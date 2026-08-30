@@ -32,7 +32,7 @@ Where evidence contradicts PLAN.md, the dossier carries a **PLAN.md impact** not
 
 | Dossier | Subject | State | Headline finding |
 |---|---|---|---|
-| [E1](E1-zcash-zebra-orchard.md) | Zcash/Zebra lineage viability | Drafted | License blocker resolved (orchard MIT/Apache-2.0 since v0.7.0, 2024); **but Orchard pool was sealed July 2026 after a counterfeiting vuln — successor pool "Ironwood" is weeks old** |
+| [E1](E1-zcash-zebra-orchard.md) | Zcash/Zebra lineage viability | **Rev 2 (2026-08-30)** | Licensing closed as a blocker (MIT/Apache-2.0 through the Ironwood era). Root cause of the June 2026 counterfeiting bug was a **shared `halo2_gadgets` flaw, not Orchard-specific code** — four years in production did not surface it. Ironwood is ~1 month old but ships a public 2,700-theorem Lean proof of balance integrity (reusable, MIT/Apache-2.0); it also carries an **unfinished post-quantum dependency (ZIP 2005)**, and the NU6.3 ZIPs are still Draft/Proposed/Reserved while live on mainnet |
 | [E2](E2-mandatory-privacy.md) | Mandatory-privacy mechanism | Drafted | Pirate's enforcement mechanism documented (Sapling-only + transparent coinbase forced to shield); no precedent for an Orchard/Ironwood-only rule |
 | [E3](E3-linear-emission.md) | Linear fair emission | Drafted | Best-evidenced exploration: Dogecoin flat emission since 2015, Monero tail since 2022 |
 | [E4](E4-bitcoin-interop.md) | Bitcoin interop / atomic swaps | Drafted | **No precedent for adaptor signatures over RedPallas**; Monero BTC-swap stack proven but currently unmaintained/fork-broken; expected verdict: defer to post-launch research |
