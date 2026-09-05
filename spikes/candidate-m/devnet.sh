@@ -20,7 +20,8 @@ run() { docker run --rm -v "$SRC:/src:ro" -v "$WORK:/work" -w /work --network $N
 
 # 1. offline wallet -> Meownero mainnet address (must start with "M")
 if [ ! -s "$WORK/wallet/address" ]; then
-  run $IMG bash -c "echo exit | $BIN/monero-wallet-cli --offline --generate-new-wallet /work/wallet/meow --password '' --mnemonic-language English --log-file /work/wallet/wallet.log 2>&1 | grep -oE 'M[1-9A-HJ-NP-Za-km-z]{94}' | head -1 > /work/wallet/address"
+  # NB: an empty --password '' is ignored by monero-wallet-cli and it prompts instead (consuming stdin), so use an explicit one.
+  run $IMG bash -c "echo exit | $BIN/monero-wallet-cli --offline --generate-new-wallet /work/wallet/meow --password meow --mnemonic-language English --restore-height 0 --log-file /work/wallet/wallet.log 2>&1 | grep -oE 'M[1-9A-HJ-NP-Za-km-z]{94}' | head -1 > /work/wallet/address"
 fi
 ADDR=$(cat "$WORK/wallet/address"); echo "miner address: $ADDR"
 case "$ADDR" in M*) ;; *) echo "address prefix wrong: $ADDR"; exit 1;; esac

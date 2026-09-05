@@ -29,7 +29,7 @@ Both controls exercise the *actual* risky deltas, not stand-ins.
 - [x] Builds from pinned tag in a documented container (`spikes/candidate-m/Dockerfile`); baseline `monerod` built before patching. *(baseline unit-test run still owed for failure attribution)*
 - [x] Emission delta: constant 0.9 MEOW/block in `get_block_reward`, genesis reward 0, penalty math retained; `block_reward` tests replaced — 7/7 pass (2026-09-05).
 - [x] Identity delta: network ID, ports, address prefixes, `CRYPTONOTE_NAME`, v2 zero-amount genesis, empty seed lists, fresh hard-fork table, checkpoints/blobs/DNS/updates removed (`docs/spec/network-identity.md`).
-- [~] Private devnet: 3 nodes mine, sync, pay exactly 0.9/block, `get_coinbase_tx_sum` = h × 0.9 (2026-09-05, `devnet.sh`); wallet round-trip: see candidate-m README.
+- [x] Private devnet: 3 nodes mine, sync, pay exactly 0.9/block, `get_coinbase_tx_sum` = h × 0.9; wallet round-trip: RingCT tx (type 6, ring 16) sent from the miner wallet, mined, received by a wallet on another node (2026-09-05, candidate-m README).
 - [x] Touched-file inventory (`apply.py` output, `docs/security/code-map.md`) and diff committed.
 
 **Candidate Z control** (Zebra v6.3.0, pinned `d1fd7ad`):

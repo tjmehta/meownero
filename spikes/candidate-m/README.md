@@ -66,4 +66,14 @@ meow-n3 height: 1590                               (followers sync at the miner'
 
 Genesis lesson recorded: a v1 coinbase output with amount 0 is rejected by the DB layer as "RCT output without commitment"; the genesis coinbase is therefore a v2 (`RCTTypeNull`) transaction, which the DB commits with `zeroCommit(0)`.
 
-Wallet round-trip: _see below_.
+Wallet round-trip (2026-09-05, `monero-wallet-rpc` built from the same tree, two instances on nodes n1 and n2):
+
+```
+wallet1 (miner, on n1): balance 28938.6 unlocked 28885.5   (= 32,154 blocks x 0.9; every coinbase recognised)
+transfer 1.0 MEOW -> wallet2: tx cf9ed9ae… fee 0.00006564 weight 2188; mined at height 32218
+node n3 view of the tx: version 2, rct_type 6 (BP+/CLSAG), 2 inputs, ring size 16, 2 outputs, amount fields [0, 0]
+transfer 2.0 MEOW -> wallet3 (created via wallet-rpc on n2): tx 06a5a131… fee 0.00008574
+wallet3 (on n2): balance 2.0 unlocked 2.0, incoming tx at height 46107
+```
+
+Harness lessons: (1) `monero-wallet-cli --password ''` is ignored and the CLI prompts instead, consuming piped stdin; use an explicit password. (2) A CLI-generated wallet's refresh height is estimated from the hard-fork table and wall clock; `set refresh-from-block-height 0` + `rescan_bc hard` (each prompting for the password) is needed before it scans a fresh chain. (3) The CLI-generated `meow2` wallet never recognised its incoming output while an RPC-created wallet on the same node did — a harness artefact of the piped-stdin creation, not reproduced with `create_wallet`; the M1 wallet path will use `monero-wallet-rpc` for automation and re-test the CLI path deliberately.
