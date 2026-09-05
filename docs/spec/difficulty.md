@@ -1,0 +1,37 @@
+# Difficulty and launch-window policy (provisional — Candidate M)
+
+**Status:** design note with simulation evidence; the launch floor is an M1 decision that needs the guaranteed genesis hashrate (a launch-planning input, PLAN §8.3/§8.5), not a code default. **Simulator:** `spikes/candidate-m/difficulty_sim.py` (ports `next_difficulty` from Monero v0.18.5.1 exactly; feasibility only).
+
+## Inherited algorithm (unchanged)
+
+Monero DAA: last 735 blocks, newest 15 ignored (lag), timestamps sorted, 60 cut from each end, `difficulty = ceil(work × 120 / time_span)`; a block's timestamp must exceed the median of the previous 60 and may be at most 2 h (`CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT`) ahead of the validator's clock. Six years of production on Monero; incident record in E5 (timestamp attacks on *other* LWMA-family chains, none on this DAA at Monero's scale).
+
+## What the simulation shows (H = 5 MH/s assumed steady launch hashrate, one seed)
+
+| Scenario | No floor | Floor = 0.25 × steady-state (150 M) | Floor = 1 × steady-state (600 M) |
+|---|---|---|---|
+| A: H present from genesis, first hour | 37 blocks (target 30) | 25 | 18 |
+| A: first 24 h total | 712 (target 720) | 723 | 707 |
+| E: 10 kH/s for 1 h, then H arrives (×500) | h0 32, **h1 208**, h2 50, h3 48 … 12 h total 616 (target 360) | **chain stalls 7 h** (h0 1, h1–h7 0), then 73/128/107/117 | stalls 2 h, then 18–46/h; 12 h total 291 |
+| C: ×10 hashrate for 2 h then back | 144.5 blocks/h during; **11/h for the 6 h after** | same | — |
+| D: attacker share 20–50 % stamps at +FTL (2 h or 20 min) | difficulty **rises** 10–13 % (the median-of-60 rule drags honest stamps forward; no drop observed) | — | — |
+
+Readings:
+
+1. **A fresh chain with a constant hashrate is fine without a floor**: the DAA adapts from block 2, and the first hour overshoots by ~25 %.
+2. **The launch hazard is the ramp (E), not the constant case**: if hashrate arrives after a slow start, one hour of ~7× block rate happens before the window catches up. With a flat 0.9 reward that hour is ~180 extra blocks ≈ **160 MEOW**, i.e. the "premine-like" effect is economically bounded (a day's issuance is 648 MEOW) but it is the optics PLAN §8.3 item 3 warns about.
+3. **A floor is a bet on the genesis hashrate.** Set above what actually shows up, the chain stalls for hours (E, 150 M floor) — worse than the burst. Set at the hashrate the launch procedure can *guarantee* (founders' committed CPUs + committed pools, PLAN §8.5), it removes the difficulty-1 start without stall risk.
+4. **After a whiplash the DAA overshoots the other way** (11/h for 6 h after a 2 h ×10 burst): the 735-block window is slow on a young chain. This is the argument for an LWMA-style shorter window; it is also a consensus delta with its own review cost.
+5. **Forward-timestamp attacks did not lower difficulty in this model**; the sorted-cut plus median rule absorbed them. The model does not include withholding or selfish-mining strategies (E5 records real incidents on chains with *different* algorithms); treat as "no easy win observed", not proof.
+
+## Decision (proposed for M1; §2.1 "prefer subtraction")
+
+- **Keep the inherited DAA unchanged.** No LWMA swap in v1: it would be a consensus delta on the PoW path with no production precedent on this exact lineage, for a benefit (faster recovery after whiplash) that confirmation guidance can cover.
+- **Add a launch floor** as a single constant, `MEOW_MIN_DIFFICULTY`, applied in `get_difficulty_for_next_block` (one line: `max(diff, floor)`), with the value computed at parameter freeze (T−4 weeks) as `guaranteed_genesis_hashrate × 120 / 2`. Until the guaranteed hashrate is known the constant is **1** (no floor) and this note is the record of why. Test: unit test that the floor is applied and that `--fixed-difficulty` still overrides on devnets.
+- **Keep FTL at 2 h** (upstream value; the simulation gives no reason to tighten, and tightening changes peer-clock tolerance).
+- **Publish confirmation guidance** for the first week scaled to observed hashrate (PLAN §6.4 item 4) instead of a checkpoint mechanism (open-questions #6 remains the group's call).
+- **Re-run the simulator with the real guaranteed hashrate** before freezing parameters; record the chosen floor in `docs/spec/network-identity.md`.
+
+## Not covered
+
+Merge-mined difficulty (E6 deferred), RandomX seed schedule during the first 2048-block epoch (inherent; the control mined through it), difficulty behaviour under 51 % adversaries (threat model T5; policy question).
