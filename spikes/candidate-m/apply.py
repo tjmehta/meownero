@@ -57,9 +57,10 @@ edit("src/cryptonote_config.h", [
   boost::uuids::uuid const NETWORK_ID = { {
       0x88, 0x7D, 0x7D, 0x6E, 0x82, 0xAB, 0x5C, 0x03, 0x63, 0x92, 0xF4, 0xDB, 0xA8, 0x94, 0x9B, 0x11
     } }; // sha256("meownero-mainnet-network-id-v1")[0:16]
-  // Genesis coinbase: v1 tx, unlock 60, txin_gen height 0, ONE OUTPUT OF AMOUNT 0 (zero spendable outputs, PLAN.md §8.2).
+  // Genesis coinbase: v2 tx (RCTTypeNull), unlock 60, txin_gen height 0, ONE OUTPUT OF AMOUNT 0 (zero spendable outputs,
+  // PLAN.md §8.2). v2 is required: a v1 output with amount 0 is treated as a RingCT output without commitment and rejected.
   // Output key and tx pubkey are Monero's well-known genesis keys; with amount 0 nothing is claimable.
-  std::string const GENESIS_TX = "013c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
+  std::string const GENESIS_TX = "023c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d100";
   uint32_t const GENESIS_NONCE = 90000;'''),
     # testnet identity
     ('''    uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 53;
@@ -83,7 +84,7 @@ edit("src/cryptonote_config.h", [
     boost::uuids::uuid const NETWORK_ID = { {
         0x36, 0xA4, 0xBF, 0x5F, 0xA0, 0x1C, 0xA0, 0xB6, 0xC3, 0xBB, 0x7F, 0x95, 0x06, 0xD1, 0x40, 0x53
       } }; // sha256("meownero-testnet-network-id-v1")[0:16]
-    std::string const GENESIS_TX = "013c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
+    std::string const GENESIS_TX = "023c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d100";
     uint32_t const GENESIS_NONCE = 90001;'''),
 ])
 
@@ -102,7 +103,7 @@ stagenet = '''    // Meownero stagenet: two-byte prefixes 150/151/152 -> "S6.." 
     boost::uuids::uuid const NETWORK_ID = { {
         0x9E, 0x6E, 0x05, 0x5F, 0x00, 0xF0, 0xAC, 0x1B, 0xD8, 0xCA, 0x74, 0x90, 0xF0, 0xA4, 0x25, 0x2A
       } }; // sha256("meownero-stagenet-network-id-v1")[0:16]
-    std::string const GENESIS_TX = "013c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
+    std::string const GENESIS_TX = "023c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d100";
     uint32_t const GENESIS_NONCE = 90002;'''
 assert "CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 24;" in m.group(1)
 s = s[:m.start(1)] + stagenet + s[m.end(1):]

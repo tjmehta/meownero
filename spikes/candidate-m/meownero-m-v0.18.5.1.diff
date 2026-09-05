@@ -138,7 +138,7 @@ index c60a626..3d07e15 100644
      uint64_t full_reward_zone = get_min_block_weight(version);
  
 diff --git a/src/cryptonote_config.h b/src/cryptonote_config.h
-index 82891b9..0808ef0 100644
+index 82891b9..c4d5492 100644
 --- a/src/cryptonote_config.h
 +++ b/src/cryptonote_config.h
 @@ -53,7 +53,9 @@
@@ -161,7 +161,7 @@ index 82891b9..0808ef0 100644
  #define CRYPTONOTE_BLOCKCHAINDATA_FILENAME      "data.mdb"
  #define CRYPTONOTE_BLOCKCHAINDATA_LOCK_FILENAME "lock.mdb"
  #define P2P_NET_DATA_FILENAME                   "p2pstate.bin"
-@@ -224,17 +226,20 @@ namespace config
+@@ -224,17 +226,21 @@ namespace config
    uint64_t const DEFAULT_DUST_THRESHOLD = ((uint64_t)2000000000); // 2 * pow(10, 9)
    uint64_t const BASE_REWARD_CLAMP_THRESHOLD = ((uint64_t)100000000); // pow(10, 8)
  
@@ -185,14 +185,15 @@ index 82891b9..0808ef0 100644
 -  uint32_t const GENESIS_NONCE = 10000;
 +      0x88, 0x7D, 0x7D, 0x6E, 0x82, 0xAB, 0x5C, 0x03, 0x63, 0x92, 0xF4, 0xDB, 0xA8, 0x94, 0x9B, 0x11
 +    } }; // sha256("meownero-mainnet-network-id-v1")[0:16]
-+  // Genesis coinbase: v1 tx, unlock 60, txin_gen height 0, ONE OUTPUT OF AMOUNT 0 (zero spendable outputs, PLAN.md §8.2).
++  // Genesis coinbase: v2 tx (RCTTypeNull), unlock 60, txin_gen height 0, ONE OUTPUT OF AMOUNT 0 (zero spendable outputs,
++  // PLAN.md §8.2). v2 is required: a v1 output with amount 0 is treated as a RingCT output without commitment and rejected.
 +  // Output key and tx pubkey are Monero's well-known genesis keys; with amount 0 nothing is claimable.
-+  std::string const GENESIS_TX = "013c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
++  std::string const GENESIS_TX = "023c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d100";
 +  uint32_t const GENESIS_NONCE = 90000;
  
    // Hash domain separators
    const char HASH_KEY_BULLETPROOF_EXPONENT[] = "bulletproof";
-@@ -267,32 +272,34 @@ namespace config
+@@ -267,32 +273,34 @@ namespace config
  
    namespace testnet
    {
@@ -216,7 +217,7 @@ index 82891b9..0808ef0 100644
 -    uint32_t const GENESIS_NONCE = 10001;
 +        0x36, 0xA4, 0xBF, 0x5F, 0xA0, 0x1C, 0xA0, 0xB6, 0xC3, 0xBB, 0x7F, 0x95, 0x06, 0xD1, 0x40, 0x53
 +      } }; // sha256("meownero-testnet-network-id-v1")[0:16]
-+    std::string const GENESIS_TX = "013c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
++    std::string const GENESIS_TX = "023c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d100";
 +    uint32_t const GENESIS_NONCE = 90001;
    }
  
@@ -242,7 +243,7 @@ index 82891b9..0808ef0 100644
 -    uint32_t const GENESIS_NONCE = 10002;
 +        0x9E, 0x6E, 0x05, 0x5F, 0x00, 0xF0, 0xAC, 0x1B, 0xD8, 0xCA, 0x74, 0x90, 0xF0, 0xA4, 0x25, 0x2A
 +      } }; // sha256("meownero-stagenet-network-id-v1")[0:16]
-+    std::string const GENESIS_TX = "013c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
++    std::string const GENESIS_TX = "023c01ff000100029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d100";
 +    uint32_t const GENESIS_NONCE = 90002;
    }
  }
@@ -448,7 +449,7 @@ index 91a54f4..89cc2f7 100644
        }
        return {};
 diff --git a/tests/unit_tests/block_reward.cpp b/tests/unit_tests/block_reward.cpp
-index 9d06c8e..8038ff1 100644
+index 9d06c8e..e1560c1 100644
 --- a/tests/unit_tests/block_reward.cpp
 +++ b/tests/unit_tests/block_reward.cpp
 @@ -1,233 +1,123 @@
@@ -725,8 +726,8 @@ index 9d06c8e..8038ff1 100644
 -    do_test(2 * m_last_block_weights_median + 1);
 -    ASSERT_FALSE(m_block_not_too_big);
 +    // Horizon: first height whose cumulative subsidy would exceed uint64::max.
-+    const uint64_t horizon = MONEY_SUPPLY / R; // 20,496,396 blocks ≈ 78.0 years at 120 s
-+    ASSERT_EQ(horizon, UINT64_C(20496396));
++    const uint64_t horizon = MONEY_SUPPLY / R; // 20,496,382 blocks ≈ 78.0 years at 120 s
++    ASSERT_EQ(horizon, UINT64_C(20496382));
 +    ASSERT_GT(horizon * R, MONEY_SUPPLY - R); // last representable full step
 +    uint64_t agc = (horizon - 1) * R;         // tally just before the edge
 +    ASSERT_EQ(reward_at(agc), R);              // reward unaffected by the tally
