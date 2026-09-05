@@ -29,7 +29,7 @@ This plan turns the January 2026 whitepaper and the chat history into a credible
 Each maps to an exploration in §5 with evidence requirements, kill criteria, and a safest fallback. Any of these can be deferred or dropped without the project failing:
 
 - **Zcash/Zebra/Orchard lineage** (the whitepaper author, 2026-08-22) → E1
-- **Linear fair emission, 1 MEOW per 2-minute block** (the whitepaper author, January whitepaper — the strongest-evidenced idea of the set) → E3
+- **Perpetual fair emission** (the whitepaper author, January whitepaper: 1 MEOW per 2-minute block) → E3 — *perpetual subsidy selected in principle 2026-09-05; current candidate 0.9 MEOW per 120 s block; exact schedule unresolved (§8.1)*
 - **Bitcoin interoperability / atomic swaps** (the whitepaper author, 2026-08-22) → E4 — *deferred post-launch by decision 2026-09-05; desirable, not a launch item; revisit on reviewed production precedent (§5 E4)*
 - **ASIC-resistant mining** (the whitepaper author, 2026-08-22) → E5
 - **Merge-mining with Monero** (the whitepaper author, January) → E6
@@ -96,7 +96,7 @@ A component, construction, or design pattern is *battle-tested* — and therefor
 | 8 | References list | Thin and partly wrong — it cites the "Dogechain Whitepaper" (an unrelated EVM sidechain project), not Dogecoin. None of the load-bearing claims are sourced. |
 | 9 | "ASIC resistance (complementary)" section | Hand-waves the actual constraint: to merge-mine with Monero, the PoW must **be RandomX** (same VM, same key schedule), not merely "ASIC resistant." |
 
-**What the whitepaper gets right and we keep as working defaults:** mandatory privacy; no premine/dev tax; two-minute blocks; the linear 1 MEOW/block emission as a deliberate, defensible monetary hypothesis (§8); community governance posture; and the jokes.
+**What the whitepaper gets right and we keep as working defaults:** mandatory privacy; no premine/dev tax; two-minute blocks (working value, pending benchmarks); perpetual block subsidy as the monetary *shape* — selected in principle 2026-09-05, with the whitepaper's 1 MEOW/block now one candidate rate beside 0.9 (§8.1); community governance posture; and the jokes.
 
 ---
 
@@ -178,13 +178,13 @@ Phase 0's mandate, in order: **(1) establish what has already been done safely b
 - **Safest fallback:** Candidate M, where the property is inherent. The *product requirement* (§1.1 #3) is never dropped — only the risky mechanism is.
 - **Pool scoping (Sapling-only vs. Ironwood-only) is decided at ADR-001** after the Ironwood eligibility gates in §7 are evaluated; not before.
 
-### E3 — Fair linear emission (1 MEOW / 2-minute block, forever)
+### E3 — Monetary policy: perpetual subsidy (selected in principle 2026-09-05; exact schedule open — §8.1)
 
 - **Precedents & maturity evidence to verify:** Dogecoin — fixed 10,000 DOGE/block since 2015, ~11 years of production; Monero — tail emission 0.6 XMR/2-min block since 2022. Flat perpetual emission is among the *best*-evidenced ideas in this plan. Supporting analysis: Peter Todd's tail-emission argument.
 - **Consensus/crypto delta:** the subsidy function — small on either lineage. Second-order deltas to map honestly: Candidate M's dynamic-block-size penalty math assumes its emission curve and must be re-derived, not copy-pasted; Candidate Z's consensus carries dev-fund/lockbox funding streams that a no-dev-tax chain must remove — parameter removal, small, but a consensus delta with test vectors like any other.
 - **Security assumptions introduced:** essentially none beyond arithmetic correctness (overflow, rounding at atomic-unit scale).
 - **Audit burden:** low — emission test vectors across the schedule, overflow/edge review.
-- **Kill criteria:** none realistic; this is the exploration most likely to pass as-is.
+- **Kill criteria:** none realistic for a perpetual schedule. A hard cap / fee-only endgame was **rejected on security grounds 2026-09-05** (E3 rev 2 §3–4: Carlsten et al. 2016, Budish 2018, Auer 2019 — fee-only mining is unstable and cannot fund a value-proportional security budget; no production counter-example exists).
 - **Safest fallback:** upstream's native schedule (which would, however, forfeit a core fairness goal — flagged for TJ/the whitepaper author if it ever comes to that).
 
 ### E4 — Bitcoin interoperability / atomic swaps
@@ -285,14 +285,33 @@ Ground rule from the brief: recommend based on **current upstream reality**, not
 
 ## 8. Emission and fair launch
 
-### 8.1 Emission schedule (working default, per E3's strong precedent)
+### 8.1 Emission schedule — perpetual subsidy selected in principle; exact schedule unresolved
 
-**1 MEOW per 2-minute block, forever.** 0.5/min, 720/day, 262,800/year, linear and infinite — Dogecoin's tail shape at Monero's cadence, preserved from the whitepaper author's January design, adopted as the working default because it is the best-evidenced idea in the plan (E3):
+**Decision (group, 2026-09-05; E3 rev 2 + council pass).** The monetary *shape* is a **perpetual block subsidy**. A hard cap with a fee-only endgame is rejected on security grounds (E3 §3–4; §5 E3). **Current candidate: 0.9 MEOW per 120-second block, flat, forever.** 120 s is the *working* block time pending Stage 2 relay/validation/orphan benchmarks on the chosen lineage (Monero already runs 120 s; Zcash runs 75 s per ZIP 208, so on Candidate Z this is a consensus parameter change to justify and test). **Neither the rate nor the schedule is ratified.** Nothing in this section may be quoted as a promise.
 
-- **Perpetual security budget:** miners are always paid in subsidy; no terminal fee-only regime (Peter Todd, "Surprisingly, Tail Emission Is Not Inflationary").
-- **Minimal early-holder advantage:** pure linear emission is the *least* front-loaded schedule available — year-2 inflation is 100%, diluting early accumulation fast, the opposite of Pirate's curve. The emission rate the day you join is the rate forever ("the same meow as it will be in 100 years").
-- **Simplicity:** one constant. Rejected alternatives: Monero-style declining curve (favors early holders — the whitepaper author, 2026-01-15), capped supply (terminal security-budget problem; the whitepaper author prefers limited-but-not-capped), "divisibility instead of emission" (logarithmic tail emission with extra steps — the whitepaper author, correctly).
-- **Open parameters for ADR-001:** atomic units/decimal places; fee policy (Candidate Z: evaluate ZIP-317-style proportional fees under an all-shielded mempool; Candidate M: dynamic-fee inheritance); 120s block time sanity-check against proof sizes and propagation on the chosen lineage; block-size policy (Z: fixed limit to choose; M: penalty math re-derived for constant subsidy); dev-fund stream removal on Z (E3).
+Arithmetic at 0.9 MEOW / 120 s: 262,800 blocks/yr → **236,520 MEOW/yr**, 648/day (at 1.0: 262,800/yr, 720/day).
+
+Why perpetual (unchanged from E3 rev 1, now decided): a permanent security budget with no fee-only terminal regime (Todd 2022; Carlsten et al. 2016); the least front-loaded distribution available; one constant. Rejected alternatives: Monero-style declining curve *as the only mechanism* (favors early holders — the whitepaper author, 2026-01-15), capped supply (terminal security budget), "divisibility instead of emission."
+
+**Supply-model audit (2026-09-05).** The fair-launch model in §8.2 is exact: genesis carries **zero spendable outputs**, no premine, no allocation, so supply at height *h* is *h* × subsidy and nothing else. Consequences that follow from arithmetic, not policy:
+
+1. **Percentage inflation is undefined at genesis and, for any flat schedule, equals 1/(N−1) during year N — independent of the rate.** 100% (yr 2), 50% (yr 3), 25% (yr 5), 10% (yr 11), 5% (yr 21), 3.03% (yr 34), 2% (yr 51), 1% (yr 101).
+2. **For any positive-issuance schedule with zero genesis supply, inflation in year N is issuance_N ÷ cumulative_(N−1).** Hitting a target *x* by year N requires cumulative_(N−1) ≥ issuance_N ÷ *x* — i.e. most of the eventual supply must already exist. Only two things produce that: (i) a large genesis supply, which is a **premine** and forbidden by §1.1 #5, or (ii) **front-loaded early issuance**, the Pirate failure mode (§4.3) that §1.1 #4 exists to prevent.
+3. **Therefore any constraint of the form "below fiat inflation (≈2–3%) from the early years" or "initial deflation" is mathematically incompatible with flat-from-genesis positive issuance and no premine.** At 0.9 MEOW/block, showing 3% in year 2 would need a 7,884,000 MEOW genesis supply; 2% would need 11,826,000. A **999,999,999 "genesis supply" is a premine** — it would make year-1 issuance read as 0.024% "inflation" precisely because 99.98% of the coin would pre-exist mining. **Rejected.** No such claim is ratified, and none may appear in brand copy.
+4. Todd's convergence result (E3 §4b: circulating supply → issuance ÷ loss-rate) is a **long-run** statement about *circulating* supply under coin loss. It does not lower early-year percentage inflation and must not be marketed as if it did.
+5. **No burn mechanism is added to manufacture a deflation narrative.** A burn is a consensus delta with its own audit cost and no security purpose here (§2.1 "prefer subtraction").
+
+**Smallest coherent choices — exact schedule left explicitly unresolved for ADR-001.** All figures at 262,800 blocks/yr; percentages are inflation *during* the named year.
+
+| Option | Shape | Yr 2 | Yr 5 | Yr 11 | Yr 20 | Yr 35 | Share of yr-20 supply issued in yrs 1–2 / 1–8 | Trade |
+|---|---|---|---|---|---|---|---|---|
+| **P-flat 0.9** (candidate) | 0.9/block forever | 100% | 25% | 10% | 5.3% | 2.9% | 10% / 40% | Least front-loaded; "same meow forever"; high early % is the honest price of no premine |
+| **P-decay-to-tail** (illustrative: 9/block yr 1, ×0.75 per year, floor 0.9 from yr 9) | Monero-shaped decline into a 0.9 tail | 75% | 11.6% | 2.6% | 2.1% | 1.6% | 36% / 75% | Lower % sooner, but three-quarters of the year-20 supply goes to the first eight years' miners — a fairness cost against §1.1 #4 |
+| **Restate the constraint** | Keep P-flat; publish issuance as constant MEOW/yr and the 1/(N−1) curve honestly | as P-flat | | | | | as P-flat | No consensus change; brand copy changes; the only option that satisfies §1.1 #4, #5 *and* says nothing false |
+
+The group's own inflation targets should be substituted into row 2 of the audit above; the finding holds for any target below 10% before year 11 or below 3% before year 34 under a flat schedule.
+
+- **Open parameters for ADR-001:** rate (0.9 vs 1.0 vs other) and schedule (flat vs decay-to-tail) per the table; atomic units/decimal places; fee policy (Candidate Z: evaluate ZIP-317-style proportional fees under an all-shielded mempool; Candidate M: dynamic-fee inheritance); 120 s block time confirmed or revised by Stage 2 propagation/orphan benchmarks against proof sizes on the chosen lineage; block-size policy (Z: fixed limit to choose — upstream is 2,000,000 bytes; M: penalty math re-derived for the chosen subsidy, which is denominated in base reward); dev-fund/lockbox stream removal on Z (E3).
 
 ### 8.2 No premine, no dev tax — and what "no insider advantage" requires operationally
 
@@ -377,7 +396,7 @@ Each promotion requires **all** exit criteria of the prior stage (§10) plus the
 
 ### 9.8 Block explorer for a private chain
 
-An explorer can show: block heights/hashes/timestamps, tx hashes and sizes, fee totals (public in both lineages), emission tally, and hashrate/difficulty — and **cannot** show amounts, senders, or recipients. Build or adapt a minimal explorer; document loudly that "the explorer looks empty of amounts" is the product working. Supply tally page (`emission = height × 1 MEOW` + genesis) doubles as a public no-premine proof.
+An explorer can show: block heights/hashes/timestamps, tx hashes and sizes, fee totals (public in both lineages), emission tally, and hashrate/difficulty — and **cannot** show amounts, senders, or recipients. Build or adapt a minimal explorer; document loudly that "the explorer looks empty of amounts" is the product working. Supply tally page (`emission = height × subsidy`; genesis contributes zero) doubles as a public no-premine proof — and, because genesis is zero, as the public record that the §8.1 inflation curve is exactly 1/(N−1) and nothing lower.
 
 ### 9.9 Incident response
 
