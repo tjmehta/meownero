@@ -96,22 +96,22 @@ Two derivation candidates satisfy the hard requirements in principle. Neither is
 Fork `monero-project/monero`; change emission to linear; rebrand; re-genesis.
 
 - **Inherent fit:** mandatory privacy by construction (zero delta for requirement #3); RandomX inherent (E5 delta = zero); merge-mining has a production template (Tari, §6).
-- **Open risks to evidence:** FCMP++ is itself **newly deployed cryptography** — at fork time its production history may be months, not years, and §2.2 item 1 applies to it exactly as it applies to anything else; the pre-FCMP++ ring construction is battle-tested but being replaced upstream. Large legacy C++ tree mid-transition through Monero's biggest-ever upgrade. Most exposed to the "cosmetic rename" criticism, so its deltas (emission, launch, possibly merge-mining) must be real and documented.
+- **Open risks to evidence:** FCMP++ is **not yet deployed** — stressnet-only as of 2026-09 (beta stressnet since 2026-05-06, `v0.19.0.0-alpha` builds; no fork date or height published; Trail of Bits cryptography audit 2026-08-17: six informational findings, zero low/medium/high — E6 §2, council pass 2026-09-05) — so at fork time its production history may be months, not years, and §2.2 applies to it exactly as it applies to anything else; the pre-FCMP++ ring construction is battle-tested but being replaced upstream. Large legacy C++ tree mid-transition through Monero's biggest-ever upgrade. Most exposed to the "cosmetic rename" criticism, so its deltas (emission, launch, possibly merge-mining) must be real and documented.
 - **License:** BSD-3-Clause-style; RandomX BSD-3-Clause. Clean.
 
 ### 4.2 Candidate Z — Zcash/Zebra-derived, made mandatory-private
 
-Build on Zebra (the Rust consensus node; `zcashd` hit end-of-life July 2026) with the Orchard shielded protocol; add a consensus rule making shielded-only mandatory; emission to linear; re-genesis.
+Build on Zebra (the Rust consensus node; `zcashd` hit end-of-life July 2026) with a shielded pool from the post-NU6.3 set — **Ironwood** (live since 2026-07-28) or **Sapling** — since **Orchard was sealed on 2026-07-28** (NU6.3, ZIP 258; E1 §2–3); add a consensus rule making shielded-only mandatory; emission to linear; re-genesis.
 
-- **Inherent fit:** Orchard has ~4 years of mainnet production history (NU5, 2022) securing real value — currently *more* production history than FCMP++; Halo 2 has no trusted setup; modern memory-safe Rust with an active maintainer org.
-- **Open risks to evidence:** privacy is optional upstream, so requirement #3 needs a consensus delta with no production precedent on Orchard (E2); the ASIC desideratum needs a PoW swap (E5); the `orchard` crate's BOSL licensing history is unresolved (E1); Zebra ships no wallet (E1); upstream is churning (zcashd EOL, June 2026 Orchard vulnerability, NU7, Tachyon in flight); merge-mining would be unprecedented on this lineage (E6).
+- **Inherent fit:** Ironwood ships with the strongest assurance artifact any shielded pool has had — a machine-checked Lean proof of circuit knowledge-soundness, CI-pinned to the deployed verifying key (Project Tachyon; ledger-level balance integrity is *not yet composed* with it and byte encodings remain external — E1 §4); Halo 2 has no trusted setup; Sapling has production history since 2018 (Pirate precedent) but upstream intends to restrict it (ZIP 219); modern memory-safe Rust with an active maintainer org whose June 2026 incident response was fast and documented in the ZIPs themselves (E1 §1).
+- **Open risks to evidence:** privacy is optional upstream, so requirement #3 needs a consensus delta — its only production precedent (Pirate, Sapling-only since 2018; enforcing rule pinned to released code in E2 §2a) is on Sapling, and an Ironwood-only rule has no production precedent until Pirate's own Ironwood pool activates on 2026-10-03 (E2 §2c); the ASIC desideratum needs a PoW swap (E5); the `orchard` crate's license is **resolved** — MIT OR Apache-2.0 since v0.7.0 (2024), confirmed through the Ironwood-era 0.15.x releases (E1 §5); Zebra ships no wallet (E1); Ironwood carries a forward dependency (ZIP 2005's Recovery Protocol, proof system not yet selected) and its NU6.3 ZIPs were Draft/Proposed while live on mainnet — pin implementation tags, not spec text (E1 §3); upstream is churning (zcashd EOL, June 2026 Orchard vulnerability, NU7, Tachyon in flight); merge-mining would be unprecedented on this lineage (E6).
 
 ### 4.3 Pirate Chain — cautionary comparison (not a candidate)
 
 Pirate Chain (ARRR, 2018) is the existence proof that **mandatory shielded transactions work in production** — z-address-only on Sapling, as a Komodo asset chain with delayed proof of work. That precedent is evidence for E2. It is equally the existence proof of what to avoid:
 
 - **Front-loaded emission.** By Pirate's own FAQ, ~90% of the 200M supply is already mined; the schedule began at 256 ARRR/block and collapsed rapidly. Whatever the stated rationale, the outcome is that early miners hold the supply — exactly the "aggressive early emission resembles a premine" failure the whitepaper author flagged on 2026-01-15. Linear emission is the direct antidote.
-- **Borrowed security with strings.** dPoW notarization trades 51% resistance for dependence on a notary set — a centralization trade to accept only knowingly, if ever (§6.4).
+- **Borrowed security with strings.** dPoW notarization trades 51% resistance for dependence on a notary set — a centralization trade to accept only knowingly, if ever (§6.4). **The strings got pulled:** Komodo v0.9.2 (2025-12-20) sunset notary dPoW in January 2026 in favor of developer-key auto-checkpointing; what Pirate's reduced 6-signature notary scheme anchors to post-sunset is unverified (E2 §2b).
 - **Ecosystem fragility.** Dependence on another project's stack, thin dev funding, exchange attrition. Plan for all three.
 
 ### 4.4 Clean-room / new chain — rejected on security grounds
@@ -122,12 +122,12 @@ Writing new consensus or privacy cryptography from scratch violates §2.1 outrig
 
 | Axis | Candidate M | Candidate Z |
 |---|---|---|
-| Mandatory privacy delta | Zero (inherent) | Consensus rule, no Orchard-era precedent (E2) |
-| Privacy-crypto production maturity | FCMP++: new; verify months-in-production at fork time | Orchard: ~4 yrs incl. June 2026 vuln + response |
+| Mandatory privacy delta | Zero (inherent) | Consensus rule; Sapling-only precedent (Pirate, 2018–); Ironwood-only unprecedented until Pirate's 2026-10-03 activation (E2) |
+| Privacy-crypto production maturity | FCMP++: stressnet-only, not on mainnet, no fork date (E6 §2) | Ironwood: live 2026-07-28; circuit soundness machine-checked + CI-pinned, ledger composition not yet mechanized (E1 §4). Sapling: 2018–, upstream restricting (ZIP 219). Orchard: sealed after a 4-year-latent counterfeiting bug (E1 §2) |
 | ASIC-resistant PoW delta | Zero (RandomX inherent) | PoW swap in Zebra (E5) |
 | Merge-mining delta | Small; Tari template (E6) | Moderate; unprecedented on lineage (E6) |
 | Emission delta | Small (E3) | Small; must also remove dev-fund streams (E3) |
-| License | Clean | `orchard`/BOSL unresolved (E1) |
+| License | Clean | Clean — MIT/Apache-2.0 confirmed through Ironwood era (E1 §5) |
 | Codebase | Legacy C++, mid-transition | Modern Rust; no wallet; churning upstream |
 | "Not a cosmetic rename" | Must be earned via deltas | Inherent if E2 lands |
 
@@ -152,13 +152,13 @@ Phase 0's mandate, in order: **(1) establish what has already been done safely b
 - **Consensus/crypto delta:** for lineage adoption itself: fork, re-genesis, network parameters — small. (Mandatory privacy, PoW, and emission deltas are E2/E5/E3.)
 - **Security assumptions introduced:** soundness of Halo 2/Orchard circuits as deployed; upstream continuity; our team's competence in Rust consensus code.
 - **Audit burden:** inherited audits cover only unmodified paths (§2.3); every delta re-reviewed; wallet path (Zallet/`zingolib` — Zebra ships no wallet) assessed separately.
-- **Kill criteria:** `orchard` BOSL license unobtainable/incompatible (counsel verdict); upstream maintenance collapse; total delta required by hard requirements exceeds the minimal-delta bar of §2.2.
+- **Kill criteria:** ~~`orchard` BOSL license unobtainable/incompatible~~ (closed 2026-08-30 — MIT OR Apache-2.0, E1 §5); upstream maintenance collapse; total delta required by hard requirements exceeds the minimal-delta bar of §2.2.
 - **Safest fallback:** Candidate M.
 
 ### E2 — Mandatory privacy: mechanism
 
-- **Precedents & maturity evidence to verify:** Monero — mandatory-private by construction since 2014, the strongest precedent, inherited at zero delta by Candidate M; Pirate Chain — z-only enforced on Sapling since 2018 (verify its incident history and *how* enforcement is implemented, noting it runs zcashd-era code, not Zebra); **no precedent exists for an Orchard-only consensus rule** — on Candidate Z this is a new rule, and §2 applies with full force.
-- **Consensus/crypto delta:** Candidate M: zero. Candidate Z: consensus rule requiring empty transparent bundles for non-coinbase transactions + shielded coinbase (verify ZIP-213's Orchard coverage from the ZIP text and deployed behavior) + removal/disabling of transparent RPC and mempool paths.
+- **Precedents & maturity evidence to verify:** Monero — mandatory-private by construction since 2014, the strongest precedent, inherited at zero delta by Candidate M; Pirate Chain — z-only enforced on Sapling since 2018 (verify its incident history and *how* enforcement is implemented, noting it runs zcashd-era code, not Zebra); Orchard is sealed (2026-07-28), so the Candidate Z rule is **Sapling-only** (Pirate precedent; enforcing consensus code pinned in E2 §2a — a single non-coinbase transparent-vout predicate, from which "coinbase first spend must shield" is emergent) or **Ironwood-only** (no production precedent; Pirate's Ironwood pool activates 2026-10-03, E2 §2c) — §2 applies with full force to the latter. Pirate's incident record is clean at chain level 2018–2026 (absence-of-evidence caveat), but its reorg resistance leaned on Komodo dPoW, which was sunset in January 2026 (E2 §2b).
+- **Consensus/crypto delta:** Candidate M: zero. Candidate Z: consensus rule requiring empty transparent bundles for non-coinbase transactions + shielded coinbase (verified E2 §3a: the ZIP-213 all-zero-ovk rule makes shielded coinbase publicly decryptable, with post-NU6 exact balance equality, so per-block supply auditability and the §9.8 no-premine proof survive with **no transparent-coinbase exception**; Orchard coinbase is prohibited post-NU6.3) + removal/disabling of transparent RPC and mempool paths. Fees are public by construction (sum of `valueBalance` fields); structure counts leak (E2 §3a).
 - **Security assumptions introduced (Z path):** our rule must not disturb value-balance accounting across pools, turnstile logic, or fee semantics; an all-shielded mempool changes DoS economics (every transaction carries heavy proof verification) — this needs adversarial analysis, not assumption.
 - **Audit burden (Z path):** the rule plus every path whose invariants it touches; mempool DoS review; wallet shielded-only operation.
 - **Kill criteria (for the Z mechanism, not the property):** unbounded patch surface, or any indication the rule perturbs audited invariants in ways review cannot bound.
@@ -175,7 +175,7 @@ Phase 0's mandate, in order: **(1) establish what has already been done safely b
 
 ### E4 — Bitcoin interoperability / atomic swaps
 
-- **Precedents & maturity evidence to verify:** COMIT `xmr-btc-swap` — production BTC↔XMR atomic swaps with all script logic on the Bitcoin side and a scriptless Monero side (verify current maintenance status and real usage); Farcaster (verify completion status); plain HTLC swaps on script-bearing chains (long-standing). **Critical evidence items:** whether existing XMR-swap constructions remain compatible with FCMP++'s changed spend authorization (Candidate M), and whether any adaptor-signature construction over RedPallas (Candidate Z's Orchard spend auth) has *any* reviewed precedent — as of this writing we know of none, which under §2.1 makes it non-shippable until that changes.
+- **Precedents & maturity evidence to verify:** COMIT `xmr-btc-swap` — production BTC↔XMR atomic swaps with all script logic on the Bitcoin side and a scriptless Monero side (verify current maintenance status and real usage); Farcaster (verify completion status); plain HTLC swaps on script-bearing chains (long-standing). **Critical evidence items:** whether existing XMR-swap constructions remain compatible with FCMP++'s changed spend authorization (Candidate M), and whether any adaptor-signature construction over RedPallas (Candidate Z's Orchard spend auth) has *any* reviewed precedent — Phase 0 result (E4 rev 2, 2026-09-04): **none exists**. COMIT `xmr-btc-swap` is unmaintained; its successor eigenwallet/core is actively maintained (release 4.14.0, 2026-08-22) but unaudited and silent on FCMP++; Farcaster is dormant at the protocol layer since 2023–24; the only shielded-native attempt (Zwap, Orchard↔EVM, never Bitcoin) was abandoned in 2026 on a structural obstacle — Orchard/Ironwood have no script primitives; and a transparent-HTLC bounce is impossible under mandatory privacy (E2's rule forbids value-bearing transparent vouts, and shielded pools expose no script layer — E4 §2b). Any future swap is therefore scriptless/ZK-binding by necessity, and FCMP++ replaces CLSAG spend-auth with a Generalized Schnorr Protocol, so CLSAG-specific swap code must be rewired (E4 §2). E4 §9 lists the zero-cost prerequisites to preserve.
 - **Consensus/crypto delta:** target zero consensus delta — swap logic belongs on Bitcoin's side and in off-chain protocol implementations. The crypto delta (adaptor signatures over our spend-auth scheme) is the risk, and it is real on both candidates post-upstream-changes.
 - **Security assumptions introduced:** adaptor-signature security over the specific scheme; swap-implementation correctness. Mitigating scope: swap failures lose swap participants' funds, not chain consensus — bad, but bounded.
 - **Audit burden:** external cryptographer review of the construction; audit of any swap implementation we endorse.
@@ -232,7 +232,7 @@ Tari (mainnet since May 2025, founded by early Monero contributors) merge-mines 
 Consequences for Meownero:
 
 - **The PoW must be RandomX**, byte-compatible with Monero's parameters — E5 and E6 interlock. Validating Monero-seeded RandomX proofs means the aux chain must track valid Monero key-block seeds (as Tari's `MoneroPowData` does); this is real consensus-critical complexity.
-- FCMP++ does not change Monero's PoW, so the mechanism survives the FCMP++ era. (Verify against the shipped hard-fork code during E6.)
+- FCMP++ does not change Monero's PoW, so the mechanism survives the FCMP++ era. (Cannot be verified against shipped hard-fork code until FCMP++ ships — stressnet-only as of 2026-09, E6 §2; merge-mining validation would target 0.18.x mainnet rules and track the eventual release.)
 - **The `tx_extra` merge-mining field is a shared, contended resource.** Pools already merge-mining Tari can only add Meownero via an aux-chain merkle tree in that single field. Any proxy and validation we build must support multi-aux from day one, or the largest merge-mining pools cannot carry us.
 - **Precedent-maturity caveat:** Tari proved the mechanism for a chain designed around it, and only recently. Namecoin and Dogecoin prove AuxPoW longevity in *other* PoW families. Porting the model to a Zcash-derived node would be a first — priced into E6's kill criteria.
 
@@ -256,11 +256,11 @@ Consequences for Meownero:
 
 Ground rule from the brief: recommend based on **current upstream reality**, not the draft's Kovri/ring-size language.
 
-- **Candidate M:** FCMP++-era privacy — full-chain membership proofs, RingCT hidden amounts, stealth addresses. Do **not** fork pre-FCMP++ and freeze ring signatures (obsolete on arrival); but note the flip side honestly: forking *at* FCMP++ means adopting cryptography with a short production history — E1's maturity test applies to FCMP++ exactly as to Orchard. Fork point and its evidence: first post-FCMP++ stable release plus however many months of incident-free mainnet history TJ/the whitepaper author set as the bar.
-- **Candidate Z:** Orchard only (Halo 2, no trusted setup), ~4 years in production; shielded coinbase per ZIP-213 (verify Orchard coverage); transparent pool removed per E2. Track Tachyon as a future upgrade, not a dependency. The June 2026 Orchard vulnerability is a reminder that even excellent zk code has soundness risk — its disclosure-and-response record is itself evidence to review in E1.
+- **Candidate M:** FCMP++-era privacy — full-chain membership proofs, RingCT hidden amounts, stealth addresses. Do **not** fork pre-FCMP++ and freeze ring signatures (obsolete on arrival); but note the flip side honestly: forking *at* FCMP++ means adopting cryptography with a short production history — the §2.2 rubric applies to FCMP++ exactly as to any pool. Status 2026-09: stressnet-only, no fork date; Veridise audited the algorithm (2025) and Trail of Bits the cryptography implementation (2026-08-17, six informational, zero severity-rated) and core integration (May 2026, report pending publication); stressnet surfaced and fixed double-spend edge cases (E6 §2; council pass 2026-09-05).
+- **Candidate Z:** **Ironwood** (Halo 2, no trusted setup; live since 2026-07-28; Project Tachyon's Lean proof of circuit knowledge-soundness is CI-pinned to the deployed verifying key, but ledger-level balance integrity is not yet composed with it and byte encodings/transcripts/BLAKE2b remain outside the proof — E1 §4, re-verified against tachyon.z.cash and the Ironwood Book 2026-09-05) or **Sapling** (2018–, Groth16 with trusted setup; upstream restricting per ZIP 219). Orchard is sealed. Shielded coinbase per ZIP-213 (verified, E2 §3a); transparent pool removed per E2. Ironwood carries a forward dependency (ZIP 2005 Recovery Protocol, proof system unselected). The June 2026 Orchard vulnerability — a missing copy constraint in the shared `halo2_gadgets` library (CVE-2026-54496), undetected for four years across multiple audits, found in days by a targeted AI-assisted review (E1 §2a) — is the reason inherited gadget libraries sit inside the audit surface for **either** candidate, and why production time is not a soundness proxy (§2.2).
 - **Network layer (honest gap either way):** Monero lineage inherits Dandelion++ and Tor/I2P relay; **the Zcash lineage has no Dandelion++ equivalent in production**. On Candidate Z, network-layer privacy work would be a delta to design, build, and review — tracked in the threat model, never claimed before it exists.
 - **Non-goals for v1:** §2.1 verbatim — no novel cryptography, no custom curves, no bespoke proof systems. The single adjacent item, E4's adaptor-signature question, ships nothing without reviewed precedent.
-- **Supply auditability caveat (must be disclosed honestly):** hidden-amount chains cannot be trivially supply-audited; soundness of the proofs is the backstop, and an undetected inflation bug is the worst-case failure (Zcash CVE-2019-7167; Monero's 2017 key-image bug). Mitigations: minimize deltas to audited upstream code, run duplicate-nullifier/key-image monitors, adopt upstream turnstile/audit tooling as it lands.
+- **Supply auditability caveat (must be disclosed honestly):** hidden-amount chains cannot be trivially supply-audited; soundness of the proofs is the backstop, and an undetected inflation bug is the worst-case failure (Zcash CVE-2019-7167; Monero's 2017 key-image bug; Zcash CVE-2026-54496). Precise formulation for anything public (Shielded Labs, June 2026; E1 §10 item 3): a pool turnstile bounds the value that *leaves* a pool, but there is "no definitive way to determine using only cryptography" whether counterfeit value was created inside it. On a mandatory-shielded Zcash-lineage chain, per-block supply auditability nonetheless holds via publicly decryptable shielded coinbase (E2 §3a). Mitigations: minimize deltas to audited upstream code, run duplicate-nullifier/key-image monitors, adopt upstream turnstile/audit tooling as it lands.
 
 ---
 
@@ -285,7 +285,7 @@ Ground rule from the brief: recommend based on **current upstream reality**, not
 
 1. **T−4 weeks:** launch date/time announced publicly; parameters frozen and published; mining guide (and merge-mining proxy, if E6 survived) released for testnet rehearsal.
 2. **T−2 weeks:** release-candidate binaries published with SHA-256 hashes and signatures; reproducible-build instructions public so third parties can verify (§9.4). Pool outreach concludes; committed pools listed publicly.
-3. **T−0:** genesis at the announced timestamp. Initial difficulty set to a sane floor (not 1) with a well-precedented adjustment algorithm (E5 reviews the LWMA family's incident history first) so early blocks cannot be insta-minted faster than difficulty reacts; with a constant 1 MEOW reward the worst case is bounded, but a chaotic first hour is still a reorg risk and a bad look.
+3. **T−0:** genesis at the announced timestamp. Initial difficulty set to a sane floor (not 1) with a well-precedented adjustment algorithm (E5 §2 records the LWMA family's incident history — a >50% selfish-mine via mishandled negative solvetimes, Verge's 2018 timestamp collapse — and the published mitigations to adopt: FTL ≈ T×N/20, ±6·T solvetime clamp, N ≈ 45–120 window, never feed the algorithm from lagged MTP) so early blocks cannot be insta-minted faster than difficulty reacts; with a constant 1 MEOW reward the worst case is bounded, but a chaotic first hour is still a reorg risk and a bad look.
 4. **T+2 weeks:** post-launch fairness report — blocks mined, pool distribution, any incidents — published against the pre-committed criteria.
 
 ### 8.4 Dev funding without a founder tax
@@ -319,7 +319,7 @@ Pools carry us or nobody does — in every PoW configuration. Concretely: pool-o
 
 1. Exposure of identifiable founders launching a **mandatory-privacy** coin: money-transmission, sanctions (OFAC precedent from the Tornado Cash saga), and jurisdiction-specific privacy-coin bans (e.g., Japan, South Korea; EU AMLR trajectory for 2027).
 2. Does a zero-premine, no-sale, mined-only launch keep MEOW clearly outside securities frameworks (Howey / MiCA utility analysis)? What launch communications would jeopardize that?
-3. **BOSL obligations and grant path for the `orchard` crate (E1)** — the one license question that can move the architecture.
+3. ~~BOSL obligations and grant path for the `orchard` crate~~ — **closed** (E1 §5: MIT OR Apache-2.0 since v0.7.0, confirmed through Ironwood-era releases); no license question remains that can move the architecture.
 4. Legal posture of facilitating BTC↔MEOW atomic swaps or hosting swap infrastructure (E4) — protocol vs. operator liability.
 5. Liability for marketing claims: the coin art literally says "no trace currency" and "zero logs" — what claims can we responsibly make?
 6. Trademark: register "Meownero"? Posture toward the pre-existing Solana "Meownero" token; risk that *we* are accused of association with it.
@@ -329,7 +329,7 @@ Pools carry us or nobody does — in every PoW configuration. Concretely: pool-o
 ### 9.3 Upstream licenses and attribution
 
 - **Monero (Candidate M):** BSD-3-Clause-style — fork-friendly; preserve notices; attribute prominently. **RandomX:** BSD-3-Clause.
-- **Zcash stack (Candidate Z):** Zebra and librustzcash are MIT/Apache-2.0; the **`orchard` crate's BOSL history is the open question (E1 kill criterion)**. `halo2` crates pinned in the same audit.
+- **Zcash stack (Candidate Z):** Zebra and librustzcash are MIT/Apache-2.0; the `orchard` crate is **MIT OR Apache-2.0** since v0.7.0 (2024), confirmed for 0.15.x and `zcash/ironwood` (E1 §5); no BOSL question remains. `halo2` crates pinned in the same audit.
 - **Tari:** if E6 adapts their proxy or validation code, verify license (BSD-3-Clause family) and attribute.
 - Deliverable: `LICENSES.md` + per-file header audit before any code is vendored.
 
@@ -407,7 +407,7 @@ These run in parallel and must never share a critical path:
 ## 12. First 10 GitHub issues
 
 1. **ADR-001 scaffold + evidence-dossier template** — encode the §5 template (precedents/maturity · delta · assumptions · audit burden · kill criteria · fallback) and the §5.4 decision rule; owners TJ + the whitepaper author. *(M0)*
-2. **E1 dossier: Zcash/Zebra/Orchard lineage** — production-maturity evidence, incident review from primary sources (June 2026 Orchard vuln, CVE-2019-7167), maintainer continuity, wallet-path assessment, and the license audit with counsel read on `orchard`/BOSL. *(M0)*
+2. **E1 dossier: Zcash/Zebra/Orchard lineage** — production-maturity evidence, incident review from primary sources (June 2026 Orchard vuln, CVE-2019-7167), maintainer continuity, wallet-path assessment. License audit closed (MIT/Apache-2.0). *(M0)*
 3. **E2 dossier: mandatory-privacy mechanisms** — Monero-inherent vs. Pirate/Sapling precedent vs. unprecedented Orchard-only rule; for the Z mechanism, enumerate the patch surface and the invariants it touches (value balance, turnstiles, mempool DoS). *(M0)*
 4. **E3 dossier + emission spec v1** — Dogecoin/Monero-tail precedent record; per-lineage delta map (penalty math on M, dev-fund stream removal on Z); atomic units, fee policy, 120s check, difficulty parameters. *(M0)*
 5. **E4 dossier: atomic-swap evidence** — xmr-btc-swap/Farcaster maturity and maintenance status; FCMP++ swap-compatibility question; RedPallas adaptor-signature precedent search; external cryptographer consult; launch verdict (expected: defer). *(M0)*
@@ -445,12 +445,17 @@ These run in parallel and must never share a critical path:
 - Network Upgrade 7: https://z.cash/upgrade/nu7/
 - Z3 / zcashd-deprecation ecosystem thread (Zcash forum): https://forum.zcashcommunity.com/t/zcash-z3-updates-formerly-zcashd-deprecation/48965
 - Zcash counterfeiting vulnerability postmortem (CVE-2019-7167): https://electriccoin.co/blog/zcash-counterfeiting-vulnerability-successfully-remediated/
+- ZIP 257 (NU6.2 emergency fix, 2026-06-03) and ZIP 258 (NU6.3 Ironwood, 2026-07-28): https://zips.z.cash/zip-0257 · https://zips.z.cash/zip-0258
+- Orchard/halo2_gadgets soundness advisory, CVE-2026-54496 (missing copy constraint, variable-base scalar mul): https://advisories.gitlab.com/cargo/halo2_gadgets/CVE-2026-54496/
+- Project Tachyon Ironwood verification (2026-07-28) and scope statement (grant post 2026-08-14): https://tachyon.z.cash/blog/ironwood-verification-complete/ · https://forum.zcashcommunity.com/t/retroactive-grant-application-ironwood-zk-snark-formal-verification-project-tachyon/57007 · Ironwood Book: https://zcash.github.io/ironwood/
+- Pirate Chain `ac_private` enforcing code (pinned E2 §2a): https://github.com/PirateNetwork/pirate
 
 **Monero / Candidate M**
 - Full-Chain Membership Proofs development announcement — getmonero.org: https://www.getmonero.org/2024/04/27/fcmps.html
 - Monero project (source, releases): https://github.com/monero-project/monero
 - RandomX specification and code: https://github.com/tevador/RandomX
 - Monero tail emission (Moneropedia): https://www.getmonero.org/resources/moneropedia/tail-emission.html
+- FCMP++ Trail of Bits cryptography audit summary (2026-08-17): https://magicgrants.org/2026/08/17/Monero-FCMP-Cryptography-Implementation-ToB
 
 **Merge-mining precedents (E6)**
 - Tari RFC-0132, "Merge Mining Monero": https://rfc.tari.com/RFC-0132_Merge_Mining_Monero
@@ -462,7 +467,9 @@ These run in parallel and must never share a critical path:
 
 **Atomic-swap precedents (E4)**
 - COMIT `xmr-btc-swap` (production BTC↔XMR atomic swaps, scriptless on the XMR side): https://github.com/comit-network/xmr-btc-swap
-- Farcaster BTC↔XMR atomic swap project: https://github.com/farcaster-project
+- Farcaster BTC↔XMR atomic swap project (dormant since 2023–24): https://github.com/farcaster-project
+- eigenwallet/core (COMIT successor, maintained): https://github.com/eigenwallet/core
+- Zwap early-access thread (abandoned 2026): https://forum.zcashcommunity.com/t/zwap-trustless-shielded-atomic-swaps-for-zcash-early-access/55874
 
 **Pirate Chain (cautionary, and E2 precedent)**
 - Pirate Chain FAQ (self-reported ~90%-mined emission): https://piratechain.com/faq/
@@ -475,7 +482,7 @@ These run in parallel and must never share a critical path:
 - Canonical whitepaper v1.1: `assets/Meownero updated.pdf` (SHA-256 in `research/artifact-inventory.md`)
 - Chat record: `research/chat-transcript.md` · Whitepaper corrections: `research/whitepaper-notes.md`
 
-*Note on source quality: claims this plan could not pin to primary sources (FCMP++ mainnet-activation timing, `orchard` current license text, ZIP-213 Orchard coinbase coverage, Zebra custom-network coverage, Tari/Pirate incident histories) are deliberately phrased as Phase 0 verification tasks, not facts.*
+*Note on source quality: the Phase 0 dossiers (`research/dossiers/`) have since pinned FCMP++ status, the `orchard` license, ZIP-213 shielded-coinbase behavior, and the Pirate incident history to primary sources; Zebra custom-network coverage and Tari's incident history remain Stage 2 / open verification tasks. Claims still tagged as open in the dossiers are not facts.*
 
 ---
 
