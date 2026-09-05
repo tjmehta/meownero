@@ -69,6 +69,8 @@ Three blocks mined; every coinbase is a v6 transaction with an Ironwood output a
 
 Adversarial run (same binary, `miner_address` = transparent `tmJymvcUCn1ctbghvTJpXBwHiMEB8P6wxNV`): `generate 1` returned `{"error":{"code":-1,"message":"block was rejected: Rejected"}}` and the node log shows `submit block failed verification error=Ok(Block { source: Transaction(TransparentValueForbidden) })`. The rule bites at block validation, before the block enters the state.
 
+Unit tests (release profile, 2026-09-05): `cargo test -p zebra-chain --lib meow_tests` → 4 passed; `cargo test -p zebra-consensus --lib meow_mandatory_shielded` → 2 passed (the rule restated independently agrees with the implementation on every transaction in the upstream mainnet+testnet block vectors; every vector coinbase is rejected as transparent, and at least one fully shielded transaction is accepted). Upstream compile impact: `amount/tests/vectors.rs` computes `2 * MAX_MONEY` at compile time, which is why `MAX_MONEY` is 46B coin rather than the i64 maximum.
+
 Measured facts for ADR-001:
 - An empty block carrying only an Ironwood shielded coinbase is **7,579 bytes** (the coinbase proof); a Candidate M coinbase-only block is a few hundred bytes. This is the per-block floor for propagation/validation on the Z path.
 - Stock Zebra 6.3.0 already routes the coinbase to the Ironwood pool at NU6.3 from a unified miner address, so the mandatory-shielded chain needs no template changes and no transparent-coinbase exception.

@@ -201,13 +201,14 @@ mod meow_mandatory_shielded {
         let _init_guard = zebra_test::init();
         let (mut rejected, mut accepted, mut shielded_only) = (0usize, 0usize, 0usize);
         for net in Network::iter() {
-            for tx in transactions_from_blocks(net.block_iter()) {
+            for (_height, tx) in transactions_from_blocks(net.block_iter()) {
+                let tx: &Transaction = tx.as_ref();
                 let expected_ok = if tx.is_coinbase() {
                     tx.outputs().iter().all(|o| o.value == Amount::<NonNegative>::zero())
                 } else {
                     tx.inputs().is_empty() && tx.outputs().is_empty()
                 };
-                let got = check::mandatory_shielded(&tx);
+                let got = check::mandatory_shielded(tx);
                 match (expected_ok, got) {
                     (true, Ok(())) => {
                         accepted += 1;
@@ -232,11 +233,11 @@ mod meow_mandatory_shielded {
     #[test]
     fn transparent_coinbase_is_rejected() {
         for net in Network::iter() {
-            let cb = transactions_from_blocks(net.block_iter())
-                .find(|tx| tx.is_coinbase() && tx.outputs().iter().any(|o| o.value != Amount::<NonNegative>::zero()))
+            let (_, cb) = transactions_from_blocks(net.block_iter())
+                .find(|(_, tx)| tx.is_coinbase() && tx.outputs().iter().any(|o| o.value != Amount::<NonNegative>::zero()))
                 .expect("a transparent coinbase in the vectors");
             assert!(matches!(
-                check::mandatory_shielded(&cb),
+                check::mandatory_shielded(cb.as_ref()),
                 Err(TransactionError::TransparentValueForbidden)
             ));
         }

@@ -39,7 +39,7 @@ docker run --rm -v "$PWD/monero:/src" -w /src/build/release meownero-monero-buil
   ./tests/unit_tests/unit_tests --gtest_filter='meow_emission*:*hardfork*:*difficulty*'
 ```
 
-Results: _filled in from the run (see below)_.
+Results (2026-09-05, patched build in the builder container): `meow_emission.*` — **7 passed** (constant_is_0_9_meow, reward_independent_of_supply, reward_independent_of_version, penalty_math_unchanged, supply_is_height_times_reward, tally_saturates_and_never_wraps, dilution_is_one_over_n_minus_one). Full upstream `unit_tests` run: 759 OK; failures attributable to the delta are the Monero address-vector tests (`get_account_address_*`, `multisig.make_*` — Meownero prefixes); `ban.subnet`, `http_server.response_soft_limit` and an abort in `cryptonote_protocol_handler.race_condition` are container/environment-class and still need a baseline run to attribute (`docs/security/code-map.md`).
 
 ## Devnet
 
@@ -49,4 +49,21 @@ spikes/candidate-m/devnet.sh monero /path/to/workdir 30
 
 Three `monerod` containers on a private Docker network; node1 mines with `--fixed-difficulty 1` to an offline-generated `M…` address; node2/node3 follow via `--add-exclusive-node`. The script asserts every block's reward is exactly 0.9 MEOW, genesis is 0, and cumulative supply equals height × 0.9.
 
-Results: _filled in from the run (see below)_.
+Results (2026-09-05, `devnet.sh … 30`):
+
+```
+miner address: MEGMXucw…nUFg                      (prefix 120 → "M")
+node1 height: 50
+height 0: reward 0             major_version 1     (genesis: zero-amount v2 coinbase)
+height 1: reward 900000000000  major_version 1
+height 2: reward 900000000000  major_version 2
+height 50: reward 900000000000 major_version 16    (fresh hard-fork table reached v16 at height 16)
+sampled 51 blocks: every reward == 0.9 MEOW (genesis 0)
+node's get_coinbase_tx_sum over heights 0..50: emission 45000000000000 atomic = 45.0 MEOW = 50 * 0.9  OK; fees 0
+meow-n2 height: 1588
+meow-n3 height: 1590                               (followers sync at the miner's pace; ~2 blocks/s at difficulty 1)
+```
+
+Genesis lesson recorded: a v1 coinbase output with amount 0 is rejected by the DB layer as "RCT output without commitment"; the genesis coinbase is therefore a v2 (`RCTTypeNull`) transaction, which the DB commits with `zeroCommit(0)`.
+
+Wallet round-trip: _see below_.
