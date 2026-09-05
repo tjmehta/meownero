@@ -51,19 +51,30 @@ This section is the project's constitution. Every other section defers to it.
 
 A component, construction, or design pattern is *battle-tested* — and therefore adoptable — only when **all** of the following hold:
 
-1. **Meaningful production history:** it has secured real value on a public network for a meaningful period (proposed bar: ≥2 years, or an explicit TJ/the whitepaper author sign-off on a documented exception).
-2. **Maintained upstream:** an active maintainer organization exists, with a security-advisory channel we can subscribe to.
-3. **Incident history reviewed from primary sources:** advisories, CVEs, and postmortems read and summarized in the evidence dossier — not "no news is good news."
+1. **Written assurance/readiness record (non-waivable).** *Amended 2026-09-05 by group decision; replaces the former "≥2 years production history" bar. TJ explicitly chose **no timeline minimum**: production time is evidence, never a pass/fail clock, and no sign-off exception exists for any line.* Rationale (E1 §10 item 2): the calendar bar would have passed Orchard in May 2026 while it carried a four-year-latent counterfeiting bug, and fails Ironwood today despite the strongest assurance artifact in the field — it measured elapsed time, not what anyone had checked. A component is eligible only when a written record exists covering **every** line below with primary-source citations, and no line reads "unknown":
+   - **(a) Exact shipped mechanism.** The precise protocol version, circuit, consensus rules and parameters we would inherit, pinned to an implementation tag (node release + crate versions), not to spec text — NU6.3's ZIPs were Draft/Proposed while live (E1 §3).
+   - **(b) Inherited gadgets and libraries.** Every proof-system and cryptographic dependency (gadget libraries such as `halo2_gadgets`, curve arithmetic, hash-to-curve, signature crates) enumerated and placed inside review scope. The June 2026 bug lived in a shared gadget library, not pool code (E1 §2a).
+   - **(c) Encodings, transcripts, and FFI boundaries.** Byte-level serialization, transcript domain prefixes, hash instantiations, and cross-language interfaces enumerated, each marked as proof-covered, audit-covered, or review-only. (Ironwood: encodings/BLAKE2b external to the proof; FCMP++: a fragile Rust FFI layout flagged by Trail of Bits.)
+   - **(d) Proof-to-implementation correspondence.** For any formal artifact: what is mechanically tied to deployed code (e.g. CI-pinned verifying-key/layout fixtures), what is hand-modeled, and what is *not composed* (e.g. Ironwood's ledger balance games vs. its circuit soundness proof — E1 §4). Credit only what is actually mechanized; headline claims are not evidence.
+   - **(e) Independent audits.** Firm, scope, commit range, date, and report actually read — not "audited" in a press release.
+   - **(f) Unresolved findings.** Zero critical/high; every open medium/low/informational item listed with its disposition and rationale.
+   - **(g) Upstream maintenance.** Active maintainer organization, security-advisory channel we subscribe to, observed release and incident-response cadence.
+   - **(h) Incident history from primary sources.** Advisories, CVEs, postmortems read and summarized — including *how* each issue was found, which is the evidence about discovery economics — never "no news is good news."
+   - **(i) Production time and value secured, as evidence.** Recorded and weighed for what operational history can actually catch (implementation, networking, DoS, wallet paths) and explicitly *not* as a proxy for proof soundness, which undetectable-by-design failures have twice shown it cannot measure (CVE-2019-7167 ~2 yrs latent; CVE-2026-54496 ~4 yrs latent).
+   The record is reviewed at every gate (§9.6, §10) and re-opened whenever the pinned implementation changes. An "unknown" on any line blocks adoption.
+2. **Maintained upstream:** an active maintainer organization exists, with a security-advisory channel we can subscribe to (rubric line (g), kept here as a gate check).
+3. **Incident history reviewed from primary sources:** advisories, CVEs, and postmortems read and summarized in the evidence dossier — not "no news is good news" (rubric line (h)).
 4. **Minimal consensus delta:** our usage stays as close as possible to the audited baseline; every divergence is enumerated and justified.
 5. **Reproducible test vectors** exist (or are written by us) for any behavior we change, checked in CI.
 6. **Adversarial testing:** changed surfaces get fuzzing and adversarial tests, not just happy-path tests.
 7. **Independent expert review/audit before mainnet** for every consensus or cryptographic delta, however small it looks.
 8. **No unresolved critical or high findings** at any launch gate. Ship dates move; this bar does not.
 
-### 2.3 Two principles that prevent self-deception
+### 2.3 Three principles that prevent self-deception
 
 - **Copying audited code does not preserve its security.** An audit certifies a whole system under its stated assumptions. The moment we change an invariant — a value-balance rule, a proof statement, a serialization, an emission function — the audit's coverage is void on every path that touches the changed assumption. Re-review scope is therefore *the delta plus everything whose assumptions the delta touches*, not the delta alone.
 - **A prototype demonstrates feasibility, never security.** Phase 0 prototypes exist to answer "can this work at all?" Nothing is security-approved because it ran on a devnet. Security approval comes only from the checklist above, applied at the M1–M3 gates (§10).
+- **Inherited gadget layers get audited as if we wrote them** (*adopted 2026-09-05; from E1 §10 item 6, derived from Hornby's June 2026 work log, E1 §2a*). Four launch-blocking controls: (1) a full-stack, AI-assisted soundness audit of the inherited gadget/proof layer, not only pool or consensus code; (2) targeted, multi-trial, design-document-fed prompting rather than a single generic pass — the Orchard bug was found in only one of four generic-prompt runs; (3) a named human retained to defend low-signal-but-real findings against model skepticism; (4) balance-integrity audits re-run on each major new model release before every gate. One clean pass proves nothing; the controls exist because discovery was fragile.
 
 ---
 
