@@ -6,7 +6,7 @@ upstream drift; the script doubles as the touched-surface inventory.  Run: pytho
 
 Deltas exercised (the actual risky ones, PLAN.md §5 E2/E3):
   1. emission: constant 0.9 coin/block replaces the halving schedule; genesis pays 0
-  2. MAX_MONEY raised (perpetual issuance exceeds Zcash's 21M cap after ~89 years at 120 s)
+  2. MAX_MONEY raised to 46B coin (perpetual issuance exceeds Zcash's 21M cap after ~88 years at 120 s)
   3. mandatory privacy: non-coinbase transactions may carry no transparent inputs or outputs;
      coinbase transparent outputs must be zero-value (shielded coinbase per ZIP-213)
   4. block spacing 120 s (working value)
@@ -80,7 +80,7 @@ mod meow_tests {
     #[test]
     fn subsidy_is_flat_on_every_network_and_height() {
         for net in Network::iter() {
-            assert_eq!(block_subsidy(Height(0), &net).unwrap(), Amount::zero());
+            assert_eq!(block_subsidy(Height(0), &net).unwrap(), Amount::<NonNegative>::zero());
             for h in [1u32, 2, 100, 262_800, 10 * 262_800, 1_000_000_000, Height::MAX.0] {
                 assert_eq!(
                     block_subsidy(Height(h), &net).unwrap(),
@@ -119,9 +119,10 @@ mod meow_tests {
 edit("zebra-chain/src/amount.rs", [
     ("pub const MAX_MONEY: i64 = 21_000_000 * COIN;",
      "// Meownero: perpetual issuance has no cap; the type bound is raised to the largest value that\n"
-     "// keeps every Amount arithmetic path inside i64 (9.2e18 < i64::MAX). Zcash's 21M cap would be\n"
-     "// crossed after ~88 years at 0.9/120 s, at which point every value-pool check would fail.\n"
-     "pub const MAX_MONEY: i64 = 92_000_000_000 * COIN;"),
+     "// keeps every Amount arithmetic path (upstream tests compute 2 * MAX_MONEY) inside i64.\n"
+     "// Zcash's 21M cap would be crossed after ~88 years at 0.9/120 s, at which point every\n"
+     "// value-pool check would fail; 46B coin is ~194,000 years of issuance.\n"
+     "pub const MAX_MONEY: i64 = 46_000_000_000 * COIN;"),
 ])
 
 # ---------------------------------------------------------------- 3. mandatory privacy

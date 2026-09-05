@@ -1,21 +1,22 @@
 diff --git a/zebra-chain/src/amount.rs b/zebra-chain/src/amount.rs
-index 06903eb..28c1098 100644
+index 06903eb..3674163 100644
 --- a/zebra-chain/src/amount.rs
 +++ b/zebra-chain/src/amount.rs
-@@ -607,7 +607,10 @@ impl Constraint for NegativeOrZero {
+@@ -607,7 +607,11 @@ impl Constraint for NegativeOrZero {
  pub const COIN: i64 = 100_000_000;
  
  /// The maximum zatoshi amount.
 -pub const MAX_MONEY: i64 = 21_000_000 * COIN;
 +// Meownero: perpetual issuance has no cap; the type bound is raised to the largest value that
-+// keeps every Amount arithmetic path inside i64 (9.2e18 < i64::MAX). Zcash's 21M cap would be
-+// crossed after ~88 years at 0.9/120 s, at which point every value-pool check would fail.
-+pub const MAX_MONEY: i64 = 92_000_000_000 * COIN;
++// keeps every Amount arithmetic path (upstream tests compute 2 * MAX_MONEY) inside i64.
++// Zcash's 21M cap would be crossed after ~88 years at 0.9/120 s, at which point every
++// value-pool check would fail; 46B coin is ~194,000 years of issuance.
++pub const MAX_MONEY: i64 = 46_000_000_000 * COIN;
  
  /// A trait for defining constraints on `Amount`
  pub trait Constraint {
 diff --git a/zebra-chain/src/parameters/network/subsidy.rs b/zebra-chain/src/parameters/network/subsidy.rs
-index 20e82e9..fb29bc8 100644
+index 20e82e9..2154eb6 100644
 --- a/zebra-chain/src/parameters/network/subsidy.rs
 +++ b/zebra-chain/src/parameters/network/subsidy.rs
 @@ -445,6 +445,14 @@ pub fn halving(height: Height, network: &Network) -> u32 {
@@ -56,7 +57,7 @@ index 20e82e9..fb29bc8 100644
 +    #[test]
 +    fn subsidy_is_flat_on_every_network_and_height() {
 +        for net in Network::iter() {
-+            assert_eq!(block_subsidy(Height(0), &net).unwrap(), Amount::zero());
++            assert_eq!(block_subsidy(Height(0), &net).unwrap(), Amount::<NonNegative>::zero());
 +            for h in [1u32, 2, 100, 262_800, 10 * 262_800, 1_000_000_000, Height::MAX.0] {
 +                assert_eq!(
 +                    block_subsidy(Height(h), &net).unwrap(),

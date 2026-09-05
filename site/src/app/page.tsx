@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Principles } from "@/components/principles";
+import { Notify } from "@/components/notify";
 
 // Entity data for search and AI answer engines. Deliberately no founder,
 // address, or contact fields: the project has no public identities yet.
@@ -69,6 +70,10 @@ export default function Home() {
               Meownero is a proof-of-work coin where every transaction is
               private by rule. Fair launch. No premine.
             </p>
+
+            <div className="rise mt-8" style={{ "--i": 3 } as React.CSSProperties}>
+              <Notify />
+            </div>
           </div>
 
           <div className="order-1 flex justify-center md:order-2 md:justify-end">

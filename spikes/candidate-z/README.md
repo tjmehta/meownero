@@ -7,7 +7,7 @@ Feasibility only, never security (PLAN.md §2.3). Upstream pin: `ZcashFoundation
 | Area | Change | Files |
 |---|---|---|
 | Emission | `block_subsidy` returns the constant `MEOW_BLOCK_SUBSIDY` = 90,000,000 zatoshi (0.9 coin at 8 dp) for every height ≥ 1; genesis 0; halving/slow-start code unreachable | `parameters/network/subsidy.rs`, `subsidy/constants.rs` |
-| Supply bound | `MAX_MONEY` raised from 21M to 92B coin: perpetual issuance crosses Zcash's cap after ~88 years at 120 s, after which every value-pool check would fail | `amount.rs` |
+| Supply bound | `MAX_MONEY` raised from 21M to 46B coin (largest value keeping upstream's `2 * MAX_MONEY` test arithmetic inside i64): perpetual issuance crosses Zcash's cap after ~88 years at 120 s, after which every value-pool check would fail | `amount.rs` |
 | Mandatory privacy | new consensus check `mandatory_shielded`: non-coinbase transactions may have no transparent inputs or outputs; coinbase transparent outputs must be zero-value (subsidy goes to a shielded receiver per ZIP-213). Wired into `check_structure_and_network_rules` so it applies to blocks and mempool | `transaction/check.rs`, `transaction.rs`, `error.rs` |
 | Block time | `POST_BLOSSOM_POW_TARGET_SPACING` 75 → 120 s (working value) | `parameters/network_upgrade.rs` |
 | Tests | `meow_tests` (subsidy invariants, supply fits `MAX_MONEY`, no funding streams on the control network); `meow_mandatory_shielded` (rule restated independently and checked against every transaction in the upstream mainnet/testnet block vectors; transparent coinbase rejected) | `subsidy.rs`, `transaction/tests.rs` |
@@ -55,4 +55,22 @@ Adversarial run: the same config with a transparent `miner_address` (`tmJymvcUCn
 
 Three blocks mined; every coinbase is a v6 transaction with an Ironwood output and zero transparent outputs; `getblockchaininfo` value pools: transparent 0, sapling 0, orchard 0, ironwood 18.75 (3 × 6.25 Regtest subsidy). So ZIP-213 shielded coinbase into the Ironwood pool works in stock Zebra 6.3.0, and a mandatory-shielded chain needs no transparent-coinbase carve-out (confirms E2 §3a).
 
-Results of the patched run: _filled in from the run (see below)_.
+## Patched run (2026-09-05, zebrad 6.3.0 + delta, Regtest, NU6.3 at height 1)
+
+`generate 10` succeeded. Per-block observation via `getblock <h> 2`:
+
+| height | coinbase version | transparent vout | transparent value | Ironwood output | block size (bytes) |
+|---|---|---|---|---|---|
+| 0 (Regtest genesis) | 1 | 1 | 0 | no | 382 |
+| 1 | 6 | 0 | 0 | yes | 7,579 |
+| 2 … 10 | 6 | 0 | 0 | yes | 7,579 |
+
+`getblockchaininfo` value pools after 10 blocks: transparent 0, sprout 0, sapling 0, orchard 0, lockbox 0, **ironwood 9.00000000** (`chainValueZat` 900,000,000 = 10 × 90,000,000). Supply equals height × 0.9 exactly; genesis contributed 0.
+
+Adversarial run (same binary, `miner_address` = transparent `tmJymvcUCn1ctbghvTJpXBwHiMEB8P6wxNV`): `generate 1` returned `{"error":{"code":-1,"message":"block was rejected: Rejected"}}` and the node log shows `submit block failed verification error=Ok(Block { source: Transaction(TransparentValueForbidden) })`. The rule bites at block validation, before the block enters the state.
+
+Measured facts for ADR-001:
+- An empty block carrying only an Ironwood shielded coinbase is **7,579 bytes** (the coinbase proof); a Candidate M coinbase-only block is a few hundred bytes. This is the per-block floor for propagation/validation on the Z path.
+- Stock Zebra 6.3.0 already routes the coinbase to the Ironwood pool at NU6.3 from a unified miner address, so the mandatory-shielded chain needs no template changes and no transparent-coinbase exception.
+- Delta size: 8 files, 250 diff lines, of which the consensus-bearing lines are one constant (subsidy), one constant (spacing), one bound (`MAX_MONEY`) and one 12-line check plus its wiring.
+
