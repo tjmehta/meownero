@@ -335,10 +335,10 @@ index 7aea5cf..8ae0705 100644
  #if defined(DEBUG_CREATE_BLOCK_TEMPLATE)
      LOG_PRINT_L1("Creating block template: reward " << block_reward <<
 diff --git a/src/hardforks/hardforks.cpp b/src/hardforks/hardforks.cpp
-index 336ef65..e208b49 100644
+index 336ef65..19470a9 100644
 --- a/src/hardforks/hardforks.cpp
 +++ b/src/hardforks/hardforks.cpp
-@@ -32,50 +32,27 @@
+@@ -32,50 +32,16 @@
  #define MONERO_DEFAULT_LOG_CATEGORY "blockchain.hardforks"
  
  const hardfork_t mainnet_hard_forks[] = {
@@ -383,28 +383,17 @@ index 336ef65..e208b49 100644
 -
 -  { 15, 2688888, 0, 1656629117 },
 -  { 16, 2689608, 0, 1656629118 },
-+  // Meownero: fresh chain. Genesis is v1; every upstream rule set activates one block apart so the
-+  // chain runs current (v16) consensus from height 16. Times are 2026-09-05 UTC + version, strictly increasing.
-+  { 1, 1, 0, 1757030401 },
-+  { 2, 2, 0, 1757030402 },
-+  { 3, 3, 0, 1757030403 },
-+  { 4, 4, 0, 1757030404 },
-+  { 5, 5, 0, 1757030405 },
-+  { 6, 6, 0, 1757030406 },
-+  { 7, 7, 0, 1757030407 },
-+  { 8, 8, 0, 1757030408 },
-+  { 9, 9, 0, 1757030409 },
-+  { 10, 10, 0, 1757030410 },
-+  { 11, 11, 0, 1757030411 },
-+  { 12, 12, 0, 1757030412 },
-+  { 13, 13, 0, 1757030413 },
-+  { 14, 14, 0, 1757030414 },
-+  { 15, 15, 0, 1757030415 },
-+  { 16, 16, 0, 1757030416 },
++  // Meownero: fresh chain, single jump. Genesis (height 0) is v1; every block from height 1 runs the current
++  // v16 rule set (RingCT coinbase, BP+, ring 16, view tags). Regtest-style {1@0, 16@1} rather than sixteen
++  // consecutive activations: the P2P handshake rejects a peer whose advertised top_version differs from the
++  // ideal version at height-1 (cryptonote_protocol_handler.inl), so every activation boundary above v6 costs
++  // one height of failed handshakes; a launch window with ten such boundaries is avoided by having none.
++  { 1, 0, 0, 1757030400 },
++  { 16, 1, 0, 1757030401 },
  };
  const size_t num_mainnet_hard_forks = sizeof(mainnet_hard_forks) / sizeof(mainnet_hard_forks[0]);
 -const uint64_t mainnet_hard_fork_version_1_till = 1009826;
-+const uint64_t mainnet_hard_fork_version_1_till = 1;
++const uint64_t mainnet_hard_fork_version_1_till = 0;
  
  const hardfork_t testnet_hard_forks[] = {
    // version 1 from the start of the blockchain
@@ -813,3 +802,24 @@ index 9d06c8e..e1560c1 100644
 +      ASSERT_GT(reward_at(agc), 0u);
    }
  }
+diff --git a/tests/unit_tests/hardfork.cpp b/tests/unit_tests/hardfork.cpp
+index bb2632d..0ded363 100644
+--- a/tests/unit_tests/hardfork.cpp
++++ b/tests/unit_tests/hardfork.cpp
+@@ -604,3 +604,16 @@ TEST(get, earliest_ideal_height)
+     ASSERT_EQ(hf.get_earliest_ideal_height_for_version(10), std::numeric_limits<uint64_t>::max());
+ }
+ 
++// Meownero: the mainnet table must give the launch window zero handshake hiccups (see hardforks.cpp comment)
++// and put every non-genesis block on the current rule set.
++#include "hardforks/hardforks.h"
++TEST(meow_hardforks, single_jump_table)
++{
++  ASSERT_EQ(num_mainnet_hard_forks, 2u);
++  ASSERT_EQ(mainnet_hard_forks[0].version, 1);   ASSERT_EQ(mainnet_hard_forks[0].height, 0u);
++  ASSERT_EQ(mainnet_hard_forks[1].version, 16);  ASSERT_EQ(mainnet_hard_forks[1].height, 1u);
++  ASSERT_LT(mainnet_hard_forks[0].time, mainnet_hard_forks[1].time);
++  // no activation boundary whose predecessor is >= v6 anywhere in the table (each would cost a height of failed handshakes)
++  for (size_t i = 1; i < num_mainnet_hard_forks; ++i)
++    ASSERT_LT(mainnet_hard_forks[i-1].version, 6) << "activation " << i << " would break handshakes for one height";
++}

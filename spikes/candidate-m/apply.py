@@ -9,7 +9,7 @@ Consensus parameters (PLAN.md rev 4 §8.1, §8.2):
   * MEOW_BLOCK_REWARD = 0.9 MEOW per block, perpetual, flat (9e11 atomic @ 12 dp)
   * genesis pays 0 (zero spendable outputs); supply(h) == h * 0.9 MEOW exactly
   * DIFFICULTY_TARGET_V2 = 120 s (inherited unchanged; working value)
-  * fresh hard-fork table v1..v16 at heights 1..16 (chain runs v16 rules from height 16)
+  * hard-fork table {v1 @ 0, v16 @ 1}: every non-genesis block runs current (v16) rules
 Network identity: name, ports, network IDs, address prefixes, empty seed lists,
 no upstream checkpoints/DNS/update checks.
 """
@@ -174,11 +174,14 @@ p = root / "src/hardforks/hardforks.cpp"
 s = p.read_text()
 start = s.index("const hardfork_t mainnet_hard_forks[] = {")
 end = s.index("const uint64_t mainnet_hard_fork_version_1_till = 1009826;")
-table = "const hardfork_t mainnet_hard_forks[] = {\n  // Meownero: fresh chain. Genesis is v1; every upstream rule set activates one block apart so the\n  // chain runs current (v16) consensus from height 16. Times are 2026-09-05 UTC + version, strictly increasing.\n"
-for v in range(1, 17):
-    table += f"  {{ {v}, {v}, 0, {1757030400 + v} }},\n"
-table += "};\nconst size_t num_mainnet_hard_forks = sizeof(mainnet_hard_forks) / sizeof(mainnet_hard_forks[0]);\n"
-s = s[:start] + table + "const uint64_t mainnet_hard_fork_version_1_till = 1;" + s[end + len("const uint64_t mainnet_hard_fork_version_1_till = 1009826;"):]
+table = ("const hardfork_t mainnet_hard_forks[] = {\n"
+         "  // Meownero: fresh chain, single jump (regtest precedent). Genesis is v1; every block from height 1 runs the\n"
+         "  // current v16 rule set. Consecutive activations would burn the first blocks' plaintext coinbases and cost one\n"
+         "  // height of failed handshakes per activation boundary above v6 (cryptonote_protocol_handler.inl).\n"
+         "  { 1, 0, 0, 1757030400 },\n"
+         "  { 16, 1, 0, 1757030401 },\n"
+         "};\nconst size_t num_mainnet_hard_forks = sizeof(mainnet_hard_forks) / sizeof(mainnet_hard_forks[0]);\n")
+s = s[:start] + table + "const uint64_t mainnet_hard_fork_version_1_till = 0;" + s[end + len("const uint64_t mainnet_hard_fork_version_1_till = 1009826;"):]
 p.write_text(s); touched.append("src/hardforks/hardforks.cpp")
 
 # ---------------------------------------------------------------- checkpoints: none inherited

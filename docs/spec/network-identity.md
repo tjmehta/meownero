@@ -23,7 +23,9 @@ Address prefix derivation: Monero base58 encodes 8-byte blocks into 11 character
 
 ## 3. Hard-fork table (mainnet)
 
-Fresh chain: versions 1..16 activate at heights 1..16 with strictly increasing times (2026-09-05 UTC + version). From height 16 the chain runs upstream v16 consensus (RingCT/CLSAG, BP+, ring 16, view tags, tagged outputs, per-byte dynamic fee). `mainnet_hard_fork_version_1_till = 1`. Testnet/stagenet tables are still Monero's and must be replaced before either network is used.
+Single jump, regtest precedent: `{ v1 @ height 0 }` (genesis) and `{ v16 @ height 1 }`. Every non-genesis block runs the current upstream rule set (RingCT/CLSAG, BP+, ring 16, view tags, tagged outputs, per-byte dynamic fee). `mainnet_hard_fork_version_1_till = 0`.
+
+Why not sixteen consecutive activations (the control's first table): (1) a v1–v3 block's coinbase is a plaintext-amount output that can never be spent under ring-size 16 with no same-amount decoys — the first blocks' rewards would be burned; (2) the P2P handshake rejects a peer whose advertised `top_version` differs from the ideal version at `height − 1`, so each activation boundary above v6 costs one height of failed handshakes — ten of them right after genesis. Found by the upstream `cryptonote_protocol_handler.race_condition` test hanging under the first table. Unit test `meow_hardforks.single_jump_table` pins the shape. Testnet/stagenet tables are still Monero's and must be replaced before either network is used.
 
 ## 4. Removed trust surfaces (must stay removed)
 

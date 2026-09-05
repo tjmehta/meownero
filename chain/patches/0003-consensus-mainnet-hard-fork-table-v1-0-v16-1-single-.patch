@@ -1,0 +1,109 @@
+From d64165ce8e01afd772034994f30362f48c259265 Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Sat, 5 Sep 2026 15:06:31 -0700
+Subject: [PATCH 3/6] =?UTF-8?q?consensus:=20mainnet=20hard-fork=20table=20?=
+ =?UTF-8?q?{v1=20@=200,=20v16=20@=201}=20=E2=80=94=20single=20jump,=20regt?=
+ =?UTF-8?q?est=20precedent?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Genesis is v1; every block from height 1 runs the current v16 rule set, so no
+pre-RingCT coinbase output ever exists (a v1..v3 coinbase would be unspendable
+under ring-size 16 with no same-amount decoys) and the P2P handshake never hits
+an activation boundary above v6 during launch (cryptonote_protocol_handler.inl
+rejects a peer whose top_version != ideal(height-1); with sixteen consecutive
+activations that is ten heights of failed handshakes right after genesis).
+mainnet_hard_fork_version_1_till = 0. Unit test pins the table shape.
+---
+ src/hardforks/hardforks.cpp   | 50 ++++++-----------------------------
+ tests/unit_tests/hardfork.cpp | 13 +++++++++
+ 2 files changed, 21 insertions(+), 42 deletions(-)
+
+diff --git a/src/hardforks/hardforks.cpp b/src/hardforks/hardforks.cpp
+index 336ef65..19470a9 100644
+--- a/src/hardforks/hardforks.cpp
++++ b/src/hardforks/hardforks.cpp
+@@ -32,50 +32,16 @@
+ #define MONERO_DEFAULT_LOG_CATEGORY "blockchain.hardforks"
+ 
+ const hardfork_t mainnet_hard_forks[] = {
+-  // version 1 from the start of the blockchain
+-  { 1, 1, 0, 1341378000 },
+-
+-  // version 2 starts from block 1009827, which is on or around the 20th of March, 2016. Fork time finalised on 2015-09-20. No fork voting occurs for the v2 fork.
+-  { 2, 1009827, 0, 1442763710 },
+-
+-  // version 3 starts from block 1141317, which is on or around the 24th of September, 2016. Fork time finalised on 2016-03-21.
+-  { 3, 1141317, 0, 1458558528 },
+-
+-  // version 4 starts from block 1220516, which is on or around the 5th of January, 2017. Fork time finalised on 2016-09-18.
+-  { 4, 1220516, 0, 1483574400 },
+-
+-  // version 5 starts from block 1288616, which is on or around the 15th of April, 2017. Fork time finalised on 2017-03-14.
+-  { 5, 1288616, 0, 1489520158 }, 
+-
+-  // version 6 starts from block 1400000, which is on or around the 16th of September, 2017. Fork time finalised on 2017-08-18.
+-  { 6, 1400000, 0, 1503046577 },
+-
+-  // version 7 starts from block 1546000, which is on or around the 6th of April, 2018. Fork time finalised on 2018-03-17.
+-  { 7, 1546000, 0, 1521303150 },
+-
+-  // version 8 starts from block 1685555, which is on or around the 18th of October, 2018. Fork time finalised on 2018-09-02.
+-  { 8, 1685555, 0, 1535889547 },
+-
+-  // version 9 starts from block 1686275, which is on or around the 19th of October, 2018. Fork time finalised on 2018-09-02.
+-  { 9, 1686275, 0, 1535889548 },
+-
+-  // version 10 starts from block 1788000, which is on or around the 9th of March, 2019. Fork time finalised on 2019-02-10.
+-  { 10, 1788000, 0, 1549792439 },
+-
+-  // version 11 starts from block 1788720, which is on or around the 10th of March, 2019. Fork time finalised on 2019-02-15.
+-  { 11, 1788720, 0, 1550225678 },
+-
+-  // version 12 starts from block 1978433, which is on or around the 30th of November, 2019. Fork time finalised on 2019-10-18.
+-  { 12, 1978433, 0, 1571419280 },
+-
+-  { 13, 2210000, 0, 1598180817 },
+-  { 14, 2210720, 0, 1598180818 },
+-
+-  { 15, 2688888, 0, 1656629117 },
+-  { 16, 2689608, 0, 1656629118 },
++  // Meownero: fresh chain, single jump. Genesis (height 0) is v1; every block from height 1 runs the current
++  // v16 rule set (RingCT coinbase, BP+, ring 16, view tags). Regtest-style {1@0, 16@1} rather than sixteen
++  // consecutive activations: the P2P handshake rejects a peer whose advertised top_version differs from the
++  // ideal version at height-1 (cryptonote_protocol_handler.inl), so every activation boundary above v6 costs
++  // one height of failed handshakes; a launch window with ten such boundaries is avoided by having none.
++  { 1, 0, 0, 1757030400 },
++  { 16, 1, 0, 1757030401 },
+ };
+ const size_t num_mainnet_hard_forks = sizeof(mainnet_hard_forks) / sizeof(mainnet_hard_forks[0]);
+-const uint64_t mainnet_hard_fork_version_1_till = 1009826;
++const uint64_t mainnet_hard_fork_version_1_till = 0;
+ 
+ const hardfork_t testnet_hard_forks[] = {
+   // version 1 from the start of the blockchain
+diff --git a/tests/unit_tests/hardfork.cpp b/tests/unit_tests/hardfork.cpp
+index bb2632d..0ded363 100644
+--- a/tests/unit_tests/hardfork.cpp
++++ b/tests/unit_tests/hardfork.cpp
+@@ -604,3 +604,16 @@ TEST(get, earliest_ideal_height)
+     ASSERT_EQ(hf.get_earliest_ideal_height_for_version(10), std::numeric_limits<uint64_t>::max());
+ }
+ 
++// Meownero: the mainnet table must give the launch window zero handshake hiccups (see hardforks.cpp comment)
++// and put every non-genesis block on the current rule set.
++#include "hardforks/hardforks.h"
++TEST(meow_hardforks, single_jump_table)
++{
++  ASSERT_EQ(num_mainnet_hard_forks, 2u);
++  ASSERT_EQ(mainnet_hard_forks[0].version, 1);   ASSERT_EQ(mainnet_hard_forks[0].height, 0u);
++  ASSERT_EQ(mainnet_hard_forks[1].version, 16);  ASSERT_EQ(mainnet_hard_forks[1].height, 1u);
++  ASSERT_LT(mainnet_hard_forks[0].time, mainnet_hard_forks[1].time);
++  // no activation boundary whose predecessor is >= v6 anywhere in the table (each would cost a height of failed handshakes)
++  for (size_t i = 1; i < num_mainnet_hard_forks; ++i)
++    ASSERT_LT(mainnet_hard_forks[i-1].version, 6) << "activation " << i << " would break handshakes for one height";
++}
+-- 
+2.55.0
+
