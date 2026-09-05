@@ -1,0 +1,58 @@
+# Candidate Z control — Zebra v6.3.0 + Meownero delta
+
+Feasibility only, never security (PLAN.md §2.3). Upstream pin: `ZcashFoundation/zebra` `v6.3.0` (commit `d1fd7ad`, 2026-09-04), Rust toolchain 1.91.0 per `rust-toolchain.toml`.
+
+## What the delta does (`apply.py`, exported as `meownero-z-v6.3.0.diff`)
+
+| Area | Change | Files |
+|---|---|---|
+| Emission | `block_subsidy` returns the constant `MEOW_BLOCK_SUBSIDY` = 90,000,000 zatoshi (0.9 coin at 8 dp) for every height ≥ 1; genesis 0; halving/slow-start code unreachable | `parameters/network/subsidy.rs`, `subsidy/constants.rs` |
+| Supply bound | `MAX_MONEY` raised from 21M to 92B coin: perpetual issuance crosses Zcash's cap after ~88 years at 120 s, after which every value-pool check would fail | `amount.rs` |
+| Mandatory privacy | new consensus check `mandatory_shielded`: non-coinbase transactions may have no transparent inputs or outputs; coinbase transparent outputs must be zero-value (subsidy goes to a shielded receiver per ZIP-213). Wired into `check_structure_and_network_rules` so it applies to blocks and mempool | `transaction/check.rs`, `transaction.rs`, `error.rs` |
+| Block time | `POST_BLOSSOM_POW_TARGET_SPACING` 75 → 120 s (working value) | `parameters/network_upgrade.rs` |
+| Tests | `meow_tests` (subsidy invariants, supply fits `MAX_MONEY`, no funding streams on the control network); `meow_mandatory_shielded` (rule restated independently and checked against every transaction in the upstream mainnet/testnet block vectors; transparent coinbase rejected) | `subsidy.rs`, `transaction/tests.rs` |
+
+Not changed: identity (the control runs on Zebra's **Regtest** network because Zebra cannot generate genesis blocks; a Meownero genesis, magic, name and address prefixes are an M1 task); PoW (Equihash inherited, PoW disabled on Regtest; RandomX integration is the E5 scope item and is **not** built); funding streams and lockbox (empty by Regtest configuration, would be a code delta on a real fork); wallet.
+
+## Build (no sudo; user-space toolchain)
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install cmake libclang
+export PATH=$PWD/.venv/bin:$PATH
+export LIBCLANG_PATH=$PWD/.venv/lib/python3.*/site-packages/clang/native
+export BINDGEN_EXTRA_CLANG_ARGS="-I/usr/lib/gcc/x86_64-linux-gnu/13/include"   # gcc builtin headers for rocksdb bindgen
+git clone --depth 1 https://github.com/ZcashFoundation/zebra.git && cd zebra && git checkout d1fd7ad
+python3 ../spikes/candidate-z/apply.py .
+cargo build --release -p zebrad --features internal-miner
+```
+
+## Run (single node, Regtest identity, NU6.3 rules from height 1)
+
+`zebrad.toml`:
+
+```toml
+[network]
+network = "Regtest"
+[network.testnet_parameters.activation_heights]
+"NU6.3" = 1
+[mining]
+miner_address = "uregtest1efxggx6…"   # Zebra's default Regtest unified address (Sapling+Orchard receivers)
+[rpc]
+listen_addr = "127.0.0.1:19332"
+enable_cookie_auth = false
+```
+
+Mine with the Regtest `generate` RPC (Zebra's internal miner is disabled upstream, issue #8180):
+
+```bash
+curl -s -X POST -H 'content-type: application/json' --data '{"jsonrpc":"2.0","id":1,"method":"generate","params":[10]}' http://127.0.0.1:19332
+curl -s -X POST -H 'content-type: application/json' --data '{"jsonrpc":"2.0","id":1,"method":"getblockchaininfo","params":[]}' http://127.0.0.1:19332
+```
+
+Adversarial run: the same config with a transparent `miner_address` (`tmJymvcUCn1ctbghvTJpXBwHiMEB8P6wxNV`) must fail to produce blocks with `TransparentValueForbidden`.
+
+## Baseline observation (unpatched zebrad, same config)
+
+Three blocks mined; every coinbase is a v6 transaction with an Ironwood output and zero transparent outputs; `getblockchaininfo` value pools: transparent 0, sapling 0, orchard 0, ironwood 18.75 (3 × 6.25 Regtest subsidy). So ZIP-213 shielded coinbase into the Ironwood pool works in stock Zebra 6.3.0, and a mandatory-shielded chain needs no transparent-coinbase carve-out (confirms E2 §3a).
+
+Results of the patched run: _filled in from the run (see below)_.
