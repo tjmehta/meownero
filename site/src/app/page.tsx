@@ -86,7 +86,7 @@ export default function Home() {
                     height={1024}
                     priority
                     sizes="(min-width: 1024px) 28rem, (min-width: 768px) 38vw, 72vw"
-                    className="size-full drop-shadow-[0_30px_60px_oklch(0.8_0.13_85/0.18)]"
+                    className="size-full"
                   />
                 </div>
               </div>

@@ -101,16 +101,17 @@
   }
 }
 
+/* transform + opacity only: no filter or will-change, because a filtered or
+   promoted layer can render a slightly different shade of dark on some GPUs
+   and show up as a faint square behind the coin. */
 @keyframes coin-in {
   from {
     opacity: 0;
     transform: scale(0.92) rotate(-6deg);
-    filter: blur(6px);
   }
   to {
     opacity: 1;
     transform: scale(1) rotate(0deg);
-    filter: blur(0);
   }
 }
 
@@ -149,12 +150,10 @@
 
 .coin-float {
   animation: coin-hover 7s ease-in-out infinite;
-  will-change: transform;
 }
 
 .coin-glow {
   animation: glow-breathe 7s ease-in-out infinite;
-  will-change: transform, opacity;
 }
 
 @keyframes fade {
