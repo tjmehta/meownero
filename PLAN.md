@@ -4,6 +4,8 @@
 
 **Steer status (2026-08-22, per TJ).** the whitepaper author's latest ideas — Zcash/Zebra derivation, Bitcoin interoperability, ASIC-resistant mining — are **promising hypotheses and desiderata, not requirements**. They are explored seriously and adopted where they can be done safely; none of them pre-selects an architecture. **Security is the overriding non-negotiable** (§2): where a desideratum and security conflict, the feature is dropped or the less novel path is chosen. The architecture decision is evidence-led and happens at the end of Phase 0 (§5), not before it.
 
+**Steer status (2026-09-05, group decision after the council pass).** **Mainnet quality is the only launch priority.** No desideratum may bypass the §2 doctrine, be promoted past its own kill criterion, or be named a launch exception (open-questions #4: *none*). Bitcoin interoperability remains desirable and stays on the roadmap, but it **defers until reviewed, production-quality precedent exists** for a swap construction over the spend-authorization scheme we actually ship (E4 rev 2 found none; §5 E4). Crypto-eligibility and monetary-policy decisions from the same session are recorded in §7 and §8.1.
+
 This plan turns the January 2026 whitepaper and the chat history into a credible first engineering phase. It is deliberately blunt where the source material is wrong, and deliberately conservative where cryptography or consensus questions are unresolved. Much Meow, but measured meow.
 
 ---
@@ -28,7 +30,7 @@ Each maps to an exploration in §5 with evidence requirements, kill criteria, an
 
 - **Zcash/Zebra/Orchard lineage** (the whitepaper author, 2026-08-22) → E1
 - **Linear fair emission, 1 MEOW per 2-minute block** (the whitepaper author, January whitepaper — the strongest-evidenced idea of the set) → E3
-- **Bitcoin interoperability / atomic swaps** (the whitepaper author, 2026-08-22) → E4
+- **Bitcoin interoperability / atomic swaps** (the whitepaper author, 2026-08-22) → E4 — *deferred post-launch by decision 2026-09-05; desirable, not a launch item; revisit on reviewed production precedent (§5 E4)*
 - **ASIC-resistant mining** (the whitepaper author, 2026-08-22) → E5
 - **Merge-mining with Monero** (the whitepaper author, January) → E6
 
@@ -190,7 +192,7 @@ Phase 0's mandate, in order: **(1) establish what has already been done safely b
 - **Consensus/crypto delta:** target zero consensus delta — swap logic belongs on Bitcoin's side and in off-chain protocol implementations. The crypto delta (adaptor signatures over our spend-auth scheme) is the risk, and it is real on both candidates post-upstream-changes.
 - **Security assumptions introduced:** adaptor-signature security over the specific scheme; swap-implementation correctness. Mitigating scope: swap failures lose swap participants' funds, not chain consensus — bad, but bounded.
 - **Audit burden:** external cryptographer review of the construction; audit of any swap implementation we endorse.
-- **Kill criteria:** no reviewed construction exists for our chosen lineage within Phase 0 → interop is **deferred to post-launch research**, preserving prerequisites where free (don't gratuitously break adaptor-friendliness of the signature scheme). Never launch-blocking; never fallback-triggering.
+- **Kill criteria — met, decision recorded 2026-09-05:** no reviewed construction exists for either lineage (E4 rev 2) → interop is **deferred to post-launch**, preserving the six zero-cost prerequisites in E4 §9 (unmodified spend-auth algebra, documented curves/encodings, upstream-aligned nonce behavior, HTLCs acknowledged as foreclosed, no note/spend-structure deltas, neither mechanism family credited as shippable). **Re-entry condition:** a reviewed, production-quality swap implementation over our shipped spend-auth scheme (M-path: an audited FCMP++-era eigenwallet or equivalent; Z-path: a reviewed scriptless/ZK-binding shielded-pool design with a Bitcoin instance), assessed through the full §2.2 rubric. Never launch-blocking; never fallback-triggering; never architecture-deciding.
 - **Safest fallback:** no protocol-level interop at launch; swaps via exchanges/OTC; revisit as the research matures. Explicitly rejected regardless of evidence: custodial bridges, federated pegs, wrapped assets — their trust assumptions fail §2.1 by construction.
 
 ### E5 — PoW: RandomX and the honest ASIC posture
@@ -220,7 +222,7 @@ Boot a minimal private devnet on **each** candidate — Candidate M with the emi
 
 1. Enumerate, per candidate, the **total consensus + cryptographic delta** required to satisfy the hard requirements (§1.1) plus whichever desiderata survived their kill criteria.
 2. Score each delta against the §2.2 checklist using the dossier evidence.
-3. **Select the candidate with the smallest total unproven surface.** Desiderata never outvote security: any desideratum whose only path fails §2.2 is deferred or dropped, not forced through.
+3. **Select the candidate with the smallest total unproven surface.** Desiderata never outvote security: any desideratum whose only path fails §2.2 is deferred or dropped, not forced through. *(Reaffirmed 2026-09-05: no launch-feature exceptions exist; mainnet quality is the only launch priority.)*
 4. If the evidence is genuinely inconclusive, §2.1 breaks the tie: the less novel architecture wins.
 5. TJ and the whitepaper author sign. Dissent is recorded in the ADR, not litigated on Twitter.
 
