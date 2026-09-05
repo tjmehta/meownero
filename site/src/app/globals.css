@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/*
+ * Single locked dark theme. The page is a teaser for a privacy coin and the
+ * gold coin art is the only saturated element, so neutrals are warm near-black
+ * and the one accent is the coin's gold.
+ */
+:root,
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.155 0.006 70);
+  --foreground: oklch(0.955 0.008 85);
+  --card: oklch(0.19 0.007 70);
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --gold: oklch(0.8 0.13 85);
+  --gold-soft: oklch(0.8 0.13 85 / 14%);
+  --primary: var(--gold);
+  --primary-foreground: oklch(0.2 0.03 80);
+  --secondary: oklch(0.24 0.008 70);
+  --secondary-foreground: var(--foreground);
+  --muted: oklch(0.24 0.008 70);
+  --muted-foreground: oklch(0.68 0.012 80);
+  --accent: var(--muted);
+  --accent-foreground: var(--foreground);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.8 0.13 85 / 60%);
+  --radius: 0.625rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--gold);
+    color: var(--primary-foreground);
+  }
+}
+
+/*
+ * Entry choreography. CSS keyframes, so it stays smooth while fonts and the
+ * coin image are still loading (off the main thread). Stagger is 60ms via
+ * --i, one shot, never blocks interaction.
+ */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes coin-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) rotate(-6deg);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes coin-hover {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1.5deg);
+  }
+}
+
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
+}
+
+.rise {
+  opacity: 0;
+  animation: rise 700ms var(--ease-out-strong) forwards;
+  animation-delay: calc(var(--i, 0) * 60ms + 120ms);
+}
+
+.coin-in {
+  opacity: 0;
+  animation: coin-in 900ms var(--ease-out-strong) forwards;
+}
+
+.coin-float {
+  animation: coin-hover 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.coin-glow {
+  animation: glow-breathe 7s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise,
+  .coin-in {
+    animation: fade 250ms ease forwards;
+    animation-delay: 0ms;
+  }
+  .coin-float,
+  .coin-glow {
+    animation: none;
+  }
+}
