@@ -1,6 +1,6 @@
 # Meownero Engineering Plan
 
-**Status:** Rev 3 — draft for review by TJ and the whitepaper author · **Date:** 2026-08-22 · **Scope:** Planning only — no consensus code, no vendored upstream, no remote repository yet.
+**Status:** Rev 4 — amended 2026-09-05 from Phase 0 evidence and group decisions (commits 93c47c5 clerical; 116d2f8, a9db573, aa9ce32, 7431e2c normative) · **Date:** 2026-08-22, rev 4 2026-09-05 · **Scope:** Planning only — no consensus code, no vendored upstream, no remote repository yet.
 
 **Steer status (2026-08-22, per TJ).** the whitepaper author's latest ideas — Zcash/Zebra derivation, Bitcoin interoperability, ASIC-resistant mining — are **promising hypotheses and desiderata, not requirements**. They are explored seriously and adopted where they can be done safely; none of them pre-selects an architecture. **Security is the overriding non-negotiable** (§2): where a desideratum and security conflict, the feature is dropped or the less novel path is chosen. The architecture decision is evidence-led and happens at the end of Phase 0 (§5), not before it.
 
@@ -158,6 +158,7 @@ Phase 0's mandate, in order: **(1) establish what has already been done safely b
 - **Deliverable:** `ADR-001` recording each exploration's outcome and the architecture selection, signed by TJ and the whitepaper author.
 - **Spikes are throwaway.** Phase 0 code lives under `spikes/` and is never promoted; this prevents sunk-cost capture.
 - **Every dossier uses the same template:** production precedents & maturity evidence to verify · consensus/crypto delta · security assumptions introduced · audit burden · kill criteria · safest fallback. No dossier, no adoption.
+- **Amendment process (adopted 2026-09-05).** Dossier findings never silently rewrite this plan. Amendments land as (1) one clearly labeled **clerical packet** per pass containing only source-backed factual corrections, each citing the dossier section that pins it, then (2) **normative changes as separate, dependency-ordered commits**, one decision each, after TJ/the whitepaper author sign-off — so doctrine cannot ride inside factual cleanup. Completed dossier work is not reopened by an amendment; new evidence gets a new dossier revision first.
 
 ### E1 — Zcash/Zebra/Orchard lineage viability
 
@@ -459,16 +460,18 @@ These run in parallel and must never share a critical path:
 
 ## 13. Questions TJ and the whitepaper author must decide
 
-1. **Ratify the security doctrine (§2) as written** — including the "prefer subtraction" tie-breaker and the ≥2-years production-history bar (or set a different bar). Everything downstream leans on this.
+1. ~~Ratify the security doctrine (§2) as written~~ — **answered 2026-09-05:** ratified *as amended* — calendar bar replaced by the non-waivable §2.2 readiness rubric with no timeline minimum; §2.3 gadget-layer controls adopted.
 2. **Confirm the hard-requirement list (§1.1)** — in particular that mandatory privacy is a hard *product* requirement with an evidence-led mechanism, and that every §1.2 desideratum is individually droppable.
-3. **Are any desiderata launch-blocking?** Default answer per this plan: none — each ships only if it passes §2.2, else it is deferred or dropped. Overriding that default for any item is a decision you must make explicitly, in writing, against the evidence.
-4. **Maturity bar for new upstream cryptography:** how many months of incident-free mainnet history must FCMP++ (Candidate M) accumulate before it is forkable? The same question applies to any newly-shipped Zcash NU on Candidate Z.
+3. ~~Are any desiderata launch-blocking?~~ — **answered 2026-09-05: none.** Mainnet quality is the only launch priority; Bitcoin interop defers to reviewed production precedent (§1, §5 E4).
+4. ~~Maturity bar for new upstream cryptography~~ — **answered 2026-09-05:** no calendar floor; mainnet-first eligibility via the §2.2 rubric; Ironwood not approved before Pirate's 2026-10-03 activation is observed and the exact gadget/encoding/integration review completes; FCMP++ monitored, not awaited (§7).
 5. **Deep-reorg protection:** if E6 survives, accept young-chain 51% risk naked, or adopt a bounded finality/checkpoint mechanism at launch with a sunset date? (§6.4 — a values call as much as an engineering one.)
 6. **Ticker collision:** "MEOW" is used by existing tokens (including the Solana squatter). Keep MEOW and fight for the name, or pick a cleaner ticker?
 7. **Public identities:** are you both willing to be publicly identifiable founders of a mandatory-privacy coin? (Feeds §9.2 items 1, 6, 7.)
 8. **Money:** who funds the external audit (5–6 figures), the counsel engagement, and the E4 cryptographer consult — group donation fund, out of pocket, or launch-delayed-until-funded?
 9. **Upstream-relationship posture** (lineage-dependent): open collaboration with Monero maintainers and/or ECC / Zcash Foundation / Shielded Labs (grant ask, upstreaming patches, shared advisories), or quiet derivative? Recommendation: open — E1's license question likely requires the conversation anyway, and goodwill is cheap insurance.
 10. **the whitepaper author's role:** whitepaper author → is he the second maintainer with release-signing keys? The two-person release rule (§9.4) needs its second person named.
+11. ~~Monetary policy: hard cap vs perpetual~~ — **answered in principle 2026-09-05:** perpetual subsidy. **Still open:** exact rate and schedule from the §8.1 table (P-flat 0.9 / decay-to-tail / restate the constraint), and whether the group's early-inflation targets are withdrawn given the §8.1 audit.
+12. **Block time:** 120 s is the working value; confirm or revise after Stage 2 propagation/orphan benchmarks (§8.1).
 
 ---
 
