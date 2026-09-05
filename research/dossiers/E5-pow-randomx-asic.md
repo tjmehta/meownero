@@ -1,6 +1,6 @@
 # E5 — Proof-of-work: RandomX and the honest ASIC posture
 
-**Exploration:** Which PoW, and what ASIC posture can we honestly commit to? · **Status:** Draft · **Date:** 2026-08-22
+**Exploration:** Which PoW, and what ASIC posture can we honestly commit to? · **Status:** Draft (rev 2) · **Date:** 2026-08-22, revised 2026-09-05
 
 ## 1. Draft verdict (DRAFT)
 
@@ -45,10 +45,10 @@ Lineage-native PoW with honest ASIC disclosure.
 
 ## 8. Open verification tasks
 
-- [ ] Pin Zephyr/Salvium RandomX usage from their own repos (currently aggregator-sourced).
-- [ ] Spec draft: our difficulty algorithm (LWMA-1, N, FTL=T×N/20, ±6T clamp, launch floor) with citations into zawy12's issues.
+- [x] Pin Zephyr/Salvium RandomX usage from their own repos. *(rev 2, 2026-09-05)* Zephyr: github.com/ZephyrProtocol/zephyr — Monero-derived, stock RandomX (standard XMRig `rx/0`); Salvium: github.com/salvium (docs.salvium.io: "RandomX, inherited from Monero", 120 s blocks); Wownero: RandomWOW fork (github.com/wownero/RandomWOW — 1 MiB scratchpad, 16 chained VM executions, active since height 114,969 on 2019-06-14). Stock-RandomX adopters therefore exist beyond Monero; a RandomX *variant* (Wownero-style) is a deliberate divergence we do not make (§2.1). `[VERIFIED-PRIMARY repo URLs; parameter claims from Wownero release notes]`
+- [ ] Spec draft: our difficulty algorithm with citations into zawy12's issues. *(rev 2 note: under ADR-001's provisional Candidate M the inherited Monero DAA — 720-block window, 15-block lag, 60-timestamp cut, 2 h future-time limit, PR #2887 hardening — is the baseline; the open design item narrows to the **launch floor** and whether a LWMA-style tighter FTL is adopted for the young-chain window. Decide in M1 with a whiplash simulation; do not swap the algorithm without evidence.)*
 - [ ] Z-path: locate Zebra's PoW abstraction boundary (how Equihash validation is modularized) to size the integration honestly — Stage 2 control-prototype input.
-- [ ] RandomX seed/key-block schedule implications for a chain that is *not* Monero (self-referential seeds) — document the design for both solo and merge-mined modes (joint with E6).
+- [ ] RandomX seed/key-block schedule implications for a chain that is *not* Monero — *(rev 2)* solo mode is inherent on Candidate M: `rx_seedheight` keys the dataset from Meownero's own block at the seed height (2048-block epochs, 64-block lag), as the control's own-chain genesis+mining confirms. Merge-mined mode would require validating Monero-keyed hashes (Tari `MoneroPowData` pattern, E6 rev 2) — deferred with E6.
 - [ ] Verify Verge incident details from a primary postmortem if the number is quoted anywhere public-facing.
 
 ## 9. Sources

@@ -1,10 +1,12 @@
 # E6 — Merge-mining with Monero
 
-**Exploration:** Launch merge-mined, solo, or hybrid — and what does the merge-mining precedent record actually support? · **Status:** Draft · **Date:** 2026-08-22
+**Exploration:** Launch merge-mined, solo, or hybrid — and what does the merge-mining precedent record actually support? · **Status:** Draft (rev 2) · **Date:** 2026-08-22, revised 2026-09-05
 
 ## 1. Draft verdict (DRAFT)
 
 The precedent record is now three-sided and unusually instructive. **Longevity:** AuxPoW itself is old and stable — Namecoin has merge-mined with Bitcoin since 2011–12, Dogecoin with Litecoin since block 371,337 (2014-09-11), and Dogecoin is the model *success*: most major Litecoin pools carry it, its hashrate jumped ~1500% in the first month, and it has been effectively attack-free since — but that maturity took years and began from an existential low-hashrate crisis. **Sabotage:** CoiledCoin (2012) confirms the zero-cost-attacker class — the Eligius pool unilaterally merge-mined it and killed it with empty blocks; academic work (Judmayer et al., "Merged Mining: Curse or Cure?") generalizes the pattern. **Centralization:** Namecoin's own materials admit single pools have repeatedly held ~80% of its hashrate — merge-mining can *concentrate* as easily as it secures. **RandomX/Monero specifically:** exactly one production precedent, Tari (mainnet May 2025, ~15 months) — mechanism verified against Tari RFC-0132 (aux commitment in Monero coinbase `tx_extra`, zero Monero consensus changes, aux chain validates a Monero PoW package including seed tracking). Verdict direction: merge-mining remains a genuine *decision*, not a default — the Dogecoin trajectory shows the model can mature into real security; CoiledCoin and Namecoin show a young, low-participation aux chain is at the mercy of any large parent pool. A solo-RandomX launch with merge-mining as a later, audited upgrade (Dogecoin itself added AuxPoW ten months post-launch) is the emerging conservative shape — to be decided at ADR-001, per PLAN.md.
+
+**Rev 2 (2026-09-05):** ADR-001 (proposed) dispositions merge-mining as *deferred* — solo-mined launch, added later by audited upgrade if pool soundings justify it; open-questions #5 remains the group's call. Multi-aux coexistence with Tari is now known to need a coordinator that does not exist off the shelf (§8).
 
 **PLAN.md impact:** none structural — §6's audit holds and gains the Dogecoin-timeline nuance ("added later" is itself precedented). One correction candidate: PLAN.md §6.2 says FCMP++ does not change Monero's PoW — still believed true, but with FCMP++ now confirmed as *not yet on mainnet* (stressnet-only, v0.19-alpha; hf milestone draft/no date), the "verify against shipped hard-fork code" task cannot complete until upstream ships. Merge-mining validation code would target today's 0.18.x mainnet rules and must track the eventual v0.20.
 
@@ -42,11 +44,11 @@ Solo-mined RandomX launch — now *positively precedented as a sequencing strate
 ## 8. Open verification tasks
 
 - [ ] Pool-commitment soundings: which Monero pools (and P2Pool) would realistically carry a second aux chain, and under what conditions.
-- [ ] Verify Tari's multi-aux/`tx_extra` handling and seed-tracking implementation in tari-project code (RFC → code check).
-- [ ] Tari post-mainnet incident review (reorgs, difficulty events) — 15 months of history to read.
-- [ ] Pin Dogecoin AuxPoW activation (block 371,337 / 2014-09-11) and the hashrate-jump figure from primary-era sources.
+- [x] Verify Tari's multi-aux/`tx_extra` handling and seed-tracking. *(rev 2, 2026-09-05)* RFC-0132 + tlu.tarilabs.com/mining/merged-mining-monero: `MoneroPowData` (Borsh in the Tari header `pow_data`) stores the Monero header, `randomx_vm_key`, tx count, merkle root, tx hashes, the full coinbase, and **aux-chain merkle proof hashes** — so the *protocol* anticipates multi-aux; the Minotari merge-mining proxy (lib.rs/crates/minotari_merge_mining_proxy) is documented and shipped as **single-aux (Tari↔Monero)** only. Conclusion: coexisting with Tari on the same coinbase needs a multi-aux coordinator (p2pool-style aux merkle tree) that does not exist off the shelf — a real build item if merge-mining is ever adopted. `[VERIFIED-PRIMARY RFC/docs; proxy scope SECONDARY]`
+- [x] Tari post-mainnet incident review. *(rev 2)* Mainnet 2025-05-06; one planned consensus hard fork at block 15,000 ("The Flow Supreme", 2025-05-26 release note) rebalancing RandomX/SHA3 hybrid rewards; no publicly documented reorg, difficulty crisis, consensus bug or emergency release found through 2026-09 (absence-of-evidence caveat; GitHub releases not read line-by-line). `[SECONDARY]`
+- [x] Pin Dogecoin AuxPoW activation. *(rev 2)* Dogecoin Core **v1.8.0** release notes: "AuxPoW is enabled from block 371,337" (doc/release-notes/release-notes-1.8.0.md); code `src/auxpow.cpp`, `src/auxpow.h`, `qa/rpc-tests/auxpow.py`; litecoinpool.org news #59 (merged mining start); CoinDesk 2014-09-11 coverage. Hashrate-jump figure remains `[SECONDARY]`.
 - [ ] Pin the "fcmp++ hf" milestone state and re-check at ADR-001 (affects fork-point timing for Candidate M and revalidation timing for merge-mining code).
-- [ ] Confirm current Monero mainnet hashrate from a live source (whitepaper's "~2 GH/s" remains unverified).
+- [x] Confirm current Monero mainnet hashrate. *(rev 2)* ~6.0 GH/s (monero.observer/stats daily 2026-08-31→09-04: 5.87–6.05 GH/s; miningpoolstats.stream 6.54 GH/s on 2026-09-03; bitinfocharts ~6.58 GH/s). The whitepaper's "~2 GH/s" is stale by 3×. Tari's merge-mined RandomX share was reported ~3.9 GH/s in mid-2025 (r/MoneroMining) — the fraction of Monero hashrate that also mines Tari is not measurable from public data. `[SECONDARY, consistent across three trackers]`
 
 ## 9. Sources
 
