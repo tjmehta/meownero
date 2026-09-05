@@ -1,0 +1,73 @@
+From 62e5b9e0452e290143474a9c497718abdccef537 Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Sat, 5 Sep 2026 14:40:36 -0700
+Subject: [PATCH 1/6] consensus: perpetual flat subsidy of 0.9 MEOW per block;
+ genesis pays 0
+
+get_block_reward returns MEOW_BLOCK_REWARD independent of supply, version and
+target spacing (block-weight penalty math unchanged). Height 0 pays 0 on both
+the block-template and validation paths so supply(h) == h * 0.9 exactly.
+PLAN.md rev 4 S8.1-S8.2; docs/spec/emission.md.
+---
+ src/cryptonote_basic/cryptonote_basic_impl.cpp | 14 +++++---------
+ src/cryptonote_core/blockchain.cpp             |  3 +++
+ src/cryptonote_core/cryptonote_tx_utils.cpp    |  4 ++++
+ 3 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/src/cryptonote_basic/cryptonote_basic_impl.cpp b/src/cryptonote_basic/cryptonote_basic_impl.cpp
+index c60a626..3d07e15 100644
+--- a/src/cryptonote_basic/cryptonote_basic_impl.cpp
++++ b/src/cryptonote_basic/cryptonote_basic_impl.cpp
+@@ -82,15 +82,11 @@ namespace cryptonote {
+   //-----------------------------------------------------------------------------------------------
+   bool get_block_reward(size_t median_weight, size_t current_block_weight, uint64_t already_generated_coins, uint64_t &reward, uint8_t version) {
+     static_assert(DIFFICULTY_TARGET_V2%60==0&&DIFFICULTY_TARGET_V1%60==0,"difficulty targets must be a multiple of 60");
+-    const int target = version < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
+-    const int target_minutes = target / 60;
+-    const int emission_speed_factor = EMISSION_SPEED_FACTOR_PER_MINUTE - (target_minutes-1);
+-
+-    uint64_t base_reward = (MONEY_SUPPLY - already_generated_coins) >> emission_speed_factor;
+-    if (base_reward < FINAL_SUBSIDY_PER_MINUTE*target_minutes)
+-    {
+-      base_reward = FINAL_SUBSIDY_PER_MINUTE*target_minutes;
+-    }
++    // Meownero: perpetual flat subsidy. Independent of already_generated_coins, hard-fork
++    // version, and target spacing (PLAN.md rev 4 §8.1). The block-weight penalty below is
++    // retained unchanged and is denominated in this constant.
++    (void)already_generated_coins;
++    uint64_t base_reward = MEOW_BLOCK_REWARD;
+ 
+     uint64_t full_reward_zone = get_min_block_weight(version);
+ 
+diff --git a/src/cryptonote_core/blockchain.cpp b/src/cryptonote_core/blockchain.cpp
+index fcc9264..0c6e544 100644
+--- a/src/cryptonote_core/blockchain.cpp
++++ b/src/cryptonote_core/blockchain.cpp
+@@ -1362,6 +1362,9 @@ bool Blockchain::validate_miner_transaction(const block& b, size_t cumulative_bl
+     MERROR_VER("block weight " << cumulative_block_weight << " is bigger than allowed for this blockchain");
+     return false;
+   }
++  // Meownero: genesis subsidy is 0 by consensus (mirrors construct_miner_tx).
++  if (get_block_height(b) == 0)
++    base_reward = 0;
+   if(base_reward + fee < money_in_use)
+   {
+     MERROR_VER("coinbase transaction spend too much money (" << print_money(money_in_use) << "). Block reward is " << print_money(base_reward + fee) << "(" << print_money(base_reward) << "+" << print_money(fee) << "), cumulative_block_weight " << cumulative_block_weight);
+diff --git a/src/cryptonote_core/cryptonote_tx_utils.cpp b/src/cryptonote_core/cryptonote_tx_utils.cpp
+index 7aea5cf..8ae0705 100644
+--- a/src/cryptonote_core/cryptonote_tx_utils.cpp
++++ b/src/cryptonote_core/cryptonote_tx_utils.cpp
+@@ -132,6 +132,10 @@ namespace cryptonote
+       LOG_PRINT_L0("Block is too big");
+       return false;
+     }
++    // Meownero: the genesis block pays nothing (zero spendable outputs, PLAN.md §8.2),
++    // so cumulative supply at height h is exactly h * MEOW_BLOCK_REWARD.
++    if (height == 0)
++      block_reward = 0;
+ 
+ #if defined(DEBUG_CREATE_BLOCK_TEMPLATE)
+     LOG_PRINT_L1("Creating block template: reward " << block_reward <<
+-- 
+2.55.0
+

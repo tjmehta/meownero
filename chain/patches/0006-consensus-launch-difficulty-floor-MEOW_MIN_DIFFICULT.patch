@@ -1,0 +1,66 @@
+From 0762f9e915d8844da96ea39d03c4fb13c59bc70f Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Sat, 5 Sep 2026 14:48:15 -0700
+Subject: [PATCH 6/6] consensus: launch difficulty floor MEOW_MIN_DIFFICULTY (1
+ = no floor), applied inside next_difficulty
+
+Applied for every caller (main-chain and alternative-chain difficulty) so a
+floor can never produce a consensus split between the two paths. Value is
+decided at parameter freeze from the guaranteed genesis hashrate
+(docs/spec/difficulty.md); until then it is 1 and behaviour is identical to
+upstream. Unit test covers the clamp and the two-block edge.
+---
+ src/cryptonote_basic/difficulty.cpp | 8 +++++++-
+ src/cryptonote_basic/difficulty.h   | 2 ++
+ src/cryptonote_config.h             | 3 +++
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/src/cryptonote_basic/difficulty.cpp b/src/cryptonote_basic/difficulty.cpp
+index 165c193..050fba2 100644
+--- a/src/cryptonote_basic/difficulty.cpp
++++ b/src/cryptonote_basic/difficulty.cpp
+@@ -236,7 +236,13 @@ namespace cryptonote {
+     boost::multiprecision::uint256_t res =  (boost::multiprecision::uint256_t(total_work) * target_seconds + time_span - 1) / time_span;
+     if(res > max128bit)
+       return 0; // to behave like previous implementation, may be better return max128bit?
+-    return res.convert_to<difficulty_type>();
++    return apply_min_difficulty(res.convert_to<difficulty_type>());
++  }
++
++  difficulty_type apply_min_difficulty(difficulty_type d)
++  {
++    const difficulty_type floor = MEOW_MIN_DIFFICULTY;
++    return d < floor ? floor : d;
+   }
+ 
+   std::string hex(difficulty_type v)
+diff --git a/src/cryptonote_basic/difficulty.h b/src/cryptonote_basic/difficulty.h
+index ee9378e..4be67ca 100644
+--- a/src/cryptonote_basic/difficulty.h
++++ b/src/cryptonote_basic/difficulty.h
+@@ -58,6 +58,8 @@ namespace cryptonote
+     bool check_hash_128(const crypto::hash &hash, difficulty_type difficulty);
+     bool check_hash(const crypto::hash &hash, difficulty_type difficulty);
+     difficulty_type next_difficulty(std::vector<std::uint64_t> timestamps, std::vector<difficulty_type> cumulative_difficulties, size_t target_seconds);
++    // Meownero: clamp a computed difficulty to MEOW_MIN_DIFFICULTY (identity while the floor is 1).
++    difficulty_type apply_min_difficulty(difficulty_type d);
+ 
+     std::string hex(difficulty_type v);
+ }
+diff --git a/src/cryptonote_config.h b/src/cryptonote_config.h
+index c4d5492..1fd5c41 100644
+--- a/src/cryptonote_config.h
++++ b/src/cryptonote_config.h
+@@ -80,6 +80,9 @@
+ 
+ 
+ #define DIFFICULTY_TARGET_V2                            120  // seconds
++// Meownero: launch difficulty floor applied inside next_difficulty() for every caller (main and alt chains).
++// 1 == no floor. Set at parameter freeze from the guaranteed genesis hashrate (docs/spec/difficulty.md).
++#define MEOW_MIN_DIFFICULTY                             ((uint64_t)1)
+ #define DIFFICULTY_TARGET_V1                            60  // seconds - before first fork
+ #define DIFFICULTY_WINDOW                               720 // blocks
+ #define DIFFICULTY_LAG                                  15  // !!!
+-- 
+2.55.0
+

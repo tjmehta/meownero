@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Meownero chain build: pinned upstream + reviewable patch series, built in a pinned container.
+#
+#   chain/build.sh [workdir]        # default workdir: ./build/chain
+#
+# Steps: (1) clone monero at the pinned tag with submodules and verify every commit hash against
+# chain/upstream.lock; (2) apply chain/patches/*.patch with `git am` (fails on drift); (3) build
+# monerod, monero-wallet-cli, monero-wallet-rpc and unit_tests inside the builder image from
+# chain/Dockerfile; (4) run the Meownero emission tests; (5) print SHA-256 of the binaries.
+# No sudo needed; Docker is the only host dependency. Nothing here touches any network except the
+# git clone and the base-image pull.
+set -euo pipefail
+HERE=$(cd "$(dirname "$0")" && pwd)
+WORK=$(realpath -m "${1:-$HERE/../build/chain}")
+SRC="$WORK/monero"
+IMG=meownero-chain-builder
+mkdir -p "$WORK"
+
+# shellcheck disable=SC1091
+source "$HERE/upstream.lock"   # UPSTREAM_URL, UPSTREAM_TAG, UPSTREAM_COMMIT, SUBMODULE_<name>=<commit>
+
+echo "==> 1. upstream $UPSTREAM_TAG ($UPSTREAM_COMMIT)"
+if [ ! -d "$SRC/.git" ]; then
+  git clone --quiet --depth 1 --branch "$UPSTREAM_TAG" --recurse-submodules --shallow-submodules "$UPSTREAM_URL" "$SRC"
+fi
+actual=$(git -C "$SRC" rev-parse HEAD)
+[ "$actual" = "$UPSTREAM_COMMIT" ] || { echo "upstream commit mismatch: $actual != $UPSTREAM_COMMIT"; exit 1; }
+while IFS='=' read -r k v; do
+  case "$k" in SUBMODULE_*) name=${k#SUBMODULE_}; path="external/${name//_/-}"; got=$(git -C "$SRC" -C "$path" rev-parse HEAD)
+    [ "$got" = "$v" ] || { echo "submodule $path mismatch: $got != $v"; exit 1; };; esac
+done < "$HERE/upstream.lock"
+echo "    pins verified"
+
+echo "==> 2. patch series"
+if git -C "$SRC" rev-parse --verify -q meownero >/dev/null; then
+  git -C "$SRC" checkout -q meownero
+else
+  git -C "$SRC" checkout -q -b meownero "$UPSTREAM_COMMIT"
+  git -C "$SRC" -c user.name=meownero-build -c user.email=build@meownero.invalid am --quiet "$HERE"/patches/*.patch
+fi
+n=$(git -C "$SRC" rev-list --count "$UPSTREAM_COMMIT"..HEAD); echo "    $n patches applied; $(git -C "$SRC" diff "$UPSTREAM_COMMIT" --shortstat)"
+
+echo "==> 3. build in $IMG"
+docker build -q -t "$IMG" -f "$HERE/Dockerfile" "$HERE" >/dev/null
+docker run --rm -v "$SRC:/src" -v meownero-chain-ccache:/root/.ccache -e CCACHE_DIR=/root/.ccache -w /src "$IMG" bash -c '
+  git config --global --add safe.directory "*"
+  mkdir -p build/release && cd build/release
+  cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTS=ON -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache ../.. > cmake.log 2>&1
+  make -j"${MEOW_JOBS:-3}" daemon simplewallet wallet_rpc_server unit_tests > make.log 2>&1 || { tail -30 make.log; exit 1; }'
+
+echo "==> 4. emission tests"
+docker run --rm -v "$SRC:/src" -w /src/build/release "$IMG" ./tests/unit_tests/unit_tests --gtest_filter='meow_emission*' 2>&1 | tail -2
+
+echo "==> 5. artifacts"
+for b in monerod monero-wallet-cli monero-wallet-rpc; do printf '%s  %s\n' "$(sha256sum "$SRC/build/release/bin/$b" | cut -d' ' -f1)" "$b"; done | tee "$WORK/SHA256SUMS"

@@ -6,7 +6,7 @@ Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything
 
 | File | Lines (+/−) | What changed | Assumptions touched → re-review scope |
 |---|---|---|---|
-| `src/cryptonote_config.h` | +37/−34 | `MEOW_BLOCK_REWARD`; `CRYPTONOTE_NAME`; per-network prefixes, ports, network IDs, genesis blob + nonce | every consumer of these constants: address parsing (`cryptonote_basic_impl.cpp`, `base58`), P2P handshake (`net_node.inl`), genesis generation, fee constants that reference `COIN` (unchanged value) |
+| `src/cryptonote_config.h` | +40/−34 | `MEOW_BLOCK_REWARD`; `MEOW_MIN_DIFFICULTY` (1); `CRYPTONOTE_NAME`; per-network prefixes, ports, network IDs, genesis blob + nonce | every consumer of these constants: address parsing (`cryptonote_basic_impl.cpp`, `base58`), P2P handshake (`net_node.inl`), genesis generation, fee constants that reference `COIN` (unchanged value) |
 | `src/cryptonote_basic/cryptonote_basic_impl.cpp` | +5/−9 | `get_block_reward` base reward is a constant | supply tally (`blockchain.cpp` line ~4434, saturation), dynamic fee derivation (`get_dynamic_base_fee`, denominated in base reward → fees are 1.5× Monero's per unit weight at the same price), block-weight penalty (unchanged code, changed magnitude) |
 | `src/cryptonote_core/cryptonote_tx_utils.cpp` | +4/−0 | height-0 block reward = 0 in `construct_miner_tx` | block-template path only |
 | `src/cryptonote_core/blockchain.cpp` | +3/−0 | height-0 base reward = 0 in `validate_miner_transaction` | coinbase validation; `already_generated_coins` accounting for genesis (0) |
@@ -16,9 +16,10 @@ Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything
 | `src/p2p/net_node.h` | +1/−6 | no DNS seed hostnames | bootstrap: node starts with zero peers unless configured — **operator docs** |
 | `src/p2p/net_node.inl` | +4/−26 | no IP/Tor/I2P seeds | same |
 | `src/cryptonote_core/cryptonote_core.cpp` | +2/−2 | `--check-updates` default `disabled` | none (no update authority exists) |
-| `tests/unit_tests/block_reward.cpp` | replaced | Meownero emission tests | n/a |
+| `src/cryptonote_basic/difficulty.h/.cpp` | +8/−2 | `apply_min_difficulty` clamp applied inside `next_difficulty` (patch 0006) | every difficulty consumer (main chain, alt chains, checkpoints) gets the same clamp — no split possible; identity while `MEOW_MIN_DIFFICULTY == 1` |
+| `tests/unit_tests/block_reward.cpp` | replaced | Meownero emission tests + difficulty-floor test | n/a |
 
-Total: 10 source files, +169/−384 (control diff `spikes/candidate-m/meownero-m-v0.18.5.1.diff`).
+Total: 12 source files + 1 test file (patch series `chain/patches/0001…0006`; diff export `spikes/candidate-m/meownero-m-v0.18.5.1.diff`).
 
 ## Inherited unchanged but inside re-review scope (assumptions changed)
 
@@ -38,5 +39,6 @@ Everything else: P2P protocol, levin, LMDB, RPC, wallet2, multisig, hardware-wal
 |---|---|---|
 | `get_account_address_as_str.works_correctly`, `get_account_address_from_str.handles_valid_address` | Monero address vectors; prefixes changed | replace vectors with Meownero addresses (M1) |
 | `multisig.make_*` | same address vectors (asserts against `TESTNET` address strings) | same |
-| `ban.subnet` (`vector larger than max_size`), `http_server.response_soft_limit`, `cryptonote_protocol_handler.race_condition` (abort) | container/environment class, not attributed to the delta yet | **run the unpatched baseline suite to attribute** (M1) |
+| `ban.subnet`, `http_server.response_soft_limit`, `notify.works` | **also fail on the unpatched v0.18.5.1 baseline in the same container** (baseline run 2026-09-05: 1,228 passed, these 3 failed) → environment class, not the delta | excluded from CI's pass criterion with this note as the reason |
+| `cryptonote_protocol_handler.race_condition` (process abort in the first patched run) | did not abort on the baseline run; second patched run pending | **open until reproduced or cleared** (see candidate-m README) |
 | `meow_emission.*` (7) | new | pass |

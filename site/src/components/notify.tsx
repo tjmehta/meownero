@@ -22,6 +22,8 @@ function readStored() {
 }
 const noop = () => () => {};
 
+
+
 function pushSupported() {
   return (
     typeof window !== "undefined" &&
@@ -56,6 +58,9 @@ export function Notify() {
   // Remembered per browser only, so a returning visitor sees the done state
   // without a round trip. Server snapshot is false to avoid hydration drift.
   const stored = useSyncExternalStore(noop, readStored, () => false);
+  // Feature detection only. iOS Safari tabs have no PushManager (Apple limits
+  // push to Home Screen web apps), so they get the email form directly.
+  const supported = useSyncExternalStore(noop, pushSupported, () => true);
 
   function finish() {
     try {

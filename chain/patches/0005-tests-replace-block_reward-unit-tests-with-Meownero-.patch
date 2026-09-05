@@ -1,0 +1,338 @@
+From a75f59f7a1c1b3ded9b0975ff8f1303d1b2e17a5 Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Sat, 5 Sep 2026 14:40:36 -0700
+Subject: [PATCH 5/6] tests: replace block_reward unit tests with Meownero
+ emission invariants
+
+Constant reward, version independence, penalty math, supply = h*0.9, tally
+saturation at 20,496,382 blocks (12 dp), 1/(N-1) dilution, no negative issuance.
+---
+ tests/unit_tests/block_reward.cpp | 280 +++++++++---------------------
+ 1 file changed, 85 insertions(+), 195 deletions(-)
+
+diff --git a/tests/unit_tests/block_reward.cpp b/tests/unit_tests/block_reward.cpp
+index 9d06c8e..e1560c1 100644
+--- a/tests/unit_tests/block_reward.cpp
++++ b/tests/unit_tests/block_reward.cpp
+@@ -1,233 +1,123 @@
+-// Copyright (c) 2014-2022, The Monero Project
+-// 
+-// All rights reserved.
+-// 
+-// Redistribution and use in source and binary forms, with or without modification, are
+-// permitted provided that the following conditions are met:
+-// 
+-// 1. Redistributions of source code must retain the above copyright notice, this list of
+-//    conditions and the following disclaimer.
+-// 
+-// 2. Redistributions in binary form must reproduce the above copyright notice, this list
+-//    of conditions and the following disclaimer in the documentation and/or other
+-//    materials provided with the distribution.
+-// 
+-// 3. Neither the name of the copyright holder nor the names of its contributors may be
+-//    used to endorse or promote products derived from this software without specific
+-//    prior written permission.
+-// 
+-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+-// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+-// MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+-// THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+-// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+-// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+-// STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+-// THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-// 
+-// Parts of this file are originally copyright (c) 2012-2013 The Cryptonote developers
+-
++// Meownero Candidate M control — emission unit tests.
++// Replaces Monero's tests/unit_tests/block_reward.cpp (which encodes the Monero curve).
++// Invariants under test (PLAN.md rev 4 §8.1, §8.2):
++//   E1  reward is exactly MEOW_BLOCK_REWARD = 0.9 * COIN at every already_generated_coins value
++//   E2  reward is independent of hard-fork version and of the 60s/120s target distinction
++//   E3  block-weight penalty math is unchanged and is denominated in the constant
++//   E4  supply(h) == h * MEOW_BLOCK_REWARD; the uint64 supply tally saturates (never wraps) at the
++//       upstream MONEY_SUPPLY cap — horizon computed and asserted, not assumed
++//   E5  dilution: year-N inflation of a flat schedule is 1/(N-1); no deflation exists at any height
+ #include "gtest/gtest.h"
+-
+ #include "cryptonote_basic/cryptonote_basic_impl.h"
++#include "cryptonote_config.h"
+ 
+ using namespace cryptonote;
+ 
+ namespace
+ {
+-  //--------------------------------------------------------------------------------------------------------------------
+-  class block_reward_and_already_generated_coins : public ::testing::Test
+-  {
+-  protected:
+-    static const size_t current_block_weight = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 / 2;
+-
+-    bool m_block_not_too_big;
+-    uint64_t m_block_reward;
+-  };
+-
+-  #define TEST_ALREADY_GENERATED_COINS(already_generated_coins, expected_reward)                              \
+-    m_block_not_too_big = get_block_reward(0, current_block_weight, already_generated_coins, m_block_reward,1); \
+-    ASSERT_TRUE(m_block_not_too_big);                                                                         \
+-    ASSERT_EQ(m_block_reward, expected_reward);
+-
+-  TEST_F(block_reward_and_already_generated_coins, handles_first_values)
+-  {
+-  	// 17592186044415 from neozaru, confirmed by fluffypony
+-    TEST_ALREADY_GENERATED_COINS(0, UINT64_C(17592186044415));
+-    TEST_ALREADY_GENERATED_COINS(m_block_reward, UINT64_C(17592169267200));
+-    TEST_ALREADY_GENERATED_COINS(UINT64_C(2756434948434199641), UINT64_C(14963444829249));
+-  }
+-
+-  TEST_F(block_reward_and_already_generated_coins, correctly_steps_from_2_to_1)
+-  {
+-    TEST_ALREADY_GENERATED_COINS(MONEY_SUPPLY - ((2 << 20) + 1), FINAL_SUBSIDY_PER_MINUTE);
+-    TEST_ALREADY_GENERATED_COINS(MONEY_SUPPLY -  (2 << 20)     , FINAL_SUBSIDY_PER_MINUTE);
+-    TEST_ALREADY_GENERATED_COINS(MONEY_SUPPLY - ((2 << 20) - 1), FINAL_SUBSIDY_PER_MINUTE);
+-  }
++  const uint64_t R = MEOW_BLOCK_REWARD;
++  const size_t small_block = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 / 2;
+ 
+-  TEST_F(block_reward_and_already_generated_coins, handles_max)
++  uint64_t reward_at(uint64_t already_generated, uint8_t version = 1, size_t median = 0, size_t weight = small_block)
+   {
+-    TEST_ALREADY_GENERATED_COINS(MONEY_SUPPLY - ((1 << 20) + 1), FINAL_SUBSIDY_PER_MINUTE);
+-    TEST_ALREADY_GENERATED_COINS(MONEY_SUPPLY -  (1 << 20)     , FINAL_SUBSIDY_PER_MINUTE);
+-    TEST_ALREADY_GENERATED_COINS(MONEY_SUPPLY - ((1 << 20) - 1), FINAL_SUBSIDY_PER_MINUTE);
++    uint64_t r = 0;
++    bool ok = get_block_reward(median, weight, already_generated, r, version);
++    EXPECT_TRUE(ok);
++    return r;
+   }
+ 
+-  //--------------------------------------------------------------------------------------------------------------------
+-  class block_reward_and_current_block_weight : public ::testing::Test
+-  {
+-  protected:
+-    virtual void SetUp()
+-    {
+-      m_block_not_too_big = get_block_reward(0, 0, already_generated_coins, m_standard_block_reward, 1);
+-      ASSERT_TRUE(m_block_not_too_big);
+-      ASSERT_LT(CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1, m_standard_block_reward);
+-    }
+-
+-    void do_test(size_t median_block_weight, size_t current_block_weight)
+-    {
+-      m_block_not_too_big = get_block_reward(median_block_weight, current_block_weight, already_generated_coins, m_block_reward, 1);
+-    }
+-
+-    static const uint64_t already_generated_coins = 0;
+-
+-    bool m_block_not_too_big;
+-    uint64_t m_block_reward;
+-    uint64_t m_standard_block_reward;
+-  };
+-
+-  TEST_F(block_reward_and_current_block_weight, handles_block_weight_less_relevance_level)
++  // ---------------------------------------------------------------- E1
++  TEST(meow_emission, constant_is_0_9_meow)
+   {
+-    do_test(0, CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 - 1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(m_block_reward, m_standard_block_reward);
++    ASSERT_EQ(R, UINT64_C(900000000000));
++    ASSERT_EQ(R, (COIN * 9) / 10);
++    ASSERT_EQ(CRYPTONOTE_DISPLAY_DECIMAL_POINT, 12);
+   }
+ 
+-  TEST_F(block_reward_and_current_block_weight, handles_block_weight_eq_relevance_level)
++  TEST(meow_emission, reward_independent_of_supply)
+   {
+-    do_test(0, CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(m_block_reward, m_standard_block_reward);
++    const uint64_t probes[] = { 0, 1, R, R * 1000, UINT64_C(2756434948434199641),
++                                MONEY_SUPPLY - R - 1, MONEY_SUPPLY - R, MONEY_SUPPLY - 1, MONEY_SUPPLY };
++    for (uint64_t agc : probes)
++      ASSERT_EQ(reward_at(agc), R) << "already_generated_coins=" << agc;
+   }
+ 
+-  TEST_F(block_reward_and_current_block_weight, handles_block_weight_gt_relevance_level)
++  // ---------------------------------------------------------------- E2
++  TEST(meow_emission, reward_independent_of_version)
+   {
+-    do_test(0, CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 + 1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_LT(m_block_reward, m_standard_block_reward);
++    for (uint8_t v = 1; v <= 16; ++v)
++      ASSERT_EQ(reward_at(0, v), R) << "version " << int(v);
++    ASSERT_EQ(reward_at(0, 1), reward_at(0, 2)); // V1 (60 s) vs V2 (120 s) target no longer matters
+   }
+ 
+-  TEST_F(block_reward_and_current_block_weight, handles_block_weight_less_2_relevance_level)
++  // ---------------------------------------------------------------- E3
++  TEST(meow_emission, penalty_math_unchanged)
+   {
+-    do_test(0, 2 * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 - 1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_LT(m_block_reward, m_standard_block_reward);
+-    ASSERT_LT(0, m_block_reward);
+-  }
++    const size_t Z = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1;
++    ASSERT_EQ(reward_at(0, 1, 0, Z), R);
++    ASSERT_LT(reward_at(0, 1, 0, Z + 1), R);
++    ASSERT_EQ(reward_at(0, 1, 0, 2 * Z), 0u);
++    uint64_t r; ASSERT_FALSE(get_block_reward(0, 2 * Z + 1, 0, r, 1));
+ 
+-  TEST_F(block_reward_and_current_block_weight, handles_block_weight_eq_2_relevance_level)
+-  {
+-    do_test(0, 2 * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(0, m_block_reward);
++    // exact fractions against a median of 8 * Z (from upstream calculates_correctly)
++    const size_t M = 8 * Z;
++    ASSERT_EQ(reward_at(0, 1, M, M * 9 / 8),  R * 63 / 64);
++    ASSERT_EQ(reward_at(0, 1, M, M * 3 / 2),  R * 3 / 4);
++    ASSERT_EQ(reward_at(0, 1, M, M * 15 / 8), R * 15 / 64);
+   }
+ 
+-  TEST_F(block_reward_and_current_block_weight, handles_block_weight_gt_2_relevance_level)
++  // ---------------------------------------------------------------- E4
++  // Mirrors Blockchain::handle_block_to_main_chain's tally update:
++  //   agc = (reward < MONEY_SUPPLY - agc) ? agc + reward : MONEY_SUPPLY
++  uint64_t tally_step(uint64_t agc, uint64_t reward)
+   {
+-    do_test(0, 2 * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 + 1);
+-    ASSERT_FALSE(m_block_not_too_big);
++    return (reward < (MONEY_SUPPLY - agc)) ? agc + reward : MONEY_SUPPLY;
+   }
+ 
+-  //--------------------------------------------------------------------------------------------------------------------
+-  class block_reward_and_last_block_weights : public ::testing::Test
++  TEST(meow_emission, supply_is_height_times_reward)
+   {
+-  protected:
+-    virtual void SetUp()
+-    {
+-      m_last_block_weights.push_back(3  * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1);
+-      m_last_block_weights.push_back(5  * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1);
+-      m_last_block_weights.push_back(7  * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1);
+-      m_last_block_weights.push_back(11 * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1);
+-      m_last_block_weights.push_back(13 * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1);
+-
+-      m_last_block_weights_median = 7 * CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1;
+-
+-      m_block_not_too_big = get_block_reward(epee::misc_utils::median(m_last_block_weights), 0, already_generated_coins, m_standard_block_reward, 1);
+-      ASSERT_TRUE(m_block_not_too_big);
+-      ASSERT_LT(CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1, m_standard_block_reward);
+-    }
+-
+-    void do_test(size_t current_block_weight)
++    uint64_t agc = 0; // genesis pays 0 by consensus (construct_miner_tx / validate_miner_transaction)
++    const uint64_t blocks_per_year = (365 * 24 * 3600) / DIFFICULTY_TARGET_V2; // 262,800
++    ASSERT_EQ(blocks_per_year, UINT64_C(262800));
++    for (uint64_t h = 1; h <= 10 * blocks_per_year; ++h)
+     {
+-      m_block_not_too_big = get_block_reward(epee::misc_utils::median(m_last_block_weights), current_block_weight, already_generated_coins, m_block_reward, 1);
++      agc = tally_step(agc, reward_at(agc));
++      if (h % blocks_per_year == 0)
++        ASSERT_EQ(agc, h * R) << "height " << h;
+     }
+-
+-    static const uint64_t already_generated_coins = 0;
+-
+-    std::vector<size_t> m_last_block_weights;
+-    uint64_t m_last_block_weights_median;
+-    bool m_block_not_too_big;
+-    uint64_t m_block_reward;
+-    uint64_t m_standard_block_reward;
+-  };
+-
+-  TEST_F(block_reward_and_last_block_weights, handles_block_weight_less_median)
+-  {
+-    do_test(m_last_block_weights_median - 1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(m_block_reward, m_standard_block_reward);
+-  }
+-
+-  TEST_F(block_reward_and_last_block_weights, handles_block_weight_eq_median)
+-  {
+-    do_test(m_last_block_weights_median);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(m_block_reward, m_standard_block_reward);
+-  }
+-
+-  TEST_F(block_reward_and_last_block_weights, handles_block_weight_gt_median)
+-  {
+-    do_test(m_last_block_weights_median + 1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_LT(m_block_reward, m_standard_block_reward);
+-  }
+-
+-  TEST_F(block_reward_and_last_block_weights, handles_block_weight_less_2_medians)
+-  {
+-    do_test(2 * m_last_block_weights_median - 1);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_LT(m_block_reward, m_standard_block_reward);
+-    ASSERT_LT(0, m_block_reward);
+-  }
+-
+-  TEST_F(block_reward_and_last_block_weights, handles_block_weight_eq_2_medians)
+-  {
+-    do_test(2 * m_last_block_weights_median);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(0, m_block_reward);
++    ASSERT_EQ(agc, UINT64_C(10) * 262800 * R); // 2,365,200 MEOW after 10 years
+   }
+ 
+-  TEST_F(block_reward_and_last_block_weights, handles_block_weight_gt_2_medians)
++  TEST(meow_emission, tally_saturates_and_never_wraps)
+   {
+-    do_test(2 * m_last_block_weights_median + 1);
+-    ASSERT_FALSE(m_block_not_too_big);
++    // Horizon: first height whose cumulative subsidy would exceed uint64::max.
++    const uint64_t horizon = MONEY_SUPPLY / R; // 20,496,382 blocks ≈ 78.0 years at 120 s
++    ASSERT_EQ(horizon, UINT64_C(20496382));
++    ASSERT_GT(horizon * R, MONEY_SUPPLY - R); // last representable full step
++    uint64_t agc = (horizon - 1) * R;         // tally just before the edge
++    ASSERT_EQ(reward_at(agc), R);              // reward unaffected by the tally
++    agc = tally_step(agc, R);                  // step onto the edge
++    ASSERT_EQ(agc, horizon * R);
++    agc = tally_step(agc, R);                  // one past: saturates
++    ASSERT_EQ(agc, MONEY_SUPPLY);
++    ASSERT_EQ(reward_at(agc), R);              // and emission continues at 0.9 forever
++    ASSERT_EQ(tally_step(agc, R), MONEY_SUPPLY);
++    // Recorded finding for ADR-001: with 12 decimal places the on-chain supply counter saturates after
++    // ~78 years while emission continues correctly; atomic-unit choice must be decided with this number.
+   }
+ 
+-  TEST_F(block_reward_and_last_block_weights, calculates_correctly)
++  // ---------------------------------------------------------------- E5
++  TEST(meow_emission, dilution_is_one_over_n_minus_one)
+   {
+-    ASSERT_EQ(0, m_last_block_weights_median % 8);
+-
+-    do_test(m_last_block_weights_median * 9 / 8);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(m_block_reward, m_standard_block_reward * 63 / 64);
+-
+-    // 3/2 = 12/8
+-    do_test(m_last_block_weights_median * 3 / 2);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(m_block_reward, m_standard_block_reward * 3 / 4);
+-
+-    do_test(m_last_block_weights_median * 15 / 8);
+-    ASSERT_TRUE(m_block_not_too_big);
+-    ASSERT_EQ(m_block_reward, m_standard_block_reward * 15 / 64);
++    // inflation during year N == issuance_N / cumulative_{N-1} == 1/(N-1) for a flat schedule
++    const long double year = 262800.0L * R;
++    for (int n = 2; n <= 101; ++n)
++    {
++      long double infl = year / (year * (n - 1));
++      ASSERT_NEAR((double)infl, 1.0 / (n - 1), 1e-12) << "year " << n;
++    }
++    // no height has negative issuance: nothing is ever burned by consensus
++    for (uint64_t agc : { UINT64_C(0), R * 262800, R * 262800 * 50 })
++      ASSERT_GT(reward_at(agc), 0u);
+   }
+ }
+-- 
+2.55.0
+

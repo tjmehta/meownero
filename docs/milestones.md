@@ -55,15 +55,15 @@ Exit: both controls boot and mine with Meownero identity and 0.9/block; measurem
 
 ## M1 — Foundation (on the selected/provisional lineage)
 
-- [ ] Repo layout: pinned upstream (submodule or vendored at tag) + reviewable patch series under `patches/`, applied by one script; `git diff` vs upstream tag enumerable.
+- [~] Repo layout: `chain/upstream.lock` (tag + commit + submodule hashes) + `chain/patches/0001…0006` applied by `chain/build.sh` (`git am`, fails on drift); series verified to apply to a pristine tag checkout. End-to-end `build.sh` run pending (in progress 2026-09-05).
 - [ ] Reproducible build from clean checkout: pinned toolchain, lockfiles, container recipe; two independent builds produce identical hashes.
 - [ ] Consensus deltas each have an ADR entry and test vectors (§2.2 item 5).
-- [ ] Emission spec v1: 0.9 MEOW/120 s, atomic units, overflow horizon, honest dilution table (PLAN §8.1) — no deflation or sub-fiat-inflation claims anywhere.
-- [ ] Identity: genesis (zero spendable outputs), prefixes, ports/magic, chain ID, seed/bootstrap policy, version/upgrade rules — explicit and tested.
-- [ ] Difficulty: algorithm choice recorded with E5 mitigations (FTL, solvetime clamp, window, launch floor) and simulated under hashrate whiplash.
-- [ ] Threat model v1; inherited-vs-modified code map; audit-scope document.
-- [ ] CI: fmt, lint, unit, integration, consensus vectors, fuzz/property where applicable, dependency/license/security checks, reproducibility check, smoke test.
-- [ ] Wallet path: CLI wallet works for send/receive/restore on the private network; gaps documented, not faked.
+- [x] Emission spec v1 (`docs/spec/emission.md`): invariants with tests, honest dilution table, 78-year tally horizon at 12 dp, forbidden claims listed.
+- [~] Identity (`docs/spec/network-identity.md`): genesis (zero-amount v2 coinbase), prefixes, ports, network IDs, hard-fork table — explicit and exercised on the devnet; **seed/bootstrap policy, testnet/stagenet tables, mainnet genesis timestamp are human/launch-time decisions**.
+- [~] Difficulty (`docs/spec/difficulty.md`): inherited DAA kept; `MEOW_MIN_DIFFICULTY` floor inside `next_difficulty` (patch 0006, unit-tested); launch/ramp/whiplash/timestamp scenarios simulated; **floor value needs the guaranteed genesis hashrate (launch input)**.
+- [x] Threat model v1 (`docs/security/threat-model.md`), code map (`docs/security/code-map.md`, includes baseline-attributed test failures); audit scope = code map + readiness records.
+- [~] CI (`.github/workflows/chain.yml`): shellcheck, pin/patch consistency, container build, emission tests, upstream suite with documented exclusions, devnet smoke, second-build hash comparison. **Never executed remotely (no remote by authorization); mirrors `chain/build.sh`.** No fuzz/property targets yet.
+- [~] Wallet path: `monero-wallet-rpc` send/receive verified across nodes; CLI caveats documented (`docs/ops/operator.md`); restore-from-seed **not yet exercised**.
 
 ## M2 — Private devnet
 

@@ -1,0 +1,70 @@
+# Meownero chain CI (provisional lineage). NOT YET EXERCISED REMOTELY: this repository has no remote
+# and nothing is pushed (authorization boundary). The same steps run locally via chain/build.sh.
+name: chain
+on:
+  push:
+    paths: ["chain/**", "spikes/candidate-m/**", ".github/workflows/chain.yml"]
+  pull_request:
+    paths: ["chain/**", "spikes/candidate-m/**", ".github/workflows/chain.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh spikes/candidate-m/devnet.sh
+      - name: patch series is well-formed and pins are consistent
+        run: |
+          set -e
+          test "$(ls chain/patches/*.patch | wc -l)" -eq 5
+          grep -q '^UPSTREAM_COMMIT=4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5$' chain/upstream.lock
+          python3 -c "import ast,sys; ast.parse(open('spikes/candidate-m/apply.py').read())"
+
+  build-and-test:
+    runs-on: ubuntu-24.04
+    needs: lint
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - name: cache ccache volume
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/meownero-ccache
+          key: meownero-ccache-${{ hashFiles('chain/upstream.lock', 'chain/patches/*.patch', 'chain/Dockerfile') }}
+      - name: build (verify pins, apply series, build in container, emission tests, hashes)
+        run: MEOW_JOBS=4 chain/build.sh build/chain
+      - name: full upstream unit tests (allowed failures documented in docs/security/code-map.md)
+        run: |
+          docker run --rm -v "$PWD/build/chain/monero:/src" -w /src/build/release meownero-chain-builder \
+            ./tests/unit_tests/unit_tests --gtest_filter='-get_account_address_*:multisig.*:ban.subnet:http_server.*:cryptonote_protocol_handler.*' 2>&1 | tail -5
+      - name: devnet smoke (3 nodes, 30 blocks, supply = h * 0.9)
+        run: spikes/candidate-m/devnet.sh build/chain/monero build/devnet 30
+      - name: reproducibility (second build, hashes must match)
+        run: |
+          cp build/chain/SHA256SUMS /tmp/first
+          docker run --rm -v "$PWD/build/chain/monero:/src" -w /src/build/release meownero-chain-builder bash -c 'rm -rf bin/* && make -j4 daemon simplewallet wallet_rpc_server > /dev/null'
+          for b in monerod monero-wallet-cli monero-wallet-rpc; do sha256sum build/chain/monero/build/release/bin/$b | cut -d' ' -f1; done > /tmp/second
+          cut -d' ' -f1 /tmp/first | diff - /tmp/second
+      - uses: actions/upload-artifact@v4
+        with:
+          name: meownero-binaries
+          path: |
+            build/chain/monero/build/release/bin/monerod
+            build/chain/monero/build/release/bin/monero-wallet-cli
+            build/chain/monero/build/release/bin/monero-wallet-rpc
+            build/chain/SHA256SUMS
+
+  supply-chain:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: upstream pin is a tag on monero-project/monero
+        run: |
+          git ls-remote --tags https://github.com/monero-project/monero.git refs/tags/v0.18.5.1^{} | grep -q 4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5
+      - name: licenses of vendored pieces are unchanged (BSD-3-Clause family)
+        run: git clone -q --depth 1 --branch v0.18.5.1 https://github.com/monero-project/monero.git /tmp/m && grep -q "Redistribution and use in source and binary forms" /tmp/m/LICENSE
