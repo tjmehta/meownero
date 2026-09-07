@@ -57,6 +57,7 @@ echo "==> 4. Meownero consensus tests"
 docker run --rm -v "$SRC:/src" -w /src/build/release "$IMG" timeout 180 ./tests/unit_tests/unit_tests --gtest_filter='meow_*:cryptonote_protocol_handler.race_condition' 2>&1 | tail -2
 
 MEOW_BUILDER_IMAGE="$IMG" bash "$HERE/test-difficulty.sh" "$SRC"
+MEOW_BUILDER_IMAGE="$IMG" bash "$HERE/test-authorities.sh" "$SRC"
 
 echo "==> 5. artifacts"
 for b in monerod monero-wallet-cli monero-wallet-rpc; do printf '%s  %s\n' "$(sha256sum "$SRC/build/release/bin/$b" | cut -d' ' -f1)" "$b"; done | tee "$WORK/SHA256SUMS"

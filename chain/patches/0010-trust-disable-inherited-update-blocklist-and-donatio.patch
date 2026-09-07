@@ -1,0 +1,352 @@
+From b8c9f81912cf4cb5c27afc6d35004a84a6977411 Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Mon, 7 Sep 2026 16:16:45 -0700
+Subject: [PATCH] trust: disable inherited update blocklist and donation routes
+
+Fail closed at shared update helpers, keep compatibility options explicit and preserve local bans. No replacement authority or donation address.
+
+Co-Authored-By: Claude Code <noreply@anthropic.com>
+---
+ src/common/updates.cpp                  | 86 +++----------------------
+ src/cryptonote_core/cryptonote_core.cpp |  2 +-
+ src/p2p/net_node.cpp                    |  2 +-
+ src/p2p/net_node.inl                    | 53 ++-------------
+ src/simplewallet/simplewallet.cpp       | 62 +-----------------
+ tests/unit_tests/CMakeLists.txt         |  1 +
+ tests/unit_tests/meow_authorities.cpp   | 20 ++++++
+ 7 files changed, 38 insertions(+), 188 deletions(-)
+ create mode 100644 tests/unit_tests/meow_authorities.cpp
+
+diff --git a/src/common/updates.cpp b/src/common/updates.cpp
+index 2a12907..70b5a3b 100644
+--- a/src/common/updates.cpp
++++ b/src/common/updates.cpp
+@@ -26,10 +26,7 @@
+ // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+ // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+-#include <boost/algorithm/string.hpp>
+ #include "misc_log_ex.h"
+-#include "util.h"
+-#include "dns_utils.h"
+ #include "updates.h"
+ 
+ #undef MONERO_DEFAULT_LOG_CATEGORY
+@@ -39,84 +36,17 @@ namespace tools
+ {
+   bool check_updates(const std::string &software, const std::string &buildtag, std::string &version, std::string &hash)
+   {
+-    std::vector<std::string> records;
+-    bool found = false;
+-
+-    MDEBUG("Checking updates for " << buildtag << " " << software);
+-
+-    // All four MoneroPulse domains have DNSSEC on and valid
+-    static const std::vector<std::string> dns_urls = {
+-        "updates.moneropulse.org",
+-        "updates.moneropulse.net",
+-        "updates.moneropulse.fr",
+-        "updates.moneropulse.de",
+-        "updates.moneropulse.co",
+-        "updates.moneropulse.ch",
+-        "updates.moneropulse.se"
+-    };
+-
+-    if (!tools::dns_utils::load_txt_records_from_dns(records, dns_urls))
+-      return false;
+-
+-    for (const auto& record : records)
+-    {
+-      std::vector<std::string> fields;
+-      boost::split(fields, record, boost::is_any_of(":"));
+-      if (fields.size() != 4)
+-      {
+-        MWARNING("Updates record does not have 4 fields: " << record);
+-        continue;
+-      }
+-
+-      if (software != fields[0] || buildtag != fields[1])
+-        continue;
+-
+-      bool alnum = true;
+-      for (auto c: fields[3])
+-        if (!isalnum(c))
+-          alnum = false;
+-      if (fields[3].size() != 64 && !alnum)
+-      {
+-        MWARNING("Invalid hash: " << fields[3]);
+-        continue;
+-      }
+-
+-      // use highest version
+-      if (found)
+-      {
+-        int cmp = vercmp(version.c_str(), fields[2].c_str());
+-        if (cmp > 0)
+-          continue;
+-        if (cmp == 0 && hash != fields[3])
+-          MWARNING("Two matches found for " << software << " version " << version << " on " << buildtag);
+-      }
+-
+-      version = fields[2];
+-      hash = fields[3];
+-
+-      MINFO("Found new version " << version << " with hash " << hash);
+-      found = true;
+-    }
+-    return found;
++    // No Meownero update authority is approved. Fail closed for every caller,
++    // including explicit daemon/RPC checks and the wallet API.
++    version.clear();
++    hash.clear();
++    MWARNING("Automatic updates are disabled: no Meownero update authority is configured");
++    return false;
+   }
+ 
+   std::string get_update_url(const std::string &software, const std::string &subdir, const std::string &buildtag, const std::string &version, bool user)
+   {
+-    const char *base = user ? "https://downloads.getmonero.org/" : "https://updates.getmonero.org/";
+-#ifdef _WIN32
+-    static const char *extension = strncmp(buildtag.c_str(), "source", 6) ? (strncmp(buildtag.c_str(), "install-", 8) ? ".zip" : ".exe") : ".tar.bz2";
+-#elif defined(__APPLE__)
+-    static const char *extension = strncmp(software.c_str(), "monero-gui", 10) ? ".tar.bz2" : ".dmg";
+-#else
+-    static const char extension[] = ".tar.bz2";
+-#endif
+-
+-    std::string url;
+-
+-    url =  base;
+-    if (!subdir.empty())
+-      url += subdir + "/";
+-    url = url + software + "-" + buildtag + "-v" + version + extension;
+-    return url;
++    // Do not offer an inherited download endpoint even when called directly.
++    return {};
+   }
+ }
+diff --git a/src/cryptonote_core/cryptonote_core.cpp b/src/cryptonote_core/cryptonote_core.cpp
+index 36bd510..dd5d3ee 100644
+--- a/src/cryptonote_core/cryptonote_core.cpp
++++ b/src/cryptonote_core/cryptonote_core.cpp
+@@ -171,7 +171,7 @@ namespace cryptonote
+   };
+   static const command_line::arg_descriptor<std::string> arg_check_updates = {
+     "check-updates"
+-  , "Check for new versions: [disabled|notify|download|update] (Meownero: no update authority; default disabled)"
++  , "Compatibility option: [disabled|notify|download|update]; automatic updates unavailable (no Meownero update authority)"
+   , "disabled"
+   };
+   static const command_line::arg_descriptor<bool> arg_fluffy_blocks  = {
+diff --git a/src/p2p/net_node.cpp b/src/p2p/net_node.cpp
+index 9f0e49f..3750c0b 100644
+--- a/src/p2p/net_node.cpp
++++ b/src/p2p/net_node.cpp
+@@ -159,7 +159,7 @@ namespace nodetool
+     const command_line::arg_descriptor<std::string> arg_ban_list = {"ban-list", "Specify ban list file, one IP address per line"};
+     const command_line::arg_descriptor<bool> arg_p2p_hide_my_port   =    {"hide-my-port", "Do not announce yourself as peerlist candidate", false, true};
+     const command_line::arg_descriptor<bool> arg_no_sync = {"no-sync", "Don't synchronize the blockchain with other peers", false};
+-    const command_line::arg_descriptor<bool> arg_enable_dns_blocklist = {"enable-dns-blocklist", "Apply realtime blocklist from DNS", false};
++    const command_line::arg_descriptor<bool> arg_enable_dns_blocklist = {"enable-dns-blocklist", "Ignored: no Meownero DNS blocklist authority is configured", false};
+ 
+     const command_line::arg_descriptor<bool>        arg_no_igd  = {"no-igd", "Disable UPnP port mapping"};
+     const command_line::arg_descriptor<std::string> arg_igd = {"igd", "UPnP port mapping (disabled)", "disabled"};
+diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
+index 89cc2f7..197f2d1 100644
+--- a/src/p2p/net_node.inl
++++ b/src/p2p/net_node.inl
+@@ -555,7 +555,9 @@ namespace nodetool
+     if (command_line::has_arg(vm, arg_no_sync))
+       m_payload_handler.set_no_sync(true);
+ 
+-    m_enable_dns_blocklist = command_line::get_arg(vm, arg_enable_dns_blocklist);
++    if (command_line::get_arg(vm, arg_enable_dns_blocklist))
++      MWARNING("DNS blocklists are disabled: no Meownero blocklist authority is configured");
++    m_enable_dns_blocklist = false;
+ 
+     if ( !set_max_out_peers(public_zone, command_line::get_arg(vm, arg_out_peers) ) )
+       return false;
+@@ -2101,54 +2103,7 @@ namespace nodetool
+   template<class t_payload_net_handler>
+   bool node_server<t_payload_net_handler>::update_dns_blocklist()
+   {
+-    if (!m_enable_dns_blocklist)
+-      return true;
+-    if (m_nettype != cryptonote::MAINNET)
+-      return true;
+-
+-    static const std::vector<std::string> dns_urls = {
+-      "blocklist.moneropulse.se"
+-    , "blocklist.moneropulse.org"
+-    , "blocklist.moneropulse.net"
+-    , "blocklist.moneropulse.co"
+-    , "blocklist.moneropulse.fr"
+-    , "blocklist.moneropulse.de"
+-    , "blocklist.moneropulse.ch"
+-    };
+-
+-    std::vector<std::string> records;
+-    if (!tools::dns_utils::load_txt_records_from_dns(records, dns_urls))
+-      return true;
+-
+-    unsigned good = 0, bad = 0;
+-    for (const auto& record : records)
+-    {
+-      std::vector<std::string> ips;
+-      boost::split(ips, record, boost::is_any_of(";"));
+-      for (const auto &ip: ips)
+-      {
+-        if (ip.empty())
+-          continue;
+-        auto subnet = net::get_ipv4_subnet_address(ip);
+-        if (subnet)
+-        {
+-          block_subnet(*subnet, DNS_BLOCKLIST_LIFETIME);
+-          ++good;
+-          continue;
+-        }
+-        const expect<epee::net_utils::network_address> parsed_addr = net::get_network_address(ip, 0);
+-        if (parsed_addr)
+-        {
+-          block_host(*parsed_addr, DNS_BLOCKLIST_LIFETIME, true);
+-          ++good;
+-          continue;
+-        }
+-        MWARNING("Invalid IP address or subnet from DNS blocklist: " << ip << " - " << parsed_addr.error());
+-        ++bad;
+-      }
+-    }
+-    if (good > 0)
+-      MINFO(good << " addresses added to the blocklist");
++    // No Meownero DNS blocklist authority is approved. Local bans are unchanged.
+     return true;
+   }
+   //-----------------------------------------------------------------------------------
+diff --git a/src/simplewallet/simplewallet.cpp b/src/simplewallet/simplewallet.cpp
+index 39bf169..3fd357f 100644
+--- a/src/simplewallet/simplewallet.cpp
++++ b/src/simplewallet/simplewallet.cpp
+@@ -3283,7 +3283,7 @@ bool simple_wallet::help(const std::vector<std::string> &args/* = std::vector<st
+     message_writer() << tr("\"version\" - Check software version.");
+     message_writer() << tr("\"exit\" - Exit wallet.");
+     message_writer() << "";
+-    message_writer() << tr("\"donate <amount>\" - Donate XMR to the development team.");
++    message_writer() << tr("\"donate\" is disabled: no Meownero donation address is configured.");
+     message_writer() << "";
+   }
+   else if ((args.size() == 1) && (args.front() == "all"))
+@@ -3445,7 +3445,7 @@ simple_wallet::simple_wallet()
+   m_cmd_binder.set_handler("donate",
+                            boost::bind(&simple_wallet::on_command, this, &simple_wallet::donate, _1),
+                            tr(USAGE_DONATE),
+-                           tr("Donate <amount> to the development team (donate.getmonero.org)."));
++                           tr("Disabled: no Meownero donation address is configured."));
+   m_cmd_binder.set_handler("sign_transfer",
+                            boost::bind(&simple_wallet::on_command, this, &simple_wallet::sign_transfer, _1),
+                            tr(USAGE_SIGN_TRANSFER),
+@@ -7828,63 +7828,7 @@ bool simple_wallet::sweep_below(const std::vector<std::string> &args_)
+ //----------------------------------------------------------------------------------------------------
+ bool simple_wallet::donate(const std::vector<std::string> &args_)
+ {
+-  CHECK_IF_BACKGROUND_SYNCING("cannot donate");
+-  std::vector<std::string> local_args = args_;
+-  if(local_args.empty() || local_args.size() > 5)
+-  {
+-     PRINT_USAGE(USAGE_DONATE);
+-     return true;
+-  }
+-  std::string amount_str;
+-  std::string payment_id_str;
+-  // get payment id and pop
+-  crypto::hash payment_id;
+-  crypto::hash8 payment_id8;
+-  if (tools::wallet2::parse_long_payment_id (local_args.back(), payment_id ) ||
+-      tools::wallet2::parse_short_payment_id(local_args.back(), payment_id8))
+-  {
+-    payment_id_str = local_args.back();
+-    local_args.pop_back();
+-  }
+-  // get amount and pop
+-  uint64_t amount;
+-  bool ok = cryptonote::parse_amount(amount, local_args.back());
+-  if (ok && amount != 0)
+-  {
+-    amount_str = local_args.back();
+-    local_args.pop_back();
+-  }
+-  else
+-  { 
+-    fail_msg_writer() << tr("amount is wrong: ") << local_args.back() << ", " << tr("expected number from 0 to ") << print_money(std::numeric_limits<uint64_t>::max());
+-    return true;
+-  }
+-  // push back address, amount, payment id
+-  std::string address_str;
+-  if (m_wallet->nettype() != cryptonote::MAINNET)
+-  {
+-    // if not mainnet, convert donation address string to the relevant network type
+-    address_parse_info info;
+-    if (!cryptonote::get_account_address_from_str(info, cryptonote::MAINNET, MONERO_DONATION_ADDR))
+-    {
+-      fail_msg_writer() << tr("Failed to parse donation address: ") << MONERO_DONATION_ADDR;
+-      return true;
+-    }
+-    address_str = cryptonote::get_account_address_as_str(m_wallet->nettype(), info.is_subaddress, info.address);
+-  }
+-  else
+-  {
+-    address_str = MONERO_DONATION_ADDR;
+-  }
+-  local_args.push_back(address_str);
+-  local_args.push_back(amount_str);
+-  if (!payment_id_str.empty())
+-    local_args.push_back(payment_id_str);
+-  if (m_wallet->nettype() == cryptonote::MAINNET)
+-    message_writer() << (boost::format(tr("Donating %s %s to The Monero Project (donate.getmonero.org or %s).")) % amount_str % cryptonote::get_unit(cryptonote::get_default_decimal_point()) % MONERO_DONATION_ADDR).str();
+-  else
+-    message_writer() << (boost::format(tr("Donating %s %s to %s.")) % amount_str % cryptonote::get_unit(cryptonote::get_default_decimal_point()) % address_str).str();
+-  transfer(local_args);
++  fail_msg_writer() << tr("Donations are disabled: no Meownero donation address is configured.");
+   return true;
+ }
+ //----------------------------------------------------------------------------------------------------
+diff --git a/tests/unit_tests/CMakeLists.txt b/tests/unit_tests/CMakeLists.txt
+index c127508..e477457 100644
+--- a/tests/unit_tests/CMakeLists.txt
++++ b/tests/unit_tests/CMakeLists.txt
+@@ -46,6 +46,7 @@ set(unit_tests_sources
+   device.cpp
+   difficulty.cpp
+   meow_difficulty.cpp
++  meow_authorities.cpp
+   dns_resolver.cpp
+   epee_boosted_tcp_server.cpp
+   epee_levin_protocol_handler_async.cpp
+diff --git a/tests/unit_tests/meow_authorities.cpp b/tests/unit_tests/meow_authorities.cpp
+new file mode 100644
+index 0000000..f2fb7f9
+--- /dev/null
++++ b/tests/unit_tests/meow_authorities.cpp
+@@ -0,0 +1,20 @@
++#include "gtest/gtest.h"
++#include "common/updates.h"
++
++TEST(meow_authorities, updates_fail_closed)
++{
++  for (const auto software : {"monero", "monero-gui", "meownero"})
++  {
++    std::string version = "stale version", hash = "stale hash";
++    ASSERT_FALSE(tools::check_updates(software, "source", version, hash));
++    ASSERT_TRUE(version.empty());
++    ASSERT_TRUE(hash.empty());
++  }
++}
++
++TEST(meow_authorities, no_download_urls)
++{
++  for (const auto software : {"monero", "monero-gui", "meownero"})
++    for (const bool user : {false, true})
++      ASSERT_TRUE(tools::get_update_url(software, "cli", "source", "999.0", user).empty());
++}
+-- 
+2.55.0
+

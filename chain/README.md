@@ -5,7 +5,8 @@ Governed by ADR-001 (PROPOSED). Until it is signed, everything here is a **patch
 | File | Purpose |
 |---|---|
 | `upstream.lock` | upstream URL, tag, commit, and every submodule commit; `build.sh` refuses to build if any differs |
-| `patches/0001…0009` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, startup/genesis/recalculation floor coverage, and address/URI fixtures (see `docs/security/code-map.md`) |
+| `patches/0001…0010` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, startup/genesis/recalculation coverage, address/URI fixtures, and opt-in authority/donation disabling (see `docs/security/code-map.md`) |
+| `test-authorities.sh` | isolated RPC update, DNS-blocklist opt-in, local-ban and disabled-donation checks; requires built daemon and CLI wallet; called by `build.sh` |
 | `Dockerfile` | Ubuntu 24.04 base pinned by digest; apt package versions are not yet pinned (M1 gap); Docker is the host build dependency |
 | `build.sh` | verify pins → apply series → build daemon, wallets and both test targets → run consensus/protocol and floor checks → print SHA-256s |
 | `test-difficulty.sh` | run eight floor cases plus inherited hash test at floor 1 and separately compiled 150M; requires `unit_tests` and `meow_difficulty_floor_tests` built first; read-only source mount |
@@ -22,6 +23,8 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 ## Current verification
 
 2026-09-07: all nine patches apply cleanly to the pinned tag and produce the tested source tree (`96dbf344ae63e9772d4330fa47d33e99fb0d49ed`). Address/URI and consensus/protocol selection passes 278/278; the eight-patch floor variants each passed 9/9. Patch 0009 fixes the inherited address and fourteen URI failures without production validation changes. The broader offline selection remains non-green: six historical wallet/serialization failures and six DNS-dependent failures (1,212/1,224 passed). See [`research/verification-2026-09-07-m1.md`](../research/verification-2026-09-07-m1.md). The historical build record below retains the earlier hashes; the reproducibility section records the verified **eight-patch** hashes, not patch 0009.
+
+Patch 0010 follow-up: all ten patches apply cleanly and match tested tree `1e7f5e4347968c8824b4fe4284ccc6db298e42fb`. Rebuild passed; targeted regressions pass 280/280, raised-floor tests 9/9, and `test-authorities.sh` passes. Explicit update modes fail closed, DNS-blocklist opt-in is ignored with a warning, and `donate` is disabled on all networks. Local bans remain usable. No replacement authority/address is configured. The eight-patch reproducibility record remains historical and is not extended to these new binaries.
 
 ## Build record
 

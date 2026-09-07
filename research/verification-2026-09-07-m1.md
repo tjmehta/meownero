@@ -67,6 +67,22 @@ Broader selection without the address exclusion, with Docker networking disabled
 
 Local logs in the scratch source: `make-address-fixtures.log`, `test-address-fixtures.log`, `test-address-broader.log`.
 
+## Opt-in authorities and donation path — patch 0010
+
+Confirmed inherited update authorities remained reachable despite the disabled default: `tools::check_updates` is shared by core, update RPC and wallet-manager API callers. Patch 0010 removes its DNS authority list, clears outputs and returns false; `get_update_url` returns an empty string instead of a Monero download URL. Existing option parsing remains compatible; help explicitly states updates are unavailable. The wallet API caller was inspected, but no separate GUI/API runtime test is claimed.
+
+The P2P DNS-blocklist callback no longer resolves hosts or installs remote bans. `--enable-dns-blocklist` remains accepted, warns and is ignored. Local bans remain intact. CLI `donate` now gives an explicit disabled message without parsing a destination or calling transfer, on every network; help no longer advertises Monero donations. No new authority, donation address or consensus parameter was introduced. The inherited donation constant remains only as an unused production-header constant referenced by an upstream URL test; the executable donation path no longer uses it.
+
+Verification:
+
+- Rebuilt daemon, CLI wallet, RPC wallet and both unit-test targets. Initial build failed when `cc1plus` was killed during wallet compilation; a single-job retry completed successfully after swap capacity recovered. No optimization or consensus settings were relaxed.
+- Address/URI, authority and consensus/protocol regression selection: **280/280 in 3.379 s**. Raised-floor target: **9/9 in 0.192 s**.
+- `chain/test-authorities.sh` passed with source mounted read-only and Docker networking disabled. Source assertions check removal of the inherited endpoints; actual RPC `check`, `download` and `update` fail closed with no URLs/download file; explicit DNS-blocklist opt-in logs its warning; RPC local host bans still work. Disposable unfunded CLI wallets report donations disabled on mainnet/testnet/stagenet, with no transfers. Test wallet output is captured, not printed, and temporary files are removed with the container.
+- Initial runner checked only console output and missed the warning in the file log; the final runner explicitly enables level 1 and checks both logs. Final runner exited 0. Shell syntax and embedded Python parsing pass; host ShellCheck is unavailable, so no local ShellCheck pass is claimed.
+- Fresh application of patches 0001–0010 matches tested tree `1e7f5e4347968c8824b4fe4284ccc6db298e42fb`; deterministic applied HEAD `8c24067c9e2f7a0b855d3d239c9ccf2e7e7be8a9`. This is source-tree verification, not a new two-build binary reproduction claim.
+
+The authority runner is wired into `chain/build.sh`; CI counts ten patches and includes the new runner in ShellCheck. Full upstream-suite failures documented above remain open. Logs: `make-authorities.log` (initial failure), `make-authorities-retry.log`, `test-authorities.log`, `test-authorities-floor.log` in the scratch source.
+
 ## Raw local evidence
 
 Scratch source: `<agent-scratch>`.
