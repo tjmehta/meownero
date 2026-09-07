@@ -28,6 +28,10 @@ Consensus integrity (no inflation, no invalid blocks accepted); user privacy (se
 | T16 | Wallet recovery failure | seed restore, rescan | inherited `monero-wallet-cli` restore | ⚠️ exercise on devnet (M2) |
 | T17 | Brand-claim liability | "no trace", "deflationary" | PLAN §8.1 forbidden claims; §9.2 counsel | ❌ counsel (human) |
 
+### Inherited opt-in authority follow-up (2026-09-07)
+
+Patch 0010 removes the remaining inherited update/download endpoints at the shared helper, disables DNS-blocklist lookup even when explicitly requested, and disables CLI donations without a replacement recipient. Actual update RPC modes fail closed; local host bans still work; the blocklist option warns; offline donation checks pass on all three networks. Shared update unit tests pass; the wallet-manager API caller is reviewed but not separately runtime-tested. This closes these specific inherited authority routes, not release signing/key custody or general DNS privacy review. See the regenerated ten-patch `code-map.md` and the dated verification record.
+
 ## Trust boundaries
 
 - **Consensus code** (Monero v0.18.5.1 + delta): trusted after review; every delta line enumerated in `docs/security/code-map.md`.

@@ -1,48 +1,60 @@
 # Inherited-vs-modified code map (provisional — Candidate M, Monero v0.18.5.1 `4f92268`)
 
-Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything whose assumptions the delta touches*. Generated from `spikes/candidate-m/apply.py`; regenerate when the M1 patch series is cut. Line counts from `git diff --stat` of the control.
+Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything whose assumptions the delta touches*. Regenerated 2026-09-07 from a fresh application of `chain/patches/0001…0010` against upstream `4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5`, using `git diff --numstat`. Applied HEAD `8c24067c9e2f7a0b855d3d239c9ccf2e7e7be8a9`; tested source tree `1e7f5e4347968c8824b4fe4284ccc6db298e42fb`. This is a scope map, not an audit-completion claim.
 
 ## Modified (Meownero delta)
 
 | File | Lines (+/−) | What changed | Assumptions touched → re-review scope |
 |---|---|---|---|
-| `src/cryptonote_config.h` | +40/−34 | `MEOW_BLOCK_REWARD`; `MEOW_MIN_DIFFICULTY` (1); `CRYPTONOTE_NAME`; per-network prefixes, ports, network IDs, genesis blob + nonce | every consumer of these constants: address parsing (`cryptonote_basic_impl.cpp`, `base58`), P2P handshake (`net_node.inl`), genesis generation, fee constants that reference `COIN` (unchanged value) |
-| `src/cryptonote_basic/cryptonote_basic_impl.cpp` | +5/−9 | `get_block_reward` base reward is a constant | supply tally (`blockchain.cpp` line ~4434, saturation), dynamic fee derivation (`get_dynamic_base_fee`, denominated in base reward → fees are 1.5× Monero's per unit weight at the same price), block-weight penalty (unchanged code, changed magnitude) |
-| `src/cryptonote_core/cryptonote_tx_utils.cpp` | +4/−0 | height-0 block reward = 0 in `construct_miner_tx` | block-template path only |
-| `src/cryptonote_core/blockchain.cpp` | +6/−2 | height-0 reward = 0; genesis difficulty = 1 in next-block calculation and recalculation | coinbase validation, zero genesis supply, genesis PoW and stable cumulative-work accounting with a nontrivial floor |
-| `src/hardforks/hardforks.cpp` | +10/−43 | mainnet table `{v1@0, v16@1}` (single jump); `version_1_till = 0` | `HardFork` logic; ideal version is 16 from height 1, so no activation boundary above v6 exists (handshake check in `cryptonote_protocol_handler.inl:449`) and no pre-RingCT coinbase output is ever created. Test: `meow_hardforks.single_jump_table` |
-| `src/checkpoints/checkpoints.cpp` | +4/−71 | no default checkpoints; DNS checkpoints disabled | `Blockchain::init` checkpoint validation (empty set), `m_checkpoints.check_block` (always passes), reorg depth policy now relies solely on `CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW`/no finality — **threat model §deep-reorg** |
-| `src/blocks/blocks.cpp` | +1/−3 | no embedded block-hash blobs | `Blockchain::init` `m_blocks_hash_check` (empty), fast-sync path disabled |
-| `src/p2p/net_node.h` | +1/−6 | no DNS seed hostnames | bootstrap: node starts with zero peers unless configured — **operator docs** |
-| `src/p2p/net_node.inl` | +4/−26 | no IP/Tor/I2P seeds | same |
-| `src/cryptonote_core/cryptonote_core.cpp` | +2/−2 | `--check-updates` default `disabled` | none (no update authority exists) |
-| `src/cryptonote_basic/difficulty.h/.cpp` | +10/−2 | computed-result and ≤1-sample startup clamping (patches 0006/0008) | main/alt-chain callers share the DAA; caller-level genesis exemptions in validation/recalculation preserve difficulty 1. Floor remains 1. Nine checks pass at floor 1 and separately compiled 150M, including core-init/fixed override/recalculation; adversarial reorg tests remain M2. |
-| `tests/unit_tests/block_reward.cpp` | replaced | seven Meownero emission tests | n/a |
-| `tests/unit_tests/difficulty.cpp`, `meow_difficulty.cpp`, `CMakeLists.txt` | +155/−0 | eight floor tests + separately compiled 150M-floor target, using actual DAA and core libraries | eight new cases and inherited hash check pass at both floors; header-identity assertion prevents accidentally testing floor 1 twice |
-| `tests/unit_tests/node_server.cpp` | +4/−1 | v16-aware synthetic miner output via existing encoder (patch 0007) | bounded protocol race regression passes; production validation unchanged |
-| `tests/unit_tests/hardfork.cpp` | +13/−0 | `meow_hardforks.single_jump_table` pins the production table | passes 2026-09-06 |
+| `src/cryptonote_config.h` | +43/−32 | fixed subsidy; floor 1; network name, prefixes, ports, IDs, genesis blob/nonce | all constant consumers: address parsing, P2P identity, genesis and monetary accounting; `COIN` precision unchanged |
+| `src/cryptonote_basic/cryptonote_basic_impl.cpp` | +5/−9 | constant block reward | supply tally, dynamic fee derivation and unchanged weight-penalty logic with changed subsidy magnitude |
+| `src/cryptonote_core/cryptonote_tx_utils.cpp` | +4/−0 | height-0 miner reward zero | block-template construction |
+| `src/cryptonote_core/blockchain.cpp` | +6/−2 | height-0 reward zero; genesis difficulty 1 in next-block calculation and recalculation | coinbase validation, genesis PoW, cumulative-work accounting under a raised floor |
+| `src/hardforks/hardforks.cpp` | +8/−42 | mainnet single jump `{v1@0, v16@1}`; `version_1_till=0` | handshake activation assumptions, transaction/output encoding from block 1; `meow_hardforks.single_jump_table` and protocol regression |
+| `src/checkpoints/checkpoints.cpp` | +5/−70 | default checkpoints removed; DNS checkpoints disabled | checkpoint initialization, externally supplied checkpoints, reorg policy without shipped finality anchors; empty default set does not imply all checkpoint checks are unconditional passes |
+| `src/blocks/blocks.cpp` | +1/−3 | embedded block-hash blobs disabled | fast-sync and block-hash assumptions |
+| `src/p2p/net_node.h` | +1/−6 | DNS seed hostnames removed | explicit operator bootstrap required |
+| `src/p2p/net_node.inl` | +9/−74 | IP/Tor/I2P seeds removed; DNS-blocklist callback disabled; opt-in warns and remains false | bootstrap and remote banning authority; local host/subnet ban implementation unchanged; RPC host-ban smoke passes |
+| `src/p2p/net_node.cpp` | +1/−1 | DNS-blocklist option help states it is ignored | config compatibility without silently claiming protection |
+| `src/cryptonote_core/cryptonote_core.cpp` | +2/−2 | update default disabled; help states all modes are unavailable | parsing remains compatible; shared helper below prevents opt-in authority access |
+| `src/common/updates.cpp` | +8/−78 | shared update check clears outputs and fails closed; download URL helper returns empty | daemon periodic checks, update RPC, wallet-manager API; RPC check/download/update tested, wallet API caller reviewed but not separately runtime-tested |
+| `src/simplewallet/simplewallet.cpp` | +3/−59 | donate command returns disabled message; help updated; inherited destination/transfer path removed | no implicit donation recipient; disposable offline CLI checks pass on all three networks; unused header constant remains referenced by the inherited URL test |
+| `src/cryptonote_basic/difficulty.h`, `difficulty.cpp` | +10/−2 | floor on computed and zero/one-sample difficulty | main/alt-chain DAA callers; explicit genesis exemptions above; floor stays 1; arithmetic/core accounting checks at 1 and 150M, adversarial reorg tests still open |
+| `tests/unit_tests/block_reward.cpp` | +85/−195 | replaces emission fixtures with seven Meownero cases | subsidy and weight-penalty expectations |
+| `tests/unit_tests/difficulty.cpp`, `meow_difficulty.cpp` | +133/−0 | eight floor cases including actual core initialization/recalculation/fixed override | synthetic DB accounting is not high-difficulty PoW or adversarial reorg evidence |
+| `tests/unit_tests/CMakeLists.txt` | +23/−0 | added test sources and separately compiled 150M-floor target | generated header assertion prevents testing floor 1 twice |
+| `tests/unit_tests/node_server.cpp` | +4/−1 | active-HF miner output via existing `set_tx_out` helper | synthetic v16 protocol fixture only; production validation unchanged |
+| `tests/unit_tests/hardfork.cpp` | +13/−0 | pins single-jump table | test passes |
+| `tests/unit_tests/base58.cpp` | +58/−1 | Meownero mainnet fixture; nine network/type encodings, rejection and checksum cases | fixed upstream public-key payloads; subaddress encoding, not subaddress key derivation; legacy hex parsing unchanged |
+| `tests/unit_tests/uri.cpp` | +8/−2 | Meownero testnet address fixtures; original Monero address rejection | all 32 URI cases pass; inherited `monero:` scheme unchanged |
+| `tests/unit_tests/meow_authorities.cpp` | +20/−0 | update helper fails closed, stale outputs cleared, no download URLs | actual shared helpers exercised without network dependency |
 
-Total: 12 source files + 5 test sources + test CMake configuration (18 files, +347/−389; patch series `chain/patches/0001…0008`). The older `spikes/candidate-m/meownero-m-v0.18.5.1.diff` is historical control evidence, not the current M1 series.
+Total: **15 production source/header files + 8 test sources + test CMake configuration = 24 files, +450/−579**. Grouped table rows sum to that total. The older `spikes/candidate-m/meownero-m-v0.18.5.1.diff` is historical control evidence, not the current series. Repository harnesses, CI and docs are separate from this upstream-source delta.
 
 ## Inherited unchanged but inside re-review scope (assumptions changed)
 
-- `src/ringct/*`, `src/crypto/*`, `external/randomx` — **unchanged**; in scope for the §2.3 gadget-layer controls because they are the privacy/PoW layer we ship (readiness record lines b–c), not because the delta touched them.
-- `src/cryptonote_core/blockchain.cpp` (rest): difficulty (`get_difficulty_for_next_block`, calls the patched DAA), reorg handling (no checkpoints), coinbase decomposition and output-type checks under the single-jump hard-fork table.
-- `src/cryptonote_core/tx_pool.cpp` fee logic (base reward magnitude changed).
-- `src/wallet/*`, `src/simplewallet/*`: address prefix consumers; display of amounts (12 dp unchanged).
-- `src/serialization/*`, `contrib/epee`: unchanged, but encoding is line (c) of the readiness record.
+- `src/ringct/*`, `src/crypto/*`, `external/randomx`: unchanged; privacy/PoW gadget-layer review is still required by §2.3.
+- Remainder of `src/cryptonote_core/blockchain.cpp`: reorg handling, main/alt-chain difficulty and post-genesis validation under the single-jump table.
+- `src/cryptonote_core/tx_pool.cpp`: fees with changed base reward.
+- `src/wallet/*`, remaining `src/simplewallet/*`: prefix/genesis consumers, recovery and 12-dp display. `wallet/api/wallet_manager.cpp` calls the disabled shared update helper.
+- `src/rpc/core_rpc_server.cpp`: update RPC calls the disabled shared helper; local ban operations preserved and smoke-tested.
+- `src/serialization/*`, `contrib/epee`: unchanged, but encoding remains readiness-review scope.
 
-## Inherited unchanged and out of delta scope (still in the general audit)
+## Other inherited code (still in the general audit)
 
-Everything else: P2P protocol, levin, LMDB, RPC, wallet2, multisig, hardware-wallet paths, Dandelion++, Tor/I2P, ZMQ.
+P2P transport, levin, LMDB, wallet2, multisig, hardware-wallet paths, Dandelion++, Tor/I2P and ZMQ remain inherited except for the exact deltas above. Being outside the edited lines does not establish security or test completion.
 
-## Known upstream tests affected by the delta (from the full `unit_tests` run, 2026-09-05)
+## Known upstream test effects and verification limits
 
 | Test | Cause | Disposition |
 |---|---|---|
-| `get_account_address_as_str.works_correctly`, `get_account_address_from_str.handles_valid_address` | Monero address vectors; prefixes changed | replace vectors with Meownero addresses (M1) |
-| `multisig.make_*` | same address vectors (asserts against `TESTNET` address strings) | same |
-| `ban.subnet`, `http_server.response_soft_limit`, `notify.works` | **also fail on the unpatched v0.18.5.1 baseline in the same container** (baseline run 2026-09-05: 1,228 passed, these 3 failed) → environment class, not the delta | excluded from CI's pass criterion with this note as the reason |
-| `cryptonote_protocol_handler.race_condition` (hung under the first delta; passes on baseline) | The fixture in `tests/unit_tests/node_server.cpp` injects synthetic blocks directly into the DB. With `{v1@0, v16@1}`, the 2026-09-06 rerun progresses past handshake into sync, but rejects its `txout_to_key` miner output: v16 requires `txout_to_tagged_key`. | **Fixed 2026-09-07 by patch 0007**: use existing `set_tx_out` to encode the synthetic miner output for the active HF. The bounded protocol regression passed in 3.151 s; production validation unchanged. Real-block devnet independently passed 2026-09-06 at h2,841 (see `research/verification-2026-09-06-m1.md`). |
-| `Serialization.portability_{wallet,unsigned_tx,signed_tx}`, 14 URI cases, 3 wallet-storage cases | 2026-09-07 broader run: 20 failures; URI fixtures contain Monero testnet addresses, wallet storage throws genesis mismatch, serialization uses historical Monero wallet/tx fixtures. Baseline attribution: these and related cases pass 40/40 on unpatched v0.18.5.1. | Open M1 fixture work, not environment exclusions; preserve production cross-network/genesis rejection. Details in `research/verification-2026-09-07-m1.md`. |
-| `meow_emission.*` (7) | new | pass |
+| `get_account_address_as_str.*`, `get_account_address_from_str.*` | inherited Monero base58 fixture under changed prefixes | **Fixed by patch 0009**; all eight cases pass, CI exclusion removed |
+| `uri.*` | inherited Monero testnet fixtures | **Fixed by patch 0009**; all 32 cases pass, including new original-address rejection |
+| `multisig.make_*` | inherited testnet address expectations | still open; existing `multisig.*` exclusion remains, not claimed as a pass |
+| `ban.subnet`, `http_server.response_soft_limit`, `notify.works` | also fail on unpatched baseline in the same container (2026-09-05: 1,228 passed, these 3 failed) | existing environment-attributed CI exclusions; local host-ban smoke does not close subnet coverage |
+| `cryptonote_protocol_handler.race_condition` | untagged synthetic miner output rejected at v16, previously timed out at 300 s | **Fixed by patch 0007**, bounded regression passes; production validation unchanged; real-block devnet separately passed 2026-09-06 at h2,841 |
+| `Serialization.portability_{wallet,unsigned_tx,signed_tx}`, three wallet-storage cases | historical Monero fixtures; wallet storage reports genesis mismatch; related baseline selection passes 40/40 | still open M1 fixture work; production genesis/network checks must not be weakened |
+| `AddressFromURL.{Success,Failure}`, four `DNSResolver` cases | DNS lookups with Docker networking disabled in patch-0009 broader run | six additional failures in that offline run, not added to CI exclusions |
+| `meow_*` and targeted regressions | Meownero-specific cases plus inherited address/URI/DAA/protocol selections | ten-patch rebuilt selection **280/280**, raised-floor target **9/9**; live authority runner passes |
+
+Latest broader run (patch 0009, offline): **1,212/1,224**, not green. The whole upstream suite was not rerun after patch 0010; targeted and authority tests are not a substitute. Same-host fixed-image binary reproduction was verified for **patches 0001–0008 only**; no ten-patch binary equality claim. Full evidence: `research/verification-2026-09-07-m1.md`.
