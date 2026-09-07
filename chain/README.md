@@ -5,7 +5,7 @@ Governed by ADR-001 (PROPOSED). Until it is signed, everything here is a **patch
 | File | Purpose |
 |---|---|
 | `upstream.lock` | upstream URL, tag, commit, and every submodule commit; `build.sh` refuses to build if any differs |
-| `patches/0001…0008` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, and startup/genesis/recalculation floor coverage (see `docs/security/code-map.md`) |
+| `patches/0001…0009` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, startup/genesis/recalculation floor coverage, and address/URI fixtures (see `docs/security/code-map.md`) |
 | `Dockerfile` | Ubuntu 24.04 base pinned by digest; apt package versions are not yet pinned (M1 gap); Docker is the host build dependency |
 | `build.sh` | verify pins → apply series → build daemon, wallets and both test targets → run consensus/protocol and floor checks → print SHA-256s |
 | `test-difficulty.sh` | run eight floor cases plus inherited hash test at floor 1 and separately compiled 150M; requires `unit_tests` and `meow_difficulty_floor_tests` built first; read-only source mount |
@@ -21,7 +21,7 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 
 ## Current verification
 
-2026-09-07: all eight patches apply cleanly to the pinned tag and produce the tested source tree (`aa6c75f0aec359d17884c24496bd07403e993cf1`). Incremental build and focused consensus/protocol tests pass (18/18); floor variants each pass 9/9, including core initialization and recalculation. The broader suite still has 20 recorded identity/wallet-fixture failures; see [`research/verification-2026-09-07-m1.md`](../research/verification-2026-09-07-m1.md). The historical build record below retains the earlier hashes; the reproducibility section records the verified eight-patch hashes.
+2026-09-07: all nine patches apply cleanly to the pinned tag and produce the tested source tree (`96dbf344ae63e9772d4330fa47d33e99fb0d49ed`). Address/URI and consensus/protocol selection passes 278/278; the eight-patch floor variants each passed 9/9. Patch 0009 fixes the inherited address and fourteen URI failures without production validation changes. The broader offline selection remains non-green: six historical wallet/serialization failures and six DNS-dependent failures (1,212/1,224 passed). See [`research/verification-2026-09-07-m1.md`](../research/verification-2026-09-07-m1.md). The historical build record below retains the earlier hashes; the reproducibility section records the verified **eight-patch** hashes, not patch 0009.
 
 ## Build record
 

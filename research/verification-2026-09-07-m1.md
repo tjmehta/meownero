@@ -55,6 +55,18 @@ Immutable builder: `sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e
 
 All three second-tree binaries passed `--help` startup smoke in the exact immutable image with networking disabled. This is **same-host fixed-image source reproducibility** for patches 0001–0008 only, not cross-hardware portability or performance evidence. Independent toolchain reconstruction remains open: apt snapshots/version pins are outstanding.
 
+## Address and URI fixtures — patch 0009
+
+Test-only patch 0009 retains upstream public-key/payment-ID payloads and re-encodes fixed vectors using the native CryptoNote base58 codec. It covers standard, integrated and subaddress encodings on all three networks; decoded keys/flags/payment IDs; cross-network rejection; checksum corruption; and rejection of original modern Monero base58 addresses, including through URI parsing. These are encoding vectors, not subaddress key-derivation tests. Legacy hex-address parsing and the inherited `monero:` URI scheme remain unchanged.
+
+The rebuilt targeted selection `get_account_address_*:base58*:meow_*:uri.*:difficulty.*:cryptonote_protocol_handler.race_condition` passed **278/278 in 3.443 s**, including all eight inherited address cases, two new address tests and all 32 URI cases. CI's `get_account_address_*` exclusion is removed; patch count is nine.
+
+A fresh local clone applied patches 0001–0009 cleanly and matched the tested source tree `96dbf344ae63e9772d4330fa47d33e99fb0d49ed` (deterministic applied HEAD `7871fb1604caadd7a54015c40db045f649ade843`). No new binary reproducibility claim is made for this nine-patch series.
+
+Broader selection without the address exclusion, with Docker networking disabled, ran **1,224 cases in 47.861 s: 1,212 passed, 12 failed (exit 1)**. The three historical serialization and three genesis-mismatched wallet-storage cases still fail. The other six failures were `AddressFromURL.{Success,Failure}` and `DNSResolver.{IPv4Success,DNSSECSuccess,DNSSECFailure,GetTXTRecord}`, which attempt network DNS lookups in this offline run. This run is not directly comparable to the earlier network-enabled count. The fourteen previously failing URI cases now pass; no new CI exclusions were added. The whole suite is still not green.
+
+Local logs in the scratch source: `make-address-fixtures.log`, `test-address-fixtures.log`, `test-address-broader.log`.
+
 ## Raw local evidence
 
 Scratch source: `<agent-scratch>`.
