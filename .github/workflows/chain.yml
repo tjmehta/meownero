@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: shellcheck
-        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh chain/test-difficulty.sh spikes/candidate-m/devnet.sh
+        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh chain/test-difficulty.sh chain/test-reproducibility.sh spikes/candidate-m/devnet.sh
       - name: patch series is well-formed and pins are consistent
         run: |
           set -e
@@ -44,12 +44,10 @@ jobs:
             timeout 600 ./tests/unit_tests/unit_tests --gtest_filter='-get_account_address_*:multisig.*:ban.subnet:http_server.response_soft_limit:notify.works' 2>&1 | tail -5
       - name: devnet smoke (3 nodes, 30 blocks, supply = h * 0.9)
         run: spikes/candidate-m/devnet.sh build/chain/monero build/devnet 30
-      - name: reproducibility (second build, hashes must match)
+      - name: reproducibility (two fresh compilations, fixed image, cache disabled)
         run: |
-          cp build/chain/SHA256SUMS /tmp/first
-          docker run --rm -v "$PWD/build/chain/monero:/src" -w /src/build/release meownero-chain-builder bash -c 'rm -rf bin/* && make -j4 daemon simplewallet wallet_rpc_server > /dev/null'
-          for b in monerod monero-wallet-cli monero-wallet-rpc; do sha256sum build/chain/monero/build/release/bin/$b | cut -d' ' -f1; done > /tmp/second
-          cut -d' ' -f1 /tmp/first | diff - /tmp/second
+          MEOW_BUILDER_IMAGE=$(docker image inspect meownero-chain-builder --format '{{.Id}}') \
+            MEOW_JOBS=2 bash chain/test-reproducibility.sh build/reproducibility
       - uses: actions/upload-artifact@v4
         with:
           name: meownero-binaries
@@ -58,6 +56,8 @@ jobs:
             build/chain/monero/build/release/bin/monero-wallet-cli
             build/chain/monero/build/release/bin/monero-wallet-rpc
             build/chain/SHA256SUMS
+            build/chain/BUILDER_IMAGE_ID
+            build/chain/packages.txt
 
   supply-chain:
     runs-on: ubuntu-24.04

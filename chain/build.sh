@@ -13,7 +13,7 @@ set -euo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 WORK=$(realpath -m "${1:-$HERE/../build/chain}")
 SRC="$WORK/monero"
-IMG=meownero-chain-builder
+IMG=${MEOW_BUILDER_IMAGE:-meownero-chain-builder}
 mkdir -p "$WORK"
 
 # shellcheck disable=SC1091
@@ -36,16 +36,21 @@ if git -C "$SRC" rev-parse --verify -q meownero >/dev/null; then
   git -C "$SRC" checkout -q meownero
 else
   git -C "$SRC" checkout -q -b meownero "$UPSTREAM_COMMIT"
-  git -C "$SRC" -c user.name=meownero-build -c user.email=build@meownero.invalid am --quiet "$HERE"/patches/*.patch
+  git -C "$SRC" -c user.name=meownero-build -c user.email=build@meownero.invalid am --quiet --committer-date-is-author-date "$HERE"/patches/*.patch
 fi
 n=$(git -C "$SRC" rev-list --count "$UPSTREAM_COMMIT"..HEAD); echo "    $n patches applied; $(git -C "$SRC" diff "$UPSTREAM_COMMIT" --shortstat)"
 
 echo "==> 3. build in $IMG"
-docker build -q -t "$IMG" -f "$HERE/Dockerfile" "$HERE" >/dev/null
-docker run --rm -v "$SRC:/src" -v meownero-chain-ccache:/root/.ccache -e CCACHE_DIR=/root/.ccache -e MEOW_JOBS="${MEOW_JOBS:-2}" -w /src "$IMG" bash -ec '
+if [ -z "${MEOW_BUILDER_IMAGE:-}" ]; then
+  docker build -q -t "$IMG" -f "$HERE/Dockerfile" "$HERE" >/dev/null
+fi
+IMG=$(docker image inspect "$IMG" --format '{{.Id}}')
+printf '%s\n' "$IMG" > "$WORK/BUILDER_IMAGE_ID"
+docker run --rm "$IMG" dpkg-query -W -f='${binary:Package}=${Version}\n' > "$WORK/packages.txt"
+docker run --rm -v "$SRC:/src" -v meownero-chain-ccache:/root/.ccache -e CCACHE_DIR=/root/.ccache -e CCACHE_DISABLE -e MEOW_JOBS="${MEOW_JOBS:-2}" -w /src "$IMG" bash -ec '
   git config --global --add safe.directory "*"
   mkdir -p build/release && cd build/release
-  cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTS=ON -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache ../.. > cmake.log 2>&1
+  cmake -D CMAKE_BUILD_TYPE=Release -D ARCH=default -D BUILD_TESTS=ON -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache ../.. > cmake.log 2>&1
   make -j"$MEOW_JOBS" daemon simplewallet wallet_rpc_server unit_tests meow_difficulty_floor_tests > make.log 2>&1 || { tail -30 make.log; exit 1; }'
 
 echo "==> 4. Meownero consensus tests"

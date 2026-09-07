@@ -6,7 +6,7 @@ Governed by ADR-001 (PROPOSED). Until it is signed, everything here is a **patch
 |---|---|
 | `upstream.lock` | upstream URL, tag, commit, and every submodule commit; `build.sh` refuses to build if any differs |
 | `patches/0001…0008` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, and startup/genesis/recalculation floor coverage (see `docs/security/code-map.md`) |
-| `Dockerfile` | Ubuntu 24.04 builder; base-image digest and package versions are not yet pinned (M1 gap); the only host dependency is Docker |
+| `Dockerfile` | Ubuntu 24.04 base pinned by digest; apt package versions are not yet pinned (M1 gap); Docker is the host build dependency |
 | `build.sh` | verify pins → apply series → build daemon, wallets and both test targets → run consensus/protocol and floor checks → print SHA-256s |
 | `test-difficulty.sh` | run eight floor cases plus inherited hash test at floor 1 and separately compiled 150M; requires `unit_tests` and `meow_difficulty_floor_tests` built first; read-only source mount |
 
@@ -32,4 +32,14 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 
 Full hashes and devnet/regression results: [`research/verification-2026-09-06-m1.md`](../research/verification-2026-09-06-m1.md). The fresh build used the existing builder image and shared ccache; it is not independent reproducibility evidence.
 
-Reproducibility (two independent builds → identical hashes) is not yet verified. The current `.github/workflows/chain.yml` step only removes binaries and relinks existing objects; replace that with independent builds before marking the M1 criterion complete. Image digest/package pinning is also outstanding.
+## Reproducibility
+
+`build.sh` applies patches with deterministic committer dates and builds with `ARCH=default` (upstream's no-`-march` baseline) rather than the host-native CPU. It resolves the builder to an immutable image ID for every invocation and records `BUILDER_IMAGE_ID` plus a complete `packages.txt` manifest next to hashes. Set `MEOW_BUILDER_IMAGE` to use an existing image rather than rebuilding the recipe; `CCACHE_DISABLE=1` is forwarded into the compiler environment.
+
+```bash
+MEOW_JOBS=2 bash chain/test-reproducibility.sh /tmp/meow-independent-builds
+```
+
+The script creates two separate source/build trees, uses one immutable builder image, disables ccache reuse for both compilations, runs the focused tests in both and compares image identity, package manifests and binary hashes. CI now invokes this instead of merely relinking existing objects. Two independent patch applications produced identical commit `8c82c0fb55d5e8fa6743884e321a23738397683d` in a local metadata check.
+
+**Status 2026-09-07:** the first two-build run is in progress at `/tmp/meownero-repro-20260907-CDD1jq`; binary equality is **not yet verified**. Even matching results establish independent source compilation in a fixed image, not independent reconstruction of the toolchain: apt versions/repository snapshots remain unpinned. Keep the M1 reproducibility criterion open until those distinctions and remaining evidence are resolved.

@@ -35,15 +35,23 @@ Before the two additional core tests were added, the suite with the previously d
 
 Failures remaining for M1 fixture work:
 
-- `Serialization.portability_wallet`, `Serialization.portability_unsigned_tx`, `Serialization.portability_signed_tx` (investigate the serialized Monero fixtures; not yet baseline-attributed here).
+- `Serialization.portability_wallet`, `Serialization.portability_unsigned_tx`, `Serialization.portability_signed_tx` (serialized Monero fixtures; all pass on the unpatched baseline, see attribution below).
 - Fourteen URI cases: `good_address`, `good_integrated_address`, `unknown_parameter`, `unknown_parameters`, `long_payment_id`, `empty_description`, `empty_recipient_name`, `non_empty_description`, `non_empty_recipient_name`, `url_encoding`, `non_alphanumeric_url_encoding`, `truncated_url_encoding`, `percent_without_url_encoding`, `url_encoded_once`. These use Monero address/URI fixtures; replacement is not done.
 - `wallet_storage.store_to_file2file`, `wallet_storage.change_password_same_file`, `wallet_storage.change_password_different_file`: throw `Genesis block mismatch` on the inherited wallet fixtures.
+
+**Baseline attribution (2026-09-07):** the same three serialization cases plus all URI and wallet-storage cases passed **40/40 in 4.207 s** using the previously built unpatched v0.18.5.1 baseline. Its source HEAD is `4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5`, with no tracked changes. The baseline source was mounted read-only, test data copied inside a disposable container, networking disabled. These 20 Meownero failures are therefore not classified as generic environment failures. The historical serializer and wallet fixtures need adaptation without weakening production network/genesis checks.
 
 Do not broaden CI exclusions merely to make the suite green. Replace/attribute fixtures and rerun. This record does not claim that the whole upstream suite or an audit passed.
 
 ## Reproducibility remains open
 
-Review identified wall-clock-dependent patch commit IDs embedded through VERSIONTAG, host-dependent `-march=native`, unpinned image/package inputs, and CI's relinking of existing objects instead of independent compilation. The next work is deterministic patch metadata, explicit architecture baseline, recorded immutable builder identity, and two fresh compilations without ccache reuse. Fixed-image reproduction and independent toolchain reconstruction must be reported separately.
+Review identified wall-clock-dependent patch commit IDs embedded through VERSIONTAG, host-dependent `-march=native`, unpinned image/package inputs, and CI's relinking of existing objects instead of independent compilation.
+
+Implemented preparation: `git am --committer-date-is-author-date`, `ARCH=default`, digest-pinned Ubuntu base, immutable builder-ID resolution, complete package manifest, forwarded `CCACHE_DISABLE`, and `chain/test-reproducibility.sh` for two fresh compilations in separate source/build trees. The same harness is wired into CI, not a relink step. Shell syntax and orchestration stub tests pass (equal artifacts, unequal artifacts fail, preexisting build trees refused; immutable image and cache-disable variables asserted). Two independent patch applications produced identical commit `8c82c0fb55d5e8fa6743884e321a23738397683d`; actual ccache configuration reports `disable = true`.
+
+**Run in progress, not a pass claim:** `/tmp/meownero-repro-20260907-CDD1jq`, task `b32ya9gkv`, first/second logs at `<workdir>/{first,second}.log`. Immutable builder is `sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e`. The first build's CMake cache reports `ARCH=default`, `VERSIONTAG=8c82c0fb5`, and its source HEAD matches the deterministic commit above. Two compiler jobs, one build at a time. The patch series is kept unchanged while this comparison runs.
+
+Await both compile/test results and binary-hash comparison. Fixed-image reproduction and independent toolchain reconstruction must be reported separately; apt snapshots/version pins remain outstanding even if the binary comparison succeeds.
 
 ## Raw local evidence
 
