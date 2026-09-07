@@ -17,11 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: shellcheck
-        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh spikes/candidate-m/devnet.sh
+        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh chain/test-difficulty.sh spikes/candidate-m/devnet.sh
       - name: patch series is well-formed and pins are consistent
         run: |
           set -e
-          test "$(ls chain/patches/*.patch | wc -l)" -eq 7
+          test "$(ls chain/patches/*.patch | wc -l)" -eq 8
           grep -q '^UPSTREAM_COMMIT=4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5$' chain/upstream.lock
           python3 -c "import ast,sys; ast.parse(open('spikes/candidate-m/apply.py').read())"
 
@@ -41,7 +41,7 @@ jobs:
       - name: full upstream unit tests (allowed failures documented in docs/security/code-map.md)
         run: |
           docker run --rm -v "$PWD/build/chain/monero:/src" -w /src/build/release meownero-chain-builder \
-            ./tests/unit_tests/unit_tests --gtest_filter='-get_account_address_*:multisig.*:ban.subnet:http_server.*:cryptonote_protocol_handler.*' 2>&1 | tail -5
+            timeout 600 ./tests/unit_tests/unit_tests --gtest_filter='-get_account_address_*:multisig.*:ban.subnet:http_server.response_soft_limit:notify.works' 2>&1 | tail -5
       - name: devnet smoke (3 nodes, 30 blocks, supply = h * 0.9)
         run: spikes/candidate-m/devnet.sh build/chain/monero build/devnet 30
       - name: reproducibility (second build, hashes must match)

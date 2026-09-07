@@ -1,0 +1,250 @@
+From ded6b57cbf7c2e2205355a237c1e5afda8b5b2dc Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Mon, 7 Sep 2026 14:46:09 -0700
+Subject: [PATCH] consensus: apply launch floor to startup difficulty and
+ preserve genesis
+
+Floor the shared zero/one-sample DAA path while keeping genesis difficulty 1 in main-chain validation and difficulty recalculation. Samples skip genesis, so the DAA alone cannot distinguish genesis from block 1. Keep fixed-difficulty override and overflow zero sentinel unchanged.
+
+Add eight tests and a 150M-floor target reusing actual DAA and core libraries. Cover genesis initialization on all networks, post-genesis difficulty, cumulative-work recalculation, fixed override, clamp, rounding and overflow. The startup arithmetic test fails before the fix at floor 150M. Production floor remains 1.
+
+Co-Authored-By: Claude Code <noreply@anthropic.com>
+---
+ src/cryptonote_basic/difficulty.cpp  |  2 +-
+ src/cryptonote_core/blockchain.cpp   |  5 +-
+ tests/unit_tests/CMakeLists.txt      | 22 ++++++++
+ tests/unit_tests/difficulty.cpp      | 49 ++++++++++++++++
+ tests/unit_tests/meow_difficulty.cpp | 84 ++++++++++++++++++++++++++++
+ 5 files changed, 159 insertions(+), 3 deletions(-)
+ create mode 100644 tests/unit_tests/meow_difficulty.cpp
+
+diff --git a/src/cryptonote_basic/difficulty.cpp b/src/cryptonote_basic/difficulty.cpp
+index 050fba2..a72f04b 100644
+--- a/src/cryptonote_basic/difficulty.cpp
++++ b/src/cryptonote_basic/difficulty.cpp
+@@ -212,7 +212,7 @@ namespace cryptonote {
+     size_t length = timestamps.size();
+     assert(length == cumulative_difficulties.size());
+     if (length <= 1) {
+-      return 1;
++      return apply_min_difficulty(1);
+     }
+     static_assert(DIFFICULTY_WINDOW >= 2, "Window is too small");
+     assert(length <= DIFFICULTY_WINDOW);
+diff --git a/src/cryptonote_core/blockchain.cpp b/src/cryptonote_core/blockchain.cpp
+index 0c6e544..96ee432 100644
+--- a/src/cryptonote_core/blockchain.cpp
++++ b/src/cryptonote_core/blockchain.cpp
+@@ -854,7 +854,8 @@ bool Blockchain::get_block_by_hash(const crypto::hash &h, block &blk, bool *orph
+ // less blocks than desired if there aren't enough.
+ difficulty_type Blockchain::get_difficulty_for_next_block()
+ {
+-  if (m_fixed_difficulty)
++  // Genesis retains difficulty 1; post-genesis samples exclude genesis and may still be empty.
++  if (m_fixed_difficulty || m_db->height() == 0)
+   {
+     return m_db->height() ? m_fixed_difficulty : 1;
+   }
+@@ -980,7 +981,7 @@ size_t Blockchain::recalculate_difficulties(boost::optional<uint64_t> start_heig
+   for (uint64_t height = start_height; height <= top_height; ++height)
+   {
+     size_t target = get_ideal_hard_fork_version(height) < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
+-    difficulty_type recalculated_diff = next_difficulty(timestamps, difficulties, target);
++    difficulty_type recalculated_diff = height == 0 ? 1 : next_difficulty(timestamps, difficulties, target);
+ 
+     boost::multiprecision::uint256_t recalculated_cum_diff_256 = boost::multiprecision::uint256_t(recalculated_diff) + last_cum_diff;
+     CHECK_AND_ASSERT_THROW_MES(recalculated_cum_diff_256 <= std::numeric_limits<difficulty_type>::max(), "Difficulty overflow!");
+diff --git a/tests/unit_tests/CMakeLists.txt b/tests/unit_tests/CMakeLists.txt
+index 2415dfe..c127508 100644
+--- a/tests/unit_tests/CMakeLists.txt
++++ b/tests/unit_tests/CMakeLists.txt
+@@ -45,6 +45,7 @@ set(unit_tests_sources
+   decompose_amount_into_digits.cpp
+   device.cpp
+   difficulty.cpp
++  meow_difficulty.cpp
+   dns_resolver.cpp
+   epee_boosted_tcp_server.cpp
+   epee_levin_protocol_handler_async.cpp
+@@ -154,3 +155,24 @@ add_test(
+ monero_add_minimal_executable(test_notifier test_notifier.cpp)
+ target_link_libraries(test_notifier ${EXTRA_LIBRARIES})
+ set_property(TARGET test_notifier PROPERTY FOLDER "tests")
++
++# Exercise the real DAA and core callers with a nontrivial floor, without changing production config.
++file(READ "${CMAKE_SOURCE_DIR}/src/cryptonote_config.h" meow_floor_config)
++string(REPLACE "#define MEOW_MIN_DIFFICULTY                             ((uint64_t)1)"
++  "#define MEOW_MIN_DIFFICULTY                             ((uint64_t)150000000)"
++  meow_test_floor_config "${meow_floor_config}")
++if(meow_test_floor_config STREQUAL meow_floor_config)
++  message(FATAL_ERROR "Review difficulty-floor tests after changing the provisional floor")
++endif()
++file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/meow-floor")
++file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/meow-floor/cryptonote_config.h" "${meow_test_floor_config}")
++monero_add_minimal_executable(meow_difficulty_floor_tests
++  main.cpp difficulty.cpp meow_difficulty.cpp
++  "${CMAKE_SOURCE_DIR}/src/cryptonote_basic/difficulty.cpp")
++target_include_directories(meow_difficulty_floor_tests BEFORE PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/meow-floor")
++target_compile_definitions(meow_difficulty_floor_tests PRIVATE MEOW_TEST_EXPECTED_FLOOR=150000000)
++get_target_property(meow_test_libraries unit_tests LINK_LIBRARIES)
++target_link_libraries(meow_difficulty_floor_tests PRIVATE ${meow_test_libraries})
++set_property(TARGET meow_difficulty_floor_tests PROPERTY FOLDER "tests")
++add_test(NAME meow_difficulty_floor_tests
++  COMMAND meow_difficulty_floor_tests --gtest_filter=meow_difficulty.*:difficulty.*)
+diff --git a/tests/unit_tests/difficulty.cpp b/tests/unit_tests/difficulty.cpp
+index 4c6f06b..adaa4cc 100644
+--- a/tests/unit_tests/difficulty.cpp
++++ b/tests/unit_tests/difficulty.cpp
+@@ -29,6 +29,11 @@
+ #include "gtest/gtest.h"
+ #include "int-util.h"
+ #include "cryptonote_basic/difficulty.h"
++#include "cryptonote_config.h"
++
++#ifdef MEOW_TEST_EXPECTED_FLOOR
++static_assert(MEOW_MIN_DIFFICULTY == MEOW_TEST_EXPECTED_FLOOR, "Test floor header was not selected");
++#endif
+ 
+ static cryptonote::difficulty_type MKDIFF(uint64_t high, uint64_t low)
+ {
+@@ -72,3 +77,47 @@ TEST(difficulty, check_hash)
+   ASSERT_TRUE(cryptonote::check_hash(MKHASH(0xffffffffffffffff, 1), MKDIFF(0xffffffffffffffff, 1)));
+   ASSERT_FALSE(cryptonote::check_hash(MKHASH(0xffffffffffffffff, 1), MKDIFF(0xffffffffffffffff, 2)));
+ }
++
++TEST(meow_difficulty, clamp)
++{
++  const cryptonote::difficulty_type floor = MEOW_MIN_DIFFICULTY;
++  ASSERT_EQ(cryptonote::apply_min_difficulty(0), floor);
++  ASSERT_EQ(cryptonote::apply_min_difficulty(floor - 1), floor);
++  ASSERT_EQ(cryptonote::apply_min_difficulty(floor), floor);
++  ASSERT_EQ(cryptonote::apply_min_difficulty(floor + 1), floor + 1);
++}
++
++TEST(meow_difficulty, startup_uses_floor)
++{
++  const cryptonote::difficulty_type floor = MEOW_MIN_DIFFICULTY;
++  ASSERT_EQ(cryptonote::next_difficulty({}, {}, 120), floor);
++  ASSERT_EQ(cryptonote::next_difficulty({100}, {1}, 120), floor);
++}
++
++TEST(meow_difficulty, computed_result_uses_floor)
++{
++  const cryptonote::difficulty_type floor = MEOW_MIN_DIFFICULTY;
++  ASSERT_EQ(cryptonote::next_difficulty({0, 1200}, {0, 1}, 120), floor);
++  ASSERT_EQ(cryptonote::next_difficulty({0, 120}, {0, floor}, 120), floor);
++  ASSERT_EQ(cryptonote::next_difficulty({0, 120}, {0, floor * 2}, 120), floor * 2);
++}
++
++TEST(meow_difficulty, rounding_and_timestamp_sorting_preserved)
++{
++  const cryptonote::difficulty_type floor = MEOW_MIN_DIFFICULTY;
++  const cryptonote::difficulty_type expected = (floor * 240 + 120) / 121;
++  ASSERT_EQ(cryptonote::next_difficulty({0, 121}, {0, floor * 2}, 120), expected);
++  ASSERT_EQ(cryptonote::next_difficulty({121, 0}, {0, floor * 2}, 120), expected);
++}
++
++TEST(meow_difficulty, equal_timestamps_use_one_second)
++{
++  const cryptonote::difficulty_type floor = MEOW_MIN_DIFFICULTY;
++  ASSERT_EQ(cryptonote::next_difficulty({100, 100}, {0, floor}, 120), floor * 120);
++}
++
++TEST(meow_difficulty, overflow_remains_error_not_floor)
++{
++  const auto max = std::numeric_limits<cryptonote::difficulty_type>::max();
++  ASSERT_EQ(cryptonote::next_difficulty({0, 1}, {0, max}, 120), 0);
++}
+diff --git a/tests/unit_tests/meow_difficulty.cpp b/tests/unit_tests/meow_difficulty.cpp
+new file mode 100644
+index 0000000..ccdeb38
+--- /dev/null
++++ b/tests/unit_tests/meow_difficulty.cpp
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: BSD-3-Clause
++#include "gtest/gtest.h"
++#include <boost/filesystem.hpp>
++#include <boost/program_options.hpp>
++#include "cryptonote_core/cryptonote_core.h"
++#include "cryptonote_basic/cryptonote_format_utils.h"
++#include "cryptonote_config.h"
++#include "misc_language.h"
++
++namespace
++{
++  void check_startup(const std::string &network, uint64_t fixed)
++  {
++    const auto dir = boost::filesystem::temp_directory_path() /
++      boost::filesystem::unique_path("meow-floor-%%%%%%%%%%%%%%%%");
++    ASSERT_TRUE(boost::filesystem::create_directory(dir));
++    auto cleanup = epee::misc_utils::create_scope_leave_handler([&dir] {
++      boost::system::error_code ec;
++      boost::filesystem::remove_all(dir, ec);
++    });
++    boost::program_options::options_description desc;
++    cryptonote::core::init_options(desc);
++    std::vector<std::string> args{
++      "--data-dir", dir.string(), "--offline", "--check-updates=disabled",
++      "--disable-dns-checkpoints"
++    };
++    if (!network.empty()) args.push_back(network);
++    if (fixed) args.push_back("--fixed-difficulty=" + std::to_string(fixed));
++    boost::program_options::variables_map options;
++    boost::program_options::store(
++      boost::program_options::command_line_parser(args).options(desc).run(), options);
++    boost::program_options::notify(options);
++
++    cryptonote::core core(nullptr);
++    ASSERT_TRUE(core.init(options, nullptr, nullptr));
++    auto shutdown = epee::misc_utils::create_scope_leave_handler([&core] {
++      core.stop();
++      core.deinit();
++    });
++    auto &chain = core.get_blockchain_storage();
++    auto &db = chain.get_db();
++    const cryptonote::difficulty_type expected = fixed ? fixed : MEOW_MIN_DIFFICULTY;
++    ASSERT_EQ(db.height(), 1u);
++    ASSERT_EQ(db.get_block_cumulative_difficulty(0), 1);
++    ASSERT_EQ(chain.get_difficulty_for_next_block(), expected);
++    ASSERT_EQ(chain.recalculate_difficulties(), 0u);
++
++    // Inject one synthetic block to exercise accounting, not PoW validation/mining.
++    cryptonote::block block;
++    block.major_version = chain.get_current_hard_fork_version();
++    block.minor_version = chain.get_ideal_hard_fork_version();
++    block.prev_id = db.get_block_hash_from_height(0);
++    block.timestamp = db.get_top_block_timestamp() + 120;
++    block.miner_tx.version = block.major_version >= 4 ? 2 : 1;
++    block.miner_tx.unlock_time = 1 + CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW;
++    block.miner_tx.vin.push_back(cryptonote::txin_gen{1});
++    cryptonote::tx_out out;
++    cryptonote::set_tx_out(MEOW_BLOCK_REWARD, {}, block.major_version >= HF_VERSION_VIEW_TAGS, {}, out);
++    block.miner_tx.vout.push_back(out);
++    const auto weight = cryptonote::get_transaction_weight(block.miner_tx);
++    db.batch_start({}, {});
++    db.add_block({block, cryptonote::block_to_blob(block)}, weight,
++      chain.get_next_long_term_block_weight(weight), 1 + expected, MEOW_BLOCK_REWARD, {});
++    db.batch_stop();
++    ASSERT_EQ(chain.recalculate_difficulties(), 0u);
++    ASSERT_EQ(db.get_block_cumulative_difficulty(0), 1);
++    ASSERT_EQ(db.get_block_cumulative_difficulty(1), 1 + expected);
++    ASSERT_EQ(chain.get_difficulty_for_next_block(), expected);
++  }
++}
++
++TEST(meow_difficulty, core_genesis_and_recalculation)
++{
++  for (const std::string network : {"", "--testnet", "--stagenet"})
++  {
++    SCOPED_TRACE(network);
++    check_startup(network, 0);
++  }
++}
++
++TEST(meow_difficulty, core_fixed_difficulty_override)
++{
++  check_startup("", 7);
++}
+-- 
+2.55.0
+

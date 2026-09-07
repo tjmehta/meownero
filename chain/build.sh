@@ -46,10 +46,12 @@ docker run --rm -v "$SRC:/src" -v meownero-chain-ccache:/root/.ccache -e CCACHE_
   git config --global --add safe.directory "*"
   mkdir -p build/release && cd build/release
   cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_TESTS=ON -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache ../.. > cmake.log 2>&1
-  make -j"$MEOW_JOBS" daemon simplewallet wallet_rpc_server unit_tests > make.log 2>&1 || { tail -30 make.log; exit 1; }'
+  make -j"$MEOW_JOBS" daemon simplewallet wallet_rpc_server unit_tests meow_difficulty_floor_tests > make.log 2>&1 || { tail -30 make.log; exit 1; }'
 
 echo "==> 4. Meownero consensus tests"
 docker run --rm -v "$SRC:/src" -w /src/build/release "$IMG" timeout 180 ./tests/unit_tests/unit_tests --gtest_filter='meow_*:cryptonote_protocol_handler.race_condition' 2>&1 | tail -2
+
+MEOW_BUILDER_IMAGE="$IMG" bash "$HERE/test-difficulty.sh" "$SRC"
 
 echo "==> 5. artifacts"
 for b in monerod monero-wallet-cli monero-wallet-rpc; do printf '%s  %s\n' "$(sha256sum "$SRC/build/release/bin/$b" | cut -d' ' -f1)" "$b"; done | tee "$WORK/SHA256SUMS"

@@ -5,9 +5,10 @@ Governed by ADR-001 (PROPOSED). Until it is signed, everything here is a **patch
 | File | Purpose |
 |---|---|
 | `upstream.lock` | upstream URL, tag, commit, and every submodule commit; `build.sh` refuses to build if any differs |
-| `patches/0001…0006` | the Meownero delta as reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor (see `docs/security/code-map.md` for what each touches) |
+| `patches/0001…0008` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, and startup/genesis/recalculation floor coverage (see `docs/security/code-map.md`) |
 | `Dockerfile` | Ubuntu 24.04 builder; base-image digest and package versions are not yet pinned (M1 gap); the only host dependency is Docker |
-| `build.sh` | one command: verify pins → apply series → build `monerod`, `monero-wallet-cli`, `monero-wallet-rpc`, `unit_tests` → run `meow_*` consensus tests → print SHA-256s |
+| `build.sh` | verify pins → apply series → build daemon, wallets and both test targets → run consensus/protocol and floor checks → print SHA-256s |
+| `test-difficulty.sh` | run eight floor cases plus inherited hash test at floor 1 and separately compiled 150M; requires `unit_tests` and `meow_difficulty_floor_tests` built first; read-only source mount |
 
 ```bash
 chain/build.sh                # fresh ./build/chain (gitignored), two compiler jobs
@@ -17,6 +18,10 @@ MEOW_JOBS=8 chain/build.sh /tmp/meow-build  # fresh workdir; more jobs only if R
 Consensus parameters live in the patches and are specified in `docs/spec/emission.md` and `docs/spec/network-identity.md`. Testing and devnet harnesses currently live in `spikes/candidate-m/` and will move here as they are promoted (M1/M2).
 
 **Upstream tracking rule (PLAN §9.9, 72 h security-merge SLA):** bump `upstream.lock` to the new tag, re-run `build.sh`; any patch that fails `git am` is rebased explicitly in its own commit, never silently.
+
+## Current verification
+
+2026-09-07: all eight patches apply cleanly to the pinned tag and produce the tested source tree (`aa6c75f0aec359d17884c24496bd07403e993cf1`). Incremental build and focused consensus/protocol tests pass (18/18); floor variants each pass 9/9, including core initialization and recalculation. The broader suite still has 20 recorded identity/wallet-fixture failures; see [`research/verification-2026-09-07-m1.md`](../research/verification-2026-09-07-m1.md). The artifact hashes below describe the earlier six-patch build, not the current eight-patch series.
 
 ## Build record
 
