@@ -1,4 +1,4 @@
-# Milestone checklist — PLAN.md rev 4 made executable
+# Milestone checklist — PLAN.md rev 5 made executable
 
 **Status:** live checklist · **Started:** 2026-09-05 · Governed by `PLAN.md` §2 (doctrine), §5.4 (decision rule), §10 (gates). This file converts settled philosophy into objective exit criteria; it does not restate or reopen the philosophy.
 
@@ -64,12 +64,13 @@ Exit: both controls boot and mine with Meownero identity and 0.9/block; measurem
 - [x] Threat model v1 (`docs/security/threat-model.md`), code map (`docs/security/code-map.md`, includes baseline-attributed test failures); audit scope = code map + readiness records.
 - [~] CI (`.github/workflows/chain.yml`): shellcheck, pin/patch consistency, container build, consensus tests, upstream suite with exclusions, devnet smoke, hash comparison. **Never executed remotely (no remote by authorization).** 2026-09-06 review: patch count corrected to six; hash comparison only relinks (not independent builds); devnet assumes a separately named builder image; suite exclusions need alignment with actual failures. No fuzz/property targets yet.
 - [~] Wallet path: `monero-wallet-rpc` send/receive verified across nodes; CLI caveats documented (`docs/ops/operator.md`); restore-from-seed **not yet exercised**.
+- [ ] Wallet presentation (2026-09-07): simpler display with adequate small-payment precision, exact-amount disclosure and no silent input rounding/nonzero-to-zero display. Preserve consensus/RPC atomic units; test smallest amounts and large balances. Adoption evaluation uses measured payment completion, conversion and retention—not claimed causal benefits of an issuance model.
 
 ## M2 — Private devnet
 
 - [ ] Deterministic local multi-node network: mine, sync, reorg within policy, private tx, restart/recover.
 - [ ] Rejects malformed, inflationary, and non-private data (adversarial suite).
-- [ ] 120 s benchmark: propagation, validation, block capacity, orphan/reorg, proof-size effects. **If evidence favors another interval, stop for the group** (PLAN §8.1).
+- [ ] Matched-issuance comparison (group instruction 2026-09-07): **90 s / 0.675 MEOW vs 120 s / 0.9 MEOW**, each targeting 236,520 MEOW per 365 days. Measure propagation, proof validation, block capacity, competing blocks/orphans and reorgs under comparable loads/topologies; disclose uncertainty and test limits. **90 s is not locked; retain the current default until evidence supports a decision.** Do not weaken mainnet-quality gates or test 0.9/90 s as though its +1/3 issuance were approved (PLAN §8.1).
 - [ ] Performance evidence: initial sync, steady-state validation, worst-case block, relay latency, memory/CPU/disk.
 - [ ] 2-week-equivalent devnet uptime run without consensus fault (accelerated where honest).
 - [ ] Explorer alpha or documented gap.
