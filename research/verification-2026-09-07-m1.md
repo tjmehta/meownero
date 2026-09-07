@@ -43,15 +43,17 @@ Failures remaining for M1 fixture work:
 
 Do not broaden CI exclusions merely to make the suite green. Replace/attribute fixtures and rerun. This record does not claim that the whole upstream suite or an audit passed.
 
-## Reproducibility remains open
+## Same-host fixed-image reproducibility verified; toolchain reconstruction open
 
 Review identified wall-clock-dependent patch commit IDs embedded through VERSIONTAG, host-dependent `-march=native`, unpinned image/package inputs, and CI's relinking of existing objects instead of independent compilation.
 
 Implemented preparation: `git am --committer-date-is-author-date`, `ARCH=default`, digest-pinned Ubuntu base, immutable builder-ID resolution, complete package manifest, forwarded `CCACHE_DISABLE`, and `chain/test-reproducibility.sh` for two fresh compilations in separate source/build trees. The same harness is wired into CI, not a relink step. Shell syntax and orchestration stub tests pass (equal artifacts, unequal artifacts fail, preexisting build trees refused; immutable image and cache-disable variables asserted). Two independent patch applications produced identical commit `8c82c0fb55d5e8fa6743884e321a23738397683d`; actual ccache configuration reports `disable = true`.
 
-**Run in progress, not a pass claim:** `/tmp/meownero-repro-20260907-CDD1jq`, task `b32ya9gkv`, first/second logs at `<workdir>/{first,second}.log`. Immutable builder is `sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e`. The first build's CMake cache reports `ARCH=default`, `VERSIONTAG=8c82c0fb5`, and its source HEAD matches the deterministic commit above. Two compiler jobs, one build at a time. The patch series is kept unchanged while this comparison runs.
+**Completed, exit 0:** `/tmp/meownero-repro-20260907-CDD1jq`, task `b32ya9gkv`, first/second logs at `<workdir>/{first,second}.log`. Both fresh eight-patch builds and focused tests passed; the harness reports `PASS: independent source builds match in the recorded builder image.` The three binaries, generated `version.cpp`, builder IDs and package manifests match. Full binary hashes and provenance are recorded in [`chain/README.md`](../chain/README.md#reproducibility).
 
-Await both compile/test results and binary-hash comparison. Fixed-image reproduction and independent toolchain reconstruction must be reported separately; apt snapshots/version pins remain outstanding even if the binary comparison succeeds.
+Immutable builder: `sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e`; package-manifest SHA-256: `769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9`. Upstream commit is `4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5`; applied series HEAD is the deterministic commit above, `VERSIONTAG=8c82c0fb5`, `ARCH=default`. Two compiler jobs, one build at a time, ccache disabled. The series stayed unchanged throughout both builds.
+
+All three second-tree binaries passed `--help` startup smoke in the exact immutable image with networking disabled. This is **same-host fixed-image source reproducibility** for patches 0001–0008 only, not cross-hardware portability or performance evidence. Independent toolchain reconstruction remains open: apt snapshots/version pins are outstanding.
 
 ## Raw local evidence
 

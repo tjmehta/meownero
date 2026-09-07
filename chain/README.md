@@ -21,7 +21,7 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 
 ## Current verification
 
-2026-09-07: all eight patches apply cleanly to the pinned tag and produce the tested source tree (`aa6c75f0aec359d17884c24496bd07403e993cf1`). Incremental build and focused consensus/protocol tests pass (18/18); floor variants each pass 9/9, including core initialization and recalculation. The broader suite still has 20 recorded identity/wallet-fixture failures; see [`research/verification-2026-09-07-m1.md`](../research/verification-2026-09-07-m1.md). The artifact hashes below describe the earlier six-patch build, not the current eight-patch series.
+2026-09-07: all eight patches apply cleanly to the pinned tag and produce the tested source tree (`aa6c75f0aec359d17884c24496bd07403e993cf1`). Incremental build and focused consensus/protocol tests pass (18/18); floor variants each pass 9/9, including core initialization and recalculation. The broader suite still has 20 recorded identity/wallet-fixture failures; see [`research/verification-2026-09-07-m1.md`](../research/verification-2026-09-07-m1.md). The historical build record below retains the earlier hashes; the reproducibility section records the verified eight-patch hashes.
 
 ## Build record
 
@@ -42,4 +42,23 @@ MEOW_JOBS=2 bash chain/test-reproducibility.sh /tmp/meow-independent-builds
 
 The script creates two separate source/build trees, uses one immutable builder image, disables ccache reuse for both compilations, runs the focused tests in both and compares image identity, package manifests and binary hashes. CI now invokes this instead of merely relinking existing objects. Two independent patch applications produced identical commit `8c82c0fb55d5e8fa6743884e321a23738397683d` in a local metadata check.
 
-**Status 2026-09-07:** the first two-build run is in progress at `/tmp/meownero-repro-20260907-CDD1jq`; binary equality is **not yet verified**. Even matching results establish independent source compilation in a fixed image, not independent reconstruction of the toolchain: apt versions/repository snapshots remain unpinned. Keep the M1 reproducibility criterion open until those distinctions and remaining evidence are resolved.
+**Verified 2026-09-07 — same-host fixed-image reproducibility, patches 0001–0008:** two fresh source/build trees at `/tmp/meownero-repro-20260907-CDD1jq/{first,second}` compiled with ccache disabled. Both builds and their focused tests passed; the complete comparison harness exited 0. All three binary hashes, package manifests and generated `version.cpp` files match.
+
+| Provenance | Value (both builds) |
+|---|---|
+| Upstream commit | `4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5` |
+| Applied series HEAD | `8c82c0fb55d5e8fa6743884e321a23738397683d` |
+| Series VERSIONTAG | `8c82c0fb5` |
+| BUILDER_IMAGE_ID | `sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e` |
+| packages.txt SHA-256 | `769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9` |
+| Architecture setting | `ARCH=default` |
+
+| Binary | SHA-256 (identical in both trees) |
+|---|---|
+| `monerod` | `cd880b033e8716e3ef052700a232f149e71784c9186da1332e27234f464891f5` |
+| `monero-wallet-cli` | `4eb0645dd8e5c339a09cec483c276fa2cf9b170f535410c824a5e15540a87be7` |
+| `monero-wallet-rpc` | `8fca2fc2b992da45c86f5819e060c3a2fa53e347c1ae25d4db1d503c557ca37c` |
+
+All three second-tree binaries also exited 0 with `--help` inside the exact builder image, with networking disabled and a read-only source mount. That establishes startup/loader smoke coverage only, not cross-hardware portability or unchanged RandomX performance. These hashes cover the eight-patch series, not subsequent patches.
+
+Independent toolchain reconstruction remains **open**: apt versions/repository snapshots are unpinned. This result does not establish cross-host or cross-hardware reproduction, a green full upstream suite, or an audit.

@@ -21,7 +21,7 @@ Consensus integrity (no inflation, no invalid blocks accepted); user privacy (se
 | T9 | Eclipse / bootstrap | no seeds shipped: node trusts whatever peers it is given | explicit seed policy (PLAN §9.5, human); anchor connections; Dandelion++ | ❌ seed policy undecided; ⚠️ docs must warn |
 | T10 | Network-layer deanonymization | IP linkage of tx origin | Dandelion++ inherited; Tor/I2P relay inherited | ⚠️ not exercised on devnet |
 | T11 | Remote-node wallet leaks | malicious remote node (2025 advisory, unpatched upstream) | operator guidance: run own node | ❌ document in operator docs |
-| T12 | Supply-chain compromise | dependency drift, container image drift, unpinned upstream | pinned upstream tag + submodule hashes; Ubuntu 24.04 Docker recipe | ✅ fresh six-patch build verified 2026-09-06; 2026-09-07 base digest pinned, immutable builder/package records and fresh cache-disabled comparison implemented; ⚠️ comparison running, not yet verified; ❌ apt versions/snapshots and independent toolchain reconstruction remain open |
+| T12 | Supply-chain compromise | dependency drift, container image drift, unpinned upstream | pinned upstream tag + submodule hashes; Ubuntu 24.04 Docker recipe | ✅ fresh six-patch build verified 2026-09-06; 2026-09-07 base digest pinned, immutable builder/package records and fresh cache-disabled comparison implemented; ✅ both eight-patch builds/tests pass and all three binary hashes match (same-host fixed-image source reproducibility; provenance in `chain/README.md`); ❌ apt versions/snapshots and independent toolchain reconstruction remain open |
 | T13 | Key compromise | release signing, donation multisig | PLAN §9.5 | ❌ human gate (who holds keys) |
 | T14 | Launch unfairness | insta-mine at difficulty 1, secret pre-testing | launch floor; parameters public T−4 weeks; fairness report | ❌ floor undecided; procedure documented in PLAN §8.3 |
 | T15 | Upstream shock | critical upstream vuln post-fork; FCMP++ rewrite | 72 h security-merge SLA; rebase-clean patch series | ⚠️ patch series format (M1) |
@@ -31,7 +31,7 @@ Consensus integrity (no inflation, no invalid blocks accepted); user privacy (se
 ## Trust boundaries
 
 - **Consensus code** (Monero v0.18.5.1 + delta): trusted after review; every delta line enumerated in `docs/security/code-map.md`.
-- **Build environment**: Ubuntu 24.04 container with distro packages — trusted at the distro level; reproducibility pending.
+- **Build environment**: Ubuntu 24.04 container with distro packages — trusted at the distro level; same-host fixed-image source reproducibility verified for patches 0001–0008, independent toolchain reconstruction pending.
 - **Peers**: untrusted; no seeds shipped.
 - **RPC clients**: untrusted unless `--restricted-rpc` off is deliberate.
 
