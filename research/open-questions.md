@@ -1,6 +1,6 @@
 # Open questions for the group
 
-**Date:** 2026-08-22, updated 2026-09-05 · **Status:** #1–#4 and #12 answered 2026-09-05 (council pass + group decision; applied to PLAN.md rev 4). Remaining answers unblock ADR-001. Answer inline or in the chat; decisions get recorded in ADR-001.
+**Date:** 2026-08-22, updated 2026-09-07 · **Status:** #1–#4 and #12 answered 2026-09-05; #13 principles and #14 benchmark instruction answered 2026-09-07 (PLAN.md rev 5, ADR-001 §7). Final benchmark selection and implementation parameters remain evidence-gated; do not re-ask settled votes. Other remaining answers unblock ADR-001.
 
 1. **Ratify the security doctrine (PLAN.md §2)?** Includes the "prefer subtraction" tie-breaker and the ≥2-years production-history bar. — Yes as written / amend (state changes).
 2. **Approve the PLAN.md amendment pass from dossier evidence?** (a) orchard license blocker resolved; (b) Orchard pool sealed July 2026 → maturity re-scoring; (c) no adaptor-signature precedent → interop defers. — Approve / review dossiers first.
@@ -17,8 +17,8 @@
 10. **the whitepaper author's role:** second maintainer with release-signing keys? (Two-person release rule needs its second person named.)
 11. **TJ:** the 2026-08-22 message cut off after "Let me know if" — was there more?
 12. **Monetary policy** (added 2026-09-04 from E3 rev 2): hard cap / fixed supply vs perpetual (linear or tail) emission?
-13. **Exact emission schedule and rate** (new, from PLAN.md §8.1 audit): P-flat 0.9 MEOW/block · decay-to-tail (illustrative 9→0.9) · keep flat and restate the inflation constraint honestly. Note: any "below fiat inflation early" or "initial deflation" target is mathematically incompatible with zero-genesis positive issuance and no premine; a 999,999,999 genesis supply is a premine and was rejected. Are the early-inflation targets withdrawn?
-14. **Block time:** 120 s working value — ratify after Stage 2 propagation/orphan benchmarks, or change now?
+13. **Answered principles (2026-09-07):** fair launch / zero premine, small fixed perpetual subsidy, no initially ultra-low percentage inflation or deflation claims. Retain precision for small payments and simplify wallet display. Remaining implementation parameters: exact precision/presentation, fees, and final spacing/subsidy pair; do not re-ask the settled shape or claims.
+14. **Benchmark instruction agreed (2026-09-07), selection pending evidence:** compare 90 s / 0.675 MEOW with 120 s / 0.9 MEOW using propagation, proof validation, competing blocks/orphans and reorgs. Both target 236,520 MEOW per 365 days. 0.9 MEOW / 90 s is not approved; 90 s is not locked.
 15. **Pool scoping on Candidate Z** (Sapling-only vs Ironwood-only): decided at ADR-001 after the §7 Ironwood gates (Pirate activation 2026-10-03 + exact review). No answer needed yet — listed so it is not forgotten.
 
 ## Answers (fill in)
@@ -37,6 +37,6 @@
 | 10 | | | |
 | 11 | | | |
 | 12 | Perpetual subsidy, in principle; 0.9 MEOW/120 s current candidate; hard cap/fee-only rejected on security grounds | Group | 2026-09-05 |
-| 13 | | | |
-| 14 | | | |
+| 13 | Fixed perpetual subsidy, zero premine, adequate precision / simpler display; misleading early-inflation and deflation claims withdrawn. No demonstrated issuance-model adoption advantage; use measured payment/conversion/retention evidence. Final implementation parameters remain open. | Group update relayed by TJ | 2026-09-07 |
+| 14 | Compare matched-issuance 90 s / 0.675 and 120 s / 0.9 candidates; choose only after benchmarks, without weakening mainnet-quality gates | Group update relayed by TJ | 2026-09-07 |
 | 15 | (ADR-001) | | |

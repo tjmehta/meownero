@@ -1,6 +1,6 @@
 # Emission specification v1 (provisional — Candidate M lineage)
 
-**Status:** provisional until ADR-001 is signed and open-questions #13 (exact rate/schedule, atomic units) is answered. **Governing text:** PLAN.md rev 4 §8.1–§8.2. **Implementation:** `spikes/candidate-m/apply.py` (control) → M1 patch series. **Tests:** `spikes/candidate-m/tests/block_reward.cpp`.
+**Status:** fixed perpetual shape, fair launch / zero premine and honest claims agreed 2026-09-07. Final spacing/subsidy pair, precision/display details and ADR-001 signatures remain open. **Governing text:** PLAN.md rev 5 §8.1–§8.2. **Implementation:** M1 patch series under `chain/patches/`; the current consensus default remains 0.9 MEOW / 120 s. **Tests:** `spikes/candidate-m/tests/block_reward.cpp` (source of patch 0005).
 
 ## 1. Parameters
 
@@ -15,7 +15,16 @@
 | Fees | miner receives base reward + fees; dynamic fee inherited (denominated in base reward) | inherited |
 | Block-weight penalty | inherited unchanged; denominated in the 0.9 constant | `get_block_reward` |
 
-## 2. Invariants (each has a test)
+### Matched-issuance benchmark candidates (2026-09-07)
+
+| Target spacing | Fixed subsidy | Atomic subsidy at 12 dp | Expected blocks / 365 days | Expected MEOW / 365 days |
+|---|---|---|---|---|
+| 120 s (current implementation) | 0.9 | 900,000,000,000 | 262,800 | 236,520 |
+| 90 s (benchmark only) | 0.675 | 675,000,000,000 | 350,400 | 236,520 |
+
+The nine theme motivates testing 90 s, not selecting it in advance. Compare propagation, proof validation, competing blocks/orphans and reorgs without weakening release gates. **0.9 / 90 s is not approved:** it would increase expected annual issuance to 315,360 MEOW. Actual calendar issuance varies with realized block timing and any block-weight penalties. Neither candidate establishes an adoption advantage; use measured payment completion, conversion and retention evidence rather than monetary-policy preference polling.
+
+## 2. Invariants (current 120 s / 0.9 implementation; each has a test)
 
 1. `get_block_reward(...)` returns exactly `MEOW_BLOCK_REWARD` for every `already_generated_coins` value, every hard-fork version, and every target spacing. (E1, E2)
 2. Penalty math for oversize blocks is unchanged from upstream and scales the constant. (E3)
@@ -41,7 +50,11 @@ Percentage inflation during year N of a flat schedule with zero genesis supply i
 
 **Claims that must not be made:** "deflationary", "initial deflation", "below USD inflation" in early years, "fixed supply". Any such target is mathematically incompatible with zero-genesis positive issuance and no premine (PLAN §8.1 audit). Todd's convergence (circulating supply → issuance ÷ loss rate) is a long-run statement and must not be marketed as early low inflation.
 
-## 4. Open parameter: atomic units
+## 4. Precision and wallet display
+
+**Agreed 2026-09-07:** retain sufficient decimal precision for small payments and simplify wallet display. Keep inherited 12 dp for now; display changes must not alter consensus/RPC atomic values, silently round payment inputs, or render a nonzero balance as zero. Prefer existing formatting paths and exact-amount disclosure; wallet display implementation and usability tests remain work to do. Denomination has no effect on percentage supply growth.
+
+### Remaining parameter: exact atomic units
 
 The tally horizon (invariant 4) is set by `MONEY_SUPPLY / MEOW_BLOCK_REWARD`. With 12 dp it is 78 years; with 10 dp (`COIN = 10^10`, reward 9×10^9) it is ~7,800 years. Changing decimals touches wallet display, RPC amount parsing, fee constants (`DYNAMIC_FEE_*`, `FEE_PER_KB`), and every test vector — a small but wide delta. Decision belongs to ADR-001 / open-questions #13; **default if undecided: keep 12 dp and document the 78-year tally saturation** (emission itself is unaffected).
 

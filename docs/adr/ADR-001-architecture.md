@@ -61,7 +61,7 @@ By §5.4 step 3, **M has the smaller total unproven surface today by a wide marg
 | Desideratum | Disposition | Basis |
 |---|---|---|
 | Zcash/Zebra/Orchard lineage (E1) | **Deferred** to the §5 re-evaluation gate; not dropped | Ironwood gated (PLAN §7); Z's extra unproven surface (§1 above) |
-| Perpetual fair emission (E3) | **Adopted** in principle: 0.9/120 s flat; exact schedule and atomic units open (PLAN §8.1, open-questions #13) | group decision 2026-09-05; controls implement it on both lineages |
+| Perpetual fair emission (E3) | **Adopted:** fixed perpetual shape; matched-issuance 0.9/120 s vs 0.675/90 s benchmarks; final pair and precision/display details open (PLAN §8.1) | group update 2026-09-07 (§7); controls measured at 0.9/120 s |
 | Bitcoin interop (E4) | **Deferred** post-launch; six prerequisites preserved (E4 §9) | no reviewed precedent; PLAN §5 E4 |
 | ASIC-resistant mining (E5) | **Adopted on M** at zero delta (RandomX inherited); posture "ASIC-unfriendly today, re-evaluated at every upgrade" | E5 |
 | Merge-mining with Monero (E6) | **Deferred**: solo-mined launch; add later by audited upgrade if pool soundings justify it (open-questions #5 still open) | E6; PLAN §6.3 zero-cost-attacker class |
@@ -77,7 +77,15 @@ By §5.4 step 3, **M has the smaller total unproven surface today by a wide marg
 
 Milestone checklist M1 on the M lineage (`docs/milestones.md`): pinned-tag layout with reviewable patch series, reproducible build, identity/genesis, emission spec v1, difficulty policy with E5 mitigations, threat model v1, CI, wallet path. Everything is throwaway-safe until signatures land: it lives under a patch series against an unmodified upstream tag.
 
-## 7. Signatures
+## 7. September 7 decision update (not architecture signatures)
+
+TJ relayed group alignment on 2026-09-07: fair launch / zero premine, a small fixed perpetual subsidy, adequate precision for small payments and simpler wallet display are agreed. Initially ultra-low percentage inflation and deflation claims are withdrawn; denomination does not change early percentage growth. No demonstrated causal adoption advantage is established for capped versus perpetual issuance; use measured payment/conversion/retention evidence.
+
+The controls and historical measurements above remain at 0.9 MEOW / 120 s. Compare 0.675 MEOW / 90 s against that working default, preserving candidate expected issuance of 236,520 MEOW per 365 days. 0.9 / 90 s is not approved. Selection requires propagation, proof-validation, competing-block/orphan and reorg benchmarks; 90 s is not locked and 120 s is not a theoretical limit. Flat shape and honest claims are settled; final parameters and architecture signatures are not. See PLAN.md rev 5 §8.1 and `docs/spec/emission.md`.
+
+Continue the existing local end-to-end charter, including M1 fixture/floor/reproducibility blockers and subsequent safe milestones. Reviewable local commits are authorized; public mainnet launch, spending, external push, fabricated audit claims and OpenClaw/runtime changes are not.
+
+## 8. Signatures
 
 - TJ: ______ (date)
 - the whitepaper author: ______ (date)
