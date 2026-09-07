@@ -1,0 +1,32 @@
+From b61d7f0b401b2f3da4da8a79df6f9673fe63df8b Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Mon, 7 Sep 2026 14:41:35 -0700
+Subject: [PATCH] tests: encode synthetic miner outputs for the active hard
+ fork
+
+Reuse set_tx_out to select tagged outputs at HF_VERSION_VIEW_TAGS. The Meownero v16-at-height-1 protocol race fixture otherwise fails validation during synchronization and waits forever. No production consensus rules change.
+
+Co-Authored-By: Claude Code <noreply@anthropic.com>
+---
+ tests/unit_tests/node_server.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tests/unit_tests/node_server.cpp b/tests/unit_tests/node_server.cpp
+index 525bdc4..3ceddd5 100644
+--- a/tests/unit_tests/node_server.cpp
++++ b/tests/unit_tests/node_server.cpp
+@@ -585,7 +585,10 @@ TEST(cryptonote_protocol_handler, race_condition)
+       reward,
+       hardfork
+     );
+-    block.miner_tx.vout.push_back(cryptonote::tx_out{reward, cryptonote::txout_to_key{}});
++    // Match the active output encoding; v16 rejects untagged miner outputs during sync.
++    cryptonote::tx_out out;
++    cryptonote::set_tx_out(reward, {}, hardfork >= HF_VERSION_VIEW_TAGS, {}, out);
++    block.miner_tx.vout.push_back(out);
+     diff = storage.get_difficulty_for_next_block();
+   };
+   struct stat {
+-- 
+2.55.0
+

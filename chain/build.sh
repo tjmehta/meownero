@@ -49,7 +49,7 @@ docker run --rm -v "$SRC:/src" -v meownero-chain-ccache:/root/.ccache -e CCACHE_
   make -j"$MEOW_JOBS" daemon simplewallet wallet_rpc_server unit_tests > make.log 2>&1 || { tail -30 make.log; exit 1; }'
 
 echo "==> 4. Meownero consensus tests"
-docker run --rm -v "$SRC:/src" -w /src/build/release "$IMG" ./tests/unit_tests/unit_tests --gtest_filter='meow_*' 2>&1 | tail -2
+docker run --rm -v "$SRC:/src" -w /src/build/release "$IMG" timeout 180 ./tests/unit_tests/unit_tests --gtest_filter='meow_*:cryptonote_protocol_handler.race_condition' 2>&1 | tail -2
 
 echo "==> 5. artifacts"
 for b in monerod monero-wallet-cli monero-wallet-rpc; do printf '%s  %s\n' "$(sha256sum "$SRC/build/release/bin/$b" | cut -d' ' -f1)" "$b"; done | tee "$WORK/SHA256SUMS"
