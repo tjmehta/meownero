@@ -83,6 +83,16 @@ Verification:
 
 The authority runner is wired into `chain/build.sh`; CI counts ten patches and includes the new runner in ShellCheck. Full upstream-suite failures documented above remain open. Logs: `make-authorities.log` (initial failure), `make-authorities-retry.log`, `test-authorities.log`, `test-authorities-floor.log` in the scratch source.
 
+## Multisig fixtures — patch 0011
+
+Before the change, `multisig.*` ran seven cases: six `make_*` cases failed at the fixed testnet-address comparison (`multisig.cpp:81`), and the key-exchange-message case passed. Patch 0011 re-encodes the five inherited address strings using native `tools::base58::{decode_addr,encode_addr}`, from Monero testnet prefix 53 to Meownero testnet prefix 156. Generation verifies the 64-byte public-key payload is unchanged after decoding each replacement. All five spend-key literals, wallet generation, multisig assertions and production code remain unchanged.
+
+Rebuilt selection `multisig.*:get_account_address_*:base58*:meow_*:uri.*:difficulty.*:cryptonote_protocol_handler.race_condition`: **287/287 in 25.108 s**, including all seven multisig cases in 21.982 s. CI removes the `multisig.*` exclusion; only the three previously attributed environment exclusions remain.
+
+Broader offline run with a read-only source mount and disposable copied test data: **1,233 cases in 70.072 s; 1,221 passed, 12 failed (exit 1)**. The same three serialization, three wallet-storage and six DNS-dependent failures remain. No new failures or exclusions were introduced; the suite is still not green. This run covers patches 0001–0011, including the authority unit tests.
+
+Fresh full-series application matches tested tree `cd8fa65fe527556e7d9b4996fdf84b9f57a492ae`; deterministic applied HEAD `663d9cf6f0871ace096e8beadeb737c879ec544c`. Delta: 25 files, +456/−584. The eight-patch binary reproducibility record is not extended to this series. Scratch logs: `make-multisig-fixtures.log`, `test-multisig-fixtures.log`; broader result is retained in task `b1ilg2bo7` output and summarized here.
+
 ## Raw local evidence
 
 Scratch source: `<agent-scratch>`.

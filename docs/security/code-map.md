@@ -1,6 +1,6 @@
 # Inherited-vs-modified code map (provisional — Candidate M, Monero v0.18.5.1 `4f92268`)
 
-Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything whose assumptions the delta touches*. Regenerated 2026-09-07 from a fresh application of `chain/patches/0001…0010` against upstream `4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5`, using `git diff --numstat`. Applied HEAD `8c24067c9e2f7a0b855d3d239c9ccf2e7e7be8a9`; tested source tree `1e7f5e4347968c8824b4fe4284ccc6db298e42fb`. This is a scope map, not an audit-completion claim.
+Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything whose assumptions the delta touches*. Regenerated 2026-09-07 from a fresh application of `chain/patches/0001…0011` against upstream `4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5`, using `git diff --numstat`. Applied HEAD `663d9cf6f0871ace096e8beadeb737c879ec544c`; tested source tree `cd8fa65fe527556e7d9b4996fdf84b9f57a492ae`. This is a scope map, not an audit-completion claim.
 
 ## Modified (Meownero delta)
 
@@ -28,8 +28,9 @@ Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything
 | `tests/unit_tests/base58.cpp` | +58/−1 | Meownero mainnet fixture; nine network/type encodings, rejection and checksum cases | fixed upstream public-key payloads; subaddress encoding, not subaddress key derivation; legacy hex parsing unchanged |
 | `tests/unit_tests/uri.cpp` | +8/−2 | Meownero testnet address fixtures; original Monero address rejection | all 32 URI cases pass; inherited `monero:` scheme unchanged |
 | `tests/unit_tests/meow_authorities.cpp` | +20/−0 | update helper fails closed, stale outputs cleared, no download URLs | actual shared helpers exercised without network dependency |
+| `tests/unit_tests/multisig.cpp` | +6/−5 | five fixed addresses re-encoded for Meownero testnet | keys and multisig assertions unchanged; all seven cases pass; CI exclusion removed |
 
-Total: **15 production source/header files + 8 test sources + test CMake configuration = 24 files, +450/−579**. Grouped table rows sum to that total. The older `spikes/candidate-m/meownero-m-v0.18.5.1.diff` is historical control evidence, not the current series. Repository harnesses, CI and docs are separate from this upstream-source delta.
+Total: **15 production source/header files + 9 test sources + test CMake configuration = 25 files, +456/−584**. Grouped table rows sum to that total. The older `spikes/candidate-m/meownero-m-v0.18.5.1.diff` is historical control evidence, not the current series. Repository harnesses, CI and docs are separate from this upstream-source delta.
 
 ## Inherited unchanged but inside re-review scope (assumptions changed)
 
@@ -50,11 +51,11 @@ P2P transport, levin, LMDB, wallet2, multisig, hardware-wallet paths, Dandelion+
 |---|---|---|
 | `get_account_address_as_str.*`, `get_account_address_from_str.*` | inherited Monero base58 fixture under changed prefixes | **Fixed by patch 0009**; all eight cases pass, CI exclusion removed |
 | `uri.*` | inherited Monero testnet fixtures | **Fixed by patch 0009**; all 32 cases pass, including new original-address rejection |
-| `multisig.make_*` | inherited testnet address expectations | still open; existing `multisig.*` exclusion remains, not claimed as a pass |
+| `multisig.make_*` | inherited testnet address expectations | **Fixed by patch 0011**; five address vectors updated, test keys/assertions preserved; all seven `multisig.*` cases pass and CI exclusion is removed |
 | `ban.subnet`, `http_server.response_soft_limit`, `notify.works` | also fail on unpatched baseline in the same container (2026-09-05: 1,228 passed, these 3 failed) | existing environment-attributed CI exclusions; local host-ban smoke does not close subnet coverage |
 | `cryptonote_protocol_handler.race_condition` | untagged synthetic miner output rejected at v16, previously timed out at 300 s | **Fixed by patch 0007**, bounded regression passes; production validation unchanged; real-block devnet separately passed 2026-09-06 at h2,841 |
 | `Serialization.portability_{wallet,unsigned_tx,signed_tx}`, three wallet-storage cases | historical Monero fixtures; wallet storage reports genesis mismatch; related baseline selection passes 40/40 | still open M1 fixture work; production genesis/network checks must not be weakened |
 | `AddressFromURL.{Success,Failure}`, four `DNSResolver` cases | DNS lookups with Docker networking disabled in patch-0009 broader run | six additional failures in that offline run, not added to CI exclusions |
 | `meow_*` and targeted regressions | Meownero-specific cases plus inherited address/URI/DAA/protocol selections | ten-patch rebuilt selection **280/280**, raised-floor target **9/9**; live authority runner passes |
 
-Latest broader run (patch 0009, offline): **1,212/1,224**, not green. The whole upstream suite was not rerun after patch 0010; targeted and authority tests are not a substitute. Same-host fixed-image binary reproduction was verified for **patches 0001–0008 only**; no ten-patch binary equality claim. Full evidence: `research/verification-2026-09-07-m1.md`.
+Latest broader run (patch 0011, offline, only three historical environment exclusions): **1,221/1,233**, not green; the same six wallet/serialization and six DNS-dependent failures remain. Eleven-patch targeted selection including multisig passes **287/287**. Targeted and authority tests are not a substitute for full-suite closure. Same-host fixed-image binary reproduction was verified for **patches 0001–0008 only**; no eleven-patch binary equality claim. Full evidence: `research/verification-2026-09-07-m1.md`.
