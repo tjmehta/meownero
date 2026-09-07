@@ -16,15 +16,16 @@ Audit-scope input per PLAN.md §2.3: re-review covers *the delta plus everything
 | `src/p2p/net_node.h` | +1/−6 | no DNS seed hostnames | bootstrap: node starts with zero peers unless configured — **operator docs** |
 | `src/p2p/net_node.inl` | +4/−26 | no IP/Tor/I2P seeds | same |
 | `src/cryptonote_core/cryptonote_core.cpp` | +2/−2 | `--check-updates` default `disabled` | none (no update authority exists) |
-| `src/cryptonote_basic/difficulty.h/.cpp` | +8/−2 | `apply_min_difficulty` clamp applied inside `next_difficulty` (patch 0006) | every difficulty consumer (main chain, alt chains, checkpoints) gets the same clamp — no split possible; identity while `MEOW_MIN_DIFFICULTY == 1` |
-| `tests/unit_tests/block_reward.cpp` | replaced | Meownero emission tests + difficulty-floor test | n/a |
+| `src/cryptonote_basic/difficulty.h/.cpp` | +9/−1 | `apply_min_difficulty` clamp on the computed-result path inside `next_difficulty` (patch 0006) | main/alt-chain callers share this function; **the ≤1-sample early return still returns 1, bypassing a future floor >1**. Current floor is 1. Missing floor tests and launch-path coverage remain M1 work. |
+| `tests/unit_tests/block_reward.cpp` | replaced | seven Meownero emission tests; the previously claimed difficulty-floor test is absent from the committed six-patch series | add floor coverage (M1) |
+| `tests/unit_tests/hardfork.cpp` | +13/−0 | `meow_hardforks.single_jump_table` pins the production table | passes 2026-09-06 |
 
-Total: 12 source files + 1 test file (patch series `chain/patches/0001…0006`; diff export `spikes/candidate-m/meownero-m-v0.18.5.1.diff`).
+Total: 12 source files + 2 test files (patch series `chain/patches/0001…0006`; diff export `spikes/candidate-m/meownero-m-v0.18.5.1.diff`).
 
 ## Inherited unchanged but inside re-review scope (assumptions changed)
 
 - `src/ringct/*`, `src/crypto/*`, `external/randomx` — **unchanged**; in scope for the §2.3 gadget-layer controls because they are the privacy/PoW layer we ship (readiness record lines b–c), not because the delta touched them.
-- `src/cryptonote_core/blockchain.cpp` (rest): difficulty (`get_difficulty_for_next_block`, no launch floor), reorg handling (no checkpoints), coinbase decomposition and output-type checks under a rapidly advancing hard-fork table.
+- `src/cryptonote_core/blockchain.cpp` (rest): difficulty (`get_difficulty_for_next_block`, calls the patched DAA), reorg handling (no checkpoints), coinbase decomposition and output-type checks under the single-jump hard-fork table.
 - `src/cryptonote_core/tx_pool.cpp` fee logic (base reward magnitude changed).
 - `src/wallet/*`, `src/simplewallet/*`: address prefix consumers; display of amounts (12 dp unchanged).
 - `src/serialization/*`, `contrib/epee`: unchanged, but encoding is line (c) of the readiness record.
@@ -40,5 +41,5 @@ Everything else: P2P protocol, levin, LMDB, RPC, wallet2, multisig, hardware-wal
 | `get_account_address_as_str.works_correctly`, `get_account_address_from_str.handles_valid_address` | Monero address vectors; prefixes changed | replace vectors with Meownero addresses (M1) |
 | `multisig.make_*` | same address vectors (asserts against `TESTNET` address strings) | same |
 | `ban.subnet`, `http_server.response_soft_limit`, `notify.works` | **also fail on the unpatched v0.18.5.1 baseline in the same container** (baseline run 2026-09-05: 1,228 passed, these 3 failed) → environment class, not the delta | excluded from CI's pass criterion with this note as the reason |
-| `cryptonote_protocol_handler.race_condition` (hung under the first delta; passes on baseline) | reproduced twice (full suite and alone). Diagnosis: the test adds blocks straight into the DB (bypassing `HardFork` state) and stamps them with `get_current_hard_fork_version()`, which stays 1, then handshakes two cores; the handler compares the peer's `top_version` with `get_ideal_hard_fork_version(height)`. On Monero's table both are 1 for the first ~1M blocks; on the Meownero table the ideal version climbs to 16 by height 16, so the peer is dropped as "wrong hard fork version" and `handshaked.wait()` never returns. A test-harness assumption about the schedule, not a consensus defect (the 3-node devnet handshakes and syncs with real blocks). | **fixed at the root**: the hard-fork table is now a single jump `{v1@0, v16@1}` (patch 0003 rewritten), which removes the launch-window handshake boundaries the test exposed; re-run pending |
+| `cryptonote_protocol_handler.race_condition` (hung under the first delta; passes on baseline) | The fixture in `tests/unit_tests/node_server.cpp` injects synthetic blocks directly into the DB. With `{v1@0, v16@1}`, the 2026-09-06 rerun progresses past handshake into sync, but rejects its `txout_to_key` miner output: v16 requires `txout_to_tagged_key`. | **Still unresolved**; the single-jump table did not make this test pass. Adapt the synthetic-block fixture to v16 and rerun with a timeout. Real-block devnet independently passed (2026-09-06): three nodes at height 2,841 with identical tip hash; see `research/verification-2026-09-06-m1.md`. |
 | `meow_emission.*` (7) | new | pass |

@@ -21,7 +21,7 @@ jobs:
       - name: patch series is well-formed and pins are consistent
         run: |
           set -e
-          test "$(ls chain/patches/*.patch | wc -l)" -eq 5
+          test "$(ls chain/patches/*.patch | wc -l)" -eq 6
           grep -q '^UPSTREAM_COMMIT=4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5$' chain/upstream.lock
           python3 -c "import ast,sys; ast.parse(open('spikes/candidate-m/apply.py').read())"
 

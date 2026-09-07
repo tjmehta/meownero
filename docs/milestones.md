@@ -55,14 +55,14 @@ Exit: both controls boot and mine with Meownero identity and 0.9/block; measurem
 
 ## M1 — Foundation (on the selected/provisional lineage)
 
-- [~] Repo layout: `chain/upstream.lock` (tag + commit + submodule hashes) + `chain/patches/0001…0006` applied by `chain/build.sh` (`git am`, fails on drift); series verified to apply to a pristine tag checkout. End-to-end `build.sh` run pending (in progress 2026-09-05).
+- [x] Repo layout: `chain/upstream.lock` (tag + commit + submodule hashes) + `chain/patches/0001…0006` applied by `chain/build.sh` (`git am`, fails on drift). Fresh upstream checkout end-to-end build passed 2026-09-06, including `meow_*` 8/8; hashes in `chain/README.md` and `research/verification-2026-09-06-m1.md`.
 - [ ] Reproducible build from clean checkout: pinned toolchain, lockfiles, container recipe; two independent builds produce identical hashes.
 - [ ] Consensus deltas each have an ADR entry and test vectors (§2.2 item 5).
 - [x] Emission spec v1 (`docs/spec/emission.md`): invariants with tests, honest dilution table, 78-year tally horizon at 12 dp, forbidden claims listed.
 - [~] Identity (`docs/spec/network-identity.md`): genesis (zero-amount v2 coinbase), prefixes, ports, network IDs, hard-fork table — explicit and exercised on the devnet; **seed/bootstrap policy, testnet/stagenet tables, mainnet genesis timestamp are human/launch-time decisions**.
-- [~] Difficulty (`docs/spec/difficulty.md`): inherited DAA kept; `MEOW_MIN_DIFFICULTY` floor inside `next_difficulty` (patch 0006, unit-tested); launch/ramp/whiplash/timestamp scenarios simulated; **floor value needs the guaranteed genesis hashrate (launch input)**.
+- [~] Difficulty (`docs/spec/difficulty.md`): inherited DAA kept; patch 0006 clamps the computed result in `next_difficulty`; launch/ramp/whiplash/timestamp scenarios simulated. **2026-09-06 verification: claimed floor test absent; ≤1-sample early return bypasses a future floor >1.** Add coverage and correct that path before raising the floor. **Floor value needs the guaranteed genesis hashrate (launch input)**.
 - [x] Threat model v1 (`docs/security/threat-model.md`), code map (`docs/security/code-map.md`, includes baseline-attributed test failures); audit scope = code map + readiness records.
-- [~] CI (`.github/workflows/chain.yml`): shellcheck, pin/patch consistency, container build, emission tests, upstream suite with documented exclusions, devnet smoke, second-build hash comparison. **Never executed remotely (no remote by authorization); mirrors `chain/build.sh`.** No fuzz/property targets yet.
+- [~] CI (`.github/workflows/chain.yml`): shellcheck, pin/patch consistency, container build, consensus tests, upstream suite with exclusions, devnet smoke, hash comparison. **Never executed remotely (no remote by authorization).** 2026-09-06 review: patch count corrected to six; hash comparison only relinks (not independent builds); devnet assumes a separately named builder image; suite exclusions need alignment with actual failures. No fuzz/property targets yet.
 - [~] Wallet path: `monero-wallet-rpc` send/receive verified across nodes; CLI caveats documented (`docs/ops/operator.md`); restore-from-seed **not yet exercised**.
 
 ## M2 — Private devnet
