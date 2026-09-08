@@ -93,6 +93,14 @@ Broader offline run with a read-only source mount and disposable copied test dat
 
 Fresh full-series application matches tested tree `cd8fa65fe527556e7d9b4996fdf84b9f57a492ae`; deterministic applied HEAD `663d9cf6f0871ace096e8beadeb737c879ec544c`. Delta: 25 files, +456/−584. The eight-patch binary reproducibility record is not extended to this series. Scratch logs: `make-multisig-fixtures.log`, `test-multisig-fixtures.log`; broader result is retained in task `b1ilg2bo7` output and summarized here.
 
+## Wallet storage fixtures — patch 0012
+
+The three storage failures attempted to load an original Monero cache through Meownero's genesis check. Patch 0012 changes only `tests/unit_tests/wallet_storage.cpp`: decode the original historical `.keys` buffer, load without a cache through the normal wallet API (which initializes Meownero genesis), and store a current-chain fixture before exercising the existing file-move/password cases. The expected address is the same public keys encoded under mainnet prefix 120. Original fixture bytes remain untouched. This fixture has a fresh cache, not the original transaction history; historical cache field portability remains a separate test, not replaced by this storage coverage.
+
+A new `wallet_storage.rejects_monero_genesis_cache` loads both original buffers and requires `wallet_internal_error` containing `Genesis block mismatch`. Existing password rotation, old-password rejection and file-presence/move assertions remain. No production code or genesis validation changes.
+
+Rebuilt offline selection covering storage, multisig, address/URI, Meownero/DAA and protocol cases: **76/76 in 31.130 s**, including all seven storage tests in 5.224 s. Test data was copied into a disposable container. Patch 0012 applies on the independently applied eleven-patch tree and matches tested tree `59fcfcfecababa1b5c8ef8ff72130a0e347310ca`, applied HEAD `84eeff10a039cb9022f486bfea9220447674a7bb`. Logs: `make-storage-fixtures.log`, `test-storage-fixtures.log`. Historical serialization tests are the next remaining fixture work; no full-suite or new binary reproducibility claim here.
+
 ## Raw local evidence
 
 Scratch source: `<agent-scratch>`.
