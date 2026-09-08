@@ -101,6 +101,20 @@ A new `wallet_storage.rejects_monero_genesis_cache` loads both original buffers 
 
 Rebuilt offline selection covering storage, multisig, address/URI, Meownero/DAA and protocol cases: **76/76 in 31.130 s**, including all seven storage tests in 5.224 s. Test data was copied into a disposable container. Patch 0012 applies on the independently applied eleven-patch tree and matches tested tree `59fcfcfecababa1b5c8ef8ff72130a0e347310ca`, applied HEAD `84eeff10a039cb9022f486bfea9220447674a7bb`. Logs: `make-storage-fixtures.log`, `test-storage-fixtures.log`. Historical serialization tests are the next remaining fixture work; no full-suite or new binary reproducibility claim here.
 
+## Historical serialization fixtures — patch 0013
+
+Signed/unsigned transaction archives already deserialized successfully; their first failures were at address-display assertions. Patch 0013 re-encodes the same two public-key payloads with native base58 from testnet prefix 53 to 156, updating all ten display assertions. Archive bytes, amounts, keys, outputs, signatures and other field assertions remain unchanged.
+
+The wallet portability case retains every original historical-cache field assertion, including the original Monero genesis hash. It first asserts normal wallet loading rejects the historical cache. Using the test's pre-existing friend access, it then loads the original keys without a cache and calls the existing cache decoder with the same temporary key-unlock guard as production `wallet2::load`. It explicitly checks that the decoded historical genesis is still rejected by `check_genesis`. This is decoder portability coverage, **not acceptance of a Monero wallet cache as Meownero**, and introduces no production override or validator change.
+
+Initial rerun: **90/91**, with cache decoding failing because the direct test call omitted the legacy key-unlock guard. Reusing that guard fixed the test setup; the final rebuilt offline selection passes **91/91 in 31.243 s**, including all 15 `Serialization.*` cases in 0.880 s and seven storage cases in 5.016 s. Logs: `make-serialization-fixtures{,-retry}.log`, `test-serialization-fixtures{,-retry}.log`.
+
+Fresh application of all thirteen patches matches tested tree `5239f02b7b2c1cfe75b3ff616ab0620c3068106e`; deterministic applied HEAD `df1d93be4be4a700713268d772ff98b8367eeef7`. Source delta: 27 files, +517/−609. `git diff --quiet <upstream> -- tests/data` passes: all tracked historical fixture bytes remain unchanged. Binary reproducibility remains eight-patch-only.
+
+### Final broader selection after patch 0013
+
+With container networking enabled for inherited DNS tests, read-only source and disposable copied test data, the full CI selection passed **1,234/1,234 in 78.606 s, exit 0**. Filter: `-ban.subnet:http_server.response_soft_limit:notify.works` — exactly the three previously baseline-attributed exclusions, no new exclusions. All address, URI, multisig, storage and serialization fixture failures are now closed in this selection. This is **not an unfiltered full-suite pass** or a remote CI run. Raw summary: task `bh2qak11t` output. The prior offline DNS failures remain accurate historical evidence, not production regressions.
+
 ## Raw local evidence
 
 Scratch source: `<agent-scratch>`.

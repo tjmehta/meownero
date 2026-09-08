@@ -5,7 +5,7 @@ Governed by ADR-001 (PROPOSED). Until it is signed, everything here is a **patch
 | File | Purpose |
 |---|---|
 | `upstream.lock` | upstream URL, tag, commit, and every submodule commit; `build.sh` refuses to build if any differs |
-| `patches/0001…0011` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, startup/genesis/recalculation coverage, address/URI fixtures, and opt-in authority/donation disabling (see `docs/security/code-map.md`) |
+| `patches/0001…0013` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, startup/genesis/recalculation coverage, address/URI fixtures, and opt-in authority/donation disabling (see `docs/security/code-map.md`) |
 | `test-authorities.sh` | isolated RPC update, DNS-blocklist opt-in, local-ban and disabled-donation checks; requires built daemon and CLI wallet; called by `build.sh` |
 | `Dockerfile` | Ubuntu 24.04 base pinned by digest; apt package versions are not yet pinned (M1 gap); Docker is the host build dependency |
 | `build.sh` | verify pins → apply series → build daemon, wallets and both test targets → run consensus/protocol and floor checks → print SHA-256s |
@@ -21,6 +21,10 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 **Upstream tracking rule (PLAN §9.9, 72 h security-merge SLA):** bump `upstream.lock` to the new tag, re-run `build.sh`; any patch that fails `git am` is rebased explicitly in its own commit, never silently.
 
 ## Current verification
+
+**Thirteen-patch result:** full CI selection passes **1,234/1,234 in 78.606 s** with networking enabled for inherited DNS tests and disposable test data. The three historical baseline-attributed exclusions remain: `ban.subnet`, `http_server.response_soft_limit`, `notify.works`. This is not an unfiltered suite or remote CI pass. Storage and historical serialization fixtures are fixed without changing production validation or historical archive bytes; targeted selection passes 91/91. Fresh application matches tested tree `5239f02b7b2c1cfe75b3ff616ab0620c3068106e`. Binary reproduction remains verified for eight patches only.
+
+### Historical intermediate selections (superseded above)
 
 2026-09-07: all nine patches apply cleanly to the pinned tag and produce the tested source tree (`96dbf344ae63e9772d4330fa47d33e99fb0d49ed`). Address/URI and consensus/protocol selection passes 278/278; the eight-patch floor variants each passed 9/9. Patch 0009 fixes the inherited address and fourteen URI failures without production validation changes. The broader offline selection remains non-green: six historical wallet/serialization failures and six DNS-dependent failures (1,212/1,224 passed). See [`research/verification-2026-09-07-m1.md`](../research/verification-2026-09-07-m1.md). The historical build record below retains the earlier hashes; the reproducibility section records the verified **eight-patch** hashes, not patch 0009.
 
