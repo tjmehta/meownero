@@ -11,11 +11,12 @@ block-generation flow come from `chain/test-reorg.py`.
 ```bash
 export MEOW_BUILDER_IMAGE=sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e
 chain/test-network-p2p.sh /path/to/built-source /tmp/meow-swarm-network-unique-run
-python3 spikes/network-benchmark/check-readiness.py --source /path/to/built-source
+python3 spikes/network-benchmark/check-readiness.py --family historical --source /path/to/built-source
 # Optional: --candidate-source /path/to/separate-experimental-90-source
 ```
 
-The network test takes the shared heavy lock and caps its entire workload at
+The network test waits at most 60 seconds for the shared heavy lock, checks
+>=5 GiB available RAM, and caps its entire workload at
 1.5 GiB/no swap/two CPUs. It binds no host ports, uses only a disposable chain
 and public test fixture address, and mounts existing binaries/source read-only.
 The readiness inventory intentionally exits **2 (blocked integration)** until
@@ -39,11 +40,58 @@ observed maximum. The three forced orphans do not estimate a natural stale rate.
 No claim covers FCMP, loaded throughput, real miners, native DAA, higher-work
 forks, privacy escape, long uptime, or the peer policy in upstream PR #11283.
 
-## Paired 90/120 experiment still requires integration
+## Selected 9/90 and gated 12/120 profiles
 
-The approved comparison preserves 7,500,000,000 atomic units/second: 0.9/120
-and 0.675/90. At the present 300,000 penalty-free floor and 600,000 maximum,
-the candidate's **configured** floors must be 225,000 and 450,000 respectively.
+The selected comparison is **9 MEOW/90 seconds** versus the gated **12 MEOW/120
+seconds** fallback: 100,000,000,000 atomic units/second, or 3,153,600 MEOW per
+365 days before penalties. This branch's fifteen production patches and frozen
+reproduction remain the historical 0.9/120 control. Historical 0.675/90 and
+0.9/120 each issue 236,520 MEOW/year; select `--family historical` explicitly
+when inspecting them.
+
+`prepare-profiles.py` reads the coordinator's `spikes/selected-issuance` overlays
+from a supplied path and prepares two disposable full tracked-source snapshots.
+It verifies current15 HEAD, clean tracked state, initialized submodules and the
+coordinator's source-lock hashes. Every tracked input is hashed; binaries,
+untracked files and Git metadata are excluded. Internal tracked symlinks are
+preserved (their manifest hash covers link text); escaping symlinks are refused.
+Input source and production patches are never edited. Use a new output path.
+
+```bash
+# Run preparation/checker in an offline <=512 MiB container, or under the shared lock.
+python3 spikes/network-benchmark/prepare-profiles.py \
+  --source /path/to/verified-current15-with-submodules \
+  --overlays /path/to/coordinator/spikes/selected-issuance \
+  --output /path/to/new-prepared
+python3 spikes/network-benchmark/check-readiness.py \
+  --source /path/to/new-prepared/fallback-12-120 \
+  --candidate-source /path/to/new-prepared/selected-9-90
+# Intentional exit 2: BLOCKED_INTEGRATION, even when binaries/directories exist.
+python3 chain/test-network-profiles.py -v
+# After building the corresponding staged source, opt into its exact profile:
+chain/test-network-p2p.sh /path/to/built-selected-source /path/to/new-p2p selected-9-90
+```
+
+These source snapshots are unbuilt. Full selected builds and profile-specific
+unit fixtures remain required: `meow_emission.constant_is_0_9_meow` in current15
+hard-codes the historical reward. The P2P harness accepts all four named profiles,
+checks source reward/spacing before starting, and checks actual emission and RPC
+target spacing on both nodes. Its default stays historical for existing callers.
+It records an empty-block correctness result only; no paired loaded comparison
+or binary/source provenance follows from that result.
+
+The readiness checker defaults to the selected family and reports mismatched
+historical input as a blocker. Observed source values and proposed matched-time
+budgets are separate. The selected overlays **do not change capacity rules**:
+both retain a 300,000-weight floor and 100/100,000-block median windows. Their
+nominal floor rates are therefore 3,333⅓ versus 2,500 weight/second, with
+9,000/9,000,000 versus 12,000/12,000,000-second windows. No enforced capacity
+normalization or FCMP integration is claimed.
+
+## Paired capacity experiment still requires integration
+
+At the present 300,000 penalty-free floor and 600,000 maximum,
+the 90-second arm's **proposed experimental** floors are 225,000 and 450,000 respectively.
 That gives 2,500 penalty-free weight/second and 5,000 maximum weight/second in
 both arms at the floor. Equal per-block weight instead adds one third nominal
 capacity/second. These are budgets, not observed throughput. These issuance rates are nominal
@@ -86,7 +134,8 @@ bash chain/test-reproducibility.sh /tmp/meow-swarm-network-unique-reproduction
 ```
 
 The opt-in guard checks >=5 GiB available RAM/disk before locking, rechecks after
-locking, releases/retries if insufficient, and holds the lock for one complete
+locking, releases/retries if insufficient (60-second wait by default, exit 75;
+`MEOW_NETWORK_WAIT_SECONDS=1..3600` can set a bounded wait), and holds the lock for one complete
 build/test run. It enforces one compiler job and 4 GiB/no swap/two-CPU containers,
 including the existing child test scripts. The second clean build reacquires
 the guard. Generic `build.sh` still honors `MEOW_JOBS` and has no swarm policy.

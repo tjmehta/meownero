@@ -5,15 +5,20 @@ blocks locally; the harness never submits/copies a block into the other daemon.
 This is accelerated, empty-block regtest correctness evidence, not FCMP or DAA
 performance. TCP shaping is per chunk/connection, not a calibrated WAN emulator.
 """
+import argparse
 import asyncio
 import json
 from pathlib import Path
 import statistics
+import runpy
 import subprocess
 import time
 import urllib.request
 
 WORK = Path('/work')
+PROFILE = None
+TARGET_SECONDS = None
+REWARD_ATOMIC = None
 ADDRESS = 'M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc'
 PROCESSES = {}
 EVENTS = []
@@ -199,7 +204,8 @@ async def main():
         height = (await tip(0))[0]
         for n in (0, 1):
             supply = await rpc(n, 'get_coinbase_tx_sum', {'height': 0, 'count': height + 1})
-            assert supply['emission_amount'] == height * 900_000_000_000
+            assert supply['emission_amount'] == height * REWARD_ATOMIC
+            assert info[n]['target'] == TARGET_SECONDS, info[n]['target']
         result = dict(result='PASS', scope='actual P2P; accelerated empty-block regtest; fixed difficulty 1; no FCMP',
                       warmup_blocks=65, samples_s=samples, median_s=statistics.median(samples),
                       p95_nearest_rank_s=sorted(samples)[-1], p99_nearest_rank_s=sorted(samples)[-1],
@@ -209,9 +215,9 @@ async def main():
                       shaping='20ms/chunk plus 64KiB/s/stream; up to two bidirectional connections',
                       cache='fresh daemon databases; 65-block warmup; host page cache uncontrolled, no purge',
                       resources='1536MiB total container; no swap; 2 CPU quota shared by both daemons and proxy',
-                      target_seconds=120, reward_atomic=900_000_000_000,
+                      profile=PROFILE, target_seconds=TARGET_SECONDS, reward_atomic=REWARD_ATOMIC,
                       configured_weight_budget=None, capacity_enforcement_tested=False, observed_rpc_weight_limits=[{k:v for k,v in x.items() if 'weight' in k} for x in info],
-                      matched_90_comparison='BLOCKED: no candidate binary or enforced scaled dynamic capacity',
+                      matched_90_comparison='BLOCKED: no paired loaded workload or enforced scaled dynamic capacity',
                       transactions=0, proofs=0, events=EVENTS)
         (WORK / 'result.json').write_text(json.dumps(result, indent=2) + '\n')
         event('PASS')
@@ -240,4 +246,10 @@ async def main():
 
 
 if __name__ == '__main__':
+    profiles = runpy.run_path('/profiles/check-readiness.py')
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--profile', choices=profiles['PROFILES'], default='historical-0.9-120')
+    PROFILE = parser.parse_args().profile
+    profiles['validate_profile'](Path('/src'), PROFILE)
+    TARGET_SECONDS, REWARD_ATOMIC = profiles['PROFILES'][PROFILE]
     asyncio.run(main())

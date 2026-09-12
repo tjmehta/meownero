@@ -2,6 +2,12 @@
 # Opt-in swarm-only resource policy. General build.sh keeps its portable defaults.
 # MEOW_REPRO_BUILD_RUNNER=$PWD/chain/network-build-guard.sh chain/test-reproducibility.sh ...
 set -euo pipefail
+WAIT_SECONDS=${MEOW_NETWORK_WAIT_SECONDS:-60}
+if [[ ! "$WAIT_SECONDS" =~ ^[1-9][0-9]{0,3}$ ]] || (( WAIT_SECONDS > 3600 )); then
+  echo 'MEOW_NETWORK_WAIT_SECONDS must be 1..3600' >&2
+  exit 2
+fi
+deadline=$((SECONDS + WAIT_SECONDS))
 exec 9>/tmp/meownero-swarm-20260912-heavy.lock
 resources_ready() {
   local available_kib disk_kib
@@ -11,12 +17,20 @@ resources_ready() {
   (( available_kib >= 5 * 1024 * 1024 && disk_kib >= 5 * 1024 * 1024 ))
 }
 while true; do
+  remaining=$((deadline - SECONDS))
+  if (( remaining <= 0 )); then
+    echo 'resource wait expired; retry after the priority reproduction checkpoint' >&2
+    exit 75
+  fi
   if resources_ready; then
-    flock 9
+    flock -w "$remaining" 9 || { echo 'priority compiler busy; retry later' >&2; exit 75; }
     if resources_ready; then break; fi
     flock -u 9
   fi
-  sleep 30
+  remaining=$((deadline - SECONDS))
+  (( remaining > 0 )) || continue
+  if (( remaining > 30 )); then remaining=30; fi
+  sleep "$remaining"
 done
 # This function deliberately applies only within this opt-in runner and its
 # existing build/test child scripts. All names/resources belong to this track.

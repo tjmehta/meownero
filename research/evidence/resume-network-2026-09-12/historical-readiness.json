@@ -1,0 +1,56 @@
+{
+  "status": "BLOCKED_INTEGRATION",
+  "family": "historical",
+  "launch_ready": false,
+  "baseline_observed": {
+    "DIFFICULTY_TARGET_V2": 120,
+    "MEOW_BLOCK_REWARD": 900000000000,
+    "CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V5": 300000,
+    "CRYPTONOTE_REWARD_BLOCKS_WINDOW": 100,
+    "CRYPTONOTE_LONG_TERM_BLOCK_WEIGHT_WINDOW_SIZE": 100000,
+    "binary_sha256": "850d6eecef1831878d3a8196f3e2135a4c1ebe57f5e887566695ce9ce82e0ddc",
+    "config_sha256": "4c13598afa420521c4a123117bec5a3b4d71b15aaacf869a23f0954771f05edc",
+    "binary_source_binding_verified": false,
+    "fcmp_source_directory_present": false,
+    "observed_floor_weight_per_second": "2500",
+    "observed_window_seconds": {
+      "CRYPTONOTE_REWARD_BLOCKS_WINDOW": 12000,
+      "CRYPTONOTE_LONG_TERM_BLOCK_WEIGHT_WINDOW_SIZE": 12000000
+    }
+  },
+  "candidate_observed": null,
+  "proposed_comparison": [
+    {
+      "profile": "historical-0.9-120",
+      "target_seconds": 120,
+      "reward_atomic": 900000000000,
+      "issuance_atomic_per_second": "7500000000",
+      "annual_meow_before_penalties": "236520",
+      "proposed_penalty_free_weight": 300000,
+      "proposed_maximum_weight_at_floor": 600000,
+      "proposed_floor_weight_per_second": "2500",
+      "confirmation_horizon_3600s_blocks": 30,
+      "capacity_enforcement_tested": false
+    },
+    {
+      "profile": "historical-0.675-90",
+      "target_seconds": 90,
+      "reward_atomic": 675000000000,
+      "issuance_atomic_per_second": "7500000000",
+      "annual_meow_before_penalties": "236520",
+      "proposed_penalty_free_weight": 225000,
+      "proposed_maximum_weight_at_floor": 450000,
+      "proposed_floor_weight_per_second": "2500",
+      "confirmation_horizon_3600s_blocks": 40,
+      "capacity_enforcement_tested": false
+    }
+  ],
+  "blockers": [
+    "No real FCMP transaction/proof workload receipts or instrumented validation/relay timings.",
+    "No saturated acceptance/rejection probes proving 0.75 capacity ratio through floor, short median, long median and surge states.",
+    "No paired actual 90/120 loaded network run with shared transaction/proof mix and wallclock horizon.",
+    "Full binary/source binding, wallet/fee integration and native difficulty/timeout recovery remain unverified.",
+    "historical-0.9-120: no src/fcmp_pp integration.",
+    "No separate historical-0.675-90 source supplied."
+  ]
+}

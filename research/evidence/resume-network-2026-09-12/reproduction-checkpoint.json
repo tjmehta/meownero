@@ -1,0 +1,72 @@
+{
+  "time_utc": "2026-09-12T22:44:10.317567+00:00",
+  "old_launcher_dead_before_resume": true,
+  "resumption_count": 1,
+  "resume_pid": 1294126,
+  "frozen_manifest_sha256": "6f74c265453e138cea3b3936542ef410ff3f0396ae561a8aa9a9f3eae7c3518e",
+  "frozen_inputs_preserved": true,
+  "production_patches_preserved": true,
+  "resumed_exit": null,
+  "timeout_seconds": 10800,
+  "runs": {
+    "first": {
+      "tree_exists": true,
+      "receipts_present": [
+        "BUILDER_IMAGE_ID",
+        "packages.txt"
+      ],
+      "compiler_log_tail": [
+        "In file included from /src/src/device_trezor/trezor/transport.hpp:52,",
+        "                 from /src/src/device_trezor/trezor/transport.cpp:42:",
+        "/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]",
+        "  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;",
+        "      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        "/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here",
+        "  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,",
+        "      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      ],
+      "source_head_tree": [
+        "7410c04bab0e304112710d63c3225c110bd8b4de",
+        "4db958cb96d72943c5c2433bd5f4a8f730037148"
+      ],
+      "complete_receipts": false
+    },
+    "second": {
+      "tree_exists": false,
+      "receipts_present": [],
+      "complete_receipts": false
+    }
+  },
+  "launcher_state": "    PID STAT     ELAPSED COMMAND\n1294126 Ss         13:24 bash\n",
+  "containers": [
+    {
+      "name": "meow-swarm-network-1294160-27641",
+      "id": "5631bf3fdeea26f9c55ca64eba1ffdc1f4f23f1ded110ddb768828cc3305acaf",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 1297486,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-09-12T22:31:00.470585951Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "memory_bytes": 4294967296,
+      "memory_swap_bytes": 4294967296,
+      "nano_cpus": 2000000000,
+      "network_mode": "none",
+      "source_mounts": [
+        "/tmp/meow-swarm-network-20260912-run/reproduction/first/monero"
+      ],
+      "job_environment": [
+        "CCACHE_DISABLE=1",
+        "MEOW_JOBS=1"
+      ],
+      "cgroup": "memory.peak\n2795687936\nmemory.max\n4294967296\nmemory.swap.max\n0\nmemory.events\nlow 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\ncpu.max\n200000 100000\n"
+    }
+  ]
+}

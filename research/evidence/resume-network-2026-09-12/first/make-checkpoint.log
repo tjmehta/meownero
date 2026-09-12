@@ -1,0 +1,530 @@
+[  0%] Building CXX object src/device/CMakeFiles/obj_device.dir/device.cpp.o
+In file included from /src/src/device/device.cpp:33:
+/src/src/device/device_ledger.hpp:91:14: warning: 'hw::ledger::{anonymous}::apdu_verbose' defined but not used [-Wunused-variable]
+   91 |         bool apdu_verbose =true;
+      |              ^~~~~~~~~~~~
+[  0%] Building CXX object src/device/CMakeFiles/obj_device.dir/device_default.cpp.o
+[  2%] Building CXX object src/device/CMakeFiles/obj_device.dir/log.cpp.o
+[  2%] Building CXX object src/device/CMakeFiles/obj_device.dir/device_ledger.cpp.o
+[  2%] Building CXX object src/device/CMakeFiles/obj_device.dir/device_io_hid.cpp.o
+[  2%] Built target obj_device
+[  2%] Building CXX object external/easylogging++/CMakeFiles/easylogging.dir/easylogging++.cc.o
+In file included from /usr/include/features.h:502,
+                 from /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:33,
+                 from /usr/include/limits.h:26,
+                 from /usr/lib/gcc/x86_64-linux-gnu/13/include/limits.h:205,
+                 from /usr/lib/gcc/x86_64-linux-gnu/13/include/syslimits.h:7,
+                 from /usr/lib/gcc/x86_64-linux-gnu/13/include/limits.h:34,
+                 from /src/external/easylogging++/ea_config.h:3,
+                 from /src/external/easylogging++/easylogging++.h:19,
+                 from /src/external/easylogging++/easylogging++.cc:18:
+In function 'size_t wcstombs(char*, const wchar_t*, size_t)',
+    inlined from 'static char* el::base::utils::Str::wcharPtrToCharPtr(const wchar_t*)' at /src/external/easylogging++/easylogging++.cc:1124:16:
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:146:10: warning: 'size_t __wcstombs_alias(char*, const wchar_t*, size_t)' specified size 18446744073709551614 exceeds maximum object size 9223372036854775807 [-Wstringop-overflow=]
+  146 |   return __glibc_fortify (wcstombs, __len, sizeof (char),
+      |          ^~~~~~~~~~~~~~~
+/usr/include/x86_64-linux-gnu/bits/stdlib.h: In static member function 'static char* el::base::utils::Str::wcharPtrToCharPtr(const wchar_t*)':
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:131:15: note: in a call to function 'size_t __wcstombs_alias(char*, const wchar_t*, size_t)' declared with attribute 'access (read_only, 2)'
+  131 | extern size_t __REDIRECT_NTH (__wcstombs_alias,
+      |               ^~~~~~~~~~~~~~
+In function 'size_t wcstombs(char*, const wchar_t*, size_t)',
+    inlined from 'static char* el::base::utils::Str::wcharPtrToCharPtr(const wchar_t*)' at /src/external/easylogging++/easylogging++.cc:1124:16,
+    inlined from 'el::base::MessageBuilder& el::base::MessageBuilder::operator<<(const wchar_t*)' at /src/external/easylogging++/easylogging++.cc:2914:52:
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:146:10: warning: 'size_t __wcstombs_alias(char*, const wchar_t*, size_t)' specified size 18446744073709551614 exceeds maximum object size 9223372036854775807 [-Wstringop-overflow=]
+  146 |   return __glibc_fortify (wcstombs, __len, sizeof (char),
+      |          ^~~~~~~~~~~~~~~
+/usr/include/x86_64-linux-gnu/bits/stdlib.h: In member function 'el::base::MessageBuilder& el::base::MessageBuilder::operator<<(const wchar_t*)':
+/usr/include/x86_64-linux-gnu/bits/stdlib.h:131:15: note: in a call to function 'size_t __wcstombs_alias(char*, const wchar_t*, size_t)' declared with attribute 'access (read_only, 2)'
+  131 | extern size_t __REDIRECT_NTH (__wcstombs_alias,
+      |               ^~~~~~~~~~~~~~
+[  2%] Linking CXX static library libeasylogging.a
+[  2%] Built target easylogging
+[  2%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/aes_hash.cpp.o
+[  2%] Building C object external/randomx/CMakeFiles/randomx.dir/src/argon2_ref.c.o
+[  2%] Building C object external/randomx/CMakeFiles/randomx.dir/src/argon2_ssse3.c.o
+[  2%] Building C object external/randomx/CMakeFiles/randomx.dir/src/argon2_avx2.c.o
+[  4%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/bytecode_machine.cpp.o
+[  4%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/cpu.cpp.o
+[  4%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/dataset.cpp.o
+[  4%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/soft_aes.cpp.o
+[  4%] Building C object external/randomx/CMakeFiles/randomx.dir/src/virtual_memory.c.o
+[  7%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/vm_interpreted.cpp.o
+[  7%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/allocator.cpp.o
+[  7%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/assembly_generator_x86.cpp.o
+[  7%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/instruction.cpp.o
+[  7%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/randomx.cpp.o
+[  7%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/superscalar.cpp.o
+[  9%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/vm_compiled.cpp.o
+[  9%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/vm_interpreted_light.cpp.o
+[  9%] Building C object external/randomx/CMakeFiles/randomx.dir/src/argon2_core.c.o
+[  9%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/blake2_generator.cpp.o
+[  9%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/instructions_portable.cpp.o
+[ 11%] Building C object external/randomx/CMakeFiles/randomx.dir/src/reciprocal.c.o
+[ 11%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/virtual_machine.cpp.o
+[ 11%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/vm_compiled_light.cpp.o
+[ 11%] Building C object external/randomx/CMakeFiles/randomx.dir/src/blake2/blake2b.c.o
+[ 11%] Building CXX object external/randomx/CMakeFiles/randomx.dir/src/jit_compiler_x86.cpp.o
+[ 11%] Building C object external/randomx/CMakeFiles/randomx.dir/src/jit_compiler_x86_static.S.o
+[ 14%] Linking CXX static library librandomx.a
+[ 14%] Built target randomx
+[ 14%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/byte_slice.cpp.o
+[ 14%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/byte_stream.cpp.o
+[ 14%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/hex.cpp.o
+[ 14%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/abstract_http_client.cpp.o
+[ 16%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/http_auth.cpp.o
+[ 16%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/mlog.cpp.o
+[ 16%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/net_helper.cpp.o
+[ 16%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/net_utils_base.cpp.o
+[ 16%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/string_tools.cpp.o
+[ 16%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/parserse_base_utils.cpp.o
+[ 19%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/wipeable_string.cpp.o
+[ 19%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/levin_base.cpp.o
+[ 19%] Building C object contrib/epee/src/CMakeFiles/obj_epee.dir/memwipe.c.o
+[ 19%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/connection_basic.cpp.o
+[ 19%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/network_throttle.cpp.o
+[ 21%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/network_throttle-detail.cpp.o
+[ 21%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/mlocker.cpp.o
+[ 21%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/buffer.cpp.o
+[ 21%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/net_ssl.cpp.o
+/src/contrib/epee/src/net_ssl.cpp: In member function 'void {anonymous}::openssl_rsa_free::operator()(RSA*) const':
+/src/contrib/epee/src/net_ssl.cpp:88:15: warning: 'void RSA_free(RSA*)' is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]
+   88 |       RSA_free(ptr);
+      |       ~~~~~~~~^~~~~
+In file included from /usr/include/openssl/x509.h:36,
+                 from /usr/include/openssl/ssl.h:31,
+                 from /usr/include/boost/asio/ssl/detail/openssl_types.hpp:24,
+                 from /usr/include/boost/asio/ssl/context_base.hpp:19,
+                 from /usr/include/boost/asio/ssl/context.hpp:23,
+                 from /usr/include/boost/asio/ssl.hpp:18,
+                 from /src/contrib/epee/src/net_ssl.cpp:33:
+/usr/include/openssl/rsa.h:298:28: note: declared here
+  298 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
+      |                            ^~~~~~~~
+/src/contrib/epee/src/net_ssl.cpp: In member function 'void {anonymous}::openssl_ec_key_free::operator()(EC_KEY*) const':
+/src/contrib/epee/src/net_ssl.cpp:106:18: warning: 'void EC_KEY_free(EC_KEY*)' is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]
+  106 |       EC_KEY_free(ptr);
+      |       ~~~~~~~~~~~^~~~~
+In file included from /usr/include/openssl/x509.h:33:
+/usr/include/openssl/ec.h:1003:28: note: declared here
+ 1003 | OSSL_DEPRECATEDIN_3_0 void EC_KEY_free(EC_KEY *key);
+      |                            ^~~~~~~~~~~
+/src/contrib/epee/src/net_ssl.cpp: In function 'bool epee::net_utils::create_rsa_ssl_certificate(EVP_PKEY*&, X509*&)':
+/src/contrib/epee/src/net_ssl.cpp:154:26: warning: 'RSA* RSA_new()' is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]
+  154 |   openssl_rsa rsa{RSA_new()};
+      |                   ~~~~~~~^~
+/usr/include/openssl/rsa.h:206:28: note: declared here
+  206 | OSSL_DEPRECATEDIN_3_0 RSA *RSA_new(void);
+      |                            ^~~~~~~
+/src/contrib/epee/src/net_ssl.cpp:170:26: warning: 'int RSA_generate_key_ex(RSA*, int, BIGNUM*, BN_GENCB*)' is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]
+  170 |   if (RSA_generate_key_ex(rsa.get(), 4096, exponent.get(), nullptr) != 1)
+      |       ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/usr/include/openssl/rsa.h:265:27: note: declared here
+  265 | OSSL_DEPRECATEDIN_3_0 int RSA_generate_key_ex(RSA *rsa, int bits, BIGNUM *e,
+      |                           ^~~~~~~~~~~~~~~~~~~
+/src/contrib/epee/src/net_ssl.cpp: In function 'bool epee::net_utils::create_ec_ssl_certificate(EVP_PKEY*&, X509*&, int)':
+/src/contrib/epee/src/net_ssl.cpp:224:35: warning: 'EC_KEY* EC_KEY_new()' is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]
+  224 |   openssl_ec_key ec_key{EC_KEY_new()};
+      |                         ~~~~~~~~~~^~
+/usr/include/openssl/ec.h:968:31: note: declared here
+  968 | OSSL_DEPRECATEDIN_3_0 EC_KEY *EC_KEY_new(void);
+      |                               ^~~~~~~~~~
+/src/contrib/epee/src/net_ssl.cpp:247:23: warning: 'int EC_KEY_set_group(EC_KEY*, const EC_GROUP*)' is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]
+  247 |   if (EC_KEY_set_group(ec_key.get(), group) != 1)
+      |       ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+/usr/include/openssl/ec.h:1042:27: note: declared here
+ 1042 | OSSL_DEPRECATEDIN_3_0 int EC_KEY_set_group(EC_KEY *key, const EC_GROUP *group);
+      |                           ^~~~~~~~~~~~~~~~
+/src/contrib/epee/src/net_ssl.cpp:252:26: warning: 'int EC_KEY_generate_key(EC_KEY*)' is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]
+  252 |   if (EC_KEY_generate_key(ec_key.get()) != 1)
+      |       ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+/usr/include/openssl/ec.h:1101:27: note: declared here
+ 1101 | OSSL_DEPRECATEDIN_3_0 int EC_KEY_generate_key(EC_KEY *key);
+      |                           ^~~~~~~~~~~~~~~~~~~
+[ 21%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/int-util.cpp.o
+[ 21%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/portable_storage.cpp.o
+[ 23%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/misc_language.cpp.o
+[ 23%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/file_io_utils.cpp.o
+[ 23%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/net_parse_helpers.cpp.o
+[ 23%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee.dir/http_base.cpp.o
+[ 23%] Built target obj_epee
+[ 23%] Linking CXX static library libepee.a
+[ 23%] Built target epee
+[ 23%] Built target genversion
+[ 23%] Building CXX object src/CMakeFiles/obj_version.dir/__/version.cpp.o
+[ 23%] Built target obj_version
+[ 26%] Linking CXX static library libversion.a
+[ 26%] Built target version
+[ 26%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/aesb.c.o
+[ 26%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/blake256.c.o
+[ 26%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/chacha.c.o
+[ 28%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/crypto-ops-data.c.o
+[ 28%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/crypto-ops.c.o
+[ 28%] Building CXX object src/crypto/CMakeFiles/obj_cncrypto.dir/crypto.cpp.o
+[ 28%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/groestl.c.o
+[ 28%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/hash-extra-blake.c.o
+[ 30%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/hash-extra-groestl.c.o
+[ 30%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/hash-extra-jh.c.o
+/src/src/crypto/hash-extra-jh.c: In function 'hash_extra_jh':
+/src/src/crypto/hash-extra-jh.c:40:7: warning: unused variable 'r' [-Wunused-variable]
+   40 |   int r = jh_hash(HASH_SIZE * 8, data, 8 * length, (uint8_t*)hash);
+      |       ^
+[ 30%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/hash-extra-skein.c.o
+/src/src/crypto/hash-extra-skein.c: In function 'hash_extra_skein':
+/src/src/crypto/hash-extra-skein.c:38:7: warning: unused variable 'r' [-Wunused-variable]
+   38 |   int r = skein_hash(8 * HASH_SIZE, data, 8 * length, (uint8_t*)hash);
+      |       ^
+[ 30%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/hash.c.o
+[ 30%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/hmac-keccak.c.o
+[ 30%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/jh.c.o
+[ 33%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/keccak.c.o
+[ 33%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/oaes_lib.c.o
+/src/src/crypto/oaes_lib.c: In function 'oaes_get_seed':
+/src/src/crypto/oaes_lib.c:515:9: warning: 'ftime' is deprecated: Use gettimeofday or clock_gettime instead [-Wdeprecated-declarations]
+  515 |         ftime (&timer);
+      |         ^~~~~
+In file included from /src/src/crypto/oaes_lib.c:45:
+/usr/include/x86_64-linux-gnu/sys/timeb.h:29:12: note: declared here
+   29 | extern int ftime (struct timeb *__timebuf)
+      |            ^~~~~
+[ 33%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/random.c.o
+[ 33%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/skein.c.o
+[ 33%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/slow-hash.c.o
+[ 35%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/rx-slow-hash.c.o
+/src/src/crypto/rx-slow-hash.c: In function 'rx_get_miner_thread':
+/src/src/crypto/rx-slow-hash.c:507:10: warning: old-style function definition [-Wold-style-definition]
+  507 | uint32_t rx_get_miner_thread() {
+      |          ^~~~~~~~~~~~~~~~~~~
+/src/src/crypto/rx-slow-hash.c: In function 'rx_slow_hash_allocate_state':
+/src/src/crypto/rx-slow-hash.c:511:6: warning: old-style function definition [-Wold-style-definition]
+  511 | void rx_slow_hash_allocate_state() {}
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/crypto/rx-slow-hash.c: In function 'rx_slow_hash_free_state':
+/src/src/crypto/rx-slow-hash.c:520:6: warning: old-style function definition [-Wold-style-definition]
+  520 | void rx_slow_hash_free_state() {
+      |      ^~~~~~~~~~~~~~~~~~~~~~~
+[ 35%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/CryptonightR_JIT.c.o
+[ 35%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/tree-hash.c.o
+/src/src/crypto/tree-hash.c: In function 'tree_hash':
+/src/src/crypto/tree-hash.c:89:5: warning: '__builtin_memcpy' writing 64 bytes into a region of size 32 [-Wstringop-overflow=]
+   89 |     memcpy(ints, hashes, (2 * cnt - count) * HASH_SIZE);
+      |     ^
+/src/src/crypto/tree-hash.c:86:18: note: destination object of size 32 allocated by 'calloc'
+   86 |     char *ints = calloc(cnt, HASH_SIZE);  // zero out as extra protection for using uninitialized mem
+      |                  ^~~~~~~~~~~~~~~~~~~~~~
+[ 35%] Building C object src/crypto/CMakeFiles/obj_cncrypto.dir/CryptonightR_template.S.o
+[ 35%] Built target obj_cncrypto
+[ 35%] Linking CXX static library libcncrypto.a
+[ 35%] Built target cncrypto
+[ 35%] Creating directories for 'generate_translations_header'
+[ 38%] No download step for 'generate_translations_header'
+[ 38%] No update step for 'generate_translations_header'
+[ 38%] No patch step for 'generate_translations_header'
+[ 38%] Performing configure step for 'generate_translations_header'
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Warning at CMakeLists.txt:53 (message):
+  lrelease program not found, translation files not built
+
+
+-- Configuring done (0.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: /src/build/release/translations
+[ 38%] Performing build step for 'generate_translations_header'
+[ 50%] Building C object CMakeFiles/generate_translations_header.dir/generate_translations_header.c.o
+[100%] Linking C executable generate_translations_header
+Generating embedded translations header
+[100%] Built target generate_translations_header
+[ 38%] Performing install step for 'generate_translations_header'
+
+[ 38%] Completed 'generate_translations_header'
+[ 38%] Built target generate_translations_header
+[ 38%] Building CXX object src/common/CMakeFiles/obj_common.dir/base58.cpp.o
+[ 38%] Building CXX object src/common/CMakeFiles/obj_common.dir/command_line.cpp.o
+[ 40%] Building CXX object src/common/CMakeFiles/obj_common.dir/dns_utils.cpp.o
+[ 40%] Building CXX object src/common/CMakeFiles/obj_common.dir/download.cpp.o
+[ 40%] Building CXX object src/common/CMakeFiles/obj_common.dir/error.cpp.o
+[ 40%] Building CXX object src/common/CMakeFiles/obj_common.dir/expect.cpp.o
+[ 40%] Building CXX object src/common/CMakeFiles/obj_common.dir/util.cpp.o
+[ 42%] Building CXX object src/common/CMakeFiles/obj_common.dir/i18n.cpp.o
+[ 42%] Building CXX object src/common/CMakeFiles/obj_common.dir/notify.cpp.o
+[ 42%] Building CXX object src/common/CMakeFiles/obj_common.dir/password.cpp.o
+[ 42%] Building CXX object src/common/CMakeFiles/obj_common.dir/perf_timer.cpp.o
+[ 42%] Building CXX object src/common/CMakeFiles/obj_common.dir/pruning.cpp.o
+[ 42%] Building CXX object src/common/CMakeFiles/obj_common.dir/spawn.cpp.o
+[ 45%] Building CXX object src/common/CMakeFiles/obj_common.dir/threadpool.cpp.o
+[ 45%] Building CXX object src/common/CMakeFiles/obj_common.dir/updates.cpp.o
+[ 45%] Building C object src/common/CMakeFiles/obj_common.dir/aligned.c.o
+[ 45%] Building CXX object src/common/CMakeFiles/obj_common.dir/timings.cc.o
+[ 45%] Building CXX object src/common/CMakeFiles/obj_common.dir/combinator.cpp.o
+[ 47%] Building CXX object src/common/CMakeFiles/obj_common.dir/stack_trace.cpp.o
+[ 47%] Built target obj_common
+[ 47%] Linking CXX static library libcommon.a
+[ 47%] Built target common
+[ 47%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/amd64-64-24k.c.o
+In file included from /src/external/supercop/src/amd64/../../crypto_sign/ed25519/amd64-64-24k/ge25519.h:5,
+                 from /src/external/supercop/src/amd64/amd64-64-24k.c:38:
+/src/external/supercop/src/amd64/amd64.c.inc: In function 'scalarmult_p1p1':
+/src/external/supercop/src/amd64/../../crypto_sign/ed25519/amd64-64-24k/sc25519.h:18:34: warning: 'crypto_sign_ed25519_amd64_64_sc25519_window4' accessing 85 bytes in a region of size 64 [-Wstringop-overflow=]
+   18 | #define sc25519_window4          crypto_sign_ed25519_amd64_64_sc25519_window4
+/src/external/supercop/src/amd64/amd64.c.inc:118:3: note: in expansion of macro 'sc25519_window4'
+  118 |   sc25519_window4(b, &s);
+      |   ^~~~~~~~~~~~~~~
+/src/external/supercop/src/amd64/../../crypto_sign/ed25519/amd64-64-24k/sc25519.h:18:34: note: referencing argument 1 of type 'signed char[85]'
+   18 | #define sc25519_window4          crypto_sign_ed25519_amd64_64_sc25519_window4
+/src/external/supercop/src/amd64/amd64.c.inc:118:3: note: in expansion of macro 'sc25519_window4'
+  118 |   sc25519_window4(b, &s);
+      |   ^~~~~~~~~~~~~~~
+/src/external/supercop/src/amd64/../../crypto_sign/ed25519/amd64-64-24k/sc25519.h:18:34: note: in a call to function 'crypto_sign_ed25519_amd64_64_sc25519_window4'
+   18 | #define sc25519_window4          crypto_sign_ed25519_amd64_64_sc25519_window4
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/external/supercop/src/amd64/../../crypto_sign/ed25519/amd64-64-24k/sc25519.h:58:6: note: in expansion of macro 'sc25519_window4'
+   58 | void sc25519_window4(signed char r[85], const sc25519 *s);
+      |      ^~~~~~~~~~~~~~~
+[ 47%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/amd64-64-24k-choose_tp.s.o
+[ 50%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/choose_t.s.o
+[ 50%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/consts.s.o
+[ 50%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_getparity.c.o
+[ 50%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_freeze.s.o
+[ 50%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_invert.c.o
+[ 50%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_iseq.c.o
+[ 52%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_mul.s.o
+[ 52%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_neg.c.o
+[ 52%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_pack.c.o
+[ 52%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_pow2523.c.o
+[ 52%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_setint.c.o
+[ 54%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_square.s.o
+[ 54%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_unpack.c.o
+[ 54%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_add.c.o
+[ 54%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_add_p1p1.s.o
+[ 54%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_dbl_p1p1.s.o
+[ 54%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_double.c.o
+[ 57%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_nielsadd_p1p1.s.o
+[ 57%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_nielsadd2.s.o
+[ 57%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_pack.c.o
+[ 57%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_p1p1_to_p2.s.o
+[ 57%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_p1p1_to_p3.s.o
+[ 59%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_pnielsadd_p1p1.s.o
+[ 59%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_scalarmult_base.c.o
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/ge25519_scalarmult_base.c:15:22: warning: 'ecd' defined but not used [-Wunused-const-variable=]
+   15 | static const fe25519 ecd = {{0x75EB4DCA135978A3, 0x00700A4D4141D8AB, 0x8CC740797779E898, 0x52036CEE2B6FFE73}};
+      |                      ^~~
+In file included from /src/external/supercop/crypto_sign/ed25519/amd64-64-24k/ge25519_scalarmult_base.c:2:
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/ge25519_scalarmult_base.c: In function 'crypto_sign_ed25519_amd64_64_scalarmult_base':
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/sc25519.h:18:34: warning: 'crypto_sign_ed25519_amd64_64_sc25519_window4' accessing 85 bytes in a region of size 64 [-Wstringop-overflow=]
+   18 | #define sc25519_window4          crypto_sign_ed25519_amd64_64_sc25519_window4
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/ge25519_scalarmult_base.c:24:3: note: in expansion of macro 'sc25519_window4'
+   24 |   sc25519_window4(b,s);
+      |   ^~~~~~~~~~~~~~~
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/sc25519.h:18:34: note: referencing argument 1 of type 'signed char[85]'
+   18 | #define sc25519_window4          crypto_sign_ed25519_amd64_64_sc25519_window4
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/ge25519_scalarmult_base.c:24:3: note: in expansion of macro 'sc25519_window4'
+   24 |   sc25519_window4(b,s);
+      |   ^~~~~~~~~~~~~~~
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/sc25519.h:18:34: note: in a call to function 'crypto_sign_ed25519_amd64_64_sc25519_window4'
+   18 | #define sc25519_window4          crypto_sign_ed25519_amd64_64_sc25519_window4
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/sc25519.h:58:6: note: in expansion of macro 'sc25519_window4'
+   58 | void sc25519_window4(signed char r[85], const sc25519 *s);
+      |      ^~~~~~~~~~~~~~~
+[ 59%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/ge25519_unpackneg.c.o
+[ 59%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/sc25519_from32bytes.c.o
+[ 59%] Building C object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/sc25519_window4.c.o
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/sc25519_window4.c:3:34: warning: argument 1 of type 'signed char[64]' with mismatched bound [-Warray-parameter=]
+    3 | void sc25519_window4(signed char r[64], const sc25519 *s)
+      |                      ~~~~~~~~~~~~^~~~~
+In file included from /src/external/supercop/crypto_sign/ed25519/amd64-64-24k/sc25519_window4.c:1:
+/src/external/supercop/crypto_sign/ed25519/amd64-64-24k/sc25519.h:58:34: note: previously declared as 'signed char[85]'
+   58 | void sc25519_window4(signed char r[85], const sc25519 *s);
+      |                      ~~~~~~~~~~~~^~~~~
+[ 59%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_add.s.o
+[ 61%] Building ASM object monero_crypto_src/amd64/CMakeFiles/monero-crypto-amd64-64-24k.dir/__/__/crypto_sign/ed25519/amd64-64-24k/fe25519_sub.s.o
+[ 61%] Built target monero-crypto-amd64-64-24k
+[ 61%] Linking CXX static library libwallet-crypto.a
+[ 61%] Built target wallet-crypto
+[ 61%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/rctOps.cpp.o
+[ 61%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/rctTypes.cpp.o
+[ 61%] Building C object src/ringct/CMakeFiles/obj_ringct_basic.dir/rctCryptoOps.c.o
+[ 64%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/multiexp.cc.o
+[ 64%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/bulletproofs.cc.o
+[ 64%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/bulletproofs_plus.cc.o
+[ 64%] Built target obj_ringct_basic
+[ 64%] Linking CXX static library libringct_basic.a
+[ 64%] Built target ringct_basic
+[ 64%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_format_utils_basic.dir/cryptonote_format_utils_basic.cpp.o
+[ 64%] Built target obj_cryptonote_format_utils_basic
+[ 64%] Linking CXX static library libcryptonote_format_utils_basic.a
+[ 64%] Built target cryptonote_format_utils_basic
+[ 64%] Generating generated_testnet_blocks.c
+[ 66%] Generating generated_checkpoints.c
+[ 66%] Generating generated_stagenet_blocks.c
+[ 66%] Building CXX object src/blocks/CMakeFiles/obj_blocks.dir/blocks.cpp.o
+[ 66%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_checkpoints.c.o
+[ 69%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_testnet_blocks.c.o
+[ 69%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_stagenet_blocks.c.o
+[ 69%] Built target obj_blocks
+[ 69%] Linking CXX static library libblocks.a
+[ 69%] Built target blocks
+[ 69%] Linking CXX static library libdevice.a
+[ 69%] Built target device
+[ 69%] Building C object external/db_drivers/liblmdb/CMakeFiles/lmdb.dir/mdb.c.o
+[ 69%] Building C object external/db_drivers/liblmdb/CMakeFiles/lmdb.dir/midl.c.o
+[ 69%] Linking C static library liblmdb.a
+[ 69%] Built target lmdb
+[ 69%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee_readline.dir/readline_buffer.cpp.o
+[ 69%] Built target obj_epee_readline
+[ 69%] Linking CXX static library libepee_readline.a
+[ 69%] Built target epee_readline
+[ 69%] Building CXX object src/ringct/CMakeFiles/obj_ringct.dir/rctSigs.cpp.o
+[ 69%] Built target obj_ringct
+[ 69%] Building CXX object src/checkpoints/CMakeFiles/obj_checkpoints.dir/checkpoints.cpp.o
+[ 69%] Built target obj_checkpoints
+[ 69%] Linking CXX static library libcheckpoints.a
+[ 69%] Built target checkpoints
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/account.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/connection_context.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/cryptonote_basic_impl.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/cryptonote_format_utils.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/difficulty.cpp.o
+[ 71%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/hardfork.cpp.o
+[ 71%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/merge_mining.cpp.o
+[ 71%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/miner.cpp.o
+[ 71%] Built target obj_cryptonote_basic
+[ 73%] Linking CXX static library libcryptonote_basic.a
+[ 73%] Built target cryptonote_basic
+[ 73%] Linking CXX static library libringct.a
+[ 73%] Built target ringct
+[ 73%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/blockchain.cpp.o
+[ 73%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/cryptonote_core.cpp.o
+/src/src/cryptonote_core/cryptonote_core.cpp: In constructor 'cryptonote::core::core(cryptonote::i_cryptonote_protocol*)':
+/src/src/cryptonote_core/cryptonote_core.cpp:225:25: warning: member 'cryptonote::core::m_blockchain_storage' is used uninitialized [-Wuninitialized]
+  225 |               m_mempool(m_blockchain_storage),
+      |                         ^~~~~~~~~~~~~~~~~~~~
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/tx_pool.cpp.o
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/tx_sanity_check.cpp.o
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/cryptonote_tx_utils.cpp.o
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/tx_verification_utils.cpp.o
+[ 76%] Built target obj_cryptonote_core
+[ 78%] Building CXX object src/hardforks/CMakeFiles/obj_hardforks.dir/hardforks.cpp.o
+[ 78%] Built target obj_hardforks
+[ 78%] Linking CXX static library libhardforks.a
+[ 78%] Built target hardforks
+[ 78%] Building CXX object src/blockchain_db/CMakeFiles/obj_blockchain_db.dir/blockchain_db.cpp.o
+[ 78%] Building CXX object src/blockchain_db/CMakeFiles/obj_blockchain_db.dir/lmdb/db_lmdb.cpp.o
+[ 78%] Built target obj_blockchain_db
+[ 78%] Linking CXX static library libblockchain_db.a
+[ 78%] Built target blockchain_db
+[ 78%] Linking CXX static library libcryptonote_core.a
+[ 78%] Built target cryptonote_core
+[ 78%] Building CXX object src/net/CMakeFiles/obj_net.dir/dandelionpp.cpp.o
+[ 78%] Building CXX object src/net/CMakeFiles/obj_net.dir/error.cpp.o
+[ 78%] Building CXX object src/net/CMakeFiles/obj_net.dir/http.cpp.o
+[ 78%] Building CXX object src/net/CMakeFiles/obj_net.dir/i2p_address.cpp.o
+[ 78%] Building CXX object src/net/CMakeFiles/obj_net.dir/parse.cpp.o
+[ 80%] Building CXX object src/net/CMakeFiles/obj_net.dir/resolve.cpp.o
+[ 80%] Building CXX object src/net/CMakeFiles/obj_net.dir/socks.cpp.o
+[ 80%] Building CXX object src/net/CMakeFiles/obj_net.dir/socks_connect.cpp.o
+[ 80%] Building CXX object src/net/CMakeFiles/obj_net.dir/tor_address.cpp.o
+[ 80%] Building CXX object src/net/CMakeFiles/obj_net.dir/zmq.cpp.o
+[ 80%] Built target obj_net
+[ 80%] Linking CXX static library libnet.a
+[ 80%] Built target net
+[ 80%] Building CXX object src/rpc/CMakeFiles/obj_rpc_base.dir/rpc_args.cpp.o
+[ 80%] Building CXX object src/rpc/CMakeFiles/obj_rpc_base.dir/rpc_payment_signature.cpp.o
+[ 83%] Building CXX object src/rpc/CMakeFiles/obj_rpc_base.dir/rpc_handler.cpp.o
+[ 83%] Built target obj_rpc_base
+[ 85%] Linking CXX static library librpc_base.a
+[ 85%] Built target rpc_base
+[ 85%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/bootstrap_daemon.cpp.o
+[ 85%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/bootstrap_node_selector.cpp.o
+[ 88%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o
+[ 88%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/rpc_payment.cpp.o
+[ 88%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/rpc_version_str.cpp.o
+[ 88%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/instanciations.cpp.o
+[ 88%] Built target obj_rpc
+[ 90%] Building CXX object src/p2p/CMakeFiles/obj_p2p.dir/net_node.cpp.o
+[ 90%] Building CXX object src/p2p/CMakeFiles/obj_p2p.dir/net_peerlist.cpp.o
+[ 90%] Built target obj_p2p
+[ 90%] Linking CXX static library libp2p.a
+[ 90%] Built target p2p
+[ 90%] Building CXX object src/cryptonote_protocol/CMakeFiles/obj_cryptonote_protocol.dir/block_queue.cpp.o
+[ 92%] Building CXX object src/cryptonote_protocol/CMakeFiles/obj_cryptonote_protocol.dir/cryptonote_protocol_handler-base.cpp.o
+[ 92%] Building CXX object src/cryptonote_protocol/CMakeFiles/obj_cryptonote_protocol.dir/levin_notify.cpp.o
+[ 92%] Built target obj_cryptonote_protocol
+[ 92%] Linking CXX static library libcryptonote_protocol.a
+[ 92%] Built target cryptonote_protocol
+[ 92%] Linking CXX static library librpc.a
+[ 92%] Built target rpc
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_rpc_pub.dir/zmq_pub.cpp.o
+[ 92%] Built target obj_rpc_pub
+[ 92%] Building CXX object src/serialization/CMakeFiles/obj_serialization.dir/json_object.cpp.o
+[ 92%] Built target obj_serialization
+[ 92%] Linking CXX static library libserialization.a
+[ 92%] Built target serialization
+[ 92%] Linking CXX static library librpc_pub.a
+[ 92%] Built target rpc_pub
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/message.cpp.o
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/daemon_messages.cpp.o
+[ 92%] Built target obj_daemon_messages
+[ 95%] Linking CXX static library libdaemon_messages.a
+[ 95%] Built target daemon_messages
+[ 95%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/daemon_handler.cpp.o
+[ 97%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_restricted_methods.cpp.o
+[ 97%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_pub.cpp.o
+[ 97%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_server.cpp.o
+[ 97%] Built target obj_daemon_rpc_server
+[ 97%] Linking CXX static library libdaemon_rpc_server.a
+[ 97%] Built target daemon_rpc_server
+[ 97%] Building CXX object src/daemonizer/CMakeFiles/obj_daemonizer.dir/posix_fork.cpp.o
+[ 97%] Built target obj_daemonizer
+[ 97%] Linking CXX static library libdaemonizer.a
+[ 97%] Built target daemonizer
+[ 97%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_parser_executor.cpp.o
+[ 97%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_server.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/daemon.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/executor.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/main.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/rpc_command_executor.cpp.o
+[100%] Linking CXX executable ../../bin/monerod
+[100%] Built target daemon
+[  0%] Building CXX object src/device_trezor/CMakeFiles/obj_device_trezor.dir/trezor/messages_map.cpp.o
+In file included from /src/src/device_trezor/trezor/messages_map.cpp:32:
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]
+  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here
+  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages_map.cpp: In static member function 'static google::protobuf::Message* hw::trezor::MessageMapper::get_message(const std::string&)':
+/src/src/device_trezor/trezor/messages_map.cpp:83:23: warning: loop variable 'text' of type 'const std::string&' {aka 'const std::__cxx11::basic_string<char>&'} binds to a temporary constructed from type 'const char*' [-Wrange-loop-construct]
+   83 |     for(const string &text : PACKAGES){
+      |                       ^~~~
+/src/src/device_trezor/trezor/messages_map.cpp:83:23: note: use non-reference type 'const std::string' {aka 'const std::__cxx11::basic_string<char>'} to make the copy explicit or 'const char* const&' to prevent copying
+[  0%] Building CXX object src/device_trezor/CMakeFiles/obj_device_trezor.dir/trezor/protocol.cpp.o
+In file included from /src/src/device_trezor/trezor/transport.hpp:52,
+                 from /src/src/device_trezor/trezor/protocol.hpp:36,
+                 from /src/src/device_trezor/trezor/protocol.cpp:31:
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]
+  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here
+  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[  2%] Building CXX object src/device_trezor/CMakeFiles/obj_device_trezor.dir/trezor/transport.cpp.o
+In file included from /src/src/device_trezor/trezor/transport.hpp:52,
+                 from /src/src/device_trezor/trezor/transport.cpp:42:
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]
+  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here
+  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

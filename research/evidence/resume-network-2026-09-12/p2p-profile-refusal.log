@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/harness/test-network-p2p.py", line 253, in <module>
+    profiles['validate_profile'](Path('/src'), PROFILE)
+  File "/profiles/check-readiness.py", line 56, in validate_profile
+    raise ValueError(f'{profile}: {key} mismatch: {values[key]} != {expected}')
+ValueError: selected-9-90: DIFFICULTY_TARGET_V2 mismatch: 120 != 90
