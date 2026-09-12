@@ -60,7 +60,8 @@ export function Notify() {
   const stored = useSyncExternalStore(noop, readStored, () => false);
   // Feature detection only. iOS Safari tabs have no PushManager (Apple limits
   // push to Home Screen web apps), so they get the email form directly.
-  const supported = useSyncExternalStore(noop, pushSupported, () => true);
+  // Unknown during SSR: do not advertise push before checking the browser.
+  const supported = useSyncExternalStore<boolean | null>(noop, pushSupported, () => null);
 
   function finish() {
     try {
@@ -122,7 +123,11 @@ export function Notify() {
     );
   }
 
-  if (mode === "email" || (mode === "working" && email)) {
+  if (supported === null) {
+    return <div className="h-16" aria-hidden="true" />;
+  }
+
+  if (!supported || mode === "email" || (mode === "working" && email)) {
     return (
       <form onSubmit={submitEmail} className="flex w-full max-w-sm flex-col gap-2">
         <div className="flex gap-2">
