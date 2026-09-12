@@ -1,0 +1,133 @@
+From 98f4a669970195f03f63c34aa3a9841b184cf3db Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Sat, 12 Sep 2026 09:52:03 -0700
+Subject: [PATCH 15/15] tests: compare difficulty callers across window and
+ rollback boundaries
+
+---
+ tests/unit_tests/meow_difficulty.cpp | 90 ++++++++++++++++++++++------
+ 1 file changed, 72 insertions(+), 18 deletions(-)
+
+diff --git a/tests/unit_tests/meow_difficulty.cpp b/tests/unit_tests/meow_difficulty.cpp
+index ccdeb38..8398d47 100644
+--- a/tests/unit_tests/meow_difficulty.cpp
++++ b/tests/unit_tests/meow_difficulty.cpp
+@@ -5,11 +5,12 @@
+ #include "cryptonote_core/cryptonote_core.h"
+ #include "cryptonote_basic/cryptonote_format_utils.h"
+ #include "cryptonote_config.h"
++#include "cryptonote_basic/account.h"
+ #include "misc_language.h"
+ 
+ namespace
+ {
+-  void check_startup(const std::string &network, uint64_t fixed)
++  void check_startup(const std::string &network, uint64_t fixed, bool boundaries = false)
+   {
+     const auto dir = boost::filesystem::temp_directory_path() /
+       boost::filesystem::unique_path("meow-floor-%%%%%%%%%%%%%%%%");
+@@ -45,27 +46,75 @@ namespace
+     ASSERT_EQ(chain.get_difficulty_for_next_block(), expected);
+     ASSERT_EQ(chain.recalculate_difficulties(), 0u);
+ 
+-    // Inject one synthetic block to exercise accounting, not PoW validation/mining.
+-    cryptonote::block block;
+-    block.major_version = chain.get_current_hard_fork_version();
+-    block.minor_version = chain.get_ideal_hard_fork_version();
+-    block.prev_id = db.get_block_hash_from_height(0);
+-    block.timestamp = db.get_top_block_timestamp() + 120;
+-    block.miner_tx.version = block.major_version >= 4 ? 2 : 1;
+-    block.miner_tx.unlock_time = 1 + CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW;
+-    block.miner_tx.vin.push_back(cryptonote::txin_gen{1});
+-    cryptonote::tx_out out;
+-    cryptonote::set_tx_out(MEOW_BLOCK_REWARD, {}, block.major_version >= HF_VERSION_VIEW_TAGS, {}, out);
+-    block.miner_tx.vout.push_back(out);
+-    const auto weight = cryptonote::get_transaction_weight(block.miner_tx);
+-    db.batch_start({}, {});
+-    db.add_block({block, cryptonote::block_to_blob(block)}, weight,
+-      chain.get_next_long_term_block_weight(weight), 1 + expected, MEOW_BLOCK_REWARD, {});
+-    db.batch_stop();
++    // Inject synthetic DB blocks to test sampling/accounting, not PoW validation.
++    // Separate daemon tests cover actual acceptance and competing-chain selection.
++    auto append = [&](uint64_t interval) {
++      const uint64_t height = db.height();
++      const auto difficulty = chain.get_difficulty_for_next_block();
++      cryptonote::block block;
++      block.major_version = chain.get_current_hard_fork_version();
++      block.minor_version = chain.get_ideal_hard_fork_version();
++      block.prev_id = db.get_block_hash_from_height(height - 1);
++      block.timestamp = db.get_top_block_timestamp() + interval;
++      block.miner_tx.version = block.major_version >= 4 ? 2 : 1;
++      block.miner_tx.unlock_time = height + CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW;
++      block.miner_tx.vin.push_back(cryptonote::txin_gen{height});
++      cryptonote::tx_out out;
++      cryptonote::set_tx_out(MEOW_BLOCK_REWARD, {}, block.major_version >= HF_VERSION_VIEW_TAGS, {}, out);
++      block.miner_tx.vout.push_back(out);
++      const auto weight = cryptonote::get_transaction_weight(block.miner_tx);
++      const cryptonote::difficulty_type cumulative = db.get_block_cumulative_difficulty(height - 1) + difficulty;
++      db.batch_start({}, {});
++      db.add_block({block, cryptonote::block_to_blob(block)}, weight,
++        chain.get_next_long_term_block_weight(weight), cumulative, height * MEOW_BLOCK_REWARD, {});
++      db.batch_stop();
++      ASSERT_GE(difficulty, expected);
++    };
++    append(120);
+     ASSERT_EQ(chain.recalculate_difficulties(), 0u);
+     ASSERT_EQ(db.get_block_cumulative_difficulty(0), 1);
+     ASSERT_EQ(db.get_block_cumulative_difficulty(1), 1 + expected);
+     ASSERT_EQ(chain.get_difficulty_for_next_block(), expected);
++    if (!boundaries) return;
++
++    cryptonote::account_base miner;
++    miner.generate();
++    // Supplying the tip explicitly uses the real alternative-chain sampling caller.
++    auto compare_callers = [&] {
++      const auto main_difficulty = chain.get_difficulty_for_next_block();
++      cryptonote::block block;
++      cryptonote::difficulty_type alt_difficulty;
++      uint64_t height, reward, seed_height;
++      crypto::hash seed_hash;
++      const auto parent = db.get_block_hash_from_height(db.height() - 1);
++      ASSERT_TRUE(chain.create_block_template(block, &parent, miner.get_keys().m_account_address, alt_difficulty,
++        height, reward, {}, seed_height, seed_hash));
++      ASSERT_EQ(height, db.height());
++      ASSERT_EQ(main_difficulty, alt_difficulty);
++      ASSERT_EQ(chain.recalculate_difficulties(), 0u);
++      ASSERT_EQ(chain.recalculate_difficulties(db.height() > 735 ? db.height() - 735 : 1), 0u);
++      ASSERT_EQ(chain.get_difficulty_for_next_block(), main_difficulty);
++    };
++    for (uint64_t height = 2; height <= 800; ++height)
++    {
++      // Nonconstant work exposes stale caches and off-by-one sampling/lag mistakes.
++      append(height < 600 ? 60 : height < 735 ? 240 : 10);
++      if (height == 599 || height == 600 || height == 601 ||
++          height == 719 || height == 720 || height == 721 ||
++          height == 734 || height == 735 || height == 736 || height == 800)
++      {
++        SCOPED_TRACE(height);
++        compare_callers();
++      }
++    }
++    // Roll back across the lag/window boundaries, then build different history.
++    chain.pop_blocks(81); // tip 800 -> 719
++    ASSERT_EQ(db.height(), 720u);
++    compare_callers();
++    for (uint64_t height = 720; height <= 800; ++height)
++      append(600);
++    compare_callers();
++    ASSERT_EQ(db.get_block_cumulative_difficulty(0), 1);
+   }
+ }
+ 
+@@ -82,3 +131,8 @@ TEST(meow_difficulty, core_fixed_difficulty_override)
+ {
+   check_startup("", 7);
+ }
++
++TEST(meow_difficulty, core_window_lag_rollback_and_alternative_sampling)
++{
++  check_startup("", 0, true);
++}
+-- 
+2.55.0
+

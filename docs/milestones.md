@@ -6,13 +6,13 @@ Authorization boundary (group, 2026-09-05): implementation work is authorized. *
 
 Legend: `[ ]` open · `[x]` done with evidence link · `[~]` partial · `[G]` gated on an external/date event (named)
 
-**2026-09-12 local checkpoint:** [handoff and evidence](../research/handoff-2026-09-12.md).
-The CI/devnet builder-image mismatch below is resolved; isolated three-node supply
-and identical-tip checks pass. Seed recovery now has a runnable regression harness
-but fails at the existing wallet's v16/height-1 check before restore. Thirteen-patch
-clean reproduction is still running. M1 wallet recovery and M2 reorg/benchmark
-items remain open. Repository writes pause after the checkpoint commit while TJ
-handles private publishing; preserve the background build.
+**2026-09-12 resumed checkpoint:** [foundation evidence](../research/verification-2026-09-12-m1.md)
+and [M2 evidence](../research/verification-2026-09-12-m2.md). Thirteen-patch clean
+binary reproduction passes; fifteen-patch full CI selection passes 1,237/1,237;
+wallet seed recovery passes; each floor target passes 10/10. Private daemon reorg
+checks and 720 native-DAA modeled scenarios pass with explicit limits. TJ completed
+private snapshot publishing; future engineering changes remain local. Settled
+parameters and human launch gates are unchanged.
 
 ---
 
@@ -63,22 +63,22 @@ Exit: both controls boot and mine with Meownero identity and 0.9/block; measurem
 
 ## M1 — Foundation (on the selected/provisional lineage)
 
-- [x] Repo layout: `chain/upstream.lock` (tag + commit + submodule hashes) + `chain/patches/0001…0006` applied by `chain/build.sh` (`git am`, fails on drift). Fresh upstream checkout end-to-end build passed 2026-09-06, including `meow_*` 8/8; hashes in `chain/README.md` and `research/verification-2026-09-06-m1.md`.
-- [~] Reproducible build from clean checkout: deterministic patch commit dates, `ARCH=default`, digest-pinned base and immutable builder/package records implemented. Two fresh cache-disabled eight-patch builds passed (2026-09-07; `chain/test-reproducibility.sh`, exit 0); **all three binary hashes match**, as do version metadata and package manifests. Same-host fixed-image source reproducibility is verified; provenance and full hashes are in `chain/README.md`. Apt snapshots/version pinning and independent toolchain reconstruction remain open.
+- [x] Repo layout: `chain/upstream.lock` (tag + commit + submodule hashes) + `chain/patches/0001…0015` applied by `chain/build.sh` (`git am`, fails on drift). Fresh upstream checkout end-to-end build passed 2026-09-06, including `meow_*` 8/8; hashes in `chain/README.md` and `research/verification-2026-09-06-m1.md`.
+- [~] Reproducible build from clean checkout: deterministic patch commit dates, `ARCH=default`, digest-pinned base and immutable builder/package records implemented. Two fresh cache-disabled thirteen-patch builds passed (2026-09-12; `chain/test-reproducibility.sh`, exit 0); **all three binary hashes match**, as do version metadata and package manifests. Same-host fixed-image reproduction is verified for thirteen patches; clean fifteen-patch reproduction remains open. Provenance and hashes are in `chain/README.md`. Apt snapshots/version pinning and independent toolchain reconstruction remain open.
 - [ ] Consensus deltas each have an ADR entry and test vectors (§2.2 item 5).
 - [x] Emission spec v1 (`docs/spec/emission.md`): invariants with tests, honest dilution table, 78-year tally horizon at 12 dp, forbidden claims listed.
 - [~] Identity (`docs/spec/network-identity.md`): genesis (zero-amount v2 coinbase), prefixes, ports, network IDs, hard-fork table — explicit and exercised on the devnet; **seed/bootstrap policy, testnet/stagenet tables, mainnet genesis timestamp are human/launch-time decisions**.
-- [~] Difficulty (`docs/spec/difficulty.md`): patch 0008 fixes startup clamping while preserving genesis difficulty 1 and recalculation consistency. **2026-09-07: 9/9 tests each at floor 1 and 150M**, including actual core initialization, fixed-difficulty override and cumulative work; production constant stays 1. Adversarial alt-chain/reorg coverage remains M2. **Floor value needs the guaranteed genesis hashrate (launch input)**.
+- [~] Difficulty (`docs/spec/difficulty.md`): patch 0008 fixes startup clamping while preserving genesis difficulty 1 and recalculation consistency. **2026-09-07: 9/9 tests each at floor 1 and 150M**, including actual core initialization, fixed-difficulty override and cumulative work; production constant stays 1. 2026-09-12: 10/10 at each floor, including varying-work main/alt sampling, window/lag rollback and recalculation; actual floor-one daemon reorg passes beyond height 738. High-work and long-alt-chain cases remain M2. **Floor value needs the guaranteed genesis hashrate (launch input)**.
 - [x] Threat model v1 (`docs/security/threat-model.md`), code map (`docs/security/code-map.md`, includes baseline-attributed test failures); audit scope = code map + readiness records.
-- [~] CI (`.github/workflows/chain.yml`): shellcheck, pin/patch consistency, container build, consensus tests, upstream suite with exclusions, devnet smoke, hash comparison. **Never executed remotely (no remote by authorization).** 2026-09-07: thirteen-patch count, bounded protocol/floor tests and isolated authority runner wired; address exclusion removed after patch 0009 and multisig exclusion after patch 0011; relink-only check replaced by two fresh compilations in one immutable image (verified for eight patches). Devnet still assumes a separately named builder image. Patches 0012/0013 close the six wallet/serialization fixture failures with historical bytes and production genesis checks preserved. Final network-enabled full CI selection passes **1,234/1,234**, retaining only the three baseline-attributed exclusions (not an unfiltered pass). Patch-0013 targeted tests pass 91/91; patch-0010 raised-floor tests pass 9/9. No fuzz/property targets yet.
-- [~] Wallet path: `monero-wallet-rpc` send/receive verified across nodes; CLI caveats documented (`docs/ops/operator.md`); restore-from-seed **not yet exercised**.
+- [~] CI (`.github/workflows/chain.yml`): shellcheck, pin/patch consistency, container build, consensus tests, upstream suite with exclusions, devnet smoke, hash comparison. **Remote CI status not verified here; TJ published a private snapshot, and future changes stay local.** 2026-09-07: thirteen-patch count, bounded protocol/floor tests and isolated authority runner wired; address exclusion removed after patch 0009 and multisig exclusion after patch 0011; relink-only check replaced by two fresh compilations in one immutable image (verified for eight patches). 2026-09-12: builder/devnet image forwarding and shellcheck fixed; seed/reorg/native-DAA runners wired; full-suite source is read-only with disposable data and pipefail. Patches 0012/0013 close the six wallet/serialization fixture failures with historical bytes and production genesis checks preserved. Final network-enabled full CI selection passes **1,234/1,234**, retaining only the three baseline-attributed exclusions (not an unfiltered pass). Patch-0013 targeted tests pass 91/91; patch-0010 raised-floor tests pass 9/9. No fuzz/property targets yet.
+- [~] Wallet path: `monero-wallet-rpc` send/receive verified across nodes; CLI caveats documented (`docs/ops/operator.md`); 2026-09-12: patch 0014 fixes sparse-fork wallet refresh; restore from seed verifies address, 130 coinbase-history entries, exact total/unlocked balances and reopen. Private-payment/outgoing metadata recovery and interactive CLI restoration remain untested.
 - [ ] Wallet presentation (2026-09-07): simpler display with adequate small-payment precision, exact-amount disclosure and no silent input rounding/nonzero-to-zero display. Preserve consensus/RPC atomic units; test smallest amounts and large balances. Adoption evaluation uses measured payment completion, conversion and retention—not claimed causal benefits of an issuance model.
 
 ## M2 — Private devnet
 
-- [ ] Deterministic local multi-node network: mine, sync, reorg within policy, private tx, restart/recover.
-- [ ] Rejects malformed, inflationary, and non-private data (adversarial suite).
-- [ ] Matched-issuance comparison (group instruction 2026-09-07): **90 s / 0.675 MEOW vs 120 s / 0.9 MEOW**, each targeting 236,520 MEOW per 365 days. Measure propagation, proof validation, block capacity, competing blocks/orphans and reorgs under comparable loads/topologies; disclose uncertainty and test limits. **90 s is not locked; retain the current default until evidence supports a decision.** Do not weaken mainnet-quality gates or test 0.9/90 s as though its +1/3 issuance were approved (PLAN §8.1).
+- [~] Local multi-node network: three-node mining/sync and private tx previously verified; 2026-09-12 actual daemon depth-3 reorg/restart checks pass in regtest and native-DAA mainnet mode beyond h738. Explicit RPC block delivery is not a P2P partition/rejoin test; final reorg policy remains open.
+- [~] Malformed block, obsolete block version, future/below-median timestamp and +1-atomic coinbase rejected with a positive control (2026-09-12). Invalid/private-proof and non-private transaction cases remain open.
+- [~] Matched-issuance comparison (group instruction 2026-09-07): **90 s / 0.675 MEOW vs 120 s / 0.9 MEOW**, each targeting 236,520 MEOW per 365 days. 2026-09-12: 720 paired native-DAA modeled scenarios completed; launch timestamp distortion remains an open modeled risk. Propagation, proof validation, block capacity, competing blocks/orphans and reorg performance under comparable loads/topologies remain unmeasured. **90 s is not locked; retain the current default until evidence supports a decision.** Do not weaken mainnet-quality gates or test 0.9/90 s as though its +1/3 issuance were approved (PLAN §8.1).
 - [ ] Performance evidence: initial sync, steady-state validation, worst-case block, relay latency, memory/CPU/disk.
 - [ ] 2-week-equivalent devnet uptime run without consensus fault (accelerated where honest).
 - [ ] Explorer alpha or documented gap.

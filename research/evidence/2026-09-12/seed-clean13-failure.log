@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/harness/test-seed-recovery.py", line 85, in <module>
+    before = snapshot(19100)
+             ^^^^^^^^^^^^^^^
+  File "/harness/test-seed-recovery.py", line 48, in snapshot
+    rpc(port, 'refresh', {'start_height': 0})
+  File "/harness/test-seed-recovery.py", line 23, in rpc
+    return request(port, 'json_rpc', {'jsonrpc': '2.0', 'id': '0',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/harness/test-seed-recovery.py", line 18, in request
+    assert 'error' not in result, (path, result.get('error'))
+           ^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('json_rpc', {'code': -1, 'message': 'Unexpected hard fork version v16 at height 1. Make sure your wallet is up to date'})

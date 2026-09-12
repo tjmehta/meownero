@@ -1,5 +1,5 @@
-# Meownero chain CI (provisional lineage). NOT YET EXERCISED REMOTELY: this repository has no remote
-# and nothing is pushed (authorization boundary). The same steps run locally via chain/build.sh.
+# Meownero chain CI (provisional lineage). Remote CI status is not verified here.
+# TJ published the private snapshot; subsequent engineering changes stay local until authorized.
 name: chain
 on:
   push:
@@ -17,11 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: shellcheck
-        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh chain/test-difficulty.sh chain/test-authorities.sh chain/test-reproducibility.sh spikes/candidate-m/devnet.sh
+        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh chain/test-difficulty.sh chain/test-authorities.sh chain/test-reproducibility.sh chain/test-seed-recovery.sh chain/test-reorg.sh chain/benchmark-difficulty.sh spikes/candidate-m/devnet.sh
       - name: patch series is well-formed and pins are consistent
         run: |
           set -e
-          test "$(ls chain/patches/*.patch | wc -l)" -eq 13
+          test "$(ls chain/patches/*.patch | wc -l)" -eq 15
           grep -q '^UPSTREAM_COMMIT=4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5$' chain/upstream.lock
           python3 -c "import ast,sys; ast.parse(open('spikes/candidate-m/apply.py').read())"
 
@@ -40,10 +40,20 @@ jobs:
         run: MEOW_JOBS=4 chain/build.sh build/chain
       - name: full upstream unit tests (allowed failures documented in docs/security/code-map.md)
         run: |
-          docker run --rm -v "$PWD/build/chain/monero:/src" -w /src/build/release meownero-chain-builder \
-            timeout 600 ./tests/unit_tests/unit_tests --gtest_filter='-ban.subnet:http_server.response_soft_limit:notify.works' 2>&1 | tail -5
+          set -euo pipefail
+          docker run --rm -v "$PWD/build/chain/monero:/src:ro" -w /tmp meownero-chain-builder bash -ec '
+            cp -a /src/tests/data /tmp/test-data
+            timeout 600 /src/build/release/tests/unit_tests/unit_tests --data-dir /tmp/test-data \
+              --gtest_filter="-ban.subnet:http_server.response_soft_limit:notify.works"
+          ' 2>&1 | tail -5
       - name: devnet smoke (3 nodes, 30 blocks, supply = h * 0.9)
         run: spikes/candidate-m/devnet.sh build/chain/monero build/devnet 30
+      - name: isolated seed recovery (address, history, exact balance, reopen)
+        run: bash chain/test-seed-recovery.sh build/chain/monero build/seed-recovery
+      - name: native-DAA reorg and invalid-block checks beyond the sampling window
+        run: bash chain/test-reorg.sh build/chain/monero build/reorg mainnet-window
+      - name: matched-issuance native-DAA models (not a network performance benchmark)
+        run: bash chain/benchmark-difficulty.sh build/chain/monero build/daa-benchmark
       - name: reproducibility (two fresh compilations, fixed image, cache disabled)
         run: |
           MEOW_BUILDER_IMAGE=$(docker image inspect meownero-chain-builder --format '{{.Id}}') \
@@ -58,6 +68,10 @@ jobs:
             build/chain/SHA256SUMS
             build/chain/BUILDER_IMAGE_ID
             build/chain/packages.txt
+            build/seed-recovery/result.json
+            build/reorg/result.json
+            build/daa-benchmark/results.json
+            build/daa-benchmark/SOURCE_SHA256SUMS
 
   supply-chain:
     runs-on: ubuntu-24.04

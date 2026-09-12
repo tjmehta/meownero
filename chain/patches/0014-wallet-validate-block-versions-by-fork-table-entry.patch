@@ -1,0 +1,121 @@
+From a061bdf29a7301e207560a382a7e110e536254b7 Mon Sep 17 00:00:00 2001
+From: Tejesh Mehta <tejesh.mehta@gmail.com>
+Date: Sat, 12 Sep 2026 09:52:03 -0700
+Subject: [PATCH 14/15] wallet: validate block versions by fork table entry
+
+---
+ src/wallet/wallet2.cpp        | 22 +++++++++-----
+ tests/unit_tests/hardfork.cpp | 57 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+), 7 deletions(-)
+
+diff --git a/src/wallet/wallet2.cpp b/src/wallet/wallet2.cpp
+index 4c83dd8..5ac56cd 100644
+--- a/src/wallet/wallet2.cpp
++++ b/src/wallet/wallet2.cpp
+@@ -3467,16 +3467,24 @@ void check_block_hard_fork_version(cryptonote::network_type nettype, uint8_t hf_
+   const hardfork_t *wallet_hard_forks = nettype == TESTNET ? testnet_hard_forks
+     : nettype == STAGENET ? stagenet_hard_forks : mainnet_hard_forks;
+ 
+-  wallet_is_outdated = static_cast<size_t>(hf_version) > wallet_num_hard_forks;
++  // Versions are identifiers, not array indices: Meownero jumps from v1 to v16.
++  const auto end = wallet_hard_forks + wallet_num_hard_forks;
++  const auto fork = std::find_if(wallet_hard_forks, end,
++    [hf_version](const hardfork_t &entry) { return entry.version == hf_version; });
++  wallet_is_outdated = hf_version > wallet_hard_forks[wallet_num_hard_forks - 1].version;
++  daemon_is_outdated = false;
+   if (wallet_is_outdated)
+     return;
++  if (fork == end)
++  {
++    daemon_is_outdated = true; // Unknown/skipped historical version (including zero).
++    return;
++  }
+ 
+-  // check block's height falls within wallet's expected range for block's given version
+-  uint64_t start_height = hf_version == 1 ? 0 : wallet_hard_forks[hf_version - 1].height;
+-  uint64_t end_height = static_cast<size_t>(hf_version) + 1 > wallet_num_hard_forks
+-    ? std::numeric_limits<uint64_t>::max()
+-    : wallet_hard_forks[hf_version].height;
+-
++  // The inherited v1 tables start at height 1, but genesis still uses v1.
++  const uint64_t start_height = hf_version == 1 ? 0 : fork->height;
++  const uint64_t end_height = fork + 1 == end
++    ? std::numeric_limits<uint64_t>::max() : (fork + 1)->height;
+   daemon_is_outdated = height < start_height || height >= end_height;
+ }
+ //----------------------------------------------------------------------------------------------------
+diff --git a/tests/unit_tests/hardfork.cpp b/tests/unit_tests/hardfork.cpp
+index 0ded363..488ae02 100644
+--- a/tests/unit_tests/hardfork.cpp
++++ b/tests/unit_tests/hardfork.cpp
+@@ -29,6 +29,7 @@
+ // Parts of this file are originally copyright (c) 2012-2013 The Cryptonote developers
+ 
+ #include <algorithm>
++#include <limits>
+ #include "gtest/gtest.h"
+ 
+ #include "blockchain_db/blockchain_db.h"
+@@ -617,3 +618,59 @@ TEST(meow_hardforks, single_jump_table)
+   for (size_t i = 1; i < num_mainnet_hard_forks; ++i)
+     ASSERT_LT(mainnet_hard_forks[i-1].version, 6) << "activation " << i << " would break handshakes for one height";
+ }
++
++// Exercise the production wallet check; no mismatched-daemon override.
++namespace tools
++{
++  void check_block_hard_fork_version(cryptonote::network_type, uint8_t, uint64_t, bool &, bool &);
++}
++
++TEST(meow_wallet_hardforks, sparse_table_and_invalid_versions)
++{
++  for (const uint64_t height : {uint64_t(0), uint64_t(1), uint64_t(720), uint64_t(735),
++       std::numeric_limits<uint64_t>::max() - 1, std::numeric_limits<uint64_t>::max()})
++  {
++    for (unsigned version = 0; version <= 17; ++version)
++    {
++      SCOPED_TRACE(std::to_string(height) + ":v" + std::to_string(version));
++      bool wallet_outdated = true, daemon_outdated = true;
++      tools::check_block_hard_fork_version(cryptonote::MAINNET, version, height,
++        wallet_outdated, daemon_outdated);
++      const bool valid = height != std::numeric_limits<uint64_t>::max() &&
++        (height == 0 ? version == 1 : version == 16);
++      EXPECT_EQ(version > 16, wallet_outdated);
++      EXPECT_EQ(!valid && version <= 16, daemon_outdated);
++    }
++  }
++}
++
++TEST(meow_wallet_hardforks, inherited_network_activation_boundaries)
++{
++  for (const auto net : {cryptonote::TESTNET, cryptonote::STAGENET})
++  {
++    const auto forks = net == cryptonote::TESTNET ? testnet_hard_forks : stagenet_hard_forks;
++    const auto count = net == cryptonote::TESTNET ? num_testnet_hard_forks : num_stagenet_hard_forks;
++    bool wallet_at_limit = false, daemon_at_limit = false;
++    tools::check_block_hard_fork_version(net, forks[count - 1].version,
++      std::numeric_limits<uint64_t>::max(), wallet_at_limit, daemon_at_limit);
++    EXPECT_FALSE(wallet_at_limit);
++    EXPECT_TRUE(daemon_at_limit);
++    for (size_t i = 0; i < count; ++i)
++    {
++      bool wallet_outdated = true, daemon_outdated = true;
++      const uint64_t first = i == 0 ? 0 : forks[i].height;
++      tools::check_block_hard_fork_version(net, forks[i].version, first, wallet_outdated, daemon_outdated);
++      EXPECT_FALSE(wallet_outdated);
++      EXPECT_FALSE(daemon_outdated);
++      if (i > 0)
++      {
++        tools::check_block_hard_fork_version(net, forks[i].version, first - 1, wallet_outdated, daemon_outdated);
++        EXPECT_FALSE(wallet_outdated);
++        EXPECT_TRUE(daemon_outdated);
++        tools::check_block_hard_fork_version(net, forks[i - 1].version, first, wallet_outdated, daemon_outdated);
++        EXPECT_FALSE(wallet_outdated);
++        EXPECT_TRUE(daemon_outdated);
++      }
++    }
++  }
++}
+-- 
+2.55.0
+

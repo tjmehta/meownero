@@ -1,0 +1,243 @@
+Reproducibility output: /tmp/meownero-repro-20260912
+Builder: sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e
+==> 1. upstream v0.18.5.1 (4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5)
+warning: refs/tags/v0.18.5.1 fe7ebfe689234a885ab2f478b0303ce930810e3b is not a commit!
+Note: switching to '4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+    pins verified
+==> 2. patch series
+    13 patches applied;  27 files changed, 517 insertions(+), 609 deletions(-)
+==> 3. build in sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e
+==> 4. Meownero consensus tests
+[==========] 21 tests from 6 test cases ran. (3196 ms total)
+[  PASSED  ] 21 tests.
+Note: Google Test filter = meow_difficulty.*:difficulty.*
+[==========] Running 9 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from difficulty
+[ RUN      ] difficulty.check_hash
+[       OK ] difficulty.check_hash (0 ms)
+[----------] 1 test from difficulty (0 ms total)
+
+[----------] 8 tests from meow_difficulty
+[ RUN      ] meow_difficulty.clamp
+[       OK ] meow_difficulty.clamp (0 ms)
+[ RUN      ] meow_difficulty.startup_uses_floor
+[       OK ] meow_difficulty.startup_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.computed_result_uses_floor
+[       OK ] meow_difficulty.computed_result_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.rounding_and_timestamp_sorting_preserved
+[       OK ] meow_difficulty.rounding_and_timestamp_sorting_preserved (0 ms)
+[ RUN      ] meow_difficulty.equal_timestamps_use_one_second
+[       OK ] meow_difficulty.equal_timestamps_use_one_second (0 ms)
+[ RUN      ] meow_difficulty.overflow_remains_error_not_floor
+[       OK ] meow_difficulty.overflow_remains_error_not_floor (0 ms)
+[ RUN      ] meow_difficulty.core_genesis_and_recalculation
+2026-09-12 16:02:58.191	I Loading blockchain from folder /tmp/meow-floor-ca72f69cf6ba4fd9/lmdb ...
+2026-09-12 16:02:58.223	I Loading checkpoints
+2026-09-12 16:02:58.223	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:02:58.223	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:02:58.228	I Loading blockchain from folder /tmp/meow-floor-20df0fa9e24fef6b/testnet/lmdb ...
+2026-09-12 16:02:58.258	I Loading checkpoints
+2026-09-12 16:02:58.258	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:02:58.258	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:02:58.263	I Loading blockchain from folder /tmp/meow-floor-b07565494fbaa586/stagenet/lmdb ...
+2026-09-12 16:02:58.293	I Loading checkpoints
+2026-09-12 16:02:58.293	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:02:58.293	I Recalculating difficulties from height 0 to height 1
+[       OK ] meow_difficulty.core_genesis_and_recalculation (107 ms)
+[ RUN      ] meow_difficulty.core_fixed_difficulty_override
+2026-09-12 16:02:58.298	I Loading blockchain from folder /tmp/meow-floor-7120276193b63973/lmdb ...
+2026-09-12 16:02:58.328	I Loading checkpoints
+[       OK ] meow_difficulty.core_fixed_difficulty_override (35 ms)
+[----------] 8 tests from meow_difficulty (142 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 2 test cases ran. (142 ms total)
+[  PASSED  ] 9 tests.
+Note: Google Test filter = meow_difficulty.*:difficulty.*
+[==========] Running 9 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from difficulty
+[ RUN      ] difficulty.check_hash
+[       OK ] difficulty.check_hash (0 ms)
+[----------] 1 test from difficulty (0 ms total)
+
+[----------] 8 tests from meow_difficulty
+[ RUN      ] meow_difficulty.clamp
+[       OK ] meow_difficulty.clamp (0 ms)
+[ RUN      ] meow_difficulty.startup_uses_floor
+[       OK ] meow_difficulty.startup_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.computed_result_uses_floor
+[       OK ] meow_difficulty.computed_result_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.rounding_and_timestamp_sorting_preserved
+[       OK ] meow_difficulty.rounding_and_timestamp_sorting_preserved (0 ms)
+[ RUN      ] meow_difficulty.equal_timestamps_use_one_second
+[       OK ] meow_difficulty.equal_timestamps_use_one_second (0 ms)
+[ RUN      ] meow_difficulty.overflow_remains_error_not_floor
+[       OK ] meow_difficulty.overflow_remains_error_not_floor (0 ms)
+[ RUN      ] meow_difficulty.core_genesis_and_recalculation
+2026-09-12 16:02:58.449	I Loading blockchain from folder /tmp/meow-floor-de618dcd82828dc4/lmdb ...
+2026-09-12 16:02:58.479	I Loading checkpoints
+2026-09-12 16:02:58.479	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:02:58.479	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:02:58.485	I Loading blockchain from folder /tmp/meow-floor-06dcb598664458a8/testnet/lmdb ...
+2026-09-12 16:02:58.521	I Loading checkpoints
+2026-09-12 16:02:58.521	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:02:58.521	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:02:58.526	I Loading blockchain from folder /tmp/meow-floor-b99e2c5988ae7814/stagenet/lmdb ...
+2026-09-12 16:02:58.560	I Loading checkpoints
+2026-09-12 16:02:58.560	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:02:58.560	I Recalculating difficulties from height 0 to height 1
+[       OK ] meow_difficulty.core_genesis_and_recalculation (116 ms)
+[ RUN      ] meow_difficulty.core_fixed_difficulty_override
+2026-09-12 16:02:58.564	I Loading blockchain from folder /tmp/meow-floor-7d157b9c950b5b15/lmdb ...
+2026-09-12 16:02:58.595	I Loading checkpoints
+[       OK ] meow_difficulty.core_fixed_difficulty_override (35 ms)
+[----------] 8 tests from meow_difficulty (151 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 2 test cases ran. (151 ms total)
+[  PASSED  ] 9 tests.
+PASS: explicit RPC update modes fail closed; DNS-blocklist opt-in warns; local bans work
+PASS: donate is disabled on all three networks; no transfers or external networking
+==> 5. artifacts
+527489b29a8cf0e41a478257c78e9accc0087a3911029c9df0ed1e8a7d4e3f92  monerod
+13121432f7d022211a7c1f883f8aa35205332c88adecd022cb6e6ea2362f7341  monero-wallet-cli
+91edabcceb69857c7a22d5fdc16f3ea72a2b0dfc8ef6560e9493fabafb40fc0f  monero-wallet-rpc
+==> 1. upstream v0.18.5.1 (4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5)
+warning: refs/tags/v0.18.5.1 fe7ebfe689234a885ab2f478b0303ce930810e3b is not a commit!
+Note: switching to '4f92268d7c16741cfb41e5bbe2aa46cc260a9ea5'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+    pins verified
+==> 2. patch series
+    13 patches applied;  27 files changed, 517 insertions(+), 609 deletions(-)
+==> 3. build in sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e
+==> 4. Meownero consensus tests
+[==========] 21 tests from 6 test cases ran. (3203 ms total)
+[  PASSED  ] 21 tests.
+Note: Google Test filter = meow_difficulty.*:difficulty.*
+[==========] Running 9 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from difficulty
+[ RUN      ] difficulty.check_hash
+[       OK ] difficulty.check_hash (0 ms)
+[----------] 1 test from difficulty (0 ms total)
+
+[----------] 8 tests from meow_difficulty
+[ RUN      ] meow_difficulty.clamp
+[       OK ] meow_difficulty.clamp (0 ms)
+[ RUN      ] meow_difficulty.startup_uses_floor
+[       OK ] meow_difficulty.startup_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.computed_result_uses_floor
+[       OK ] meow_difficulty.computed_result_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.rounding_and_timestamp_sorting_preserved
+[       OK ] meow_difficulty.rounding_and_timestamp_sorting_preserved (0 ms)
+[ RUN      ] meow_difficulty.equal_timestamps_use_one_second
+[       OK ] meow_difficulty.equal_timestamps_use_one_second (0 ms)
+[ RUN      ] meow_difficulty.overflow_remains_error_not_floor
+[       OK ] meow_difficulty.overflow_remains_error_not_floor (0 ms)
+[ RUN      ] meow_difficulty.core_genesis_and_recalculation
+2026-09-12 16:31:10.075	I Loading blockchain from folder /tmp/meow-floor-83e5a2bf0be2e460/lmdb ...
+2026-09-12 16:31:10.106	I Loading checkpoints
+2026-09-12 16:31:10.106	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:31:10.106	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:31:10.111	I Loading blockchain from folder /tmp/meow-floor-e48e8258e09214a2/testnet/lmdb ...
+2026-09-12 16:31:10.142	I Loading checkpoints
+2026-09-12 16:31:10.142	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:31:10.142	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:31:10.147	I Loading blockchain from folder /tmp/meow-floor-9e127f48af03e051/stagenet/lmdb ...
+2026-09-12 16:31:10.178	I Loading checkpoints
+2026-09-12 16:31:10.178	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:31:10.178	I Recalculating difficulties from height 0 to height 1
+[       OK ] meow_difficulty.core_genesis_and_recalculation (108 ms)
+[ RUN      ] meow_difficulty.core_fixed_difficulty_override
+2026-09-12 16:31:10.183	I Loading blockchain from folder /tmp/meow-floor-104dad761274767e/lmdb ...
+2026-09-12 16:31:10.214	I Loading checkpoints
+[       OK ] meow_difficulty.core_fixed_difficulty_override (36 ms)
+[----------] 8 tests from meow_difficulty (144 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 2 test cases ran. (144 ms total)
+[  PASSED  ] 9 tests.
+Note: Google Test filter = meow_difficulty.*:difficulty.*
+[==========] Running 9 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from difficulty
+[ RUN      ] difficulty.check_hash
+[       OK ] difficulty.check_hash (0 ms)
+[----------] 1 test from difficulty (0 ms total)
+
+[----------] 8 tests from meow_difficulty
+[ RUN      ] meow_difficulty.clamp
+[       OK ] meow_difficulty.clamp (0 ms)
+[ RUN      ] meow_difficulty.startup_uses_floor
+[       OK ] meow_difficulty.startup_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.computed_result_uses_floor
+[       OK ] meow_difficulty.computed_result_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.rounding_and_timestamp_sorting_preserved
+[       OK ] meow_difficulty.rounding_and_timestamp_sorting_preserved (0 ms)
+[ RUN      ] meow_difficulty.equal_timestamps_use_one_second
+[       OK ] meow_difficulty.equal_timestamps_use_one_second (0 ms)
+[ RUN      ] meow_difficulty.overflow_remains_error_not_floor
+[       OK ] meow_difficulty.overflow_remains_error_not_floor (0 ms)
+[ RUN      ] meow_difficulty.core_genesis_and_recalculation
+2026-09-12 16:31:10.335	I Loading blockchain from folder /tmp/meow-floor-03705310398aefa4/lmdb ...
+2026-09-12 16:31:10.366	I Loading checkpoints
+2026-09-12 16:31:10.367	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:31:10.367	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:31:10.371	I Loading blockchain from folder /tmp/meow-floor-163313e49bc11981/testnet/lmdb ...
+2026-09-12 16:31:10.402	I Loading checkpoints
+2026-09-12 16:31:10.402	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:31:10.402	I Recalculating difficulties from height 0 to height 1
+2026-09-12 16:31:10.407	I Loading blockchain from folder /tmp/meow-floor-988d80235ff00381/stagenet/lmdb ...
+2026-09-12 16:31:10.440	I Loading checkpoints
+2026-09-12 16:31:10.440	I Recalculating difficulties from height 0 to height 0
+2026-09-12 16:31:10.440	I Recalculating difficulties from height 0 to height 1
+[       OK ] meow_difficulty.core_genesis_and_recalculation (109 ms)
+[ RUN      ] meow_difficulty.core_fixed_difficulty_override
+2026-09-12 16:31:10.445	I Loading blockchain from folder /tmp/meow-floor-b8504b5ee6515cfa/lmdb ...
+2026-09-12 16:31:10.477	I Loading checkpoints
+[       OK ] meow_difficulty.core_fixed_difficulty_override (37 ms)
+[----------] 8 tests from meow_difficulty (146 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 2 test cases ran. (146 ms total)
+[  PASSED  ] 9 tests.
+PASS: explicit RPC update modes fail closed; DNS-blocklist opt-in warns; local bans work
+PASS: donate is disabled on all three networks; no transfers or external networking
+==> 5. artifacts
+527489b29a8cf0e41a478257c78e9accc0087a3911029c9df0ed1e8a7d4e3f92  monerod
+13121432f7d022211a7c1f883f8aa35205332c88adecd022cb6e6ea2362f7341  monero-wallet-cli
+91edabcceb69857c7a22d5fdc16f3ea72a2b0dfc8ef6560e9493fabafb40fc0f  monero-wallet-rpc
+PASS: independent source builds match in the recorded builder image.

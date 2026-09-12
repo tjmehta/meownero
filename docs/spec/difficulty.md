@@ -4,11 +4,11 @@
 
 ## Inherited algorithm (unchanged)
 
-Monero DAA: last 735 blocks, newest 15 ignored (lag), timestamps sorted, 60 cut from each end, `difficulty = ceil(work × 120 / time_span)`; a block's timestamp must exceed the median of the previous 60 and may be at most 2 h (`CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT`) ahead of the validator's clock. Six years of production on Monero; incident record in E5 (timestamp attacks on *other* LWMA-family chains, none on this DAA at Monero's scale).
+Monero DAA: last 735 blocks, newest 15 ignored (lag), timestamps sorted, 60 cut from each end, `difficulty = ceil(work × 120 / time_span)`; a block's timestamp must be at least the median of the previous 60 and may be at most 2 h (`CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT`) ahead of the validator's clock. Six years of production on Monero; incident record in E5 (timestamp attacks on *other* LWMA-family chains, none on this DAA at Monero's scale).
 
 **2026-09-12 correction and new evidence:** the native timestamp check accepts
-**equality** with the median; “must exceed” above describes the older simulator's
-stricter approximation. That simulator also included genesis in DAA samples and
+**equality** with the median; the older simulator instead required strictly
+exceeding it. That simulator also included genesis in DAA samples and
 counted an out-of-horizon final draw. Its numbers below remain historical.
 [Native-DAA benchmark and daemon tests](../../research/verification-2026-09-12-m2.md)
 now cover 720 paired scenario runs and real reorganization beyond the 720/735

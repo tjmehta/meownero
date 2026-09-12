@@ -5,11 +5,14 @@ Governed by ADR-001 (PROPOSED). Until it is signed, everything here is a **patch
 | File | Purpose |
 |---|---|
 | `upstream.lock` | upstream URL, tag, commit, and every submodule commit; `build.sh` refuses to build if any differs |
-| `patches/0001…0013` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, startup/genesis/recalculation coverage, address/URI fixtures, and opt-in authority/donation disabling (see `docs/security/code-map.md`) |
+| `patches/0001…0015` | reviewable `git am` patches: emission, identity, hard-fork table, trust-surface removal, tests, launch difficulty floor, v16 protocol fixture, startup/genesis/recalculation coverage, address/URI fixtures, opt-in authority/donation disabling, sparse-fork wallet compatibility and difficulty boundary tests (see `docs/security/code-map.md`) |
 | `test-authorities.sh` | isolated RPC update, DNS-blocklist opt-in, local-ban and disabled-donation checks; requires built daemon and CLI wallet; called by `build.sh` |
+| `test-seed-recovery.sh` | isolated seed restore with exact address/history/balance and reopen assertions; run with `bash` |
+| `test-reorg.sh` | competing branches, restart and invalid-block checks; regtest and native-DAA window modes |
+| `benchmark-difficulty.sh` | matched-issuance native-DAA models; explicitly not a full peer-network benchmark |
 | `Dockerfile` | Ubuntu 24.04 base pinned by digest; apt package versions are not yet pinned (M1 gap); Docker is the host build dependency |
 | `build.sh` | verify pins → apply series → build daemon, wallets and both test targets → run consensus/protocol and floor checks → print SHA-256s |
-| `test-difficulty.sh` | run eight floor cases plus inherited hash test at floor 1 and separately compiled 150M; requires `unit_tests` and `meow_difficulty_floor_tests` built first; read-only source mount |
+| `test-difficulty.sh` | run nine floor cases plus inherited hash test at floor 1 and separately compiled 150M; requires `unit_tests` and `meow_difficulty_floor_tests` built first; read-only source mount |
 
 ```bash
 chain/build.sh                # fresh ./build/chain (gitignored), two compiler jobs
@@ -22,14 +25,28 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 
 ## Current verification
 
-**2026-09-12 checkpoint:** the builder/devnet image mismatch is fixed and the isolated
-three-node supply/tip checks pass. The new `test-seed-recovery.sh` runner exposes a
-live wallet refresh failure at v16/height 1; seed recovery is **not verified**.
-Thirteen-patch clean binary reproduction is running from frozen inputs, with no
-result yet. See the [September 12 handoff](../research/handoff-2026-09-12.md) for
-evidence, process locations and the publishing pause. No consensus patch changed.
+**2026-09-12:** the **thirteen-patch** clean reproduction passed: all three binary
+hashes match across two fresh cache-disabled builds in the same immutable image.
+Provenance and hashes are in the [foundation report](../research/verification-2026-09-12-m1.md).
+Independent toolchain reconstruction and clean fifteen-patch reproduction remain open.
 
-**Thirteen-patch result:** full CI selection passes **1,234/1,234 in 78.606 s** with networking enabled for inherited DNS tests and disposable test data. The three historical baseline-attributed exclusions remain: `ban.subnet`, `http_server.response_soft_limit`, `notify.works`. This is not an unfiltered suite or remote CI pass. Storage and historical serialization fixtures are fixed without changing production validation or historical archive bytes; targeted selection passes 91/91. Fresh application matches tested tree `5239f02b7b2c1cfe75b3ff616ab0620c3068106e`. Binary reproduction remains verified for eight patches only.
+**Fifteen-patch implementation:** patch 0014 fixes live wallet refresh against the
+sparse `{v1@0, v16@1}` table; seed restoration now verifies address, 130 coinbase
+history entries, exact total/unlocked balances and reopen. Patch 0015 exercises
+real difficulty callers, recalculation and rollback across the window/lag boundaries;
+**10/10 tests pass at each floor, 1 and 150M**. Production floor stays 1.
+Full local CI selection passes **1,237/1,237 in 79.174 s**, retaining only the
+three historical exclusions. Historical fixture bytes and production genesis
+checks remain intact. Fresh patch application matches tested tree
+`4db958cb96d72943c5c2433bd5f4a8f730037148`.
+
+The builder/devnet mismatch is fixed; three-node supply/tip checks, all runner
+shellchecks and workflow syntax checks pass. Actual daemon reorg/rejection tests
+and 720 native-DAA modeled scenarios are documented in the
+[M2 report](../research/verification-2026-09-12-m2.md). Full network performance,
+private-transaction recovery, long alternative chains and sustained uptime remain
+open. No timing or floor decision is made. Remote CI status is not verified here;
+TJ's private snapshot publication does not authorize future pushes.
 
 ### Historical intermediate selections (superseded above)
 

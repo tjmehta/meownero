@@ -37,20 +37,20 @@ ADDR=$(cat "$WORK/wallet/address"); echo "miner address: $ADDR"
 case "$ADDR" in M*) ;; *) echo "address prefix wrong: $ADDR"; exit 1;; esac
 
 # 2. three daemons (node1 mines). No seeds exist; peers are explicit.
-common="--non-interactive --no-igd --hide-my-port --confirm-external-bind --log-level 1 --p2p-bind-ip 0.0.0.0 --rpc-bind-ip 0.0.0.0 --disable-dns-checkpoints --check-updates disabled --fixed-difficulty 1 --db-sync-mode fastest:async:250000"
-docker run -d --name $N1 -v "$SRC:/src:ro" -v "$WORK:/work" --network $NET $IMG \
-  $BIN/monerod $common --data-dir /work/n1 --start-mining "$ADDR" --mining-threads 1 >/dev/null
-docker run -d --name $N2 -v "$SRC:/src:ro" -v "$WORK:/work" --network $NET $IMG \
-  $BIN/monerod $common --data-dir /work/n2 --add-exclusive-node $N1:19080 >/dev/null
-docker run -d --name $N3 -v "$SRC:/src:ro" -v "$WORK:/work" --network $NET $IMG \
-  $BIN/monerod $common --data-dir /work/n3 --add-exclusive-node $N2:19080 >/dev/null
+common=(--non-interactive --no-igd --hide-my-port --confirm-external-bind --log-level 1 --p2p-bind-ip 0.0.0.0 --rpc-bind-ip 0.0.0.0 --disable-dns-checkpoints --check-updates disabled --fixed-difficulty 1 --db-sync-mode fastest:async:250000)
+docker run -d --name $N1 -v "$SRC:/src:ro" -v "$WORK:/work" --network "$NET" "$IMG" \
+  "$BIN/monerod" "${common[@]}" --data-dir /work/n1 --start-mining "$ADDR" --mining-threads 1 >/dev/null
+docker run -d --name $N2 -v "$SRC:/src:ro" -v "$WORK:/work" --network "$NET" "$IMG" \
+  "$BIN/monerod" "${common[@]}" --data-dir /work/n2 --add-exclusive-node $N1:19080 >/dev/null
+docker run -d --name $N3 -v "$SRC:/src:ro" -v "$WORK:/work" --network "$NET" "$IMG" \
+  "$BIN/monerod" "${common[@]}" --data-dir /work/n3 --add-exclusive-node $N2:19080 >/dev/null
 
 # the builder image has python3 but no curl
 rpc() { docker exec "$1" python3 -c 'import sys,json,urllib.request; r=urllib.request.Request("http://127.0.0.1:19081/json_rpc",data=sys.argv[1].encode(),headers={"content-type":"application/json"}); print(urllib.request.urlopen(r, timeout=20).read().decode())' "$2"; }
 height() { rpc "$1" '{"jsonrpc":"2.0","id":"0","method":"get_block_count"}' | python3 -c 'import sys,json;print(json.load(sys.stdin)["result"]["count"]-1)'; }
 
 # 3. wait for BLOCKS on node1
-for i in $(seq 1 600); do h=$(height $N1 2>/dev/null || echo 0); [ "$h" -ge "$BLOCKS" ] && break; sleep 2; done
+for _ in $(seq 1 600); do h=$(height $N1 2>/dev/null || echo 0); [ "$h" -ge "$BLOCKS" ] && break; sleep 2; done
 [ "$h" -ge "$BLOCKS" ] || { echo "mining timeout: $h < $BLOCKS" >&2; exit 1; }
 docker exec "$N1" python3 -c 'import urllib.request; urllib.request.urlopen(urllib.request.Request("http://127.0.0.1:19081/stop_mining", b"{}", {"content-type":"application/json"}), timeout=20).read()'
 h=$(height "$N1")
@@ -81,7 +81,7 @@ cat "$WORK/supply-check.txt"
 
 # 5. All nodes must reach the same stopped tip, not merely print heights.
 for n in "$N2" "$N3"; do
-  for i in $(seq 1 120); do
+  for _ in $(seq 1 120); do
     [ "$(height "$n" 2>/dev/null || echo 0)" -eq "$h" ] && break
     sleep 1
   done
