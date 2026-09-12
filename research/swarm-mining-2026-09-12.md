@@ -1,5 +1,7 @@
 # Mining track — exact P2Pool compatibility boundary
 
+**Policy update:** the reward/fork compatibility matrix and default/branding wording below record historical controls. TJ subsequently selected 9/90, with gated 12/120 fallback; [decision](decision-2026-09-12-issuance.md). Selected-parameter P2Pool compatibility remains untested; nominal rewards do not guarantee purchasing power or hashpower.
+
 Base: `39070e8e3ab32a695d80c90b7c0ad74cf39fb581`, including `81b3182`.
 Work is confined to `spikes/p2pool/`, this report, and
 `research/evidence/swarm-2026-09-12/mining/`. Complete swarm decisions and resumed

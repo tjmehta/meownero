@@ -1,6 +1,6 @@
 # Meownero Engineering Plan
 
-**Status:** Rev 5 — 2026-09-07 group update: fixed perpetual subsidy, honest claims, matched-issuance 90 s / 120 s benchmark candidates (§8.1); builds on rev 4 (2026-09-05). · **Date:** 2026-08-22, rev 5 2026-09-07 · **Scope:** End-to-end local implementation and verification authorized (`docs/milestones.md`); no public mainnet launch, spending, external push or runtime changes. Reviewable local commits authorized; ADR-001 signatures and mainnet-quality gates remain required.
+**Status:** Rev 6 — 2026-09-12 TJ selects 9 MEOW/90 s, conditional on engineering gates, with 12 MEOW/120 s fallback (§8.1); prior experiment pairs are historical controls. · **Date:** 2026-08-22, rev 6 2026-09-12 · **Scope:** End-to-end local implementation and verification authorized (`docs/milestones.md`); no public mainnet launch, spending, external push or runtime changes. Reviewable local commits authorized; ADR-001 signatures and mainnet-quality gates remain required.
 
 **Steer status (2026-08-22, per TJ).** the whitepaper author's latest ideas — Zcash/Zebra derivation, Bitcoin interoperability, ASIC-resistant mining — are **promising hypotheses and desiderata, not requirements**. They are explored seriously and adopted where they can be done safely; none of them pre-selects an architecture. **Security is the overriding non-negotiable** (§2): where a desideratum and security conflict, the feature is dropped or the less novel path is chosen. The architecture decision is evidence-led and happens at the end of Phase 0 (§5), not before it.
 
@@ -29,7 +29,7 @@ This plan turns the January 2026 whitepaper and the chat history into a credible
 Each maps to an exploration in §5 with evidence requirements, kill criteria, and a safest fallback. Any of these can be deferred or dropped without the project failing:
 
 - **Zcash/Zebra/Orchard lineage** (the whitepaper author, 2026-08-22) → E1
-- **Perpetual fair emission** (the whitepaper author, January whitepaper: 1 MEOW per 2-minute block) → E3 — *fixed perpetual subsidy agreed 2026-09-07; benchmark 0.9 MEOW/120 s versus 0.675 MEOW/90 s at matched annual issuance (§8.1)*
+- **Perpetual fair emission** (the whitepaper author, January whitepaper: 1 MEOW per 2-minute block) → E3 — *fixed perpetual subsidy selected; target 9 MEOW/90 s, gated fallback 12 MEOW/120 s at matched annual issuance (§8.1)*
 - **Bitcoin interoperability / atomic swaps** (the whitepaper author, 2026-08-22) → E4 — *deferred post-launch by decision 2026-09-05; desirable, not a launch item; revisit on reviewed production precedent (§5 E4)*
 - **ASIC-resistant mining** (the whitepaper author, 2026-08-22) → E5
 - **Merge-mining with Monero** (the whitepaper author, January) → E6
@@ -185,7 +185,7 @@ Phase 0's mandate, in order: **(1) establish what has already been done safely b
 - **Consensus/crypto delta:** the subsidy function — small on either lineage. Second-order deltas to map honestly: Candidate M's dynamic-block-size penalty math assumes its emission curve and must be re-derived, not copy-pasted; Candidate Z's consensus carries dev-fund/lockbox funding streams that a no-dev-tax chain must remove — parameter removal, small, but a consensus delta with test vectors like any other.
 - **Security assumptions introduced:** essentially none beyond arithmetic correctness (overflow, rounding at atomic-unit scale).
 - **Audit burden:** low — emission test vectors across the schedule, overflow/edge review.
-- **Kill criteria:** none realistic for a perpetual schedule. A hard cap / fee-only endgame was **rejected on security grounds 2026-09-05** (E3 rev 2 §3–4: Carlsten et al. 2016, Budish 2018, Auer 2019 — fee-only mining is unstable and cannot fund a value-proportional security budget; no production counter-example exists).
+- **Selected policy and limits:** perpetual subsidy avoids a scheduled fee-only transition; this is not a guarantee of sufficient miner purchasing power or security. TJ selected no cap/sunset on 2026-09-12. Existing §2 engineering and independent-review gates still apply; research about fee-only incentives is rationale, not proof of this chain’s security.
 - **Safest fallback:** upstream's native schedule (which would, however, forfeit a core fairness goal — flagged for TJ/the whitepaper author if it ever comes to that).
 
 ### E4 — Bitcoin interoperability / atomic swaps
@@ -286,21 +286,21 @@ Ground rule from the brief: recommend based on **current upstream reality**, not
 
 ## 8. Emission and fair launch
 
-### 8.1 Emission schedule — fixed perpetual subsidy agreed; final parameters evidence-gated
+### 8.1 Emission schedule — selected perpetual issuance; spacing evidence-gated
 
-**Decision (group update relayed by TJ, 2026-09-07; supersedes the open schedule choices of 2026-09-05).** Fair launch, **zero premine and a small fixed perpetual subsidy** are agreed. The flat shape is settled; decay-to-tail and an initially ultra-low percentage-inflation target are not pending votes. Retain sufficient decimal precision for small payments and simplify wallet display independently of consensus/RPC precision. Mainnet-quality gates remain unchanged.
+**Selected decision (TJ, 2026-09-12; supersedes recommendation-only status).** Fixed perpetual issuance, zero premine, no halvings, cap or sunset, no developer or transfer tax, no artificial burns; fees to miners. Target **9 MEOW/~90 s**, conditional on validation, relay, stale-block and reorg testing including the intended cryptography. If 90 s fails, select **12 MEOW/120 s**. Both target **3,153,600 MEOW per 365 days before penalties**. High early dilution is accepted for simple fair launch and ongoing open distribution; do not substitute premine or front-loaded emission to reduce later percentage growth. [Decision, evidence and implementation gates](research/decision-2026-09-12-issuance.md).
 
-**Benchmark candidates, not launch promises:** keep the current implementation at **0.9 MEOW / 120 s** and compare **0.675 MEOW / 90 s**. Both preserve candidate time-based issuance of **236,520 MEOW per 365 days** (648/day): 262,800 × 0.9 = 350,400 × 0.675. These are expected issuance rates at target spacing, not guaranteed calendar payouts. **0.9 MEOW / 90 s would issue 315,360/year (+1/3) and is not approved.** 120 s is a working target, not a theoretical limit; 90 s is motivated by the nine theme but must earn selection through propagation, proof-validation, competing-block/orphan and reorg evidence. Do not lock 90 s or weaken release gates to achieve it.
+**Historical controls:** preserve **0.9 MEOW/120 s** and **0.675 MEOW/90 s**, each 236,520 MEOW/year, with their original experiments and frozen reproduction inputs. The fifteen-patch build remains this historical control; selected parameters are staged separately as reversible local source overlays. Do not silently relabel those binaries or their results. Compare selected 9/90 versus 12/120 with matched issuance **and capacity per second**, proof mix and topology; dynamic block-weight behavior requires measurement. No parameter selection bypasses §2 or authorizes launch.
 
 **Adoption evidence:** no demonstrated causal evidence establishes that hard caps or perpetual issuance win adoption. The security-budget rationale for this design is not an adoption result. Use measured payment completion, conversion and retention evidence with denominators, observation periods and confounders disclosed; community preferences and denomination changes are not causal evidence.
 
-Why perpetual (unchanged from E3 rev 1, now decided): a permanent security budget with no fee-only terminal regime (Todd 2022; Carlsten et al. 2016); the least front-loaded distribution available; one constant. Rejected alternatives: Monero-style declining curve *as the only mechanism* (favors early holders — the whitepaper author, 2026-01-15), capped supply (terminal security budget), "divisibility instead of emission."
+Why perpetual: ongoing nominal miner subsidy with no fee-only terminal regime; its purchasing power and resulting security are not guaranteed (Todd 2022; Carlsten et al. 2016); the least front-loaded distribution available; one constant. Rejected alternatives: Monero-style declining curve *as the only mechanism* (favors early holders — the whitepaper author, 2026-01-15), capped supply (terminal security budget), "divisibility instead of emission."
 
-**Supply-model audit (2026-09-05).** The fair-launch model in §8.2 is exact: genesis carries **zero spendable outputs**, no premine, no allocation, so supply at height *h* is *h* × subsidy and nothing else. Consequences that follow from arithmetic, not policy:
+**Supply-model audit (2026-09-05).** The fair-launch model in §8.2 is exact: genesis carries **zero spendable outputs**, no premine, no allocation, so unpenalized issuance at height *h* is *h* × subsidy; actual issuance sums penalized subsidies. Consequences that follow from arithmetic, not policy:
 
 1. **Percentage inflation is undefined at genesis and, for any flat schedule, equals 1/(N−1) during year N — independent of the rate.** 100% (yr 2), 50% (yr 3), 25% (yr 5), 10% (yr 11), 5% (yr 21), 3.03% (yr 34), 2% (yr 51), 1% (yr 101).
 2. **For any positive-issuance schedule with zero genesis supply, inflation in year N is issuance_N ÷ cumulative_(N−1).** Hitting a target *x* by year N requires cumulative_(N−1) ≥ issuance_N ÷ *x* — i.e. most of the eventual supply must already exist. Only two things produce that: (i) a large genesis supply, which is a **premine** and forbidden by §1.1 #5, or (ii) **front-loaded early issuance**, the Pirate failure mode (§4.3) that §1.1 #4 exists to prevent.
-3. **Therefore any constraint of the form "below fiat inflation (≈2–3%) from the early years" or "initial deflation" is mathematically incompatible with flat-from-genesis positive issuance and no premine.** At 0.9 MEOW/block, showing 3% in year 2 would need a 7,884,000 MEOW genesis supply; 2% would need 11,826,000. A **999,999,999 "genesis supply" is a premine** — it would make year-1 issuance read as 0.024% "inflation" precisely because 99.98% of the coin would pre-exist mining. **Rejected.** No such claim is ratified, and none may appear in brand copy.
+3. **Therefore any constraint of the form "below fiat inflation (≈2–3%) from the early years" or "initial deflation" is mathematically incompatible with flat-from-genesis positive issuance and no premine.** For the historical 0.9 MEOW/120 s control, showing 3% in year 2 would need a 7,647,480 MEOW genesis supply; 2% would need 11,589,480. A **999,999,999 "genesis supply" is a premine** — it would make year-1 issuance read as 0.024% "inflation" precisely because 99.98% of the coin would pre-exist mining. **Rejected.** No such claim is ratified, and none may appear in brand copy.
 4. Todd's convergence result (E3 §4b: circulating supply → issuance ÷ loss-rate) is a **long-run** statement about *circulating* supply under coin loss. It does not lower early-year percentage inflation and must not be marketed as if it did.
 5. **No burn mechanism is added to manufacture a deflation narrative.** A burn is a consensus delta with its own audit cost and no security purpose here (§2.1 "prefer subtraction").
 
@@ -314,7 +314,7 @@ Why perpetual (unchanged from E3 rev 1, now decided): a permanent security budge
 
 **Claims decision (2026-09-07):** drop initially ultra-low percentage inflation and deflation claims. Flat issuance from zero has high early percentage growth irrespective of denomination; smaller units do not change the arithmetic.
 
-- **Unfinalized parameters for ADR-001:** the 90 s / 0.675 versus 120 s / 0.9 pairing after comparative benchmarks, preserving the candidate annual issuance above; exact atomic-unit precision (retain the inherited 12 dp until justified otherwise); wallet presentation that simplifies display without losing nonzero amounts or rounding payment inputs silently; fee policy and block-weight limits/penalties rechecked for the chosen subsidy and spacing; launch difficulty and network timeouts. The flat perpetual shape, zero premine and honest claims are not open parameters.
+- **Unfinalized parameters for ADR-001:** validation of selected 9/90 versus fallback 12/120, preserving 3,153,600 MEOW/year; exact atomic-unit precision (retain the inherited 12 dp until justified otherwise); wallet presentation that simplifies display without losing nonzero amounts or rounding payment inputs silently; fee policy and block-weight limits/penalties rechecked for the chosen subsidy and spacing; launch difficulty and network timeouts. The flat perpetual shape, zero premine and honest claims are not open parameters.
 
 ### 8.2 No premine, no dev tax — and what "no insider advantage" requires operationally
 
@@ -474,7 +474,7 @@ These run in parallel and must never share a critical path:
 9. **Upstream-relationship posture** (lineage-dependent): open collaboration with Monero maintainers and/or ECC / Zcash Foundation / Shielded Labs (grant ask, upstreaming patches, shared advisories), or quiet derivative? Recommendation: open — E1's license question likely requires the conversation anyway, and goodwill is cheap insurance.
 10. **the whitepaper author's role:** whitepaper author → is he the second maintainer with release-signing keys? The two-person release rule (§9.4) needs its second person named.
 11. ~~Monetary policy and early-inflation claims~~ — **answered 2026-09-07:** small fixed perpetual subsidy, fair launch / zero premine; initially ultra-low percentage inflation and deflation claims dropped. Precision and display implementation remain to finalize (§8.1).
-12. **Block time:** benchmark 90 s / 0.675 MEOW against working 120 s / 0.9 MEOW at matched candidate annual issuance. Selection remains evidence-gated (§8.1); no new vote on whether to test 90 s is needed.
+12. **Block time:** selected target 9 MEOW/90 s, fallback 12 MEOW/120 s if 90 s fails, matched issuance and capacity/time. Intended-cryptography testing remains required (§8.1); old pairs remain historical controls.
 
 ---
 

@@ -1,0 +1,41 @@
+{
+  "scope": "compiled extracted reward and both tally expressions; not full node",
+  "source_lock": {
+    "source_commit": "7410c04bab0e304112710d63c3225c110bd8b4de",
+    "sha256": {
+      "src/cryptonote_config.h": "4c13598afa420521c4a123117bec5a3b4d71b15aaacf869a23f0954771f05edc",
+      "src/cryptonote_basic/cryptonote_basic_impl.cpp": "dc480b6be7a004ed29cb1c9cad3ef17715010a266dc38670650b3da4416c10a2",
+      "src/cryptonote_core/blockchain.cpp": "41c7497d186617e38071f4f86fb548a748a266e405b542bb14877784943c8926",
+      "src/cryptonote_core/cryptonote_tx_utils.cpp": "a0c25c6035857dcf545633121d9fca030b8c060dfbb10cedcd1f5613bd266a48",
+      "contrib/epee/include/int-util.h": "6d30dfce132862c59345f099d92c1478a4a0882eb289b57d45345eb0b7d040bd",
+      "contrib/epee/src/int-util.cpp": "e2b8d377bad7605516f8f75bbbfd266e5f8843dfd54d673aca09d56d1ac89ebe"
+    }
+  },
+  "profiles": [
+    {
+      "name": "selected-9-90",
+      "reward_atomic": 9000000000000,
+      "seconds": 90,
+      "annual_meow_before_penalties": 3153600,
+      "cases_passed": 3024,
+      "first_saturating_block": 2049639,
+      "tally_horizon_years": 5.849426369863013,
+      "overlay_sha256": "de750169f3f3aac75de8325a09570343cc10df7cf2da52dec9b084ad0b3414fe",
+      "reverse_apply_restores_source": true
+    },
+    {
+      "name": "fallback-12-120",
+      "reward_atomic": 12000000000000,
+      "seconds": 120,
+      "annual_meow_before_penalties": 3153600,
+      "cases_passed": 3024,
+      "first_saturating_block": 1537229,
+      "tally_horizon_years": 5.849425418569254,
+      "overlay_sha256": "0a81ee72f8b700a1299842a965b6dce650ce380b7dd1d92051a7ee4cc9fa5d06",
+      "reverse_apply_restores_source": true
+    }
+  ],
+  "launch_ready": false,
+  "toolchain": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "source_drift_refused": true
+}

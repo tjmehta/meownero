@@ -1,5 +1,7 @@
 # Local parallel engineering — 2026-09-12
 
+**Subsequent update:** all five existing workers acknowledged TJ’s selected 9/90 direction, gated 12/120 fallback and adoption-evidence limits. [Decision and distribution receipts](decision-2026-09-12-issuance.md). Recommendation-only language below records the earlier checkpoint, not current policy.
+
 TJ explicitly requested focused Codex/Herdr sessions implementing the latest
 research. The coordinator read the complete external research note
 `<private-notes-path>`

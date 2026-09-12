@@ -1,5 +1,7 @@
 # Network worker checkpoint — 2026-09-12
 
+**Policy update:** this report and its readiness checker describe historical 0.9/120 and 0.675/90 controls. The selected gated comparison is now 9/90 versus 12/120; [decision](decision-2026-09-12-issuance.md). No selected-family or FCMP network measurement is inferred from these results.
+
 Based on verified `39070e8e3ab32a695d80c90b7c0ad74cf39fb581` (including `81b3182`).
 Complete decisions memo and resumed handoff were read before implementation.
 All modifications are within the assigned worktree/owned paths and unique

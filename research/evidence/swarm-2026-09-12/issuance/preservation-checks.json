@@ -1,0 +1,49 @@
+{
+  "checked_at_utc": "2026-09-12T18:02:49.401673+00:00",
+  "baseline_commit": "ca946670dcae29574f2c48b56f7914c7799363e7",
+  "protected_tracked_paths_unchanged": [
+    "chain",
+    "spikes/candidate-m",
+    "demos/private-payment",
+    "wallet/metadata",
+    "spikes/cuprate",
+    "spikes/p2pool",
+    "site"
+  ],
+  "frozen_manifest_sha256": "6f74c265453e138cea3b3936542ef410ff3f0396ae561a8aa9a9f3eae7c3518e",
+  "frozen_manifest_check_pass": true,
+  "worker_worktrees": {
+    "network": {
+      "head": "174b723958dc6225c051e344ce0ef157226cbdcd",
+      "clean": true
+    },
+    "privacy": {
+      "head": "17a948d71318de06cdf3259088064add8674a431",
+      "clean": true
+    },
+    "mining": {
+      "head": "64f4e5852805413a71e1ea9d67989dc29d48ad7f",
+      "clean": true
+    },
+    "rust": {
+      "head": "03f455f6138895858325be54b6d40d42eac16ce0",
+      "clean": true
+    },
+    "demo": {
+      "head": "f004bdd82adbb0ca19c20ee5824219e12b200f39",
+      "clean": true
+    }
+  },
+  "reproduction_waiter": "PID     ELAPSED COMMAND\n  19457       30:29 bash /tmp/meow-swarm-network-20260912-run/reproduce.sh",
+  "reproduction_tail": [
+    "2026-09-12T18:01:20Z resource gate RAM=993972 KiB disk=39854024 KiB",
+    "2026-09-12T18:01:50Z resource gate RAM=1380608 KiB disk=39853796 KiB",
+    "2026-09-12T18:02:20Z resource gate RAM=1942504 KiB disk=39853164 KiB"
+  ],
+  "reproduction_exit_exists": false,
+  "bash_syntax": "pass",
+  "python_syntax": "pass",
+  "local_markdown_links": "pass",
+  "compiled_profile_cases": 6048,
+  "full_selected_node_verified": false
+}

@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-12",
+  "acknowledgments": [
+    {
+      "worker": "meow-network",
+      "source": "herdr agent read --source recent-unwrapped --lines 35",
+      "selected_direction_acknowledged": true,
+      "excerpt": "• Acknowledged: 9 MEOW/~90s is the selected target, conditional on intended-cryptography/network gates; 12 MEOW/120s is the fallback, preserving 3,153,600 MEOW/year before penalties. Zero premine, perpetual fixed\n  subsidy, no halvings/cap/sunset/taxes/artificial burns; fees to miners. High early dilution is accepted. Evidence limitations remain unchanged.\n  Coordinator references needing historical-control labeling:\n  - Network report:136 (research/swarm-network-2026-09-12.md:136) retains .9/120–.675/90; line 150 (research/swarm-network-2026-09-12.md:150) names .675/90 as the pending candidate.\n  - Benchmark README:42 (spikes/network-benchmark/README.md:42) calls that family “the approved comparison.”\n  - Readiness checker:40 (spikes/network-benchmark/check-readiness.py:40) explicitly evaluates historical parameters; it does not evaluate the selected family.\n  Network comparisons must still match issuance and capacity per second, including dynamic effects. No files, tests, controls, queued-build inputs or gates changed."
+    },
+    {
+      "worker": "meow-privacy",
+      "source": "herdr agent read --source recent-unwrapped --lines 35",
+      "selected_direction_acknowledged": true,
+      "excerpt": "• Acknowledged: 9 MEOW/~90s is now the selected monetary direction, conditional on validation gates, with 12 MEOW/120s fallback. Fixed perpetual subsidy, zero premine, no halvings/cap/sunset, taxes or artificial\n  burns; fees go to miners.\n  My preceding “branding candidate” acknowledgment is superseded. No conflicting monetary claims exist in the privacy track files. Historical controls and observer-specific evidence limits remain preserved.\n  Track stays closed; no writes, reruns or runtime changes."
+    },
+    {
+      "worker": "meow-mining",
+      "source": "herdr agent read --source recent-unwrapped --lines 35",
+      "selected_direction_acknowledged": true,
+      "excerpt": "• Acknowledged: 9 MEOW/~90s is selected, conditional on validation gates; fallback 12 MEOW/120s, with perpetual issuance, zero premine, no cap/halvings/sunset, taxes or artificial burns, and fees to miners. Early\n  dilution is accepted; adoption/security evidence limits remain unchanged.\n  Exact report wording needing coordinator clarification:\n  - Lines 113–116 (research/swarm-mining-2026-09-12.md:113): .9/120 as default and 9/90 branding are superseded.\n  - Compatibility matrix, lines 73–78 (research/swarm-mining-2026-09-12.md:73): reward/timing findings describe historical controls, not selected parameters.\n  Existing test evidence remains valid for those controls; selected-parameter P2Pool compatibility is untested. Incentives remain dependent on purchasing power and mining costs.\n  No files changed or tests rerun. Track remains closed."
+    },
+    {
+      "worker": "meow-rust",
+      "source": "herdr agent read --source recent-unwrapped --lines 35",
+      "selected_direction_acknowledged": true,
+      "excerpt": "• Acknowledged: selected direction is 9 MEOW/~90s, conditional on the required tests, with 12 MEOW/120s fallback. Both preserve 3,153,600 MEOW/year before penalties. Zero premine, perpetual subsidy, no halvings/cap/\n  sunset, no developer/transfer tax or artificial burns; fees go to miners.\n  No conflicting Rust-track claim requires correction. The report’s 120-second scope (research/swarm-rust-2026-09-12.md:58) records historical testing, not selected parameters. My earlier recommendation-only\n  characterization is superseded.\n  Track remains closed; controls, evidence and worktree unchanged. No test reruns. Implementation/readiness and adoption-evidence limits remain intact."
+    },
+    {
+      "worker": "meow-demo",
+      "source": "herdr agent read --source recent-unwrapped --lines 35",
+      "selected_direction_acknowledged": true,
+      "excerpt": "• Acknowledged: 9 MEOW/~90s is now TJ’s selected monetary direction, conditional on the stated network and intended-cryptography gates; fallback 12 MEOW/120s preserves annual issuance.\n  Selected policy: perpetual fixed subsidy, zero premine, no halvings/cap/sunset, developer/transfer tax or artificial burns; fees go to miners. High early dilution is explicitly accepted.\n  No conflicting claim found in the committed demo materials. Their .9/120 accounting records the tested historical control and must remain preserved. My preceding acknowledgment’s “branding candidate only” status is\n  superseded.\n  Future economics-facing demo materials should disclose perpetual issuance, no cap and early growth—year 2 +100%, year 11 +10%, year 51 +2%—without adoption or security guarantees.\n  No edits or test reruns. Coordinator owns decision updates and gated source integration."
+    }
+  ]
+}

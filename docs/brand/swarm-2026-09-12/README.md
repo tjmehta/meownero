@@ -1,5 +1,7 @@
 # Local visual directions and explainer
 
+**Economics disclosure for future materials:** TJ selected perpetual issuance with zero premine and no hard cap: target 9 MEOW/90 s, conditional fallback 12 MEOW/120 s. Both target 3,153,600 MEOW/year before penalties. From zero initial supply, year 2 adds 100%, year 11 adds 10%, year 51 adds 2%. No adoption neutrality or guaranteed security claim. [Decision](../../../research/decision-2026-09-12-issuance.md). Existing demo accounting remains the tested historical control.
+
 Private review materials, September 12, 2026. No identity, ticker, launch timing
 or funded campaign decision. [Mood-board contact sheet](moodboards.svg) and
 [six-frame storyboard](storyboard.svg) are original vector assets with text

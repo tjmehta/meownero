@@ -1,5 +1,7 @@
 # Bounded network benchmark
 
+**Historical-control harness:** the approved comparison at this checkpoint was 0.675/90 versus 0.9/120. TJ now selects gated 9/90 versus 12/120; see [decision](../../research/decision-2026-09-12-issuance.md). This checker retains historical inputs and does not assess selected-family readiness.
+
 `chain/test-network-p2p.sh` runs two existing fifteen-patch daemons inside one
 network-disabled container. Two interruptible TCP proxies carry the actual P2P
 protocol. The RPC client only generates a block at its originating daemon; it

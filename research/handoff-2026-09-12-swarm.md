@@ -1,5 +1,7 @@
 # Parallel engineering integration handoff — 2026-09-12
 
+**Subsequent selected-policy update:** [September 12 decision and evidence handoff](decision-2026-09-12-issuance.md). TJ selected 9/90 with 12/120 fallback behind engineering gates. The completed checkpoint below predates that decision and records historical-control results.
+
 This follows the [foundation checkpoint](handoff-2026-09-12-resumed.md).
 TJ explicitly authorized focused parallel local Codex/Herdr sessions. Five
 workers started from `39070e8` (including `81b3182`), completed bounded
