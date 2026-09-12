@@ -1,0 +1,114 @@
+{
+  "result": "PASS",
+  "scope": "actual P2P; accelerated empty-block regtest; fixed difficulty 1; no FCMP",
+  "warmup_blocks": 65,
+  "samples_s": [
+    0.09605390764772892,
+    0.09163059201091528,
+    0.09153535589575768,
+    0.0958568137139082,
+    0.09585521928966045,
+    0.09170514531433582,
+    0.09952367469668388,
+    0.09668130241334438,
+    0.09380765538662672,
+    0.09525257721543312,
+    0.09735357016324997,
+    0.09230785723775625
+  ],
+  "median_s": 0.09555389825254679,
+  "p95_nearest_rank_s": 0.09952367469668388,
+  "p99_nearest_rank_s": 0.09952367469668388,
+  "timing": "RPC generation start to receiver tip poll; includes mining/RPC; 25ms polling",
+  "reorg_depth": 3,
+  "rejoin_s": 0.44873134791851044,
+  "malformed_transport_closed": true,
+  "proxy_bytes": 44732,
+  "proxy_connections": 6,
+  "shaping": "20ms/chunk plus 64KiB/s/stream; up to two bidirectional connections",
+  "cache": "fresh daemon databases; 65-block warmup; host page cache uncontrolled, no purge",
+  "resources": "1536MiB total container; no swap; 2 CPU quota shared by both daemons and proxy",
+  "target_seconds": 120,
+  "reward_atomic": 900000000000,
+  "configured_weight_budget": null,
+  "capacity_enforcement_tested": false,
+  "observed_rpc_weight_limits": [
+    {
+      "block_weight_limit": 600000,
+      "block_weight_median": 300000
+    },
+    {
+      "block_weight_limit": 600000,
+      "block_weight_median": 300000
+    }
+  ],
+  "matched_90_comparison": "BLOCKED: no candidate binary or enforced scaled dynamic capacity",
+  "transactions": 0,
+  "proofs": 0,
+  "events": [
+    {
+      "event": "warmup_complete",
+      "monotonic_s": 4232654.91428445,
+      "tip": [
+        65,
+        "253a31f16c3b6b70095bdc6f53d657e2127aae1b8a66cf5bf6620bc17a0abc4d",
+        "0x42"
+      ],
+      "proxy_connections": 4
+    },
+    {
+      "event": "connected_relay",
+      "monotonic_s": 4232656.051881832,
+      "samples_s": [
+        0.09605390764772892,
+        0.09163059201091528,
+        0.09153535589575768,
+        0.0958568137139082,
+        0.09585521928966045,
+        0.09170514531433582,
+        0.09952367469668388,
+        0.09668130241334438,
+        0.09380765538662672,
+        0.09525257721543312,
+        0.09735357016324997,
+        0.09230785723775625
+      ]
+    },
+    {
+      "event": "partition_proven",
+      "monotonic_s": 4232657.464313854,
+      "root": [
+        77,
+        "e13b3f83b1551acc876abf419d9c5369b1b17d29b0b476f97c8290d011cb7c6b",
+        "0x4e"
+      ],
+      "a": [
+        80,
+        "94d0361e1d0c10e9da1e759e7a6a9ac5dd0bc5d4205470e617284f39473390af",
+        "0x51"
+      ],
+      "b": [
+        81,
+        "03f1d9a8fa837e4146c9b4ff2159e7f3650102a291a89577f8ddba715df1d6d7",
+        "0x52"
+      ],
+      "forwarded_bytes": 0
+    },
+    {
+      "event": "p2p_rejoin",
+      "monotonic_s": 4232657.915817296,
+      "reorg_depth": 3,
+      "convergence_s": 0.44873134791851044,
+      "tip": [
+        81,
+        "03f1d9a8fa837e4146c9b4ff2159e7f3650102a291a89577f8ddba715df1d6d7",
+        "0x52"
+      ]
+    },
+    {
+      "event": "malformed_transport_closed_healthy_relay_survives",
+      "monotonic_s": 4232658.008959046,
+      "close_mode": "TCP reset"
+    }
+  ]
+}

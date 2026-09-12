@@ -19,9 +19,13 @@ MEOW_BUILDER_IMAGE=$(docker image inspect "$IMG" --format '{{.Id}}')
 export CCACHE_DISABLE=1
 printf 'Reproducibility output: %s\nBuilder: %s\n' "$WORK" "$MEOW_BUILDER_IMAGE"
 for run in first second; do
-  "$HERE/build.sh" "$WORK/$run" 2>&1 | tee "$WORK/$run.log"
+  if [ -n "${MEOW_REPRO_BUILD_RUNNER:-}" ]; then
+    "$MEOW_REPRO_BUILD_RUNNER" "$HERE/build.sh" "$WORK/$run" 2>&1 | tee "$WORK/$run.log"
+  else
+    "$HERE/build.sh" "$WORK/$run" 2>&1 | tee "$WORK/$run.log"
+  fi
 done
-diff -u "$WORK/first/BUILDER_IMAGE_ID" "$WORK/second/BUILDER_IMAGE_ID"
-diff -u "$WORK/first/packages.txt" "$WORK/second/packages.txt"
-diff -u "$WORK/first/SHA256SUMS" "$WORK/second/SHA256SUMS"
+for evidence in BUILDER_IMAGE_ID packages.txt SHA256SUMS SOURCE_REVISIONS SUBMODULES INPUT_SHA256SUMS VERSIONS; do
+  diff -u "$WORK/first/$evidence" "$WORK/second/$evidence"
+done
 printf 'PASS: independent source builds match in the recorded builder image.\n'

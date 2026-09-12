@@ -1,0 +1,30 @@
+{"event": "warmup_complete", "monotonic_s": 4232587.655288418, "tip": [65, "2508748d4ee15959a3ff6e9ee47e0bded0309ea3f2b2c3d0269590c30a1a92c3", "0x42"], "proxy_connections": 2}
+{"event": "connected_relay", "monotonic_s": 4232588.863575253, "samples_s": [0.0923323892056942, 0.09442835114896297, 0.09191195573657751, 0.10954602342098951, 0.0929772350937128, 0.09751776605844498, 0.12427636422216892, 0.10516929719597101, 0.11993087641894817, 0.09613557253032923, 0.09982454683631659, 0.08420098572969437]}
+{"event": "partition_proven", "monotonic_s": 4232590.296260051, "root": [77, "4b704abf1e8ed4bf31f38a235c5fa89da206d8db12674680db05dd206240d99b", "0x4e"], "a": [80, "ae170c471c5503a0e9af16939231e0cb70bed5a4540034eb97683de12c5c2ee5", "0x51"], "b": [81, "0d9b97324b66006fa27ccaf696f4c4b6096ffe926a872c92a3ca07070608ecce", "0x52"], "forwarded_bytes": 0}
+{"event": "p2p_rejoin", "monotonic_s": 4232590.897338522, "reorg_depth": 3, "convergence_s": 0.5978419510647655, "tip": [81, "0d9b97324b66006fa27ccaf696f4c4b6096ffe926a872c92a3ca07070608ecce", "0x52"]}
+Traceback (most recent call last):
+  File "/harness/test-network-p2p.py", line 235, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/harness/test-network-p2p.py", line 182, in main
+    rejected = await asyncio.wait_for(reader.read(1), timeout=5) == b''
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/streams.py", line 713, in read
+    await self._wait_for_data('read')
+  File "/usr/lib/python3.12/asyncio/streams.py", line 545, in _wait_for_data
+    await self._waiter
+  File "/usr/lib/python3.12/asyncio/selector_events.py", line 1013, in _read_ready__data_received
+    data = self._sock.recv(self.max_size)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [Errno 104] Connection reset by peer

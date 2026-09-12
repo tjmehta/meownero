@@ -1,0 +1,46 @@
+{
+  "status": "BLOCKED_INTEGRATION",
+  "baseline_observed": {
+    "DIFFICULTY_TARGET_V2": 120,
+    "MEOW_BLOCK_REWARD": 900000000000,
+    "CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V5": 300000,
+    "CRYPTONOTE_REWARD_BLOCKS_WINDOW": 100,
+    "CRYPTONOTE_LONG_TERM_BLOCK_WEIGHT_WINDOW_SIZE": 100000,
+    "binary_sha256": "850d6eecef1831878d3a8196f3e2135a4c1ebe57f5e887566695ce9ce82e0ddc",
+    "fcmp_source_directory_present": false
+  },
+  "candidate_observed": null,
+  "configured_comparison": [
+    {
+      "target_seconds": 120,
+      "reward_atomic": 900000000000,
+      "issuance_atomic_per_second": "7500000000",
+      "configured_minimum_penalty_free_weight": 300000,
+      "configured_max_weight_at_floor": 600000,
+      "penalty_free_weight_per_second": "2500",
+      "maximum_weight_per_second_at_floor": "5000",
+      "confirmation_horizon_3600s_blocks": 30,
+      "maximum_budget_enforcement_tested": false,
+      "dynamic_median_ratio_enforcement_tested": false
+    },
+    {
+      "target_seconds": 90,
+      "reward_atomic": 675000000000,
+      "issuance_atomic_per_second": "7500000000",
+      "configured_minimum_penalty_free_weight": 225000,
+      "configured_max_weight_at_floor": 450000,
+      "penalty_free_weight_per_second": "2500",
+      "maximum_weight_per_second_at_floor": "5000",
+      "confirmation_horizon_3600s_blocks": 40,
+      "maximum_budget_enforcement_tested": false,
+      "dynamic_median_ratio_enforcement_tested": false
+    }
+  ],
+  "blockers": [
+    "No real FCMP transaction/proof workload receipts or instrumented validation/relay timings.",
+    "No saturated acceptance/rejection boundary probes proving 0.75 capacity ratio through floor, short median, long median and surge states.",
+    "No paired actual 90/120 network workload run with shared transaction/proof mix and wallclock horizon.",
+    "No separately built 90-second / 0.675 candidate source supplied.",
+    "Current pinned source has no src/fcmp_pp integration."
+  ]
+}

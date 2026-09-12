@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -uo pipefail
+cd /tmp/meownero-swarm-20260912-network
+export MEOW_BUILDER_IMAGE=sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e
+export MEOW_REPRO_BUILD_RUNNER=$PWD/chain/network-build-guard.sh
+bash chain/test-reproducibility.sh /tmp/meow-swarm-network-20260912-run/reproduction
+status=$?
+printf '%s\n' "$status" > /tmp/meow-swarm-network-20260912-run/reproduction.exit
+exit "$status"

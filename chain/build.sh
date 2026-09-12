@@ -46,18 +46,32 @@ if [ -z "${MEOW_BUILDER_IMAGE:-}" ]; then
 fi
 IMG=$(docker image inspect "$IMG" --format '{{.Id}}')
 printf '%s\n' "$IMG" > "$WORK/BUILDER_IMAGE_ID"
-docker run --rm "$IMG" dpkg-query -W -f='${binary:Package}=${Version}\n' > "$WORK/packages.txt"
-docker run --rm -v "$SRC:/src" -v meownero-chain-ccache:/root/.ccache -e CCACHE_DIR=/root/.ccache -e CCACHE_DISABLE -e MEOW_JOBS="${MEOW_JOBS:-2}" -w /src "$IMG" bash -ec '
+docker run --rm --network none "$IMG" dpkg-query -W -f='${binary:Package}=${Version}\n' > "$WORK/packages.txt"
+cache_args=()
+if [ "${CCACHE_DISABLE:-0}" != 1 ]; then
+  cache_args=(-v meownero-chain-ccache:/root/.ccache -e CCACHE_DIR=/root/.ccache)
+fi
+docker run --rm --network none -v "$SRC:/src" "${cache_args[@]}" -e CCACHE_DISABLE -e MEOW_JOBS="${MEOW_JOBS:-2}" -w /src "$IMG" bash -ec '
   git config --global --add safe.directory "*"
   mkdir -p build/release && cd build/release
   cmake -D CMAKE_BUILD_TYPE=Release -D ARCH=default -D BUILD_TESTS=ON -D CMAKE_C_COMPILER_LAUNCHER=ccache -D CMAKE_CXX_COMPILER_LAUNCHER=ccache ../.. > cmake.log 2>&1
   make -j"$MEOW_JOBS" daemon simplewallet wallet_rpc_server unit_tests meow_difficulty_floor_tests > make.log 2>&1 || { tail -30 make.log; exit 1; }'
 
 echo "==> 4. Meownero consensus tests"
-docker run --rm -v "$SRC:/src" -w /src/build/release "$IMG" timeout 180 ./tests/unit_tests/unit_tests --gtest_filter='meow_*:cryptonote_protocol_handler.race_condition' 2>&1 | tail -2
+docker run --rm --network none -v "$SRC:/src:ro" -w /src/build/release "$IMG" timeout 180 ./tests/unit_tests/unit_tests --gtest_filter='meow_*:cryptonote_protocol_handler.race_condition' 2>&1 | tail -2
 
 MEOW_BUILDER_IMAGE="$IMG" bash "$HERE/test-difficulty.sh" "$SRC"
 MEOW_BUILDER_IMAGE="$IMG" bash "$HERE/test-authorities.sh" "$SRC"
 
 echo "==> 5. artifacts"
 for b in monerod monero-wallet-cli monero-wallet-rpc; do printf '%s  %s\n' "$(sha256sum "$SRC/build/release/bin/$b" | cut -d' ' -f1)" "$b"; done | tee "$WORK/SHA256SUMS"
+
+# Exact local source inputs and binary versions accompany every hash set.
+git -C "$SRC" rev-parse HEAD HEAD^{tree} > "$WORK/SOURCE_REVISIONS"
+git -C "$SRC" submodule status --recursive > "$WORK/SUBMODULES"
+(cd "$HERE" && sha256sum upstream.lock patches/*.patch) > "$WORK/INPUT_SHA256SUMS"
+docker run --rm --network none -v "$SRC:/src:ro" "$IMG" bash -ec '
+  c++ --version
+  cmake --version
+  for b in monerod monero-wallet-cli monero-wallet-rpc; do /src/build/release/bin/$b --version; done
+' > "$WORK/VERSIONS"
