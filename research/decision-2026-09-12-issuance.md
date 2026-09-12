@@ -1,5 +1,8 @@
 # Selected monetary direction and local evidence handoff — September 12, 2026
 
+Later local engineering: [restarted checkpoint](handoff-2026-09-12-restarted.md).
+The policy decision below remains current; subsequent test/build state is there.
+
 ## Decision and authorization
 
 TJ's latest explicit delegated choice supersedes the preceding recommendation:
