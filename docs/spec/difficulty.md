@@ -6,6 +6,16 @@
 
 Monero DAA: last 735 blocks, newest 15 ignored (lag), timestamps sorted, 60 cut from each end, `difficulty = ceil(work × 120 / time_span)`; a block's timestamp must exceed the median of the previous 60 and may be at most 2 h (`CRYPTONOTE_BLOCK_FUTURE_TIME_LIMIT`) ahead of the validator's clock. Six years of production on Monero; incident record in E5 (timestamp attacks on *other* LWMA-family chains, none on this DAA at Monero's scale).
 
+**2026-09-12 correction and new evidence:** the native timestamp check accepts
+**equality** with the median; “must exceed” above describes the older simulator's
+stricter approximation. That simulator also included genesis in DAA samples and
+counted an out-of-horizon final draw. Its numbers below remain historical.
+[Native-DAA benchmark and daemon tests](../../research/verification-2026-09-12-m2.md)
+now cover 720 paired scenario runs and real reorganization beyond the 720/735
+boundaries. Launch-time forward-stamp scenarios show substantial modeled issuance
+distortion; the older warmed-up attack result does not close launch timestamp
+risk. No timing, minimum value or lifetime decision follows from these results.
+
 ## What the simulation shows (H = 5 MH/s assumed steady launch hashrate, one seed)
 
 | Scenario | No floor | Floor = 0.25 × steady-state (150 M) | Floor = 1 × steady-state (600 M) |

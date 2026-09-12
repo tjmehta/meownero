@@ -1,0 +1,29 @@
+{
+  "result": "PASS",
+  "reorg_depth": 3,
+  "restart_preserved": true,
+  "rejected": {
+    "malformed": {
+      "code": -6,
+      "message": "Wrong block blob"
+    },
+    "obsolete_block_version": {
+      "code": -7,
+      "message": "Block not accepted"
+    },
+    "future_timestamp": {
+      "code": -7,
+      "message": "Block not accepted"
+    },
+    "below_median_timestamp": {
+      "code": -7,
+      "message": "Block not accepted"
+    },
+    "inflated_coinbase": {
+      "code": -7,
+      "message": "Block not accepted"
+    }
+  },
+  "positive_control_accepted": true,
+  "scope": "two regtest daemons; explicit block delivery; fixed difficulty 1; no transactions"
+}
