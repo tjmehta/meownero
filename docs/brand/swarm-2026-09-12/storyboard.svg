@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1040" viewBox="0 0 1440 1040" role="img" aria-labelledby="title desc">
+  <title id="title">A payment. A fresh wallet. The same balance.</title>
+  <desc id="desc">Six frames show disposable wallet setup, an exact payment, owner versus public transaction views, removal of the recipient files, seed recovery and evidence checks. Local notes are not restored. The diagram demonstrates a local ring-based prototype, not FCMP++ or network anonymity.</desc>
+  <rect width="1440" height="1040" fill="#F5F0DF"/>
+  <g font-family="Arial, sans-serif" fill="#163E35"><text x="40" y="48" font-size="17" letter-spacing="2">MEOWNERO / LOCAL PROTOTYPE / DISPOSABLE WALLETS</text><text x="40" y="108" font-size="40">A payment. A fresh wallet. The same balance.</text><text x="40" y="145" font-size="18">54-second storyboard · static accessible version · read left to right</text></g>
+  <g font-family="Arial, sans-serif" fill="#163E35" stroke="#163E35">
+    <g transform="translate(40 185)">
+      <rect width="440" height="365" fill="#FFFDF6" stroke="#CDC9B9"/>
+      <text x="24" y="36" font-size="16" stroke="none">01 / 0–7 s / SET UP</text>
+      <rect x="30" y="86" width="170" height="136" rx="6" fill="#F5F0DF"/><rect x="240" y="86" width="170" height="136" rx="6" fill="#F5F0DF"/>
+      <g stroke="none"><text x="48" y="120" font-size="20">Sender</text><text x="258" y="120" font-size="20">Recipient</text><text x="258" y="183" font-size="38">0</text><text x="24" y="274" font-size="22">Two wallets. One local chain.</text><text x="24" y="315" font-size="16">Actual current15 binaries. No real keys.</text></g>
+    </g>
+    <g transform="translate(500 185)">
+      <rect width="440" height="365" fill="#FFFDF6" stroke="#CDC9B9"/>
+      <text x="24" y="36" font-size="16" stroke="none">02 / 7–16 s / PAY</text>
+      <path d="M36 146H398M384 133L398 146L384 159" fill="none" stroke-width="3"/>
+      <rect x="58" y="100" width="324" height="92" fill="#B9D9C7" stroke="none"/>
+      <g stroke="none"><text x="77" y="157" font-family="monospace" font-size="29">0.123456789012</text><text x="24" y="236" font-size="18">Fee recorded separately.</text><text x="24" y="274" font-size="22">The recipient receives the amount.</text><text x="24" y="315" font-size="16">Every balance check uses atomic integers.</text></g>
+    </g>
+    <g transform="translate(960 185)">
+      <rect width="440" height="365" fill="#FFFDF6" stroke="#CDC9B9"/>
+      <text x="24" y="36" font-size="16" stroke="none">03 / 16–26 s / TWO VIEWS</text>
+      <rect x="24" y="76" width="392" height="70" fill="#B9D9C7" stroke="none"/><rect x="24" y="159" width="392" height="70" fill="#E8EFF7" stroke="none"/>
+      <g stroke="none"><text x="39" y="101" font-size="16">WALLET OWNER</text><text x="39" y="131" font-size="23">Amount decoded by the wallet.</text><text x="39" y="184" font-size="16">PUBLIC TRANSACTION DATA</text><text x="39" y="214" font-size="23">Commitments + ring references.</text><text x="24" y="274" font-size="22">Keep observer views separate.</text><text x="24" y="315" font-size="16">No meaningful anonymity claim for this test.</text></g>
+    </g>
+    <g transform="translate(40 575)">
+      <rect width="440" height="365" fill="#FFFDF6" stroke="#CDC9B9"/>
+      <text x="24" y="36" font-size="16" stroke="none">04 / 26–35 s / START FRESH</text>
+      <path d="M56 111H111L130 131H229V212H56Z" fill="#F5F0DF" stroke-width="2"/>
+      <path d="M88 147L194 192M194 147L88 192" stroke="#BA432B" stroke-width="4"/>
+      <rect x="287" y="94" width="110" height="132" fill="#B9D9C7" stroke="none"/>
+      <path d="M305 127H379M305 151H379M305 175H379M305 199H379" stroke-width="3"/>
+      <g stroke="none"><text x="24" y="274" font-size="22">Remove the recipient's files.</text><text x="24" y="315" font-size="16">Deliberate test reset. Seed stays in memory.</text></g>
+    </g>
+    <g transform="translate(500 575)">
+      <rect width="440" height="365" fill="#FFFDF6" stroke="#CDC9B9"/>
+      <text x="24" y="36" font-size="16" stroke="none">05 / 35–46 s / RECOVER</text>
+      <rect x="24" y="84" width="392" height="148" fill="#B9D9C7" stroke="none"/>
+      <g stroke="none"><text x="43" y="115" font-size="17">FRESH WALLET / SEED + CHAIN SCAN</text><text x="43" y="162" font-family="monospace" font-size="31">0.123456789012</text><text x="43" y="205" font-size="18">Same address. Local note: empty.</text><text x="24" y="274" font-size="22">Reopen. Check again.</text><text x="24" y="315" font-size="16">Incoming history and unlocked balance match.</text></g>
+    </g>
+    <g transform="translate(960 575)">
+      <rect width="440" height="365" fill="#163E35" stroke="none"/>
+      <g stroke="none" fill="#F5F0DF"><text x="24" y="36" font-size="16">06 / 46–54 s / VERIFY</text><text x="24" y="102" font-size="30">Payment checked.</text><text x="24" y="149" font-size="30">Recovery checked.</text><text x="24" y="196" font-size="30">Reopen checked.</text><text x="24" y="260" font-size="22">Run it. Read the limits.</text><text x="24" y="301" font-family="monospace" font-size="17">demos/private-payment/run.sh</text><text x="24" y="333" font-size="16">Evidence: research/swarm-demo-2026-09-12.md</text></g>
+    </g>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="17" fill="#163E35"><text x="40" y="983">Current ring-based payment path. Fixed difficulty 1. All outputs controlled by the tester. No P2P or FCMP++ demonstration.</text><text x="40" y="1015">This is a communication proposal grounded in the local test. It is not a production wallet, network privacy test or public launch.</text></g>
+</svg>

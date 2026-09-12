@@ -1,0 +1,37 @@
+{
+  "result": "PASS",
+  "height": 111,
+  "payment_atomic": 123456789012,
+  "fee_atomic": 64950000,
+  "sender_before_atomic": 90000000000000,
+  "sender_after_atomic": 99776543210988,
+  "post_payment_subsidy_atomic": 9900000000000,
+  "miner_fee_received_atomic": 64950000,
+  "emission_atomic": 99900000000000,
+  "recipient": {
+    "balance_atomic": 123456789012,
+    "unlocked_atomic": 123456789012,
+    "history": [
+      [
+        "adf4d28f04cd372f783bf2a5529443a3959e3081b3afe62141f28d3ec909cd51",
+        102,
+        123456789012,
+        "in"
+      ]
+    ]
+  },
+  "ring_size": 16,
+  "rct_type": 6,
+  "public_output_amounts_zero": true,
+  "address_recovered": true,
+  "original_recipient_files_removed": true,
+  "fresh_process_restore_matches": true,
+  "reopen_matches": true,
+  "local_note_not_recovered": true,
+  "timings_ns": {
+    "construct_and_local_submit_ns": 155034238,
+    "restore_and_refresh_ns": 3041149132
+  },
+  "timing_scope": "single diagnostic sample; no performance claim",
+  "scope": "isolated mainnet-mode private chain; fixed difficulty 1; historical 120s headers; current ring-based cryptography; no P2P"
+}
