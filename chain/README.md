@@ -22,6 +22,13 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 
 ## Current verification
 
+**2026-09-12 checkpoint:** the builder/devnet image mismatch is fixed and the isolated
+three-node supply/tip checks pass. The new `test-seed-recovery.sh` runner exposes a
+live wallet refresh failure at v16/height 1; seed recovery is **not verified**.
+Thirteen-patch clean binary reproduction is running from frozen inputs, with no
+result yet. See the [September 12 handoff](../research/handoff-2026-09-12.md) for
+evidence, process locations and the publishing pause. No consensus patch changed.
+
 **Thirteen-patch result:** full CI selection passes **1,234/1,234 in 78.606 s** with networking enabled for inherited DNS tests and disposable test data. The three historical baseline-attributed exclusions remain: `ban.subnet`, `http_server.response_soft_limit`, `notify.works`. This is not an unfiltered suite or remote CI pass. Storage and historical serialization fixtures are fixed without changing production validation or historical archive bytes; targeted selection passes 91/91. Fresh application matches tested tree `5239f02b7b2c1cfe75b3ff616ab0620c3068106e`. Binary reproduction remains verified for eight patches only.
 
 ### Historical intermediate selections (superseded above)

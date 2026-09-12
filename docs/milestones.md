@@ -6,6 +6,14 @@ Authorization boundary (group, 2026-09-05): implementation work is authorized. *
 
 Legend: `[ ]` open · `[x]` done with evidence link · `[~]` partial · `[G]` gated on an external/date event (named)
 
+**2026-09-12 local checkpoint:** [handoff and evidence](../research/handoff-2026-09-12.md).
+The CI/devnet builder-image mismatch below is resolved; isolated three-node supply
+and identical-tip checks pass. Seed recovery now has a runnable regression harness
+but fails at the existing wallet's v16/height-1 check before restore. Thirteen-patch
+clean reproduction is still running. M1 wallet recovery and M2 reorg/benchmark
+items remain open. Repository writes pause after the checkpoint commit while TJ
+handles private publishing; preserve the background build.
+
 ---
 
 ## M0-S1 — Stage 1 evidence (close or mark as watch items)
