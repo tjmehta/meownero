@@ -1,0 +1,70 @@
+Waiting for shared heavy lock (one small compiler process, then one daemon).
+{
+  "source_sha256_verified": 19,
+  "compiled_cases": [
+    {
+      "supply": 0,
+      "height": 1,
+      "network": 0,
+      "reward": 35184372088831,
+      "major_version": 1
+    },
+    {
+      "supply": 900000000000,
+      "height": 2,
+      "network": 0,
+      "reward": 35184370372218,
+      "major_version": 1
+    },
+    {
+      "supply": 18446744073709551615,
+      "height": 2689608,
+      "network": 0,
+      "reward": 600000000000,
+      "major_version": 16
+    },
+    {
+      "supply": 0,
+      "height": 1009826,
+      "network": 0,
+      "reward": 35184372088831,
+      "major_version": 1
+    },
+    {
+      "supply": 0,
+      "height": 1009827,
+      "network": 0,
+      "reward": 35184372088831,
+      "major_version": 2
+    },
+    {
+      "supply": 0,
+      "height": 1983520,
+      "network": 1,
+      "reward": 35184372088831,
+      "major_version": 16
+    },
+    {
+      "supply": 0,
+      "height": 1151720,
+      "network": 2,
+      "reward": 35184372088831,
+      "major_version": 16
+    }
+  ],
+  "source_guards": [
+    "Monero-only one-byte prefixes",
+    "95-character addresses",
+    "historical hardfork equality",
+    "0.6 minimum share reward",
+    "tagged coinbase outputs",
+    "60-block coinbase unlock"
+  ],
+  "compatible": false,
+  "scope": "two exact compiled routines plus static source guards"
+}
+Traceback (most recent call last):
+  File "/harness/devnet_probe.py", line 121, in <module>
+    assert miner['median_weight'] >= 300000 and miner['tx_backlog'] == []
+                                                ~~~~~^^^^^^^^^^^^^^
+KeyError: 'tx_backlog'

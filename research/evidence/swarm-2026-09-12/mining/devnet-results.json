@@ -1,0 +1,33 @@
+{
+  "compatible": false,
+  "pool_started": false,
+  "native_daa": true,
+  "fixed_difficulty_override": false,
+  "genesis": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+  "daemon_network_label": "mainnet",
+  "offline_synchronized": true,
+  "p2pool_reward_at_height_1": 35184372088831,
+  "meownero_reward_at_height_1": 900000000000,
+  "p2pool_version_at_height_1": 1,
+  "meownero_version_at_height_1": 16,
+  "p2pool_amount_mutation_rejected": {
+    "code": -7,
+    "message": "Block not accepted"
+  },
+  "tail_amount_mutation_rejected": {
+    "code": -7,
+    "message": "Block not accepted"
+  },
+  "original_template_accepted": true,
+  "zmq_miner_height": 2,
+  "rpc_methods_exercised": [
+    "get_block_header_by_height",
+    "get_block_headers_range",
+    "get_block_template",
+    "get_info",
+    "get_last_block_header",
+    "get_miner_data",
+    "get_version",
+    "submit_block"
+  ]
+}

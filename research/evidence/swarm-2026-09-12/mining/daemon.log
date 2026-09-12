@@ -1,0 +1,256 @@
+2026-09-12 17:37:45.401	    75bb54dd6a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-12 17:37:45.401	    75bb54dd6a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:INFO,global:INFO,stacktrace:INFO,logging:INFO,msgwriter:INFO,perf.*:DEBUG,blockchain:DEBUG,verify:ERROR
+2026-09-12 17:37:45.402	    75bb54dd6a40	INFO	global	src/daemon/main.cpp:309	Monero 'Fluorine Fermi' (v0.18.5.1-7b74615ab)
+2026-09-12 17:37:45.402	    75bb54dd6a40	INFO	daemon	src/daemon/main.cpp:371	Moving from main() into the daemonize now.
+2026-09-12 17:37:45.402	    75bb54dd6a40	INFO	global	src/daemon/protocol.h:53	Initializing cryptonote protocol...
+2026-09-12 17:37:45.402	    75bb54dd6a40	INFO	global	src/daemon/protocol.h:58	Cryptonote protocol initialized OK
+2026-09-12 17:37:45.402	    75bb54dd6a40	INFO	global	src/daemon/core.h:64	Initializing core...
+2026-09-12 17:37:45.402	    75bb54dd6a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:521	Loading blockchain from folder /work/node/lmdb ...
+2026-09-12 17:37:45.402	    75bb54dd6a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1464	LMDB memory map size: 1073741824
+2026-09-12 17:37:45.403	    75bb54dd6a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:348	Blockchain not loaded, generating genesis block.
+2026-09-12 17:37:45.433	    75bb54dd6a40	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:1316	Miner tx hash: <4bc82302608dccd5ed450fb2ba4f21bcc1db633a764f26960b0d715656b5f173>
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       77    get_next_long_term_block_weight
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      107      get_long_term_block_weights
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      126    update_next_cumulative_weight_limit
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8>
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<56316d3598ed0a46c353ff818a21261f06ebc4e82aab5369be4d7f6f783ff9e3>
+2026-09-12 17:37:45.433	    75bb54dd6a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 0, difficulty:	1
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 0.000000000000(0.000000000000 + 0.000000000000), coinbase_weight: 75, cumulative weight: 75, 15(0/15)ms
+2026-09-12 17:37:45.434	    75bb54dd6a40	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:5725	Invalidating block template cache
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3940	batch transaction mode already enabled, but asked to enable batch mode
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3943	batch transactions enabled
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:389	Blockchain initialized. last block: 0, d4530.h6.m48.s52 time ago, current difficulty: 1
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      111      get_long_term_block_weights
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      207    update_next_cumulative_weight_limit
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x6412590c9a34]:__cxa_throw+0xb0) [0x6412590c9a34]
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x64125912ecb0] 
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x8598a9) [0x64125986e8a9] 
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x582684) [0x641259597684] 
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x583045) [0x641259598045] 
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x9cb84) [0x75bb55254b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x75bb55254b84]
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7]  0x44) [0x75bb552e1b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x75bb552e1b64]
+2026-09-12 17:37:45.434	    75bb145fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	txpool	src/cryptonote_core/tx_pool.cpp:1714	Validating txpool contents for v16
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:696	Loading checkpoints
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	global	src/daemon/core.h:81	Core initialized OK
+2026-09-12 17:37:45.434	    75bb54dd6a40	INFO	global	src/daemon/p2p.h:64	Initializing p2p server...
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.p2p	src/p2p/net_node.inl:2845	Set limit-up to 8192 kB/s
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.p2p	src/p2p/net_node.inl:2857	Set limit-down to 32768 kB/s
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.p2p	src/p2p/net_node.inl:2879	Set limit-up to 8192 kB/s
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net.p2p	src/p2p/net_node.inl:2883	Set limit-down to 32768 kB/s
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	global	src/daemon/p2p.h:69	p2p server initialized OK
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	global	src/daemon/rpc.h:63	Initializing core RPC server...
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-12 17:37:45.436	    75bb54dd6a40	INFO	global	contrib/epee/include/net/http_server_impl_base.h:94	Binding on 127.0.0.1 (IPv4):19081
+2026-09-12 17:37:45.458	    75bb54dd6a40	INFO	net.ssl	contrib/epee/src/net_ssl.cpp:145	Generating SSL certificate
+2026-09-12 17:37:45.806	    75bb145fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX main cache initialized
+2026-09-12 17:37:46.606	    75bb54dd6a40	INFO	global	src/daemon/rpc.h:69	core RPC server initialized OK on port: 19081
+2026-09-12 17:37:46.607	    75bb54dd6a40	INFO	net.zmq	src/rpc/zmq_server.cpp:85	ZMQ now listening at tcp://127.0.0.1:19082
+2026-09-12 17:37:46.607	    75bb54dd6a40	INFO	net.zmq	src/rpc/zmq_server.cpp:85	ZMQ now listening at tcp://127.0.0.1:19083
+2026-09-12 17:37:46.607	    75bb54dd6a40	INFO	net.zmq	src/rpc/zmq_server.cpp:85	ZMQ now listening at inproc://pub_relay
+2026-09-12 17:37:46.607	    75bb54dd6a40	INFO	global	src/daemon/rpc.h:74	Starting core RPC server...
+2026-09-12 17:37:46.607	    75bb54dd6a40	INFO	net.http	contrib/epee/include/net/http_server_impl_base.h:111	Run net_service loop( 2 threads)...
+2026-09-12 17:37:46.607	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:79	core RPC server started ok
+2026-09-12 17:37:46.607	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:79	Starting p2p net loop...
+2026-09-12 17:37:46.607	    75bb115f86c0	INFO	net.zmq	src/rpc/zmq_server.cpp:128	ZMQ Server started
+2026-09-12 17:37:46.607	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1032	Run net_service loop( 10 threads)...
+2026-09-12 17:37:46.820	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.820	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:39510 INC] Calling RPC method get_info
+2026-09-12 17:37:46.820	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:46.820	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      397    get_info
+2026-09-12 17:37:46.821	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.821	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:174	[127.0.0.1:39526 INC] Calling RPC method get_version
+2026-09-12 17:37:46.821	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:46.821	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       28    get_version
+2026-09-12 17:37:46.822	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.822	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:39542 INC] Calling RPC method get_block_header_by_height
+2026-09-12 17:37:46.822	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:46.822	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       13      fill_block_header_response
+2026-09-12 17:37:46.822	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       51    get_block_header_by_height
+2026-09-12 17:37:46.823	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.823	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:150	[127.0.0.1:39544 INC] Calling RPC method get_miner_data
+2026-09-12 17:37:46.826	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.826	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:148	[127.0.0.1:39556 INC] Calling RPC method get_block_template
+2026-09-12 17:37:46.826	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:46.826	[RPC0]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:5731	Setting block template cache
+2026-09-12 17:37:46.826	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      799    getblocktemplate
+2026-09-12 17:37:46.827	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.827	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:153	[127.0.0.1:39562 INC] Calling RPC method submit_block
+2026-09-12 17:37:46.827	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:46.827	[RPC1]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:5100	block_batches: 1
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x6412590c9a34]:__cxa_throw+0xb0) [0x6412590c9a34]
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x64125912ecb0] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x641259871995] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x64125986ebab] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824a5) [0x6412595974a5] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x584295) [0x641259599295] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ad0) [0x641259575ad0] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x641259507179] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96c9) [0x6412595ee6c9] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x5d9f2c) [0x6412595eef2c] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x4ff942) [0x641259514942] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x5269eb) [0x64125953b9eb] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x52c0f9) [0x6412595410f9] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x2eb144) [0x641259300144] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x3b315e) [0x6412593c815e] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x3cad1e) [0x6412593dfd1e] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x174edd) [0x641259189edd] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x19494f) [0x6412591a994f] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x194ed1) [0x6412591a9ed1] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x1ddf1c) [0x6412591f2f1c] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21] /src/build/release/bin/monerod(+0x1de48e) [0x6412591f348e] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22] /src/build/release/bin/monerod(+0x1688d5) [0x64125917d8d5] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23] /src/build/release/bin/monerod(+0x150897) [0x641259165897] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [24] /src/build/release/bin/monerod(+0x17810c) [0x64125918d10c] 
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [25]  0x1699f) [0x75bb557ba99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x75bb557ba99f]
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [26]  0x9cb84) [0x75bb55254b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x75bb55254b84]
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [27]  0x44) [0x75bb552e1b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x75bb552e1b64]
+2026-09-12 17:37:46.828	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-12 17:37:46.845	[RPC1]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:1316	Miner tx hash: <eb06462f49ec8714bc26205e374771973f408cdd21ee6a19c03cbf6ad818b298>
+2026-09-12 17:37:46.845	[RPC1]	ERROR	verify	src/cryptonote_core/blockchain.cpp:1371	coinbase transaction spend too much money (35.184372088831). Block reward is 0.900000000000(0.900000000000+0.000000000000), cumulative_block_weight 82
+2026-09-12 17:37:46.845	[RPC1]	ERROR	verify	src/cryptonote_core/blockchain.cpp:4421	Block with id: <091875cbadc81208c47a2e154c26488c255f4eb8dbcfd9fde970666127175dfc> has incorrect miner transaction
+2026-09-12 17:37:46.852	[RPC1]	ERROR	cn	src/cryptonote_core/cryptonote_core.cpp:1311	mined block failed verification
+2026-09-12 17:37:46.852	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF    24300    submitblock
+2026-09-12 17:37:46.852	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.852	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:153	[127.0.0.1:39576 INC] Calling RPC method submit_block
+2026-09-12 17:37:46.852	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:46.852	[RPC0]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:5100	block_batches: 1
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x6412590c9a34]:__cxa_throw+0xb0) [0x6412590c9a34]
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x64125912ecb0] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x641259871995] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x64125986ebab] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824a5) [0x6412595974a5] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x584295) [0x641259599295] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ad0) [0x641259575ad0] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x641259507179] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96c9) [0x6412595ee6c9] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x5d9f2c) [0x6412595eef2c] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x4ff942) [0x641259514942] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x5269eb) [0x64125953b9eb] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x52c0f9) [0x6412595410f9] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x2eb144) [0x641259300144] 
+2026-09-12 17:37:46.852	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x3b315e) [0x6412593c815e] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x3cad1e) [0x6412593dfd1e] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x174edd) [0x641259189edd] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x19494f) [0x6412591a994f] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x194ed1) [0x6412591a9ed1] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x1ddf1c) [0x6412591f2f1c] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21] /src/build/release/bin/monerod(+0x1de48e) [0x6412591f348e] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22] /src/build/release/bin/monerod(+0x1688d5) [0x64125917d8d5] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23] /src/build/release/bin/monerod(+0x150897) [0x641259165897] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [24] /src/build/release/bin/monerod(+0x17810c) [0x64125918d10c] 
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [25]  0x1699f) [0x75bb557ba99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x75bb557ba99f]
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [26]  0x9cb84) [0x75bb55254b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x75bb55254b84]
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [27]  0x44) [0x75bb552e1b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x75bb552e1b64]
+2026-09-12 17:37:46.853	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-12 17:37:46.866	[RPC0]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:1316	Miner tx hash: <73fde9e530da7c12c620edbc63e28f80560250eb5981d43d618dfcd0555b7e9e>
+2026-09-12 17:37:46.866	[RPC0]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:1379	coinbase transaction doesn't use full amount of block reward:  spent: 600000000000,  block reward 900000000000(900000000000+0)
+2026-09-12 17:37:46.866	[RPC0]	ERROR	verify	src/cryptonote_core/blockchain.cpp:4421	Block with id: <f54ec572e52bc4882d8bb9c6ffcb921e87d60a74472dc0749a63c5e4cd2c220a> has incorrect miner transaction
+2026-09-12 17:37:46.866	[RPC0]	ERROR	cn	src/cryptonote_core/cryptonote_core.cpp:1311	mined block failed verification
+2026-09-12 17:37:46.866	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF    13925    submitblock
+2026-09-12 17:37:46.866	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.867	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:39586 INC] Calling RPC method get_last_block_header
+2026-09-12 17:37:46.867	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:46.867	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        8      fill_block_header_response
+2026-09-12 17:37:46.867	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       31    get_last_block_header
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	The daemon is running offline and will not attempt to sync to the Monero network.
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use the "help" command to see the list of available commands.
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use "help <command>" to see a command's documentation.
+2026-09-12 17:37:47.608	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-12 17:37:47.878	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:47.878	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:153	[127.0.0.1:39588 INC] Calling RPC method submit_block
+2026-09-12 17:37:47.878	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:47.878	[RPC0]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:5100	block_batches: 1
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x6412590c9a34]:__cxa_throw+0xb0) [0x6412590c9a34]
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x64125912ecb0] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x641259871995] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x64125986ebab] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824a5) [0x6412595974a5] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x584295) [0x641259599295] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ad0) [0x641259575ad0] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x641259507179] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96c9) [0x6412595ee6c9] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x5d9f2c) [0x6412595eef2c] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x4ff942) [0x641259514942] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x5269eb) [0x64125953b9eb] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x52c0f9) [0x6412595410f9] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x2eb144) [0x641259300144] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x3b315e) [0x6412593c815e] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x3cad1e) [0x6412593dfd1e] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x174edd) [0x641259189edd] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x19494f) [0x6412591a994f] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x194ed1) [0x6412591a9ed1] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x1ddf1c) [0x6412591f2f1c] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21] /src/build/release/bin/monerod(+0x1de48e) [0x6412591f348e] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22] /src/build/release/bin/monerod(+0x1688d5) [0x64125917d8d5] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23] /src/build/release/bin/monerod(+0x150897) [0x641259165897] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [24] /src/build/release/bin/monerod(+0x17810c) [0x64125918d10c] 
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [25]  0x1699f) [0x75bb557ba99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x75bb557ba99f]
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [26]  0x9cb84) [0x75bb55254b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x75bb55254b84]
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [27]  0x44) [0x75bb552e1b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x75bb552e1b64]
+2026-09-12 17:37:47.878	[RPC0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-12 17:37:47.891	[RPC0]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:1316	Miner tx hash: <eac6ff7ac6166bf553c5bc69c2c57fc80c11fe8f24d16bf3768c242edfdf203e>
+2026-09-12 17:37:47.891	[RPC0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF        0        get_long_term_block_weights
+2026-09-12 17:37:47.891	[RPC0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       14      get_next_long_term_block_weight
+2026-09-12 17:37:47.891	[RPC0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      104        get_long_term_block_weights
+2026-09-12 17:37:47.891	[RPC0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      125      update_next_cumulative_weight_limit
+2026-09-12 17:37:47.891	[RPC0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-12 17:37:47.891	[RPC0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<bdad067f4b97522c34bb405ff8646a620101b27f5fe3bc61a56d731dc7a96058>
+2026-09-12 17:37:47.891	[RPC0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<90877497ba0ba5f0f477a5fdb77af3631aa07bd4373118873a981d93a4c11c89>
+2026-09-12 17:37:47.891	[RPC0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 1, difficulty:	1
+2026-09-12 17:37:47.891	[RPC0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 0.900000000000(0.900000000000 + 0.000000000000), coinbase_weight: 81, cumulative weight: 81, 14(0/14)ms
+2026-09-12 17:37:47.891	[RPC0]	DEBUG	blockchain	src/cryptonote_core/blockchain.cpp:5725	Invalidating block template cache
+2026-09-12 17:37:47.903	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF    24970    submitblock
+2026-09-12 17:37:47.904	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:47.904	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:162	[127.0.0.1:39600 INC] Calling RPC method get_block_headers_range
+2026-09-12 17:37:47.904	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-12 17:37:47.904	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       12      fill_block_header_response
+2026-09-12 17:37:47.904	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        9      fill_block_header_response
+2026-09-12 17:37:47.904	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       80    get_block_headers_range
+2026-09-12 17:37:47.908	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1038	net_service loop stopped.
+2026-09-12 17:37:47.908	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:81	p2p net loop stopped
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::system_error
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x6412590c9a34]:__cxa_throw+0xb0) [0x6412590c9a34]
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0xaff1b) [0x6412590c4f1b] 
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x636b15) [0x64125964bb15] 
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4]  0x1699f) [0x75bb557ba99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x75bb557ba99f]
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5]  0x9cb84) [0x75bb55254b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x75bb55254b84]
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x44) [0x75bb552e1b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x75bb552e1b64]
+2026-09-12 17:37:47.909	    75bb115f86c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-12 17:37:47.909	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:84	Stopping core RPC server...
+2026-09-12 17:37:47.909	[SRV_MAIN]	INFO	global	src/daemon/daemon.cpp:288	Node stopped.
+2026-09-12 17:37:47.909	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:96	Deinitializing core RPC server...
+2026-09-12 17:37:47.909	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:91	Deinitializing p2p...
+2026-09-12 17:37:47.910	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:410	Killing the net_node
+2026-09-12 17:37:48.608	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:414	Joined extra background net_node threads
+2026-09-12 17:37:48.608	[SRV_MAIN]	INFO	global	src/daemon/core.h:102	Deinitializing core...
+2026-09-12 17:37:48.608	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:75	Stopping cryptonote protocol...
+2026-09-12 17:37:48.608	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully

@@ -1,0 +1,6 @@
+{
+  "source_drift_rejected_before_compile": true,
+  "negative_exit": 1,
+  "negative_stderr": "Traceback (most recent call last):\n  File \"/tmp/meownero-swarm-20260912-mining/spikes/p2pool/source_probe.py\", line 100, in <module>\n    build(Path(sys.argv[1]), Path(sys.argv[2]))\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/meownero-swarm-20260912-mining/spikes/p2pool/source_probe.py\", line 30, in build\n    assert hashlib.sha256((source / name).read_bytes()).hexdigest() == expected, name\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: src/block_template.cpp\n",
+  "python_ast": "pass"
+}

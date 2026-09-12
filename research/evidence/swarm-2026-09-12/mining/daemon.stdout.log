@@ -1,0 +1,111 @@
+2026-09-12 17:37:45.402	I Monero 'Fluorine Fermi' (v0.18.5.1-7b74615ab)
+2026-09-12 17:37:45.402	I Moving from main() into the daemonize now.
+2026-09-12 17:37:45.402	I Initializing cryptonote protocol...
+2026-09-12 17:37:45.402	I Cryptonote protocol initialized OK
+2026-09-12 17:37:45.402	I Initializing core...
+2026-09-12 17:37:45.402	I Loading blockchain from folder /work/node/lmdb ...
+2026-09-12 17:37:45.402	I LMDB memory map size: 1073741824
+2026-09-12 17:37:45.403	I Blockchain not loaded, generating genesis block.
+2026-09-12 17:37:45.433	D Miner tx hash: <4bc82302608dccd5ed450fb2ba4f21bcc1db633a764f26960b0d715656b5f173>
+2026-09-12 17:37:45.433	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-12 17:37:45.433	I id:	<20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8>
+2026-09-12 17:37:45.433	I PoW:	<56316d3598ed0a46c353ff818a21261f06ebc4e82aab5369be4d7f6f783ff9e3>
+2026-09-12 17:37:45.433	I HEIGHT 0, difficulty:	1
+2026-09-12 17:37:45.434	I block reward: 0.000000000000(0.000000000000 + 0.000000000000), coinbase_weight: 75, cumulative weight: 75, 15(0/15)ms
+2026-09-12 17:37:45.434	D Invalidating block template cache
+2026-09-12 17:37:45.434	I batch transaction mode already enabled, but asked to enable batch mode
+2026-09-12 17:37:45.434	I batch transactions enabled
+2026-09-12 17:37:45.434	I RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-12 17:37:45.434	I Blockchain initialized. last block: 0, d4530.h6.m48.s52 time ago, current difficulty: 1
+2026-09-12 17:37:45.434	I RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-12 17:37:45.434	I Validating txpool contents for v16
+2026-09-12 17:37:45.434	I Loading checkpoints
+2026-09-12 17:37:45.434	I Core initialized OK
+2026-09-12 17:37:45.434	I Initializing p2p server...
+2026-09-12 17:37:45.436	I Setting LIMIT: 8192 kbps
+2026-09-12 17:37:45.436	I Set limit-up to 8192 kB/s
+2026-09-12 17:37:45.436	I Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	I Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	I Set limit-down to 32768 kB/s
+2026-09-12 17:37:45.436	I Setting LIMIT: 8192 kbps
+2026-09-12 17:37:45.436	I Set limit-up to 8192 kB/s
+2026-09-12 17:37:45.436	I Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	I Setting LIMIT: 32768 kbps
+2026-09-12 17:37:45.436	I Set limit-down to 32768 kB/s
+2026-09-12 17:37:45.436	I Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-12 17:37:45.436	I p2p server initialized OK
+2026-09-12 17:37:45.436	I Initializing core RPC server...
+2026-09-12 17:37:45.436	I Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-12 17:37:45.436	I Binding on 127.0.0.1 (IPv4):19081
+2026-09-12 17:37:45.458	I Generating SSL certificate
+2026-09-12 17:37:45.806	I RandomX main cache initialized
+2026-09-12 17:37:46.606	I core RPC server initialized OK on port: 19081
+2026-09-12 17:37:46.607	I ZMQ now listening at tcp://127.0.0.1:19082
+2026-09-12 17:37:46.607	I ZMQ now listening at tcp://127.0.0.1:19083
+2026-09-12 17:37:46.607	I ZMQ now listening at inproc://pub_relay
+2026-09-12 17:37:46.607	I Starting core RPC server...
+2026-09-12 17:37:46.607	I Run net_service loop( 2 threads)...
+2026-09-12 17:37:46.607	I core RPC server started ok
+2026-09-12 17:37:46.607	I Starting p2p net loop...
+2026-09-12 17:37:46.607	I ZMQ Server started
+2026-09-12 17:37:46.607	I Run net_service loop( 10 threads)...
+2026-09-12 17:37:46.820	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.820	I [127.0.0.1:39510 INC] Calling RPC method get_info
+2026-09-12 17:37:46.821	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.821	I [127.0.0.1:39526 INC] Calling RPC method get_version
+2026-09-12 17:37:46.822	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.822	I [127.0.0.1:39542 INC] Calling RPC method get_block_header_by_height
+2026-09-12 17:37:46.823	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.823	I [127.0.0.1:39544 INC] Calling RPC method get_miner_data
+2026-09-12 17:37:46.826	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.826	I [127.0.0.1:39556 INC] Calling RPC method get_block_template
+2026-09-12 17:37:46.826	D Setting block template cache
+2026-09-12 17:37:46.827	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.827	I [127.0.0.1:39562 INC] Calling RPC method submit_block
+2026-09-12 17:37:46.827	D block_batches: 1
+2026-09-12 17:37:46.845	D Miner tx hash: <eb06462f49ec8714bc26205e374771973f408cdd21ee6a19c03cbf6ad818b298>
+2026-09-12 17:37:46.845	E coinbase transaction spend too much money (35.184372088831). Block reward is 0.900000000000(0.900000000000+0.000000000000), cumulative_block_weight 82
+2026-09-12 17:37:46.845	E Block with id: <091875cbadc81208c47a2e154c26488c255f4eb8dbcfd9fde970666127175dfc> has incorrect miner transaction
+2026-09-12 17:37:46.852	E mined block failed verification
+2026-09-12 17:37:46.852	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.852	I [127.0.0.1:39576 INC] Calling RPC method submit_block
+2026-09-12 17:37:46.852	D block_batches: 1
+2026-09-12 17:37:46.866	D Miner tx hash: <73fde9e530da7c12c620edbc63e28f80560250eb5981d43d618dfcd0555b7e9e>
+2026-09-12 17:37:46.866	D coinbase transaction doesn't use full amount of block reward:  spent: 600000000000,  block reward 900000000000(900000000000+0)
+2026-09-12 17:37:46.866	E Block with id: <f54ec572e52bc4882d8bb9c6ffcb921e87d60a74472dc0749a63c5e4cd2c220a> has incorrect miner transaction
+2026-09-12 17:37:46.866	E mined block failed verification
+2026-09-12 17:37:46.866	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:46.867	I [127.0.0.1:39586 INC] Calling RPC method get_last_block_header
+2026-09-12 17:37:47.608	I 
+2026-09-12 17:37:47.608	I **********************************************************************
+2026-09-12 17:37:47.608	I The daemon is running offline and will not attempt to sync to the Monero network.
+2026-09-12 17:37:47.608	I 
+2026-09-12 17:37:47.608	I You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-12 17:37:47.608	I where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-12 17:37:47.608	I 
+2026-09-12 17:37:47.608	I Use the "help" command to see the list of available commands.
+2026-09-12 17:37:47.608	I Use "help <command>" to see a command's documentation.
+2026-09-12 17:37:47.608	I **********************************************************************
+2026-09-12 17:37:47.878	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:47.878	I [127.0.0.1:39588 INC] Calling RPC method submit_block
+2026-09-12 17:37:47.878	D block_batches: 1
+2026-09-12 17:37:47.891	D Miner tx hash: <eac6ff7ac6166bf553c5bc69c2c57fc80c11fe8f24d16bf3768c242edfdf203e>
+2026-09-12 17:37:47.891	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-12 17:37:47.891	I id:	<bdad067f4b97522c34bb405ff8646a620101b27f5fe3bc61a56d731dc7a96058>
+2026-09-12 17:37:47.891	I PoW:	<90877497ba0ba5f0f477a5fdb77af3631aa07bd4373118873a981d93a4c11c89>
+2026-09-12 17:37:47.891	I HEIGHT 1, difficulty:	1
+2026-09-12 17:37:47.891	I block reward: 0.900000000000(0.900000000000 + 0.000000000000), coinbase_weight: 81, cumulative weight: 81, 14(0/14)ms
+2026-09-12 17:37:47.891	D Invalidating block template cache
+2026-09-12 17:37:47.904	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-12 17:37:47.904	I [127.0.0.1:39600 INC] Calling RPC method get_block_headers_range
+2026-09-12 17:37:47.908	I net_service loop stopped.
+2026-09-12 17:37:47.908	I p2p net loop stopped
+2026-09-12 17:37:47.909	I Stopping core RPC server...
+2026-09-12 17:37:47.909	I Node stopped.
+2026-09-12 17:37:47.909	I Deinitializing core RPC server...
+2026-09-12 17:37:47.910	I Deinitializing p2p...
+2026-09-12 17:37:47.910	I Killing the net_node
+2026-09-12 17:37:48.608	I Joined extra background net_node threads
+2026-09-12 17:37:48.608	I Deinitializing core...
+2026-09-12 17:37:48.608	I Stopping cryptonote protocol...
+2026-09-12 17:37:48.608	I Cryptonote protocol stopped successfully

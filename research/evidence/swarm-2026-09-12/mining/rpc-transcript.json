@@ -1,0 +1,290 @@
+[
+  {
+    "method": "get_info",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "adjusted_time": 1789234666,
+        "alt_blocks_count": 0,
+        "block_size_limit": 600000,
+        "block_size_median": 300000,
+        "block_weight_limit": 600000,
+        "block_weight_median": 300000,
+        "bootstrap_daemon_address": "",
+        "busy_syncing": false,
+        "credits": 0,
+        "cumulative_difficulty": 1,
+        "cumulative_difficulty_top64": 0,
+        "database_size": 86016,
+        "difficulty": 1,
+        "difficulty_top64": 0,
+        "free_space": 41230942208,
+        "grey_peerlist_size": 0,
+        "height": 1,
+        "height_without_bootstrap": 1,
+        "incoming_connections_count": 0,
+        "mainnet": true,
+        "nettype": "mainnet",
+        "offline": true,
+        "outgoing_connections_count": 0,
+        "restricted": false,
+        "rpc_connections_count": 1,
+        "stagenet": false,
+        "start_time": 1789234665,
+        "status": "OK",
+        "synchronized": true,
+        "target": 120,
+        "target_height": 0,
+        "testnet": false,
+        "top_block_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+        "top_hash": "",
+        "tx_count": 0,
+        "tx_pool_size": 0,
+        "untrusted": false,
+        "update_available": false,
+        "version": "0.18.5.1-7b74615ab",
+        "was_bootstrap_ever_used": false,
+        "white_peerlist_size": 0,
+        "wide_cumulative_difficulty": "0x1",
+        "wide_difficulty": "0x1"
+      }
+    }
+  },
+  {
+    "method": "get_version",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "current_height": 1,
+        "hard_forks": [
+          {
+            "height": 0,
+            "hf_version": 1
+          },
+          {
+            "height": 1,
+            "hf_version": 16
+          }
+        ],
+        "release": false,
+        "status": "OK",
+        "untrusted": false,
+        "version": 196624
+      }
+    }
+  },
+  {
+    "method": "get_block_header_by_height",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "block_header": {
+          "block_size": 75,
+          "block_weight": 75,
+          "cumulative_difficulty": 1,
+          "cumulative_difficulty_top64": 0,
+          "depth": 0,
+          "difficulty": 1,
+          "difficulty_top64": 0,
+          "hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+          "height": 0,
+          "long_term_weight": 75,
+          "major_version": 1,
+          "miner_tx_hash": "4bc82302608dccd5ed450fb2ba4f21bcc1db633a764f26960b0d715656b5f173",
+          "minor_version": 0,
+          "nonce": 90000,
+          "num_txes": 0,
+          "orphan_status": false,
+          "pow_hash": "",
+          "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "reward": 0,
+          "timestamp": 0,
+          "wide_cumulative_difficulty": "0x1",
+          "wide_difficulty": "0x1"
+        },
+        "credits": 0,
+        "status": "OK",
+        "top_hash": "",
+        "untrusted": false
+      }
+    }
+  },
+  {
+    "method": "get_miner_data",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "already_generated_coins": 0,
+        "difficulty": "0x1",
+        "height": 1,
+        "major_version": 16,
+        "median_weight": 300000,
+        "prev_id": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+        "seed_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+        "status": "OK",
+        "untrusted": false
+      }
+    }
+  },
+  {
+    "method": "get_block_template",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "blockhashing_blob": "1010ea9b96d50620ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d800000000eac6ff7ac6166bf553c5bc69c2c57fc80c11fe8f24d16bf3768c242edfdf203e01",
+        "blocktemplate_blob": "1010ea9b96d50620ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d800000000023d01ff010180d0b8e1981a033ad3711d54f78d8b7f8d1963986d199edfc3ea4f0fb942b60f21e68bd0ee91d13021016318492f0087d6cfb337fbd58afcf17033083dbb9e78b3799304c242a5165a5c0000",
+        "difficulty": 1,
+        "difficulty_top64": 0,
+        "expected_reward": 900000000000,
+        "height": 1,
+        "next_seed_hash": "",
+        "prev_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+        "reserved_offset": 0,
+        "seed_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+        "seed_height": 0,
+        "status": "OK",
+        "untrusted": false,
+        "wide_difficulty": "0x1"
+      }
+    }
+  },
+  {
+    "method": "submit_block",
+    "response": {
+      "error": {
+        "code": -7,
+        "message": "Block not accepted"
+      },
+      "id": "0",
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "method": "submit_block",
+    "response": {
+      "error": {
+        "code": -7,
+        "message": "Block not accepted"
+      },
+      "id": "0",
+      "jsonrpc": "2.0"
+    }
+  },
+  {
+    "method": "get_last_block_header",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "block_header": {
+          "block_size": 75,
+          "block_weight": 75,
+          "cumulative_difficulty": 1,
+          "cumulative_difficulty_top64": 0,
+          "depth": 0,
+          "difficulty": 1,
+          "difficulty_top64": 0,
+          "hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+          "height": 0,
+          "long_term_weight": 75,
+          "major_version": 1,
+          "miner_tx_hash": "4bc82302608dccd5ed450fb2ba4f21bcc1db633a764f26960b0d715656b5f173",
+          "minor_version": 0,
+          "nonce": 90000,
+          "num_txes": 0,
+          "orphan_status": false,
+          "pow_hash": "",
+          "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "reward": 0,
+          "timestamp": 0,
+          "wide_cumulative_difficulty": "0x1",
+          "wide_difficulty": "0x1"
+        },
+        "credits": 0,
+        "status": "OK",
+        "top_hash": "",
+        "untrusted": false
+      }
+    }
+  },
+  {
+    "method": "submit_block",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "block_id": "bdad067f4b97522c34bb405ff8646a620101b27f5fe3bc61a56d731dc7a96058",
+        "status": "OK",
+        "untrusted": false
+      }
+    }
+  },
+  {
+    "method": "get_block_headers_range",
+    "response": {
+      "id": "0",
+      "jsonrpc": "2.0",
+      "result": {
+        "credits": 0,
+        "headers": [
+          {
+            "block_size": 75,
+            "block_weight": 75,
+            "cumulative_difficulty": 1,
+            "cumulative_difficulty_top64": 0,
+            "depth": 1,
+            "difficulty": 1,
+            "difficulty_top64": 0,
+            "hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+            "height": 0,
+            "long_term_weight": 75,
+            "major_version": 1,
+            "miner_tx_hash": "4bc82302608dccd5ed450fb2ba4f21bcc1db633a764f26960b0d715656b5f173",
+            "minor_version": 0,
+            "nonce": 90000,
+            "num_txes": 0,
+            "orphan_status": false,
+            "pow_hash": "",
+            "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+            "reward": 0,
+            "timestamp": 0,
+            "wide_cumulative_difficulty": "0x1",
+            "wide_difficulty": "0x1"
+          },
+          {
+            "block_size": 81,
+            "block_weight": 81,
+            "cumulative_difficulty": 2,
+            "cumulative_difficulty_top64": 0,
+            "depth": 0,
+            "difficulty": 1,
+            "difficulty_top64": 0,
+            "hash": "bdad067f4b97522c34bb405ff8646a620101b27f5fe3bc61a56d731dc7a96058",
+            "height": 1,
+            "long_term_weight": 176470,
+            "major_version": 16,
+            "miner_tx_hash": "eac6ff7ac6166bf553c5bc69c2c57fc80c11fe8f24d16bf3768c242edfdf203e",
+            "minor_version": 16,
+            "nonce": 0,
+            "num_txes": 0,
+            "orphan_status": false,
+            "pow_hash": "",
+            "prev_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+            "reward": 900000000000,
+            "timestamp": 1789234666,
+            "wide_cumulative_difficulty": "0x2",
+            "wide_difficulty": "0x1"
+          }
+        ],
+        "status": "OK",
+        "top_hash": "",
+        "untrusted": false
+      }
+    }
+  }
+]

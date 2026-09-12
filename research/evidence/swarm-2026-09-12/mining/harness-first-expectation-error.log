@@ -1,0 +1,8 @@
+Waiting for shared heavy lock (one small compiler process, then one daemon).
+Traceback (most recent call last):
+  File "/harness/source_probe.py", line 99, in <module>
+    build(Path(sys.argv[1]), Path(sys.argv[2]))
+  File "/harness/source_probe.py", line 87, in build
+    assert actual == {'reward': expected_reward, 'major_version': expected_version}, actual
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'reward': 35184370372218, 'major_version': 1}

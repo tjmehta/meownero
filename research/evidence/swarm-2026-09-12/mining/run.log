@@ -1,0 +1,98 @@
+Waiting for shared heavy lock (one small compiler process, then one daemon).
+{
+  "source_sha256_verified": 19,
+  "compiled_cases": [
+    {
+      "supply": 0,
+      "height": 1,
+      "network": 0,
+      "reward": 35184372088831,
+      "major_version": 1
+    },
+    {
+      "supply": 900000000000,
+      "height": 2,
+      "network": 0,
+      "reward": 35184370372218,
+      "major_version": 1
+    },
+    {
+      "supply": 18446744073709551615,
+      "height": 2689608,
+      "network": 0,
+      "reward": 600000000000,
+      "major_version": 16
+    },
+    {
+      "supply": 0,
+      "height": 1009826,
+      "network": 0,
+      "reward": 35184372088831,
+      "major_version": 1
+    },
+    {
+      "supply": 0,
+      "height": 1009827,
+      "network": 0,
+      "reward": 35184372088831,
+      "major_version": 2
+    },
+    {
+      "supply": 0,
+      "height": 1983520,
+      "network": 1,
+      "reward": 35184372088831,
+      "major_version": 16
+    },
+    {
+      "supply": 0,
+      "height": 1151720,
+      "network": 2,
+      "reward": 35184372088831,
+      "major_version": 16
+    }
+  ],
+  "source_guards": [
+    "Monero-only one-byte prefixes",
+    "95-character addresses",
+    "historical hardfork equality",
+    "0.6 minimum share reward",
+    "tagged coinbase outputs",
+    "60-block coinbase unlock"
+  ],
+  "compatible": false,
+  "scope": "two exact compiled routines plus static source guards"
+}
+{
+  "compatible": false,
+  "pool_started": false,
+  "native_daa": true,
+  "fixed_difficulty_override": false,
+  "genesis": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+  "daemon_network_label": "mainnet",
+  "offline_synchronized": true,
+  "p2pool_reward_at_height_1": 35184372088831,
+  "meownero_reward_at_height_1": 900000000000,
+  "p2pool_version_at_height_1": 1,
+  "meownero_version_at_height_1": 16,
+  "p2pool_amount_mutation_rejected": {
+    "code": -7,
+    "message": "Block not accepted"
+  },
+  "tail_amount_mutation_rejected": {
+    "code": -7,
+    "message": "Block not accepted"
+  },
+  "original_template_accepted": true,
+  "zmq_miner_height": 2,
+  "rpc_methods_exercised": [
+    "get_block_header_by_height",
+    "get_block_headers_range",
+    "get_block_template",
+    "get_info",
+    "get_last_block_header",
+    "get_miner_data",
+    "get_version",
+    "submit_block"
+  ]
+}
