@@ -1,0 +1,5 @@
+/out/reporting-probe.cpp: In lambda function:
+/out/reporting-probe.cpp:78:83: warning: unused parameter ‘hash’ [-Wunused-parameter]
+   78 |         [this, &emission_amount, &total_fee_amount](uint64_t, const crypto::hash& hash, const block& b){
+      |                                                               ~~~~~~~~~~~~~~~~~~~~^~~~
+40 reporting cases passed; synthetic storage, not full-node integration

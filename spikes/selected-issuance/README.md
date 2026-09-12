@@ -43,3 +43,25 @@ primitive reward continuity passes but full-system reporting/aggregation does
 not thereby become verified. No precision change or safety-gate relaxation.
 
 [Recorded local result](../../research/evidence/swarm-2026-09-12/issuance/summary.json).
+
+## Aggregate reporting across tally saturation
+
+```sh
+bash spikes/selected-issuance/run-reporting.sh \
+  /tmp/meownero-wallet-verified-source-20260912 \
+  /tmp/meownero-reporting-new-run
+```
+
+This separate 512 MiB probe compiles the literal pinned core coinbase-sum method,
+RPC `store_128`, hexadecimal encoder and wide money formatter. Synthetic block
+storage and transactions supply both rewards, genesis, ranges crossing the u64
+boundary, partial rewards and fees. Forty cases compare exact totals, RPC low/high
+words, wide hexadecimal strings and 12-decimal CLI formatting against Python
+integers. The legacy `emission_amount` alone is only the low 64 bits; consumers
+must use `wide_emission_amount` or combine it with `emission_amount_top64`.
+
+This checks aggregation/formatting arithmetic with synthetic storage. It does
+not exercise database traversal, JSON serialization, the full RPC handler,
+wallet balances/spending, fee validation or selected daemon binaries. The
+fee-overflow fixture tests aggregate formatting, not consensus acceptance of
+extreme fees. Historical sources and production patches stay unchanged.

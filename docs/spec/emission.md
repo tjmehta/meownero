@@ -76,6 +76,13 @@ a successful reward primitive does not establish whole-system readiness.
 The mathematical cumulative totals above are not representable in that u64
 atomic-unit tally after saturation. Lower precision has not been selected.
 
+The [aggregate-reporting probe](../../spikes/selected-issuance/README.md#aggregate-reporting-across-tally-saturation)
+now verifies the pinned coinbase-sum method and RPC/CLI amount formatting with
+synthetic storage across this boundary (40 cases). Core aggregation uses u128;
+RPC `wide_emission_amount` and the daemon CLI preserve the full total. The legacy
+`emission_amount` field contains only its low 64 bits. This does not close actual
+database, JSON transport, wallet balance/spending or fee-validation integration.
+
 ## Evidence and presentation constraints
 
 No direct causal evidence establishes zero adoption penalty for flat issuance
