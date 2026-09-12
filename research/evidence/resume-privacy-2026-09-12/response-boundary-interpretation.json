@@ -1,0 +1,27 @@
+{
+  "result_sha256": "ea072e5d58d558ab53820884b4f7775fe64ee25098c9e3083c18a266d1e600e6",
+  "scope": "Interpretation of bounded hostile-response probes; raw result.json and stdout are unchanged.",
+  "oversized_responses": [
+    {
+      "case": "malicious_oversized_hex",
+      "body_bytes": 2097193,
+      "rejection_guard": "transaction decoding",
+      "observed_error": {
+        "code": -1,
+        "message": "Failed to get tx from daemon"
+      }
+    },
+    {
+      "case": "malicious_oversized_padding",
+      "body_bytes": 2097207,
+      "rejection_guard": "missing transaction/count",
+      "observed_error": {
+        "code": -1,
+        "message": "daemon returned wrong response for gettransactions, wrong txs count = 0, expected 1"
+      }
+    }
+  ],
+  "response_size_ceiling_established": false,
+  "response_size_limit_added": false,
+  "limits": "Both roughly 2 MiB bodies were consumed before semantic rejection. These errors are not evidence of an enforced response-size ceiling or resistance to unbounded/slow/compressed responses. The container cap bounds the test workload, not wallet HTTP responses."
+}

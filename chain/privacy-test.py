@@ -12,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
 from pathlib import Path
+import re
 import select
 import socket
 import socketserver
@@ -29,6 +30,9 @@ DAEMON_PORT, PROXY_PORT, RPC_PORT, REDIRECT_PORT = 19881, 19890, 19800, 19883
 events = []
 cases = []
 mode = 'missing_tx'
+# Public source fixture; no wallet/address/key material is copied into evidence.
+GENESIS_TX = re.search(r'GENESIS_TX = "([0-9a-f]+)"',
+    Path('/src/src/cryptonote_config.h').read_text()).group(1)
 
 
 def record(name, **observations):
@@ -70,6 +74,16 @@ class Handler(BaseHTTPRequestHandler):
                 payload['txs'] = [{'as_hex': '00'}, {'as_hex': '00'}]
             elif mode == 'invalid_tx':
                 payload['txs'] = [{'as_hex': 'zz', 'pruned_as_hex': 'zz'}]
+            elif mode == 'valid_tx_wrong_hash':
+                payload['txs'] = [{'as_hex': GENESIS_TX}]
+            elif mode == 'truncated_valid_hex':
+                payload['txs'] = [{'as_hex': GENESIS_TX[:-2]}]
+            elif mode == 'oversized_hex':
+                payload['txs'] = [{'as_hex': '00' * (1024 * 1024)}]
+            elif mode == 'oversized_padding':
+                payload['unrecognized_padding'] = 'x' * (2 * 1024 * 1024)
+            elif mode == 'wrong_txs_type':
+                payload['txs'] = 'valid-looking-but-not-an-array'
             if mode == 'malformed_json':
                 raw = b'{"status":"OK","txs":['
             elif mode == 'redirect':
@@ -89,9 +103,14 @@ class Handler(BaseHTTPRequestHandler):
             raw = b'{"status":"BUSY"}'
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
-        self.send_header('Content-Length', str(len(raw)))
+        truncated = self.path == '/gettransactions' and mode == 'short_http_body'
+        self.send_header('Content-Length', str(len(raw) + (128 if truncated else 0)))
+        if truncated:
+            self.send_header('Connection', 'close')
+            self.close_connection = True
         self.end_headers()
         self.wfile.write(raw)
+        events.append({'kind': 'response_sent', 'mode': mode, 'body_bytes': len(raw)})
 
 
 class RedirectTrap(socketserver.BaseRequestHandler):
@@ -228,7 +247,7 @@ def failure(opener):
 
 
 @contextmanager
-def wallet(name, direct=False, fingerprint=None, hostname='127.0.0.1'):
+def wallet(name, direct=False, fingerprint=None, hostname='127.0.0.1', restricted_wallet=None):
     state = WORK / name
     state.mkdir(mode=0o700)
     if not direct:
@@ -244,9 +263,14 @@ def wallet(name, direct=False, fingerprint=None, hostname='127.0.0.1'):
         argv = ['python3', '-B', LAUNCHER, '--binary', BIN, '--state-dir', str(state),
                 '--rpc-port', str(RPC_PORT), '--proxy', f'127.0.0.1:{PROXY_PORT}',
                 '--daemon', address, '--daemon-fingerprint', fingerprint or pin]
+        if restricted_wallet:
+            password_file = state / 'password'
+            password_file.write_text('disposable\n')
+            password_file.chmod(0o600)
+            argv += ['--restricted-wallet', str(restricted_wallet), '--password-file', str(password_file)]
     with (state / 'stdout.log').open('w') as log:
         environment = os.environ.copy()
-        if name == 'openalias-boundary':
+        if name in ('openalias-boundary', 'restricted-controller'):
             # Route this boundary probe only to our local resolver using the
             # pinned upstream override; no system DNS or public fallback probe.
             environment['DNS_PUBLIC'] = 'tcp://127.0.0.1'
@@ -273,11 +297,13 @@ def wallet(name, direct=False, fingerprint=None, hostname='127.0.0.1'):
         except urllib.error.HTTPError as error:
             assert error.code == 401
         assert (state / f'monero-wallet-rpc.{RPC_PORT}.login').stat().st_mode & 0o077 == 0
-        ok(opener, 'create_wallet', {'filename': 'disposable', 'password': 'disposable', 'language': 'English'})
-        ok(opener, 'auto_refresh', {'enable': False})
+        if not restricted_wallet:
+            ok(opener, 'create_wallet', {'filename': 'disposable', 'password': 'disposable', 'language': 'English'})
+            ok(opener, 'auto_refresh', {'enable': False})
         if not direct:
             rejected = request(opener, 'start_mining', {'threads_count': 1})
-            assert 'error' in rejected and 'trusted' in rejected['error']['message'].lower(), rejected
+            expected = 'restricted' if restricted_wallet else 'trusted'
+            assert 'error' in rejected and expected in rejected['error']['message'].lower(), rejected
         yield opener
     finally:
         process.terminate()
@@ -327,12 +353,39 @@ try:
                (['--daemon', 'https://observer.invalid:18081\n'], 'url_whitespace'),
                (['--daemon', 'http://short.onion:18081'], 'bad_onion'),
                (['--trusted-daemon'], 'trust_override'), (['--config-file', '/dev/null'], 'config_override'),
+               (['--restricted-wallet', '/missing'], 'restricted_missing_password'),
+               (['--password-file', '/missing'], 'password_without_restricted_wallet'),
+               (['--restricted-wallet', '/missing', '--password-file', '/missing'], 'restricted_missing_files'),
                (['--disable-rpc-login'], 'auth_override'), (['--pro', '127.0.0.1:9050'], 'abbreviated_override')]
     for extra, name in invalid:
         result = subprocess.run(base + extra, capture_output=True, timeout=3)
         assert result.returncode == 2, (name, result.returncode)
         assert not (WORK / 'refused').exists(), name
         record('refusal_' + name, exit_code=result.returncode)
+    inputs = WORK / 'restricted-input-refusals'
+    inputs.mkdir(mode=0o700)
+    input_files = [inputs / name for name in ('wallet', 'wallet.keys', 'password')]
+    for path in input_files:
+        path.write_text('synthetic refusal fixture; no wallet or secret')
+        path.chmod(0o600)
+    restricted_args = ['--restricted-wallet', str(input_files[0]), '--password-file', str(input_files[2])]
+    for path in input_files:
+        path.chmod(0o644)
+        result = subprocess.run(base + restricted_args, capture_output=True, timeout=3)
+        assert result.returncode == 2 and b'private regular files' in result.stderr, path.name
+        assert not (WORK / 'refused').exists()
+        record('refusal_public_' + path.name, exit_code=2)
+        path.chmod(0o600)
+    input_files[2].unlink()
+    os.mkfifo(input_files[2], mode=0o600)
+    result = subprocess.run(base + restricted_args, capture_output=True, timeout=3)
+    assert result.returncode == 2 and b'private regular files' in result.stderr
+    assert not (WORK / 'refused').exists()
+    record('refusal_password_fifo_without_reading', exit_code=2)
+    input_files[1].unlink()
+    result = subprocess.run(base + restricted_args, capture_output=True, timeout=3)
+    assert result.returncode == 2 and not (WORK / 'refused').exists()
+    record('refusal_missing_wallet_keys', exit_code=2)
     assert not events
 
     with wallet('direct-control', direct=True) as rpc:
@@ -361,15 +414,22 @@ try:
     proxy_server = serve(Server(('127.0.0.1', PROXY_PORT), Socks))
     events.clear()
     with wallet('live-proxy') as rpc:
-        for attack in ['missing_tx', 'duplicate_tx', 'invalid_tx', 'malformed_json', 'redirect']:
+        for attack in ['missing_tx', 'duplicate_tx', 'invalid_tx', 'malformed_json', 'redirect',
+                       'valid_tx_wrong_hash', 'truncated_valid_hex', 'oversized_hex',
+                       'oversized_padding', 'wrong_txs_type', 'short_http_body']:
             mode = attack
             before = len(events)
+            attack_started = time.monotonic()
             error = failure(rpc)
             observed = events[before:]
             assert any(e.get('path') == '/gettransactions' and e.get('mode') == attack for e in observed)
             assert not counts().get('direct_tcp') and not counts().get('redirect_tcp')
+            if attack == 'valid_tx_wrong_hash':
+                assert 'right transaction' in error['message'], error
             record('malicious_' + attack, error=error, wallet_alive=True, balance_atomic=0,
-                   direct_connections=0, redirect_connections=0)
+                   direct_connections=0, redirect_connections=0,
+                   duration_seconds=round(time.monotonic() - attack_started, 3),
+                   response_body_bytes=max((e.get('body_bytes', 0) for e in observed), default=0))
         assert counts().get('socks_connect', 0) > 0 and counts().get('proxied_tcp', 0) > 0
         record('live_proxy_control', counts=counts())
         # The authenticated controller can relax trust and TLS at runtime. Record
@@ -404,6 +464,43 @@ try:
         record('hostname_sent_to_proxy', counts=counts(), host='observer.invalid')
     events.clear()
     dns_server = serve(Server(('127.0.0.1', 53), DnsTrap))
+    # Reopen a real disposable wallet. Restricted RPC cannot create/open wallets;
+    # the launcher must load it at startup for this control to be useful.
+    with wallet('restricted-controller', restricted_wallet=WORK / 'live-proxy/wallets/disposable') as rpc:
+        assert ok(rpc, 'get_balance')['balance'] == 0
+        for name, method, params in [
+            ('daemon_tls_trust_change', 'set_daemon', {'address': f'http://127.0.0.1:{REDIRECT_PORT}', 'trusted': True,
+                            'ssl_support': 'disabled', 'ssl_allow_any_cert': True}),
+            ('daemon_proxy_change', 'set_daemon', {'address': f'https://observer.invalid:{DAEMON_PORT}',
+                            'proxy': '127.0.0.1:19999'}),
+            ('create_wallet', 'create_wallet', {'filename': 'forbidden', 'password': 'disposable', 'language': 'English'}),
+            ('open_wallet', 'open_wallet', {'filename': 'disposable', 'password': 'disposable'}),
+            ('transfer', 'transfer', {'destinations': [{'address': 'privacy-observer.example.com', 'amount': 1}]}),
+            ('query_key', 'query_key', {'key_type': 'mnemonic'})]:
+            before_dns = counts().get('dns_query', 0)
+            rejected = request(rpc, method, params)
+            assert rejected.get('error', {}).get('code') == -7, (method, rejected)
+            assert 'restricted' in rejected['error']['message'].lower(), (method, rejected)
+            assert counts().get('dns_query', 0) == before_dns
+            record('restricted_denies_' + name, method=method, error=rejected['error'], dns_queries=0)
+        error = failure(rpc)
+        assert counts().get('proxied_tcp', 0) > 0 and not counts().get('direct_tcp')
+        assert not counts().get('redirect_tcp')
+        record('restricted_wallet_loaded_and_original_daemon_retained', error=error,
+               wallet_alive=True, balance_atomic=0, direct_connections=0, redirect_connections=0)
+        address = ok(rpc, 'get_address')['address']
+        before_dns = counts().get('dns_query', 0)
+        assert ok(rpc, 'validate_address', {'address': address, 'allow_openalias': False})['valid']
+        assert not ok(rpc, 'validate_address', {'address': 'privacy-observer.example.com',
+                                               'allow_openalias': False})['valid']
+        assert counts().get('dns_query', 0) == before_dns
+        record('restricted_literal_address_validation', native_address_valid=True, alias_valid=False, dns_queries=0)
+        assert not ok(rpc, 'validate_address', {'address': 'privacy-observer.example.com',
+                                               'allow_openalias': True})['valid']
+        assert counts().get('dns_query', 0) > before_dns
+        record('restricted_openalias_still_uses_dns', dns_queries=counts().get('dns_query', 0) - before_dns,
+               scope='native restricted RPC is not an OpenAlias or process-egress boundary')
+    events.clear()
     with wallet('openalias-boundary') as rpc:
         before = counts().get('dns_query', 0)
         result = ok(rpc, 'validate_address', {'address': 'privacy-observer.example.com',

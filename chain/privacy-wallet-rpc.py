@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Startup wallet-to-daemon controls for the pinned wallet RPC, NOT a network sandbox.
 
-The authenticated local RPC controller can change TLS/trust with set_daemon.
+The default administrative RPC controller can change TLS/trust with set_daemon.
+--restricted-wallet opens an existing wallet with upstream restricted RPC,
+which denies set_daemon and spending/management commands even after login.
 OpenAlias RPC/address lookups can use DNS outside SOCKS despite --no-dns.
 Use literal native addresses in the controlling application; application-level
 OpenAlias enforcement remains unimplemented. No process-wide anonymity claim.
@@ -63,9 +65,25 @@ def main():
     parser.add_argument("--proxy", required=True, type=proxy)
     parser.add_argument("--daemon", required=True)
     parser.add_argument("--daemon-fingerprint")
+    parser.add_argument("--restricted-wallet", type=Path,
+                        help="open an existing wallet with native restricted RPC (no create/open/transfer/set_daemon)")
+    parser.add_argument("--password-file", type=Path,
+                        help="private password file, required only with --restricted-wallet")
     args = parser.parse_args()
     try:
         address, tls = daemon(args.daemon, args.daemon_fingerprint)
+        if bool(args.restricted_wallet) != bool(args.password_file):
+            raise ValueError("--restricted-wallet and --password-file must be supplied together")
+        wallet_args = None
+        if args.restricted_wallet:
+            wallet_file = args.restricted_wallet.resolve(strict=True)
+            password_file = args.password_file.resolve(strict=True)
+            for path in (wallet_file, Path(str(wallet_file) + ".keys"), password_file):
+                info = path.stat()
+                if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) & 0o077:
+                    raise ValueError("wallet, keys and password must be private regular files owned by this user")
+            wallet_args = ["--wallet-file", str(wallet_file), "--password-file", str(password_file),
+                           "--restricted-rpc"]
         binary = args.binary.resolve(strict=True)
         if not binary.is_file() or not os.access(binary, os.X_OK):
             raise ValueError("binary must be an executable file")
@@ -78,7 +96,7 @@ def main():
     except (OSError, ValueError, argparse.ArgumentTypeError) as error:
         parser.error(str(error))
     os.chdir(state)
-    argv = [str(binary), "--wallet-dir", str(state / "wallets"),
+    argv = [str(binary), *(wallet_args or ["--wallet-dir", str(state / "wallets")]),
             "--rpc-bind-ip", "127.0.0.1", "--rpc-bind-port", args.rpc_port,
             "--proxy", args.proxy, "--daemon-address", address, "--untrusted-daemon",
             "--no-dns", "--shared-ringdb-dir", str(state / "ringdb"),

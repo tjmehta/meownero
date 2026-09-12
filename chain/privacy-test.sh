@@ -13,6 +13,10 @@ trap 'docker rm -f "$NAME" >/dev/null 2>&1 || true' EXIT
 printf '%s\n' "$IMG" > "$WORK/BUILDER_IMAGE_ID"
 git -C "$SRC" rev-parse HEAD 'HEAD^{tree}' > "$WORK/SOURCE_REVISIONS"
 sha256sum "$SRC/build/release/bin/monero-wallet-rpc" > "$WORK/BINARY_SHA256"
+sha256sum "$HERE/privacy-wallet-rpc.py" "$HERE/privacy-test.py" "$HERE/privacy-test.sh" \
+  "$SRC/src/wallet/wallet_rpc_server.cpp" "$SRC/src/wallet/wallet2.cpp" \
+  "$SRC/src/cryptonote_config.h" "$SRC/contrib/epee/include/net/http_client.h" \
+  > "$WORK/INPUT_SHA256"
 docker run --rm --name "$NAME" --network none --memory 512m --memory-swap 512m \
   --cpus 1 --pids-limit 128 --cap-drop ALL --security-opt no-new-privileges \
   --user "$(id -u):$(id -g)" \
