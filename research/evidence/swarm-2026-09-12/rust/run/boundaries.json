@@ -1,0 +1,68 @@
+[
+  {
+    "name": "intermediate-overflow-quotient-fits",
+    "input": "2 0 1 120 2835686391007820528861455061931401764",
+    "oracle": "2835686391007820528861455061931401763",
+    "results": {
+      "cpp": {
+        "exit": 0,
+        "stdout": "2835686391007820528861455061931401763\n",
+        "stderr": ""
+      },
+      "rust-release": {
+        "exit": 0,
+        "stdout": "1\n",
+        "stderr": ""
+      },
+      "rust-checked": {
+        "exit": -6,
+        "stdout": "",
+        "stderr": "\nthread 'main' (69) panicked at /out/extracted.rs:135:5:\nattempt to multiply with overflow\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      }
+    }
+  },
+  {
+    "name": "result-overflow-sentinel",
+    "input": "2 0 1 1 2835686391007820528861455061931401764",
+    "oracle": "0",
+    "results": {
+      "cpp": {
+        "exit": 0,
+        "stdout": "0\n",
+        "stderr": ""
+      },
+      "rust-release": {
+        "exit": 0,
+        "stdout": "104\n",
+        "stderr": ""
+      },
+      "rust-checked": {
+        "exit": -6,
+        "stdout": "",
+        "stderr": "\nthread 'main' (72) panicked at /out/extracted.rs:135:5:\nattempt to multiply with overflow\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      }
+    }
+  },
+  {
+    "name": "large-intermediate",
+    "input": "2 0 1 18446744073709551615 170141183460469231731687303715884105728",
+    "oracle": "1106804644422573097020",
+    "results": {
+      "cpp": {
+        "exit": 0,
+        "stdout": "1106804644422573097020\n",
+        "stderr": ""
+      },
+      "rust-release": {
+        "exit": 0,
+        "stdout": "18446744073709551617\n",
+        "stderr": ""
+      },
+      "rust-checked": {
+        "exit": -6,
+        "stdout": "",
+        "stderr": "\nthread 'main' (75) panicked at /out/extracted.rs:135:5:\nattempt to multiply with overflow\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      }
+    }
+  }
+]
