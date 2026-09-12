@@ -8,7 +8,37 @@ executes the narrow compatibility boundary without modifying production patches.
 The [track report](../../research/swarm-mining-2026-09-12.md) maps the exact gaps
 and distinguishes executed checks from source inspection.
 
-## Reproduce
+## Selected 9/90 and fallback 12/120 source adaptation
+
+The historical runner below predates the selected issuance policy. The new
+[resumed report](../../research/resume-mining-2026-09-12.md) records an isolated
+mainnet profile adaptation of the pinned reward and address routines, unchanged
+fork lookup linked against Meownero's table, and genesis/sharechain refusal.
+It remains **incompatible as a full pool**; no P2Pool process or payout is tested.
+
+```sh
+bash spikes/p2pool/run-selected.sh \
+  /tmp/meow-swarm-mining-p2pool-source \
+  /tmp/meownero-wallet-verified-source-20260912 \
+  <repo>/spikes/selected-issuance \
+  /tmp/meownero-mining-selected-YOUR_UNIQUE_SUFFIX
+```
+
+The coordinator's overlays are read-only inputs, applied and reversed only in
+the new output directory. All consumed upstream/overlay files are hash-pinned.
+This bounded source compilation uses the authorized lightweight exception:
+512 MiB, no swap, half a CPU, low CPU shares, one compiler job and no network.
+It does not take the heavy lock from network reproduction. Do not expand it
+into a full build without the shared lock and required resource preflight.
+
+Regular mainnet prefix 120 fits the pinned one-byte/95-character decoder.
+The adapter retains checksum and curve-point checks, rejects other payout
+address types, and omits only upstream's informational FCMP torsion warning.
+Neither FCMP checks nor testnet/stagenet varint-prefix support are implemented.
+Generated diffs expose every routine change. Experimental profile IDs are test
+domains, **not production P2Pool consensus IDs or chosen launch identities**.
+
+## Reproduce historical controls
 
 Use fresh, unique output directories. The daemon source argument is mounted
 read-only; the harness writes only to its output directory. No private keys are
@@ -58,4 +88,5 @@ and isolated peer discovery; and tests of share acceptance, competing share
 chains, payouts and wallet recovery. Mainchain difficulty remains daemon-owned.
 Low-hashrate share difficulty and PPLNS behavior require measurement. These are
 P2Pool-side consensus changes, beyond an RPC shim. This spike makes none of those
-changes and supplies no launch configuration.
+changes in its historical runner and supplies no launch configuration. The
+selected runner above supplies only the documented isolated adaptations.

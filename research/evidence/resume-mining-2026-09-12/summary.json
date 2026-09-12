@@ -1,0 +1,233 @@
+{
+  "compatible": false,
+  "pool_started": false,
+  "payouts_tested": false,
+  "scope": "compiled reward/fork/decoder source slices plus experimental mainnet profile gate",
+  "source_drift_refusals": [
+    "p2pool",
+    "meownero",
+    "selected overlays"
+  ],
+  "stock_address_positive_and_negative_pass": true,
+  "profiles": [
+    {
+      "name": "selected-9-90",
+      "reward_atomic": 9000000000000,
+      "seconds": 90,
+      "weight_floor": 300000,
+      "regular_address_prefix": 120,
+      "genesis": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "genesis_provenance": "historical mainnet RPC receipt; overlays leave genesis unchanged",
+      "fork_table_sha256": "f88c8ef3f190992661dccc361878a7ba9b8bca29de5dba74eeb00b22698e9b2d",
+      "overlay_sha256": "de750169f3f3aac75de8325a09570343cc10df7cf2da52dec9b084ad0b3414fe",
+      "config_sha256": "16beaee17b95fb628cd383008f84207da49f29dc27ef98016138af5f60ea97da",
+      "share_id": "6494a6ed630972b34c755d1ff766d685c8eb619755e449441159b74bff9c0031",
+      "cases_passed": 2551,
+      "oracle_cases": 2520,
+      "controls_passed": 31,
+      "reverse_apply_restores_source": true,
+      "vectors_sha256": "c1c268f194a59e2900c258be07e8539d5476078cb433d86b2f9f937185dfeb41",
+      "results_sha256": "25b37dc5096af02cb2efc6048845fc235ee515694a6e3ea78a51db68276ae38d",
+      "probe_cpp_sha256": "0aa03d1b0e36eb931476573cece34f20396970864da381d9b196bd31eeaa5b23",
+      "first_saturating_block": 2049639,
+      "single_full_reward_varint_bytes": 7,
+      "historical_single_full_reward_varint_bytes": 6,
+      "stock_output_max_atomic": 72057594037927935,
+      "stock_mismatch_cases": [
+        {
+          "supply": 0,
+          "stock": {
+            "reward": 35184372088831,
+            "major_version": 1
+          },
+          "selected_reward": 9000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 9000000000000,
+          "stock": {
+            "reward": 35184354922694,
+            "major_version": 1
+          },
+          "selected_reward": 9000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446735073709551614,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 9000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446735073709551615,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 9000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446735073709551616,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 9000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446744073709551615,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 9000000000000,
+          "selected_version": 16
+        }
+      ],
+      "compiled_stock_share_floor_controls": [
+        {
+          "amount": 0,
+          "accepted_by_floor_guard_only": false
+        },
+        {
+          "amount": 599999999999,
+          "accepted_by_floor_guard_only": false
+        },
+        {
+          "amount": 600000000000,
+          "accepted_by_floor_guard_only": true
+        },
+        {
+          "amount": 6750000000000,
+          "accepted_by_floor_guard_only": true
+        },
+        {
+          "amount": 9000000000000,
+          "accepted_by_floor_guard_only": true
+        }
+      ]
+    },
+    {
+      "name": "fallback-12-120",
+      "reward_atomic": 12000000000000,
+      "seconds": 120,
+      "weight_floor": 300000,
+      "regular_address_prefix": 120,
+      "genesis": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "genesis_provenance": "historical mainnet RPC receipt; overlays leave genesis unchanged",
+      "fork_table_sha256": "f88c8ef3f190992661dccc361878a7ba9b8bca29de5dba74eeb00b22698e9b2d",
+      "overlay_sha256": "0a81ee72f8b700a1299842a965b6dce650ce380b7dd1d92051a7ee4cc9fa5d06",
+      "config_sha256": "a370396596d3f4520e7ac0e383194663d1b58866558ff5fd6cd7c55d6cda0157",
+      "share_id": "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "cases_passed": 2551,
+      "oracle_cases": 2520,
+      "controls_passed": 31,
+      "reverse_apply_restores_source": true,
+      "vectors_sha256": "5fa7cf4e7fca9520e41712af47fae374ff8e31a5586aa759902aec295781f235",
+      "results_sha256": "76e3689fcff588c6baed775124deb2ddaaca2028dc9cba1a56ae6087409a7770",
+      "probe_cpp_sha256": "64ea062568b57abd3767bcdffc41d5dc0f127b2e383e8f91ab632cb7bb7ab279",
+      "first_saturating_block": 1537229,
+      "single_full_reward_varint_bytes": 7,
+      "historical_single_full_reward_varint_bytes": 6,
+      "stock_output_max_atomic": 72057594037927935,
+      "stock_mismatch_cases": [
+        {
+          "supply": 0,
+          "stock": {
+            "reward": 35184372088831,
+            "major_version": 1
+          },
+          "selected_reward": 12000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 12000000000000,
+          "stock": {
+            "reward": 35184349200648,
+            "major_version": 1
+          },
+          "selected_reward": 12000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446732073709551614,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 12000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446732073709551615,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 12000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446732073709551616,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 12000000000000,
+          "selected_version": 16
+        },
+        {
+          "supply": 18446744073709551615,
+          "stock": {
+            "reward": 600000000000,
+            "major_version": 1
+          },
+          "selected_reward": 12000000000000,
+          "selected_version": 16
+        }
+      ],
+      "compiled_stock_share_floor_controls": [
+        {
+          "amount": 0,
+          "accepted_by_floor_guard_only": false
+        },
+        {
+          "amount": 599999999999,
+          "accepted_by_floor_guard_only": false
+        },
+        {
+          "amount": 600000000000,
+          "accepted_by_floor_guard_only": true
+        },
+        {
+          "amount": 9000000000000,
+          "accepted_by_floor_guard_only": true
+        },
+        {
+          "amount": 12000000000000,
+          "accepted_by_floor_guard_only": true
+        }
+      ]
+    }
+  ],
+  "toolchain": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "resource_policy": {
+    "memory_mib": 512,
+    "swap_mib": 0,
+    "cpus": 0.5,
+    "compiler_jobs": 1,
+    "network": "none"
+  },
+  "container_observed": {
+    "memory.max": "536870912",
+    "memory.swap.max": "0",
+    "memory.peak": "78647296",
+    "cpu.max": "50000 100000",
+    "cpu.weight": "21"
+  }
+}

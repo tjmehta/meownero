@@ -1,0 +1,34 @@
+--- pinned-slices
++++ experimental-slices
+@@ -1,15 +1,15 @@
+ static FORCEINLINE uint64_t get_base_reward(uint64_t already_generated_coins)
+ {
+-	const uint64_t result = ~already_generated_coins >> 19;
+-	return (result < BASE_BLOCK_REWARD) ? BASE_BLOCK_REWARD : result;
++	(void)already_generated_coins;
++	return PROFILE_REWARD;
+ }
+ 
+ 
+ // Allow only regular addresses (no integrated addresses, no subaddresses)
+ // Values taken from cryptonote_config.h (CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX)
+-constexpr uint64_t valid_prefixes[] = { 18, 53, 24 };
++constexpr uint64_t valid_prefixes[] = { 120, 53, 24 };
+ 
+-constexpr uint64_t valid_prefixes_subaddress[] = { 42, 63, 36 };
++constexpr uint64_t valid_prefixes_subaddress[] = { 123, 63, 36 };
+ 
+ constexpr std::array<int, 9> block_sizes{ 0, 2, 3, 5, 6, 7, 9, 10, 11 };
+ constexpr int num_full_blocks = p2pool::Wallet::ADDRESS_LENGTH / block_sizes.back();
+@@ -125,10 +125,7 @@
+ 		m_type = NetworkType::Invalid;
+ 	}
+ 
+-	if (!torsion_check()) {
+-		LOGWARN(1, "Torsion check failed for wallet " << *this << "! It will not be compatible with FCMP++.");
+-		// TODO: add "m_type = NetworkType::Invalid;" and return false in a later release, closer to FCMP++ hardfork
+-	}
++	// Informational FCMP torsion warning omitted in this isolated probe.
+ 
+ 	return valid();
+ }

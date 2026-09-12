@@ -1,0 +1,591 @@
+[
+  {
+    "name": "correct-profile",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "ok",
+      "12000000000000",
+      "16"
+    ]
+  },
+  {
+    "name": "wrong-genesis",
+    "input": [
+      "0000000000000000000000000000000000000000000000000000000000000000",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "genesis",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "missing-genesis",
+    "input": [
+      "-",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "genesis",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "cross-profile-share-id",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "6494a6ed630972b34c755d1ff766d685c8eb619755e449441159b74bff9c0031",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "sharechain",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "missing-share-id",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "-",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "sharechain",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "stock-default-share-id",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "22af7ee7b50b6892e399da6b2c6c4427b25104d4a9048e00b16e9df04407f918",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "sharechain",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "stock-mini-share-id",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "3982c91a95aec7fa4250bd126cd8c2dc88173f184071dd2cdb5627a335187ec4",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "sharechain",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "stock-nano-share-id",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "abf8ce94d2e27263fa91dd600dd8173f683581a8f4508d8a9dfa323625bd0559",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "sharechain",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-meow",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "ok",
+      "12000000000000",
+      "16"
+    ]
+  },
+  {
+    "name": "address-monero",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "45p2SngJAPSJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSHPhbve",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-testnet",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "T6T5gt37MUFEcnmYLVT9hobAUPrx849DvihXjkwqRNofCLScJo7p1v8ReNMYGbUMfpBtbiZvTahhrYnRTgdaFpUK1QqoFoR18",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-stagenet",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "S6F3c389hs9EcnmYLVT9hobAUPrx849DvihXjkwqRNofCLScJo7p1v8ReNMYGbUMfpBtbiZvTahhrYnRTgdaFpUK1QqrGYjbq",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-subaddress",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "MeSeuYf61UkJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSNV3o1h",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-integrated",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "MK3Jsw26nwiJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeeU5g7pRVCvs138cXQX",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-checksum",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvf1",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-invalid-alphabet",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "09Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-truncated",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvf",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "address-invalid-point",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "MErPgg5gaNajpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQVqMMuj9",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "address",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "genesis-not-mineable",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      0,
+      1,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "genesis-mining",
+      "0",
+      "1"
+    ]
+  },
+  {
+    "name": "wrong-fork-0",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      0,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "fork",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "wrong-fork-1",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      1,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "fork",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "wrong-fork-15",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      15,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "fork",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "wrong-fork-17",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      17,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "fork",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "wrong-fork-255",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      255,
+      300000,
+      0,
+      0
+    ],
+    "output": [
+      "fork",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "median-domain",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      4294967296,
+      0,
+      0
+    ],
+    "output": [
+      "median-domain",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "huge-median-domain",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      18446744073709551615,
+      0,
+      0
+    ],
+    "output": [
+      "median-domain",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "fee-last-valid",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      18446732073709551615
+    ],
+    "output": [
+      "ok",
+      "18446744073709551615",
+      "16"
+    ]
+  },
+  {
+    "name": "fee-overflow",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      0,
+      18446732073709551616
+    ],
+    "output": [
+      "fee-overflow",
+      "0",
+      "16"
+    ]
+  },
+  {
+    "name": "penalized-fee-last-valid",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      450000,
+      18446735073709551615
+    ],
+    "output": [
+      "ok",
+      "18446744073709551615",
+      "16"
+    ]
+  },
+  {
+    "name": "zero-subsidy-fees",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      600000,
+      18446744073709551615
+    ],
+    "output": [
+      "ok",
+      "18446744073709551615",
+      "16"
+    ]
+  },
+  {
+    "name": "below-stock-share-reward-floor",
+    "input": [
+      "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+      "768571c423909339d0075548f57d7faa8404fb358a53720b2f1d81447f4523b1",
+      "M9Lds8CcBgCJbqSiUvYfS3BfhEdxZmv8pDt25oW1LzxrZv9Uq6ARagiFViMGUE3gJk5VPWingCXVf1p2tyAy6SUeSLMMvfc",
+      0,
+      1,
+      16,
+      300000,
+      599999,
+      0
+    ],
+    "output": [
+      "ok",
+      "79999866",
+      "16"
+    ]
+  }
+]

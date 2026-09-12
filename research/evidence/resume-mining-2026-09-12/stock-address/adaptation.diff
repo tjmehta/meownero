@@ -1,0 +1,14 @@
+--- pinned-slices
++++ experimental-slices
+@@ -125,10 +125,7 @@
+ 		m_type = NetworkType::Invalid;
+ 	}
+ 
+-	if (!torsion_check()) {
+-		LOGWARN(1, "Torsion check failed for wallet " << *this << "! It will not be compatible with FCMP++.");
+-		// TODO: add "m_type = NetworkType::Invalid;" and return false in a later release, closer to FCMP++ hardfork
+-	}
++	// Informational FCMP torsion warning omitted in this isolated probe.
+ 
+ 	return valid();
+ }
