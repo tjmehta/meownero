@@ -67,7 +67,7 @@ echo "==> 5. artifacts"
 for b in monerod monero-wallet-cli monero-wallet-rpc; do printf '%s  %s\n' "$(sha256sum "$SRC/build/release/bin/$b" | cut -d' ' -f1)" "$b"; done | tee "$WORK/SHA256SUMS"
 
 # Exact local source inputs and binary versions accompany every hash set.
-git -C "$SRC" rev-parse HEAD HEAD^{tree} > "$WORK/SOURCE_REVISIONS"
+git -C "$SRC" rev-parse HEAD 'HEAD^{tree}' > "$WORK/SOURCE_REVISIONS"
 git -C "$SRC" submodule status --recursive > "$WORK/SUBMODULES"
 (cd "$HERE" && sha256sum upstream.lock patches/*.patch) > "$WORK/INPUT_SHA256SUMS"
 docker run --rm --network none -v "$SRC:/src:ro" "$IMG" bash -ec '

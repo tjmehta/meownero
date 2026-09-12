@@ -95,3 +95,24 @@ The script creates two separate source/build trees, uses one immutable builder i
 All three second-tree binaries also exited 0 with `--help` inside the exact builder image, with networking disabled and a read-only source mount. That establishes startup/loader smoke coverage only, not cross-hardware portability or unchanged RandomX performance. These hashes cover the eight-patch series, not subsequent patches.
 
 Independent toolchain reconstruction remains **open**: apt versions/repository snapshots are unpinned. This result does not establish cross-host or cross-hardware reproduction, a green full upstream suite, or an audit.
+
+## Parallel local engineering checkpoint
+
+The [integrated September 12 handoff](../research/handoff-2026-09-12-swarm.md)
+links actual P2P partition/rejoin, strict wallet startup/observer tests, a private
+received-payment recovery demo, and source-pinned P2Pool/Cuprate probes. The
+fifteen production patches and preserved seed success remain unchanged.
+
+`chain/test-network-p2p.sh` measures bounded empty-block P2P behavior.
+`chain/privacy-test.sh` checks selected wallet transport and response paths;
+OpenAlias can still issue DNS despite `--no-dns`. The new demo, privacy and module
+runners are local fixtures tied to the recorded builder/source; CI lints them,
+but their full runtime suites have not been wired into or run on remote CI.
+
+`chain/test-reproducibility.sh` now also compares source/submodule/input/version
+receipts and omits the shared cache mount when disabled. Optional
+`MEOW_REPRO_BUILD_RUNNER` selects a guard such as `chain/network-build-guard.sh`.
+The existing clean-fifteen waiter is preserved; do not start a duplicate or remove
+its worktree. It has not compiled while host RAM remains below its gate.
+Actual matched-capacity 90/120 and integrated FCMP benchmarks remain open; the
+[readiness inventory](../spikes/network-benchmark/README.md) reports blockers.

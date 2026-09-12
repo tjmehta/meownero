@@ -57,3 +57,30 @@ Fair launch, zero premine, the working perpetual policy and readiness gates stay
 unchanged. The 9 MEOW / 90 s branding candidate and 135/150-year cap discussions
 do not authorize consensus changes. Founder identity, ticker, checkpoint trust,
 second signer and audit funding remain human decisions.
+
+## Integration result
+
+All five workers finished reviewable commits and stopped repository writes.
+The coordinator reviewed the changed flows, source/corpus boundaries, negative
+controls, evidence and visual assets, then integrated the owned commits locally:
+
+| Track | Worker commit | Integrated commit | Result |
+|---|---|---|---|
+| Rust | `03f455f` | `8b3fc83` | 1,870 parity cases; three separately expected arithmetic mismatches |
+| Mining | `64f4e58` | `3b4c448` | Exact P2Pool routines and real RPC/ZMQ/coinbase controls establish incompatibility |
+| Demo | `f004bdd` | `c9ddfb3` | Private payment/recovery; 321 hash vectors; baseline and visual materials |
+| Privacy | `17a948d` | `48f224b` | 29 cases; startup proxy failure closes; OpenAlias/RPC-controller limits explicit |
+| Network | `174b723` | `924f367` | Actual P2P depth-3 partition/rejoin; clean15 memory blocker; FCMP readiness inventory |
+
+Coordinator integration corrected one Shellcheck literal-brace warning in the
+build source-tree receipt command. The frozen waiter retains the worker's
+semantically equivalent original spelling; its inputs/worktree are unchanged.
+Shared CI now lints the new runners and watches their paths; their local
+fixture-specific runtime suites are not represented as remote-CI passes.
+Operator/threat guidance removes blanket no-DNS and unsupported stale-advisory
+claims and links the observed limits. Full production tests were not repeated:
+production patches/binaries are unchanged, and all prior evidence is preserved.
+
+See the [final handoff](handoff-2026-09-12-swarm.md) for combined checks, exact
+build-waiter state and remaining work. Sessions/worktrees remain available for
+inspection. No project remote/push, host-service changes or unrelated edits.

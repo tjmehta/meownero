@@ -12,7 +12,7 @@ monerod --data-dir <dir> --non-interactive --no-igd --hide-my-port \
 
 Facts an operator must know:
 
-- **No seeds, no DNS, no checkpoints, no update checks.** A fresh node with no `--add-exclusive-node`/`--add-peer`/`--seed-node` has zero peers and will sit at its own genesis. This is deliberate until the seed policy is decided (PLAN §9.5; `docs/spec/network-identity.md` §4). Eclipse risk is entirely the operator's peer list (threat model T9).
+- **No shipped seeds, inherited checkpoints or update/download authorities.** A fresh node with no `--add-exclusive-node`/`--add-peer`/`--seed-node` has zero peers and will sit at its own genesis. This is deliberate until the seed policy is decided (PLAN §9.5; `docs/spec/network-identity.md` §4). Eclipse risk is entirely the operator's peer list (threat model T9).
 - **Ports:** 19080 P2P, 19081 RPC, 19082 ZMQ (testnet 29xxx, stagenet 39xxx). Never expose 19081 without `--restricted-rpc` (CVE-2025-26819 class; threat model T8).
 - **Data dir:** `~/.meownero` by default (`CRYPTONOTE_NAME`).
 - **Difficulty:** inherited Monero DAA; launch floor undecided (`docs/spec/difficulty.md`). Devnets use `--fixed-difficulty 1`.
@@ -36,11 +36,17 @@ CLI (`monero-wallet-cli`) caveats found on the devnet (`spikes/candidate-m/READM
 - A newly generated wallet estimates its refresh height from the hard-fork table and the clock; on a fresh chain run `set refresh-from-block-height 0` then `rescan_bc hard` (each asks for the password).
 - Addresses start with `M` (mainnet), `T` (testnet), `S` (stagenet). Amounts have 12 decimal places.
 - **Never reuse Monero keys on Meownero** (the CLI warns about this; key reuse across forks links transactions).
-- Remote nodes: prefer your own node (2025 malicious-remote-node advisory, unpatched upstream; threat model T11).
+- Remote nodes: prefer your own node when practical; TLS authentication and proxy routing do not make remote blockchain data trustworthy. The [metadata tests](../../research/swarm-privacy-2026-09-12.md) exercise selected malformed responses, not general malicious-node resistance (threat model T11).
+
+### Tested local payment and metadata tools
+
+- [Private-payment demo](../../demos/private-payment/README.md): exact atomic accounting, received-payment seed recovery and reopen with disposable wallets. Local notes are not seed-derived; the tiny controlled chain does not demonstrate meaningful anonymity.
+- [Wallet metadata controls](../../research/swarm-privacy-2026-09-12.md): strict local authenticated RPC startup, explicit proxy and TLS/onion policy, plus controlled observer tests. Wallet RPC, daemon transaction relay and daemon synchronization are distinct paths. **`--no-dns` does not prevent an authenticated RPC caller from requesting OpenAlias resolution.** The launcher is not a process-wide network sandbox, and Tor alone does not remove traffic correlation.
+- [P2Pool compatibility gate](../../spikes/p2pool/README.md): unmodified upstream P2Pool fails the current chain's address, subsidy and fork assumptions. This is an executable compatibility probe, not a pool launch/onboarding command.
 
 ## Supply audit (anyone can run)
 
-`get_coinbase_tx_sum {"height":0,"count":h+1}` on any node returns `emission_amount`; it must equal `h × 900000000000` (0.9 MEOW × height; genesis contributes 0). `docs/spec/emission.md`.
+`get_coinbase_tx_sum {"height":0,"count":h+1}` on any node returns `emission_amount`; for the full, unpenalized-subsidy devnet it must equal `h × 900000000000` (0.9 MEOW × height; genesis contributes 0). Account for inherited block-weight penalties when auditing other workloads. `docs/spec/emission.md`.
 
 ## What is not available
 

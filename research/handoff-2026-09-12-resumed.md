@@ -1,5 +1,8 @@
 # Resumed engineering handoff — 2026-09-12
 
+Later local work: [parallel engineering handoff](handoff-2026-09-12-swarm.md).
+This document remains the provenance for the preserved foundation checkpoint.
+
 Read this before the earlier September 12 publishing-pause handoff. **The pause
 is superseded.** TJ reported the snapshot at `a4f358679aeb98844e0a2b3bae97ad84bbd4b320`
 published privately to `tjmehta/meownero`, with the requested invitation pending.

@@ -3,9 +3,9 @@
 name: chain
 on:
   push:
-    paths: ["chain/**", "spikes/candidate-m/**", ".github/workflows/chain.yml"]
+    paths: ["chain/**", "spikes/candidate-m/**", "spikes/cuprate/**", "spikes/p2pool/**", "spikes/network-benchmark/**", "demos/private-payment/**", ".github/workflows/chain.yml"]
   pull_request:
-    paths: ["chain/**", "spikes/candidate-m/**", ".github/workflows/chain.yml"]
+    paths: ["chain/**", "spikes/candidate-m/**", "spikes/cuprate/**", "spikes/p2pool/**", "spikes/network-benchmark/**", "demos/private-payment/**", ".github/workflows/chain.yml"]
   workflow_dispatch:
 
 permissions:
@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: shellcheck
-        run: sudo apt-get install -y shellcheck && shellcheck chain/build.sh chain/test-difficulty.sh chain/test-authorities.sh chain/test-reproducibility.sh chain/test-seed-recovery.sh chain/test-reorg.sh chain/benchmark-difficulty.sh spikes/candidate-m/devnet.sh
+        run: sudo apt-get install -y shellcheck && shellcheck chain/*.sh spikes/candidate-m/devnet.sh spikes/cuprate/run.sh spikes/p2pool/*.sh demos/private-payment/*.sh
       - name: patch series is well-formed and pins are consistent
         run: |
           set -e
