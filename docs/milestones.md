@@ -2,6 +2,11 @@
 
 **Selected-policy update, September 12:** [decision and verification](../research/decision-2026-09-12-issuance.md). Target 9/90, fallback 12/120 if 90 s fails; both 3,153,600 MEOW/year before penalties. Prior parameter results below are historical controls. Reversible source probes pass; selected binaries, fee/wallet integration and matched-capacity intended-crypto network gates remain open.
 
+**Latest local checkpoint:** [clean15 completed and selected builds started](../research/handoff-2026-09-12-selected-builds.md).
+Two clean historical fifteen-patch builds match. Selected/fallback emission
+fixtures each pass 7/7 smoke tests; full selected builds remain in progress.
+Earlier queued-build descriptions below record their original checkpoints.
+
 **Status:** live checklist · **Started:** 2026-09-05 · Governed by `PLAN.md` §2 (doctrine), §5.4 (decision rule), §10 (gates). This file converts settled philosophy into objective exit criteria; it does not restate or reopen the philosophy.
 
 Authorization boundary (group, 2026-09-05): implementation work is authorized. **Not** authorized: public deployment or mainnet launch, spending, third-party messages, domain/account changes, key custody, pushing externally. Every item below stops at a locally reproducible, review-ready artifact.
@@ -68,7 +73,7 @@ Exit: both controls boot and mine with Meownero identity and 0.9/block; measurem
 ## M1 — Foundation (on the selected/provisional lineage)
 
 - [x] Repo layout: `chain/upstream.lock` (tag + commit + submodule hashes) + `chain/patches/0001…0015` applied by `chain/build.sh` (`git am`, fails on drift). Fresh upstream checkout end-to-end build passed 2026-09-06, including `meow_*` 8/8; hashes in `chain/README.md` and `research/verification-2026-09-06-m1.md`.
-- [~] Reproducible build from clean checkout: deterministic patch commit dates, `ARCH=default`, digest-pinned base and immutable builder/package records implemented. Two fresh cache-disabled thirteen-patch builds passed (2026-09-12; `chain/test-reproducibility.sh`, exit 0); **all three binary hashes match**, as do version metadata and package manifests. Same-host fixed-image reproduction is verified for thirteen patches; clean fifteen-patch reproduction is queued behind the measured host-memory gate (compiler not started at the swarm checkpoint). Provenance and hashes are in `chain/README.md`. Apt snapshots/version pinning and independent toolchain reconstruction remain open.
+- [~] Reproducible build from clean checkout: deterministic patch commit dates, `ARCH=default`, digest-pinned base and immutable builder/package records implemented. Two fresh cache-disabled fifteen-patch builds now pass (`chain/test-reproducibility.sh`, exit 0); all three daemon/wallet hashes, source/submodule/input receipts, version metadata and package manifests match. [Complete clean15 verification](../research/verification-2026-09-12-clean15.md) supersedes the queued/in-progress status; the thirteen-patch reproduction remains historical evidence. This proves same-host fixed-image reproduction of the historical 0.9/120 family. Selected-profile reproduction, apt snapshots/version pinning and independent toolchain reconstruction remain open.
 - [ ] Consensus deltas each have an ADR entry and test vectors (§2.2 item 5).
 - [x] Emission spec v1 (`docs/spec/emission.md`): invariants with tests, honest dilution table, 78-year tally horizon at 12 dp, forbidden claims listed.
 - [~] Identity (`docs/spec/network-identity.md`): genesis (zero-amount v2 coinbase), prefixes, ports, network IDs, hard-fork table — explicit and exercised on the devnet; **seed/bootstrap policy, testnet/stagenet tables, mainnet genesis timestamp are human/launch-time decisions**.

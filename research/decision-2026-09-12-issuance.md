@@ -1,6 +1,6 @@
 # Selected monetary direction and local evidence handoff — September 12, 2026
 
-Later local engineering: [restarted checkpoint](handoff-2026-09-12-restarted.md).
+Later local engineering: [clean15 completion and selected builds](handoff-2026-09-12-selected-builds.md).
 The policy decision below remains current; subsequent test/build state is there.
 
 ## Decision and authorization

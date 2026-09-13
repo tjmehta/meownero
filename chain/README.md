@@ -67,6 +67,12 @@ Full hashes and devnet/regression results: [`research/verification-2026-09-06-m1
 
 ## Reproducibility
 
+**Latest verified checkpoint, September 12:** [two clean fifteen-patch builds
+match](../research/verification-2026-09-12-clean15.md), including all daemon/wallet
+hashes and source/input/package/version receipts. This is the historical 0.9/120
+family in one immutable builder image. [Selected-profile builds](../research/handoff-2026-09-12-selected-builds.md)
+are a separate ongoing check. Earlier reproduction records below remain historical.
+
 `build.sh` applies patches with deterministic committer dates and builds with `ARCH=default` (upstream's no-`-march` baseline) rather than the host-native CPU. It resolves the builder to an immutable image ID for every invocation and records `BUILDER_IMAGE_ID` plus a complete `packages.txt` manifest next to hashes. Set `MEOW_BUILDER_IMAGE` to use an existing image rather than rebuilding the recipe; `CCACHE_DISABLE=1` is forwarded into the compiler environment.
 
 ```bash

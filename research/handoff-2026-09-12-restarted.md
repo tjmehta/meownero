@@ -1,5 +1,8 @@
 # Restarted engineering checkpoint — September 12, 2026
 
+**Later update:** [clean15 completed; selected builds started](handoff-2026-09-12-selected-builds.md).
+The in-progress historical-build status below records the earlier checkpoint.
+
 TJ requested resuming local work and explicitly named the idle network, privacy,
 mining and Rust Herdr panes. All four panes were at shell prompts with no Codex
 foreground process. The previous handoff had closed their bounded tracks;
