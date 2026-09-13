@@ -1,0 +1,25 @@
+[
+  {
+    "script": "spikes/cuprate/recovery/fetch-locked.sh",
+    "bash_syntax": "passed"
+  },
+  {
+    "script": "spikes/cuprate/recovery/check-locked.sh",
+    "bash_syntax": "passed"
+  },
+  {
+    "script": "spikes/cuprate/recovery/check-crate.sh",
+    "bash_syntax": "passed"
+  },
+  {
+    "case": "final runner rejects archive input before guard",
+    "exit": 2,
+    "stderr": "crate check requires a genuine standalone Git checkout; an archive lacks build commit metadata\n"
+  },
+  {
+    "case": "final runner unchanged during guarded attempt",
+    "sha256": "7552988a9cddacee5abd4a69797a02e8d477907f84c5a4980b56c0ee68f53115",
+    "guard_exit": 75,
+    "reason": "network/shared heavy lock occupied; no container launched"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "case": "spikes/cuprate/recovery/fetch-locked.sh Bash syntax",
+    "exit": 0
+  },
+  {
+    "case": "spikes/cuprate/recovery/check-locked.sh Bash syntax",
+    "exit": 0
+  },
+  {
+    "case": "spikes/cuprate/recovery/check-crate.sh Bash syntax",
+    "exit": 0
+  },
+  {
+    "case": "fetch refuses unsafe destination",
+    "command": [
+      "bash",
+      "spikes/cuprate/recovery/fetch-locked.sh",
+      "spikes/cuprate/.scratch/recovery-2026-09-13/prepared/cuprate-318c2dea4eb404ac4ecf2bea87c1a4696b0198cc",
+      "spikes/cuprate/.scratch/recovery-2026-09-13/fetch-cache",
+      "spikes/cuprate/.scratch/unused-refusal-output"
+    ],
+    "exit": 2,
+    "stderr": "cache and output must be distinct new directories\n"
+  },
+  {
+    "case": "fetch refuses unsafe destination",
+    "command": [
+      "bash",
+      "spikes/cuprate/recovery/fetch-locked.sh",
+      "spikes/cuprate/.scratch/recovery-2026-09-13/prepared/cuprate-318c2dea4eb404ac4ecf2bea87c1a4696b0198cc",
+      "spikes/cuprate/.scratch/unused-same-output",
+      "spikes/cuprate/.scratch/unused-same-output"
+    ],
+    "exit": 2,
+    "stderr": "cache and output must be distinct new directories\n"
+  },
+  {
+    "case": "locked-resolution manifest/lock unchanged",
+    "passed": true
+  },
+  {
+    "case": "locked-fetch manifest/lock unchanged",
+    "passed": true
+  },
+  {
+    "case": "frozen-after-fetch manifest/lock unchanged",
+    "passed": true
+  }
+]

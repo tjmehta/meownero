@@ -1,0 +1,11 @@
+{
+  "actual_cargo_exit": 0,
+  "actual_cargo_elapsed_seconds": 72,
+  "outer_shell_exit": 1,
+  "container_exit_receipt_missing": true,
+  "cause": "Launcher edited while Bash was blocked in docker run; changed file offsets caused host-shell continuation bookkeeping to fail on /out redirects after the successful container run.",
+  "effect": "Inside-container cargo exit, completion log, input hashes, memory counters and timestamps were already saved. No additional compilation was attempted.",
+  "container_name": "meownero-rust-crate-check-2589199",
+  "container_absent_after_run": true,
+  "followup_actions": "Preserved original failure and all successful container receipts; final launcher syntax and input refusal checked. No repeat compile."
+}

@@ -1,0 +1,52 @@
+   Compiling cuprate-constants v0.1.0 (/src/constants)
+    Checking ctutils v0.4.2
+   Compiling thiserror v1.0.69
+    Checking jh v0.1.0
+    Checking cuprate-hex v0.0.0 (/src/types/hex)
+    Checking cuprate-helper v0.1.0 (/src/helper)
+   Compiling randomx-rs v1.4.1 (https://github.com/Cuprate/randomx-rs.git?rev=76c2385#76c23857)
+    Checking strum v0.28.0
+    Checking cuprate-fixed-bytes v0.1.0 (/src/types/fixed-bytes)
+    Checking tracing-core v0.1.36
+    Checking rand_chacha v0.3.1
+    Checking groestl v0.10.1
+   Compiling tracing-attributes v0.1.31
+   Compiling proptest-derive v0.8.0
+   Compiling tokio-macros v2.7.1
+   Compiling thiserror-impl v1.0.69
+    Checking cpubits v0.1.1
+   Compiling seq-macro v0.3.6
+    Checking cuprate-cryptonight v0.1.0 (/src/cryptonight)
+    Checking crypto-bigint v0.7.5
+    Checking tokio v1.53.0
+    Checking cuprate-types v0.0.0 (/src/types/types)
+warning: unused import: `PoolTxInfo`
+  --> types/types/src/rpc/pool_info.rs:15:53
+   |
+15 | use crate::rpc::{PoolInfoFull, PoolInfoIncremental, PoolTxInfo};
+   |                                                     ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `default_zero` is never used
+  --> types/types/src/rpc/types.rs:13:4
+   |
+13 | fn default_zero<T: From<u8>>() -> T {
+   |    ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `cuprate-types` (lib) generated 2 warnings (run `cargo fix --lib -p cuprate-types` to apply 1 suggestion)
+    Checking tracing v0.1.44
+    Checking rand v0.8.7
+    Checking sync_wrapper v1.0.2
+    Checking tower-layer v0.3.3
+    Checking tower-service v0.3.3
+    Checking bitflags v1.3.2
+    Checking tower v0.5.3
+    Checking cuprate-consensus-rules v0.1.0 (/src/consensus/rules)
+    Checking tokio-util v0.7.18
+    Checking arc-swap v1.9.2
+    Checking thread_local v1.1.10
+    Checking cuprate-consensus-context v0.1.0 (/src/consensus/context)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1m 12s

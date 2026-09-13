@@ -1,0 +1,78 @@
+{
+  "refusal_cases": [
+    {
+      "case": "preserve existing destination",
+      "command": [
+        "python3",
+        "/spike/recovery/prepare-source.py",
+        "--archive",
+        "/scratch/cuprate.tar.gz",
+        "--destination",
+        "/scratch/prepared",
+        "--spike",
+        "/spike",
+        "--receipt",
+        "/receipt.json"
+      ],
+      "exit": 2,
+      "stderr": "preparation refused: destination must not exist; existing sources are never overwritten\n",
+      "passed": true
+    },
+    {
+      "case": "reject altered archive",
+      "command": [
+        "python3",
+        "/spike/recovery/prepare-source.py",
+        "--archive",
+        "/scratch/invalid.tar.gz",
+        "--destination",
+        "/scratch/should-not-exist",
+        "--spike",
+        "/spike",
+        "--receipt",
+        "/receipt.json"
+      ],
+      "exit": 2,
+      "stderr": "preparation refused: archive SHA-256 differs from historical receipt\n",
+      "passed": true
+    },
+    {
+      "case": "reject mismatched receipt commit",
+      "command": [
+        "python3",
+        "/spike/recovery/prepare-source.py",
+        "--archive",
+        "/scratch/cuprate.tar.gz",
+        "--destination",
+        "/scratch/should-not-exist",
+        "--spike",
+        "/spike",
+        "--receipt",
+        "/scratch/wrong-receipt.json"
+      ],
+      "exit": 2,
+      "stderr": "preparation refused: receipt commit differs from source lock\n",
+      "passed": true
+    },
+    {
+      "case": "reject altered file pin before extraction",
+      "command": [
+        "python3",
+        "/spike/recovery/prepare-source.py",
+        "--archive",
+        "/scratch/cuprate.tar.gz",
+        "--destination",
+        "/scratch/should-not-exist",
+        "--spike",
+        "/scratch/wrong-spike",
+        "--receipt",
+        "/receipt.json"
+      ],
+      "exit": 2,
+      "stderr": "preparation refused: source SHA-256 mismatch: Cargo.lock\n",
+      "passed": true
+    }
+  ],
+  "python_syntax": "passed",
+  "bash_syntax": "passed"
+}

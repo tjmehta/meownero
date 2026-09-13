@@ -95,3 +95,13 @@ No performance claim follows from this correctness harness.
 source-extraction, image, binary hashes, run logs and cgroup memory counters are
 captured alongside them. The track report is
 [`research/swarm-rust-2026-09-12.md`](../../research/swarm-rust-2026-09-12.md).
+
+## Build-tooling recovery
+
+September 13 recovery adds full pinned archive preparation, a bounded fetch into
+an isolated cache, and a capped offline Cargo-resolution check under `recovery/`. See the
+[recovery report](../../research/recovery-rust-2026-09-13.md) for exact commands,
+cache inventory, passing frozen dependency resolution and a successful actual
+context-crate `cargo check` with genuine pinned Git sources. The report separately
+records the launcher bookkeeping failure and the subsequent passing final wrapper verification.
+The historical primitive result is unchanged; runtime integration is untested.

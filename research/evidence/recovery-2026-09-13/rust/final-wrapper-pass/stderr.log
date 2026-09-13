@@ -1,0 +1,18 @@
+warning: unused import: `PoolTxInfo`
+  --> types/types/src/rpc/pool_info.rs:15:53
+   |
+15 | use crate::rpc::{PoolInfoFull, PoolInfoIncremental, PoolTxInfo};
+   |                                                     ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `default_zero` is never used
+  --> types/types/src/rpc/types.rs:13:4
+   |
+13 | fn default_zero<T: From<u8>>() -> T {
+   |    ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `cuprate-types` (lib) generated 2 warnings (run `cargo fix --lib -p cuprate-types` to apply 1 suggestion)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.64s
