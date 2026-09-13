@@ -1,0 +1,29 @@
+--- a/tests/unit_tests/output_selection.cpp
++++ b/tests/unit_tests/output_selection.cpp
+@@ -113,10 +113,14 @@
+ {
+   std::vector<uint64_t> offsets;
+ 
+-  MKOFFSETS(300000, 1);
++  // Keep the historical fixture's wallclock horizon: truncation affects the median.
++  constexpr size_t history_seconds = 300000 * 120;
++  static_assert(history_seconds % DIFFICULTY_TARGET_V2 == 0, "exact fixture horizon");
++  MKOFFSETS(history_seconds / DIFFICULTY_TARGET_V2, 1);
+   tools::gamma_picker picker(offsets);
+-  std::vector<double> ages(100000);
+-  double age_scale = 120. * (offsets.size() / (double)n_outs);
++  // More draws reduce stochastic error; the original median bounds stay unchanged.
++  std::vector<double> ages(1000000);
++  double age_scale = double(DIFFICULTY_TARGET_V2) * (offsets.size() / (double)n_outs);
+   for (size_t i = 0; i < ages.size(); )
+   {
+     uint64_t o = picker.pick();
+@@ -124,7 +128,7 @@
+       continue;
+     ages[i] = (n_outs - 1 - o) * age_scale;
+     ASSERT_GE(ages[i], 0);
+-    ASSERT_LE(ages[i], offsets.size() * 120);
++    ASSERT_LE(ages[i], history_seconds);
+     ++i;
+   }
+   double median = epee::misc_utils::median(ages);

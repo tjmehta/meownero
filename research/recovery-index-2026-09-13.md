@@ -1,8 +1,8 @@
 # Session recovery — September 13, 2026
 
 TJ requested inspection of unfinished Claude/Codex/Claudex sessions and restarting
-focused agents in the Meownero Herdr workspace. This index records recovered
-status and assignments, not completion of the newly assigned engineering work.
+focused agents in the Meownero Herdr workspace. This index records the recovered
+sessions, verified results, and remaining work.
 
 ## What survived
 
@@ -24,7 +24,7 @@ without changing user focus, all using the main checkout and disjoint ownership.
 | Workstream | Last established result | Remaining work / disposition |
 |---|---|---|
 | Historical clean15 | Both clean builds and provenance verified, integrated into main | Same-host/same-image claim only; do not repeat as unfinished |
-| Selected build/network | Fresh selected 9/90 build passes all 1,237 native tests and bounded actual P2P checks | Fallback 12/120 is the next gated run; loaded/FCMP performance remains open |
+| Selected build/network | Fresh 9/90 and 12/120 builds each pass all 1,237 native tests and bounded actual P2P checks | Recovery complete; selected-family reproduction, wallet/fee/aggregate integration and loaded/FCMP performance remain open |
 | Rust/Cuprate | Genuine pinned dependencies restored; actual context-crate check and final wrapper pass (`19d0304`) | Runtime/consensus parity remains open; historical 1,870-case primitive evidence retains its original scope |
 | Privacy | `7dedf3d` / worker `ffc7f77`: restricted wallet controller and 52/52 cases | Completed bounded checkpoint; broader transport/funded-wallet tests remain roadmap work |
 | Mining | `f4c1506` / worker `13f10a0`: 2,551 cases per selected profile | Completed bounded checkpoint; stock P2Pool remains incompatible, no pool/payout result |
@@ -37,31 +37,34 @@ commits**: `5aeabb6` (guarded selected runner) and `c1f8d05` (failed selected ru
 and diagnosis). Other commits on that branch have integrated patch equivalents.
 The latest root handoff's “active selected build” status is therefore stale.
 
-The six DNS/address failures ran with networking disabled. The seventh,
-`select_outputs.gamma`, retains a literal 120-second conversion while the selected
-picker uses 90 seconds. Its statistical tolerance also needs investigation;
-changing the conversion alone is not a verified fix. Original failures must be
-preserved; no additional exclusions or weakened assertions were authorized.
+The recovered failures included six DNS/address cases run with networking
+disabled and `select_outputs.gamma`, whose fixture used a literal 120-second
+conversion and unequal wallclock history for the 90-second picker. Recovery
+separated the existing DNS cases and corrected the gamma fixture using repeated
+controls, equal-duration history and more samples. Conversion alone was
+insufficient. The original failures, exclusions and statistical bounds remain
+preserved.
 
 The site handoff's “uncommitted” status is also stale: `bd77e07` contains the fix.
 The unfinished Rust attempt reported a container-path `IndexError` and an
 unavailable pinned `monero-oxide` dependency. A platform refusal also occurred;
 the new task concerns ordinary build tooling, not retrying refused output.
 
-## Active assignments
+## Resumed assignments
 
 | Agent | Herdr pane | Scope / expected report |
 |---|---|---|
-| `meow-network-recovery` | `wS:p2` | Recover missing network runner/evidence; narrow DNS/gamma fixture investigation; guarded selected builds if prerequisites permit. `research/recovery-network-2026-09-13.md` |
+| `meow-network-recovery` | `wS:p2` | Completed 9/90 and 12/120 native and P2P verification. `research/recovery-network-2026-09-13.md` |
 | `meow-rust-recovery` | `wS:p3` | Completed dependency and crate-build recovery. Final cached wrapper verification also passed. `research/recovery-rust-2026-09-13.md` |
 | `meow-site-recovery` | `wS:p4` | Completed local browser capability/hydration/signup verification; no source change needed. `research/recovery-site-2026-09-13.md` |
 
-These report paths are assigned outputs and may not exist until workers finish.
+All three reports exist and their completed checkpoints have been reviewed.
 Workers share the checkout: network owns its harness/selected fixture paths,
 Rust owns `spikes/cuprate/`, site owns `site/`, each owns its new report/evidence.
 They were told not to stage, commit, switch/reset branches, cherry-pick whole
-commits, or spawn more agents. Coordinator review/integration remains necessary.
-No completed-result claim follows merely from agent startup.
+commits, or spawn more agents. The coordinator verified and archived their
+completed receipts. All three agents are idle after these assignments; no
+completed-result claim follows merely from agent startup.
 
 **Site checkpoint reviewed:** [report](recovery-site-2026-09-13.md) and browser
 traces establish placeholder-to-email rendering without push text, supported
@@ -90,6 +93,15 @@ binary hashes and exact XML coverage, and archived native/P2P receipts under
 `research/evidence/recovery-network-2026-09-13/selected-9-90-{native,p2p-pass}/`.
 See [network report](recovery-network-2026-09-13.md).
 
+**Fallback completed:** the fresh 12/120 build also exited 0 and passed the same
+1,237-case native selection. Direct P2P execution exited 0 and passed relay,
+partition/rejoin, depth-three reorg and malformed-transport recovery. Both daemon
+exits were 0, with peak memory 614,367,232 bytes and no limit/OOM events. The
+coordinator verified five executable hashes and exact XML coverage, and archived
+the receipts under `research/evidence/recovery-network-2026-09-13/fallback-12-120-{native,p2p-pass}/`.
+One fresh build per profile is not a selected-family reproduction pair or a
+matched-capacity loaded-network comparison.
+
 **Rust completed:** [report](recovery-rust-2026-09-13.md) records 658 resolved
 packages, genuine pinned Git sources and an actual `cuprate-consensus-context`
 compile pass. The frozen wrapper subsequently passed end-to-end with cached
@@ -112,6 +124,28 @@ The pre-existing `.codex/`, `.mcp.json` and authority-script temporary file rema
 untouched. Real-device checks cannot be represented by browser emulation.
 
 ## Session evidence and next resume
+
+The current source and build directories are local, untracked artifacts:
+
+| Artifact | Path relative to this checkout |
+|---|---|
+| Reconstructed clean historical source | `build/recovery-network-20260913/source` |
+| Verified selected 9/90 build | `build/recovery-network-20260913/selected-9-90-launch-01/output/source` |
+| Verified fallback 12/120 build | `build/recovery-network-20260913/fallback-12-120-run-01/output/source` |
+| Genuine pinned Cuprate checkout | `spikes/cuprate/.scratch/recovery-2026-09-13/source-checkout` |
+| Isolated Cuprate dependency cache | `spikes/cuprate/.scratch/recovery-2026-09-13/fetch-cache` |
+
+Each network build's `output/` directory holds phase exits, native XML and binary
+hashes; `build.exit` is written only when the runner terminates. Read the profile
+receipt before using a binary, and compare its hash with the durable evidence.
+The reconstructed historical source must stay clean and unbuilt for the
+source-only staging mode. Its HEAD is
+`7410c04bab0e304112710d63c3225c110bd8b4de`, tree
+`4db958cb96d72943c5c2433bd5f4a8f730037148`; the clean15 manifest covers 4,320
+tracked files and recursive submodules. Source reconstruction used the pinned
+upstream and deterministic patch application from the first two steps of
+`chain/build.sh`. Do not rebuild the completed historical reproduction just
+to recover source.
 
 Codex metadata was inspected read-only in `<agent-session-store>`, with rollouts
 under `<agent-session-store>`. Relevant IDs:

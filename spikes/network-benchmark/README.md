@@ -1,6 +1,6 @@
 # Bounded network benchmark
 
-TJ selects gated 9/90 versus 12/120; see the [decision](../../research/decision-2026-09-12-issuance.md). The checker now inventories selected profiles by default. Recorded P2P runtime results remain historical controls; selected binaries and network performance remain unverified.
+TJ selects gated 9/90 versus 12/120; see the [decision](../../research/decision-2026-09-12-issuance.md). The checker inventories selected profiles by default. September 13 recovery produced fresh binaries for both profiles, each passing all 1,237 native tests and the bounded empty-block P2P checks. Loaded-network and FCMP performance remain unverified. [Current receipts and status](../../research/recovery-network-2026-09-13.md).
 
 `chain/test-network-p2p.sh` runs two existing fifteen-patch daemons inside one
 network-disabled container. Two interruptible TCP proxies carry the actual P2P
@@ -72,9 +72,9 @@ python3 chain/test-network-profiles.py -v
 chain/test-network-p2p.sh /path/to/built-selected-source /path/to/new-p2p selected-9-90
 ```
 
-These source snapshots are unbuilt. Full selected builds and profile-specific
-unit fixtures remain required: `meow_emission.constant_is_0_9_meow` in current15
-hard-codes the historical reward. The P2P harness accepts all four named profiles,
+Preparation alone produces unbuilt snapshots. Use the isolated build runner below
+to apply the reviewed native fixtures and compile them: the original current15
+reward fixture hard-codes the historical reward. The P2P harness accepts all four named profiles,
 checks source reward/spacing before starting, and checks actual emission and RPC
 target spacing on both nodes. Its default stays historical for existing callers.
 It records an empty-block correctness result only; no paired loaded comparison

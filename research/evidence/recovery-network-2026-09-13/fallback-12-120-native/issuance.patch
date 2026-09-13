@@ -1,0 +1,24 @@
+--- a/src/cryptonote_config.h
++++ b/src/cryptonote_config.h
+@@ -54,8 +54,8 @@
+ #define MONEY_SUPPLY                                    ((uint64_t)(-1))
+ #define EMISSION_SPEED_FACTOR_PER_MINUTE                (20)
+ #define FINAL_SUBSIDY_PER_MINUTE                        ((uint64_t)300000000000) // 3 * pow(10, 11) (unused by Meownero; kept for upstream diff hygiene)
+-// Meownero: perpetual flat subsidy, 0.9 MEOW per block (PLAN.md rev 4 §8.1). Genesis pays 0.
+-#define MEOW_BLOCK_REWARD                               ((uint64_t)900000000000) // 9 * pow(10, 11) = 0.9 * COIN
++// Meownero: gated local fallback-12-120 profile (decision 2026-09-12). Genesis pays 0.
++#define MEOW_BLOCK_REWARD                               ((uint64_t)12000000000000) // 12 * COIN
+ 
+ #define CRYPTONOTE_REWARD_BLOCKS_WINDOW                 100
+ #define CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2    60000 //size of block (bytes) after which reward for block calculated using block size
+--- a/src/cryptonote_basic/cryptonote_basic_impl.cpp
++++ b/src/cryptonote_basic/cryptonote_basic_impl.cpp
+@@ -81,7 +81,7 @@
+   }
+   //-----------------------------------------------------------------------------------------------
+   bool get_block_reward(size_t median_weight, size_t current_block_weight, uint64_t already_generated_coins, uint64_t &reward, uint8_t version) {
+-    static_assert(DIFFICULTY_TARGET_V2%60==0&&DIFFICULTY_TARGET_V1%60==0,"difficulty targets must be a multiple of 60");
++    // Flat subsidy has no minute-based emission calculation or whole-minute constraint.
+     // Meownero: perpetual flat subsidy. Independent of already_generated_coins, hard-fork
+     // version, and target spacing (PLAN.md rev 4 §8.1). The block-weight penalty below is
+     // retained unchanged and is denominated in this constant.

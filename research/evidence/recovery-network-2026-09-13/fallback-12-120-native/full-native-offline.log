@@ -1,0 +1,3354 @@
+Note: Google Test filter = -ban.subnet:http_server.response_soft_limit:notify.works:AddressFromURL.*:DNSResolver.*
+[==========] Running 1228 tests from 152 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from account
+[ RUN      ] account.encrypt_keys
+[       OK ] account.encrypt_keys (82 ms)
+[----------] 1 test from account (82 ms total)
+
+[----------] 4 tests from apply_permutation
+[ RUN      ] apply_permutation.empty
+[       OK ] apply_permutation.empty (0 ms)
+[ RUN      ] apply_permutation.reorder
+[       OK ] apply_permutation.reorder (0 ms)
+[ RUN      ] apply_permutation.bad_size
+2026-09-13 15:53:07.527	E Mismatched vector sizes
+2026-09-13 15:53:07.527	E Mismatched vector sizes
+[       OK ] apply_permutation.bad_size (1 ms)
+[ RUN      ] apply_permutation.bad_permutation
+2026-09-13 15:53:07.527	E Bad permutation
+[       OK ] apply_permutation.bad_permutation (0 ms)
+[----------] 4 tests from apply_permutation (1 ms total)
+
+[----------] 2 tests from AddressFromTXT
+[ RUN      ] AddressFromTXT.Success
+[       OK ] AddressFromTXT.Success (0 ms)
+[ RUN      ] AddressFromTXT.Failure
+[       OK ] AddressFromTXT.Failure (0 ms)
+[----------] 2 tests from AddressFromTXT (0 ms total)
+
+[----------] 8 tests from base58_uint_8be_to_64
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0000000000000001
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0000000000000001 (0 ms)
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0000000000000102
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0000000000000102 (0 ms)
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0000000000010203
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0000000000010203 (0 ms)
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0000000001020304
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0000000001020304 (0 ms)
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0000000102030405
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0000000102030405 (0 ms)
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0000010203040506
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0000010203040506 (0 ms)
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0001020304050607
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0001020304050607 (0 ms)
+[ RUN      ] base58_uint_8be_to_64.handles_bytes_0x0102030405060708
+[       OK ] base58_uint_8be_to_64.handles_bytes_0x0102030405060708 (0 ms)
+[----------] 8 tests from base58_uint_8be_to_64 (0 ms total)
+
+[----------] 8 tests from base58_uint_64_to_8be
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0000000000000001
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0000000000000001 (0 ms)
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0000000000000102
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0000000000000102 (0 ms)
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0000000000010203
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0000000000010203 (0 ms)
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0000000001020304
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0000000001020304 (0 ms)
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0000000102030405
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0000000102030405 (0 ms)
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0000010203040506
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0000010203040506 (0 ms)
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0001020304050607
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0001020304050607 (0 ms)
+[ RUN      ] base58_uint_64_to_8be.handles_bytes_0x0102030405060708
+[       OK ] base58_uint_64_to_8be.handles_bytes_0x0102030405060708 (0 ms)
+[----------] 8 tests from base58_uint_64_to_8be (0 ms total)
+
+[----------] 1 test from reverse_alphabet
+[ RUN      ] reverse_alphabet.is_correct
+[       OK ] reverse_alphabet.is_correct (0 ms)
+[----------] 1 test from reverse_alphabet (0 ms total)
+
+[----------] 29 tests from base58_encode_block
+[ RUN      ] base58_encode_block.handles_11
+[       OK ] base58_encode_block.handles_11 (0 ms)
+[ RUN      ] base58_encode_block.handles_1z
+[       OK ] base58_encode_block.handles_1z (0 ms)
+[ RUN      ] base58_encode_block.handles_5Q
+[       OK ] base58_encode_block.handles_5Q (0 ms)
+[ RUN      ] base58_encode_block.handles_111
+[       OK ] base58_encode_block.handles_111 (0 ms)
+[ RUN      ] base58_encode_block.handles_11z
+[       OK ] base58_encode_block.handles_11z (0 ms)
+[ RUN      ] base58_encode_block.handles_15R
+[       OK ] base58_encode_block.handles_15R (0 ms)
+[ RUN      ] base58_encode_block.handles_LUv
+[       OK ] base58_encode_block.handles_LUv (0 ms)
+[ RUN      ] base58_encode_block.handles_11111
+[       OK ] base58_encode_block.handles_11111 (0 ms)
+[ RUN      ] base58_encode_block.handles_1111z
+[       OK ] base58_encode_block.handles_1111z (0 ms)
+[ RUN      ] base58_encode_block.handles_11LUw
+[       OK ] base58_encode_block.handles_11LUw (0 ms)
+[ RUN      ] base58_encode_block.handles_2UzHL
+[       OK ] base58_encode_block.handles_2UzHL (0 ms)
+[ RUN      ] base58_encode_block.handles_11111z
+[       OK ] base58_encode_block.handles_11111z (0 ms)
+[ RUN      ] base58_encode_block.handles_7YXq9G
+[       OK ] base58_encode_block.handles_7YXq9G (0 ms)
+[ RUN      ] base58_encode_block.handles_111111z
+[       OK ] base58_encode_block.handles_111111z (0 ms)
+[ RUN      ] base58_encode_block.handles_VtB5VXc
+[       OK ] base58_encode_block.handles_VtB5VXc (0 ms)
+[ RUN      ] base58_encode_block.handles_11111111z
+[       OK ] base58_encode_block.handles_11111111z (0 ms)
+[ RUN      ] base58_encode_block.handles_3CUsUpv9t
+[       OK ] base58_encode_block.handles_3CUsUpv9t (0 ms)
+[ RUN      ] base58_encode_block.handles_111111111z
+[       OK ] base58_encode_block.handles_111111111z (0 ms)
+[ RUN      ] base58_encode_block.handles_Ahg1opVcGW
+[       OK ] base58_encode_block.handles_Ahg1opVcGW (0 ms)
+[ RUN      ] base58_encode_block.handles_1111111111z
+[       OK ] base58_encode_block.handles_1111111111z (0 ms)
+[ RUN      ] base58_encode_block.handles_jpXCZedGfVQ
+[       OK ] base58_encode_block.handles_jpXCZedGfVQ (0 ms)
+[ RUN      ] base58_encode_block.handles_11111111111
+[       OK ] base58_encode_block.handles_11111111111 (0 ms)
+[ RUN      ] base58_encode_block.handles_11111111112
+[       OK ] base58_encode_block.handles_11111111112 (0 ms)
+[ RUN      ] base58_encode_block.handles_11111111119
+[       OK ] base58_encode_block.handles_11111111119 (0 ms)
+[ RUN      ] base58_encode_block.handles_1111111111A
+[       OK ] base58_encode_block.handles_1111111111A (0 ms)
+[ RUN      ] base58_encode_block.handles_11111111121
+[       OK ] base58_encode_block.handles_11111111121 (0 ms)
+[ RUN      ] base58_encode_block.handles_1Ahg1opVcGW
+[       OK ] base58_encode_block.handles_1Ahg1opVcGW (0 ms)
+[ RUN      ] base58_encode_block.handles_22222222222
+[       OK ] base58_encode_block.handles_22222222222 (0 ms)
+[ RUN      ] base58_encode_block.handles_1z111111111
+[       OK ] base58_encode_block.handles_1z111111111 (0 ms)
+[----------] 29 tests from base58_encode_block (0 ms total)
+
+[----------] 45 tests from base58_decode_block
+[ RUN      ] base58_decode_block.handles_neg_1
+[       OK ] base58_decode_block.handles_neg_1 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_z
+[       OK ] base58_decode_block.handles_neg_z (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_11
+[       OK ] base58_decode_block.handles_pos_11 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_5Q
+[       OK ] base58_decode_block.handles_pos_5Q (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_5R
+[       OK ] base58_decode_block.handles_neg_5R (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zz
+[       OK ] base58_decode_block.handles_neg_zz (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_111
+[       OK ] base58_decode_block.handles_pos_111 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_LUv
+[       OK ] base58_decode_block.handles_pos_LUv (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_LUw
+[       OK ] base58_decode_block.handles_neg_LUw (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzz
+[       OK ] base58_decode_block.handles_neg_zzz (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_1111
+[       OK ] base58_decode_block.handles_neg_1111 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzz
+[       OK ] base58_decode_block.handles_neg_zzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_11111
+[       OK ] base58_decode_block.handles_pos_11111 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_2UzHL
+[       OK ] base58_decode_block.handles_pos_2UzHL (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_2UzHM
+[       OK ] base58_decode_block.handles_neg_2UzHM (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzzz
+[       OK ] base58_decode_block.handles_neg_zzzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_111111
+[       OK ] base58_decode_block.handles_pos_111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_7YXq9G
+[       OK ] base58_decode_block.handles_pos_7YXq9G (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_7YXq9H
+[       OK ] base58_decode_block.handles_neg_7YXq9H (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzzzz
+[       OK ] base58_decode_block.handles_neg_zzzzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_1111111
+[       OK ] base58_decode_block.handles_pos_1111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_VtB5VXc
+[       OK ] base58_decode_block.handles_pos_VtB5VXc (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_VtB5VXd
+[       OK ] base58_decode_block.handles_neg_VtB5VXd (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzzzzz
+[       OK ] base58_decode_block.handles_neg_zzzzzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_11111111
+[       OK ] base58_decode_block.handles_neg_11111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzzzzzz
+[       OK ] base58_decode_block.handles_neg_zzzzzzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_111111111
+[       OK ] base58_decode_block.handles_pos_111111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_3CUsUpv9t
+[       OK ] base58_decode_block.handles_pos_3CUsUpv9t (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_3CUsUpv9u
+[       OK ] base58_decode_block.handles_neg_3CUsUpv9u (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzzzzzzz
+[       OK ] base58_decode_block.handles_neg_zzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_1111111111
+[       OK ] base58_decode_block.handles_pos_1111111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_Ahg1opVcGW
+[       OK ] base58_decode_block.handles_pos_Ahg1opVcGW (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_Ahg1opVcGX
+[       OK ] base58_decode_block.handles_neg_Ahg1opVcGX (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzzzzzzzz
+[       OK ] base58_decode_block.handles_neg_zzzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_11111111111
+[       OK ] base58_decode_block.handles_pos_11111111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_pos_jpXCZedGfVQ
+[       OK ] base58_decode_block.handles_pos_jpXCZedGfVQ (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_jpXCZedGfVR
+[       OK ] base58_decode_block.handles_neg_jpXCZedGfVR (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_zzzzzzzzzzz
+[       OK ] base58_decode_block.handles_neg_zzzzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_01111111111
+[       OK ] base58_decode_block.handles_neg_01111111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_11111111110
+[       OK ] base58_decode_block.handles_neg_11111111110 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_11111011111
+[       OK ] base58_decode_block.handles_neg_11111011111 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_I1111111111
+[       OK ] base58_decode_block.handles_neg_I1111111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_O1111111111
+[       OK ] base58_decode_block.handles_neg_O1111111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg_l1111111111
+[       OK ] base58_decode_block.handles_neg_l1111111111 (0 ms)
+[ RUN      ] base58_decode_block.handles_neg__1111111111
+[       OK ] base58_decode_block.handles_neg__1111111111 (0 ms)
+[----------] 45 tests from base58_decode_block (1 ms total)
+
+[----------] 17 tests from base58_encode
+[ RUN      ] base58_encode.handles_11
+[       OK ] base58_encode.handles_11 (0 ms)
+[ RUN      ] base58_encode.handles_111
+[       OK ] base58_encode.handles_111 (0 ms)
+[ RUN      ] base58_encode.handles_11111
+[       OK ] base58_encode.handles_11111 (0 ms)
+[ RUN      ] base58_encode.handles_111111
+[       OK ] base58_encode.handles_111111 (0 ms)
+[ RUN      ] base58_encode.handles_1111111
+[       OK ] base58_encode.handles_1111111 (0 ms)
+[ RUN      ] base58_encode.handles_111111111
+[       OK ] base58_encode.handles_111111111 (0 ms)
+[ RUN      ] base58_encode.handles_1111111111
+[       OK ] base58_encode.handles_1111111111 (0 ms)
+[ RUN      ] base58_encode.handles_11111111111
+[       OK ] base58_encode.handles_11111111111 (0 ms)
+[ RUN      ] base58_encode.handles_1111111111111
+[       OK ] base58_encode.handles_1111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_11111111111111
+[       OK ] base58_encode.handles_11111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_1111111111111111
+[       OK ] base58_encode.handles_1111111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_11111111111111111
+[       OK ] base58_encode.handles_11111111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_111111111111111111
+[       OK ] base58_encode.handles_111111111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_11111111111111111111
+[       OK ] base58_encode.handles_11111111111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_111111111111111111111
+[       OK ] base58_encode.handles_111111111111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_1111111111111111111111
+[       OK ] base58_encode.handles_1111111111111111111111 (0 ms)
+[ RUN      ] base58_encode.handles_22222222222VtB5VXc
+[       OK ] base58_encode.handles_22222222222VtB5VXc (0 ms)
+[----------] 17 tests from base58_encode (0 ms total)
+
+[----------] 17 tests from base58_decode_pos
+[ RUN      ] base58_decode_pos.handles_pos_
+[       OK ] base58_decode_pos.handles_pos_ (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_5Q
+[       OK ] base58_decode_pos.handles_pos_5Q (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_LUv
+[       OK ] base58_decode_pos.handles_pos_LUv (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_2UzHL
+[       OK ] base58_decode_pos.handles_pos_2UzHL (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_7YXq9G
+[       OK ] base58_decode_pos.handles_pos_7YXq9G (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_VtB5VXc
+[       OK ] base58_decode_pos.handles_pos_VtB5VXc (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_3CUsUpv9t
+[       OK ] base58_decode_pos.handles_pos_3CUsUpv9t (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_Ahg1opVcGW
+[       OK ] base58_decode_pos.handles_pos_Ahg1opVcGW (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQ
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQ (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQ5Q
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQ5Q (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQLUv
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQLUv (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQ2UzHL
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQ2UzHL (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQ7YXq9G
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQ7YXq9G (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQVtB5VXc
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQVtB5VXc (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQ3CUsUpv9t
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQ3CUsUpv9t (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQAhg1opVcGW
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQAhg1opVcGW (0 ms)
+[ RUN      ] base58_decode_pos.handles_pos_jpXCZedGfVQjpXCZedGfVQ
+[       OK ] base58_decode_pos.handles_pos_jpXCZedGfVQjpXCZedGfVQ (0 ms)
+[----------] 17 tests from base58_decode_pos (0 ms total)
+
+[----------] 56 tests from base58_decode_neg
+[ RUN      ] base58_decode_neg.handles_neg_1
+[       OK ] base58_decode_neg.handles_neg_1 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_z
+[       OK ] base58_decode_neg.handles_neg_z (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_1111
+[       OK ] base58_decode_neg.handles_neg_1111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzz
+[       OK ] base58_decode_neg.handles_neg_zzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_11111111
+[       OK ] base58_decode_neg.handles_neg_11111111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_zzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789AB1
+[       OK ] base58_decode_neg.handles_neg_123456789AB1 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABz
+[       OK ] base58_decode_neg.handles_neg_123456789ABz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789AB1111
+[       OK ] base58_decode_neg.handles_neg_123456789AB1111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789AB11111111
+[       OK ] base58_decode_neg.handles_neg_123456789AB11111111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_5R
+[       OK ] base58_decode_neg.handles_neg_5R (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zz
+[       OK ] base58_decode_neg.handles_neg_zz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_LUw
+[       OK ] base58_decode_neg.handles_neg_LUw (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzz
+[       OK ] base58_decode_neg.handles_neg_zzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_2UzHM
+[       OK ] base58_decode_neg.handles_neg_2UzHM (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzz
+[       OK ] base58_decode_neg.handles_neg_zzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_7YXq9H
+[       OK ] base58_decode_neg.handles_neg_7YXq9H (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzzz
+[       OK ] base58_decode_neg.handles_neg_zzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_VtB5VXd
+[       OK ] base58_decode_neg.handles_neg_VtB5VXd (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzzzz
+[       OK ] base58_decode_neg.handles_neg_zzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_3CUsUpv9u
+[       OK ] base58_decode_neg.handles_neg_3CUsUpv9u (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_zzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_Ahg1opVcGX
+[       OK ] base58_decode_neg.handles_neg_Ahg1opVcGX (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_zzzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_jpXCZedGfVR
+[       OK ] base58_decode_neg.handles_neg_jpXCZedGfVR (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_zzzzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789AB5R
+[       OK ] base58_decode_neg.handles_neg_123456789AB5R (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABLUw
+[       OK ] base58_decode_neg.handles_neg_123456789ABLUw (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789AB2UzHM
+[       OK ] base58_decode_neg.handles_neg_123456789AB2UzHM (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789AB7YXq9H
+[       OK ] base58_decode_neg.handles_neg_123456789AB7YXq9H (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABVtB5VXd
+[       OK ] base58_decode_neg.handles_neg_123456789ABVtB5VXd (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789AB3CUsUpv9u
+[       OK ] base58_decode_neg.handles_neg_123456789AB3CUsUpv9u (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABAhg1opVcGX
+[       OK ] base58_decode_neg.handles_neg_123456789ABAhg1opVcGX (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABjpXCZedGfVR
+[       OK ] base58_decode_neg.handles_neg_123456789ABjpXCZedGfVR (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_123456789ABzzzzzzzzzzz
+[       OK ] base58_decode_neg.handles_neg_123456789ABzzzzzzzzzzz (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_zzzzzzzzzzz11
+[       OK ] base58_decode_neg.handles_neg_zzzzzzzzzzz11 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_10
+[       OK ] base58_decode_neg.handles_neg_10 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_11I
+[       OK ] base58_decode_neg.handles_neg_11I (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_11O11
+[       OK ] base58_decode_neg.handles_neg_11O11 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_11l111
+[       OK ] base58_decode_neg.handles_neg_11l111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_11_11111111
+[       OK ] base58_decode_neg.handles_neg_11_11111111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_1101111111111
+[       OK ] base58_decode_neg.handles_neg_1101111111111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_11I11111111111111
+[       OK ] base58_decode_neg.handles_neg_11I11111111111111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_11O1111111111111111111
+[       OK ] base58_decode_neg.handles_neg_11O1111111111111111111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_1111111111110
+[       OK ] base58_decode_neg.handles_neg_1111111111110 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_111111111111l1111
+[       OK ] base58_decode_neg.handles_neg_111111111111l1111 (0 ms)
+[ RUN      ] base58_decode_neg.handles_neg_111111111111_111111111
+[       OK ] base58_decode_neg.handles_neg_111111111111_111111111 (0 ms)
+[----------] 56 tests from base58_decode_neg (0 ms total)
+
+[----------] 21 tests from base58_encode_decode_addr
+[ RUN      ] base58_encode_decode_addr.handles_21D35quxec71111111111111111111111111111111111111111111111111111111111111111111111111111116Q5tCH
+[       OK ] base58_encode_decode_addr.handles_21D35quxec71111111111111111111111111111111111111111111111111111111111111111111111111111116Q5tCH (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_2Aui6ejTFscjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQVqegMoV
+[       OK ] base58_encode_decode_addr.handles_2Aui6ejTFscjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQVqegMoV (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_1119XrkPuSmLzdHXgVgrZKjepg5hZAxffLzdHXgVgrZKjepg5hZAxffLzdHXgVgrZKjepg5hZAxffLzdHXgVgrZKVphZRvn
+[       OK ] base58_encode_decode_addr.handles_1119XrkPuSmLzdHXgVgrZKjepg5hZAxffLzdHXgVgrZKjepg5hZAxffLzdHXgVgrZKjepg5hZAxffLzdHXgVgrZKVphZRvn (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_111111111111111111111111111111111111111111111111111111111111111111111111111111111111111115TXfiA
+[       OK ] base58_encode_decode_addr.handles_111111111111111111111111111111111111111111111111111111111111111111111111111111111111111115TXfiA (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83qvSEivPLYo11111111111111111111111111111111111111111111111111111111111111111111111111111169tWrH
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83qvSEivPLYo11111111111111111111111111111111111111111111111111111111111111111111111111111169tWrH (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA841d7FXjswpJjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQVq4LL1v
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA841d7FXjswpJjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQjpXCZedGfVQVq4LL1v (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA819VwdWVDP
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA819VwdWVDP (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA81efAfdCjPg
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA81efAfdCjPg (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83sryEt3YC8Q
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83sryEt3YC8Q (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83tWUuc54PFP3b
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83tWUuc54PFP3b (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83u9zaKrtRKZ1J6
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83u9zaKrtRKZ1J6 (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83uoWF3eanGG1aRoG
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83uoWF3eanGG1aRoG (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83vT1umSHMYJ4oNVdu
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83vT1umSHMYJ4oNVdu (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83w6XaVDyvpoGQBEWbB
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83w6XaVDyvpoGQBEWbB (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_PuT7GAdgbA83wk3FD1gW7J2KVGofA1r
+[       OK ] base58_encode_decode_addr.handles_PuT7GAdgbA83wk3FD1gW7J2KVGofA1r (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_15p2yAV
+[       OK ] base58_encode_decode_addr.handles_15p2yAV (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_FNQ3D6A
+[       OK ] base58_encode_decode_addr.handles_FNQ3D6A (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_26k9QWweu
+[       OK ] base58_encode_decode_addr.handles_26k9QWweu (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_3BzAD7n3y
+[       OK ] base58_encode_decode_addr.handles_3BzAD7n3y (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_11efCaY6UjG7JrxuB
+[       OK ] base58_encode_decode_addr.handles_11efCaY6UjG7JrxuB (0 ms)
+[ RUN      ] base58_encode_decode_addr.handles_21rhHRT48LN4PriP9
+[       OK ] base58_encode_decode_addr.handles_21rhHRT48LN4PriP9 (0 ms)
+[----------] 21 tests from base58_encode_decode_addr (0 ms total)
+
+[----------] 17 tests from base58_decode_addr_neg
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_overflow
+[       OK ] base58_decode_addr_neg.decode_fails_due_overflow (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_char_0
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_char_0 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_char_I
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_char_I (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_char_O
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_char_O (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_char_l
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_char_l (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_char_00
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_char_00 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_lenght
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_lenght (0 ms)
+[ RUN      ] base58_decode_addr_neg.handles_invalid_checksum
+[       OK ] base58_decode_addr_neg.handles_invalid_checksum (0 ms)
+[ RUN      ] base58_decode_addr_neg.handles_non_correct_tag
+[       OK ] base58_decode_addr_neg.handles_non_correct_tag (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_block_len_0
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_block_len_0 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_invalid_block_len_1
+[       OK ] base58_decode_addr_neg.decode_fails_due_invalid_block_len_1 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_address_too_short_0
+[       OK ] base58_decode_addr_neg.decode_fails_due_address_too_short_0 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_address_too_short_1
+[       OK ] base58_decode_addr_neg.decode_fails_due_address_too_short_1 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_address_too_short_2
+[       OK ] base58_decode_addr_neg.decode_fails_due_address_too_short_2 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_address_too_short_3
+[       OK ] base58_decode_addr_neg.decode_fails_due_address_too_short_3 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_address_too_short_4
+[       OK ] base58_decode_addr_neg.decode_fails_due_address_too_short_4 (0 ms)
+[ RUN      ] base58_decode_addr_neg.decode_fails_due_address_too_short_5
+[       OK ] base58_decode_addr_neg.decode_fails_due_address_too_short_5 (0 ms)
+[----------] 17 tests from base58_decode_addr_neg (0 ms total)
+
+[----------] 1 test from get_account_address_as_str
+[ RUN      ] get_account_address_as_str.works_correctly
+[       OK ] get_account_address_as_str.works_correctly (0 ms)
+[----------] 1 test from get_account_address_as_str (0 ms total)
+
+[----------] 7 tests from get_account_address_from_str
+[ RUN      ] get_account_address_from_str.handles_valid_address
+[       OK ] get_account_address_from_str.handles_valid_address (0 ms)
+[ RUN      ] get_account_address_from_str.fails_on_invalid_address_format
+[       OK ] get_account_address_from_str.fails_on_invalid_address_format (0 ms)
+[ RUN      ] get_account_address_from_str.fails_on_invalid_address_prefix
+[       OK ] get_account_address_from_str.fails_on_invalid_address_prefix (0 ms)
+[ RUN      ] get_account_address_from_str.fails_on_invalid_address_content
+[       OK ] get_account_address_from_str.fails_on_invalid_address_content (0 ms)
+[ RUN      ] get_account_address_from_str.fails_on_invalid_address_spend_key
+[       OK ] get_account_address_from_str.fails_on_invalid_address_spend_key (0 ms)
+[ RUN      ] get_account_address_from_str.fails_on_invalid_address_view_key
+[       OK ] get_account_address_from_str.fails_on_invalid_address_view_key (0 ms)
+[ RUN      ] get_account_address_from_str.parses_old_address_format
+[       OK ] get_account_address_from_str.parses_old_address_format (0 ms)
+[----------] 7 tests from get_account_address_from_str (0 ms total)
+
+[----------] 2 tests from meow_address
+[ RUN      ] meow_address.network_and_address_type_vectors
+[       OK ] meow_address.network_and_address_type_vectors (0 ms)
+[ RUN      ] meow_address.rejects_monero_base58_address
+[       OK ] meow_address.rejects_monero_base58_address (0 ms)
+[----------] 2 tests from meow_address (0 ms total)
+
+[----------] 3 tests from BlockchainDBTest/0, where TypeParam = cryptonote::BlockchainLMDB
+[ RUN      ] BlockchainDBTest/0.OpenAndClose
+File created by test: /tmp/c4f6-b2fb-110f-2f8d/data.mdb
+File created by test: /tmp/c4f6-b2fb-110f-2f8d/lock.mdb
+2026-09-13 15:53:07.535	W Attempted to open db, but it's already open
+[       OK ] BlockchainDBTest/0.OpenAndClose (8 ms)
+[ RUN      ] BlockchainDBTest/0.AddBlock
+File created by test: /tmp/ea2c-675f-9465-b112/data.mdb
+File created by test: /tmp/ea2c-675f-9465-b112/lock.mdb
+[       OK ] BlockchainDBTest/0.AddBlock (9 ms)
+[ RUN      ] BlockchainDBTest/0.RetrieveBlockData
+File created by test: /tmp/4a7d-e1d0-5a52-fb2b/data.mdb
+File created by test: /tmp/4a7d-e1d0-5a52-fb2b/lock.mdb
+[       OK ] BlockchainDBTest/0.RetrieveBlockData (10 ms)
+[----------] 3 tests from BlockchainDBTest/0 (27 ms total)
+
+[----------] 3 tests from block_queue
+[ RUN      ] block_queue.empty
+[       OK ] block_queue.empty (0 ms)
+[ RUN      ] block_queue.add_stepwise
+[       OK ] block_queue.add_stepwise (0 ms)
+[ RUN      ] block_queue.flush_uuid
+[       OK ] block_queue.flush_uuid (0 ms)
+[----------] 3 tests from block_queue (0 ms total)
+
+[----------] 7 tests from meow_emission
+[ RUN      ] meow_emission.selected_reward_spacing_pair
+[       OK ] meow_emission.selected_reward_spacing_pair (0 ms)
+[ RUN      ] meow_emission.reward_independent_of_supply
+[       OK ] meow_emission.reward_independent_of_supply (0 ms)
+[ RUN      ] meow_emission.reward_independent_of_version
+[       OK ] meow_emission.reward_independent_of_version (0 ms)
+[ RUN      ] meow_emission.penalty_math_unchanged
+2026-09-13 15:53:07.555	E Block cumulative weight is too big: 40001, expected less than 40000
+[       OK ] meow_emission.penalty_math_unchanged (1 ms)
+[ RUN      ] meow_emission.supply_is_height_times_reward
+[       OK ] meow_emission.supply_is_height_times_reward (16 ms)
+[ RUN      ] meow_emission.tally_saturates_and_never_wraps
+[       OK ] meow_emission.tally_saturates_and_never_wraps (0 ms)
+[ RUN      ] meow_emission.dilution_is_one_over_n_minus_one
+[       OK ] meow_emission.dilution_is_one_over_n_minus_one (0 ms)
+[----------] 7 tests from meow_emission (17 ms total)
+
+[----------] 6 tests from bootstrap_node_selector
+[ RUN      ] bootstrap_node_selector.selector_auto_empty
+[       OK ] bootstrap_node_selector.selector_auto_empty (0 ms)
+[ RUN      ] bootstrap_node_selector.selector_auto_no_credentials
+[       OK ] bootstrap_node_selector.selector_auto_no_credentials (0 ms)
+[ RUN      ] bootstrap_node_selector.selector_auto_success
+[       OK ] bootstrap_node_selector.selector_auto_success (0 ms)
+[ RUN      ] bootstrap_node_selector.selector_auto_failure
+[       OK ] bootstrap_node_selector.selector_auto_failure (0 ms)
+[ RUN      ] bootstrap_node_selector.selector_auto_white_nodes_first
+[       OK ] bootstrap_node_selector.selector_auto_white_nodes_first (0 ms)
+[ RUN      ] bootstrap_node_selector.selector_auto_max_nodes
+[       OK ] bootstrap_node_selector.selector_auto_max_nodes (0 ms)
+[----------] 6 tests from bootstrap_node_selector (1 ms total)
+
+[----------] 9 tests from bulletproofs
+[ RUN      ] bulletproofs.valid_zero
+[       OK ] bulletproofs.valid_zero (69 ms)
+[ RUN      ] bulletproofs.valid_max
+[       OK ] bulletproofs.valid_max (28 ms)
+[ RUN      ] bulletproofs.valid_random
+[       OK ] bulletproofs.valid_random (191 ms)
+[ RUN      ] bulletproofs.valid_multi_random
+[       OK ] bulletproofs.valid_multi_random (1183 ms)
+[ RUN      ] bulletproofs.multi_splitting
+[       OK ] bulletproofs.multi_splitting (3021 ms)
+[ RUN      ] bulletproofs.valid_aggregated
+[       OK ] bulletproofs.valid_aggregated (1052 ms)
+[ RUN      ] bulletproofs.invalid_8
+2026-09-13 15:53:13.140	E Verification failure
+[       OK ] bulletproofs.invalid_8 (23 ms)
+[ RUN      ] bulletproofs.invalid_31
+2026-09-13 15:53:13.165	E Verification failure
+[       OK ] bulletproofs.invalid_31 (25 ms)
+[ RUN      ] bulletproofs.invalid_torsion
+2026-09-13 15:53:13.192	E Verification failure
+2026-09-13 15:53:13.195	E Verification failure
+2026-09-13 15:53:13.198	E Verification failure
+2026-09-13 15:53:13.201	E Verification failure
+2026-09-13 15:53:13.204	E Verification failure
+2026-09-13 15:53:13.208	E Verification failure
+2026-09-13 15:53:13.211	E Verification failure
+2026-09-13 15:53:13.214	E Verification failure
+2026-09-13 15:53:13.217	E Verification failure
+2026-09-13 15:53:13.220	E Verification failure
+2026-09-13 15:53:13.223	E Verification failure
+2026-09-13 15:53:13.227	E Verification failure
+2026-09-13 15:53:13.230	E Verification failure
+2026-09-13 15:53:13.233	E Verification failure
+2026-09-13 15:53:13.236	E Verification failure
+2026-09-13 15:53:13.239	E Verification failure
+2026-09-13 15:53:13.242	E Verification failure
+2026-09-13 15:53:13.246	E Verification failure
+2026-09-13 15:53:13.249	E Verification failure
+2026-09-13 15:53:13.252	E Verification failure
+2026-09-13 15:53:13.255	E Verification failure
+2026-09-13 15:53:13.258	E Verification failure
+2026-09-13 15:53:13.261	E Verification failure
+2026-09-13 15:53:13.264	E Verification failure
+2026-09-13 15:53:13.267	E Verification failure
+2026-09-13 15:53:13.270	E Verification failure
+2026-09-13 15:53:13.273	E Verification failure
+2026-09-13 15:53:13.277	E Verification failure
+2026-09-13 15:53:13.280	E Verification failure
+2026-09-13 15:53:13.283	E Verification failure
+2026-09-13 15:53:13.286	E Verification failure
+2026-09-13 15:53:13.289	E Verification failure
+2026-09-13 15:53:13.292	E Verification failure
+2026-09-13 15:53:13.295	E Verification failure
+2026-09-13 15:53:13.299	E Verification failure
+2026-09-13 15:53:13.302	E Verification failure
+2026-09-13 15:53:13.305	E Verification failure
+2026-09-13 15:53:13.309	E Verification failure
+2026-09-13 15:53:13.312	E Verification failure
+2026-09-13 15:53:13.315	E Verification failure
+2026-09-13 15:53:13.318	E Verification failure
+2026-09-13 15:53:13.321	E Verification failure
+2026-09-13 15:53:13.324	E Verification failure
+2026-09-13 15:53:13.327	E Verification failure
+2026-09-13 15:53:13.331	E Verification failure
+2026-09-13 15:53:13.334	E Verification failure
+2026-09-13 15:53:13.337	E Verification failure
+2026-09-13 15:53:13.340	E Verification failure
+2026-09-13 15:53:13.343	E Verification failure
+2026-09-13 15:53:13.347	E Verification failure
+2026-09-13 15:53:13.350	E Verification failure
+2026-09-13 15:53:13.353	E Verification failure
+2026-09-13 15:53:13.357	E Verification failure
+2026-09-13 15:53:13.360	E Verification failure
+2026-09-13 15:53:13.363	E Verification failure
+2026-09-13 15:53:13.366	E Verification failure
+2026-09-13 15:53:13.369	E Verification failure
+2026-09-13 15:53:13.372	E Verification failure
+2026-09-13 15:53:13.375	E Verification failure
+2026-09-13 15:53:13.379	E Verification failure
+2026-09-13 15:53:13.382	E Verification failure
+2026-09-13 15:53:13.385	E Verification failure
+2026-09-13 15:53:13.388	E Verification failure
+2026-09-13 15:53:13.391	E Verification failure
+2026-09-13 15:53:13.394	E Verification failure
+2026-09-13 15:53:13.397	E Verification failure
+2026-09-13 15:53:13.400	E Verification failure
+2026-09-13 15:53:13.403	E Verification failure
+2026-09-13 15:53:13.407	E Verification failure
+2026-09-13 15:53:13.410	E Verification failure
+2026-09-13 15:53:13.414	E Verification failure
+2026-09-13 15:53:13.418	E Verification failure
+2026-09-13 15:53:13.421	E Verification failure
+2026-09-13 15:53:13.425	E Verification failure
+2026-09-13 15:53:13.428	E Verification failure
+2026-09-13 15:53:13.431	E Verification failure
+2026-09-13 15:53:13.435	E Verification failure
+2026-09-13 15:53:13.438	E Verification failure
+2026-09-13 15:53:13.442	E Verification failure
+2026-09-13 15:53:13.445	E Verification failure
+2026-09-13 15:53:13.448	E Verification failure
+2026-09-13 15:53:13.452	E Verification failure
+2026-09-13 15:53:13.456	E Verification failure
+2026-09-13 15:53:13.460	E Verification failure
+2026-09-13 15:53:13.463	E Verification failure
+2026-09-13 15:53:13.466	E Verification failure
+2026-09-13 15:53:13.470	E Verification failure
+2026-09-13 15:53:13.473	E Verification failure
+2026-09-13 15:53:13.476	E Verification failure
+2026-09-13 15:53:13.479	E Verification failure
+2026-09-13 15:53:13.483	E Verification failure
+2026-09-13 15:53:13.486	E Verification failure
+2026-09-13 15:53:13.489	E Verification failure
+2026-09-13 15:53:13.492	E Verification failure
+2026-09-13 15:53:13.495	E Verification failure
+2026-09-13 15:53:13.499	E Verification failure
+2026-09-13 15:53:13.502	E Verification failure
+2026-09-13 15:53:13.506	E Verification failure
+2026-09-13 15:53:13.509	E Verification failure
+2026-09-13 15:53:13.512	E Verification failure
+2026-09-13 15:53:13.515	E Verification failure
+2026-09-13 15:53:13.518	E Verification failure
+2026-09-13 15:53:13.522	E Verification failure
+2026-09-13 15:53:13.525	E Verification failure
+2026-09-13 15:53:13.528	E Verification failure
+2026-09-13 15:53:13.531	E Verification failure
+2026-09-13 15:53:13.534	E Verification failure
+2026-09-13 15:53:13.538	E Verification failure
+2026-09-13 15:53:13.541	E Verification failure
+2026-09-13 15:53:13.544	E Verification failure
+2026-09-13 15:53:13.547	E Verification failure
+2026-09-13 15:53:13.550	E Verification failure
+2026-09-13 15:53:13.554	E Verification failure
+2026-09-13 15:53:13.557	E Verification failure
+2026-09-13 15:53:13.560	E Verification failure
+2026-09-13 15:53:13.563	E Verification failure
+2026-09-13 15:53:13.566	E Verification failure
+2026-09-13 15:53:13.569	E Verification failure
+2026-09-13 15:53:13.573	E Verification failure
+[       OK ] bulletproofs.invalid_torsion (408 ms)
+[----------] 9 tests from bulletproofs (6000 ms total)
+
+[----------] 3 tests from bulletproof
+[ RUN      ] bulletproof.weight_equal
+[       OK ] bulletproof.weight_equal (0 ms)
+[ RUN      ] bulletproof.weight_more
+[       OK ] bulletproof.weight_more (0 ms)
+[ RUN      ] bulletproof.weight_pruned
+[       OK ] bulletproof.weight_pruned (4 ms)
+[----------] 3 tests from bulletproof (4 ms total)
+
+[----------] 8 tests from bulletproofs_plus
+[ RUN      ] bulletproofs_plus.valid_zero
+[       OK ] bulletproofs_plus.valid_zero (27 ms)
+[ RUN      ] bulletproofs_plus.valid_max
+[       OK ] bulletproofs_plus.valid_max (27 ms)
+[ RUN      ] bulletproofs_plus.valid_random
+[       OK ] bulletproofs_plus.valid_random (178 ms)
+[ RUN      ] bulletproofs_plus.valid_multi_random
+[       OK ] bulletproofs_plus.valid_multi_random (1063 ms)
+[ RUN      ] bulletproofs_plus.valid_aggregated
+[       OK ] bulletproofs_plus.valid_aggregated (963 ms)
+[ RUN      ] bulletproofs_plus.invalid_8
+2026-09-13 15:53:15.856	E Verification failure
+[       OK ] bulletproofs_plus.invalid_8 (21 ms)
+[ RUN      ] bulletproofs_plus.invalid_31
+2026-09-13 15:53:15.879	E Verification failure
+[       OK ] bulletproofs_plus.invalid_31 (23 ms)
+[ RUN      ] bulletproofs_plus.invalid_torsion
+2026-09-13 15:53:15.907	E Verification failure
+2026-09-13 15:53:15.911	E Verification failure
+2026-09-13 15:53:15.914	E Verification failure
+2026-09-13 15:53:15.917	E Verification failure
+2026-09-13 15:53:15.921	E Verification failure
+2026-09-13 15:53:15.924	E Verification failure
+2026-09-13 15:53:15.927	E Verification failure
+2026-09-13 15:53:15.930	E Verification failure
+2026-09-13 15:53:15.934	E Verification failure
+2026-09-13 15:53:15.937	E Verification failure
+2026-09-13 15:53:15.940	E Verification failure
+2026-09-13 15:53:15.943	E Verification failure
+2026-09-13 15:53:15.948	E Verification failure
+2026-09-13 15:53:15.952	E Verification failure
+2026-09-13 15:53:15.956	E Verification failure
+2026-09-13 15:53:15.959	E Verification failure
+2026-09-13 15:53:15.964	E Verification failure
+2026-09-13 15:53:15.967	E Verification failure
+2026-09-13 15:53:15.970	E Verification failure
+2026-09-13 15:53:15.973	E Verification failure
+2026-09-13 15:53:15.977	E Verification failure
+2026-09-13 15:53:15.980	E Verification failure
+2026-09-13 15:53:15.983	E Verification failure
+2026-09-13 15:53:15.987	E Verification failure
+2026-09-13 15:53:15.990	E Verification failure
+2026-09-13 15:53:15.993	E Verification failure
+2026-09-13 15:53:15.996	E Verification failure
+2026-09-13 15:53:15.999	E Verification failure
+2026-09-13 15:53:16.002	E Verification failure
+2026-09-13 15:53:16.005	E Verification failure
+2026-09-13 15:53:16.009	E Verification failure
+2026-09-13 15:53:16.012	E Verification failure
+2026-09-13 15:53:16.015	E Verification failure
+2026-09-13 15:53:16.018	E Verification failure
+2026-09-13 15:53:16.021	E Verification failure
+2026-09-13 15:53:16.024	E Verification failure
+2026-09-13 15:53:16.028	E Verification failure
+2026-09-13 15:53:16.032	E Verification failure
+2026-09-13 15:53:16.035	E Verification failure
+2026-09-13 15:53:16.038	E Verification failure
+2026-09-13 15:53:16.041	E Verification failure
+2026-09-13 15:53:16.044	E Verification failure
+2026-09-13 15:53:16.048	E Verification failure
+2026-09-13 15:53:16.051	E Verification failure
+2026-09-13 15:53:16.054	E Verification failure
+2026-09-13 15:53:16.057	E Verification failure
+2026-09-13 15:53:16.060	E Verification failure
+2026-09-13 15:53:16.063	E Verification failure
+2026-09-13 15:53:16.067	E Verification failure
+2026-09-13 15:53:16.070	E Verification failure
+2026-09-13 15:53:16.073	E Verification failure
+2026-09-13 15:53:16.076	E Verification failure
+2026-09-13 15:53:16.079	E Verification failure
+2026-09-13 15:53:16.083	E Verification failure
+2026-09-13 15:53:16.086	E Verification failure
+2026-09-13 15:53:16.089	E Verification failure
+2026-09-13 15:53:16.092	E Verification failure
+2026-09-13 15:53:16.095	E Verification failure
+2026-09-13 15:53:16.098	E Verification failure
+2026-09-13 15:53:16.101	E Verification failure
+2026-09-13 15:53:16.105	E Verification failure
+2026-09-13 15:53:16.108	E Verification failure
+2026-09-13 15:53:16.111	E Verification failure
+2026-09-13 15:53:16.114	E Verification failure
+2026-09-13 15:53:16.117	E Verification failure
+2026-09-13 15:53:16.120	E Verification failure
+2026-09-13 15:53:16.123	E Verification failure
+2026-09-13 15:53:16.126	E Verification failure
+2026-09-13 15:53:16.130	E Verification failure
+2026-09-13 15:53:16.133	E Verification failure
+2026-09-13 15:53:16.136	E Verification failure
+2026-09-13 15:53:16.139	E Verification failure
+2026-09-13 15:53:16.142	E Verification failure
+2026-09-13 15:53:16.145	E Verification failure
+2026-09-13 15:53:16.149	E Verification failure
+2026-09-13 15:53:16.152	E Verification failure
+2026-09-13 15:53:16.155	E Verification failure
+2026-09-13 15:53:16.158	E Verification failure
+2026-09-13 15:53:16.161	E Verification failure
+2026-09-13 15:53:16.164	E Verification failure
+2026-09-13 15:53:16.168	E Verification failure
+2026-09-13 15:53:16.171	E Verification failure
+2026-09-13 15:53:16.174	E Verification failure
+2026-09-13 15:53:16.177	E Verification failure
+2026-09-13 15:53:16.180	E Verification failure
+2026-09-13 15:53:16.183	E Verification failure
+2026-09-13 15:53:16.186	E Verification failure
+2026-09-13 15:53:16.190	E Verification failure
+2026-09-13 15:53:16.193	E Verification failure
+2026-09-13 15:53:16.196	E Verification failure
+2026-09-13 15:53:16.199	E Verification failure
+2026-09-13 15:53:16.202	E Verification failure
+2026-09-13 15:53:16.205	E Verification failure
+2026-09-13 15:53:16.208	E Verification failure
+2026-09-13 15:53:16.211	E Verification failure
+2026-09-13 15:53:16.215	E Verification failure
+2026-09-13 15:53:16.218	E Verification failure
+2026-09-13 15:53:16.221	E Verification failure
+2026-09-13 15:53:16.224	E Verification failure
+2026-09-13 15:53:16.228	E Verification failure
+2026-09-13 15:53:16.231	E Verification failure
+2026-09-13 15:53:16.234	E Verification failure
+2026-09-13 15:53:16.237	E Verification failure
+2026-09-13 15:53:16.240	E Verification failure
+2026-09-13 15:53:16.243	E Verification failure
+2026-09-13 15:53:16.246	E Verification failure
+2026-09-13 15:53:16.250	E Verification failure
+2026-09-13 15:53:16.253	E Verification failure
+2026-09-13 15:53:16.256	E Verification failure
+2026-09-13 15:53:16.259	E Verification failure
+2026-09-13 15:53:16.263	E Verification failure
+2026-09-13 15:53:16.266	E Verification failure
+[       OK ] bulletproofs_plus.invalid_torsion (387 ms)
+[----------] 8 tests from bulletproofs_plus (2689 ms total)
+
+[----------] 2 tests from canonical_amounts
+[ RUN      ] canonical_amounts.valid
+[       OK ] canonical_amounts.valid (0 ms)
+[ RUN      ] canonical_amounts.invalid
+[       OK ] canonical_amounts.invalid (0 ms)
+[----------] 2 tests from canonical_amounts (0 ms total)
+
+[----------] 4 tests from chacha8
+[ RUN      ] chacha8.is_correct_0
+[       OK ] chacha8.is_correct_0 (0 ms)
+[ RUN      ] chacha8.is_correct_1
+[       OK ] chacha8.is_correct_1 (0 ms)
+[ RUN      ] chacha8.is_correct_2
+[       OK ] chacha8.is_correct_2 (0 ms)
+[ RUN      ] chacha8.is_correct_3
+[       OK ] chacha8.is_correct_3 (0 ms)
+[----------] 4 tests from chacha8 (0 ms total)
+
+[----------] 3 tests from checkpoints_is_alternative_block_allowed
+[ RUN      ] checkpoints_is_alternative_block_allowed.handles_empty_checkpoints
+[       OK ] checkpoints_is_alternative_block_allowed.handles_empty_checkpoints (0 ms)
+[ RUN      ] checkpoints_is_alternative_block_allowed.handles_one_checkpoint
+[       OK ] checkpoints_is_alternative_block_allowed.handles_one_checkpoint (0 ms)
+[ RUN      ] checkpoints_is_alternative_block_allowed.handles_two_and_more_checkpoints
+[       OK ] checkpoints_is_alternative_block_allowed.handles_two_and_more_checkpoints (0 ms)
+[----------] 3 tests from checkpoints_is_alternative_block_allowed (0 ms total)
+
+[----------] 1 test from CommandLine
+[ RUN      ] CommandLine.IsYes
+[       OK ] CommandLine.IsYes (0 ms)
+[----------] 1 test from CommandLine (0 ms total)
+
+[----------] 4 tests from Crypto
+[ RUN      ] Crypto.Ostream
+[       OK ] Crypto.Ostream (0 ms)
+[ RUN      ] Crypto.null_keys
+[       OK ] Crypto.null_keys (0 ms)
+[ RUN      ] Crypto.verify_32
+[       OK ] Crypto.verify_32 (1 ms)
+[ RUN      ] Crypto.tree_branch
+[       OK ] Crypto.tree_branch (2 ms)
+[----------] 4 tests from Crypto (3 ms total)
+
+[----------] 7 tests from decompose_amount_into_digits_test
+[ RUN      ] decompose_amount_into_digits_test.is_correct_0
+[       OK ] decompose_amount_into_digits_test.is_correct_0 (0 ms)
+[ RUN      ] decompose_amount_into_digits_test.is_correct_1
+[       OK ] decompose_amount_into_digits_test.is_correct_1 (0 ms)
+[ RUN      ] decompose_amount_into_digits_test.is_correct_2
+[       OK ] decompose_amount_into_digits_test.is_correct_2 (0 ms)
+[ RUN      ] decompose_amount_into_digits_test.is_correct_3
+[       OK ] decompose_amount_into_digits_test.is_correct_3 (0 ms)
+[ RUN      ] decompose_amount_into_digits_test.is_correct_4
+[       OK ] decompose_amount_into_digits_test.is_correct_4 (0 ms)
+[ RUN      ] decompose_amount_into_digits_test.is_correct_5
+[       OK ] decompose_amount_into_digits_test.is_correct_5 (0 ms)
+[ RUN      ] decompose_amount_into_digits_test.is_correct_6
+[       OK ] decompose_amount_into_digits_test.is_correct_6 (0 ms)
+[----------] 7 tests from decompose_amount_into_digits_test (0 ms total)
+
+[----------] 4 tests from device
+[ RUN      ] device.name
+[       OK ] device.name (0 ms)
+[ RUN      ] device.open_close
+[       OK ] device.open_close (0 ms)
+[ RUN      ] device.ops
+[       OK ] device.ops (1 ms)
+[ RUN      ] device.ecdh32
+[       OK ] device.ecdh32 (0 ms)
+[----------] 4 tests from device (1 ms total)
+
+[----------] 1 test from difficulty
+[ RUN      ] difficulty.check_hash
+[       OK ] difficulty.check_hash (0 ms)
+[----------] 1 test from difficulty (0 ms total)
+
+[----------] 9 tests from meow_difficulty
+[ RUN      ] meow_difficulty.clamp
+[       OK ] meow_difficulty.clamp (0 ms)
+[ RUN      ] meow_difficulty.startup_uses_floor
+[       OK ] meow_difficulty.startup_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.computed_result_uses_floor
+[       OK ] meow_difficulty.computed_result_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.rounding_and_timestamp_sorting_preserved
+[       OK ] meow_difficulty.rounding_and_timestamp_sorting_preserved (0 ms)
+[ RUN      ] meow_difficulty.equal_timestamps_use_one_second
+[       OK ] meow_difficulty.equal_timestamps_use_one_second (0 ms)
+[ RUN      ] meow_difficulty.overflow_remains_error_not_floor
+[       OK ] meow_difficulty.overflow_remains_error_not_floor (0 ms)
+[ RUN      ] meow_difficulty.core_genesis_and_recalculation
+2026-09-13 15:53:16.271	I Loading blockchain from folder /tmp/meow-floor-4f07c7ce29752f7d/lmdb ...
+2026-09-13 15:53:16.302	I Loading checkpoints
+2026-09-13 15:53:16.302	I Recalculating difficulties from height 0 to height 0
+2026-09-13 15:53:16.302	I Recalculating difficulties from height 0 to height 1
+2026-09-13 15:53:16.307	I Loading blockchain from folder /tmp/meow-floor-c091e75622f72a19/testnet/lmdb ...
+2026-09-13 15:53:16.337	I Loading checkpoints
+2026-09-13 15:53:16.337	I Recalculating difficulties from height 0 to height 0
+2026-09-13 15:53:16.337	I Recalculating difficulties from height 0 to height 1
+2026-09-13 15:53:16.343	I Loading blockchain from folder /tmp/meow-floor-bd5f6e0c9dce572c/stagenet/lmdb ...
+2026-09-13 15:53:16.374	I Loading checkpoints
+2026-09-13 15:53:16.374	I Recalculating difficulties from height 0 to height 0
+2026-09-13 15:53:16.374	I Recalculating difficulties from height 0 to height 1
+[       OK ] meow_difficulty.core_genesis_and_recalculation (108 ms)
+[ RUN      ] meow_difficulty.core_fixed_difficulty_override
+2026-09-13 15:53:16.379	I Loading blockchain from folder /tmp/meow-floor-c66bef763d0fa420/lmdb ...
+2026-09-13 15:53:16.410	I Loading checkpoints
+[       OK ] meow_difficulty.core_fixed_difficulty_override (36 ms)
+[ RUN      ] meow_difficulty.core_window_lag_rollback_and_alternative_sampling
+2026-09-13 15:53:16.415	I Loading blockchain from folder /tmp/meow-floor-93a204d32e3d47d6/lmdb ...
+2026-09-13 15:53:16.445	I Loading checkpoints
+2026-09-13 15:53:16.445	I Recalculating difficulties from height 0 to height 0
+2026-09-13 15:53:16.445	I Recalculating difficulties from height 0 to height 1
+2026-09-13 15:53:16.733	I Recalculating difficulties from height 0 to height 599
+2026-09-13 15:53:16.734	I Recalculating difficulties from height 1 to height 599
+2026-09-13 15:53:16.737	I Recalculating difficulties from height 0 to height 600
+2026-09-13 15:53:16.738	I Recalculating difficulties from height 1 to height 600
+2026-09-13 15:53:16.740	I Recalculating difficulties from height 0 to height 601
+2026-09-13 15:53:16.742	I Recalculating difficulties from height 1 to height 601
+2026-09-13 15:53:16.822	I Recalculating difficulties from height 0 to height 719
+2026-09-13 15:53:16.824	I Recalculating difficulties from height 1 to height 719
+2026-09-13 15:53:16.827	I Recalculating difficulties from height 0 to height 720
+2026-09-13 15:53:16.829	I Recalculating difficulties from height 1 to height 720
+2026-09-13 15:53:16.832	I Recalculating difficulties from height 0 to height 721
+2026-09-13 15:53:16.834	I Recalculating difficulties from height 1 to height 721
+2026-09-13 15:53:16.846	I Recalculating difficulties from height 0 to height 734
+2026-09-13 15:53:16.848	I Recalculating difficulties from height 1 to height 734
+2026-09-13 15:53:16.851	I Recalculating difficulties from height 0 to height 735
+2026-09-13 15:53:16.853	I Recalculating difficulties from height 1 to height 735
+2026-09-13 15:53:16.856	I Recalculating difficulties from height 0 to height 736
+2026-09-13 15:53:16.858	I Recalculating difficulties from height 2 to height 736
+2026-09-13 15:53:16.906	I Recalculating difficulties from height 0 to height 800
+2026-09-13 15:53:16.908	I Recalculating difficulties from height 66 to height 800
+2026-09-13 15:53:16.912	I Recalculating difficulties from height 0 to height 719
+2026-09-13 15:53:16.915	I Recalculating difficulties from height 1 to height 719
+2026-09-13 15:53:16.979	I Recalculating difficulties from height 0 to height 800
+2026-09-13 15:53:16.981	I Recalculating difficulties from height 66 to height 800
+[       OK ] meow_difficulty.core_window_lag_rollback_and_alternative_sampling (580 ms)
+[----------] 9 tests from meow_difficulty (724 ms total)
+
+[----------] 2 tests from meow_authorities
+[ RUN      ] meow_authorities.updates_fail_closed
+2026-09-13 15:53:16.994	W Automatic updates are disabled: no Meownero update authority is configured
+2026-09-13 15:53:16.994	W Automatic updates are disabled: no Meownero update authority is configured
+2026-09-13 15:53:16.994	W Automatic updates are disabled: no Meownero update authority is configured
+[       OK ] meow_authorities.updates_fail_closed (0 ms)
+[ RUN      ] meow_authorities.no_download_urls
+[       OK ] meow_authorities.no_download_urls (0 ms)
+[----------] 2 tests from meow_authorities (0 ms total)
+
+[----------] 13 tests from DNS_PUBLIC
+[ RUN      ] DNS_PUBLIC.empty
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.empty (0 ms)
+[ RUN      ] DNS_PUBLIC.default
+2026-09-13 15:53:16.994	W Using default public DNS server(s): 194.150.168.168, 80.67.169.40, 89.233.43.71, 109.69.8.51, 193.58.251.251 (TCP)
+[       OK ] DNS_PUBLIC.default (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_scheme
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_scheme (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_alpha
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_ip_alpha (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_num1
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_ip_num1 (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_num3
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_ip_num3 (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_num4_extra
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_ip_num4_extra (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_num4_range
+2026-09-13 15:53:16.994	E Invalid IP: tcp://3.4.542.6, using default
+[       OK ] DNS_PUBLIC.invalid_ip_num4_range (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_dot
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_ip_dot (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_num5
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_ip_num5 (0 ms)
+[ RUN      ] DNS_PUBLIC.invalid_ip_4_missing
+2026-09-13 15:53:16.994	E Invalid DNS_PUBLIC contents, ignored
+[       OK ] DNS_PUBLIC.invalid_ip_4_missing (0 ms)
+[ RUN      ] DNS_PUBLIC.valid_ip_lo
+[       OK ] DNS_PUBLIC.valid_ip_lo (0 ms)
+[ RUN      ] DNS_PUBLIC.valid_ip
+[       OK ] DNS_PUBLIC.valid_ip (0 ms)
+[----------] 13 tests from DNS_PUBLIC (0 ms total)
+
+[----------] 3 tests from boosted_tcp_server
+[ RUN      ] boosted_tcp_server.worker_threads_are_exception_resistant
+[       OK ] boosted_tcp_server.worker_threads_are_exception_resistant (763 ms)
+[ RUN      ] boosted_tcp_server.strand_deadlock
+[       OK ] boosted_tcp_server.strand_deadlock (12 ms)
+[ RUN      ] boosted_tcp_server.shutdown
+[       OK ] boosted_tcp_server.shutdown (1 ms)
+[----------] 3 tests from boosted_tcp_server (776 ms total)
+
+[----------] 3 tests from test_epee_connection
+[ RUN      ] test_epee_connection.test_lifetime
+[       OK ] test_epee_connection.test_lifetime (361 ms)
+[ RUN      ] test_epee_connection.ssl_shutdown
+[       OK ] test_epee_connection.ssl_shutdown (1169 ms)
+[ RUN      ] test_epee_connection.ssl_handshake
+[       OK ] test_epee_connection.ssl_handshake (404 ms)
+[----------] 3 tests from test_epee_connection (1934 ms total)
+
+[----------] 8 tests from positive_test_connection_to_levin_protocol_handler_calls
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.new_handler_is_not_initialized
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.new_handler_is_not_initialized (0 ms)
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.handler_initialization_and_destruction_is_correct
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.handler_initialization_and_destruction_is_correct (0 ms)
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.concurent_handler_initialization_and_destruction_is_correct
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.concurent_handler_initialization_and_destruction_is_correct (1369 ms)
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_invoke
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_invoke (0 ms)
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_notify
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_notify (0 ms)
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_qued_callback
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_qued_callback (0 ms)
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_dummy
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_dummy (0 ms)
+[ RUN      ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_fragment
+[       OK ] positive_test_connection_to_levin_protocol_handler_calls.handler_processes_handle_read_as_fragment (0 ms)
+[----------] 8 tests from positive_test_connection_to_levin_protocol_handler_calls (1369 ms total)
+
+[----------] 13 tests from test_levin_protocol_handler__hanle_recv_with_invalid_data
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_big_packet_1
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_big_packet_1 (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_big_packet_2
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_big_packet_2 (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_invalid_signature_for_full_header
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_invalid_signature_for_full_header (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_invalid_signature_for_partial_header
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_invalid_signature_for_partial_header (1 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_big_cb
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_big_cb (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.does_not_handle_data_after_close
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.does_not_handle_data_after_close (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_network_error
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_network_error (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_chunked_header
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_chunked_header (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_chunked_body
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_chunked_body (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_two_requests_at_once
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_two_requests_at_once (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_unexpected_response
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_unexpected_response (0 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_short_fragment
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_short_fragment (1 ms)
+[ RUN      ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_bad_cb
+[       OK ] test_levin_protocol_handler__hanle_recv_with_invalid_data.handles_bad_cb (0 ms)
+[----------] 13 tests from test_levin_protocol_handler__hanle_recv_with_invalid_data (2 ms total)
+
+[----------] 2 tests from http_server
+[ RUN      ] http_server.private_ip_limit
+2026-09-13 15:53:21.075	I Binding on 0.0.0.0 (IPv4):8080
+[       OK ] http_server.private_ip_limit (622 ms)
+[ RUN      ] http_server.read_then_close
+2026-09-13 15:53:21.697	I Binding on 0.0.0.0 (IPv4):8080
+[       OK ] http_server.read_then_close (1495 ms)
+[----------] 2 tests from http_server (2117 ms total)
+
+[----------] 3 tests from epee_binary
+[ RUN      ] epee_binary.two_keys
+[       OK ] epee_binary.two_keys (0 ms)
+[ RUN      ] epee_binary.duplicate_key
+[       OK ] epee_binary.duplicate_key (1 ms)
+[ RUN      ] epee_binary.serialize_deserialize
+[       OK ] epee_binary.serialize_deserialize (0 ms)
+[----------] 3 tests from epee_binary (1 ms total)
+
+[----------] 11 tests from Span
+[ RUN      ] Span.Traits
+[       OK ] Span.Traits (0 ms)
+[ RUN      ] Span.MutableConstruction
+[       OK ] Span.MutableConstruction (0 ms)
+[ RUN      ] Span.ImmutableConstruction
+[       OK ] Span.ImmutableConstruction (0 ms)
+[ RUN      ] Span.NoExcept
+[       OK ] Span.NoExcept (0 ms)
+[ RUN      ] Span.Nullptr
+[       OK ] Span.Nullptr (0 ms)
+[ RUN      ] Span.Writing
+[       OK ] Span.Writing (0 ms)
+[ RUN      ] Span.RemovePrefix
+[       OK ] Span.RemovePrefix (0 ms)
+[ RUN      ] Span.ToByteSpan
+[       OK ] Span.ToByteSpan (0 ms)
+[ RUN      ] Span.AsByteSpan
+[       OK ] Span.AsByteSpan (0 ms)
+[ RUN      ] Span.AsMutByteSpan
+[       OK ] Span.AsMutByteSpan (0 ms)
+[ RUN      ] Span.ToMutSpan
+[       OK ] Span.ToMutSpan (0 ms)
+[----------] 11 tests from Span (0 ms total)
+
+[----------] 14 tests from ByteSlice
+[ RUN      ] ByteSlice.Construction
+[       OK ] ByteSlice.Construction (0 ms)
+[ RUN      ] ByteSlice.DataReturnedMatches
+[       OK ] ByteSlice.DataReturnedMatches (0 ms)
+[ RUN      ] ByteSlice.NoExcept
+[       OK ] ByteSlice.NoExcept (0 ms)
+[ RUN      ] ByteSlice.Empty
+[       OK ] ByteSlice.Empty (0 ms)
+[ RUN      ] ByteSlice.CopySpans
+[       OK ] ByteSlice.CopySpans (0 ms)
+[ RUN      ] ByteSlice.AdaptString
+[       OK ] ByteSlice.AdaptString (0 ms)
+[ RUN      ] ByteSlice.EmptyAdaptString
+[       OK ] ByteSlice.EmptyAdaptString (0 ms)
+[ RUN      ] ByteSlice.AdaptVector
+[       OK ] ByteSlice.AdaptVector (0 ms)
+[ RUN      ] ByteSlice.EmptyAdaptVector
+[       OK ] ByteSlice.EmptyAdaptVector (0 ms)
+[ RUN      ] ByteSlice.Move
+[       OK ] ByteSlice.Move (0 ms)
+[ RUN      ] ByteSlice.Clone
+[       OK ] ByteSlice.Clone (0 ms)
+[ RUN      ] ByteSlice.RemovePrefix
+[       OK ] ByteSlice.RemovePrefix (0 ms)
+[ RUN      ] ByteSlice.TakeSlice
+[       OK ] ByteSlice.TakeSlice (0 ms)
+[ RUN      ] ByteSlice.GetSlice
+[       OK ] ByteSlice.GetSlice (1 ms)
+[----------] 14 tests from ByteSlice (1 ms total)
+
+[----------] 11 tests from ByteStream
+[ RUN      ] ByteStream.Construction
+[       OK ] ByteStream.Construction (0 ms)
+[ RUN      ] ByteStream.Noexcept
+[       OK ] ByteStream.Noexcept (0 ms)
+[ RUN      ] ByteStream.Empty
+[       OK ] ByteStream.Empty (0 ms)
+[ RUN      ] ByteStream.Write
+[       OK ] ByteStream.Write (0 ms)
+[ RUN      ] ByteStream.Put
+[       OK ] ByteStream.Put (0 ms)
+[ RUN      ] ByteStream.PutN
+[       OK ] ByteStream.PutN (0 ms)
+[ RUN      ] ByteStream.Reserve
+[       OK ] ByteStream.Reserve (0 ms)
+[ RUN      ] ByteStream.TakeBuffer
+[       OK ] ByteStream.TakeBuffer (0 ms)
+[ RUN      ] ByteStream.Move
+[       OK ] ByteStream.Move (0 ms)
+[ RUN      ] ByteStream.ToByteSlice
+[       OK ] ByteStream.ToByteSlice (0 ms)
+[ RUN      ] ByteStream.Clear
+[       OK ] ByteStream.Clear (0 ms)
+[----------] 11 tests from ByteStream (0 ms total)
+
+[----------] 5 tests from ToHex
+[ RUN      ] ToHex.String
+[       OK ] ToHex.String (0 ms)
+[ RUN      ] ToHex.Array
+[       OK ] ToHex.Array (0 ms)
+[ RUN      ] ToHex.ArrayFromPod
+[       OK ] ToHex.ArrayFromPod (0 ms)
+[ RUN      ] ToHex.Ostream
+[       OK ] ToHex.Ostream (0 ms)
+[ RUN      ] ToHex.Formatted
+[       OK ] ToHex.Formatted (0 ms)
+[----------] 5 tests from ToHex (0 ms total)
+
+[----------] 1 test from HexLocale
+[ RUN      ] HexLocale.String
+[       OK ] HexLocale.String (0 ms)
+[----------] 1 test from HexLocale (0 ms total)
+
+[----------] 2 tests from FromHex
+[ RUN      ] FromHex.ToString
+[       OK ] FromHex.ToString (0 ms)
+[ RUN      ] FromHex.ToBuffer
+[       OK ] FromHex.ToBuffer (0 ms)
+[----------] 2 tests from FromHex (0 ms total)
+
+[----------] 8 tests from StringTools
+[ RUN      ] StringTools.BuffToHex
+[       OK ] StringTools.BuffToHex (0 ms)
+[ RUN      ] StringTools.PodToHex
+[       OK ] StringTools.PodToHex (0 ms)
+[ RUN      ] StringTools.ParseHex
+[       OK ] StringTools.ParseHex (0 ms)
+[ RUN      ] StringTools.ParseNotHex
+[       OK ] StringTools.ParseNotHex (0 ms)
+[ RUN      ] StringTools.GetIpString
+[       OK ] StringTools.GetIpString (0 ms)
+[ RUN      ] StringTools.GetIpInt32
+[       OK ] StringTools.GetIpInt32 (0 ms)
+[ RUN      ] StringTools.GetExtension
+[       OK ] StringTools.GetExtension (0 ms)
+[ RUN      ] StringTools.CutOffExtension
+[       OK ] StringTools.CutOffExtension (0 ms)
+[----------] 8 tests from StringTools (0 ms total)
+
+[----------] 3 tests from NetUtils
+[ RUN      ] NetUtils.IPv4NetworkAddress
+[       OK ] NetUtils.IPv4NetworkAddress (0 ms)
+[ RUN      ] NetUtils.NetworkAddress
+[       OK ] NetUtils.NetworkAddress (1 ms)
+[ RUN      ] NetUtils.PrivateRanges
+[       OK ] NetUtils.PrivateRanges (0 ms)
+[----------] 3 tests from NetUtils (1 ms total)
+
+[----------] 4 tests from net_buffer
+[ RUN      ] net_buffer.basic
+2026-09-13 15:53:23.195	E span is too large
+2026-09-13 15:53:23.195	E span is too large
+2026-09-13 15:53:23.195	E span is too large
+2026-09-13 15:53:23.195	E span is too large
+2026-09-13 15:53:23.195	E erase: sz too large
+2026-09-13 15:53:23.195	E span is too large
+[       OK ] net_buffer.basic (0 ms)
+[ RUN      ] net_buffer.existing_capacity
+[       OK ] net_buffer.existing_capacity (0 ms)
+[ RUN      ] net_buffer.reallocate
+[       OK ] net_buffer.reallocate (0 ms)
+[ RUN      ] net_buffer.move
+[       OK ] net_buffer.move (0 ms)
+[----------] 4 tests from net_buffer (0 ms total)
+
+[----------] 5 tests from parsing
+[ RUN      ] parsing.isspace
+[       OK ] parsing.isspace (0 ms)
+[ RUN      ] parsing.isdigit
+[       OK ] parsing.isdigit (0 ms)
+[ RUN      ] parsing.number
+[       OK ] parsing.number (0 ms)
+[ RUN      ] parsing.unicode
+[       OK ] parsing.unicode (1 ms)
+[ RUN      ] parsing.strtoul
+[       OK ] parsing.strtoul (0 ms)
+[----------] 5 tests from parsing (1 ms total)
+
+[----------] 10 tests from Expect
+[ RUN      ] Expect.Constructions
+[       OK ] Expect.Constructions (0 ms)
+[ RUN      ] Expect.Conversions
+[       OK ] Expect.Conversions (0 ms)
+[ RUN      ] Expect.NoExcept
+[       OK ] Expect.NoExcept (0 ms)
+[ RUN      ] Expect.Trivial
+[       OK ] Expect.Trivial (0 ms)
+[ RUN      ] Expect.Assignment
+[       OK ] Expect.Assignment (0 ms)
+[ RUN      ] Expect.AssignmentThrowsOnMove
+[       OK ] Expect.AssignmentThrowsOnMove (0 ms)
+[ RUN      ] Expect.EqualWithStrings
+[       OK ] Expect.EqualWithStrings (0 ms)
+[ RUN      ] Expect.EqualWithVoid
+[       OK ] Expect.EqualWithVoid (0 ms)
+[ RUN      ] Expect.EqualNoCopies
+[       OK ] Expect.EqualNoCopies (0 ms)
+[ RUN      ] Expect.Macros
+[       OK ] Expect.Macros (0 ms)
+[----------] 10 tests from Expect (0 ms total)
+
+[----------] 4 tests from fee
+[ RUN      ] fee.10xmr
+[       OK ] fee.10xmr (0 ms)
+[ RUN      ] fee.1xmr
+[       OK ] fee.1xmr (0 ms)
+[ RUN      ] fee.dot3xmr
+[       OK ] fee.dot3xmr (0 ms)
+[ RUN      ] fee.double_at_full
+[       OK ] fee.double_at_full (0 ms)
+[----------] 4 tests from fee (0 ms total)
+
+[----------] 7 tests from JsonSerialization
+[ RUN      ] JsonSerialization.VectorBytes
+[       OK ] JsonSerialization.VectorBytes (0 ms)
+[ RUN      ] JsonSerialization.InvalidVectorBytes
+[       OK ] JsonSerialization.InvalidVectorBytes (0 ms)
+[ RUN      ] JsonSerialization.DaemonInfo
+[       OK ] JsonSerialization.DaemonInfo (0 ms)
+[ RUN      ] JsonSerialization.MinerTransaction
+[       OK ] JsonSerialization.MinerTransaction (0 ms)
+[ RUN      ] JsonSerialization.RegularTransaction
+[       OK ] JsonSerialization.RegularTransaction (2 ms)
+[ RUN      ] JsonSerialization.RingctTransaction
+[       OK ] JsonSerialization.RingctTransaction (17 ms)
+[ RUN      ] JsonSerialization.BulletproofTransaction
+[       OK ] JsonSerialization.BulletproofTransaction (24 ms)
+[----------] 7 tests from JsonSerialization (43 ms total)
+
+[----------] 1 test from JsonRpcSerialization
+[ RUN      ] JsonRpcSerialization.HandlerFromJson
+[       OK ] JsonRpcSerialization.HandlerFromJson (0 ms)
+[----------] 1 test from JsonRpcSerialization (0 ms total)
+
+[----------] 75 tests from get_xtype_from_string
+[ RUN      ] get_xtype_from_string.handles_pos_uint16_t_0
+[       OK ] get_xtype_from_string.handles_pos_uint16_t_0 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint16_t_1
+[       OK ] get_xtype_from_string.handles_pos_uint16_t_1 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint16_t_65535
+[       OK ] get_xtype_from_string.handles_pos_uint16_t_65535 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_75
+[       OK ] get_xtype_from_string.handles_neguint16_t_75 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_76
+[       OK ] get_xtype_from_string.handles_neguint16_t_76 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_77
+[       OK ] get_xtype_from_string.handles_neguint16_t_77 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_78
+[       OK ] get_xtype_from_string.handles_neguint16_t_78 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_79
+[       OK ] get_xtype_from_string.handles_neguint16_t_79 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_81
+[       OK ] get_xtype_from_string.handles_neguint16_t_81 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_82
+[       OK ] get_xtype_from_string.handles_neguint16_t_82 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_83
+[       OK ] get_xtype_from_string.handles_neguint16_t_83 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_84
+[       OK ] get_xtype_from_string.handles_neguint16_t_84 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_86
+[       OK ] get_xtype_from_string.handles_neguint16_t_86 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_87
+[       OK ] get_xtype_from_string.handles_neguint16_t_87 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_88
+[       OK ] get_xtype_from_string.handles_neguint16_t_88 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_89
+[       OK ] get_xtype_from_string.handles_neguint16_t_89 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_90
+[       OK ] get_xtype_from_string.handles_neguint16_t_90 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_91
+[       OK ] get_xtype_from_string.handles_neguint16_t_91 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_93
+[       OK ] get_xtype_from_string.handles_neguint16_t_93 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_94
+[       OK ] get_xtype_from_string.handles_neguint16_t_94 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_95
+[       OK ] get_xtype_from_string.handles_neguint16_t_95 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_96
+[       OK ] get_xtype_from_string.handles_neguint16_t_96 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_97
+[       OK ] get_xtype_from_string.handles_neguint16_t_97 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_99
+[       OK ] get_xtype_from_string.handles_neguint16_t_99 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_100
+[       OK ] get_xtype_from_string.handles_neguint16_t_100 (1 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint16_t_101
+[       OK ] get_xtype_from_string.handles_neguint16_t_101 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint32_t_0
+[       OK ] get_xtype_from_string.handles_pos_uint32_t_0 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint32_t_1
+[       OK ] get_xtype_from_string.handles_pos_uint32_t_1 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint32_t_4294967295
+[       OK ] get_xtype_from_string.handles_pos_uint32_t_4294967295 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_108
+[       OK ] get_xtype_from_string.handles_neguint32_t_108 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_109
+[       OK ] get_xtype_from_string.handles_neguint32_t_109 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_110
+[       OK ] get_xtype_from_string.handles_neguint32_t_110 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_111
+[       OK ] get_xtype_from_string.handles_neguint32_t_111 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_112
+[       OK ] get_xtype_from_string.handles_neguint32_t_112 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_114
+[       OK ] get_xtype_from_string.handles_neguint32_t_114 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_115
+[       OK ] get_xtype_from_string.handles_neguint32_t_115 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_116
+[       OK ] get_xtype_from_string.handles_neguint32_t_116 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_117
+[       OK ] get_xtype_from_string.handles_neguint32_t_117 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_119
+[       OK ] get_xtype_from_string.handles_neguint32_t_119 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_120
+[       OK ] get_xtype_from_string.handles_neguint32_t_120 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_121
+[       OK ] get_xtype_from_string.handles_neguint32_t_121 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_122
+[       OK ] get_xtype_from_string.handles_neguint32_t_122 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_123
+[       OK ] get_xtype_from_string.handles_neguint32_t_123 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_124
+[       OK ] get_xtype_from_string.handles_neguint32_t_124 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_126
+[       OK ] get_xtype_from_string.handles_neguint32_t_126 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_127
+[       OK ] get_xtype_from_string.handles_neguint32_t_127 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_128
+[       OK ] get_xtype_from_string.handles_neguint32_t_128 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_129
+[       OK ] get_xtype_from_string.handles_neguint32_t_129 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_130
+[       OK ] get_xtype_from_string.handles_neguint32_t_130 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_132
+[       OK ] get_xtype_from_string.handles_neguint32_t_132 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint32_t_133
+[       OK ] get_xtype_from_string.handles_neguint32_t_133 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint64_t_0
+[       OK ] get_xtype_from_string.handles_pos_uint64_t_0 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint64_t_1
+[       OK ] get_xtype_from_string.handles_pos_uint64_t_1 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_pos_uint64_t_18446744073709551615ULL
+[       OK ] get_xtype_from_string.handles_pos_uint64_t_18446744073709551615ULL (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_139
+[       OK ] get_xtype_from_string.handles_neguint64_t_139 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_140
+[       OK ] get_xtype_from_string.handles_neguint64_t_140 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_141
+[       OK ] get_xtype_from_string.handles_neguint64_t_141 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_142
+[       OK ] get_xtype_from_string.handles_neguint64_t_142 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_143
+[       OK ] get_xtype_from_string.handles_neguint64_t_143 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_145
+[       OK ] get_xtype_from_string.handles_neguint64_t_145 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_146
+[       OK ] get_xtype_from_string.handles_neguint64_t_146 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_147
+[       OK ] get_xtype_from_string.handles_neguint64_t_147 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_148
+[       OK ] get_xtype_from_string.handles_neguint64_t_148 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_150
+[       OK ] get_xtype_from_string.handles_neguint64_t_150 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_151
+[       OK ] get_xtype_from_string.handles_neguint64_t_151 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_152
+[       OK ] get_xtype_from_string.handles_neguint64_t_152 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_153
+[       OK ] get_xtype_from_string.handles_neguint64_t_153 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_154
+[       OK ] get_xtype_from_string.handles_neguint64_t_154 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_155
+[       OK ] get_xtype_from_string.handles_neguint64_t_155 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_157
+[       OK ] get_xtype_from_string.handles_neguint64_t_157 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_158
+[       OK ] get_xtype_from_string.handles_neguint64_t_158 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_159
+[       OK ] get_xtype_from_string.handles_neguint64_t_159 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_160
+[       OK ] get_xtype_from_string.handles_neguint64_t_160 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_161
+[       OK ] get_xtype_from_string.handles_neguint64_t_161 (0 ms)
+[ RUN      ] get_xtype_from_string.handles_neguint64_t_163
+[       OK ] get_xtype_from_string.handles_neguint64_t_163 (1 ms)
+[----------] 75 tests from get_xtype_from_string (2 ms total)
+
+[----------] 6 tests from hashchain
+[ RUN      ] hashchain.empty
+[       OK ] hashchain.empty (0 ms)
+[ RUN      ] hashchain.genesis
+[       OK ] hashchain.genesis (0 ms)
+[ RUN      ] hashchain.push_back
+[       OK ] hashchain.push_back (0 ms)
+[ RUN      ] hashchain.clear_empty
+[       OK ] hashchain.clear_empty (0 ms)
+[ RUN      ] hashchain.crop
+[       OK ] hashchain.crop (0 ms)
+[ RUN      ] hashchain.trim
+[       OK ] hashchain.trim (0 ms)
+[----------] 6 tests from hashchain (0 ms total)
+
+[----------] 5 tests from keccak_hmac
+[ RUN      ] keccak_hmac.nullptr
+[       OK ] keccak_hmac.nullptr (0 ms)
+[ RUN      ] keccak_hmac.1
+[       OK ] keccak_hmac.1 (0 ms)
+[ RUN      ] keccak_hmac.1_20
+[       OK ] keccak_hmac.1_20 (0 ms)
+[ RUN      ] keccak_hmac.136_1
+[       OK ] keccak_hmac.136_1 (0 ms)
+[ RUN      ] keccak_hmac.137_1
+[       OK ] keccak_hmac.137_1 (0 ms)
+[----------] 5 tests from keccak_hmac (0 ms total)
+
+[----------] 7 tests from HTTP_Server_Auth
+[ RUN      ] HTTP_Server_Auth.NotRequired
+[       OK ] HTTP_Server_Auth.NotRequired (0 ms)
+[ RUN      ] HTTP_Server_Auth.MissingAuth
+[       OK ] HTTP_Server_Auth.MissingAuth (0 ms)
+[ RUN      ] HTTP_Server_Auth.BadSyntax
+[       OK ] HTTP_Server_Auth.BadSyntax (0 ms)
+[ RUN      ] HTTP_Server_Auth.MD5
+[       OK ] HTTP_Server_Auth.MD5 (0 ms)
+[ RUN      ] HTTP_Server_Auth.MD5_sess
+[       OK ] HTTP_Server_Auth.MD5_sess (0 ms)
+[ RUN      ] HTTP_Server_Auth.MD5_auth
+[       OK ] HTTP_Server_Auth.MD5_auth (0 ms)
+[ RUN      ] HTTP_Server_Auth.MD5_sess_auth
+[       OK ] HTTP_Server_Auth.MD5_sess_auth (0 ms)
+[----------] 7 tests from HTTP_Server_Auth (0 ms total)
+
+[----------] 1 test from HTTP_Auth
+[ RUN      ] HTTP_Auth.DogFood
+[       OK ] HTTP_Auth.DogFood (10 ms)
+[----------] 1 test from HTTP_Auth (10 ms total)
+
+[----------] 5 tests from HTTP_Client_Auth
+[ RUN      ] HTTP_Client_Auth.Unavailable
+[       OK ] HTTP_Client_Auth.Unavailable (0 ms)
+[ RUN      ] HTTP_Client_Auth.MissingAuthenticate
+[       OK ] HTTP_Client_Auth.MissingAuthenticate (0 ms)
+[ RUN      ] HTTP_Client_Auth.BadSyntax
+[       OK ] HTTP_Client_Auth.BadSyntax (0 ms)
+[ RUN      ] HTTP_Client_Auth.MD5
+[       OK ] HTTP_Client_Auth.MD5 (0 ms)
+[ RUN      ] HTTP_Client_Auth.MD5_auth
+[       OK ] HTTP_Client_Auth.MD5_auth (9 ms)
+[----------] 5 tests from HTTP_Client_Auth (9 ms total)
+
+[----------] 9 tests from HTTP
+[ RUN      ] HTTP.Parse_Header_Line
+[       OK ] HTTP.Parse_Header_Line (0 ms)
+[ RUN      ] HTTP.Server_Parses_Content_Length_First_Header
+[       OK ] HTTP.Server_Parses_Content_Length_First_Header (0 ms)
+[ RUN      ] HTTP.Server_Parses_First_Header_After_Split_Request_Line
+[       OK ] HTTP.Server_Parses_First_Header_After_Split_Request_Line (0 ms)
+[ RUN      ] HTTP.Server_Rejects_Malformed_First_Header
+[       OK ] HTTP.Server_Rejects_Malformed_First_Header (0 ms)
+[ RUN      ] HTTP.Server_Rejects_Malformed_Later_Header
+[       OK ] HTTP.Server_Rejects_Malformed_Later_Header (0 ms)
+[ RUN      ] HTTP.Server_Keeps_Unknown_First_Header
+[       OK ] HTTP.Server_Keeps_Unknown_First_Header (0 ms)
+[ RUN      ] HTTP.Client_Keeps_Unknown_Header
+[       OK ] HTTP.Client_Keeps_Unknown_Header (0 ms)
+[ RUN      ] HTTP.Client_Rejects_Malformed_Response_Header
+[       OK ] HTTP.Client_Rejects_Malformed_Response_Header (0 ms)
+[ RUN      ] HTTP.Add_Field
+[       OK ] HTTP.Add_Field (0 ms)
+[----------] 9 tests from HTTP (0 ms total)
+
+[----------] 16 tests from keccak
+[ RUN      ] keccak.0_and_0
+[       OK ] keccak.0_and_0 (0 ms)
+[ RUN      ] keccak.1_and_1
+[       OK ] keccak.1_and_1 (0 ms)
+[ RUN      ] keccak.1_and_0_1_0
+[       OK ] keccak.1_and_0_1_0 (0 ms)
+[ RUN      ] keccak.2_and_1_1
+[       OK ] keccak.2_and_1_1 (0 ms)
+[ RUN      ] keccak.4_and_0_0_1_0_2_1_0
+[       OK ] keccak.4_and_0_0_1_0_2_1_0 (0 ms)
+[ RUN      ] keccak.15_and_1_14
+[       OK ] keccak.15_and_1_14 (0 ms)
+[ RUN      ] keccak.135_and_134_1
+[       OK ] keccak.135_and_134_1 (0 ms)
+[ RUN      ] keccak.135_and_135_0
+[       OK ] keccak.135_and_135_0 (0 ms)
+[ RUN      ] keccak.135_and_0_135
+[       OK ] keccak.135_and_0_135 (0 ms)
+[ RUN      ] keccak.136_and_135_1
+[       OK ] keccak.136_and_135_1 (0 ms)
+[ RUN      ] keccak.136_and_136_0
+[       OK ] keccak.136_and_136_0 (0 ms)
+[ RUN      ] keccak.136_and_0_136
+[       OK ] keccak.136_and_0_136 (0 ms)
+[ RUN      ] keccak.136_and_136
+[       OK ] keccak.136_and_136 (0 ms)
+[ RUN      ] keccak.137_and_136_1
+[       OK ] keccak.137_and_136_1 (0 ms)
+[ RUN      ] keccak.137_and_1_136
+[       OK ] keccak.137_and_1_136 (0 ms)
+[ RUN      ] keccak.alignment
+[       OK ] keccak.alignment (2 ms)
+[----------] 16 tests from keccak (2 ms total)
+
+[----------] 2 tests from make_header
+[ RUN      ] make_header.no_expect_return
+[       OK ] make_header.no_expect_return (0 ms)
+[ RUN      ] make_header.expect_return
+[       OK ] make_header.expect_return (0 ms)
+[----------] 2 tests from make_header (0 ms total)
+
+[----------] 7 tests from message_writer
+[ RUN      ] message_writer.invoke_with_empty_payload
+[       OK ] message_writer.invoke_with_empty_payload (0 ms)
+[ RUN      ] message_writer.invoke_with_payload
+[       OK ] message_writer.invoke_with_payload (0 ms)
+[ RUN      ] message_writer.notify_with_empty_payload
+[       OK ] message_writer.notify_with_empty_payload (0 ms)
+[ RUN      ] message_writer.notify_with_payload
+[       OK ] message_writer.notify_with_payload (0 ms)
+[ RUN      ] message_writer.response_with_empty_payload
+[       OK ] message_writer.response_with_empty_payload (0 ms)
+[ RUN      ] message_writer.response_with_payload
+[       OK ] message_writer.response_with_payload (0 ms)
+[ RUN      ] message_writer.error
+[       OK ] message_writer.error (1 ms)
+[----------] 7 tests from message_writer (1 ms total)
+
+[----------] 2 tests from make_noise
+[ RUN      ] make_noise.invalid
+[       OK ] make_noise.invalid (0 ms)
+[ RUN      ] make_noise.valid
+[       OK ] make_noise.valid (0 ms)
+[----------] 2 tests from make_noise (0 ms total)
+
+[----------] 3 tests from make_fragment
+[ RUN      ] make_fragment.invalid
+[       OK ] make_fragment.invalid (0 ms)
+[ RUN      ] make_fragment.single
+[       OK ] make_fragment.single (0 ms)
+[ RUN      ] make_fragment.multiple
+[       OK ] make_fragment.multiple (1 ms)
+[----------] 3 tests from make_fragment (1 ms total)
+
+[----------] 33 tests from levin_notify
+[ RUN      ] levin_notify.defaulted
+[       OK ] levin_notify.defaulted (0 ms)
+[ RUN      ] levin_notify.fluff_without_padding
+[       OK ] levin_notify.fluff_without_padding (8 ms)
+[ RUN      ] levin_notify.stem_without_padding
+[       OK ] levin_notify.stem_without_padding (3 ms)
+[ RUN      ] levin_notify.stem_no_outs_without_padding
+2026-09-13 15:53:23.277	E Unable to send transaction(s) via Dandelion++ stem
+[       OK ] levin_notify.stem_no_outs_without_padding (2 ms)
+[ RUN      ] levin_notify.local_without_padding
+[       OK ] levin_notify.local_without_padding (3 ms)
+[ RUN      ] levin_notify.forward_without_padding
+[       OK ] levin_notify.forward_without_padding (3 ms)
+[ RUN      ] levin_notify.block_without_padding
+[       OK ] levin_notify.block_without_padding (1 ms)
+[ RUN      ] levin_notify.none_without_padding
+[       OK ] levin_notify.none_without_padding (1 ms)
+[ RUN      ] levin_notify.fluff_with_padding
+[       OK ] levin_notify.fluff_with_padding (2 ms)
+[ RUN      ] levin_notify.stem_with_padding
+[       OK ] levin_notify.stem_with_padding (2 ms)
+[ RUN      ] levin_notify.stem_no_outs_with_padding
+2026-09-13 15:53:23.291	E Unable to send transaction(s) via Dandelion++ stem
+[       OK ] levin_notify.stem_no_outs_with_padding (2 ms)
+[ RUN      ] levin_notify.local_with_padding
+[       OK ] levin_notify.local_with_padding (2 ms)
+[ RUN      ] levin_notify.forward_with_padding
+[       OK ] levin_notify.forward_with_padding (1 ms)
+[ RUN      ] levin_notify.block_with_padding
+[       OK ] levin_notify.block_with_padding (1 ms)
+[ RUN      ] levin_notify.none_with_padding
+[       OK ] levin_notify.none_with_padding (2 ms)
+[ RUN      ] levin_notify.private_fluff_without_padding
+[       OK ] levin_notify.private_fluff_without_padding (1 ms)
+[ RUN      ] levin_notify.private_stem_without_padding
+[       OK ] levin_notify.private_stem_without_padding (1 ms)
+[ RUN      ] levin_notify.private_local_without_padding
+[       OK ] levin_notify.private_local_without_padding (1 ms)
+[ RUN      ] levin_notify.private_forward_without_padding
+[       OK ] levin_notify.private_forward_without_padding (1 ms)
+[ RUN      ] levin_notify.private_block_without_padding
+[       OK ] levin_notify.private_block_without_padding (2 ms)
+[ RUN      ] levin_notify.private_none_without_padding
+[       OK ] levin_notify.private_none_without_padding (1 ms)
+[ RUN      ] levin_notify.private_fluff_with_padding
+[       OK ] levin_notify.private_fluff_with_padding (1 ms)
+[ RUN      ] levin_notify.private_stem_with_padding
+[       OK ] levin_notify.private_stem_with_padding (1 ms)
+[ RUN      ] levin_notify.private_local_with_padding
+[       OK ] levin_notify.private_local_with_padding (1 ms)
+[ RUN      ] levin_notify.private_forward_with_padding
+[       OK ] levin_notify.private_forward_with_padding (1 ms)
+[ RUN      ] levin_notify.private_block_with_padding
+[       OK ] levin_notify.private_block_with_padding (1 ms)
+[ RUN      ] levin_notify.private_none_with_padding
+[       OK ] levin_notify.private_none_with_padding (2 ms)
+[ RUN      ] levin_notify.stem_mappings
+[       OK ] levin_notify.stem_mappings (1 ms)
+[ RUN      ] levin_notify.fluff_multiple
+[       OK ] levin_notify.fluff_multiple (1 ms)
+[ RUN      ] levin_notify.fluff_with_duplicate
+[       OK ] levin_notify.fluff_with_duplicate (1 ms)
+[ RUN      ] levin_notify.noise
+[       OK ] levin_notify.noise (1 ms)
+[ RUN      ] levin_notify.noise_stem
+2026-09-13 15:53:23.317	W Dandelion++ stem not supported over noise networks
+[       OK ] levin_notify.noise_stem (1 ms)
+[ RUN      ] levin_notify.command_max_bytes
+[       OK ] levin_notify.command_max_bytes (1 ms)
+[----------] 33 tests from levin_notify (53 ms total)
+
+[----------] 11 tests from logging
+[ RUN      ] logging.no_logs
+[       OK ] logging.no_logs (0 ms)
+[ RUN      ] logging.default
+[       OK ] logging.default (1 ms)
+[ RUN      ] logging.all
+[       OK ] logging.all (1 ms)
+[ RUN      ] logging.glob_suffix
+[       OK ] logging.glob_suffix (0 ms)
+[ RUN      ] logging.glob_prefix
+[       OK ] logging.glob_prefix (1 ms)
+[ RUN      ] logging.last_precedence
+[       OK ] logging.last_precedence (1 ms)
+[ RUN      ] logging.multiline
+[       OK ] logging.multiline (1 ms)
+[ RUN      ] logging.copy_ctor_segfault
+[       OK ] logging.copy_ctor_segfault (0 ms)
+[ RUN      ] logging.operator_equals_segfault
+[       OK ] logging.operator_equals_segfault (0 ms)
+[ RUN      ] logging.empty_configurations_throws
+[       OK ] logging.empty_configurations_throws (1 ms)
+[ RUN      ] logging.deadlock
+[       OK ] logging.deadlock (0 ms)
+[----------] 11 tests from logging (6 ms total)
+
+[----------] 10 tests from long_term_block_weight
+[ RUN      ] long_term_block_weight.empty_short
+[       OK ] long_term_block_weight.empty_short (31 ms)
+[ RUN      ] long_term_block_weight.identical_before_fork
+[       OK ] long_term_block_weight.identical_before_fork (245 ms)
+[ RUN      ] long_term_block_weight.identical_after_fork_before_long_term_window
+[       OK ] long_term_block_weight.identical_after_fork_before_long_term_window (329 ms)
+[ RUN      ] long_term_block_weight.ceiling_at_30000000
+[       OK ] long_term_block_weight.ceiling_at_30000000 (339 ms)
+[ RUN      ] long_term_block_weight.multi_pop
+[       OK ] long_term_block_weight.multi_pop (324 ms)
+[ RUN      ] long_term_block_weight.multiple_updates
+[       OK ] long_term_block_weight.multiple_updates (469 ms)
+[ RUN      ] long_term_block_weight.pop_invariant_max
+[       OK ] long_term_block_weight.pop_invariant_max (911 ms)
+[ RUN      ] long_term_block_weight.pop_invariant_random
+[       OK ] long_term_block_weight.pop_invariant_random (2256 ms)
+[ RUN      ] long_term_block_weight.long_growth_spike_and_drop
+[       OK ] long_term_block_weight.long_growth_spike_and_drop (430 ms)
+[ RUN      ] long_term_block_weight.cache_matches_true_value
+[       OK ] long_term_block_weight.cache_matches_true_value (1254 ms)
+[----------] 10 tests from long_term_block_weight (6588 ms total)
+
+[----------] 11 tests from LMDB
+[ RUN      ] LMDB.Traits
+[       OK ] LMDB.Traits (0 ms)
+[ RUN      ] LMDB.ToNative
+[       OK ] LMDB.ToNative (0 ms)
+[ RUN      ] LMDB.Conversions
+[       OK ] LMDB.Conversions (0 ms)
+[ RUN      ] LMDB.LessSort
+[       OK ] LMDB.LessSort (0 ms)
+[ RUN      ] LMDB.SortCompare
+[       OK ] LMDB.SortCompare (0 ms)
+[ RUN      ] LMDB.Table
+[       OK ] LMDB.Table (0 ms)
+[ RUN      ] LMDB.InvalidDatabase
+[       OK ] LMDB.InvalidDatabase (0 ms)
+[ RUN      ] LMDB.InvalidValueStream
+[       OK ] LMDB.InvalidValueStream (0 ms)
+[ RUN      ] LMDB.InvalidValueIterator
+[       OK ] LMDB.InvalidValueIterator (0 ms)
+[ RUN      ] LMDB.InvalidKeyStream
+[       OK ] LMDB.InvalidKeyStream (0 ms)
+[ RUN      ] LMDB.InvalidKeyIterator
+[       OK ] LMDB.InvalidKeyIterator (0 ms)
+[----------] 11 tests from LMDB (0 ms total)
+
+[----------] 2 tests from memwipe
+[ RUN      ] memwipe.control
+[       OK ] memwipe.control (0 ms)
+[ RUN      ] memwipe.works
+[       OK ] memwipe.works (0 ms)
+[----------] 2 tests from memwipe (0 ms total)
+
+[----------] 8 tests from mlocker
+[ RUN      ] mlocker.distinct_1
+[       OK ] mlocker.distinct_1 (0 ms)
+[ RUN      ] mlocker.distinct_full_page
+[       OK ] mlocker.distinct_full_page (0 ms)
+[ RUN      ] mlocker.identical
+[       OK ] mlocker.identical (0 ms)
+[ RUN      ] mlocker.overlapping_small
+[       OK ] mlocker.overlapping_small (0 ms)
+[ RUN      ] mlocker.multi_page
+[       OK ] mlocker.multi_page (0 ms)
+[ RUN      ] mlocker.cross_page
+[       OK ] mlocker.cross_page (0 ms)
+[ RUN      ] mlocker.redundant
+[       OK ] mlocker.redundant (0 ms)
+[ RUN      ] mlocker.mlocked
+[       OK ] mlocker.mlocked (0 ms)
+[----------] 8 tests from mlocker (0 ms total)
+
+[----------] 6 tests from mnemonics
+[ RUN      ] mnemonics.consistency
+[       OK ] mnemonics.consistency (21 ms)
+[ RUN      ] mnemonics.all_languages
+Test seed without checksum:
+祥 现 姓 种 老 详 街 贝 销 代 虎 袋 加 愤 么 卫 设 灭 升 赫 路 砂 绳 频
+Detected language: 简体中文 (中国)
+Returned seed:
+祥 现 姓 种 老 详 街 贝 销 代 虎 袋 加 愤 么 卫 设 灭 升 赫 路 砂 绳 频 详
+Test seed with checksum:
+祥 现 姓 种 老 详 街 贝 销 代 虎 袋 加 愤 么 卫 设 灭 升 赫 路 砂 绳 频 详
+Detected language: 简体中文 (中国)
+Returned seed:
+祥 现 姓 种 老 详 街 贝 销 代 虎 袋 加 愤 么 卫 设 灭 升 赫 路 砂 绳 频 详
+Test seed without checksum:
+nestle bikini fuel niece rumble ouch masterful bumper luxury hatchet aplomb swung epoxy tagged oilfield fading lipstick tinted nobody wayside plus archer orders otherwise
+Detected language: English
+Returned seed:
+nestle bikini fuel niece rumble ouch masterful bumper luxury hatchet aplomb swung epoxy tagged oilfield fading lipstick tinted nobody wayside plus archer orders otherwise hatchet
+Test seed with checksum:
+nestle bikini fuel niece rumble ouch masterful bumper luxury hatchet aplomb swung epoxy tagged oilfield fading lipstick tinted nobody wayside plus archer orders otherwise hatchet
+Detected language: English
+Returned seed:
+nestle bikini fuel niece rumble ouch masterful bumper luxury hatchet aplomb swung epoxy tagged oilfield fading lipstick tinted nobody wayside plus archer orders otherwise hatchet
+Test seed without checksum:
+grosor canto día isla exponer doce onza prensa hostil champú agudo panal iris emoción pelo bravo rebote pitón reparto calvo ancla denso bobina arco
+Detected language: Español
+Returned seed:
+grosor canto día isla exponer doce onza prensa hostil champú agudo panal iris emoción pelo bravo rebote pitón reparto calvo ancla denso bobina arco pelo
+Test seed with checksum:
+grosor canto día isla exponer doce onza prensa hostil champú agudo panal iris emoción pelo bravo rebote pitón reparto calvo ancla denso bobina arco pelo
+Detected language: Español
+Returned seed:
+grosor canto día isla exponer doce onza prensa hostil champú agudo panal iris emoción pelo bravo rebote pitón reparto calvo ancla denso bobina arco pelo
+Test seed without checksum:
+tiara nalgum epiteto pujante acrostico curvo egiptologo edredom iroques cicuta sonso rasurar pajem edredom nucleotideo historiografia vibratorio arquivo ruivo reivindicavel utopico migratorio botina enxuto
+Detected language: Português
+Returned seed:
+tiara nalgum epiteto pujante acrostico curvo egiptologo edredom iroques cicuta sonso rasurar pajem edredom nucleotideo historiografia vibratorio arquivo ruivo reivindicavel utopico migratorio botina enxuto cicuta
+Test seed with checksum:
+tiara nalgum epiteto pujante acrostico curvo egiptologo edredom iroques cicuta sonso rasurar pajem edredom nucleotideo historiografia vibratorio arquivo ruivo reivindicavel utopico migratorio botina enxuto cicuta
+Detected language: Português
+Returned seed:
+tiara nalgum epiteto pujante acrostico curvo egiptologo edredom iroques cicuta sonso rasurar pajem edredom nucleotideo historiografia vibratorio arquivo ruivo reivindicavel utopico migratorio botina enxuto cicuta
+Test seed without checksum:
+きもだめし くさき ねっしん にんち つつじ せいげん とばす あんい こやま かいしゃ しゃけん かんこう はろうぃん はいれつ こもち けいこ きかんしゃ はやし いこう こうそく さばく さくら きこえる あまど
+Detected language: 日本語
+Returned seed:
+きもだめし くさき ねっしん にんち つつじ せいげん とばす あんい こやま かいしゃ しゃけん かんこう はろうぃん はいれつ こもち けいこ きかんしゃ はやし いこう こうそく さばく さくら きこえる あまど あんい
+Test seed with checksum:
+きもだめし くさき ねっしん にんち つつじ せいげん とばす あんい こやま かいしゃ しゃけん かんこう はろうぃん はいれつ こもち けいこ きかんしゃ はやし いこう こうそく さばく さくら きこえる あまど あんい
+Detected language: 日本語
+Returned seed:
+きもだめし くさき ねっしん にんち つつじ せいげん とばす あんい こやま かいしゃ しゃけん かんこう はろうぃん はいれつ こもち けいこ きかんしゃ はやし いこう こうそく さばく さくら きこえる あまど あんい
+Test seed without checksum:
+Chalet Dickicht Gehöft Turm Clubhaus Brecher Trennung umarmen Alphabet wechseln Kugel Format Grashalm Fontäne Galopp Terrasse Gedeck Gesindel Affront glänzen Ersatz Lagune Strömung Farn
+Detected language: Deutsch
+Returned seed:
+Chalet Dickicht Gehöft Turm Clubhaus Brecher Trennung umarmen Alphabet wechseln Kugel Format Grashalm Fontäne Galopp Terrasse Gedeck Gesindel Affront glänzen Ersatz Lagune Strömung Farn Strömung
+Test seed with checksum:
+Chalet Dickicht Gehöft Turm Clubhaus Brecher Trennung umarmen Alphabet wechseln Kugel Format Grashalm Fontäne Galopp Terrasse Gedeck Gesindel Affront glänzen Ersatz Lagune Strömung Farn Strömung
+Detected language: Deutsch
+Returned seed:
+Chalet Dickicht Gehöft Turm Clubhaus Brecher Trennung umarmen Alphabet wechseln Kugel Format Grashalm Fontäne Galopp Terrasse Gedeck Gesindel Affront glänzen Ersatz Lagune Strömung Farn Strömung
+Test seed without checksum:
+tridente pennello imbarco brindare volume muscolo fucile cortesia bottino acciaio alpi zittire circuito amnistia cavallo credere stregone casino soldi levitare sfera unghia neutroni essere
+Detected language: Italiano
+Returned seed:
+tridente pennello imbarco brindare volume muscolo fucile cortesia bottino acciaio alpi zittire circuito amnistia cavallo credere stregone casino soldi levitare sfera unghia neutroni essere levitare
+Test seed with checksum:
+tridente pennello imbarco brindare volume muscolo fucile cortesia bottino acciaio alpi zittire circuito amnistia cavallo credere stregone casino soldi levitare sfera unghia neutroni essere levitare
+Detected language: Italiano
+Returned seed:
+tridente pennello imbarco brindare volume muscolo fucile cortesia bottino acciaio alpi zittire circuito amnistia cavallo credere stregone casino soldi levitare sfera unghia neutroni essere levitare
+Test seed without checksum:
+гаишник афиша поток лечь затрата дорога елка эстрада дебют дешевый могила класс лютый батарея погода писать взятка въезд ботинок дрожать сентябрь духи петля нищий
+Detected language: русский язык
+Returned seed:
+гаишник афиша поток лечь затрата дорога елка эстрада дебют дешевый могила класс лютый батарея погода писать взятка въезд ботинок дрожать сентябрь духи петля нищий лютый
+Test seed with checksum:
+гаишник афиша поток лечь затрата дорога елка эстрада дебют дешевый могила класс лютый батарея погода писать взятка въезд ботинок дрожать сентябрь духи петля нищий лютый
+Detected language: русский язык
+Returned seed:
+гаишник афиша поток лечь затрата дорога елка эстрада дебют дешевый могила класс лютый батарея погода писать взятка въезд ботинок дрожать сентябрь духи петля нищий лютый
+Test seed without checksum:
+stagiaire esprit crise voyage alcool attente coiffer descendre distance fuite serpe sapin ainsi chaud nuire plaire vivant scoop science cobra muret fatigue conclure amie
+Detected language: Français
+Returned seed:
+stagiaire esprit crise voyage alcool attente coiffer descendre distance fuite serpe sapin ainsi chaud nuire plaire vivant scoop science cobra muret fatigue conclure amie serpe
+Test seed with checksum:
+stagiaire esprit crise voyage alcool attente coiffer descendre distance fuite serpe sapin ainsi chaud nuire plaire vivant scoop science cobra muret fatigue conclure amie serpe
+Detected language: Français
+Returned seed:
+stagiaire esprit crise voyage alcool attente coiffer descendre distance fuite serpe sapin ainsi chaud nuire plaire vivant scoop science cobra muret fatigue conclure amie serpe
+Test seed without checksum:
+verraad lunzen extase frijnen wijnbes bitumen oraal culinair link efteling tinsteen ghanees pepmiddel cirkel lumen redster solo gedijd spionage convector toulouse wingebied zuur zege
+Detected language: Nederlands
+Returned seed:
+verraad lunzen extase frijnen wijnbes bitumen oraal culinair link efteling tinsteen ghanees pepmiddel cirkel lumen redster solo gedijd spionage convector toulouse wingebied zuur zege spionage
+Test seed with checksum:
+verraad lunzen extase frijnen wijnbes bitumen oraal culinair link efteling tinsteen ghanees pepmiddel cirkel lumen redster solo gedijd spionage convector toulouse wingebied zuur zege spionage
+Detected language: Nederlands
+Returned seed:
+verraad lunzen extase frijnen wijnbes bitumen oraal culinair link efteling tinsteen ghanees pepmiddel cirkel lumen redster solo gedijd spionage convector toulouse wingebied zuur zege spionage
+Test seed without checksum:
+febro ralio pizango formulo geumo fanatiko geedzeco eblecoj timida bitlibro agnoski hajlo gestolingvo tofeo enspezo hagiografio nanometro ambasado motoro megafono onomatopeo dajmono efektiva caro
+Detected language: Esperanto
+Returned seed:
+febro ralio pizango formulo geumo fanatiko geedzeco eblecoj timida bitlibro agnoski hajlo gestolingvo tofeo enspezo hagiografio nanometro ambasado motoro megafono onomatopeo dajmono efektiva caro megafono
+Test seed with checksum:
+febro ralio pizango formulo geumo fanatiko geedzeco eblecoj timida bitlibro agnoski hajlo gestolingvo tofeo enspezo hagiografio nanometro ambasado motoro megafono onomatopeo dajmono efektiva caro megafono
+Detected language: Esperanto
+Returned seed:
+febro ralio pizango formulo geumo fanatiko geedzeco eblecoj timida bitlibro agnoski hajlo gestolingvo tofeo enspezo hagiografio nanometro ambasado motoro megafono onomatopeo dajmono efektiva caro megafono
+Test seed without checksum:
+mokca sraji gugde kinda danti valsi gasta ctino velski zmanei rakso katna slovo panra sadjo kalci kufra tagji ningau xrotu cenba disko jdima balji
+Detected language: Lojban
+Returned seed:
+mokca sraji gugde kinda danti valsi gasta ctino velski zmanei rakso katna slovo panra sadjo kalci kufra tagji ningau xrotu cenba disko jdima balji gugde
+Test seed with checksum:
+mokca sraji gugde kinda danti valsi gasta ctino velski zmanei rakso katna slovo panra sadjo kalci kufra tagji ningau xrotu cenba disko jdima balji gugde
+Detected language: Lojban
+Returned seed:
+mokca sraji gugde kinda danti valsi gasta ctino velski zmanei rakso katna slovo panra sadjo kalci kufra tagji ningau xrotu cenba disko jdima balji gugde
+[       OK ] mnemonics.all_languages (6 ms)
+[ RUN      ] mnemonics.language_detection_with_bad_checksum
+[       OK ] mnemonics.language_detection_with_bad_checksum (0 ms)
+[ RUN      ] mnemonics.utf8prefix
+[       OK ] mnemonics.utf8prefix (0 ms)
+[ RUN      ] mnemonics.case_tolerance
+[       OK ] mnemonics.case_tolerance (1 ms)
+[ RUN      ] mnemonics.partial_word_tolerance
+[       OK ] mnemonics.partial_word_tolerance (0 ms)
+[----------] 6 tests from mnemonics (28 ms total)
+
+[----------] 2 tests from mul128
+[ RUN      ] mul128.handles_zero
+[       OK ] mul128.handles_zero (0 ms)
+[ RUN      ] mul128.handles_one
+[       OK ] mul128.handles_one (0 ms)
+[----------] 2 tests from mul128 (0 ms total)
+
+[----------] 1 test from mul128_without_carry
+[ RUN      ] mul128_without_carry.multiplies_correctly
+[       OK ] mul128_without_carry.multiplies_correctly (0 ms)
+[----------] 1 test from mul128_without_carry (0 ms total)
+
+[----------] 1 test from mul128_with_carry_1_only
+[ RUN      ] mul128_with_carry_1_only.multiplies_correctly
+[       OK ] mul128_with_carry_1_only.multiplies_correctly (0 ms)
+[----------] 1 test from mul128_with_carry_1_only (0 ms total)
+
+[----------] 1 test from mul128_with_carry_2_only
+[ RUN      ] mul128_with_carry_2_only.multiplies_correctly
+[       OK ] mul128_with_carry_2_only.multiplies_correctly (0 ms)
+[----------] 1 test from mul128_with_carry_2_only (0 ms total)
+
+[----------] 1 test from mul128_with_carry_1_and_2
+[ RUN      ] mul128_with_carry_1_and_2.multiplies_correctly
+[       OK ] mul128_with_carry_1_and_2.multiplies_correctly (0 ms)
+[----------] 1 test from mul128_with_carry_1_and_2 (0 ms total)
+
+[----------] 5 tests from div128_32
+[ RUN      ] div128_32.handles_zero
+[       OK ] div128_32.handles_zero (0 ms)
+[ RUN      ] div128_32.handles_one
+[       OK ] div128_32.handles_one (0 ms)
+[ RUN      ] div128_32.handles_if_dividend_less_divider
+[       OK ] div128_32.handles_if_dividend_less_divider (0 ms)
+[ RUN      ] div128_32.handles_if_dividend_dwords_less_divider
+[       OK ] div128_32.handles_if_dividend_dwords_less_divider (0 ms)
+[ RUN      ] div128_32.works_correctly
+[       OK ] div128_32.works_correctly (0 ms)
+[----------] 5 tests from div128_32 (0 ms total)
+
+[----------] 6 tests from div128_64
+[ RUN      ] div128_64.handles_zero
+[       OK ] div128_64.handles_zero (0 ms)
+[ RUN      ] div128_64.handles_one
+[       OK ] div128_64.handles_one (0 ms)
+[ RUN      ] div128_64.handles_if_dividend_less_divider
+[       OK ] div128_64.handles_if_dividend_less_divider (0 ms)
+[ RUN      ] div128_64.handles_if_dividend_dwords_less_divider
+[       OK ] div128_64.handles_if_dividend_dwords_less_divider (0 ms)
+[ RUN      ] div128_64.works_correctly
+[       OK ] div128_64.works_correctly (0 ms)
+[ RUN      ] div128_64.divisor_above_32_bit
+[       OK ] div128_64.divisor_above_32_bit (0 ms)
+[----------] 6 tests from div128_64 (0 ms total)
+
+[----------] 21 tests from multiexp
+[ RUN      ] multiexp.bos_coster_empty
+[       OK ] multiexp.bos_coster_empty (0 ms)
+[ RUN      ] multiexp.straus_empty
+[       OK ] multiexp.straus_empty (0 ms)
+[ RUN      ] multiexp.pippenger_empty
+[       OK ] multiexp.pippenger_empty (0 ms)
+[ RUN      ] multiexp.bos_coster_zero_and_non_zero
+[       OK ] multiexp.bos_coster_zero_and_non_zero (0 ms)
+[ RUN      ] multiexp.straus_zero_and_non_zero
+[       OK ] multiexp.straus_zero_and_non_zero (1 ms)
+[ RUN      ] multiexp.pippenger_zero_and_non_zero
+[       OK ] multiexp.pippenger_zero_and_non_zero (0 ms)
+[ RUN      ] multiexp.bos_coster_pow2_scalar
+[       OK ] multiexp.bos_coster_pow2_scalar (0 ms)
+[ RUN      ] multiexp.straus_pow2_scalar
+[       OK ] multiexp.straus_pow2_scalar (1 ms)
+[ RUN      ] multiexp.pippenger_pow2_scalar
+[       OK ] multiexp.pippenger_pow2_scalar (0 ms)
+[ RUN      ] multiexp.bos_coster_only_zeroes
+[       OK ] multiexp.bos_coster_only_zeroes (1 ms)
+[ RUN      ] multiexp.straus_only_zeroes
+[       OK ] multiexp.straus_only_zeroes (2 ms)
+[ RUN      ] multiexp.pippenger_only_zeroes
+[       OK ] multiexp.pippenger_only_zeroes (1 ms)
+[ RUN      ] multiexp.bos_coster_only_identities
+[       OK ] multiexp.bos_coster_only_identities (2 ms)
+[ RUN      ] multiexp.straus_only_identities
+[       OK ] multiexp.straus_only_identities (1 ms)
+[ RUN      ] multiexp.pippenger_only_identities
+[       OK ] multiexp.pippenger_only_identities (2 ms)
+[ RUN      ] multiexp.bos_coster_random
+[       OK ] multiexp.bos_coster_random (70 ms)
+[ RUN      ] multiexp.straus_random
+[       OK ] multiexp.straus_random (58 ms)
+[ RUN      ] multiexp.pippenger_random
+[       OK ] multiexp.pippenger_random (63 ms)
+[ RUN      ] multiexp.straus_cached
+[       OK ] multiexp.straus_cached (185 ms)
+[ RUN      ] multiexp.pippenger_cached
+[       OK ] multiexp.pippenger_cached (234 ms)
+[ RUN      ] multiexp.scalarmult_triple
+[       OK ] multiexp.scalarmult_triple (1366 ms)
+[----------] 21 tests from multiexp (1987 ms total)
+
+[----------] 7 tests from multisig
+[ RUN      ] multisig.make_1_2
+[       OK ] multisig.make_1_2 (2586 ms)
+[ RUN      ] multisig.make_1_3
+[       OK ] multisig.make_1_3 (4140 ms)
+[ RUN      ] multisig.make_2_2
+[       OK ] multisig.make_2_2 (2267 ms)
+[ RUN      ] multisig.make_3_3
+[       OK ] multisig.make_3_3 (3298 ms)
+[ RUN      ] multisig.make_2_3
+[       OK ] multisig.make_2_3 (3674 ms)
+[ RUN      ] multisig.make_2_4
+[       OK ] multisig.make_2_4 (5426 ms)
+[ RUN      ] multisig.multisig_kex_msg
+[       OK ] multisig.multisig_kex_msg (4 ms)
+[----------] 7 tests from multisig (21395 ms total)
+
+[----------] 1 test from host
+[ RUN      ] host.canonicalize_host
+[       OK ] host.canonicalize_host (0 ms)
+[----------] 1 test from host (0 ms total)
+
+[----------] 11 tests from tor_address
+[ RUN      ] tor_address.constants
+[       OK ] tor_address.constants (0 ms)
+[ RUN      ] tor_address.invalid
+[       OK ] tor_address.invalid (0 ms)
+[ RUN      ] tor_address.unblockable_types
+[       OK ] tor_address.unblockable_types (0 ms)
+[ RUN      ] tor_address.valid
+[       OK ] tor_address.valid (0 ms)
+[ RUN      ] tor_address.generic_network_address
+[       OK ] tor_address.generic_network_address (0 ms)
+[ RUN      ] tor_address.epee_serializev_v2
+[       OK ] tor_address.epee_serializev_v2 (0 ms)
+[ RUN      ] tor_address.epee_serializev_v3
+[       OK ] tor_address.epee_serializev_v3 (0 ms)
+[ RUN      ] tor_address.epee_serialize_unknown
+[       OK ] tor_address.epee_serialize_unknown (0 ms)
+[ RUN      ] tor_address.boost_serialize_v2
+[       OK ] tor_address.boost_serialize_v2 (0 ms)
+[ RUN      ] tor_address.boost_serialize_v3
+[       OK ] tor_address.boost_serialize_v3 (0 ms)
+[ RUN      ] tor_address.boost_serialize_unknown
+[       OK ] tor_address.boost_serialize_unknown (0 ms)
+[----------] 11 tests from tor_address (0 ms total)
+
+[----------] 4 tests from get_network_address
+[ RUN      ] get_network_address.onion
+[       OK ] get_network_address.onion (0 ms)
+[ RUN      ] get_network_address.i2p
+[       OK ] get_network_address.i2p (0 ms)
+[ RUN      ] get_network_address.ipv4
+[       OK ] get_network_address.ipv4 (0 ms)
+[ RUN      ] get_network_address.ipv4subnet
+[       OK ] get_network_address.ipv4subnet (0 ms)
+[----------] 4 tests from get_network_address (0 ms total)
+
+[----------] 9 tests from i2p_address
+[ RUN      ] i2p_address.constants
+[       OK ] i2p_address.constants (0 ms)
+[ RUN      ] i2p_address.invalid
+[       OK ] i2p_address.invalid (0 ms)
+[ RUN      ] i2p_address.unblockable_types
+[       OK ] i2p_address.unblockable_types (0 ms)
+[ RUN      ] i2p_address.valid
+[       OK ] i2p_address.valid (0 ms)
+[ RUN      ] i2p_address.generic_network_address
+[       OK ] i2p_address.generic_network_address (0 ms)
+[ RUN      ] i2p_address.epee_serializev_b32
+[       OK ] i2p_address.epee_serializev_b32 (0 ms)
+[ RUN      ] i2p_address.epee_serialize_unknown
+[       OK ] i2p_address.epee_serialize_unknown (0 ms)
+[ RUN      ] i2p_address.boost_serialize_b32
+[       OK ] i2p_address.boost_serialize_b32 (0 ms)
+[ RUN      ] i2p_address.boost_serialize_unknown
+[       OK ] i2p_address.boost_serialize_unknown (0 ms)
+[----------] 9 tests from i2p_address (0 ms total)
+
+[----------] 3 tests from get_network_address_host_and_port
+[ RUN      ] get_network_address_host_and_port.ipv4
+[       OK ] get_network_address_host_and_port.ipv4 (0 ms)
+[ RUN      ] get_network_address_host_and_port.ipv6
+[       OK ] get_network_address_host_and_port.ipv6 (0 ms)
+[ RUN      ] get_network_address_host_and_port.hostname
+[       OK ] get_network_address_host_and_port.hostname (0 ms)
+[----------] 3 tests from get_network_address_host_and_port (0 ms total)
+
+[----------] 1 test from scheme_and_authority
+[ RUN      ] scheme_and_authority.basic
+[       OK ] scheme_and_authority.basic (0 ms)
+[----------] 1 test from scheme_and_authority (0 ms total)
+
+[----------] 1 test from userinfo_and_hostport
+[ RUN      ] userinfo_and_hostport.basic
+[       OK ] userinfo_and_hostport.basic (0 ms)
+[----------] 1 test from userinfo_and_hostport (0 ms total)
+
+[----------] 1 test from user_and_pass
+[ RUN      ] user_and_pass.basic
+[       OK ] user_and_pass.basic (0 ms)
+[----------] 1 test from user_and_pass (0 ms total)
+
+[----------] 1 test from uri_components
+[ RUN      ] uri_components.get
+[       OK ] uri_components.get (0 ms)
+[----------] 1 test from uri_components (0 ms total)
+
+[----------] 1 test from socks_endpoint
+[ RUN      ] socks_endpoint.get
+[       OK ] socks_endpoint.get (0 ms)
+[----------] 1 test from socks_endpoint (0 ms total)
+
+[----------] 9 tests from socks_client
+[ RUN      ] socks_client.unsupported_command
+[       OK ] socks_client.unsupported_command (0 ms)
+[ RUN      ] socks_client.no_command
+[       OK ] socks_client.no_command (0 ms)
+[ RUN      ] socks_client.connect_command
+[       OK ] socks_client.connect_command (1 ms)
+[ RUN      ] socks_client.v5_ipv6_connect_command
+[       OK ] socks_client.v5_ipv6_connect_command (0 ms)
+[ RUN      ] socks_client.connect_command_failed
+[       OK ] socks_client.connect_command_failed (0 ms)
+[ RUN      ] socks_client.v5_ipv4_connect_command_failed
+[       OK ] socks_client.v5_ipv4_connect_command_failed (0 ms)
+[ RUN      ] socks_client.resolve_command
+[       OK ] socks_client.resolve_command (0 ms)
+[ RUN      ] socks_client.v5_username_host_connect
+[       OK ] socks_client.v5_username_host_connect (1 ms)
+[ RUN      ] socks_client.v5_usernameskipped_host_connect
+[       OK ] socks_client.v5_usernameskipped_host_connect (0 ms)
+[----------] 9 tests from socks_client (2 ms total)
+
+[----------] 4 tests from socks_connector
+[ RUN      ] socks_connector.host
+[       OK ] socks_connector.host (0 ms)
+[ RUN      ] socks_connector.ipv4
+[       OK ] socks_connector.ipv4 (0 ms)
+[ RUN      ] socks_connector.error
+[       OK ] socks_connector.error (0 ms)
+[ RUN      ] socks_connector.timeout
+[       OK ] socks_connector.timeout (11 ms)
+[----------] 4 tests from socks_connector (11 ms total)
+
+[----------] 6 tests from dandelionpp_map
+[ RUN      ] dandelionpp_map.traits
+[       OK ] dandelionpp_map.traits (0 ms)
+[ RUN      ] dandelionpp_map.empty
+[       OK ] dandelionpp_map.empty (0 ms)
+[ RUN      ] dandelionpp_map.zero_stems
+[       OK ] dandelionpp_map.zero_stems (0 ms)
+[ RUN      ] dandelionpp_map.dropped_connection
+[       OK ] dandelionpp_map.dropped_connection (0 ms)
+[ RUN      ] dandelionpp_map.dropped_connection_remapped
+[       OK ] dandelionpp_map.dropped_connection_remapped (0 ms)
+[ RUN      ] dandelionpp_map.dropped_all_connections
+[       OK ] dandelionpp_map.dropped_all_connections (0 ms)
+[----------] 6 tests from dandelionpp_map (0 ms total)
+
+[----------] 6 tests from zmq
+[ RUN      ] zmq.error_codes
+[       OK ] zmq.error_codes (6 ms)
+[ RUN      ] zmq.read_write
+[       OK ] zmq.read_write (2 ms)
+[ RUN      ] zmq.read_write_slice
+[       OK ] zmq.read_write_slice (0 ms)
+[ RUN      ] zmq.write_slice_fail
+[       OK ] zmq.write_slice_fail (0 ms)
+[ RUN      ] zmq.read_write_multipart
+[       OK ] zmq.read_write_multipart (0 ms)
+[ RUN      ] zmq.read_write_termination
+[       OK ] zmq.read_write_termination (1 ms)
+[----------] 6 tests from zmq (9 ms total)
+
+[----------] 4 tests from ban
+[ RUN      ] ban.add
+[       OK ] ban.add (0 ms)
+[ RUN      ] ban.limit
+[       OK ] ban.limit (0 ms)
+[ RUN      ] ban.ignores_port
+[       OK ] ban.ignores_port (0 ms)
+[ RUN      ] ban.file_banlist
+[       OK ] ban.file_banlist (1 ms)
+[----------] 4 tests from ban (1 ms total)
+
+[----------] 2 tests from node_server
+[ RUN      ] node_server.bind_same_p2p_port
+[       OK ] node_server.bind_same_p2p_port (2 ms)
+[ RUN      ] node_server.race_condition
+[       OK ] node_server.race_condition (1007 ms)
+[----------] 2 tests from node_server (1009 ms total)
+
+[----------] 1 test from cryptonote_protocol_handler
+[ RUN      ] cryptonote_protocol_handler.race_condition
+[       OK ] cryptonote_protocol_handler.race_condition (4433 ms)
+[----------] 1 test from cryptonote_protocol_handler (4433 ms total)
+
+[----------] 1 test from regtest
+[ RUN      ] regtest.isolates_p2p_state_from_mainnet_data_dir
+[       OK ] regtest.isolates_p2p_state_from_mainnet_data_dir (1 ms)
+[----------] 1 test from regtest (1 ms total)
+
+[----------] 6 tests from output_distribution
+[ RUN      ] output_distribution.extend
+[       OK ] output_distribution.extend (1 ms)
+[ RUN      ] output_distribution.one
+[       OK ] output_distribution.one (0 ms)
+[ RUN      ] output_distribution.full_cumulative
+[       OK ] output_distribution.full_cumulative (1 ms)
+[ RUN      ] output_distribution.full_noncumulative
+[       OK ] output_distribution.full_noncumulative (0 ms)
+[ RUN      ] output_distribution.part_cumulative
+[       OK ] output_distribution.part_cumulative (0 ms)
+[ RUN      ] output_distribution.part_noncumulative
+[       OK ] output_distribution.part_noncumulative (0 ms)
+[----------] 6 tests from output_distribution (2 ms total)
+
+[----------] 62 tests from parse_amount
+[ RUN      ] parse_amount.handles_pos_0
+[       OK ] parse_amount.handles_pos_0 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00
+[       OK ] parse_amount.handles_pos_00 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00000000
+[       OK ] parse_amount.handles_pos_00000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_000000000
+[       OK ] parse_amount.handles_pos_000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00000000000000000000000000000000
+[       OK ] parse_amount.handles_pos_00000000000000000000000000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos__0
+[       OK ] parse_amount.handles_pos__0 (0 ms)
+[ RUN      ] parse_amount.handles_pos__00
+[       OK ] parse_amount.handles_pos__00 (0 ms)
+[ RUN      ] parse_amount.handles_pos__00000000
+[       OK ] parse_amount.handles_pos__00000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos__000000000
+[       OK ] parse_amount.handles_pos__000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos__00000000000000000000000000000000
+[       OK ] parse_amount.handles_pos__00000000000000000000000000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00000000_
+[       OK ] parse_amount.handles_pos_00000000_ (0 ms)
+[ RUN      ] parse_amount.handles_pos_000000000_
+[       OK ] parse_amount.handles_pos_000000000_ (0 ms)
+[ RUN      ] parse_amount.handles_pos_00000000000000000000000000000000_
+[       OK ] parse_amount.handles_pos_00000000000000000000000000000000_ (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_
+[       OK ] parse_amount.handles_pos_0_ (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_0
+[       OK ] parse_amount.handles_pos_0_0 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_00
+[       OK ] parse_amount.handles_pos_0_00 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_00000000
+[       OK ] parse_amount.handles_pos_0_00000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_000000000
+[       OK ] parse_amount.handles_pos_0_000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_00000000000000000000000000000000
+[       OK ] parse_amount.handles_pos_0_00000000000000000000000000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00_
+[       OK ] parse_amount.handles_pos_00_ (0 ms)
+[ RUN      ] parse_amount.handles_pos_00_0
+[       OK ] parse_amount.handles_pos_00_0 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00_00
+[       OK ] parse_amount.handles_pos_00_00 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00_00000000
+[       OK ] parse_amount.handles_pos_00_00000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00_000000000
+[       OK ] parse_amount.handles_pos_00_000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_00_00000000000000000000000000000000
+[       OK ] parse_amount.handles_pos_00_00000000000000000000000000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_000000000001
+[       OK ] parse_amount.handles_pos_0_000000000001 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_0000000000010
+[       OK ] parse_amount.handles_pos_0_0000000000010 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_0000000000010000000000000000000000000
+[       OK ] parse_amount.handles_pos_0_0000000000010000000000000000000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_000000000009
+[       OK ] parse_amount.handles_pos_0_000000000009 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_0000000000090
+[       OK ] parse_amount.handles_pos_0_0000000000090 (0 ms)
+[ RUN      ] parse_amount.handles_pos_0_0000000000090000000000000000000000000
+[       OK ] parse_amount.handles_pos_0_0000000000090000000000000000000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_1
+[       OK ] parse_amount.handles_pos_1 (0 ms)
+[ RUN      ] parse_amount.handles_pos_10
+[       OK ] parse_amount.handles_pos_10 (0 ms)
+[ RUN      ] parse_amount.handles_pos_100
+[       OK ] parse_amount.handles_pos_100 (0 ms)
+[ RUN      ] parse_amount.handles_pos_1000
+[       OK ] parse_amount.handles_pos_1000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_6553_5
+[       OK ] parse_amount.handles_pos_6553_5 (0 ms)
+[ RUN      ] parse_amount.handles_pos_429496_7295
+[       OK ] parse_amount.handles_pos_429496_7295 (0 ms)
+[ RUN      ] parse_amount.handles_pos_18446744_0737
+[       OK ] parse_amount.handles_pos_18446744_0737 (0 ms)
+[ RUN      ] parse_amount.handles_pos_18446744_0737000
+[       OK ] parse_amount.handles_pos_18446744_0737000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_18446744_07370000
+[       OK ] parse_amount.handles_pos_18446744_07370000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_18446744_073700000
+[       OK ] parse_amount.handles_pos_18446744_073700000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_18446744_0737000000000000000
+[       OK ] parse_amount.handles_pos_18446744_0737000000000000000 (0 ms)
+[ RUN      ] parse_amount.handles_pos_18446744_073709551615
+[       OK ] parse_amount.handles_pos_18446744_073709551615 (0 ms)
+[ RUN      ] parse_amount.handles_neg_empty_string
+[       OK ] parse_amount.handles_neg_empty_string (0 ms)
+[ RUN      ] parse_amount.handles_neg_minus_0
+[       OK ] parse_amount.handles_neg_minus_0 (0 ms)
+[ RUN      ] parse_amount.handles_neg_plus_0
+[       OK ] parse_amount.handles_neg_plus_0 (0 ms)
+[ RUN      ] parse_amount.handles_neg_minus_1
+[       OK ] parse_amount.handles_neg_minus_1 (0 ms)
+[ RUN      ] parse_amount.handles_neg_plus_1
+[       OK ] parse_amount.handles_neg_plus_1 (0 ms)
+[ RUN      ] parse_amount.handles_neg_only_point
+[       OK ] parse_amount.handles_neg_only_point (0 ms)
+[ RUN      ] parse_amount.handles_neg_0_0000000000001
+[       OK ] parse_amount.handles_neg_0_0000000000001 (0 ms)
+[ RUN      ] parse_amount.handles_neg_0_0000000000009
+[       OK ] parse_amount.handles_neg_0_0000000000009 (0 ms)
+[ RUN      ] parse_amount.handles_neg_184467440737_000000001
+[       OK ] parse_amount.handles_neg_184467440737_000000001 (0 ms)
+[ RUN      ] parse_amount.handles_neg_184467440737_09551616
+[       OK ] parse_amount.handles_neg_184467440737_09551616 (0 ms)
+[ RUN      ] parse_amount.handles_neg_184467440738
+[       OK ] parse_amount.handles_neg_184467440738 (0 ms)
+[ RUN      ] parse_amount.handles_neg_18446744073709551616
+[       OK ] parse_amount.handles_neg_18446744073709551616 (1 ms)
+[ RUN      ] parse_amount.handles_neg___
+[       OK ] parse_amount.handles_neg___ (0 ms)
+[ RUN      ] parse_amount.handles_neg_0__
+[       OK ] parse_amount.handles_neg_0__ (0 ms)
+[ RUN      ] parse_amount.handles_neg___0
+[       OK ] parse_amount.handles_neg___0 (0 ms)
+[ RUN      ] parse_amount.handles_neg_0__0
+[       OK ] parse_amount.handles_neg_0__0 (0 ms)
+[ RUN      ] parse_amount.handles_neg_0_0_
+[       OK ] parse_amount.handles_neg_0_0_ (0 ms)
+[ RUN      ] parse_amount.handles_neg__0_0
+[       OK ] parse_amount.handles_neg__0_0 (0 ms)
+[ RUN      ] parse_amount.handles_neg_0_0_0
+[       OK ] parse_amount.handles_neg_0_0_0 (0 ms)
+[----------] 62 tests from parse_amount (1 ms total)
+
+[----------] 9 tests from pruning
+[ RUN      ] pruning.parts
+[       OK ] pruning.parts (0 ms)
+[ RUN      ] pruning.out_of_range
+[       OK ] pruning.out_of_range (0 ms)
+[ RUN      ] pruning.fits
+[       OK ] pruning.fits (0 ms)
+[ RUN      ] pruning.tip
+[       OK ] pruning.tip (0 ms)
+[ RUN      ] pruning.seed
+[       OK ] pruning.seed (0 ms)
+[ RUN      ] pruning.match
+[       OK ] pruning.match (0 ms)
+[ RUN      ] pruning.stripe_size
+[       OK ] pruning.stripe_size (0 ms)
+[ RUN      ] pruning.next_unpruned
+[       OK ] pruning.next_unpruned (0 ms)
+[ RUN      ] pruning.next_pruned
+[       OK ] pruning.next_pruned (0 ms)
+[----------] 9 tests from pruning (0 ms total)
+
+[----------] 1 test from random32_unbiased
+[ RUN      ] random32_unbiased.less_than_order
+[       OK ] random32_unbiased.less_than_order (1 ms)
+[----------] 1 test from random32_unbiased (1 ms total)
+
+[----------] 10 tests from rolling_median
+[ RUN      ] rolling_median.one
+[       OK ] rolling_median.one (0 ms)
+[ RUN      ] rolling_median.two
+[       OK ] rolling_median.two (0 ms)
+[ RUN      ] rolling_median.series
+[       OK ] rolling_median.series (25 ms)
+[ RUN      ] rolling_median.clear_whole
+[       OK ] rolling_median.clear_whole (5 ms)
+[ RUN      ] rolling_median.clear_partway
+[       OK ] rolling_median.clear_partway (5 ms)
+[ RUN      ] rolling_median.order
+[       OK ] rolling_median.order (0 ms)
+[ RUN      ] rolling_median.history_blind
+[       OK ] rolling_median.history_blind (1 ms)
+[ RUN      ] rolling_median.overflow
+[       OK ] rolling_median.overflow (0 ms)
+[ RUN      ] rolling_median.size
+[       OK ] rolling_median.size (0 ms)
+[ RUN      ] rolling_median.copy
+[       OK ] rolling_median.copy (1 ms)
+[----------] 10 tests from rolling_median (37 ms total)
+
+[----------] 3 tests from fee_2021_scaling
+[ RUN      ] fee_2021_scaling.relay_fee_cases_from_pdf
+[       OK ] fee_2021_scaling.relay_fee_cases_from_pdf (1 ms)
+[ RUN      ] fee_2021_scaling.wallet_fee_cases_from_pdf
+[       OK ] fee_2021_scaling.wallet_fee_cases_from_pdf (0 ms)
+[ RUN      ] fee_2021_scaling.rounding
+[       OK ] fee_2021_scaling.rounding (0 ms)
+[----------] 3 tests from fee_2021_scaling (1 ms total)
+
+[----------] 15 tests from Serialization
+[ RUN      ] Serialization.BinaryArchiveInts
+[       OK ] Serialization.BinaryArchiveInts (0 ms)
+[ RUN      ] Serialization.BinaryArchiveVarInts
+[       OK ] Serialization.BinaryArchiveVarInts (0 ms)
+[ RUN      ] Serialization.Test1
+[       OK ] Serialization.Test1 (0 ms)
+[ RUN      ] Serialization.Overflow
+[       OK ] Serialization.Overflow (0 ms)
+[ RUN      ] Serialization.serializes_vector_uint64_as_varint
+[       OK ] Serialization.serializes_vector_uint64_as_varint (0 ms)
+[ RUN      ] Serialization.serializes_vector_int64_as_fixed_int
+[       OK ] Serialization.serializes_vector_int64_as_fixed_int (0 ms)
+[ RUN      ] Serialization.deserializes_vector_reserve
+[       OK ] Serialization.deserializes_vector_reserve (0 ms)
+[ RUN      ] Serialization.serializes_transacion_signatures_correctly
+[       OK ] Serialization.serializes_transacion_signatures_correctly (0 ms)
+[ RUN      ] Serialization.serializes_ringct_types
+[       OK ] Serialization.serializes_ringct_types (92 ms)
+[ RUN      ] Serialization.portability_wallet
+[       OK ] Serialization.portability_wallet (746 ms)
+[ RUN      ] Serialization.portability_outputs
+[       OK ] Serialization.portability_outputs (15 ms)
+[ RUN      ] Serialization.portability_unsigned_tx
+[       OK ] Serialization.portability_unsigned_tx (0 ms)
+[ RUN      ] Serialization.portability_signed_tx
+[       OK ] Serialization.portability_signed_tx (0 ms)
+[ RUN      ] Serialization.difficulty_type
+[       OK ] Serialization.difficulty_type (0 ms)
+[ RUN      ] Serialization.adl_free_function
+[       OK ] Serialization.adl_free_function (0 ms)
+[----------] 15 tests from Serialization (853 ms total)
+
+[----------] 7 tests from sha256
+[ RUN      ] sha256.empty
+[       OK ] sha256.empty (0 ms)
+[ RUN      ] sha256.small
+[       OK ] sha256.small (0 ms)
+[ RUN      ] sha256.large
+[       OK ] sha256.large (39 ms)
+[ RUN      ] sha256.emptyfile
+[       OK ] sha256.emptyfile (0 ms)
+[ RUN      ] sha256.smallfile
+[       OK ] sha256.smallfile (0 ms)
+[ RUN      ] sha256.largefile
+[       OK ] sha256.largefile (0 ms)
+[ RUN      ] sha256.noexist
+[       OK ] sha256.noexist (0 ms)
+[----------] 7 tests from sha256 (39 ms total)
+
+[----------] 1 test from slowmem
+[ RUN      ] slowmem.Success
+[       OK ] slowmem.Success (0 ms)
+[----------] 1 test from slowmem (0 ms total)
+
+[----------] 7 tests from WalletSubaddress
+[ RUN      ] WalletSubaddress.GetSubaddressLabel
+[       OK ] WalletSubaddress.GetSubaddressLabel (378 ms)
+[ RUN      ] WalletSubaddress.AddSubaddress
+[       OK ] WalletSubaddress.AddSubaddress (354 ms)
+[ RUN      ] WalletSubaddress.OutOfBoundsIndexes
+[       OK ] WalletSubaddress.OutOfBoundsIndexes (350 ms)
+[ RUN      ] WalletSubaddress.SetLookahead
+[       OK ] WalletSubaddress.SetLookahead (1224 ms)
+[ RUN      ] WalletSubaddress.ExpandThenSetMinorIncreaseOnly
+[       OK ] WalletSubaddress.ExpandThenSetMinorIncreaseOnly (988 ms)
+[ RUN      ] WalletSubaddress.ExpandThenSetMajorIncreaseOnly
+[       OK ] WalletSubaddress.ExpandThenSetMajorIncreaseOnly (1035 ms)
+[ RUN      ] WalletSubaddress.ExpandThenSetIncreaseBoth
+[       OK ] WalletSubaddress.ExpandThenSetIncreaseBoth (1517 ms)
+[----------] 7 tests from WalletSubaddress (5846 ms total)
+
+[----------] 9 tests from parse_tx_extra
+[ RUN      ] parse_tx_extra.handles_empty_extra
+[       OK ] parse_tx_extra.handles_empty_extra (0 ms)
+[ RUN      ] parse_tx_extra.handles_padding_only_size_1
+[       OK ] parse_tx_extra.handles_padding_only_size_1 (0 ms)
+[ RUN      ] parse_tx_extra.handles_padding_only_size_2
+[       OK ] parse_tx_extra.handles_padding_only_size_2 (0 ms)
+[ RUN      ] parse_tx_extra.handles_padding_only_max_size
+[       OK ] parse_tx_extra.handles_padding_only_max_size (0 ms)
+[ RUN      ] parse_tx_extra.handles_padding_only_exceed_max_size
+[       OK ] parse_tx_extra.handles_padding_only_exceed_max_size (0 ms)
+[ RUN      ] parse_tx_extra.handles_invalid_padding_only
+[       OK ] parse_tx_extra.handles_invalid_padding_only (0 ms)
+[ RUN      ] parse_tx_extra.handles_pub_key_only
+[       OK ] parse_tx_extra.handles_pub_key_only (0 ms)
+[ RUN      ] parse_tx_extra.handles_extra_nonce_only
+[       OK ] parse_tx_extra.handles_extra_nonce_only (0 ms)
+[ RUN      ] parse_tx_extra.handles_pub_key_and_padding
+[       OK ] parse_tx_extra.handles_pub_key_and_padding (0 ms)
+[----------] 9 tests from parse_tx_extra (0 ms total)
+
+[----------] 3 tests from parse_and_validate_tx_extra
+[ RUN      ] parse_and_validate_tx_extra.is_valid_tx_extra_parsed
+[       OK ] parse_and_validate_tx_extra.is_valid_tx_extra_parsed (1 ms)
+[ RUN      ] parse_and_validate_tx_extra.fails_on_big_extra_nonce
+[       OK ] parse_and_validate_tx_extra.fails_on_big_extra_nonce (0 ms)
+[ RUN      ] parse_and_validate_tx_extra.fails_on_wrong_size_in_extra_nonce
+[       OK ] parse_and_validate_tx_extra.fails_on_wrong_size_in_extra_nonce (0 ms)
+[----------] 3 tests from parse_and_validate_tx_extra (1 ms total)
+
+[----------] 1 test from validate_parse_amount_case
+[ RUN      ] validate_parse_amount_case.validate_parse_amount
+[       OK ] validate_parse_amount_case.validate_parse_amount (0 ms)
+[----------] 1 test from validate_parse_amount_case (0 ms total)
+
+[----------] 8 tests from sort_tx_extra
+[ RUN      ] sort_tx_extra.empty
+[       OK ] sort_tx_extra.empty (0 ms)
+[ RUN      ] sort_tx_extra.pubkey
+[       OK ] sort_tx_extra.pubkey (0 ms)
+[ RUN      ] sort_tx_extra.two_pubkeys
+[       OK ] sort_tx_extra.two_pubkeys (0 ms)
+[ RUN      ] sort_tx_extra.keep_order
+[       OK ] sort_tx_extra.keep_order (0 ms)
+[ RUN      ] sort_tx_extra.switch_order
+[       OK ] sort_tx_extra.switch_order (0 ms)
+[ RUN      ] sort_tx_extra.invalid
+[       OK ] sort_tx_extra.invalid (0 ms)
+[ RUN      ] sort_tx_extra.invalid_suffix_strict
+[       OK ] sort_tx_extra.invalid_suffix_strict (0 ms)
+[ RUN      ] sort_tx_extra.invalid_suffix_partial
+[       OK ] sort_tx_extra.invalid_suffix_partial (0 ms)
+[----------] 8 tests from sort_tx_extra (0 ms total)
+
+[----------] 4 tests from remove_field_from_tx_extra
+[ RUN      ] remove_field_from_tx_extra.remove_first
+[       OK ] remove_field_from_tx_extra.remove_first (0 ms)
+[ RUN      ] remove_field_from_tx_extra.remove_last
+[       OK ] remove_field_from_tx_extra.remove_last (0 ms)
+[ RUN      ] remove_field_from_tx_extra.remove_middle
+[       OK ] remove_field_from_tx_extra.remove_middle (0 ms)
+[ RUN      ] remove_field_from_tx_extra.invalid_varint
+[       OK ] remove_field_from_tx_extra.invalid_varint (0 ms)
+[----------] 4 tests from remove_field_from_tx_extra (0 ms total)
+
+[----------] 2 tests from peer_list
+[ RUN      ] peer_list.peer_list_general
+4
+[       OK ] peer_list.peer_list_general (0 ms)
+[ RUN      ] peer_list.merge_peer_lists
+[       OK ] peer_list.merge_peer_lists (0 ms)
+[----------] 2 tests from peer_list (0 ms total)
+
+[----------] 1 test from peerlist_storage
+[ RUN      ] peerlist_storage.store
+[       OK ] peerlist_storage.store (0 ms)
+[----------] 1 test from peerlist_storage (0 ms total)
+
+[----------] 1 test from protocol_pack
+[ RUN      ] protocol_pack.protocol_pack_command
+[       OK ] protocol_pack.protocol_pack_command (0 ms)
+[----------] 1 test from protocol_pack (0 ms total)
+
+[----------] 8 tests from threadpool
+[ RUN      ] threadpool.wait_nothing
+[       OK ] threadpool.wait_nothing (0 ms)
+[ RUN      ] threadpool.wait_waits
+[       OK ] threadpool.wait_waits (1001 ms)
+[ RUN      ] threadpool.one_thread
+[       OK ] threadpool.one_thread (3 ms)
+[ RUN      ] threadpool.many_threads
+[       OK ] threadpool.many_threads (70 ms)
+[ RUN      ] threadpool.reentrency
+[       OK ] threadpool.reentrency (0 ms)
+[ RUN      ] threadpool.reentrancy
+[       OK ] threadpool.reentrancy (0 ms)
+[ RUN      ] threadpool.leaf_throws
+[       OK ] threadpool.leaf_throws (1 ms)
+[ RUN      ] threadpool.leaf_reentrancy
+[       OK ] threadpool.leaf_reentrancy (393 ms)
+[----------] 8 tests from threadpool (1468 ms total)
+
+[----------] 1 test from tx_proof
+[ RUN      ] tx_proof.prove_verify_v2
+[       OK ] tx_proof.prove_verify_v2 (7 ms)
+[----------] 1 test from tx_proof (7 ms total)
+
+[----------] 1 test from major
+[ RUN      ] major.Only
+[       OK ] major.Only (0 ms)
+[----------] 1 test from major (0 ms total)
+
+[----------] 1 test from empty_hardforks
+[ RUN      ] empty_hardforks.Success
+[       OK ] empty_hardforks.Success (0 ms)
+[----------] 1 test from empty_hardforks (0 ms total)
+
+[----------] 1 test from ordering
+[ RUN      ] ordering.Success
+[       OK ] ordering.Success (0 ms)
+[----------] 1 test from ordering (0 ms total)
+
+[----------] 1 test from check_for_height
+[ RUN      ] check_for_height.Success
+[       OK ] check_for_height.Success (0 ms)
+[----------] 1 test from check_for_height (0 ms total)
+
+[----------] 3 tests from get
+[ RUN      ] get.next_version
+[       OK ] get.next_version (0 ms)
+[ RUN      ] get.higher
+[       OK ] get.higher (0 ms)
+[ RUN      ] get.earliest_ideal_height
+[       OK ] get.earliest_ideal_height (0 ms)
+[----------] 3 tests from get (0 ms total)
+
+[----------] 1 test from states
+[ RUN      ] states.Success
+[       OK ] states.Success (0 ms)
+[----------] 1 test from states (0 ms total)
+
+[----------] 1 test from steps_asap
+[ RUN      ] steps_asap.Success
+[       OK ] steps_asap.Success (0 ms)
+[----------] 1 test from steps_asap (0 ms total)
+
+[----------] 1 test from steps_1
+[ RUN      ] steps_1.Success
+[       OK ] steps_1.Success (0 ms)
+[----------] 1 test from steps_1 (0 ms total)
+
+[----------] 3 tests from reorganize
+[ RUN      ] reorganize.Same
+[       OK ] reorganize.Same (0 ms)
+[ RUN      ] reorganize.Changed
+[       OK ] reorganize.Changed (0 ms)
+[ RUN      ] reorganize.changed
+[       OK ] reorganize.changed (0 ms)
+[----------] 3 tests from reorganize (0 ms total)
+
+[----------] 3 tests from voting
+[ RUN      ] voting.threshold
+[       OK ] voting.threshold (0 ms)
+[ RUN      ] voting.different_thresholds
+[       OK ] voting.different_thresholds (0 ms)
+[ RUN      ] voting.info
+[       OK ] voting.info (0 ms)
+[----------] 3 tests from voting (0 ms total)
+
+[----------] 1 test from new_blocks
+[ RUN      ] new_blocks.denied
+[       OK ] new_blocks.denied (0 ms)
+[----------] 1 test from new_blocks (0 ms total)
+
+[----------] 1 test from new_version
+[ RUN      ] new_version.early
+[       OK ] new_version.early (0 ms)
+[----------] 1 test from new_version (0 ms total)
+
+[----------] 1 test from meow_hardforks
+[ RUN      ] meow_hardforks.single_jump_table
+[       OK ] meow_hardforks.single_jump_table (0 ms)
+[----------] 1 test from meow_hardforks (0 ms total)
+
+[----------] 2 tests from meow_wallet_hardforks
+[ RUN      ] meow_wallet_hardforks.sparse_table_and_invalid_versions
+[       OK ] meow_wallet_hardforks.sparse_table_and_invalid_versions (0 ms)
+[ RUN      ] meow_wallet_hardforks.inherited_network_activation_boundaries
+[       OK ] meow_wallet_hardforks.inherited_network_activation_boundaries (0 ms)
+[----------] 2 tests from meow_wallet_hardforks (0 ms total)
+
+[----------] 32 tests from uri
+[ RUN      ] uri.empty_string
+[       OK ] uri.empty_string (1 ms)
+[ RUN      ] uri.no_scheme
+[       OK ] uri.no_scheme (0 ms)
+[ RUN      ] uri.bad_scheme
+[       OK ] uri.bad_scheme (1 ms)
+[ RUN      ] uri.scheme_not_first
+[       OK ] uri.scheme_not_first (0 ms)
+[ RUN      ] uri.no_body
+[       OK ] uri.no_body (0 ms)
+[ RUN      ] uri.no_address
+[       OK ] uri.no_address (1 ms)
+[ RUN      ] uri.bad_address
+[       OK ] uri.bad_address (0 ms)
+[ RUN      ] uri.rejects_monero_address
+[       OK ] uri.rejects_monero_address (1 ms)
+[ RUN      ] uri.good_address
+[       OK ] uri.good_address (1 ms)
+[ RUN      ] uri.good_integrated_address
+[       OK ] uri.good_integrated_address (1 ms)
+[ RUN      ] uri.parameter_without_inter
+[       OK ] uri.parameter_without_inter (0 ms)
+[ RUN      ] uri.parameter_without_equals
+[       OK ] uri.parameter_without_equals (0 ms)
+[ RUN      ] uri.parameter_without_value
+[       OK ] uri.parameter_without_value (1 ms)
+[ RUN      ] uri.negative_amount
+[       OK ] uri.negative_amount (0 ms)
+[ RUN      ] uri.bad_amount
+[       OK ] uri.bad_amount (1 ms)
+[ RUN      ] uri.duplicate_parameter
+[       OK ] uri.duplicate_parameter (0 ms)
+[ RUN      ] uri.unknown_parameter
+[       OK ] uri.unknown_parameter (1 ms)
+[ RUN      ] uri.unknown_parameters
+[       OK ] uri.unknown_parameters (0 ms)
+[ RUN      ] uri.empty_payment_id
+[       OK ] uri.empty_payment_id (0 ms)
+[ RUN      ] uri.bad_payment_id
+[       OK ] uri.bad_payment_id (1 ms)
+[ RUN      ] uri.short_payment_id
+[       OK ] uri.short_payment_id (0 ms)
+[ RUN      ] uri.long_payment_id
+[       OK ] uri.long_payment_id (1 ms)
+[ RUN      ] uri.payment_id_with_integrated_address
+[       OK ] uri.payment_id_with_integrated_address (0 ms)
+[ RUN      ] uri.empty_description
+[       OK ] uri.empty_description (1 ms)
+[ RUN      ] uri.empty_recipient_name
+[       OK ] uri.empty_recipient_name (0 ms)
+[ RUN      ] uri.non_empty_description
+[       OK ] uri.non_empty_description (0 ms)
+[ RUN      ] uri.non_empty_recipient_name
+[       OK ] uri.non_empty_recipient_name (1 ms)
+[ RUN      ] uri.url_encoding
+[       OK ] uri.url_encoding (0 ms)
+[ RUN      ] uri.non_alphanumeric_url_encoding
+[       OK ] uri.non_alphanumeric_url_encoding (1 ms)
+[ RUN      ] uri.truncated_url_encoding
+[       OK ] uri.truncated_url_encoding (0 ms)
+[ RUN      ] uri.percent_without_url_encoding
+[       OK ] uri.percent_without_url_encoding (0 ms)
+[ RUN      ] uri.url_encoded_once
+[       OK ] uri.url_encoded_once (1 ms)
+[----------] 32 tests from uri (15 ms total)
+
+[----------] 17 tests from LocalAddress
+[ RUN      ] LocalAddress.localhost
+[       OK ] LocalAddress.localhost (0 ms)
+[ RUN      ] LocalAddress.localhost_port
+[       OK ] LocalAddress.localhost_port (0 ms)
+[ RUN      ] LocalAddress.localhost_suffix
+[       OK ] LocalAddress.localhost_suffix (0 ms)
+[ RUN      ] LocalAddress.loopback
+[       OK ] LocalAddress.loopback (0 ms)
+[ RUN      ] LocalAddress.loopback_port
+[       OK ] LocalAddress.loopback_port (0 ms)
+[ RUN      ] LocalAddress.loopback_protocol
+[       OK ] LocalAddress.loopback_protocol (0 ms)
+[ RUN      ] LocalAddress.loopback_hi
+[       OK ] LocalAddress.loopback_hi (0 ms)
+[ RUN      ] LocalAddress.loopback_lo
+[       OK ] LocalAddress.loopback_lo (0 ms)
+[ RUN      ] LocalAddress.loopback_ipv6
+[       OK ] LocalAddress.loopback_ipv6 (0 ms)
+[ RUN      ] LocalAddress.onion
+[       OK ] LocalAddress.onion (0 ms)
+[ RUN      ] LocalAddress.i2p
+[       OK ] LocalAddress.i2p (0 ms)
+[ RUN      ] LocalAddress.valid_ip
+[       OK ] LocalAddress.valid_ip (0 ms)
+[ RUN      ] LocalAddress.valid_ipv6
+[       OK ] LocalAddress.valid_ipv6 (0 ms)
+[ RUN      ] LocalAddress.valid_domain
+[       OK ] LocalAddress.valid_domain (0 ms)
+[ RUN      ] LocalAddress.local_prefix
+[       OK ] LocalAddress.local_prefix (0 ms)
+[ RUN      ] LocalAddress.invalid
+[       OK ] LocalAddress.invalid (0 ms)
+[ RUN      ] LocalAddress.empty
+[       OK ] LocalAddress.empty (0 ms)
+[----------] 17 tests from LocalAddress (0 ms total)
+
+[----------] 1 test from varint
+[ RUN      ] varint.equal
+[       OK ] varint.equal (1 ms)
+[----------] 1 test from varint (1 ms total)
+
+[----------] 5 tests from verRctNonSemanticsSimple
+[ RUN      ] verRctNonSemanticsSimple.tx1_preconditions
+[       OK ] verRctNonSemanticsSimple.tx1_preconditions (21 ms)
+[ RUN      ] verRctNonSemanticsSimple.serializable_sig_changes
+[       OK ] verRctNonSemanticsSimple.serializable_sig_changes (1 ms)
+[ RUN      ] verRctNonSemanticsSimple.unserializable_sig_changes
+[       OK ] verRctNonSemanticsSimple.unserializable_sig_changes (0 ms)
+[ RUN      ] verRctNonSemanticsSimple.serializable_mixring_changes
+[       OK ] verRctNonSemanticsSimple.serializable_mixring_changes (2 ms)
+[ RUN      ] verRctNonSemanticsSimple.expand_transaction_2_failures
+[       OK ] verRctNonSemanticsSimple.expand_transaction_2_failures (0 ms)
+[----------] 5 tests from verRctNonSemanticsSimple (24 ms total)
+
+[----------] 136 tests from ringct
+[ RUN      ] ringct.Borromean
+[       OK ] ringct.Borromean (104 ms)
+[ RUN      ] ringct.MG_sigs
+[       OK ] ringct.MG_sigs (7 ms)
+[ RUN      ] ringct.CLSAG
+[       OK ] ringct.CLSAG (106 ms)
+[ RUN      ] ringct.range_proofs
+[       OK ] ringct.range_proofs (70 ms)
+[ RUN      ] ringct.range_proofs_with_fee
+[       OK ] ringct.range_proofs_with_fee (69 ms)
+[ RUN      ] ringct.simple
+[       OK ] ringct.simple (40 ms)
+[ RUN      ] ringct.range_proofs_reject_empty_outs
+[       OK ] ringct.range_proofs_reject_empty_outs (3 ms)
+[ RUN      ] ringct.range_proofs_reject_empty_outs_simple
+[       OK ] ringct.range_proofs_reject_empty_outs_simple (2 ms)
+[ RUN      ] ringct.range_proofs_reject_empty_ins
+[       OK ] ringct.range_proofs_reject_empty_ins (12 ms)
+[ RUN      ] ringct.range_proofs_reject_empty_ins_simple
+[       OK ] ringct.range_proofs_reject_empty_ins_simple (1 ms)
+[ RUN      ] ringct.range_proofs_reject_all_empty
+[       OK ] ringct.range_proofs_reject_all_empty (0 ms)
+[ RUN      ] ringct.range_proofs_reject_all_empty_simple
+[       OK ] ringct.range_proofs_reject_all_empty_simple (0 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_empty
+[       OK ] ringct.range_proofs_accept_zero_empty (3 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_empty_simple
+[       OK ] ringct.range_proofs_accept_zero_empty_simple (3 ms)
+[ RUN      ] ringct.range_proofs_reject_empty_zero
+[       OK ] ringct.range_proofs_reject_empty_zero (12 ms)
+[ RUN      ] ringct.range_proofs_reject_empty_zero_simple
+[       OK ] ringct.range_proofs_reject_empty_zero_simple (0 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_zero
+[       OK ] ringct.range_proofs_accept_zero_zero (27 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_zero_simple
+[       OK ] ringct.range_proofs_accept_zero_zero_simple (26 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_out_first
+[       OK ] ringct.range_proofs_accept_zero_out_first (39 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_out_first_simple
+[       OK ] ringct.range_proofs_accept_zero_out_first_simple (38 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_out_last
+[       OK ] ringct.range_proofs_accept_zero_out_last (50 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_out_last_simple
+[       OK ] ringct.range_proofs_accept_zero_out_last_simple (41 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_out_middle
+[       OK ] ringct.range_proofs_accept_zero_out_middle (64 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_out_middle_simple
+[       OK ] ringct.range_proofs_accept_zero_out_middle_simple (52 ms)
+[ RUN      ] ringct.range_proofs_accept_zero
+[       OK ] ringct.range_proofs_accept_zero (26 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_in_first_simple
+[       OK ] ringct.range_proofs_accept_zero_in_first_simple (29 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_in_last_simple
+[       OK ] ringct.range_proofs_accept_zero_in_last_simple (29 ms)
+[ RUN      ] ringct.range_proofs_accept_zero_in_middle_simple
+[       OK ] ringct.range_proofs_accept_zero_in_middle_simple (32 ms)
+[ RUN      ] ringct.range_proofs_reject_single_lower
+[       OK ] ringct.range_proofs_reject_single_lower (36 ms)
+[ RUN      ] ringct.range_proofs_reject_single_lower_simple
+[       OK ] ringct.range_proofs_reject_single_lower_simple (13 ms)
+[ RUN      ] ringct.range_proofs_reject_single_higher
+[       OK ] ringct.range_proofs_reject_single_higher (27 ms)
+[ RUN      ] ringct.range_proofs_reject_single_higher_simple
+[       OK ] ringct.range_proofs_reject_single_higher_simple (14 ms)
+[ RUN      ] ringct.range_proofs_reject_single_out_negative
+[       OK ] ringct.range_proofs_reject_single_out_negative (28 ms)
+[ RUN      ] ringct.range_proofs_reject_single_out_negative_simple
+[       OK ] ringct.range_proofs_reject_single_out_negative_simple (15 ms)
+[ RUN      ] ringct.range_proofs_reject_out_negative_first
+[       OK ] ringct.range_proofs_reject_out_negative_first (40 ms)
+[ RUN      ] ringct.range_proofs_reject_out_negative_first_simple
+[       OK ] ringct.range_proofs_reject_out_negative_first_simple (26 ms)
+[ RUN      ] ringct.range_proofs_reject_out_negative_last
+[       OK ] ringct.range_proofs_reject_out_negative_last (51 ms)
+[ RUN      ] ringct.range_proofs_reject_out_negative_last_simple
+[       OK ] ringct.range_proofs_reject_out_negative_last_simple (26 ms)
+[ RUN      ] ringct.range_proofs_reject_out_negative_middle
+[       OK ] ringct.range_proofs_reject_out_negative_middle (52 ms)
+[ RUN      ] ringct.range_proofs_reject_out_negative_middle_simple
+[       OK ] ringct.range_proofs_reject_out_negative_middle_simple (38 ms)
+[ RUN      ] ringct.range_proofs_reject_single_in_negative
+[       OK ] ringct.range_proofs_reject_single_in_negative (26 ms)
+[ RUN      ] ringct.range_proofs_reject_single_in_negative_simple
+[       OK ] ringct.range_proofs_reject_single_in_negative_simple (14 ms)
+[ RUN      ] ringct.range_proofs_reject_in_negative_first
+[       OK ] ringct.range_proofs_reject_in_negative_first (1 ms)
+[ RUN      ] ringct.range_proofs_reject_in_negative_first_simple
+[       OK ] ringct.range_proofs_reject_in_negative_first_simple (15 ms)
+[ RUN      ] ringct.range_proofs_reject_in_negative_last
+[       OK ] ringct.range_proofs_reject_in_negative_last (0 ms)
+[ RUN      ] ringct.range_proofs_reject_in_negative_last_simple
+[       OK ] ringct.range_proofs_reject_in_negative_last_simple (16 ms)
+[ RUN      ] ringct.range_proofs_reject_in_negative_middle
+[       OK ] ringct.range_proofs_reject_in_negative_middle (1 ms)
+[ RUN      ] ringct.range_proofs_reject_in_negative_middle_simple
+[       OK ] ringct.range_proofs_reject_in_negative_middle_simple (18 ms)
+[ RUN      ] ringct.range_proofs_reject_higher_list
+[       OK ] ringct.range_proofs_reject_higher_list (98 ms)
+[ RUN      ] ringct.range_proofs_reject_higher_list_simple
+[       OK ] ringct.range_proofs_reject_higher_list_simple (78 ms)
+[ RUN      ] ringct.range_proofs_accept_1_to_1
+[       OK ] ringct.range_proofs_accept_1_to_1 (27 ms)
+[ RUN      ] ringct.range_proofs_accept_1_to_1_simple
+[       OK ] ringct.range_proofs_accept_1_to_1_simple (26 ms)
+[ RUN      ] ringct.range_proofs_accept_1_to_N
+[       OK ] ringct.range_proofs_accept_1_to_N (77 ms)
+[ RUN      ] ringct.range_proofs_accept_1_to_N_simple
+[       OK ] ringct.range_proofs_accept_1_to_N_simple (84 ms)
+[ RUN      ] ringct.range_proofs_accept_N_to_1_simple
+[       OK ] ringct.range_proofs_accept_N_to_1_simple (34 ms)
+[ RUN      ] ringct.range_proofs_accept_N_to_N_simple
+[       OK ] ringct.range_proofs_accept_N_to_N_simple (93 ms)
+[ RUN      ] ringct.range_proofs_accept_very_long_simple
+[       OK ] ringct.range_proofs_accept_very_long_simple (274 ms)
+[ RUN      ] ringct.HPow2
+[       OK ] ringct.HPow2 (2 ms)
+[ RUN      ] ringct.d2h
+[       OK ] ringct.d2h (0 ms)
+[ RUN      ] ringct.d2b
+[       OK ] ringct.d2b (0 ms)
+[ RUN      ] ringct.prooveRange_is_non_deterministic
+[       OK ] ringct.prooveRange_is_non_deterministic (48 ms)
+[ RUN      ] ringct.fee_0_valid
+[       OK ] ringct.fee_0_valid (27 ms)
+[ RUN      ] ringct.fee_0_valid_simple
+[       OK ] ringct.fee_0_valid_simple (28 ms)
+[ RUN      ] ringct.fee_non_0_valid
+[       OK ] ringct.fee_non_0_valid (27 ms)
+[ RUN      ] ringct.fee_non_0_valid_simple
+[       OK ] ringct.fee_non_0_valid_simple (27 ms)
+[ RUN      ] ringct.fee_non_0_invalid_higher
+[       OK ] ringct.fee_non_0_invalid_higher (1 ms)
+[ RUN      ] ringct.fee_non_0_invalid_higher_simple
+[       OK ] ringct.fee_non_0_invalid_higher_simple (15 ms)
+[ RUN      ] ringct.fee_non_0_invalid_lower
+[       OK ] ringct.fee_non_0_invalid_lower (1 ms)
+[ RUN      ] ringct.fee_non_0_invalid_lower_simple
+[       OK ] ringct.fee_non_0_invalid_lower_simple (16 ms)
+[ RUN      ] ringct.fee_burn_valid_one_out
+[       OK ] ringct.fee_burn_valid_one_out (27 ms)
+[ RUN      ] ringct.fee_burn_valid_one_out_simple
+[       OK ] ringct.fee_burn_valid_one_out_simple (28 ms)
+[ RUN      ] ringct.fee_burn_valid_zero_out
+[       OK ] ringct.fee_burn_valid_zero_out (3 ms)
+[ RUN      ] ringct.fee_burn_valid_zero_out_simple
+[       OK ] ringct.fee_burn_valid_zero_out_simple (6 ms)
+[ RUN      ] ringct.rctSig_rangeSigs_empty
+[       OK ] ringct.rctSig_rangeSigs_empty (28 ms)
+[ RUN      ] ringct.rctSig_rangeSigs_too_many
+[       OK ] ringct.rctSig_rangeSigs_too_many (13 ms)
+[ RUN      ] ringct.rctSig_rangeSigs_too_few
+[       OK ] ringct.rctSig_rangeSigs_too_few (13 ms)
+[ RUN      ] ringct.rctSig_mgSig_MG_empty
+[       OK ] ringct.rctSig_mgSig_MG_empty (13 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss_empty
+[       OK ] ringct.rctSig_mgSig_ss_empty (25 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss_too_many
+[       OK ] ringct.rctSig_mgSig_ss_too_many (26 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss_too_few
+[       OK ] ringct.rctSig_mgSig_ss_too_few (25 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss0_empty
+[       OK ] ringct.rctSig_mgSig_ss0_empty (26 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss0_too_many
+[       OK ] ringct.rctSig_mgSig_ss0_too_many (25 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss0_too_few
+[       OK ] ringct.rctSig_mgSig_ss0_too_few (25 ms)
+[ RUN      ] ringct.rctSig_mgSig_II_empty
+[       OK ] ringct.rctSig_mgSig_II_empty (25 ms)
+[ RUN      ] ringct.rctSig_mgSig_II_too_many
+[       OK ] ringct.rctSig_mgSig_II_too_many (26 ms)
+[ RUN      ] ringct.rctSig_mgSig_II_too_few
+[       OK ] ringct.rctSig_mgSig_II_too_few (25 ms)
+[ RUN      ] ringct.rctSig_mixRing_empty
+[       OK ] ringct.rctSig_mixRing_empty (25 ms)
+[ RUN      ] ringct.rctSig_mixRing_too_many
+[       OK ] ringct.rctSig_mixRing_too_many (26 ms)
+[ RUN      ] ringct.rctSig_mixRing_too_few
+[       OK ] ringct.rctSig_mixRing_too_few (25 ms)
+[ RUN      ] ringct.rctSig_mixRing0_empty
+[       OK ] ringct.rctSig_mixRing0_empty (25 ms)
+[ RUN      ] ringct.rctSig_mixRing0_too_many
+[       OK ] ringct.rctSig_mixRing0_too_many (25 ms)
+[ RUN      ] ringct.rctSig_mixRing0_too_few
+[       OK ] ringct.rctSig_mixRing0_too_few (25 ms)
+[ RUN      ] ringct.rctSig_ecdhInfo_empty
+[       OK ] ringct.rctSig_ecdhInfo_empty (13 ms)
+[ RUN      ] ringct.rctSig_ecdhInfo_too_many
+[       OK ] ringct.rctSig_ecdhInfo_too_many (14 ms)
+[ RUN      ] ringct.rctSig_ecdhInfo_too_few
+[       OK ] ringct.rctSig_ecdhInfo_too_few (14 ms)
+[ RUN      ] ringct.rctSig_outPk_empty
+[       OK ] ringct.rctSig_outPk_empty (13 ms)
+[ RUN      ] ringct.rctSig_outPk_too_many
+[       OK ] ringct.rctSig_outPk_too_many (14 ms)
+[ RUN      ] ringct.rctSig_outPk_too_few
+[       OK ] ringct.rctSig_outPk_too_few (15 ms)
+[ RUN      ] ringct.rctSig_rangeSigs_empty_simple
+[       OK ] ringct.rctSig_rangeSigs_empty_simple (28 ms)
+[ RUN      ] ringct.rctSig_rangeSigs_too_many_simple
+[       OK ] ringct.rctSig_rangeSigs_too_many_simple (14 ms)
+[ RUN      ] ringct.rctSig_rangeSigs_too_few_simple
+[       OK ] ringct.rctSig_rangeSigs_too_few_simple (13 ms)
+[ RUN      ] ringct.rctSig_mgSig_empty_simple
+[       OK ] ringct.rctSig_mgSig_empty_simple (13 ms)
+[ RUN      ] ringct.rctSig_mgSig_too_many_simple
+[       OK ] ringct.rctSig_mgSig_too_many_simple (15 ms)
+[ RUN      ] ringct.rctSig_mgSig_too_few_simple
+[       OK ] ringct.rctSig_mgSig_too_few_simple (14 ms)
+[ RUN      ] ringct.rctSig_mgSig0_ss_empty_simple
+[       OK ] ringct.rctSig_mgSig0_ss_empty_simple (27 ms)
+[ RUN      ] ringct.rctSig_mgSig0_ss_too_many_simple
+[       OK ] ringct.rctSig_mgSig0_ss_too_many_simple (27 ms)
+[ RUN      ] ringct.rctSig_mgSig0_ss_too_few_simple
+[       OK ] ringct.rctSig_mgSig0_ss_too_few_simple (26 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss0_empty_simple
+[       OK ] ringct.rctSig_mgSig_ss0_empty_simple (27 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss0_too_many_simple
+[       OK ] ringct.rctSig_mgSig_ss0_too_many_simple (27 ms)
+[ RUN      ] ringct.rctSig_mgSig_ss0_too_few_simple
+[       OK ] ringct.rctSig_mgSig_ss0_too_few_simple (43 ms)
+[ RUN      ] ringct.rctSig_mgSig0_II_empty_simple
+[       OK ] ringct.rctSig_mgSig0_II_empty_simple (27 ms)
+[ RUN      ] ringct.rctSig_mgSig0_II_too_many_simple
+[       OK ] ringct.rctSig_mgSig0_II_too_many_simple (27 ms)
+[ RUN      ] ringct.rctSig_mgSig0_II_too_few_simple
+[       OK ] ringct.rctSig_mgSig0_II_too_few_simple (34 ms)
+[ RUN      ] ringct.rctSig_mixRing_empty_simple
+[       OK ] ringct.rctSig_mixRing_empty_simple (26 ms)
+[ RUN      ] ringct.rctSig_mixRing_too_many_simple
+[       OK ] ringct.rctSig_mixRing_too_many_simple (24 ms)
+[ RUN      ] ringct.rctSig_mixRing_too_few_simple
+[       OK ] ringct.rctSig_mixRing_too_few_simple (25 ms)
+[ RUN      ] ringct.rctSig_mixRing0_empty_simple
+[       OK ] ringct.rctSig_mixRing0_empty_simple (26 ms)
+[ RUN      ] ringct.rctSig_mixRing0_too_many_simple
+[       OK ] ringct.rctSig_mixRing0_too_many_simple (27 ms)
+[ RUN      ] ringct.rctSig_mixRing0_too_few_simple
+[       OK ] ringct.rctSig_mixRing0_too_few_simple (28 ms)
+[ RUN      ] ringct.rctSig_pseudoOuts_empty_simple
+[       OK ] ringct.rctSig_pseudoOuts_empty_simple (14 ms)
+[ RUN      ] ringct.rctSig_pseudoOuts_too_many_simple
+[       OK ] ringct.rctSig_pseudoOuts_too_many_simple (13 ms)
+[ RUN      ] ringct.rctSig_pseudoOuts_too_few_simple
+[       OK ] ringct.rctSig_pseudoOuts_too_few_simple (15 ms)
+[ RUN      ] ringct.rctSig_ecdhInfo_empty_simple
+[       OK ] ringct.rctSig_ecdhInfo_empty_simple (13 ms)
+[ RUN      ] ringct.rctSig_ecdhInfo_too_many_simple
+[       OK ] ringct.rctSig_ecdhInfo_too_many_simple (16 ms)
+[ RUN      ] ringct.rctSig_ecdhInfo_too_few_simple
+[       OK ] ringct.rctSig_ecdhInfo_too_few_simple (13 ms)
+[ RUN      ] ringct.rctSig_outPk_empty_simple
+[       OK ] ringct.rctSig_outPk_empty_simple (14 ms)
+[ RUN      ] ringct.rctSig_outPk_too_many_simple
+[       OK ] ringct.rctSig_outPk_too_many_simple (13 ms)
+[ RUN      ] ringct.rctSig_outPk_too_few_simple
+[       OK ] ringct.rctSig_outPk_too_few_simple (14 ms)
+[ RUN      ] ringct.reject_gen_simple_ver_non_simple
+[       OK ] ringct.reject_gen_simple_ver_non_simple (16 ms)
+[ RUN      ] ringct.reject_gen_non_simple_ver_simple
+[       OK ] ringct.reject_gen_non_simple_ver_simple (13 ms)
+[ RUN      ] ringct.key_ostream
+[       OK ] ringct.key_ostream (0 ms)
+[ RUN      ] ringct.zeroCommmit
+[       OK ] ringct.zeroCommmit (1 ms)
+[ RUN      ] ringct.zeroCommitCache
+[       OK ] ringct.zeroCommitCache (0 ms)
+[ RUN      ] ringct.H
+[       OK ] ringct.H (0 ms)
+[ RUN      ] ringct.mul8
+[       OK ] ringct.mul8 (1 ms)
+[ RUN      ] ringct.aggregated
+[       OK ] ringct.aggregated (750 ms)
+[----------] 136 tests from ringct (4346 ms total)
+
+[----------] 5 tests from select_outputs
+[ RUN      ] select_outputs.one_out_of_N
+[       OK ] select_outputs.one_out_of_N (0 ms)
+[ RUN      ] select_outputs.order
+[       OK ] select_outputs.order (1 ms)
+[ RUN      ] select_outputs.gamma
+[       OK ] select_outputs.gamma (1643 ms)
+[ RUN      ] select_outputs.density
+[       OK ] select_outputs.density (1760 ms)
+[ RUN      ] select_outputs.same_distribution
+[       OK ] select_outputs.same_distribution (1958 ms)
+[----------] 5 tests from select_outputs (5362 ms total)
+
+[----------] 12 tests from vercmp
+[ RUN      ] vercmp.empty
+[       OK ] vercmp.empty (0 ms)
+[ RUN      ] vercmp.empty0
+[       OK ] vercmp.empty0 (0 ms)
+[ RUN      ] vercmp.empty1
+[       OK ] vercmp.empty1 (0 ms)
+[ RUN      ] vercmp.zero_zero
+[       OK ] vercmp.zero_zero (0 ms)
+[ RUN      ] vercmp.one_one
+[       OK ] vercmp.one_one (0 ms)
+[ RUN      ] vercmp.one_two
+[       OK ] vercmp.one_two (0 ms)
+[ RUN      ] vercmp.two_one
+[       OK ] vercmp.two_one (0 ms)
+[ RUN      ] vercmp.ten_nine
+[       OK ] vercmp.ten_nine (0 ms)
+[ RUN      ] vercmp.one_dot_ten_one_dot_nine
+[       OK ] vercmp.one_dot_ten_one_dot_nine (0 ms)
+[ RUN      ] vercmp.one_one_dot_nine
+[       OK ] vercmp.one_one_dot_nine (0 ms)
+[ RUN      ] vercmp.to_master
+[       OK ] vercmp.to_master (0 ms)
+[ RUN      ] vercmp.from_master
+[       OK ] vercmp.from_master (0 ms)
+[----------] 12 tests from vercmp (0 ms total)
+
+[----------] 4 tests from ringdb
+[ RUN      ] ringdb.not_found
+[       OK ] ringdb.not_found (28 ms)
+[ RUN      ] ringdb.found
+[       OK ] ringdb.found (27 ms)
+[ RUN      ] ringdb.convert
+[       OK ] ringdb.convert (23 ms)
+[ RUN      ] ringdb.different_genesis
+[       OK ] ringdb.different_genesis (37 ms)
+[----------] 4 tests from ringdb (115 ms total)
+
+[----------] 5 tests from spent_outputs
+[ RUN      ] spent_outputs.not_found
+[       OK ] spent_outputs.not_found (23 ms)
+[ RUN      ] spent_outputs.found
+[       OK ] spent_outputs.found (22 ms)
+[ RUN      ] spent_outputs.vector
+[       OK ] spent_outputs.vector (21 ms)
+[ RUN      ] spent_outputs.mark_as_unspent
+[       OK ] spent_outputs.mark_as_unspent (35 ms)
+[ RUN      ] spent_outputs.clear
+[       OK ] spent_outputs.clear (32 ms)
+[----------] 5 tests from spent_outputs (135 ms total)
+
+[----------] 7 tests from wallet_storage
+[ RUN      ] wallet_storage.rejects_monero_genesis_cache
+[       OK ] wallet_storage.rejects_monero_genesis_cache (184 ms)
+[ RUN      ] wallet_storage.store_to_file2file
+[       OK ] wallet_storage.store_to_file2file (1001 ms)
+[ RUN      ] wallet_storage.store_to_mem2file
+[       OK ] wallet_storage.store_to_mem2file (634 ms)
+[ RUN      ] wallet_storage.change_password_same_file
+[       OK ] wallet_storage.change_password_same_file (1071 ms)
+[ RUN      ] wallet_storage.change_password_different_file
+[       OK ] wallet_storage.change_password_different_file (1045 ms)
+[ RUN      ] wallet_storage.change_password_in_memory
+[       OK ] wallet_storage.change_password_in_memory (486 ms)
+[ RUN      ] wallet_storage.change_password_mem2file
+[       OK ] wallet_storage.change_password_mem2file (734 ms)
+[----------] 7 tests from wallet_storage (5155 ms total)
+
+[----------] 15 tests from wipeable_string
+[ RUN      ] wipeable_string.ctor
+[       OK ] wipeable_string.ctor (0 ms)
+[ RUN      ] wipeable_string.wipe
+[       OK ] wipeable_string.wipe (0 ms)
+[ RUN      ] wipeable_string.clear
+[       OK ] wipeable_string.clear (0 ms)
+[ RUN      ] wipeable_string.push_back
+[       OK ] wipeable_string.push_back (0 ms)
+[ RUN      ] wipeable_string.append_char
+[       OK ] wipeable_string.append_char (0 ms)
+[ RUN      ] wipeable_string.append_string
+[       OK ] wipeable_string.append_string (0 ms)
+[ RUN      ] wipeable_string.empty
+[       OK ] wipeable_string.empty (0 ms)
+[ RUN      ] wipeable_string.pop_back
+[       OK ] wipeable_string.pop_back (0 ms)
+[ RUN      ] wipeable_string.equal
+[       OK ] wipeable_string.equal (0 ms)
+[ RUN      ] wipeable_string.not_equal
+[       OK ] wipeable_string.not_equal (0 ms)
+[ RUN      ] wipeable_string.trim
+[       OK ] wipeable_string.trim (0 ms)
+[ RUN      ] wipeable_string.split
+[       OK ] wipeable_string.split (0 ms)
+[ RUN      ] wipeable_string.parse_hexstr
+[       OK ] wipeable_string.parse_hexstr (0 ms)
+[ RUN      ] wipeable_string.to_hex
+[       OK ] wipeable_string.to_hex (0 ms)
+[ RUN      ] wipeable_string.to_string
+[       OK ] wipeable_string.to_string (0 ms)
+[----------] 15 tests from wipeable_string (0 ms total)
+
+[----------] 4 tests from is_hdd
+[ RUN      ] is_hdd.rotational_drive
+Skipping test: No rotational disk device configured
+[       OK ] is_hdd.rotational_drive (0 ms)
+[ RUN      ] is_hdd.ssd
+Skipping test: No SSD device configured
+[       OK ] is_hdd.ssd (0 ms)
+[ RUN      ] is_hdd.unknown_attrs
+[       OK ] is_hdd.unknown_attrs (0 ms)
+[ RUN      ] is_hdd.stability
+[       OK ] is_hdd.stability (0 ms)
+[----------] 4 tests from is_hdd (0 ms total)
+
+[----------] 15 tests from aligned
+[ RUN      ] aligned.large_null
+[       OK ] aligned.large_null (0 ms)
+[ RUN      ] aligned.free_null
+[       OK ] aligned.free_null (0 ms)
+[ RUN      ] aligned.zero
+[       OK ] aligned.zero (0 ms)
+[ RUN      ] aligned.aligned1
+[       OK ] aligned.aligned1 (0 ms)
+[ RUN      ] aligned.aligned4096
+[       OK ] aligned.aligned4096 (0 ms)
+[ RUN      ] aligned.aligned8
+[       OK ] aligned.aligned8 (0 ms)
+[ RUN      ] aligned.realloc_null
+[       OK ] aligned.realloc_null (0 ms)
+[ RUN      ] aligned.realloc_diff_align
+[       OK ] aligned.realloc_diff_align (0 ms)
+[ RUN      ] aligned.realloc_same
+[       OK ] aligned.realloc_same (0 ms)
+[ RUN      ] aligned.realloc_larger
+[       OK ] aligned.realloc_larger (0 ms)
+[ RUN      ] aligned.realloc_zero
+[       OK ] aligned.realloc_zero (0 ms)
+[ RUN      ] aligned.contents_larger
+[       OK ] aligned.contents_larger (0 ms)
+[ RUN      ] aligned.contents_same
+[       OK ] aligned.contents_same (0 ms)
+[ RUN      ] aligned.contents_smaller
+[       OK ] aligned.contents_smaller (0 ms)
+[ RUN      ] aligned.alignment
+[       OK ] aligned.alignment (0 ms)
+[----------] 15 tests from aligned (0 ms total)
+
+[----------] 1 test from rpc
+[ RUN      ] rpc.is_version_string_valid
+[       OK ] rpc.is_version_string_valid (1 ms)
+[----------] 1 test from rpc (1 ms total)
+
+[----------] 2 tests from ZmqFullMessage
+[ RUN      ] ZmqFullMessage.InvalidRequest
+[       OK ] ZmqFullMessage.InvalidRequest (0 ms)
+[ RUN      ] ZmqFullMessage.Request
+[       OK ] ZmqFullMessage.Request (0 ms)
+[----------] 2 tests from ZmqFullMessage (0 ms total)
+
+[----------] 1 test from ZmqRestrictedMethods
+[ RUN      ] ZmqRestrictedMethods.BasicCoverage
+[       OK ] ZmqRestrictedMethods.BasicCoverage (0 ms)
+[----------] 1 test from ZmqRestrictedMethods (0 ms total)
+
+[----------] 12 tests from zmq_pub
+[ RUN      ] zmq_pub.InvalidContext
+[       OK ] zmq_pub.InvalidContext (1 ms)
+[ RUN      ] zmq_pub.NoBlocking
+[       OK ] zmq_pub.NoBlocking (0 ms)
+[ RUN      ] zmq_pub.DefaultDrop
+[       OK ] zmq_pub.DefaultDrop (33 ms)
+[ RUN      ] zmq_pub.JsonFullTxpool
+[       OK ] zmq_pub.JsonFullTxpool (53 ms)
+[ RUN      ] zmq_pub.JsonMinimalTxpool
+[       OK ] zmq_pub.JsonMinimalTxpool (62 ms)
+[ RUN      ] zmq_pub.JsonFullChain
+[       OK ] zmq_pub.JsonFullChain (0 ms)
+[ RUN      ] zmq_pub.JsonMinimalChain
+[       OK ] zmq_pub.JsonMinimalChain (1 ms)
+[ RUN      ] zmq_pub.JsonFullAll
+[       OK ] zmq_pub.JsonFullAll (59 ms)
+[ RUN      ] zmq_pub.JsonMinimalAll
+[       OK ] zmq_pub.JsonMinimalAll (68 ms)
+[ RUN      ] zmq_pub.JsonAll
+[       OK ] zmq_pub.JsonAll (59 ms)
+[ RUN      ] zmq_pub.JsonChainWeakPtrSkip
+[       OK ] zmq_pub.JsonChainWeakPtrSkip (0 ms)
+[ RUN      ] zmq_pub.JsonTxpoolWeakPtrSkip
+[       OK ] zmq_pub.JsonTxpoolWeakPtrSkip (58 ms)
+[----------] 12 tests from zmq_pub (394 ms total)
+
+[----------] 1 test from zmq_server
+[ RUN      ] zmq_server.pub
+[       OK ] zmq_server.pub (55 ms)
+[----------] 1 test from zmq_server (56 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1228 tests from 152 test cases ran. (75205 ms total)
+[  PASSED  ] 1228 tests.

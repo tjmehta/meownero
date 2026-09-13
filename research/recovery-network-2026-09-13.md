@@ -1,7 +1,8 @@
 # Network workstream recovery — September 13, 2026
 
-The recovered selected runner was reviewed and executed once for selected 9/90
-from a reconstructed, pinned source tree. The source-only path verified the
+The recovered runner was reviewed and executed for selected 9/90 and fallback
+12/120, each from a fresh copy of a reconstructed, pinned source tree. Both
+profiles passed the native selection and bounded P2P checks. The source-only path verified the
 historical HEAD/tree, clean recursive submodules, and frozen source manifest
 before copying. It refused inherited build output and dirty or mismatched
 fixture inputs. Economic, approved emission, and source-locked gamma overlays
@@ -93,13 +94,48 @@ were archived and reviewed by the coordinator. This is accelerated empty-block,
 fixed-difficulty correctness evidence, not loaded-network or FCMP performance.
 
 Validation performed: shell syntax, Python AST parsing, capped 512 MiB runner
-validation, and guarded 9/90 build/test execution. No production patches,
-historical evidence, keys, host services, or shared documents were modified.
+validation, and guarded 9/90 build/test execution. Production patches,
+historical evidence, keys and host services remain unchanged.
 
-## Fallback status (live checkpoint)
+## Fallback launch checkpoint (superseded by completion below)
 
 After the readiness-corrected selected 9/90 P2P pass, a fresh frozen
 `fallback-12-120-run-01` build was started through the guarded source-only
-runner. Compilation is still active; no fallback test, binary, or P2P result is
-claimed yet. Its launcher, frozen scripts, and output directory are retained
+runner. At that checkpoint compilation was active, with no fallback test,
+binary or P2P result claimed. Its launcher, frozen scripts, and output directory are retained
 separately under `build/recovery-network-20260913/fallback-12-120-run-01/`.
+
+## Fallback completion
+
+The existing fallback run completed with `build.exit=0`, `offline.exit=0`,
+`dns.exit=0`, and `container.exit=0` in
+`build/recovery-network-20260913/fallback-12-120-run-01/output/`. Consensus,
+difficulty, and floor selections passed 24, 10, and 10 tests. The exact native
+CI union passed 1,237/1,237 tests: 1,228 offline and 9 DNS-only tests using
+ordinary bridge networking. The final receipt is `output/result.json`; source,
+overlay, binary, version, package, cgroup, and XML receipts remain beside it.
+
+The direct fallback P2P run used the readiness-corrected harness without a
+second guard wrapper. It used a fresh empty `p2p/work` child and captured an
+external subprocess return code of 0 in
+`build/recovery-network-20260913/fallback-12-120-run-01/p2p/subprocess.json`.
+Its durable log is
+`research/evidence/recovery-network-2026-09-13/fallback-12-120-p2p-01.log`;
+the work directory contains PASS result, events, resources, and daemon logs.
+Warmup, connected relay, partition/rejoin, malformed transport rejection, and
+12/120 issuance checks passed. This remains accelerated empty-block P2P
+evidence, with no loaded-capacity, FCMP, or launch-readiness claim.
+
+The coordinator independently verified all five executable hashes, regenerated
+the exact native XML union, and matched the P2P daemon hash to the native build
+receipt. Both P2P daemons exited 0; peak usage was 614,367,232 bytes under the
+original 1.5 GiB cap, with no memory-limit or OOM events. The depth-three reorg
+and healthy relay after malformed transport rejection passed.
+
+Durable [native receipts](evidence/recovery-network-2026-09-13/fallback-12-120-native/)
+and [P2P receipts](evidence/recovery-network-2026-09-13/fallback-12-120-p2p-pass/)
+include raw logs, XML, phase exits, binary hashes and resource records.
+`fallback-SHA256SUMS` covers these artifacts and the coordinator's final review.
+Both recovered network assignments are complete at this bounded checkpoint;
+selected-family reproduction pairs, wallet/fee/aggregate integration and the
+matched-capacity intended-cryptography workload remain open.

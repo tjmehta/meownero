@@ -1,14 +1,14 @@
 # Milestone checklist — PLAN.md rev 5 made executable
 
-**Selected-policy update, September 12:** [decision and verification](../research/decision-2026-09-12-issuance.md). Target 9/90, fallback 12/120 if 90 s fails; both 3,153,600 MEOW/year before penalties. Prior parameter results below are historical controls. Reversible source probes pass; selected binaries, fee/wallet integration and matched-capacity intended-crypto network gates remain open.
+**Selected-policy update, September 12:** [decision and verification](../research/decision-2026-09-12-issuance.md). Target 9/90, fallback 12/120 if 90 s fails; both 3,153,600 MEOW/year before penalties. Prior parameter results below are historical controls. Selected binaries now pass the bounded checks described below; fee/wallet integration and matched-capacity intended-crypto network gates remain open.
 
 **Latest recovery checkpoint:** [September 13 session recovery](../research/recovery-index-2026-09-13.md).
 Two clean historical fifteen-patch builds match. Selected/fallback emission
 fixtures each pass 7/7 smoke tests. Later recovered evidence records that the
 9/90 build compiled but its native selection failed seven of 1,237 tests.
-September 13 recovery fixed the fixture/test-environment issues; a fresh selected
-9/90 build now passes all 1,237 selected native tests, with no new exclusions.
-Selected P2P relay/partition/rejoin/reorg checks also pass; fallback 12/120 is pending. Rust's pinned
+September 13 recovery fixed the fixture/test-environment issues; fresh 9/90 and
+12/120 builds each pass all 1,237 selected native tests, with no new exclusions.
+P2P relay/partition/rejoin/reorg checks also pass for both profiles. Rust's pinned
 context crate compiles and local site presentation checks pass. Earlier queued
 build descriptions below record their original checkpoints, not current processes.
 

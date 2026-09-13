@@ -1,0 +1,125 @@
+--- a/tests/unit_tests/block_reward.cpp
++++ b/tests/unit_tests/block_reward.cpp
+@@ -1,13 +1,14 @@
+-// Meownero Candidate M control — emission unit tests.
++// Meownero selected/fallback local profiles — emission unit tests.
+ // Replaces Monero's tests/unit_tests/block_reward.cpp (which encodes the Monero curve).
+ // Invariants under test (PLAN.md rev 4 §8.1, §8.2):
+-//   E1  reward is exactly MEOW_BLOCK_REWARD = 0.9 * COIN at every already_generated_coins value
+-//   E2  reward is independent of hard-fork version and of the 60s/120s target distinction
++//   E1  reward matches the selected 9/90 or fallback 12/120 pair at every tally value
++//   E2  reward is independent of hard-fork version and of the historical/current target distinction
+ //   E3  block-weight penalty math is unchanged and is denominated in the constant
+-//   E4  supply(h) == h * MEOW_BLOCK_REWARD; the uint64 supply tally saturates (never wraps) at the
++//   E4  unpenalized supply(h) == h * MEOW_BLOCK_REWARD; the uint64 tally saturates at the
+ //       upstream MONEY_SUPPLY cap — horizon computed and asserted, not assumed
+ //   E5  dilution: year-N inflation of a flat schedule is 1/(N-1); no deflation exists at any height
+ #include "gtest/gtest.h"
++#include <boost/multiprecision/cpp_int.hpp>
+ #include "cryptonote_basic/cryptonote_basic_impl.h"
+ #include "cryptonote_config.h"
+ 
+@@ -16,6 +17,12 @@
+ namespace
+ {
+   const uint64_t R = MEOW_BLOCK_REWARD;
++  // Independent values from the selected-policy decision; never derive expected
++  // reward/horizon from the production reward constant being tested.
++  const bool selected = DIFFICULTY_TARGET_V2 == 90;
++  const uint64_t expected_reward = selected ? UINT64_C(9000000000000) : UINT64_C(12000000000000);
++  const uint64_t expected_blocks_per_year = selected ? UINT64_C(350400) : UINT64_C(262800);
++  const uint64_t expected_last_unsaturated_height = selected ? UINT64_C(2049638) : UINT64_C(1537228);
+   const size_t small_block = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 / 2;
+ 
+   uint64_t reward_at(uint64_t already_generated, uint8_t version = 1, size_t median = 0, size_t weight = small_block)
+@@ -27,10 +34,11 @@
+   }
+ 
+   // ---------------------------------------------------------------- E1
+-  TEST(meow_emission, constant_is_0_9_meow)
++  TEST(meow_emission, selected_reward_spacing_pair)
+   {
+-    ASSERT_EQ(R, UINT64_C(900000000000));
+-    ASSERT_EQ(R, (COIN * 9) / 10);
++    ASSERT_TRUE(DIFFICULTY_TARGET_V2 == 90 || DIFFICULTY_TARGET_V2 == 120);
++    ASSERT_EQ(R, expected_reward);
++    ASSERT_EQ(R, COIN * (selected ? 9 : 12));
+     ASSERT_EQ(CRYPTONOTE_DISPLAY_DECIMAL_POINT, 12);
+   }
+ 
+@@ -47,7 +55,7 @@
+   {
+     for (uint8_t v = 1; v <= 16; ++v)
+       ASSERT_EQ(reward_at(0, v), R) << "version " << int(v);
+-    ASSERT_EQ(reward_at(0, 1), reward_at(0, 2)); // V1 (60 s) vs V2 (120 s) target no longer matters
++    ASSERT_EQ(reward_at(0, 1), reward_at(0, 2)); // Historical V1 vs selected/fallback V2 target does not affect flat reward
+   }
+ 
+   // ---------------------------------------------------------------- E3
+@@ -77,22 +85,30 @@
+   TEST(meow_emission, supply_is_height_times_reward)
+   {
+     uint64_t agc = 0; // genesis pays 0 by consensus (construct_miner_tx / validate_miner_transaction)
+-    const uint64_t blocks_per_year = (365 * 24 * 3600) / DIFFICULTY_TARGET_V2; // 262,800
+-    ASSERT_EQ(blocks_per_year, UINT64_C(262800));
++    const uint64_t blocks_per_year = (365 * 24 * 3600) / DIFFICULTY_TARGET_V2;
++    ASSERT_EQ(blocks_per_year, expected_blocks_per_year);
++    using boost::multiprecision::uint128_t;
++    ASSERT_EQ(uint128_t(blocks_per_year) * R, uint128_t(3153600) * COIN);
+     for (uint64_t h = 1; h <= 10 * blocks_per_year; ++h)
+     {
+       agc = tally_step(agc, reward_at(agc));
+       if (h % blocks_per_year == 0)
+-        ASSERT_EQ(agc, h * R) << "height " << h;
++      {
++        const uint128_t issued = uint128_t(h) * R;
++        const uint64_t expected = issued > MONEY_SUPPLY ? MONEY_SUPPLY : issued.convert_to<uint64_t>();
++        ASSERT_EQ(agc, expected) << "height " << h;
++      }
+     }
+-    ASSERT_EQ(agc, UINT64_C(10) * 262800 * R); // 2,365,200 MEOW after 10 years
++    // Mathematical ten-year issuance exceeds the internal tally; it is not a cap.
++    ASSERT_EQ(uint128_t(10) * blocks_per_year * R, uint128_t(31536000) * COIN);
++    ASSERT_EQ(agc, MONEY_SUPPLY);
+   }
+ 
+   TEST(meow_emission, tally_saturates_and_never_wraps)
+   {
+     // Horizon: first height whose cumulative subsidy would exceed uint64::max.
+-    const uint64_t horizon = MONEY_SUPPLY / R; // 20,496,382 blocks ≈ 78.0 years at 120 s
+-    ASSERT_EQ(horizon, UINT64_C(20496382));
++    const uint64_t horizon = MONEY_SUPPLY / R;
++    ASSERT_EQ(horizon, expected_last_unsaturated_height);
+     ASSERT_GT(horizon * R, MONEY_SUPPLY - R); // last representable full step
+     uint64_t agc = (horizon - 1) * R;         // tally just before the edge
+     ASSERT_EQ(reward_at(agc), R);              // reward unaffected by the tally
+@@ -100,24 +116,24 @@
+     ASSERT_EQ(agc, horizon * R);
+     agc = tally_step(agc, R);                  // one past: saturates
+     ASSERT_EQ(agc, MONEY_SUPPLY);
+-    ASSERT_EQ(reward_at(agc), R);              // and emission continues at 0.9 forever
++    ASSERT_EQ(reward_at(agc), R);              // and the selected flat subsidy continues
+     ASSERT_EQ(tally_step(agc, R), MONEY_SUPPLY);
+-    // Recorded finding for ADR-001: with 12 decimal places the on-chain supply counter saturates after
+-    // ~78 years while emission continues correctly; atomic-unit choice must be decided with this number.
++    // Both selected profiles saturate the internal tally around 5.85 target-years.
++    // This fixture does not exercise full-node aggregate consumers or wallet balances.
+   }
+ 
+   // ---------------------------------------------------------------- E5
+   TEST(meow_emission, dilution_is_one_over_n_minus_one)
+   {
+     // inflation during year N == issuance_N / cumulative_{N-1} == 1/(N-1) for a flat schedule
+-    const long double year = 262800.0L * R;
++    const long double year = static_cast<long double>(expected_blocks_per_year) * R;
+     for (int n = 2; n <= 101; ++n)
+     {
+       long double infl = year / (year * (n - 1));
+       ASSERT_NEAR((double)infl, 1.0 / (n - 1), 1e-12) << "year " << n;
+     }
+     // no height has negative issuance: nothing is ever burned by consensus
+-    for (uint64_t agc : { UINT64_C(0), R * 262800, R * 262800 * 50 })
++    for (uint64_t agc : { UINT64_C(0), R * expected_blocks_per_year, MONEY_SUPPLY - R, MONEY_SUPPLY })
+       ASSERT_GT(reward_at(agc), 0u);
+   }
+ }

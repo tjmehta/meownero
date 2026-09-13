@@ -37,8 +37,10 @@ Output `summary.json` reports `launch_ready: false` unconditionally. The probe
 is not a whole daemon build, integrated consensus/FCMP test, seed-recovery rerun
 or matched-capacity network benchmark. Current source full-reward floors remain
 unchanged, so capacity/time is **not matched** by applying these overlays alone.
-The native-fixture overlay below is prepared; full selected unit integration
-and fee/wallet/aggregate consumers require work before promotion. U64
+The separate [September 13 recovery build](../../research/recovery-network-2026-09-13.md)
+passes all 1,237 native tests and bounded empty-block P2P checks for each of
+9/90 and 12/120. Fee/wallet/aggregate consumers still
+require integration work before promotion. U64
 generated-coins saturation moves to about 5.85 years;
 primitive reward continuity passes but full-system reporting/aggregation does
 not thereby become verified. No precision change or safety-gate relaxation.
@@ -95,3 +97,11 @@ headers exceeded the 512 MiB lightweight cap, so this runner uses the existing
 heavy guard: 5 GiB available-memory/disk preflight, shared compiler lock,
 4 GiB/no swap container and one CPU. It reports fixture arithmetic only;
 full daemon/wallet/unit integration is a separate build step.
+
+`selected-gamma-fixture.patch` supplies the additional output-selection fixture
+correction used by the full build runner. It converts block ages using the actual
+target and keeps the original 36,000,000-second history horizon for both profiles.
+One million draws reduce sampling error; the original 1.3–1.4-day median bounds
+are unchanged. `gamma-fixture-source-lock.json` pins the upstream inputs. The
+[recovery report](../../research/recovery-network-2026-09-13.md) records the
+negative controls and repeated probe results that support this fixture change.

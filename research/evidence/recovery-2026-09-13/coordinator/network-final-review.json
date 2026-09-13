@@ -1,0 +1,33 @@
+{
+  "reviewed_utc": "2026-09-13T15:56:19.344220+00:00",
+  "fallback_native_tests": {
+    "consensus": 24,
+    "difficulty": 10,
+    "floor": 10,
+    "full-native-offline": 1228,
+    "dns": 9,
+    "full-native": 1237
+  },
+  "binary_hashes_verified": {
+    "build/release/bin/monerod": "177855bf7fb13adff357e87273e0c8f1caeb14c2ebf31d29d37b107380fb6948",
+    "build/release/bin/monero-wallet-cli": "76888400acb4381b621174043cf8305c6ab92ec8161f32efa5eeb12ad5dd322a",
+    "build/release/bin/monero-wallet-rpc": "242633af93cfb3aaf8e641da0fef2baae3d5e4b7c5f28a50a8641e80913cb8bd",
+    "build/release/tests/unit_tests/unit_tests": "68eae116d2a665002e2719258ceafc4afb76d6700dfe3e805ea44283b1ddae03",
+    "build/release/tests/unit_tests/meow_difficulty_floor_tests": "d420684dbb20de881e710ebc94b1f729520a0876340fe12b1bcd77874a094ac1"
+  },
+  "xml_coverage": "exact disjoint union; regenerated XML byte-matches receipt",
+  "fallback_p2p_result": "PASS",
+  "fallback_p2p_reorg_depth": 3,
+  "fallback_p2p_memory_peak_bytes": 614367232,
+  "fallback_p2p_binary_matches_native_receipt": true,
+  "selected_checkpoint": "baddcea",
+  "rust_checkpoint": "19d0304",
+  "site_checkpoint": "baddcea",
+  "limits": [
+    "One fresh build per selected/fallback profile; not selected-family reproduction pairs",
+    "P2P used accelerated empty blocks at fixed difficulty one; no loaded workload or FCMP",
+    "Wallet/fee/aggregate integration, runtime Cuprate parity, real-device site and actual delivery remain open"
+  ],
+  "fallback_native_memory_peak_bytes": 3624435712,
+  "fallback_native_memory_limit_and_oom_events": 0
+}

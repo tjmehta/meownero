@@ -1,0 +1,52 @@
+{
+  "collected_utc": "2026-09-13T15:35:33.102345+00:00",
+  "container_id": "675a6fcbfe9b0f12cda86933302a91ed2e69766362581a88af171beb4998c8c7",
+  "image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "state": "running",
+  "memory_bytes": 4294967296,
+  "memory_plus_swap_bytes": 4294967296,
+  "nanocpus": 2000000000,
+  "network": "none",
+  "frozen_script_hashes": {
+    "build-profile.sh": "970718b59c292066b4dc84891b2e9da2765ad30d6f5708a8df8136d1efc3c118",
+    "stage-profile-build.py": "816c0d5edca63b5bd7ea41c5ab421833a4db649faece11d156a410ecea85d490"
+  },
+  "mounts": [
+    {
+      "Source": "<repo>/build/recovery-network-20260913/fallback-12-120-run-01/output",
+      "Destination": "/out",
+      "RW": true
+    },
+    {
+      "Source": "<repo>/build/recovery-network-20260913/source",
+      "Destination": "/historical",
+      "RW": false
+    },
+    {
+      "Source": "<repo>/spikes/selected-issuance",
+      "Destination": "/issuance",
+      "RW": false
+    },
+    {
+      "Source": "<repo>/spikes/selected-issuance/selected-unit-fixtures.patch",
+      "Destination": "/fixture.patch",
+      "RW": false
+    },
+    {
+      "Source": "<repo>/research/evidence/clean15-2026-09-12/first",
+      "Destination": "/receipts",
+      "RW": false
+    },
+    {
+      "Source": "<repo>/spikes/network-benchmark",
+      "Destination": "/harness",
+      "RW": false
+    },
+    {
+      "Source": "<repo>/build/recovery-network-20260913/fallback-12-120-run-01/output/source",
+      "Destination": "/src",
+      "RW": true
+    }
+  ],
+  "scope": "Live resource/input snapshot; no build completion claim"
+}
