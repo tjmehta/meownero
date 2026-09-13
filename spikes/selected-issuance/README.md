@@ -37,8 +37,9 @@ Output `summary.json` reports `launch_ready: false` unconditionally. The probe
 is not a whole daemon build, integrated consensus/FCMP test, seed-recovery rerun
 or matched-capacity network benchmark. Current source full-reward floors remain
 unchanged, so capacity/time is **not matched** by applying these overlays alone.
-Selected-family unit fixtures and fee/wallet/aggregate consumers require work
-before promotion. U64 generated-coins saturation moves to about 5.85 years;
+The native-fixture overlay below is prepared; full selected unit integration
+and fee/wallet/aggregate consumers require work before promotion. U64
+generated-coins saturation moves to about 5.85 years;
 primitive reward continuity passes but full-system reporting/aggregation does
 not thereby become verified. No precision change or safety-gate relaxation.
 
@@ -65,3 +66,32 @@ not exercise database traversal, JSON serialization, the full RPC handler,
 wallet balances/spending, fee validation or selected daemon binaries. The
 fee-overflow fixture tests aggregate formatting, not consensus acceptance of
 extreme fees. Historical sources and production patches stay unchanged.
+
+## Native emission fixtures for selected builds
+
+`selected-unit-fixtures.patch` is a separate test-only overlay, applied after
+either economic overlay to a disposable source copy. It changes only
+`tests/unit_tests/block_reward.cpp`; `fixture-source-lock.json` pins that file's
+original bytes. Production `chain/patches` and historical fixtures stay intact.
+
+The fixture asserts independent expected reward/spacing pairs, annual issuance
+and saturation heights. Ten-year arithmetic uses the installed Boost u128 type
+because selected issuance exceeds the internal u64 tally in about 5.85 years;
+the test separately checks mathematical issuance and saturated tally behavior.
+It retains supply/version independence, exact penalty fractions and positive
+perpetual rewards. It does not change precision, fees or capacity policy.
+
+```sh
+bash spikes/selected-issuance/run-fixtures.sh \
+  /tmp/meownero-wallet-verified-source-20260912 \
+  /tmp/meownero-selected-fixtures-new-run
+```
+
+The smoke test compiles the complete patched fixture with native headers/gtest
+and literal extracted reward functions. Seven tests pass for each selected
+profile; historical 0.9/120 fails pair, annual-supply and horizon assertions as
+the negative control. Both overlays reverse to identical source bytes. Native
+headers exceeded the 512 MiB lightweight cap, so this runner uses the existing
+heavy guard: 5 GiB available-memory/disk preflight, shared compiler lock,
+4 GiB/no swap container and one CPU. It reports fixture arithmetic only;
+full daemon/wallet/unit integration is a separate build step.

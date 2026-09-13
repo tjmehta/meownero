@@ -1,0 +1,44 @@
+Running main() from gtest_main.cc
+[==========] Running 7 tests from 1 test case.
+[----------] Global test environment set-up.
+[----------] 7 tests from meow_emission
+[ RUN      ] meow_emission.selected_reward_spacing_pair
+/out/historical-negative-control/tests/unit_tests/block_reward.cpp:40: Failure
+Value of: expected_reward
+  Actual: 12000000000000
+Expected: R
+Which is: 900000000000
+[  FAILED  ] meow_emission.selected_reward_spacing_pair (0 ms)
+[ RUN      ] meow_emission.reward_independent_of_supply
+[       OK ] meow_emission.reward_independent_of_supply (0 ms)
+[ RUN      ] meow_emission.reward_independent_of_version
+[       OK ] meow_emission.reward_independent_of_version (0 ms)
+[ RUN      ] meow_emission.penalty_math_unchanged
+[       OK ] meow_emission.penalty_math_unchanged (0 ms)
+[ RUN      ] meow_emission.supply_is_height_times_reward
+/out/historical-negative-control/tests/unit_tests/block_reward.cpp:91: Failure
+Value of: uint128_t(3153600) * ((uint64_t)1000000000000)
+  Actual: 3153600000000000000
+Expected: uint128_t(blocks_per_year) * R
+Which is: 236520000000000000
+[  FAILED  ] meow_emission.supply_is_height_times_reward (0 ms)
+[ RUN      ] meow_emission.tally_saturates_and_never_wraps
+/out/historical-negative-control/tests/unit_tests/block_reward.cpp:111: Failure
+Value of: expected_last_unsaturated_height
+  Actual: 1537228
+Expected: horizon
+Which is: 20496382
+[  FAILED  ] meow_emission.tally_saturates_and_never_wraps (0 ms)
+[ RUN      ] meow_emission.dilution_is_one_over_n_minus_one
+[       OK ] meow_emission.dilution_is_one_over_n_minus_one (0 ms)
+[----------] 7 tests from meow_emission (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test case ran. (0 ms total)
+[  PASSED  ] 4 tests.
+[  FAILED  ] 3 tests, listed below:
+[  FAILED  ] meow_emission.selected_reward_spacing_pair
+[  FAILED  ] meow_emission.supply_is_height_times_reward
+[  FAILED  ] meow_emission.tally_saturates_and_never_wraps
+
+ 3 FAILED TESTS

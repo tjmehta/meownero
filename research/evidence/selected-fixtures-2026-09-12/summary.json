@@ -1,0 +1,46 @@
+{
+  "scope": "full emission fixture; extracted reward functions; not full-node integration",
+  "launch_ready": false,
+  "profiles": [
+    {
+      "profile": "selected-9-90",
+      "tests": 7,
+      "exit": 0,
+      "failed_tests": [],
+      "reverse_application_exact": true
+    },
+    {
+      "profile": "fallback-12-120",
+      "tests": 7,
+      "exit": 0,
+      "failed_tests": [],
+      "reverse_application_exact": true
+    },
+    {
+      "profile": "historical-negative-control",
+      "tests": 7,
+      "exit": 1,
+      "failed_tests": [
+        "selected_reward_spacing_pair",
+        "supply_is_height_times_reward",
+        "tally_saturates_and_never_wraps"
+      ],
+      "reverse_application_exact": true
+    }
+  ],
+  "source_inputs": {
+    "src/cryptonote_config.h": "4c13598afa420521c4a123117bec5a3b4d71b15aaacf869a23f0954771f05edc",
+    "src/cryptonote_basic/cryptonote_basic_impl.cpp": "dc480b6be7a004ed29cb1c9cad3ef17715010a266dc38670650b3da4416c10a2",
+    "src/cryptonote_core/blockchain.cpp": "41c7497d186617e38071f4f86fb548a748a266e405b542bb14877784943c8926",
+    "src/cryptonote_core/cryptonote_tx_utils.cpp": "a0c25c6035857dcf545633121d9fca030b8c060dfbb10cedcd1f5613bd266a48",
+    "contrib/epee/include/int-util.h": "6d30dfce132862c59345f099d92c1478a4a0882eb289b57d45345eb0b7d040bd",
+    "contrib/epee/src/int-util.cpp": "e2b8d377bad7605516f8f75bbbfd266e5f8843dfd54d673aca09d56d1ac89ebe",
+    "tests/unit_tests/block_reward.cpp": "95a813baf15a382478fca36219c42e7b03a155d49e8e108011fa767d32f367ba"
+  },
+  "gtest_archives": {
+    "build/release/tests/gtest/libgtest_main.a": "fcae269434d8b0e0d7f44e62a8603a302f02d71ba29db375bd767488a36687fc",
+    "build/release/tests/gtest/libgtest.a": "7727c471ae80e5851732fbd444bb05fbf609db4a64c9b5f983ffc9df3e98dd6e"
+  },
+  "fixture_patch_sha256": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+  "toolchain": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n"
+}

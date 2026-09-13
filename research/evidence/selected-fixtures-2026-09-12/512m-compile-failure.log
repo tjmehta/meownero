@@ -1,0 +1,10 @@
+g++: fatal error: Killed signal terminated program cc1plus
+compilation terminated.
+Traceback (most recent call last):
+  File "/harness/verify-fixtures.py", line 81, in <module>
+    main()
+  File "/harness/verify-fixtures.py", line 50, in main
+    subprocess.run(['g++', '-std=c++14', '-O1', '-pthread',
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['g++', '-std=c++14', '-O1', '-pthread', '-I', '/out/selected-9-90/src', '-I', '/src/src', '-I', '/src/contrib/epee/include', '-I', '/src/external/easylogging++', '-I', '/src/tests/gtest/include', '/out/selected-9-90/tests/unit_tests/block_reward.cpp', '/out/selected-9-90/reward.cpp', '/src/contrib/epee/src/int-util.cpp', '/src/build/release/tests/gtest/libgtest_main.a', '/src/build/release/tests/gtest/libgtest.a', '-o', '/out/selected-9-90/fixture-tests']' returned non-zero exit status 1.
