@@ -24,8 +24,8 @@ without changing user focus, all using the main checkout and disjoint ownership.
 | Workstream | Last established result | Remaining work / disposition |
 |---|---|---|
 | Historical clean15 | Both clean builds and provenance verified, integrated into main | Same-host/same-image claim only; do not repeat as unfinished |
-| Selected build/network | Later worker commit `c1f8d05`: 9/90 compiled, full native selection 1,230/1,237 passing, seven failures | Recover runner/evidence, investigate failures; selected P2P and fallback 12/120 never ran |
-| Rust/Cuprate | Historical 1,870-case primitive checkpoint integrated | Later crate/dependency attempt incomplete and uncommitted; missing `/tmp` partial files are not recovered code |
+| Selected build/network | Fresh selected 9/90 build passes all 1,237 native tests and bounded actual P2P checks | Fallback 12/120 is the next gated run; loaded/FCMP performance remains open |
+| Rust/Cuprate | Genuine pinned dependencies restored; actual context-crate check and final wrapper pass (`19d0304`) | Runtime/consensus parity remains open; historical 1,870-case primitive evidence retains its original scope |
 | Privacy | `7dedf3d` / worker `ffc7f77`: restricted wallet controller and 52/52 cases | Completed bounded checkpoint; broader transport/funded-wallet tests remain roadmap work |
 | Mining | `f4c1506` / worker `13f10a0`: 2,551 cases per selected profile | Completed bounded checkpoint; stock P2Pool remains incompatible, no pool/payout result |
 | Demo/brand | `c9ddfb3`: private incoming payment/seed restore and comparison materials | Completed bounded checkpoint; no reason to restart the old assignment |
@@ -53,7 +53,7 @@ the new task concerns ordinary build tooling, not retrying refused output.
 | Agent | Herdr pane | Scope / expected report |
 |---|---|---|
 | `meow-network-recovery` | `wS:p2` | Recover missing network runner/evidence; narrow DNS/gamma fixture investigation; guarded selected builds if prerequisites permit. `research/recovery-network-2026-09-13.md` |
-| `meow-rust-recovery` | `wS:p3` | Pinned source/cache/dependency inventory and minimal reproducible build-tooling recovery. `research/recovery-rust-2026-09-13.md` |
+| `meow-rust-recovery` | `wS:p3` | Completed dependency and crate-build recovery. Final cached wrapper verification also passed. `research/recovery-rust-2026-09-13.md` |
 | `meow-site-recovery` | `wS:p4` | Completed local browser capability/hydration/signup verification; no source change needed. `research/recovery-site-2026-09-13.md` |
 
 These report paths are assigned outputs and may not exist until workers finish.
@@ -75,6 +75,26 @@ checks with intercepted submissions, not actual delivery or iPhone verification.
 **Recovered evidence reviewed:** all 39 entries in the network recovery manifest
 match their original Git objects; all 37 evidence files match recovered bytes.
 New runner changes are reviewed separately from those original receipts.
+
+**Native build completed:** the fresh selected 9/90 pipeline at
+`build/recovery-network-20260913/selected-9-90-launch-01/` exited 0. All 1,237
+selected native tests passed across disjoint offline (1,228) and DNS (9)
+partitions, with exactly the existing three CI exclusions. Equal-duration gamma
+fixtures retain the original median bounds. The first P2P attempt failed before
+mining; its blank exit file and nonfatal allocation trace do not establish a
+successful exit or memory-cap failure. After adding a bounded synchronization
+wait, the retry passed relay, partition/rejoin, depth-three reorg and malformed
+transport rejection with healthy subsequent relay at the original 1.5 GiB cap.
+This remains accelerated empty-block testing. The coordinator verified native
+binary hashes and exact XML coverage, and archived native/P2P receipts under
+`research/evidence/recovery-network-2026-09-13/selected-9-90-{native,p2p-pass}/`.
+See [network report](recovery-network-2026-09-13.md).
+
+**Rust completed:** [report](recovery-rust-2026-09-13.md) records 658 resolved
+packages, genuine pinned Git sources and an actual `cuprate-consensus-context`
+compile pass. The frozen wrapper subsequently passed end-to-end with cached
+artifacts in 0.64 seconds. Original cache, Git-metadata and wrapper-bookkeeping
+failures remain preserved. This is build integration, not runtime parity.
 
 The network agent resumed Codex session
 `01a097bd-031d-7d52-be6f-70dadffac411` with cwd explicitly overridden to the main

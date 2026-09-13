@@ -1,0 +1,219 @@
+{
+  "result": "PASS",
+  "scope": "actual P2P; accelerated empty-block regtest; fixed difficulty 1; no FCMP",
+  "warmup_blocks": 65,
+  "samples_s": [
+    0.0961788969943882,
+    0.09227044799627038,
+    0.0929636639993987,
+    0.104911116999574,
+    0.12585031500202604,
+    0.09263917399948696,
+    0.10259238000435289,
+    0.09836469300353201,
+    0.0928153970016865,
+    0.09451152499968885,
+    0.13197099399985746,
+    0.11811149099958129
+  ],
+  "median_s": 0.0972717949989601,
+  "p95_nearest_rank_s": 0.13197099399985746,
+  "p99_nearest_rank_s": 0.13197099399985746,
+  "timing": "RPC generation start to receiver tip poll; includes mining/RPC; 25ms polling",
+  "reorg_depth": 3,
+  "rejoin_s": 1.2549087759980466,
+  "malformed_transport_closed": true,
+  "proxy_bytes": 42449,
+  "proxy_connections": 6,
+  "shaping": "20ms/chunk plus 64KiB/s/stream; up to two bidirectional connections",
+  "cache": "fresh daemon databases; 65-block warmup; host page cache uncontrolled, no purge",
+  "resources": "1536MiB total container; no swap; 2 CPU quota shared by both daemons and proxy",
+  "profile": "selected-9-90",
+  "target_seconds": 90,
+  "reward_atomic": 9000000000000,
+  "configured_weight_budget": null,
+  "capacity_enforcement_tested": false,
+  "observed_rpc_weight_limits": [
+    {
+      "block_weight_limit": 600000,
+      "block_weight_median": 300000
+    },
+    {
+      "block_weight_limit": 600000,
+      "block_weight_median": 300000
+    }
+  ],
+  "matched_90_comparison": "BLOCKED: no paired loaded workload or enforced scaled dynamic capacity",
+  "transactions": 0,
+  "proofs": 0,
+  "events": [
+    {
+      "event": "initial_core_readiness",
+      "monotonic_s": 34400.635801966,
+      "get_info": {
+        "0": {
+          "adjusted_time": 1789313064,
+          "alt_blocks_count": 0,
+          "block_size_limit": 600000,
+          "block_size_median": 300000,
+          "block_weight_limit": 600000,
+          "block_weight_median": 300000,
+          "bootstrap_daemon_address": "",
+          "busy_syncing": false,
+          "credits": 0,
+          "cumulative_difficulty": 1,
+          "cumulative_difficulty_top64": 0,
+          "database_size": 86016,
+          "difficulty": 1,
+          "difficulty_top64": 0,
+          "free_space": 83597606912,
+          "grey_peerlist_size": 0,
+          "height": 1,
+          "height_without_bootstrap": 1,
+          "incoming_connections_count": 0,
+          "mainnet": false,
+          "nettype": "fakechain",
+          "offline": false,
+          "outgoing_connections_count": 1,
+          "restricted": false,
+          "rpc_connections_count": 1,
+          "stagenet": false,
+          "start_time": 1789313060,
+          "status": "OK",
+          "synchronized": true,
+          "target": 90,
+          "target_height": 0,
+          "testnet": false,
+          "top_block_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+          "top_hash": "",
+          "tx_count": 0,
+          "tx_pool_size": 0,
+          "untrusted": false,
+          "update_available": false,
+          "version": "0.18.5.1-7410c04ba",
+          "was_bootstrap_ever_used": false,
+          "white_peerlist_size": 0,
+          "wide_cumulative_difficulty": "0x1",
+          "wide_difficulty": "0x1"
+        },
+        "1": {
+          "adjusted_time": 1789313064,
+          "alt_blocks_count": 0,
+          "block_size_limit": 600000,
+          "block_size_median": 300000,
+          "block_weight_limit": 600000,
+          "block_weight_median": 300000,
+          "bootstrap_daemon_address": "",
+          "busy_syncing": false,
+          "credits": 0,
+          "cumulative_difficulty": 1,
+          "cumulative_difficulty_top64": 0,
+          "database_size": 86016,
+          "difficulty": 1,
+          "difficulty_top64": 0,
+          "free_space": 83597606912,
+          "grey_peerlist_size": 0,
+          "height": 1,
+          "height_without_bootstrap": 1,
+          "incoming_connections_count": 1,
+          "mainnet": false,
+          "nettype": "fakechain",
+          "offline": false,
+          "outgoing_connections_count": 0,
+          "restricted": false,
+          "rpc_connections_count": 1,
+          "stagenet": false,
+          "start_time": 1789313062,
+          "status": "OK",
+          "synchronized": true,
+          "target": 90,
+          "target_height": 0,
+          "testnet": false,
+          "top_block_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+          "top_hash": "",
+          "tx_count": 0,
+          "tx_pool_size": 0,
+          "untrusted": false,
+          "update_available": false,
+          "version": "0.18.5.1-7410c04ba",
+          "was_bootstrap_ever_used": false,
+          "white_peerlist_size": 0,
+          "wide_cumulative_difficulty": "0x1",
+          "wide_difficulty": "0x1"
+        }
+      }
+    },
+    {
+      "event": "core_ready",
+      "monotonic_s": 34400.636056937,
+      "synchronized": [
+        true,
+        true
+      ]
+    },
+    {
+      "event": "warmup_complete",
+      "monotonic_s": 34403.015760611,
+      "tip": [
+        65,
+        "32f6143972843ea58c5b0dbb253221c7175d09b19c89256e857866690b9e8fd6",
+        "0x42"
+      ],
+      "proxy_connections": 4
+    },
+    {
+      "event": "connected_relay",
+      "monotonic_s": 34404.258984965,
+      "samples_s": [
+        0.0961788969943882,
+        0.09227044799627038,
+        0.0929636639993987,
+        0.104911116999574,
+        0.12585031500202604,
+        0.09263917399948696,
+        0.10259238000435289,
+        0.09836469300353201,
+        0.0928153970016865,
+        0.09451152499968885,
+        0.13197099399985746,
+        0.11811149099958129
+      ]
+    },
+    {
+      "event": "partition_proven",
+      "monotonic_s": 34405.710632804,
+      "root": [
+        77,
+        "c24c3f22cad672de1fbfd25a46f056d3dff034dc08bf8e59b78296e14cca0b55",
+        "0x4e"
+      ],
+      "a": [
+        80,
+        "4028d6967cd114afa4fa36dc1c03c46e623528b5db772d142400343b6eee67f3",
+        "0x51"
+      ],
+      "b": [
+        81,
+        "2551ac127d4c660711c46f128c4122c4a32566e840ed31f0a59bf6224031bcb9",
+        "0x52"
+      ],
+      "forwarded_bytes": 0
+    },
+    {
+      "event": "p2p_rejoin",
+      "monotonic_s": 34406.9680846,
+      "reorg_depth": 3,
+      "convergence_s": 1.2549087759980466,
+      "tip": [
+        81,
+        "2551ac127d4c660711c46f128c4122c4a32566e840ed31f0a59bf6224031bcb9",
+        "0x52"
+      ]
+    },
+    {
+      "event": "malformed_transport_closed_healthy_relay_survives",
+      "monotonic_s": 34407.062646253,
+      "close_mode": "EOF"
+    }
+  ]
+}

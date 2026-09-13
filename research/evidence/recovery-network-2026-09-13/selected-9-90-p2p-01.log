@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/harness/test-network-p2p.py", line 255, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/harness/test-network-p2p.py", line 152, in main
+    await generate(0, 65)
+  File "/harness/test-network-p2p.py", line 142, in generate
+    return (await rpc(node, 'generateblocks', dict(wallet_address=ADDRESS, amount_of_blocks=count)))['blocks']
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'blocks'

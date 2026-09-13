@@ -1,0 +1,19 @@
+ShellCheck - shell script analysis tool
+version: 0.9.0
+license: GNU General Public License, version 3
+website: https://www.shellcheck.net
+
+In /harness/build-profile.sh line 34:
+  if [[ -s $OUT/container.cid ]]; then
+  ^-- SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+     ^-------------------------^ SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+
+
+In /harness/build-profile.sh line 35:
+    docker rm -f "$(cat "$OUT/container.cid")" >/dev/null 2>&1 || true
+    ^-- SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+                    ^----------------------^ SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+                                                                  ^--^ SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2317 -- Command appears to be unreachable...

@@ -26,11 +26,12 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 ## Current verification
 
 **September 13 recovery:** [current workstream index](../research/recovery-index-2026-09-13.md).
-Historical clean15 reproduction is complete. The selected 9/90 build later
-compiled but stopped on seven native-test failures; selected P2P and fallback
-12/120 did not run. The original temporary builds are absent. The checkpoints
-below retain their historical scope; new recovery work does not establish a
-passing selected build or launch readiness.
+Historical clean15 reproduction is complete. After recovery of seven earlier
+native-test failures, a fresh selected 9/90 build now passes all 1,237 selected
+native tests with the original three exclusions. Selected P2P relay and
+partition/rejoin/reorg checks also pass; fallback 12/120 is pending. The original temporary builds are absent. The
+checkpoints below retain their historical scope; the selected test pass does not
+establish launch readiness.
 
 **2026-09-12:** the **thirteen-patch** clean reproduction passed: all three binary
 hashes match across two fresh cache-disabled builds in the same immutable image.

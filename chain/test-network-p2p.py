@@ -139,7 +139,26 @@ async def start(node):
 
 
 async def generate(node, count):
-    return (await rpc(node, 'generateblocks', dict(wallet_address=ADDRESS, amount_of_blocks=count)))['blocks']
+    result = await rpc(node, 'generateblocks', dict(wallet_address=ADDRESS, amount_of_blocks=count))
+    if 'blocks' not in result:
+        raise AssertionError(f'generateblocks returned no blocks: {json.dumps(result, sort_keys=True)}')
+    return result['blocks']
+
+
+async def wait_core_ready():
+    """Wait only after both daemons launched; CHECK_CORE_READY returns BUSY otherwise."""
+    deadline = time.monotonic() + 30
+    initial = {}
+    while time.monotonic() < deadline:
+        infos = [await rpc(n, 'get_info') for n in (0, 1)]
+        if not initial:
+            initial = {str(n): infos[n] for n in (0, 1)}
+            event('initial_core_readiness', get_info=initial)
+        if all(info.get('synchronized') for info in infos):
+            event('core_ready', synchronized=[info.get('synchronized') for info in infos])
+            return
+        await asyncio.sleep(0.1)
+    raise AssertionError(f'core readiness timeout: {json.dumps(initial, sort_keys=True)}')
 
 
 async def main():
@@ -149,6 +168,7 @@ async def main():
     try:
         await start(0)
         await start(1)
+        await wait_core_ready()
         await generate(0, 65)
         await wait_tip(1, await tip(0))
         event('warmup_complete', tip=await tip(0), proxy_connections=link.connections)

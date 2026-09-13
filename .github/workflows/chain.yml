@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: shellcheck
-        run: sudo apt-get install -y shellcheck && shellcheck chain/*.sh spikes/candidate-m/devnet.sh spikes/cuprate/run.sh spikes/p2pool/*.sh spikes/selected-issuance/*.sh demos/private-payment/*.sh
+        run: sudo apt-get install -y shellcheck && shellcheck chain/*.sh spikes/candidate-m/devnet.sh spikes/cuprate/run.sh spikes/cuprate/recovery/*.sh spikes/network-benchmark/*.sh spikes/p2pool/*.sh spikes/selected-issuance/*.sh demos/private-payment/*.sh
       - name: patch series is well-formed and pins are consistent
         run: |
           set -e

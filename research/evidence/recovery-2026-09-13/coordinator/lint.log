@@ -1,0 +1,21 @@
+ShellCheck - shell script analysis tool
+version: 0.9.0
+license: GNU General Public License, version 3
+website: https://www.shellcheck.net
+
+In spikes/network-benchmark/build-profile.sh line 42:
+  result=$?
+  ^-------^ SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+
+
+In spikes/network-benchmark/build-profile.sh line 43:
+  printf '%s\n' "$result" > "$OUT/build.exit"
+  ^-- SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+
+
+In spikes/network-benchmark/build-profile.sh line 44:
+  cleanup
+  ^-----^ SC2317 (info): Command appears to be unreachable. Check usage (or ignore if invoked indirectly).
+
+For more information:
+  https://www.shellcheck.net/wiki/SC2317 -- Command appears to be unreachable...

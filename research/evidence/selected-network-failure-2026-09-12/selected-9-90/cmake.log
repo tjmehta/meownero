@@ -1,0 +1,94 @@
+CMake Warning (dev) at CMakeLists.txt:40 (include):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- CMake version 3.28.3
+-- Found usable ccache: /usr/bin/ccache
+-- Building without build tag
+-- Checking submodules
+-- Submodule 'external/rapidjson' is up-to-date
+-- Submodule 'external/trezor-common' is up-to-date
+-- Submodule 'external/randomx' is up-to-date
+-- Submodule 'external/supercop' is up-to-date
+-- Could not find DEVELOPER_LOCAL_TOOLS in env (not required)
+-- BOOST_IGNORE_SYSTEM_PATHS defaults to OFF
+-- Building for a 64-bit system
+-- Building internal libraries as static
+-- Using LMDB as default DB type
+-- Stack trace on exception enabled (using easylogging++)
+-- Using OpenSSL include dir at /usr/include
+-- Looking for libunbound
+-- Found libunbound include (unbound.h) in /usr/include
+-- Found libunbound library
+-- Using 64-bit LMDB from source tree
+-- Backtrace_LIBRARY: 
+-- Setting CXX flag -maes
+-- Setting C flag -maes
+-- Using HIDAPI include dir at /usr/include/hidapi
+-- Protobuf lib: /usr/lib/x86_64-linux-gnu/libprotobuf.so, inc: /usr/include, protoc: /usr/bin/protoc
+-- Trezor protobuf messages regenerated out: "."
+-- LibUSB Compilation test: TRUE
+-- Trezor compatible LibUSB found at: /usr/include/libusb-1.0
+-- Building on x86_64 for default
+-- AES support enabled
+-- Performing Test _Werror__fcf_protection=full_c
+-- Performing Test _Werror__fcf_protection=full_c - Success
+-- Performing Test _Werror__fcf_protection=full_cxx
+-- Performing Test _Werror__fcf_protection=full_cxx - Success
+-- Performing Test _Werror__Werror=switch_c
+-- Performing Test _Werror__Werror=switch_c - Success
+-- Performing Test _Werror__Werror=switch_cxx
+-- Performing Test _Werror__Werror=switch_cxx - Success
+-- Performing Test _Werror__Werror=return_type_c
+-- Performing Test _Werror__Werror=return_type_c - Success
+-- Performing Test _Werror__Werror=return_type_cxx
+-- Performing Test _Werror__Werror=return_type_cxx - Success
+-- Using C security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1 -Wformat -Wformat-security -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type
+-- Using C++ security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1 -Wformat -Wformat-security -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type
+-- Using linker security hardening flags:  -pie -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+-- Found Boost Version: 1.83.0
+-- Boost components: filesystem;thread;date_time;chrono;serialization;program_options;locale
+-- Found readline library at: /usr
+-- ZMQ_LIB: /usr/lib/x86_64-linux-gnu/libzmq.so;/usr/lib/x86_64-linux-gnu/libpgm.so;/usr/lib/x86_64-linux-gnu/libnorm.so;/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so;/usr/lib/x86_64-linux-gnu/libsodium.so
+-- SODIUM_INCLUDE_PATH: /usr/include
+-- Found Git: /usr/bin/git
+-- You are currently on commit 7410c04ba
+-- You are ahead of or behind a tagged release
+Wallet crypto is using amd64-64-24k backend
+-- Trezor support enabled
+CMake Warning (dev) at CMakeLists.txt:1258 (find_package):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Building tests
+-- Could NOT find GTest (missing: GTEST_LIBRARY GTEST_INCLUDE_DIR GTEST_MAIN_LIBRARY) 
+-- GTest not found on the system: will use GTest bundled with this source
+-- Copying test data directory...
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'requests'
+CMake Warning at tests/functional_tests/CMakeLists.txt:79 (message):
+  functional_tests_rpc and check_missing_rpc_methods skipped, needs the
+  'requests', 'psutil', 'monotonic', 'zmq', and 'deepdiff' python modules
+
+
+Wallet crypto bench is using cn;amd64-64-24k;amd64-51-30k
+-- Not building debug utilities
+Doxygen: graphviz not found - graphs disabled
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+CMake Warning (dev) at CMakeLists.txt:1297 (find_package):
+  Policy CMP0148 is not set: The FindPythonInterp and FindPythonLibs modules
+  are removed.  Run "cmake --help-policy CMP0148" for policy details.  Use
+  the cmake_policy command to set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring done (3.7s)
+-- Generating done (0.5s)
+-- Build files have been written to: /src/build/release

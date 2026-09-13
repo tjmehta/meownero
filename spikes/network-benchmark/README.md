@@ -144,3 +144,72 @@ includes binaries, image ID, package list, source HEAD/tree, submodules, patch
 input hashes, compiler/CMake versions and all three executable versions. It
 remains same-image source reproducibility, not toolchain reconstruction or
 cross-host reproducibility.
+
+## Isolated incremental selected builds
+
+`build-profile.sh` uses a disposable copy of the verified **first** clean15 source
+and build tree. It verifies the seven completed receipts, all 4,320 tracked source
+hashes and the collection-time build-file inventory before copying. The original
+is mounted read-only. Copies use `cp -a --reflink=auto`, preserving build mtimes
+and `/src` CMake paths without hard-linking back to the historical tree.
+
+The coordinator supplies `selected-unit-fixtures.patch` and
+`fixture-source-lock.json` beside the monetary overlays. The approved fixture
+SHA-256 is `360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7`.
+Its source lock must match the original `block_reward.cpp` before application.
+The runner applies the monetary overlay, then the common fixture patch; fixture
+changes may touch only `tests/unit_tests/` and must replace the historical reward
+test. It refuses an unreviewed fixture hash. No production patch is edited.
+
+```bash
+bash spikes/network-benchmark/build-profile.sh \
+  /tmp/meow-swarm-network-20260912-run/reproduction/first \
+  /path/to/coordinator/spikes/selected-issuance \
+  selected-9-90 \
+  /path/to/coordinator/spikes/selected-issuance/selected-unit-fixtures.patch \
+  /path/to/NEW-selected-output
+# Run fallback-12-120 separately only after reviewing the first result.
+```
+
+The shared guard holds the heavy lock across verification, copying, compilation
+and tests. It checks >=5 GiB available RAM and disk; the runner also checks the
+output filesystem. Containers use the same immutable image, 4 GiB/no swap,
+two CPUs, one compiler job and disabled ccache. Compilation and the non-DNS
+native partition use no networking. A separately logged DNS-only container uses
+ordinary bridge networking, matching the existing CI environment. A two-hour
+container timeout and owned-container cleanup bound interruption handling.
+Neither a failed compiler nor a failed `tee` log write reports success.
+
+Inherited daemon/wallet/test executables are removed from the **copy** before
+building all three binaries plus `unit_tests` and the alternative-floor test
+executable. Existing object/archive files can be reused, so this is an
+**incremental selected build**, not clean selected reproduction. The runner
+records copied-input provenance, all overlay hashes, source diff, changed-file
+hashes, compiler/CMake logs, executable hashes/versions, XML/test logs and cgroup
+limits/events. The historical input hashes are checked again afterward.
+
+If the old build cache is gone, set `MEOW_PROFILE_SOURCE_ONLY=1` and pass the
+reconstructed pinned source directory as the first argument. This mode refuses
+inherited build outputs and verifies the original revision, submodules and full
+frozen source manifest before copying. It creates a fresh build directory; the
+receipt labels this as a single fresh selected build, with no preserved historical
+build claim. Economic, approved reward, and source-locked gamma fixture overlays
+apply only to the disposable copy.
+
+Tests include the consensus/protocol selection, both difficulty-floor selections,
+and the exact existing native CI selection with only
+`ban.subnet`, `http_server.response_soft_limit`, and `notify.works` excluded.
+Native fixture data is copied to `/tmp/test-data`. The DNS phase selects only
+`AddressFromURL.*:DNSResolver.*`; the offline phase selects the complement.
+`merge-native-results.py` rejects missing/extra/duplicate/unexecuted/failed tests
+and requires their union to equal the original CI list. `offline.exit` and
+`dns.exit` record phase termination; `build.exit` exists only at final termination.
+No historical reward failure
+is treated as an expected exclusion. Any new failure stops the run for review.
+After a successful build, `chain/test-network-p2p.sh OUTPUT/source OUTPUT/p2p PROFILE`
+runs the separate profile-specific empty-block P2P check under its own guard.
+A native test pass still does not establish loaded capacity, intended FCMP
+integration, wallet recovery, aggregate-consumer correctness, or launch readiness.
+
+September 13 recovery, gamma controls, resource-wrapper checks and current build
+status: [recovery report](../../research/recovery-network-2026-09-13.md).

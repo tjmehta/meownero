@@ -1,0 +1,717 @@
+2026-09-13 15:24:22.568	    7d069a578a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-13 15:24:22.568	    7d069a578a40	INFO	global	src/daemon/main.cpp:309	Monero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)
+2026-09-13 15:24:22.568	    7d069a578a40	INFO	global	src/daemon/protocol.h:53	Initializing cryptonote protocol...
+2026-09-13 15:24:22.568	    7d069a578a40	INFO	global	src/daemon/protocol.h:58	Cryptonote protocol initialized OK
+2026-09-13 15:24:22.568	    7d069a578a40	INFO	global	src/daemon/core.h:64	Initializing core...
+2026-09-13 15:24:22.568	    7d069a578a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:521	Loading blockchain from folder /work/n1/fake/lmdb ...
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:22.598	    7d069a578a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:696	Loading checkpoints
+2026-09-13 15:24:22.598	    7d069a578a40	INFO	global	src/daemon/core.h:81	Core initialized OK
+2026-09-13 15:24:22.598	    7d069a578a40	INFO	global	src/daemon/p2p.h:64	Initializing p2p server...
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x8598a9) [0x589bbb6f18a9] 
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x582694) [0x589bbb41a694] 
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x583055) [0x589bbb41b055] 
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:22.598	    7d0659dfe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:22.600	    7d069a578a40	INFO	global	src/daemon/p2p.h:69	p2p server initialized OK
+2026-09-13 15:24:22.600	    7d069a578a40	INFO	global	src/daemon/rpc.h:63	Initializing core RPC server...
+2026-09-13 15:24:22.600	    7d069a578a40	INFO	global	contrib/epee/include/net/http_server_impl_base.h:94	Binding on 127.0.0.1 (IPv4):19181
+2026-09-13 15:24:24.550	    7d069a578a40	INFO	global	src/daemon/rpc.h:69	core RPC server initialized OK on port: 19181
+2026-09-13 15:24:24.551	    7d069a578a40	INFO	global	src/daemon/rpc.h:74	Starting core RPC server...
+2026-09-13 15:24:24.551	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:79	core RPC server started ok
+2026-09-13 15:24:24.551	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:79	Starting p2p net loop...
+2026-09-13 15:24:24.551	[P2P7]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-13 15:24:24.551	[P2P7]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-13 15:24:24.551	[P2P7]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-13 15:24:24.551	[P2P7]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-13 15:24:24.551	[P2P7]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	Use the "help" command to see the list of available commands.
+2026-09-13 15:24:24.551	[P2P7]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:24.811	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:24.840	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:24.840	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:24.841	[P2P7]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:24.868	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:24.896	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:24.926	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:24.954	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:25.008	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:25.115	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:25.115	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:25.116	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:25.142	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:25.142	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:25.143	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use the "help" command to see the list of available commands.
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use "help <command>" to see a command's documentation.
+2026-09-13 15:24:25.551	[P2P4]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-13 15:24:25.742	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:25.742	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:25.742	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:25.742	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:25.743	    7d06296f26c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:25.743	    7d06291f16c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:25.762	[P2P8]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1614	Synced 32/33 (96%, 1 left)
+2026-09-13 15:24:25.762	[P2P8]	WARNING	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2859	monerod is now disconnected from the network
+2026-09-13 15:24:26.626	[P2P8]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:508	[127.0.0.1:55798 INC] Sync data returned a new top block candidate: 32 -> 63 [Your node is 31 blocks (31.0 minutes) behind] 
+2026-09-13 15:24:26.626	[P2P8]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:508	SYNCHRONIZATION started
+2026-09-13 15:24:26.668	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:508	[127.0.0.1:20180 OUT] Sync data returned a new top block candidate: 32 -> 65 [Your node is 33 blocks (33.0 minutes) behind] 
+2026-09-13 15:24:26.668	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:508	SYNCHRONIZATION started
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:26.851	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:26.851	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:26.851	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:26.851	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:26.851	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:26.852	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:26.852	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:26.852	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:26.852	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:26.852	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:26.852	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:26.852	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:26.852	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:26.852	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:26.852	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:26.852	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:26.853	    7d0628cf06c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:26.983	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1614	Synced 52/66 (78%, 14 left)
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x5d9f3c) [0x589bbb471f3c] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x4ff942) [0x589bbb397942] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x5269eb) [0x589bbb3be9eb] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x4bdf0e) [0x589bbb355f0e] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x4c35e3) [0x589bbb35b5e3] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x1e3311) [0x589bbb07b311] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [24]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [25]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:26.983	[P2P4]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:26.983	    7d0606bfb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:26.983	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:26.983	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:26.983	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:26.983	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:26.984	    7d06070fc6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:26.984	    7d06075fd6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:27.082	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1614	Synced 66/66
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:27.576	[P2P2]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x50b9c2) [0x589bbb3a39c2] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513a3e) [0x589bbb3aba3e] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x52d24d) [0x589bbb3c524d] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x482780) [0x589bbb31a780] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e369f) [0x589bbb07b69f] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:27.670	[P2P8]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:28.349	[P2P3]	WARNING	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2859	monerod is now disconnected from the network
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x5608b1) [0x589bbb3f88b1] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x75b382) [0x589bbb5f3382] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x2eba34) [0x589bbb183a34] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x3b42ad) [0x589bbb24c2ad] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x3cad1e) [0x589bbb262d1e] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x174edd) [0x589bbb00cedd] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x19494f) [0x589bbb02c94f] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x194ed1) [0x589bbb02ced1] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x1ddf1c) [0x589bbb075f1c] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x1de48e) [0x589bbb07648e] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x150897) [0x589bbafe8897] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x17810c) [0x589bbb01010c] 
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:28.673	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x5608b1) [0x589bbb3f88b1] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x75b382) [0x589bbb5f3382] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x2eba34) [0x589bbb183a34] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x3b42ad) [0x589bbb24c2ad] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x3cad1e) [0x589bbb262d1e] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x174edd) [0x589bbb00cedd] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x19494f) [0x589bbb02c94f] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x194ed1) [0x589bbb02ced1] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x1ddf1c) [0x589bbb075f1c] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x1de48e) [0x589bbb07648e] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x150897) [0x589bbafe8897] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x17810c) [0x589bbb01010c] 
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:28.703	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x5608b1) [0x589bbb3f88b1] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x75b382) [0x589bbb5f3382] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x2eba34) [0x589bbb183a34] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x3b42ad) [0x589bbb24c2ad] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x3cad1e) [0x589bbb262d1e] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x174edd) [0x589bbb00cedd] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x19494f) [0x589bbb02c94f] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x194ed1) [0x589bbb02ced1] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x1ddf1c) [0x589bbb075f1c] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x1de48e) [0x589bbb07648e] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x150897) [0x589bbafe8897] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x17810c) [0x589bbb01010c] 
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:28.730	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:28.757	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x5608b1) [0x589bbb3f88b1] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x75b382) [0x589bbb5f3382] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x2eba34) [0x589bbb183a34] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x3b42ad) [0x589bbb24c2ad] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x3cad1e) [0x589bbb262d1e] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x174edd) [0x589bbb00cedd] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x19494f) [0x589bbb02c94f] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x194ed1) [0x589bbb02ced1] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x1ddf1c) [0x589bbb075f1c] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x1de48e) [0x589bbb07648e] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x150897) [0x589bbafe8897] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x17810c) [0x589bbb01010c] 
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:28.758	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:30.822	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:30.822	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:30.822	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:30.822	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:30.822	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:30.823	    7d0607fff6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x560ae0) [0x589bbb3f8ae0] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x4f2179) [0x589bbb38a179] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x5d96d9) [0x589bbb4716d9] 
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:30.823	    7d0607afe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:30.860	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:30.860	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x5605e4) [0x589bbb3f85e4] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x511c64) [0x589bbb3a9c64] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x513986) [0x589bbb3ab986] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x52cfad) [0x589bbb3c4fad] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x4be16d) [0x589bbb35616d] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x4c35e3) [0x589bbb35b5e3] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1e3311) [0x589bbb07b311] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x1e4eed) [0x589bbb07ceed] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4879be) [0x589bbb31f9be] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x488c63) [0x589bbb320c63] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x4891b3) [0x589bbb3211b3] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:30.861	[P2P1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:30.878	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 78
+2026-09-13 15:24:30.878	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	id:	<79443b4951a2dafa99cbefa7c2b21b8d022d49495be46da028a76b5fab7dcca1>
+2026-09-13 15:24:30.878	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	PoW:	<bb10a92bcd4cfa9c5b6bb77b2a43023d51dfaa1da87aa2624a13c10a65320c03>
+2026-09-13 15:24:30.878	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	difficulty:	1
+2026-09-13 15:24:30.891	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 79
+2026-09-13 15:24:30.891	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	id:	<b10129213266119f119e706179dd3c8c91087428ca37dc8714fe1e44dc663b03>
+2026-09-13 15:24:30.891	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	PoW:	<fbf4a492a1ddea008b3bb2eab51551b839ae5a927f02849a5c4e0b579c8f1009>
+2026-09-13 15:24:30.891	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	difficulty:	1
+2026-09-13 15:24:30.937	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 80
+2026-09-13 15:24:30.937	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	id:	<4028d6967cd114afa4fa36dc1c03c46e623528b5db772d142400343b6eee67f3>
+2026-09-13 15:24:30.937	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	PoW:	<32889dec0b549265c1989409ca7b5ea3a301e05d0ceebe8459111d0a816f3ff1>
+2026-09-13 15:24:30.937	[P2P1]	INFO	global	src/cryptonote_core/blockchain.cpp:2114	difficulty:	1
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x119cb0) [0x589bbafb1cb0] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x85c995) [0x589bbb6f4995] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x859bab) [0x589bbb6f1bab] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x5824b5) [0x589bbb41a4b5] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x5842a5) [0x589bbb41c2a5] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x5608b1) [0x589bbb3f88b1] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x75b382) [0x589bbb5f3382] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x2eba34) [0x589bbb183a34] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x3b42ad) [0x589bbb24c2ad] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x3cad1e) [0x589bbb262d1e] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x174edd) [0x589bbb00cedd] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x19494f) [0x589bbb02c94f] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x194ed1) [0x589bbb02ced1] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x1ddf1c) [0x589bbb075f1c] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /src/build/release/bin/monerod(+0x1de48e) [0x589bbb07648e] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /src/build/release/bin/monerod(+0x150897) [0x589bbafe8897] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /src/build/release/bin/monerod(+0x17810c) [0x589bbb01010c] 
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:31.060	[RPC1]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: boost::wrapexcept<boost::bad_weak_ptr>
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0x8dd25) [0x589bbaf25d25] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x42ecf1) [0x589bbb2c6cf1] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /src/build/release/bin/monerod(+0x442cf3) [0x589bbb2dacf3] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /src/build/release/bin/monerod(+0x452de1) [0x589bbb2eade1] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /src/build/release/bin/monerod(+0x4a53ae) [0x589bbb33d3ae] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /src/build/release/bin/monerod(+0x4a5918) [0x589bbb33d918] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /src/build/release/bin/monerod(+0x45a6df) [0x589bbb2f26df] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /src/build/release/bin/monerod(+0x498aa0) [0x589bbb330aa0] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /src/build/release/bin/monerod(+0x49913b) [0x589bbb33113b] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /src/build/release/bin/monerod(+0x12fa6a) [0x589bbafc7a6a] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /src/build/release/bin/monerod(+0x46a8be) [0x589bbb3028be] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /src/build/release/bin/monerod(+0x1688d5) [0x589bbb0008d5] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /src/build/release/bin/monerod(+0x4141e7) [0x589bbb2ac1e7] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /src/build/release/bin/monerod(+0x4490a6) [0x589bbb2e10a6] 
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:31.157	[P2P9]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:31.157	[P2P9]	WARNING	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2859	monerod is now disconnected from the network
+2026-09-13 15:24:31.158	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:81	p2p net loop stopped
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::system_error
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x589bbaf4ca34]:__cxa_throw+0xb0) [0x589bbaf4ca34]
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /src/build/release/bin/monerod(+0xaff1b) [0x589bbaf47f1b] 
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /src/build/release/bin/monerod(+0x63628f) [0x589bbb4ce28f] 
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4]  0x1699f) [0x7d069af5c99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7d069af5c99f]
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5]  0x9cb84) [0x7d069a9f6b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7d069a9f6b84]
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x44) [0x7d069aa83b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7d069aa83b64]
+2026-09-13 15:24:31.158	    7d06427fb6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-13 15:24:31.158	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:84	Stopping core RPC server...
+2026-09-13 15:24:31.158	[SRV_MAIN]	INFO	global	src/daemon/daemon.cpp:288	Node stopped.
+2026-09-13 15:24:31.158	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:96	Deinitializing core RPC server...
+2026-09-13 15:24:31.159	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:91	Deinitializing p2p...
+2026-09-13 15:24:31.554	[SRV_MAIN]	INFO	global	src/daemon/core.h:102	Deinitializing core...
+2026-09-13 15:24:31.555	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:75	Stopping cryptonote protocol...
+2026-09-13 15:24:31.555	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully

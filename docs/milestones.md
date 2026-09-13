@@ -5,11 +5,12 @@
 **Latest recovery checkpoint:** [September 13 session recovery](../research/recovery-index-2026-09-13.md).
 Two clean historical fifteen-patch builds match. Selected/fallback emission
 fixtures each pass 7/7 smoke tests. Later recovered evidence records that the
-9/90 build compiled but its native selection failed seven of 1,237 tests;
-selected P2P and fallback 12/120 did not run. The earlier build is no longer
-active. Recovery agents are investigating the failures and reconstructing
-missing temporary inputs. Earlier queued-build descriptions below record their
-original checkpoints, not current running processes.
+9/90 build compiled but its native selection failed seven of 1,237 tests.
+September 13 recovery fixed the fixture/test-environment issues; a fresh selected
+9/90 build now passes all 1,237 selected native tests, with no new exclusions.
+Selected P2P relay/partition/rejoin/reorg checks also pass; fallback 12/120 is pending. Rust's pinned
+context crate compiles and local site presentation checks pass. Earlier queued
+build descriptions below record their original checkpoints, not current processes.
 
 **Status:** live checklist · **Started:** 2026-09-05 · Governed by `PLAN.md` §2 (doctrine), §5.4 (decision rule), §10 (gates). This file converts settled philosophy into objective exit criteria; it does not restate or reopen the philosophy.
 

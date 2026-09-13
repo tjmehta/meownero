@@ -1,0 +1,660 @@
+[  0%] Building CXX object src/device/CMakeFiles/obj_device.dir/device.cpp.o
+In file included from /src/src/device/device.cpp:33:
+/src/src/device/device_ledger.hpp:91:14: warning: 'hw::ledger::{anonymous}::apdu_verbose' defined but not used [-Wunused-variable]
+   91 |         bool apdu_verbose =true;
+      |              ^~~~~~~~~~~~
+[  0%] Building CXX object src/device/CMakeFiles/obj_device.dir/device_default.cpp.o
+[  2%] Building CXX object src/device/CMakeFiles/obj_device.dir/log.cpp.o
+[  2%] Building CXX object src/device/CMakeFiles/obj_device.dir/device_ledger.cpp.o
+[  2%] Building CXX object src/device/CMakeFiles/obj_device.dir/device_io_hid.cpp.o
+[  2%] Built target obj_device
+[  2%] Built target easylogging
+[ 14%] Built target randomx
+[ 23%] Built target obj_epee
+[ 23%] Built target epee
+[ 23%] Built target genversion
+[ 23%] Built target obj_version
+[ 26%] Built target version
+[ 26%] Building CXX object src/crypto/CMakeFiles/obj_cncrypto.dir/crypto.cpp.o
+[ 35%] Built target obj_cncrypto
+[ 35%] Linking CXX static library libcncrypto.a
+[ 35%] Built target cncrypto
+[ 38%] Built target generate_translations_header
+[ 38%] Building CXX object src/common/CMakeFiles/obj_common.dir/util.cpp.o
+[ 38%] Building CXX object src/common/CMakeFiles/obj_common.dir/pruning.cpp.o
+[ 38%] Building CXX object src/common/CMakeFiles/obj_common.dir/spawn.cpp.o
+[ 40%] Building CXX object src/common/CMakeFiles/obj_common.dir/threadpool.cpp.o
+[ 47%] Built target obj_common
+[ 47%] Linking CXX static library libcommon.a
+[ 47%] Built target common
+[ 61%] Built target monero-crypto-amd64-64-24k
+[ 61%] Built target wallet-crypto
+[ 61%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/rctOps.cpp.o
+[ 61%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/rctTypes.cpp.o
+[ 61%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/bulletproofs.cc.o
+[ 61%] Building CXX object src/ringct/CMakeFiles/obj_ringct_basic.dir/bulletproofs_plus.cc.o
+[ 64%] Built target obj_ringct_basic
+[ 64%] Linking CXX static library libringct_basic.a
+[ 64%] Built target ringct_basic
+[ 64%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_format_utils_basic.dir/cryptonote_format_utils_basic.cpp.o
+[ 64%] Built target obj_cryptonote_format_utils_basic
+[ 64%] Linking CXX static library libcryptonote_format_utils_basic.a
+[ 64%] Built target cryptonote_format_utils_basic
+[ 64%] Building CXX object src/blocks/CMakeFiles/obj_blocks.dir/blocks.cpp.o
+[ 69%] Built target obj_blocks
+[ 69%] Linking CXX static library libblocks.a
+[ 69%] Built target blocks
+[ 69%] Linking CXX static library libdevice.a
+[ 69%] Built target device
+[ 69%] Built target lmdb
+[ 69%] Built target obj_epee_readline
+[ 69%] Built target epee_readline
+[ 69%] Building CXX object src/ringct/CMakeFiles/obj_ringct.dir/rctSigs.cpp.o
+[ 69%] Built target obj_ringct
+[ 69%] Building CXX object src/checkpoints/CMakeFiles/obj_checkpoints.dir/checkpoints.cpp.o
+[ 69%] Built target obj_checkpoints
+[ 69%] Linking CXX static library libcheckpoints.a
+[ 69%] Built target checkpoints
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/account.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/connection_context.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/cryptonote_basic_impl.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/cryptonote_format_utils.cpp.o
+[ 69%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/difficulty.cpp.o
+[ 71%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/hardfork.cpp.o
+[ 71%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/merge_mining.cpp.o
+[ 71%] Building CXX object src/cryptonote_basic/CMakeFiles/obj_cryptonote_basic.dir/miner.cpp.o
+[ 71%] Built target obj_cryptonote_basic
+[ 73%] Linking CXX static library libcryptonote_basic.a
+[ 73%] Built target cryptonote_basic
+[ 73%] Linking CXX static library libringct.a
+[ 73%] Built target ringct
+[ 73%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/blockchain.cpp.o
+[ 73%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/cryptonote_core.cpp.o
+/src/src/cryptonote_core/cryptonote_core.cpp: In constructor 'cryptonote::core::core(cryptonote::i_cryptonote_protocol*)':
+/src/src/cryptonote_core/cryptonote_core.cpp:225:25: warning: member 'cryptonote::core::m_blockchain_storage' is used uninitialized [-Wuninitialized]
+  225 |               m_mempool(m_blockchain_storage),
+      |                         ^~~~~~~~~~~~~~~~~~~~
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/tx_pool.cpp.o
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/tx_sanity_check.cpp.o
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/cryptonote_tx_utils.cpp.o
+[ 76%] Building CXX object src/cryptonote_core/CMakeFiles/obj_cryptonote_core.dir/tx_verification_utils.cpp.o
+[ 76%] Built target obj_cryptonote_core
+[ 78%] Built target obj_hardforks
+[ 78%] Built target hardforks
+[ 78%] Building CXX object src/blockchain_db/CMakeFiles/obj_blockchain_db.dir/blockchain_db.cpp.o
+[ 78%] Building CXX object src/blockchain_db/CMakeFiles/obj_blockchain_db.dir/lmdb/db_lmdb.cpp.o
+[ 78%] Built target obj_blockchain_db
+[ 78%] Linking CXX static library libblockchain_db.a
+[ 78%] Built target blockchain_db
+[ 78%] Linking CXX static library libcryptonote_core.a
+[ 78%] Built target cryptonote_core
+[ 78%] Building CXX object src/net/CMakeFiles/obj_net.dir/dandelionpp.cpp.o
+[ 80%] Built target obj_net
+[ 80%] Linking CXX static library libnet.a
+[ 80%] Built target net
+[ 83%] Building CXX object src/rpc/CMakeFiles/obj_rpc_base.dir/rpc_handler.cpp.o
+[ 83%] Built target obj_rpc_base
+[ 85%] Linking CXX static library librpc_base.a
+[ 85%] Built target rpc_base
+[ 85%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/bootstrap_daemon.cpp.o
+[ 88%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o
+[ 88%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/rpc_payment.cpp.o
+[ 88%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/instanciations.cpp.o
+[ 88%] Built target obj_rpc
+[ 90%] Building CXX object src/p2p/CMakeFiles/obj_p2p.dir/net_node.cpp.o
+[ 90%] Building CXX object src/p2p/CMakeFiles/obj_p2p.dir/net_peerlist.cpp.o
+[ 90%] Built target obj_p2p
+[ 90%] Linking CXX static library libp2p.a
+[ 90%] Built target p2p
+[ 90%] Building CXX object src/cryptonote_protocol/CMakeFiles/obj_cryptonote_protocol.dir/block_queue.cpp.o
+[ 92%] Building CXX object src/cryptonote_protocol/CMakeFiles/obj_cryptonote_protocol.dir/cryptonote_protocol_handler-base.cpp.o
+[ 92%] Building CXX object src/cryptonote_protocol/CMakeFiles/obj_cryptonote_protocol.dir/levin_notify.cpp.o
+[ 92%] Built target obj_cryptonote_protocol
+[ 92%] Linking CXX static library libcryptonote_protocol.a
+[ 92%] Built target cryptonote_protocol
+[ 92%] Linking CXX static library librpc.a
+[ 92%] Built target rpc
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_rpc_pub.dir/zmq_pub.cpp.o
+[ 92%] Built target obj_rpc_pub
+[ 92%] Building CXX object src/serialization/CMakeFiles/obj_serialization.dir/json_object.cpp.o
+[ 92%] Built target obj_serialization
+[ 92%] Linking CXX static library libserialization.a
+[ 92%] Built target serialization
+[ 92%] Linking CXX static library librpc_pub.a
+[ 92%] Built target rpc_pub
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/message.cpp.o
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/daemon_messages.cpp.o
+[ 92%] Built target obj_daemon_messages
+[ 95%] Linking CXX static library libdaemon_messages.a
+[ 95%] Built target daemon_messages
+[ 95%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/daemon_handler.cpp.o
+[ 95%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_pub.cpp.o
+[ 97%] Built target obj_daemon_rpc_server
+[ 97%] Linking CXX static library libdaemon_rpc_server.a
+[ 97%] Built target daemon_rpc_server
+[ 97%] Built target obj_daemonizer
+[ 97%] Built target daemonizer
+[ 97%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_parser_executor.cpp.o
+[ 97%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_server.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/daemon.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/executor.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/main.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/rpc_command_executor.cpp.o
+[100%] Linking CXX executable ../../bin/monerod
+[100%] Built target daemon
+[  0%] Building CXX object src/device_trezor/CMakeFiles/obj_device_trezor.dir/trezor/protocol.cpp.o
+In file included from /src/src/device_trezor/trezor/transport.hpp:52,
+                 from /src/src/device_trezor/trezor/protocol.hpp:36,
+                 from /src/src/device_trezor/trezor/protocol.cpp:31:
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]
+  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here
+  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[  0%] Building CXX object src/device_trezor/CMakeFiles/obj_device_trezor.dir/device_trezor_base.cpp.o
+In file included from /src/src/device_trezor/trezor/transport.hpp:52,
+                 from /src/src/device_trezor/trezor.hpp:36,
+                 from /src/src/device_trezor/device_trezor_base.hpp:44,
+                 from /src/src/device_trezor/device_trezor_base.cpp:30:
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]
+  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here
+  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/device_trezor_base.cpp: In member function 'bool hw::trezor::device_trezor_base::message_handler(hw::trezor::GenericMessage&)':
+/src/src/device_trezor/device_trezor_base.cpp:303:24: warning: 'hw::trezor::messages::MessageType_Deprecated_PassphraseStateRequest' is deprecated [-Wdeprecated-declarations]
+  303 |         case messages::MessageType_Deprecated_PassphraseStateRequest:
+      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /src/src/device_trezor/trezor/messages_map.hpp:51,
+                 from /src/src/device_trezor/trezor/transport.hpp:49:
+/src/src/device_trezor/trezor/messages/messages.pb.h:91:3: note: declared here
+   91 |   MessageType_Deprecated_PassphraseStateRequest PROTOBUF_DEPRECATED_ENUM = 77,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/device_trezor_base.cpp: In member function 'void hw::trezor::device_trezor_base::on_passphrase_request(hw::trezor::GenericMessage&, const hw::trezor::messages::common::PassphraseRequest*)':
+/src/src/device_trezor/device_trezor_base.cpp:479:30: warning: 'bool hw::trezor::messages::common::PassphraseRequest::has__on_device() const' is deprecated [-Wdeprecated-declarations]
+  479 |       if (msg->has__on_device() && msg->_on_device()){
+      |           ~~~~~~~~~~~~~~~~~~~^~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:2556:13: note: declared here
+ 2556 | inline bool PassphraseRequest::has__on_device() const {
+      |             ^~~~~~~~~~~~~~~~~
+/src/src/device_trezor/device_trezor_base.cpp:479:51: warning: 'bool hw::trezor::messages::common::PassphraseRequest::_on_device() const' is deprecated [-Wdeprecated-declarations]
+  479 |       if (msg->has__on_device() && msg->_on_device()){
+      |                                    ~~~~~~~~~~~~~~~^~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:2566:13: note: declared here
+ 2566 | inline bool PassphraseRequest::_on_device() const {
+      |             ^~~~~~~~~~~~~~~~~
+/src/src/device_trezor/device_trezor_base.cpp:487:30: warning: 'bool hw::trezor::messages::common::PassphraseRequest::has__on_device() const' is deprecated [-Wdeprecated-declarations]
+  487 |       if (msg->has__on_device() && !msg->_on_device()){
+      |           ~~~~~~~~~~~~~~~~~~~^~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:2556:13: note: declared here
+ 2556 | inline bool PassphraseRequest::has__on_device() const {
+      |             ^~~~~~~~~~~~~~~~~
+/src/src/device_trezor/device_trezor_base.cpp:487:52: warning: 'bool hw::trezor::messages::common::PassphraseRequest::_on_device() const' is deprecated [-Wdeprecated-declarations]
+  487 |       if (msg->has__on_device() && !msg->_on_device()){
+      |                                     ~~~~~~~~~~~~~~~^~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:2566:13: note: declared here
+ 2566 | inline bool PassphraseRequest::_on_device() const {
+      |             ^~~~~~~~~~~~~~~~~
+[  0%] Building CXX object src/device_trezor/CMakeFiles/obj_device_trezor.dir/device_trezor.cpp.o
+In file included from /src/src/device_trezor/trezor/transport.hpp:52,
+                 from /src/src/device_trezor/trezor.hpp:36,
+                 from /src/src/device_trezor/device_trezor.hpp:33,
+                 from /src/src/device_trezor/device_trezor.cpp:30:
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]
+  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here
+  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[  4%] Built target obj_device_trezor
+[  4%] Built target lmdb
+[  4%] Built target easylogging
+[ 16%] Built target randomx
+[ 26%] Built target obj_epee
+[ 26%] Built target epee
+[ 26%] Built target genversion
+[ 26%] Built target obj_version
+[ 28%] Built target version
+[ 38%] Built target obj_cncrypto
+[ 38%] Built target cncrypto
+[ 40%] Built target generate_translations_header
+[ 50%] Built target obj_common
+[ 50%] Built target common
+[ 64%] Built target monero-crypto-amd64-64-24k
+[ 64%] Built target wallet-crypto
+[ 66%] Built target obj_ringct_basic
+[ 66%] Built target ringct_basic
+[ 69%] Built target obj_device
+[ 69%] Built target obj_cryptonote_format_utils_basic
+[ 69%] Built target cryptonote_format_utils_basic
+[ 73%] Built target obj_blocks
+[ 73%] Built target blocks
+[ 73%] Built target device
+[ 73%] Built target obj_ringct
+[ 73%] Built target obj_checkpoints
+[ 73%] Built target checkpoints
+[ 76%] Built target obj_cryptonote_basic
+[ 78%] Built target cryptonote_basic
+[ 78%] Built target ringct
+[ 80%] Built target obj_cryptonote_core
+[ 83%] Built target obj_hardforks
+[ 83%] Built target hardforks
+[ 83%] Built target obj_blockchain_db
+[ 83%] Built target blockchain_db
+[ 83%] Built target cryptonote_core
+[ 83%] Linking CXX static library libdevice_trezor.a
+[ 83%] Built target device_trezor
+[ 85%] Built target qrcodegen
+[ 85%] Built target obj_epee_readline
+[ 85%] Built target epee_readline
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_account.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_account_kex_impl.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_clsag_context.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_kex_msg.cpp.o
+[ 90%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_tx_builder_ringct.cpp.o
+[ 90%] Built target obj_multisig
+[ 90%] Linking CXX static library libmultisig.a
+[ 90%] Built target multisig
+[ 92%] Built target obj_net
+[ 92%] Built target net
+[ 92%] Built target obj_mnemonics
+[ 92%] Built target mnemonics
+[ 95%] Built target obj_rpc_base
+[ 97%] Built target rpc_base
+[ 97%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/wallet2.cpp.o
+In file included from /src/src/device_trezor/trezor/transport.hpp:52,
+                 from /src/src/device_trezor/trezor.hpp:36,
+                 from /src/src/device_trezor/device_trezor.hpp:33,
+                 from /src/src/wallet/wallet2.cpp:93:
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:767:5: warning: 'hw::trezor::messages::common::ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType' is deprecated [-Wdeprecated-declarations]
+  767 |     ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType;
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/device_trezor/trezor/messages/messages-common.pb.h:161:3: note: declared here
+  161 |   ButtonRequest_ButtonRequestType__Deprecated_ButtonRequest_PassphraseType PROTOBUF_DEPRECATED_ENUM = 14,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/src/src/wallet/wallet2.cpp: In member function 'void tools::wallet2::expand_subaddresses(const cryptonote::subaddress_index&)':
+/src/src/wallet/wallet2.cpp:1619:6: warning: 'if constexpr' only available with '-std=c++17' or '-std=gnu++17' [-Wc++17-extensions]
+ 1619 |   if constexpr (sizeof(std::size_t) <= sizeof(std::uint32_t))
+      |      ^~~~~~~~~
+/src/src/wallet/wallet2.cpp: In member function 'void tools::wallet2::refresh(bool, uint64_t, uint64_t&, bool&, bool, bool, uint64_t)':
+/src/src/wallet/wallet2.cpp:4126:8: warning: unused variable 'refreshed' [-Wunused-variable]
+ 4126 |   bool refreshed = false;
+      |        ^~~~~~~~~
+/src/src/wallet/wallet2.cpp: In member function 'std::vector<std::pair<long unsigned int, long unsigned int> > tools::wallet2::estimate_backlog(const std::vector<std::pair<double, double> >&)':
+/src/src/wallet/wallet2.cpp:15859:20: warning: structured bindings only available with '-std=c++17' or '-std=gnu++17' [-Wc++17-extensions]
+15859 |   for (const auto& [our_fee_byte_min, our_fee_byte_max] : fee_levels)
+      |                    ^
+[100%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/wallet_args.cpp.o
+[100%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/ringdb.cpp.o
+[100%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/node_rpc_proxy.cpp.o
+[100%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/message_store.cpp.o
+[100%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/message_transporter.cpp.o
+[100%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/wallet_rpc_payments.cpp.o
+[100%] Built target obj_wallet
+[100%] Linking CXX static library ../../lib/libwallet.a
+[100%] Built target wallet
+[100%] Building CXX object src/simplewallet/CMakeFiles/simplewallet.dir/simplewallet.cpp.o
+[100%] Linking CXX executable ../../bin/monero-wallet-cli
+[100%] Built target simplewallet
+[  4%] Built target obj_device_trezor
+[  4%] Built target lmdb
+[  4%] Built target easylogging
+[ 16%] Built target randomx
+[ 26%] Built target obj_epee
+[ 26%] Built target epee
+[ 26%] Built target genversion
+[ 26%] Built target obj_version
+[ 28%] Built target version
+[ 38%] Built target obj_cncrypto
+[ 38%] Built target cncrypto
+[ 40%] Built target generate_translations_header
+[ 50%] Built target obj_common
+[ 50%] Built target common
+[ 64%] Built target monero-crypto-amd64-64-24k
+[ 64%] Built target wallet-crypto
+[ 66%] Built target obj_ringct_basic
+[ 66%] Built target ringct_basic
+[ 69%] Built target obj_device
+[ 69%] Built target obj_cryptonote_format_utils_basic
+[ 69%] Built target cryptonote_format_utils_basic
+[ 73%] Built target obj_blocks
+[ 73%] Built target blocks
+[ 73%] Built target device
+[ 73%] Built target obj_ringct
+[ 73%] Built target obj_checkpoints
+[ 73%] Built target checkpoints
+[ 76%] Built target obj_cryptonote_basic
+[ 78%] Built target cryptonote_basic
+[ 78%] Built target ringct
+[ 80%] Built target obj_cryptonote_core
+[ 83%] Built target obj_hardforks
+[ 83%] Built target hardforks
+[ 83%] Built target obj_blockchain_db
+[ 83%] Built target blockchain_db
+[ 83%] Built target cryptonote_core
+[ 83%] Built target device_trezor
+[ 83%] Built target obj_epee_readline
+[ 83%] Built target epee_readline
+[ 88%] Built target obj_multisig
+[ 88%] Built target multisig
+[ 90%] Built target obj_net
+[ 90%] Built target net
+[ 90%] Built target obj_mnemonics
+[ 90%] Built target mnemonics
+[ 92%] Built target obj_rpc_base
+[ 95%] Built target rpc_base
+[ 97%] Built target obj_wallet
+[ 97%] Built target wallet
+[ 97%] Built target obj_daemonizer
+[ 97%] Built target daemonizer
+[ 97%] Building CXX object src/wallet/CMakeFiles/wallet_rpc_server.dir/wallet_rpc_server.cpp.o
+[100%] Linking CXX executable ../../bin/monero-wallet-rpc
+[100%] Built target wallet_rpc_server
+[  3%] Built target googletest
+[  3%] Built target lmdb
+[  3%] Built target easylogging
+[ 11%] Built target randomx
+[ 17%] Built target obj_epee
+[ 17%] Built target epee
+[ 17%] Built target genversion
+[ 17%] Built target obj_version
+[ 19%] Built target version
+[ 25%] Built target obj_cncrypto
+[ 25%] Built target cncrypto
+[ 26%] Built target generate_translations_header
+[ 33%] Built target obj_common
+[ 33%] Built target common
+[ 42%] Built target monero-crypto-amd64-64-24k
+[ 42%] Built target wallet-crypto
+[ 44%] Built target obj_ringct_basic
+[ 44%] Built target ringct_basic
+[ 46%] Built target obj_device
+[ 46%] Built target obj_cryptonote_format_utils_basic
+[ 46%] Built target cryptonote_format_utils_basic
+[ 49%] Built target obj_blocks
+[ 49%] Built target blocks
+[ 49%] Built target device
+[ 49%] Built target obj_ringct
+[ 49%] Built target obj_checkpoints
+[ 49%] Built target checkpoints
+[ 50%] Built target obj_cryptonote_basic
+[ 52%] Built target cryptonote_basic
+[ 52%] Built target ringct
+[ 53%] Built target obj_cryptonote_core
+[ 55%] Built target obj_hardforks
+[ 55%] Built target hardforks
+[ 55%] Built target obj_blockchain_db
+[ 55%] Built target blockchain_db
+[ 55%] Built target cryptonote_core
+[ 55%] Built target obj_lmdb_lib
+[ 55%] Built target lmdb_lib
+[ 58%] Built target obj_multisig
+[ 58%] Built target multisig
+[ 60%] Built target obj_net
+[ 60%] Built target net
+[ 60%] Built target obj_mnemonics
+[ 60%] Built target mnemonics
+[ 61%] Built target obj_rpc_base
+[ 63%] Built target rpc_base
+[ 65%] Built target obj_rpc
+[ 66%] Built target obj_p2p
+[ 66%] Built target p2p
+[ 68%] Built target obj_cryptonote_protocol
+[ 68%] Built target cryptonote_protocol
+[ 68%] Built target rpc
+[ 68%] Built target obj_rpc_pub
+[ 68%] Built target obj_serialization
+[ 68%] Built target serialization
+[ 68%] Built target rpc_pub
+[ 68%] Built target obj_daemon_messages
+[ 69%] Built target daemon_messages
+[ 71%] Built target obj_daemon_rpc_server
+[ 71%] Built target daemon_rpc_server
+[ 74%] Built target obj_device_trezor
+[ 74%] Built target device_trezor
+[ 76%] Built target obj_wallet
+[ 76%] Built target wallet
+[ 77%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/account.cpp.o
+[ 77%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/address_from_url.cpp.o
+[ 77%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/base58.cpp.o
+/src/tests/unit_tests/base58.cpp: In member function 'virtual void meow_address_network_and_address_type_vectors_Test::TestBody()':
+/src/tests/unit_tests/base58.cpp:575:8: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+  575 |     if (v.integrated) ASSERT_EQ(info.payment_id, payment_id);
+      |        ^
+/src/tests/unit_tests/base58.cpp:577:10: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+  577 |       if (other != v.network)
+      |          ^
+[ 77%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/blockchain_db.cpp.o
+[ 77%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/block_queue.cpp.o
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/block_reward.cpp.o
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/bulletproofs.cpp.o
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/bulletproofs_plus.cpp.o
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/canonical_amounts.cpp.o
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/checkpoints.cpp.o
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/crypto.cpp.o
+/src/tests/unit_tests/crypto.cpp:52:20: warning: 'void* {anonymous}::addressof(T&) [with T = epee::mlocked<tools::scrubbed<crypto::ec_scalar> >]' defined but not used [-Wunused-function]
+   52 |   template<> void *addressof(crypto::secret_key &k) { return addressof(unwrap(unwrap(k))); }
+      |                    ^~~~~~~~~
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/decompose_amount_into_digits.cpp.o
+[ 79%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/device.cpp.o
+[ 80%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/difficulty.cpp.o
+[ 80%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/meow_difficulty.cpp.o
+[ 80%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/epee_boosted_tcp_server.cpp.o
+[ 80%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/epee_http_server.cpp.o
+[ 80%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/epee_utils.cpp.o
+[ 80%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/fee.cpp.o
+[ 82%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/json_serialization.cpp.o
+[ 82%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/hashchain.cpp.o
+[ 82%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/levin.cpp.o
+[ 82%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/long_term_block_weight.cpp.o
+/src/tests/unit_tests/long_term_block_weight.cpp: In constructor 'BlockchainAndPool::BlockchainAndPool()':
+/src/tests/unit_tests/long_term_block_weight.cpp:113:31: warning: member 'BlockchainAndPool::bc' is used uninitialized [-Wuninitialized]
+  113 |   BlockchainAndPool(): txpool(bc), bc(txpool) {}
+      |                               ^~
+[ 82%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/main.cpp.o
+[ 84%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/multisig.cpp.o
+[ 84%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/net.cpp.o
+[ 84%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/node_server.cpp.o
+[ 84%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/output_distribution.cpp.o
+[ 84%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/parse_amount.cpp.o
+[ 85%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/pruning.cpp.o
+[ 85%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/scaling_2021.cpp.o
+[ 85%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/serialization.cpp.o
+[ 87%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/sha256.cpp.o
+[ 87%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/subaddress.cpp.o
+[ 87%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/test_tx_utils.cpp.o
+[ 87%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/test_peerlist.cpp.o
+[ 87%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/test_protocol_pack.cpp.o
+[ 87%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/hardfork.cpp.o
+[ 87%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/uri.cpp.o
+[ 88%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/util.cpp.o
+[ 88%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/varint.cpp.o
+[ 88%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/ver_rct_non_semantics_simple_cached.cpp.o
+In file included from /src/src/cryptonote_basic/cryptonote_basic.h:50,
+                 from /src/src/cryptonote_basic/cryptonote_basic_impl.h:33,
+                 from /src/src/cryptonote_basic/cryptonote_format_utils.h:33,
+                 from /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:36:
+In constructor 'rct::BulletproofPlus::BulletproofPlus(rct::BulletproofPlus&&)',
+    inlined from 'void std::__new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/new_allocator.h:191:4,
+    inlined from 'static void std::allocator_traits<std::allocator<_CharT> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/alloc_traits.h:538:17,
+    inlined from 'void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/vector.tcc:117:30,
+    inlined from 'void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/stl_vector.h:1299:21,
+    inlined from 'verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:5,
+    inlined from 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:202:22:
+/src/src/ringct/rctTypes.h:249:12: warning: '<unnamed>.rct::BulletproofPlus::A' may be used uninitialized [-Wmaybe-uninitialized]
+  249 |     struct BulletproofPlus
+      |            ^~~~~~~~~~~~~~~
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp: In function 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]':
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:67: note: '<anonymous>' declared here
+  321 |     SERIALIZABLE_SIG_CHANGES_SUBTEST(p.bulletproofs_plus.push_back({}))
+      |                                                                   ^
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:283:65: note: in definition of macro 'SERIALIZABLE_SIG_CHANGES_SUBTEST'
+  283 |         const auto sig_modifier_func = [](rct::rctSig& rs) { rs.fieldmodifyclause; };          \
+      |                                                                 ^~~~~~~~~~~~~~~~~
+In constructor 'rct::BulletproofPlus::BulletproofPlus(rct::BulletproofPlus&&)',
+    inlined from 'void std::__new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/new_allocator.h:191:4,
+    inlined from 'static void std::allocator_traits<std::allocator<_CharT> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/alloc_traits.h:538:17,
+    inlined from 'void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/vector.tcc:117:30,
+    inlined from 'void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/stl_vector.h:1299:21,
+    inlined from 'verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:5,
+    inlined from 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:202:22:
+/src/src/ringct/rctTypes.h:249:12: warning: '<unnamed>.rct::BulletproofPlus::A1' may be used uninitialized [-Wmaybe-uninitialized]
+  249 |     struct BulletproofPlus
+      |            ^~~~~~~~~~~~~~~
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp: In function 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]':
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:67: note: '<anonymous>' declared here
+  321 |     SERIALIZABLE_SIG_CHANGES_SUBTEST(p.bulletproofs_plus.push_back({}))
+      |                                                                   ^
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:283:65: note: in definition of macro 'SERIALIZABLE_SIG_CHANGES_SUBTEST'
+  283 |         const auto sig_modifier_func = [](rct::rctSig& rs) { rs.fieldmodifyclause; };          \
+      |                                                                 ^~~~~~~~~~~~~~~~~
+In constructor 'rct::BulletproofPlus::BulletproofPlus(rct::BulletproofPlus&&)',
+    inlined from 'void std::__new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/new_allocator.h:191:4,
+    inlined from 'static void std::allocator_traits<std::allocator<_CharT> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/alloc_traits.h:538:17,
+    inlined from 'void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/vector.tcc:117:30,
+    inlined from 'void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/stl_vector.h:1299:21,
+    inlined from 'verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:5,
+    inlined from 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:202:22:
+/src/src/ringct/rctTypes.h:249:12: warning: '<unnamed>.rct::BulletproofPlus::B' may be used uninitialized [-Wmaybe-uninitialized]
+  249 |     struct BulletproofPlus
+      |            ^~~~~~~~~~~~~~~
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp: In function 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]':
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:67: note: '<anonymous>' declared here
+  321 |     SERIALIZABLE_SIG_CHANGES_SUBTEST(p.bulletproofs_plus.push_back({}))
+      |                                                                   ^
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:283:65: note: in definition of macro 'SERIALIZABLE_SIG_CHANGES_SUBTEST'
+  283 |         const auto sig_modifier_func = [](rct::rctSig& rs) { rs.fieldmodifyclause; };          \
+      |                                                                 ^~~~~~~~~~~~~~~~~
+In constructor 'rct::BulletproofPlus::BulletproofPlus(rct::BulletproofPlus&&)',
+    inlined from 'void std::__new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/new_allocator.h:191:4,
+    inlined from 'static void std::allocator_traits<std::allocator<_CharT> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/alloc_traits.h:538:17,
+    inlined from 'void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/vector.tcc:117:30,
+    inlined from 'void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/stl_vector.h:1299:21,
+    inlined from 'verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:5,
+    inlined from 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:202:22:
+/src/src/ringct/rctTypes.h:249:12: warning: '<unnamed>.rct::BulletproofPlus::r1' may be used uninitialized [-Wmaybe-uninitialized]
+  249 |     struct BulletproofPlus
+      |            ^~~~~~~~~~~~~~~
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp: In function 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]':
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:67: note: '<anonymous>' declared here
+  321 |     SERIALIZABLE_SIG_CHANGES_SUBTEST(p.bulletproofs_plus.push_back({}))
+      |                                                                   ^
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:283:65: note: in definition of macro 'SERIALIZABLE_SIG_CHANGES_SUBTEST'
+  283 |         const auto sig_modifier_func = [](rct::rctSig& rs) { rs.fieldmodifyclause; };          \
+      |                                                                 ^~~~~~~~~~~~~~~~~
+In constructor 'rct::BulletproofPlus::BulletproofPlus(rct::BulletproofPlus&&)',
+    inlined from 'void std::__new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/new_allocator.h:191:4,
+    inlined from 'static void std::allocator_traits<std::allocator<_CharT> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/alloc_traits.h:538:17,
+    inlined from 'void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/vector.tcc:117:30,
+    inlined from 'void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/stl_vector.h:1299:21,
+    inlined from 'verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:5,
+    inlined from 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:202:22:
+/src/src/ringct/rctTypes.h:249:12: warning: '<unnamed>.rct::BulletproofPlus::s1' may be used uninitialized [-Wmaybe-uninitialized]
+  249 |     struct BulletproofPlus
+      |            ^~~~~~~~~~~~~~~
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp: In function 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]':
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:67: note: '<anonymous>' declared here
+  321 |     SERIALIZABLE_SIG_CHANGES_SUBTEST(p.bulletproofs_plus.push_back({}))
+      |                                                                   ^
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:283:65: note: in definition of macro 'SERIALIZABLE_SIG_CHANGES_SUBTEST'
+  283 |         const auto sig_modifier_func = [](rct::rctSig& rs) { rs.fieldmodifyclause; };          \
+      |                                                                 ^~~~~~~~~~~~~~~~~
+In constructor 'rct::BulletproofPlus::BulletproofPlus(rct::BulletproofPlus&&)',
+    inlined from 'void std::__new_allocator<_Tp>::construct(_Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/new_allocator.h:191:4,
+    inlined from 'static void std::allocator_traits<std::allocator<_CharT> >::construct(allocator_type&, _Up*, _Args&& ...) [with _Up = rct::BulletproofPlus; _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus]' at /usr/include/c++/13/bits/alloc_traits.h:538:17,
+    inlined from 'void std::vector<_Tp, _Alloc>::emplace_back(_Args&& ...) [with _Args = {rct::BulletproofPlus}; _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/vector.tcc:117:30,
+    inlined from 'void std::vector<_Tp, _Alloc>::push_back(value_type&&) [with _Tp = rct::BulletproofPlus; _Alloc = std::allocator<rct::BulletproofPlus>]' at /usr/include/c++/13/bits/stl_vector.h:1299:21,
+    inlined from 'verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:5,
+    inlined from 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]' at /src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:202:22:
+/src/src/ringct/rctTypes.h:249:12: warning: '<unnamed>.rct::BulletproofPlus::d1' may be used uninitialized [-Wmaybe-uninitialized]
+  249 |     struct BulletproofPlus
+      |            ^~~~~~~~~~~~~~~
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp: In function 'bool {anonymous}::modification_changes_do_serialize(const T&, TModifier&, bool) [with T = rct::rctSig; TModifier = const verRctNonSemanticsSimple_serializable_sig_changes_Test::TestBody()::<lambda(rct::rctSig&)>]':
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:321:67: note: '<anonymous>' declared here
+  321 |     SERIALIZABLE_SIG_CHANGES_SUBTEST(p.bulletproofs_plus.push_back({}))
+      |                                                                   ^
+/src/tests/unit_tests/ver_rct_non_semantics_simple_cached.cpp:283:65: note: in definition of macro 'SERIALIZABLE_SIG_CHANGES_SUBTEST'
+  283 |         const auto sig_modifier_func = [](rct::rctSig& rs) { rs.fieldmodifyclause; };          \
+      |                                                                 ^~~~~~~~~~~~~~~~~
+[ 88%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/ringct.cpp.o
+[ 88%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/output_selection.cpp.o
+[ 88%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/vercmp.cpp.o
+[ 90%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/ringdb.cpp.o
+[ 90%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/wallet_storage.cpp.o
+[ 90%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/is_hdd.cpp.o
+[ 90%] Building CXX object tests/unit_tests/CMakeFiles/unit_tests.dir/zmq_rpc.cpp.o
+[ 90%] Linking CXX executable unit_tests
+[100%] Built target unit_tests
+[  4%] Built target googletest
+[  4%] Built target lmdb
+[  4%] Built target easylogging
+[ 14%] Built target randomx
+[ 22%] Built target obj_epee
+[ 22%] Built target epee
+[ 22%] Built target genversion
+[ 22%] Built target obj_version
+[ 24%] Built target version
+[ 32%] Built target obj_cncrypto
+[ 32%] Built target cncrypto
+[ 34%] Built target generate_translations_header
+[ 42%] Built target obj_common
+[ 42%] Built target common
+[ 55%] Built target monero-crypto-amd64-64-24k
+[ 55%] Built target wallet-crypto
+[ 57%] Built target obj_ringct_basic
+[ 57%] Built target ringct_basic
+[ 59%] Built target obj_device
+[ 59%] Built target obj_cryptonote_format_utils_basic
+[ 59%] Built target cryptonote_format_utils_basic
+[ 63%] Built target obj_blocks
+[ 63%] Built target blocks
+[ 63%] Built target device
+[ 63%] Built target obj_ringct
+[ 63%] Built target obj_checkpoints
+[ 63%] Built target checkpoints
+[ 65%] Built target obj_cryptonote_basic
+[ 67%] Built target cryptonote_basic
+[ 67%] Built target ringct
+[ 69%] Built target obj_cryptonote_core
+[ 71%] Built target obj_hardforks
+[ 71%] Built target hardforks
+[ 71%] Built target obj_blockchain_db
+[ 71%] Built target blockchain_db
+[ 71%] Built target cryptonote_core
+[ 71%] Built target obj_lmdb_lib
+[ 71%] Built target lmdb_lib
+[ 75%] Built target obj_multisig
+[ 75%] Built target multisig
+[ 77%] Built target obj_net
+[ 77%] Built target net
+[ 77%] Built target obj_mnemonics
+[ 77%] Built target mnemonics
+[ 79%] Built target obj_rpc_base
+[ 81%] Built target rpc_base
+[ 83%] Built target obj_rpc
+[ 85%] Built target obj_p2p
+[ 85%] Built target p2p
+[ 87%] Built target obj_cryptonote_protocol
+[ 87%] Built target cryptonote_protocol
+[ 87%] Built target rpc
+[ 87%] Built target obj_rpc_pub
+[ 87%] Built target obj_serialization
+[ 87%] Built target serialization
+[ 87%] Built target rpc_pub
+[ 87%] Built target obj_daemon_messages
+[ 89%] Built target daemon_messages
+[ 91%] Built target obj_daemon_rpc_server
+[ 91%] Built target daemon_rpc_server
+[ 95%] Built target obj_device_trezor
+[ 95%] Built target device_trezor
+[ 97%] Built target obj_wallet
+[ 97%] Built target wallet
+[ 97%] Building CXX object tests/unit_tests/CMakeFiles/meow_difficulty_floor_tests.dir/main.cpp.o
+[ 97%] Building CXX object tests/unit_tests/CMakeFiles/meow_difficulty_floor_tests.dir/difficulty.cpp.o
+[ 97%] Building CXX object tests/unit_tests/CMakeFiles/meow_difficulty_floor_tests.dir/meow_difficulty.cpp.o
+[100%] Building CXX object tests/unit_tests/CMakeFiles/meow_difficulty_floor_tests.dir/__/__/src/cryptonote_basic/difficulty.cpp.o
+[100%] Linking CXX executable meow_difficulty_floor_tests
+[100%] Built target meow_difficulty_floor_tests
