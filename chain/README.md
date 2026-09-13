@@ -25,10 +25,19 @@ Consensus parameters live in the patches and are specified in `docs/spec/emissio
 
 ## Current verification
 
+**September 13 recovery:** [current workstream index](../research/recovery-index-2026-09-13.md).
+Historical clean15 reproduction is complete. The selected 9/90 build later
+compiled but stopped on seven native-test failures; selected P2P and fallback
+12/120 did not run. The original temporary builds are absent. The checkpoints
+below retain their historical scope; new recovery work does not establish a
+passing selected build or launch readiness.
+
 **2026-09-12:** the **thirteen-patch** clean reproduction passed: all three binary
 hashes match across two fresh cache-disabled builds in the same immutable image.
 Provenance and hashes are in the [foundation report](../research/verification-2026-09-12-m1.md).
-Independent toolchain reconstruction and clean fifteen-patch reproduction remain open.
+Clean fifteen-patch reproduction subsequently passed, as recorded in the
+[clean15 report](../research/verification-2026-09-12-clean15.md).
+Independent toolchain reconstruction remains open.
 
 **Fifteen-patch implementation:** patch 0014 fixes live wallet refresh against the
 sparse `{v1@0, v16@1}` table; seed restoration now verifies address, 130 coinbase
@@ -70,8 +79,8 @@ Full hashes and devnet/regression results: [`research/verification-2026-09-06-m1
 **Latest verified checkpoint, September 12:** [two clean fifteen-patch builds
 match](../research/verification-2026-09-12-clean15.md), including all daemon/wallet
 hashes and source/input/package/version receipts. This is the historical 0.9/120
-family in one immutable builder image. [Selected-profile builds](../research/handoff-2026-09-12-selected-builds.md)
-are a separate ongoing check. Earlier reproduction records below remain historical.
+family in one immutable builder image. [Selected-profile recovery](../research/recovery-index-2026-09-13.md)
+is a separate incomplete check. Earlier reproduction records below remain historical.
 
 `build.sh` applies patches with deterministic committer dates and builds with `ARCH=default` (upstream's no-`-march` baseline) rather than the host-native CPU. It resolves the builder to an immutable image ID for every invocation and records `BUILDER_IMAGE_ID` plus a complete `packages.txt` manifest next to hashes. Set `MEOW_BUILDER_IMAGE` to use an existing image rather than rebuilding the recipe; `CCACHE_DISABLE=1` is forwarded into the compiler environment.
 

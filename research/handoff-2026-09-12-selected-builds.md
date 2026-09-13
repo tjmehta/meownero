@@ -1,5 +1,10 @@
 # Clean15 completion and selected-build continuation — September 12, 2026
 
+**Superseded running-build status:** [September 13 recovery index](recovery-index-2026-09-13.md).
+Later worker commit `c1f8d05` records successful 9/90 compilation followed by
+seven native-test failures. P2P and fallback did not run. The old temporary
+build paths are now absent; do not restart using the PIDs recorded below.
+
 TJ requested continued engineering and useful questions for the WhatsApp group.
 The coordinator reused the existing network Herdr agent for clean-build evidence
 and isolated full selected builds, while preparing native emission fixtures and

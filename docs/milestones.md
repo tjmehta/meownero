@@ -2,10 +2,14 @@
 
 **Selected-policy update, September 12:** [decision and verification](../research/decision-2026-09-12-issuance.md). Target 9/90, fallback 12/120 if 90 s fails; both 3,153,600 MEOW/year before penalties. Prior parameter results below are historical controls. Reversible source probes pass; selected binaries, fee/wallet integration and matched-capacity intended-crypto network gates remain open.
 
-**Latest local checkpoint:** [clean15 completed and selected builds started](../research/handoff-2026-09-12-selected-builds.md).
+**Latest recovery checkpoint:** [September 13 session recovery](../research/recovery-index-2026-09-13.md).
 Two clean historical fifteen-patch builds match. Selected/fallback emission
-fixtures each pass 7/7 smoke tests; full selected builds remain in progress.
-Earlier queued-build descriptions below record their original checkpoints.
+fixtures each pass 7/7 smoke tests. Later recovered evidence records that the
+9/90 build compiled but its native selection failed seven of 1,237 tests;
+selected P2P and fallback 12/120 did not run. The earlier build is no longer
+active. Recovery agents are investigating the failures and reconstructing
+missing temporary inputs. Earlier queued-build descriptions below record their
+original checkpoints, not current running processes.
 
 **Status:** live checklist · **Started:** 2026-09-05 · Governed by `PLAN.md` §2 (doctrine), §5.4 (decision rule), §10 (gates). This file converts settled philosophy into objective exit criteria; it does not restate or reopen the philosophy.
 
