@@ -1,6 +1,31 @@
 # Open questions for the group
 
-**Date:** 2026-08-22, updated 2026-09-07 · **Status:** #1–#4 and #12 answered 2026-09-05; #13 principles and #14 benchmark instruction answered 2026-09-07 (PLAN.md rev 5, ADR-001 §7). Final benchmark selection and implementation parameters remain evidence-gated; do not re-ask settled votes. Other remaining answers unblock ADR-001.
+**Date:** 2026-08-22, updated 2026-09-12 · **Status:** #1–#4 and #12 answered 2026-09-05; #13/#14 superseded by the [September 12 selected-policy decision](decision-2026-09-12-issuance.md). Fixed perpetual 9/90 is selected behind engineering gates, with 12/120 fallback. Do not re-ask the cap, premine, subsidy shape or branding-number vote.
+
+## Useful questions now
+
+Based on decisions recorded in this repository, the highest-value group inputs
+are named people and practical commitments:
+
+1. **Independent operators:** who can run an independent private-testnet node and
+   CPU miner, on what hardware, and for how long? Measured sustained hashrate can
+   inform launch-floor testing; a promise to mine is not a security guarantee.
+2. **Second maintainer/signatory (#10):** will the whitepaper author take the second release
+   review/signing role alongside TJ, or should another person be nominated?
+3. **Review funding/owner (#9):** who owns obtaining external audit and counsel
+   quotes, and what budget can the group actually commit? No spending or outreach
+   is authorized by merely asking this question.
+
+Ticker (#7) and public identities (#8) also remain unanswered in this record,
+but do not block the current local build work. Merge-mining/checkpoint choices
+(#5/#6) need a concrete evidence/architecture packet before a useful group vote;
+the current P2Pool probes do not establish a working pool or mining protection.
+These are repository-based questions; no new WhatsApp messages were inspected
+or sent for this update.
+
+[Ready-to-paste short draft](whatsapp-questions-2026-09-12.md).
+
+## Historical question wording
 
 1. **Ratify the security doctrine (PLAN.md §2)?** Includes the "prefer subtraction" tie-breaker and the ≥2-years production-history bar. — Yes as written / amend (state changes).
 2. **Approve the PLAN.md amendment pass from dossier evidence?** (a) orchard license blocker resolved; (b) Orchard pool sealed July 2026 → maturity re-scoring; (c) no adaptor-signature precedent → interop defers. — Approve / review dossiers first.
@@ -40,3 +65,11 @@
 | 13 | Fixed perpetual subsidy, zero premine, adequate precision / simpler display; misleading early-inflation and deflation claims withdrawn. No demonstrated issuance-model adoption advantage; use measured payment/conversion/retention evidence. Final implementation parameters remain open. | Group update relayed by TJ | 2026-09-07 |
 | 14 | Compare matched-issuance 90 s / 0.675 and 120 s / 0.9 candidates; choose only after benchmarks, without weakening mainnet-quality gates | Group update relayed by TJ | 2026-09-07 |
 | 15 | (ADR-001) | | |
+
+September 12 supersedes the original #13/#14 values: 9 MEOW/90 s selected,
+12 MEOW/120 s gated fallback, each 3,153,600 MEOW per 365 days before penalties;
+zero premine, perpetual, no halvings/cap/sunset, no developer/transfer tax or
+artificial burns, fees to miners. Retain 12-decimal atomic precision for current
+engineering; simplify presentation separately. The earlier pairs remain
+historical controls. No final benchmark, launch or cryptography gate is passed
+by this policy choice.
