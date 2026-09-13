@@ -1,6 +1,15 @@
 # Meownero Engineering Plan
 
-**Status:** Rev 6 — 2026-09-12 TJ selects 9 MEOW/90 s, conditional on engineering gates, with 12 MEOW/120 s fallback (§8.1); prior experiment pairs are historical controls. · **Date:** 2026-08-22, rev 6 2026-09-12 · **Scope:** End-to-end local implementation and verification authorized (`docs/milestones.md`); no public mainnet launch, spending, external push or runtime changes. Reviewable local commits authorized; ADR-001 signatures and mainnet-quality gates remain required.
+**Status:** Rev 7 — 2026-09-13 TJ confirms open participation, anonymous maintainers and agent reviews; no named second-maintainer or paid-review procurement prerequisite. Selected 9 MEOW/90 s remains conditional on engineering gates, with 12 MEOW/120 s fallback (§8.1). · **Date:** 2026-08-22, rev 7 2026-09-13 · **Scope:** End-to-end local implementation and verification authorized (`docs/milestones.md`); no public mainnet launch, spending, external push or runtime changes. Reviewable local commits authorized; ADR-001 approval and mainnet-quality gates remain required.
+
+**Collaboration update (2026-09-13, TJ).** Anyone may help test nodes/miners;
+contributors can remain anonymous/pseudonymous and work under their existing
+repository permissions. TJ is currently doing most of the work. No named second
+maintainer or the whitepaper author co-signature is required. Agents will perform review and
+research; paid audit/counsel procurement is not a prerequisite. Preserve the
+technical acceptance criteria and upstream assurance records, and label agent
+review evidence accurately. The next WhatsApp ask is help with concrete testing
+tasks, not staffing or funding. [Recorded answers](research/open-questions.md).
 
 **Steer status (2026-08-22, per TJ).** the whitepaper author's latest ideas — Zcash/Zebra derivation, Bitcoin interoperability, ASIC-resistant mining — are **promising hypotheses and desiderata, not requirements**. They are explored seriously and adopted where they can be done safely; none of them pre-selects an architecture. **Security is the overriding non-negotiable** (§2): where a desideratum and security conflict, the feature is dropped or the less novel path is chosen. The architecture decision is evidence-led and happens at the end of Phase 0 (§5), not before it.
 
@@ -346,17 +355,23 @@ Pools carry us or nobody does — in every PoW configuration. Concretely: pool-o
 | Threat | Vector | Posture |
 |---|---|---|
 | 51% / deep reorg | Young-chain hashrate; if merge-mined, a large Monero pool attacks at zero parent-chain cost | §6.3–6.4; E6 decision; confirmation guidance; chain monitoring |
-| Inflation bug | Soundness flaw in shielded/membership proofs or our patches | §2 framework; minimal deltas; upstream advisory tracking; duplicate-nullifier/key-image monitors; external audit before mainnet |
+| Inflation bug | Soundness flaw in shielded/membership proofs or our patches | §2 framework; minimal deltas; upstream advisory tracking; duplicate-nullifier/key-image monitors; agent review with reproduced findings and dispositions |
 | Tx-graph/timing analysis | Statistical deanonymization, poisoned outputs | Whole-pool anonymity sets (Orchard / FCMP++); wallet-side guidance |
 | Network-layer deanonymization | IP linkage, eclipse/sybil attacks on P2P | Lineage-dependent (§7); Tor relay support; diverse seed nodes; anchor connections |
 | Interop-layer attacks | Swap counterparty griefing, adaptor-signature implementation flaws | E4 ships nothing unreviewed; swap losses bounded to participants |
-| Supply-chain compromise | Malicious dependency, compromised CI, backdoored release | §9.4; two-person release rule; dependency pinning + review |
+| Supply-chain compromise | Malicious dependency, compromised CI, backdoored release | §9.4; reproducible builds; dependency pinning + agent review |
 | Key compromise | Release-signing or seed-node keys stolen | §9.5 |
 | Social/insider | "Leak" paranoia (see 02-10 chat), squatter projects, fake binaries | Everything public by default; official-channel discipline; the Solana "Meownero" is a brand problem, not a chain problem |
 | Regulatory shock | Exchange delistings of privacy coins, jurisdictional bans | §9.2; design assumes no exchange support at launch |
 | Upstream shock | Critical vulnerability disclosed upstream post-fork | 72h security-merge SLA; §9.9 rehearsed playbook |
 
-### 9.2 Questions for legal counsel (obtain real counsel; none of this is settled by us)
+### 9.2 Legal research questions
+
+Agents will research these questions under TJ's September 13 direction; no paid
+counsel engagement is currently planned or required. Record
+sources, jurisdiction and unresolved questions. Research does not itself resolve
+the questions below or constitute an external legal opinion. Contributors may
+remain anonymous/pseudonymous; no public-founder identity vote is pending.
 
 1. Exposure of identifiable founders launching a **mandatory-privacy** coin: money-transmission, sanctions (OFAC precedent from the Tornado Cash saga), and jurisdiction-specific privacy-coin bans (e.g., Japan, South Korea; EU AMLR trajectory for 2027).
 2. Does a zero-premine, no-sale, mined-only launch keep MEOW clearly outside securities frameworks (Howey / MiCA utility analysis)? What launch communications would jeopardize that?
@@ -382,14 +397,14 @@ Pools carry us or nobody does — in every PoW configuration. Concretely: pool-o
 
 ### 9.5 Key management
 
-- **Release-signing keys:** hardware-backed, held by ≥2 maintainers (TJ + the whitepaper author to start), with a published key-transparency page and revocation procedure.
+- **Release-signing keys:** hardware-backed, with a published key-transparency page and revocation procedure. TJ is the current active maintainer; no named second signer is required. Custody and release permissions must be recorded when release tooling is prepared; repository access alone does not provision a signing key.
 - **Donation fund:** m-of-n multisig, holders disclosed, no single spender.
 - **Seed-node infrastructure:** separate credentials per node, no shared root, documented rotation.
 - **No "network keys" exist** in this architecture — no trusted setup we control, nothing like a mint key — and we must be able to say so truthfully.
 
 ### 9.6 Testnet → mainnet gates
 
-Each promotion requires **all** exit criteria of the prior stage (§10) plus the §2.2 checklist for every consensus/crypto delta: no open consensus-severity bugs; external audit findings triaged with **zero unresolved critical/high**; two independent pools mining on testnet; reproducible-build verification by a third party; incident-response runbook rehearsed once.
+Each promotion requires **all** exit criteria of the prior stage (§10) plus the §2.2 checklist for every consensus/crypto delta: no open consensus-severity bugs; agent-review findings and any applicable upstream/external findings triaged with **zero unresolved critical/high**; two independent pools mining on testnet; reproducible-build verification by a third party; incident-response runbook rehearsed once. Review-agent count alone does not establish independent build reproduction or close a technical finding.
 
 ### 9.7 Wallets, node, and miner tooling (v1 scope)
 
@@ -459,9 +474,9 @@ These run in parallel and must never share a critical path:
 10. **Security acceptance operationalization** — turn §2.2 into repo machinery: PR checklist for consensus paths, test-vector and fuzzing harness templates, advisory-subscription runbook. *(M0→M1)*
     *Tooling note (2026-09-05, clerical):* two org-backed Claude Code skill packs are registered at project scope in `.claude/settings.json` for use when Stage 2 unlocks — **Trail of Bits `skills`** (github.com/trailofbits/skills, CC BY-SA 4.0; pinned at review to `d3323ce`; plugins: differential-review, audit-context-building, spec-to-code-compliance, rust-review, constant-time-analysis, zeroize-audit, supply-chain-risk-auditor, property-based-testing, writing-lean-proofs) and **`leanprover/skills`** (github.com/leanprover/skills, Apache-2.0; pinned at review to `7d3da02`; plugin `lean`). Four SKILL.md files were read before install (differential-review, constant-time-analysis, rust-review, lean-proof): no network calls, no writes outside the working repo. Marketplace source is a git URL, so updates are pulled on `claude plugin update`; re-read diffs before updating, per §9.4. No anonymous marketplace skills; Circom/Noir skills rejected as the wrong proof systems.
 
-*(Reproducible-build pipeline, threat-model v1, and the launch-fairness procedure doc are M1 issues, opened once ADR-001 is signed. Brand-track issues — voice guide, site, whitepaper v2 — live under a separate `brand` label so they never block the consensus board.)*
+*(Reproducible-build pipeline, threat-model v1, and the launch-fairness procedure doc are M1 issues, opened once ADR-001 is approved. Brand-track issues — voice guide, site, whitepaper v2 — live under a separate `brand` label so they never block the consensus board.)*
 
-## 13. Questions TJ and the whitepaper author must decide
+## 13. Decisions and remaining questions
 
 1. ~~Ratify the security doctrine (§2) as written~~ — **answered 2026-09-05:** ratified *as amended* — calendar bar replaced by the non-waivable §2.2 readiness rubric with no timeline minimum; §2.3 gadget-layer controls adopted.
 2. **Confirm the hard-requirement list (§1.1)** — in particular that mandatory privacy is a hard *product* requirement with an evidence-led mechanism, and that every §1.2 desideratum is individually droppable.
@@ -469,10 +484,10 @@ These run in parallel and must never share a critical path:
 4. ~~Maturity bar for new upstream cryptography~~ — **answered 2026-09-05:** no calendar floor; mainnet-first eligibility via the §2.2 rubric; Ironwood not approved before Pirate's 2026-10-03 activation is observed and the exact gadget/encoding/integration review completes; FCMP++ monitored, not awaited (§7).
 5. **Deep-reorg protection:** if E6 survives, accept young-chain 51% risk naked, or adopt a bounded finality/checkpoint mechanism at launch with a sunset date? (§6.4 — a values call as much as an engineering one.)
 6. **Ticker collision:** "MEOW" is used by existing tokens (including the Solana squatter). Keep MEOW and fight for the name, or pick a cleaner ticker?
-7. **Public identities:** are you both willing to be publicly identifiable founders of a mandatory-privacy coin? (Feeds §9.2 items 1, 6, 7.)
-8. **Money:** who funds the external audit (5–6 figures), the counsel engagement, and the E4 cryptographer consult — group donation fund, out of pocket, or launch-delayed-until-funded?
+7. **Public identities — answered 2026-09-13:** anonymous/pseudonymous participation; no public-founder identity requirement.
+8. **Review approach — answered 2026-09-13:** use agents for review and research; no paid audit/counsel procurement prerequisite. Findings and technical readiness still require evidence.
 9. **Upstream-relationship posture** (lineage-dependent): open collaboration with Monero maintainers and/or ECC / Zcash Foundation / Shielded Labs (grant ask, upstreaming patches, shared advisories), or quiet derivative? Recommendation: open — E1's license question likely requires the conversation anyway, and goodwill is cheap insurance.
-10. **the whitepaper author's role:** whitepaper author → is he the second maintainer with release-signing keys? The two-person release rule (§9.4) needs its second person named.
+10. **Maintainers — answered 2026-09-13:** TJ does most of the current work; contributors work under existing repository permissions. No named second maintainer or mandatory the whitepaper author co-signature.
 11. ~~Monetary policy and early-inflation claims~~ — **answered 2026-09-07:** small fixed perpetual subsidy, fair launch / zero premine; initially ultra-low percentage inflation and deflation claims dropped. Precision and display implementation remain to finalize (§8.1).
 12. **Block time:** selected target 9 MEOW/90 s, fallback 12 MEOW/120 s if 90 s fails, matched issuance and capacity/time. Intended-cryptography testing remains required (§8.1); old pairs remain historical controls.
 

@@ -26,7 +26,7 @@ Consensus integrity (no inflation, no invalid blocks accepted); user privacy (se
 | T14 | Launch unfairness | insta-mine at difficulty 1, secret pre-testing | launch floor; parameters public T−4 weeks; fairness report | ❌ floor undecided; procedure documented in PLAN §8.3 |
 | T15 | Upstream shock | critical upstream vuln post-fork; FCMP++ rewrite | 72 h security-merge SLA; rebase-clean patch series | ⚠️ patch series format (M1) |
 | T16 | Wallet recovery failure | seed restore, rescan | wallet2 regeneration/rescan; sparse-fork version lookup fixed by patch 0014 | ✅ original coinbase recovery preserved; private received payment also recovers matching address/history/balance/reopen after deleting original files; local note is absent as expected; ⚠️ outgoing metadata, restored-wallet spend and interactive CLI remain open |
-| T17 | Brand-claim liability | "no trace", "deflationary" | PLAN §8.1 forbidden claims; §9.2 counsel | ❌ counsel (human) |
+| T17 | Brand-claim liability | "no trace", "deflationary" | PLAN §8.1 forbidden claims; §9.2 agent research | ❌ claims/research review remains open |
 
 ### Inherited opt-in authority follow-up (2026-09-07)
 
@@ -49,4 +49,4 @@ Later [restricted-controller and response probes](../../research/resume-privacy-
 extend the wallet checkpoint. Native restricted RPC is an opt-in method boundary,
 not a watch-only conversion, complete read-only API or process-wide DNS policy.
 
-Latest evidence and limits: [foundation verification](../../research/verification-2026-09-12-m1.md), [initial M2 adversarial/native-DAA report](../../research/verification-2026-09-12-m2.md). These results do not close the independent audit or human launch gates.
+Latest evidence and limits: [foundation verification](../../research/verification-2026-09-12-m1.md), [initial M2 adversarial/native-DAA report](../../research/verification-2026-09-12-m2.md). These results do not close remaining technical-review or launch gates. Under TJ's September 13 direction, agents perform review/research; paid external-review procurement is not a prerequisite.

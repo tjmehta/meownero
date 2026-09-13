@@ -1,6 +1,6 @@
 # ADR-001 — Architecture selection (PLAN.md §5.4)
 
-**Status:** PROPOSED (provisional selection; not signed) · **Date:** 2026-09-05 · **Deciders:** TJ, the whitepaper author (signatures required) · **Inputs:** dossiers E1–E6, Stage 2 controls (`spikes/`), readiness records (`docs/readiness/`), PLAN.md rev 4.
+**Status:** PROPOSED (provisional selection; approval not recorded) · **Date:** 2026-09-05, maintainer requirement updated 2026-09-13 · **Decider:** TJ as current active maintainer; no mandatory the whitepaper author co-signature under the September 13 direction. · **Inputs:** dossiers E1–E6, Stage 2 controls (`spikes/`), readiness records (`docs/readiness/`), PLAN.md rev 4.
 
 ## Decision (provisional)
 
@@ -75,7 +75,7 @@ By §5.4 step 3, **M has the smaller total unproven surface today by a wide marg
 
 ## 6. What continues now (architecture-neutral or M-provisional)
 
-Milestone checklist M1 on the M lineage (`docs/milestones.md`): pinned-tag layout with reviewable patch series, reproducible build, identity/genesis, emission spec v1, difficulty policy with E5 mitigations, threat model v1, CI, wallet path. Everything is throwaway-safe until signatures land: it lives under a patch series against an unmodified upstream tag.
+Milestone checklist M1 on the M lineage (`docs/milestones.md`): pinned-tag layout with reviewable patch series, reproducible build, identity/genesis, emission spec v1, difficulty policy with E5 mitigations, threat model v1, CI, wallet path. Everything is throwaway-safe until architecture approval is recorded: it lives under a patch series against an unmodified upstream tag.
 
 ## 7. September 7 decision update (not architecture signatures)
 
@@ -85,9 +85,9 @@ The controls and historical measurements above remain at 0.9 MEOW / 120 s. Compa
 
 Continue the existing local end-to-end charter, including M1 fixture/floor/reproducibility blockers and subsequent safe milestones. Reviewable local commits are authorized; public mainnet launch, spending, external push, fabricated audit claims and OpenClaw/runtime changes are not.
 
-## 8. Signatures
+## 8. Approval
 
 - TJ: ______ (date)
-- the whitepaper author: ______ (date)
+- Additional reviewers (optional): ______ (date)
 
 Dissent, if any, is recorded here, not litigated elsewhere (§5.4 step 5).

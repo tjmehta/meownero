@@ -1,4 +1,4 @@
-# Milestone checklist — PLAN.md rev 5 made executable
+# Milestone checklist — PLAN.md rev 7 made executable
 
 **Selected-policy update, September 12:** [decision and verification](../research/decision-2026-09-12-issuance.md). Target 9/90, fallback 12/120 if 90 s fails; both 3,153,600 MEOW/year before penalties. Prior parameter results below are historical controls. Selected binaries now pass the bounded checks described below; fee/wallet integration and matched-capacity intended-crypto network gates remain open.
 
@@ -11,6 +11,12 @@ September 13 recovery fixed the fixture/test-environment issues; fresh 9/90 and
 P2P relay/partition/rejoin/reorg checks also pass for both profiles. Rust's pinned
 context crate compiles and local site presentation checks pass. Earlier queued
 build descriptions below record their original checkpoints, not current processes.
+
+**Collaboration update, September 13:** anyone may help test; maintainers may
+remain anonymous, and TJ is doing most of the work. Agents handle review and
+research. No named second maintainer or paid-review procurement prerequisite;
+technical verification and findings disposition remain required. The next group
+ask is help testing, beginning with iPhone Safari.
 
 **Status:** live checklist · **Started:** 2026-09-05 · Governed by `PLAN.md` §2 (doctrine), §5.4 (decision rule), §10 (gates). This file converts settled philosophy into objective exit criteria; it does not restate or reopen the philosophy.
 
@@ -73,7 +79,7 @@ Exit: both controls boot and mine with Meownero identity and 0.9/block; measurem
 - [~] §2.2 readiness records drafted (`docs/readiness/`): M RingCT, Z Ironwood; Z Sapling not drafted (held with Z).
 - [x] Provisional selection (M) with the named gate and re-evaluation procedure (ADR-001 §5) — PROPOSED, unsigned.
 - [x] Disposition of every desideratum (ADR-001 §4).
-- [ ] Signed by TJ and the whitepaper author — **human gate**; until then the ADR is "proposed".
+- [ ] Architecture approval recorded by TJ as current active maintainer; no mandatory the whitepaper author co-signature. The ADR remains "proposed" until approval is recorded.
 
 ## M1 — Foundation (on the selected/provisional lineage)
 
@@ -103,5 +109,5 @@ Exit: both controls boot and mine with Meownero identity and 0.9/block; measurem
 - [ ] No open high/critical; every medium has a written disposition.
 - [ ] Release/checkpoint/signing plan, incident-response runbook, operator docs, testnet launch checklist.
 - [ ] Final clean-checkout verification and release-candidate handoff.
-- [G] External audit engagement (money + counsel — human gate, open-questions #8/#9).
+- [ ] Agent review/research completed with scope, evidence and findings dispositions. Paid external audit/counsel procurement is not a prerequisite under TJ's September 13 direction.
 - [G] Public testnet, key custody, mainnet — human gates; never crossed here.

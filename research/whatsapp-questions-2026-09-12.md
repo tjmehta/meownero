@@ -1,21 +1,19 @@
-# Meownero group questions — draft, not sent
+# Meownero testing invitation — draft, not sent
 
-Based on the recorded decisions, these are the useful next questions. The
-selected issuance policy stays settled while engineering checks continue.
+Updated September 13 after TJ answered the operator, maintainer and review
+questions. The remaining group ask is practical testing help.
 
-> Three practical things for the next stage:
+> Anyone up for helping test Meownero?
 >
-> 1. Who can run an independent private-testnet node and CPU miner? What hardware
->    can you offer, and for how long?
-> 2. the whitepaper author, do you want to be the second maintainer and release signer alongside
->    TJ? If not, who should we nominate?
-> 3. Who can own getting independent audit and counsel quotes, and what budget
->    can we commit?
+> First up: an iPhone Safari check of the website signup flow. Reply with your
+> device/iOS version if you can help; we'll share the exact steps and expected
+> behavior.
 >
-> These answers help plan testing and review. They aren't a launch date or a
-> request to send money.
+> Later we'll have node and CPU-miner testing instructions too. Anyone can join
+> in—let us know what computer/OS you can test on.
 
-Later, before public-facing release preparation: resolve the ticker and public
-founder identities. No need to reopen perpetual issuance, zero premine or the
-selected 9/90 with 12/120 fallback. Merge-mining/checkpoint policy should be
-reviewed with a concrete proposal and its demonstrated limits.
+Prepare a short reproducible checklist before inviting actual signup submissions;
+the current browser evidence uses mocked submissions, and real delivery is still
+unverified. Keep the invitation separate from any subscriber-wide launch send.
+The issuance choices remain settled. Maintainers may remain anonymous; agent
+reviews are the planned review method, with TJ doing most of the current work.

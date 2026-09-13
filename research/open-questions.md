@@ -1,27 +1,32 @@
 # Open questions for the group
 
-**Date:** 2026-08-22, updated 2026-09-12 · **Status:** #1–#4 and #12 answered 2026-09-05; #13/#14 superseded by the [September 12 selected-policy decision](decision-2026-09-12-issuance.md). Fixed perpetual 9/90 is selected behind engineering gates, with 12/120 fallback. Do not re-ask the cap, premine, subsidy shape or branding-number vote.
+**Date:** 2026-08-22, updated 2026-09-13 · **Status:** #1–#4 and #12 answered 2026-09-05; #13/#14 superseded by the [September 12 selected-policy decision](decision-2026-09-12-issuance.md); #8–#10 answered by TJ on September 13 below. Fixed perpetual 9/90 is selected behind engineering gates, with 12/120 fallback. Do not re-ask the cap, premine, subsidy shape or branding-number vote.
 
 ## Useful questions now
 
-Based on decisions recorded in this repository, the highest-value group inputs
-are named people and practical commitments:
+TJ answered the proposed group questions directly on September 13:
 
-1. **Independent operators:** who can run an independent private-testnet node and
-   CPU miner, on what hardware, and for how long? Measured sustained hashrate can
-   inform launch-floor testing; a promise to mine is not a security guarantee.
-2. **Second maintainer/signatory (#10):** will the whitepaper author take the second release
-   review/signing role alongside TJ, or should another person be nominated?
-3. **Review funding/owner (#9):** who owns obtaining external audit and counsel
-   quotes, and what budget can the group actually commit? No spending or outreach
-   is authorized by merely asking this question.
+- **Operators:** anyone can participate; no named operator roster is required
+  before continuing. Hardware and sustained hashrate are measurements to collect
+  during testing, not another staffing decision for the group.
+- **Maintainers and identities (#8/#10):** anonymous/pseudonymous participation;
+  contributors with repository access can contribute under their existing
+  permissions. TJ is doing most of the work. No named second maintainer or
+  mandatory the whitepaper author co-signature is required.
+- **Review approach (#9):** use agents for review and research. Paid external
+  audit/counsel procurement is not a prerequisite in the current plan. Agent
+  findings need evidence and disposition; this does not establish a completed
+  third-party audit or legal opinion.
+- **Testing help:** ask the WhatsApp group for volunteers when there are concrete
+  tasks, starting with a real iPhone Safari signup check and later node/miner
+  instructions. The draft below has not been sent.
 
-Ticker (#7) and public identities (#8) also remain unanswered in this record,
-but do not block the current local build work. Merge-mining/checkpoint choices
+No staffing or review-funding question is pending for the group. Ticker (#7)
+remains unanswered here and does not block local work. Merge-mining/checkpoint choices
 (#5/#6) need a concrete evidence/architecture packet before a useful group vote;
 the current P2Pool probes do not establish a working pool or mining protection.
-These are repository-based questions; no new WhatsApp messages were inspected
-or sent for this update.
+This update records TJ's direct answers in the agent conversation; no new
+WhatsApp messages were inspected or sent.
 
 [Ready-to-paste short draft](whatsapp-questions-2026-09-12.md).
 
@@ -57,9 +62,9 @@ or sent for this update.
 | 5 | | | |
 | 6 | | | |
 | 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
+| 8 | Anonymous/pseudonymous participation; no public-founder identity requirement | TJ | 2026-09-13 |
+| 9 | Use agents for review and research; no paid audit/counsel procurement prerequisite | TJ | 2026-09-13 |
+| 10 | TJ is the primary active contributor; existing repository access governs contributions; no named second maintainer or mandatory the whitepaper author co-signature | TJ | 2026-09-13 |
 | 11 | | | |
 | 12 | Perpetual subsidy, in principle; 0.9 MEOW/120 s current candidate; hard cap/fee-only rejected on security grounds | Group | 2026-09-05 |
 | 13 | Fixed perpetual subsidy, zero premine, adequate precision / simpler display; misleading early-inflation and deflation claims withdrawn. No demonstrated issuance-model adoption advantage; use measured payment/conversion/retention evidence. Final implementation parameters remain open. | Group update relayed by TJ | 2026-09-07 |
