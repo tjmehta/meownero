@@ -40,6 +40,23 @@ observed maximum. The three forced orphans do not estimate a natural stale rate.
 No claim covers FCMP, loaded throughput, real miners, native DAA, higher-work
 forks, privacy escape, long uptime, or the peer policy in upstream PR #11283.
 
+## Loaded matched comparison (September 15)
+
+`chain/test-network-loaded.sh <built-source> <new-dir> <profile> [args]` runs the
+same two-daemon shaped-proxy topology with a disposable `monero-wallet-rpc` on
+node 0 creating real RingCT transfers at a fixed cadence, one block per emulated
+slot (`target/--accel`), induced competing blocks, a partition with transactions
+mined on the cut-off side, a depth-3 reorg and a no-transaction-lost check. It
+keeps the P2P test's heavy lock, >=5 GiB preflight (bounded wait, exit 75) and
+1.5 GiB/no swap/two-CPU cap. `loaded-matrix.py` runs the predeclared sixteen-cell
+90-versus-120 matrix sequentially and resumably; `summarize-loaded.py` applies the
+predeclared criteria. Matching is by identical arguments, caps and topology; only
+target/reward differ. Capacity is **not** normalized (both keep the 300,000
+zone), difficulty is fixed at 1, `--accel > 1` cells are not target-rate, and
+`--outputs` scales transaction size only because no FCMP integration exists in
+the pinned source. Design, criteria and results:
+[`research/loaded-network-2026-09-15.md`](../../research/loaded-network-2026-09-15.md).
+
 ## Selected 9/90 and gated 12/120 profiles
 
 The selected comparison is **9 MEOW/90 seconds** versus the gated **12 MEOW/120

@@ -10,6 +10,7 @@ Governed by ADR-001 (PROPOSED). Until it is signed, everything here is a **patch
 | `test-seed-recovery.sh` | isolated seed restore with exact address/history/balance and reopen assertions; run with `bash` |
 | `test-reorg.sh` | competing branches, restart and invalid-block checks; regtest and native-DAA window modes |
 | `benchmark-difficulty.sh` | matched-issuance native-DAA models; explicitly not a full peer-network benchmark |
+| `test-network-loaded.sh` | loaded matched 90 s/120 s P2P probe: real wallet-rpc RingCT load, competing blocks, partition/reorg, confirmation latency; same heavy lock and 5 GiB/1.5 GiB/no-swap/2-CPU guards as `test-network-p2p.sh`; fixed difficulty, no FCMP, capacity not normalized; see `research/loaded-network-2026-09-15.md` |
 | `Dockerfile` | Ubuntu 24.04 base pinned by digest; apt package versions are not yet pinned (M1 gap); Docker is the host build dependency |
 | `build.sh` | verify pins → apply series → build daemon, wallets and both test targets → run consensus/protocol and floor checks → print SHA-256s |
 | `test-difficulty.sh` | run nine floor cases plus inherited hash test at floor 1 and separately compiled 150M; requires `unit_tests` and `meow_difficulty_floor_tests` built first; read-only source mount |
