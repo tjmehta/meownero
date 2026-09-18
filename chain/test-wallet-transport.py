@@ -2,12 +2,15 @@
 
 Runs the real selected daemon and wallet on an isolated fixed-difficulty chain
 (--network none, disposable keys) with a RECORDING FORWARDING PROXY on the
-wallet's configured daemon boundary. The wallet is pointed at the proxy as an
-untrusted remote node; the proxy is a stand-in for an on-path observer / the node
-operator. It records the request metadata the node actually sees (HTTP method,
-path, body size, timing, client connection) while transparently forwarding to the
-daemon, then injects ONE denied/interrupted response and records the wallet's
-observable failure and recovery.
+wallet's configured daemon boundary. The wallet is pointed at the proxy with an
+EXPLICIT --untrusted-daemon (a local daemon is auto-trusted otherwise), and that
+untrusted mode is verified at runtime via a trusted-daemon-gated RPC. The proxy is
+a stand-in for an on-path observer / the node operator: it records the request
+metadata the node actually sees (HTTP method, path, body size, timing, client
+connection) while transparently forwarding to the daemon, then injects ONE denied
+response and classifies the wallet's OBSERVABLE reaction strictly from evidence
+(the raw RPC reply plus the recorded post-denial retries) before asserting
+recovery. It never asserts an error that did not actually surface.
 
 This is execution evidence for the "intended wallet transport / observer metadata"
 acceptance item, NOT an anonymity claim and NOT a Tor/I2P deployment. Observed
@@ -41,6 +44,7 @@ records = []                # metadata-only request records
 record_lock = threading.Lock()
 deny_next_bin = threading.Event()   # one-shot: deny the next .bin request (a refresh call)
 denied_paths = []
+denied_indices = []                 # index into records[] of each denied request
 
 
 def request(port, path, body):
@@ -55,6 +59,29 @@ def request(port, path, body):
 def rpc(port, method, params=None):
     return request(port, 'json_rpc', {'jsonrpc': '2.0', 'id': '0',
                                       'method': method, 'params': params or {}})['result']
+
+
+def raw_json_rpc(port, method, params=None):
+    """Return (envelope, transport_exception_name) without asserting.
+
+    `envelope` is the full parsed JSON-RPC reply (it may carry 'result' OR
+    'error'); a genuine RPC/daemon error is therefore captured as evidence
+    instead of being masked by an assertion. `transport_exception_name` is set
+    only when no HTTP reply was received at all (connection dropped/refused).
+    """
+    body = {'jsonrpc': '2.0', 'id': '0', 'method': method, 'params': params or {}}
+    req = urllib.request.Request(f'http://127.0.0.1:{port}/json_rpc',
+                                 json.dumps(body).encode(), {'Content-Type': 'application/json'})
+    try:
+        with urllib.request.urlopen(req, timeout=120) as response:
+            return json.load(response), None
+    except urllib.error.HTTPError as exc:          # HTTP reply arrived with error status
+        try:
+            return json.load(exc), None
+        except (ValueError, OSError):
+            return {'http_status': exc.code}, None
+    except (urllib.error.URLError, OSError) as exc:  # no usable reply at all
+        return None, type(exc).__name__
 
 
 def wait_until(check, label, seconds=240):
@@ -112,6 +139,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
         # Metadata only: never store body bytes; a hash lets a reviewer prove
         # two captures are the same request class without revealing contents.
         with record_lock:
+            idx = len(records)
             records.append({'method': method, 'path': path, 'req_bytes': length,
                             'req_sha256': hashlib.sha256(body).hexdigest()[:16],
                             'client': self.client_address[0],
@@ -121,6 +149,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
         if path.endswith('.bin') and deny_next_bin.is_set():
             deny_next_bin.clear()
             denied_paths.append(path)
+            denied_indices.append(idx)
             payload = b'{"status":"Failed","untrusted":true}'
             self.send_response(503)
             self.send_header('Content-Type', 'application/octet-stream')
@@ -157,10 +186,15 @@ def snapshot(port):
 
 
 def scan_for_secrets():
-    """Prove the recording is sanitized: no 25-word mnemonic / key-like blobs."""
-    blob = json.dumps(records)
-    assert not re.search(r'(?:\b[a-z]+\b[ ]){24}[a-z]+', blob), 'mnemonic-like text in records'
-    assert not re.search(r'\b[0-9a-f]{64}\b', blob), 'raw 32-byte hex (key/seed-like) in records'
+    """Prove the transport recording holds only sanitized metadata: no 25-word
+    mnemonic and no raw 32-byte key/seed hex. Also assert no mnemonic phrase
+    leaked into any captured error/log text. Public tx ids in the case results
+    are 64-hex by nature and are not secret, so the strict hex rule stays scoped
+    to the recording, not to those identifiers."""
+    records_blob = json.dumps(records)
+    assert not re.search(r'(?:\b[a-z]+\b[ ]){24}[a-z]+', records_blob), 'mnemonic-like text in records'
+    assert not re.search(r'\b[0-9a-f]{64}\b', records_blob), 'raw 32-byte hex (key/seed-like) in records'
+    assert not re.search(r'(?:\b[a-z]+\b[ ]){24}[a-z]+', json.dumps(cases)), 'mnemonic-like text in cases'
     return True
 
 
@@ -186,17 +220,40 @@ try:
     threading.Thread(target=proxy.serve_forever, daemon=True).start()
 
     # Intended remote-node boundary: wallet talks to the proxy as an UNTRUSTED
-    # daemon (no --trusted-daemon), i.e. a node the wallet operator does not run.
+    # daemon. --untrusted-daemon is EXPLICIT: for a local (127.0.0.1) daemon,
+    # wallet2.cpp make_basic auto-sets trusted_daemon=true unless a trust flag is
+    # given (see the "Daemon is local, assuming trusted" path), so merely omitting
+    # --trusted-daemon would leave the wallet TRUSTED. --log-level 1 captures that
+    # decision line for corroboration; runtime mode is verified below.
     wdir = WORK / 'A'
     wdir.mkdir()
     start('monero-wallet-rpc', ['--rpc-bind-ip', '127.0.0.1', '--rpc-bind-port', '19100',
-          '--disable-rpc-login', '--wallet-dir', str(wdir),
+          '--disable-rpc-login', '--untrusted-daemon', '--log-level', '1',
+          '--wallet-dir', str(wdir),
           '--daemon-address', f'http://127.0.0.1:{PROXY_PORT}',
           '--log-file', str(WORK / 'A.log')], 'wallet-A')
     wait_until(lambda: rpc(19100, 'get_version')['version'] > 0, 'wallet RPC')
     rpc(19100, 'create_wallet', {'filename': 'A', 'password': 'disposable', 'language': 'English'})
     addr = rpc(19100, 'get_address')['address']
     assert addr.startswith('M')
+
+    # 0) Verify ACTUAL trust mode at runtime, not just the flag. rescan_spent is
+    #    gated by is_trusted_daemon() in wallet_rpc_server.cpp::on_rescan_spent and
+    #    an untrusted wallet MUST reject it before touching the daemon. This ties
+    #    the --untrusted-daemon flag to the observed mode with version-specific
+    #    source/runtime evidence.
+    probe, probe_exc = raw_json_rpc(19100, 'rescan_spent')
+    assert probe_exc is None, ('rescan_spent probe had no reply', probe_exc)
+    assert isinstance(probe, dict) and 'error' in probe, \
+        ('rescan_spent was NOT rejected; wallet is running trusted, not untrusted', probe)
+    probe_msg = probe['error'].get('message', '')
+    assert 'requires a trusted daemon' in probe_msg, ('unexpected rescan_spent error', probe['error'])
+    log_text = (WORK / 'A.log').read_text(errors='ignore') if (WORK / 'A.log').exists() else ''
+    record('untrusted_mode_verified', probe_rpc='rescan_spent',
+           rejected_code=probe['error'].get('code'), rejected_message=probe_msg,
+           auto_local_trust_log_present=('assuming trusted' in log_text),
+           source='wallet_rpc_server.cpp on_rescan_spent is_trusted_daemon() gate; '
+                  'wallet2.cpp make_basic --untrusted-daemon vs local-address auto-trust')
 
     # Fund by mining directly at the daemon (operator action, not wallet transport).
     mine_blocks(addr, 90, '90 coinbase blocks')
@@ -227,17 +284,36 @@ try:
            first_relay_submissions=len(submit), decoy_or_index_fetches=len(outs))
     mine_blocks(addr, 15, 'confirm spend')
 
-    # 3) One justified denial/interruption correlated with wallet recovery.
-    #    Deny the next .bin sync call (untrusted/unavailable node), observe the
-    #    wallet's failure, then restore and confirm it recovers the correct state.
+    # 3) One justified denial correlated with wallet recovery. The proxy really
+    #    returns 503 for one .bin sync call; the wallet's OBSERVABLE reaction is
+    #    then classified strictly from evidence (raw RPC envelope + proxy records).
+    #    No error is asserted unless one actually surfaced.
     deny_next_bin.set()
-    failure = None
-    try:
-        rpc(19100, 'refresh', {'start_height': 0})
-    except (urllib.error.HTTPError, urllib.error.URLError, OSError, AssertionError) as exc:
-        failure = type(exc).__name__
+    refresh_reply, transport_exc = raw_json_rpc(19100, 'refresh', {'start_height': 0})
     assert denied_paths, 'the injected denial was never exercised'
     assert all(p.poll() is None for p in processes), 'wallet or daemon crashed on the denial'
+
+    post_denial = records[denied_indices[0] + 1:]
+    retry_bins = [r['path'] for r in post_denial if r['path'].endswith('.bin')]
+    if transport_exc is not None:
+        # No usable HTTP reply reached the RPC client.
+        observed = {'mode': 'transport_error_to_client', 'exception': transport_exc,
+                    'post_denial_bin_retries': retry_bins}
+    elif isinstance(refresh_reply, dict) and 'error' in refresh_reply:
+        # The daemon failure surfaced to the wallet RPC client: capture it verbatim.
+        err = refresh_reply['error']
+        observed = {'mode': 'surfaced_daemon_error',
+                    'rpc_error_code': err.get('code'), 'rpc_error_message': err.get('message'),
+                    'post_denial_bin_retries': retry_bins}
+    else:
+        # refresh returned a normal result: the denial did NOT surface to the RPC
+        # client. That is only truthful as "recovery" if the node actually saw the
+        # wallet re-request the sync after the 503 — assert that evidence exists.
+        assert retry_bins, ('refresh returned no error yet no post-denial .bin retry '
+                            'was recorded at the node; cannot substantiate recovery')
+        observed = {'mode': 'transparent_retry_no_client_error',
+                    'post_denial_bin_retries': retry_bins}
+
     # Recovery: proxy forwards again; consecutive refreshes must converge, and the
     # balance equals coinbase*reward (self-send + self-mined fee net to zero).
     recovered = snapshot(19100)
@@ -246,9 +322,9 @@ try:
     coinbase = daemon_height() - 1
     assert recovered == coinbase * EXPECTED_REWARD, (recovered, coinbase * EXPECTED_REWARD)
     record('denial_and_recovery', denied_path=denied_paths[0],
-           wallet_observed_failure=failure if failure else 'refresh returned daemon error; no crash',
-           recovered_balance_atomic=recovered,
-           recovery='consecutive refreshes converged to coinbase*reward after the node stopped refusing')
+           injected_response='503 {"status":"Failed","untrusted":true} on one .bin sync call',
+           wallet_observed=observed, recovered_balance_atomic=recovered,
+           recovery='two consecutive refreshes converged to coinbase*reward after the node stopped refusing')
 
     # 4) Sanitation proof + exposure summary.
     assert scan_for_secrets()
@@ -261,7 +337,14 @@ try:
     summary = {
         'result': 'PASS',
         'cases': cases,
-        'boundary': 'wallet -> recording forwarding proxy (untrusted node) -> daemon; --network none',
+        'boundary': 'wallet (--untrusted-daemon, runtime-verified) -> recording forwarding '
+                    'proxy (untrusted remote node) -> daemon; --network none',
+        'trust_mode': {
+            'flag': '--untrusted-daemon (explicit)',
+            'runtime_verified': 'rescan_spent rejected with "This command requires a trusted daemon."',
+            'note': 'wallet2.cpp make_basic auto-trusts a local (127.0.0.1) daemon unless a trust '
+                    'flag is given, so the explicit flag is required for untrusted mode.',
+        },
         'observed_exposure': {
             'note': 'Metadata the node/on-path observer actually saw in this run.',
             'request_paths': sorted(all_paths),
@@ -280,8 +363,9 @@ try:
         ],
         'sanitization': 'records hold method/path/size/sha256/client/time only; no bodies, '
                         'mnemonic, keys, or addresses; asserted by scan_for_secrets().',
-        'scope': 'selected 9/90 real daemon+wallet; isolated fixed-difficulty chain; disposable '
-                 'keys; one denial/recovery correlation; not an anonymity or Tor/I2P test.',
+        'scope': 'selected 9/90 real daemon+wallet, --untrusted-daemon (runtime-verified); '
+                 'isolated fixed-difficulty chain; disposable keys; one evidence-classified '
+                 'denial/recovery correlation; not an anonymity or Tor/I2P test.',
     }
     (WORK / 'result.json').write_text(json.dumps(summary, indent=2) + '\n')
     # Durable metadata-only capture for the reviewer.

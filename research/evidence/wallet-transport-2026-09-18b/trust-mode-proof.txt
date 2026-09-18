@@ -1,0 +1,21 @@
+Runtime trust-mode verification (Defect 1 fix)
+==============================================
+Wallet launched with EXPLICIT --untrusted-daemon. Without it, a local
+(127.0.0.1) daemon is auto-trusted by wallet2.cpp make_basic
+("Daemon is local, assuming trusted"), so omitting --trusted-daemon is NOT
+untrusted mode.
+
+Runtime probe (authoritative), from result.json case "untrusted_mode_verified":
+  RPC:              rescan_spent
+  rejected_code:    -1
+  rejected_message: "This command requires a trusted daemon."
+  auto_local_trust_log_present: false   (no "assuming trusted" line in wallet log)
+
+Source gate (selected 9/90, HEAD 7410c04b):
+  src/wallet/wallet_rpc_server.cpp  on_rescan_spent -> if (!m_wallet->is_trusted_daemon())
+                                     -> "This command requires a trusted daemon."
+  src/wallet/wallet2.cpp  make_basic -> --untrusted-daemon forces trusted_daemon=false,
+                                     bypassing the local-address auto-trust branch.
+
+An untrusted wallet MUST reject rescan_spent before touching the daemon; the
+observed rejection is therefore direct runtime proof of untrusted mode.

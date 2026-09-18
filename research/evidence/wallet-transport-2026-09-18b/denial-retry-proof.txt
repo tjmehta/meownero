@@ -1,0 +1,19 @@
+Denial/recovery classification (Defect 2 fix) — evidence-based, no fabricated error
+======================================================================
+Proxy injected: 503 {"status":"Failed","untrusted":true} on ONE /getblocks.bin
+
+Ordered .bin requests the node recorded (method path t):
+  POST /getblocks.bin                   t=149837.9711
+  POST /get_output_distribution.bin     t=149838.8871
+  POST /get_outs.bin                    t=149838.9702
+  POST /get_output_distribution.bin     t=149839.0661
+  POST /get_outs.bin                    t=149839.1511
+  POST /getblocks.bin                   t=149839.9739
+  POST /getblocks.bin                   t=149840.0151
+  POST /getblocks.bin                   t=149840.2031
+  POST /getblocks.bin                   t=149840.2451
+
+Observed behavior: refresh RPC returned NO client error; the node saw the
+wallet re-request /getblocks.bin after the denial (transparent retry).
+The harness asserts a post-denial .bin retry exists before claiming recovery,
+and asserts balance converged to coinbase*reward. No error text is fabricated.

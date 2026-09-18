@@ -1,0 +1,121 @@
+{"case": "untrusted_mode_verified", "result": "PASS", "probe_rpc": "rescan_spent", "rejected_code": -1, "rejected_message": "This command requires a trusted daemon.", "auto_local_trust_log_present": false, "source": "wallet_rpc_server.cpp on_rescan_spent is_trusted_daemon() gate; wallet2.cpp make_basic --untrusted-daemon vs local-address auto-trust"}
+{"case": "observed_sync", "result": "PASS", "balance_atomic": 1107000000000000, "requests": 1, "distinct_paths": ["/getblocks.bin"], "path_histogram": {"/getblocks.bin": 1}}
+{"case": "observed_spend", "result": "PASS", "txid": "665f7603f0f0da7add2626c4da76e69b7a3cb9e569e3bd764885c6b92ed92658", "fee_atomic": 649800000, "requests": 14, "distinct_paths": ["/get_output_distribution.bin", "/get_outs.bin", "/json_rpc", "/sendrawtransaction"], "first_relay_submissions": 1, "decoy_or_index_fetches": 2}
+{"case": "denial_and_recovery", "result": "PASS", "denied_path": "/getblocks.bin", "injected_response": "503 {\"status\":\"Failed\",\"untrusted\":true} on one .bin sync call", "wallet_observed": {"mode": "transparent_retry_no_client_error", "post_denial_bin_retries": ["/getblocks.bin"]}, "recovered_balance_atomic": 1746000000000000, "recovery": "two consecutive refreshes converged to coinbase*reward after the node stopped refusing"}
+{"case": "recording_sanitized", "result": "PASS", "total_requests": 20, "distinct_paths": ["/get_output_distribution.bin", "/get_outs.bin", "/getblocks.bin", "/getheight", "/json_rpc", "/sendrawtransaction"], "observed_client_sources": ["127.0.0.1"], "stored_fields": ["method", "path", "req_bytes", "req_sha256", "client", "t"]}
+{
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "untrusted_mode_verified",
+      "result": "PASS",
+      "probe_rpc": "rescan_spent",
+      "rejected_code": -1,
+      "rejected_message": "This command requires a trusted daemon.",
+      "auto_local_trust_log_present": false,
+      "source": "wallet_rpc_server.cpp on_rescan_spent is_trusted_daemon() gate; wallet2.cpp make_basic --untrusted-daemon vs local-address auto-trust"
+    },
+    {
+      "case": "observed_sync",
+      "result": "PASS",
+      "balance_atomic": 1107000000000000,
+      "requests": 1,
+      "distinct_paths": [
+        "/getblocks.bin"
+      ],
+      "path_histogram": {
+        "/getblocks.bin": 1
+      }
+    },
+    {
+      "case": "observed_spend",
+      "result": "PASS",
+      "txid": "665f7603f0f0da7add2626c4da76e69b7a3cb9e569e3bd764885c6b92ed92658",
+      "fee_atomic": 649800000,
+      "requests": 14,
+      "distinct_paths": [
+        "/get_output_distribution.bin",
+        "/get_outs.bin",
+        "/json_rpc",
+        "/sendrawtransaction"
+      ],
+      "first_relay_submissions": 1,
+      "decoy_or_index_fetches": 2
+    },
+    {
+      "case": "denial_and_recovery",
+      "result": "PASS",
+      "denied_path": "/getblocks.bin",
+      "injected_response": "503 {\"status\":\"Failed\",\"untrusted\":true} on one .bin sync call",
+      "wallet_observed": {
+        "mode": "transparent_retry_no_client_error",
+        "post_denial_bin_retries": [
+          "/getblocks.bin"
+        ]
+      },
+      "recovered_balance_atomic": 1746000000000000,
+      "recovery": "two consecutive refreshes converged to coinbase*reward after the node stopped refusing"
+    },
+    {
+      "case": "recording_sanitized",
+      "result": "PASS",
+      "total_requests": 20,
+      "distinct_paths": [
+        "/get_output_distribution.bin",
+        "/get_outs.bin",
+        "/getblocks.bin",
+        "/getheight",
+        "/json_rpc",
+        "/sendrawtransaction"
+      ],
+      "observed_client_sources": [
+        "127.0.0.1"
+      ],
+      "stored_fields": [
+        "method",
+        "path",
+        "req_bytes",
+        "req_sha256",
+        "client",
+        "t"
+      ]
+    }
+  ],
+  "boundary": "wallet (--untrusted-daemon, runtime-verified) -> recording forwarding proxy (untrusted remote node) -> daemon; --network none",
+  "trust_mode": {
+    "flag": "--untrusted-daemon (explicit)",
+    "runtime_verified": "rescan_spent rejected with \"This command requires a trusted daemon.\"",
+    "note": "wallet2.cpp make_basic auto-trusts a local (127.0.0.1) daemon unless a trust flag is given, so the explicit flag is required for untrusted mode."
+  },
+  "observed_exposure": {
+    "note": "Metadata the node/on-path observer actually saw in this run.",
+    "request_paths": [
+      "/get_output_distribution.bin",
+      "/get_outs.bin",
+      "/getblocks.bin",
+      "/getheight",
+      "/json_rpc",
+      "/sendrawtransaction"
+    ],
+    "path_histogram": {
+      "/getheight": 1,
+      "/getblocks.bin": 5,
+      "/json_rpc": 9,
+      "/get_output_distribution.bin": 2,
+      "/get_outs.bin": 2,
+      "/sendrawtransaction": 1
+    },
+    "total_requests": 20,
+    "client_sources_seen_by_proxy": [
+      "127.0.0.1"
+    ],
+    "first_relay_origin_recorded": true
+  },
+  "hypotheses_not_tested": [
+    "On a real network the node sees the operator public IP, not 127.0.0.1, unless Tor/I2P is used (not deployed or tested here).",
+    "Repeated get_outs/get_transactions patterns narrow wallet-owned outputs by intersection over time; not quantified here.",
+    "Timing/traffic-analysis resistance and Dandelion++ relay origin hiding are not evaluated."
+  ],
+  "sanitization": "records hold method/path/size/sha256/client/time only; no bodies, mnemonic, keys, or addresses; asserted by scan_for_secrets().",
+  "scope": "selected 9/90 real daemon+wallet, --untrusted-daemon (runtime-verified); isolated fixed-difficulty chain; disposable keys; one evidence-classified denial/recovery correlation; not an anonymity or Tor/I2P test."
+}
