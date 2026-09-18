@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="9" failures="0" disabled="0" errors="0" timestamp="2026-09-18T05:56:18" time="0.685" name="AllTests">
+  <testsuite name="AddressFromURL" tests="2" failures="0" disabled="0" errors="0" time="0.116">
+    <testcase name="Success" status="run" time="0.108" classname="AddressFromURL" />
+    <testcase name="Failure" status="run" time="0.008" classname="AddressFromURL" />
+  </testsuite>
+  <testsuite name="DNSResolver" tests="7" failures="0" disabled="0" errors="0" time="0.569">
+    <testcase name="IPv4Success" status="run" time="0.087" classname="DNSResolver" />
+    <testcase name="IPv4Failure" status="run" time="0.039" classname="DNSResolver" />
+    <testcase name="DNSSECSuccess" status="run" time="0.077" classname="DNSResolver" />
+    <testcase name="DNSSECFailure" status="run" time="0.27" classname="DNSResolver" />
+    <testcase name="IPv6Failure" status="run" time="0.06" classname="DNSResolver" />
+    <testcase name="GetTXTRecord" status="run" time="0" classname="DNSResolver" />
+    <testcase name="Localhost" status="run" time="0.036" classname="DNSResolver" />
+  </testsuite>
+</testsuites>

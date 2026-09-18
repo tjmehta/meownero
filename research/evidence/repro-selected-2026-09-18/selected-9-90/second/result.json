@@ -1,0 +1,86 @@
+{
+  "scope": "fresh selected source build, not a reproduction pair",
+  "profile": "selected-9-90",
+  "source_only": true,
+  "historical_head": "7410c04bab0e304112710d63c3225c110bd8b4de",
+  "historical_tree": "4db958cb96d72943c5c2433bd5f4a8f730037148",
+  "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "copied_with": "cp -a --reflink=auto; no hard-link copy",
+  "issuance_sha256": "de750169f3f3aac75de8325a09570343cc10df7cf2da52dec9b084ad0b3414fe",
+  "fixture_sha256": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+  "source_lock_sha256": "eefb8fc267460030e933da906bbe493722549089e9a8ec232284aedf556470df",
+  "fixture_source_lock_sha256": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+  "gamma_fixture_sha256": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+  "gamma_source_lock_sha256": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+  "changed_file_sha256": {
+    "src/cryptonote_basic/cryptonote_basic_impl.cpp": "fa872674e95d23be23636713591fc275b14b8b4e6230a8f5a36bf19b7dcf4047",
+    "src/cryptonote_config.h": "16beaee17b95fb628cd383008f84207da49f29dc27ef98016138af5f60ea97da",
+    "tests/unit_tests/block_reward.cpp": "09340b5902ec0a59defc0d9d2a1b174b1519e21dd3f1c52bfbb0a5f6a753486d",
+    "tests/unit_tests/output_selection.cpp": "cba8e843e5e521b24263d77b50f28994e77b0a764429029327e997fbf230055e"
+  },
+  "target_seconds": 90,
+  "reward_atomic": 9000000000000,
+  "build_completed": true,
+  "capacity_normalization_enforced": false,
+  "fcmp_verified": false,
+  "tests": {
+    "consensus": {
+      "tests": "24",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "timestamp": "2026-09-18T05:54:51",
+      "time": "3.95",
+      "name": "AllTests"
+    },
+    "difficulty": {
+      "tests": "10",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "timestamp": "2026-09-18T05:54:55",
+      "time": "0.71",
+      "name": "AllTests"
+    },
+    "floor": {
+      "tests": "10",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "timestamp": "2026-09-18T05:54:56",
+      "time": "0.719",
+      "name": "AllTests"
+    },
+    "full-native-offline": {
+      "tests": "1228",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "timestamp": "2026-09-18T05:54:57",
+      "time": "80.281",
+      "name": "AllTests"
+    },
+    "dns": {
+      "tests": "9",
+      "failures": "0",
+      "disabled": "0",
+      "errors": "0",
+      "timestamp": "2026-09-18T05:56:18",
+      "time": "0.685",
+      "name": "AllTests"
+    },
+    "full-native": {
+      "tests": "1237",
+      "failures": "0",
+      "errors": "0",
+      "name": "AllTests"
+    }
+  },
+  "historical_source_preserved": true,
+  "historical_build_preserved": null,
+  "limits": [
+    "fresh selected source build, not a reproduction pair",
+    "native CI selection excludes only ban.subnet, http_server.response_soft_limit, notify.works; DNS-only phase uses normal networking",
+    "no runtime wallet/RPC/authority/P2P/FCMP readiness claim"
+  ]
+}

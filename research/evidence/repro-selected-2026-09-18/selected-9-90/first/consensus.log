@@ -1,0 +1,157 @@
+Note: Google Test filter = meow_*:cryptonote_protocol_handler.race_condition
+[==========] Running 24 tests from 7 test cases.
+[----------] Global test environment set-up.
+[----------] 2 tests from meow_address
+[ RUN      ] meow_address.network_and_address_type_vectors
+[       OK ] meow_address.network_and_address_type_vectors (1 ms)
+[ RUN      ] meow_address.rejects_monero_base58_address
+[       OK ] meow_address.rejects_monero_base58_address (0 ms)
+[----------] 2 tests from meow_address (1 ms total)
+
+[----------] 7 tests from meow_emission
+[ RUN      ] meow_emission.selected_reward_spacing_pair
+[       OK ] meow_emission.selected_reward_spacing_pair (0 ms)
+[ RUN      ] meow_emission.reward_independent_of_supply
+[       OK ] meow_emission.reward_independent_of_supply (0 ms)
+[ RUN      ] meow_emission.reward_independent_of_version
+[       OK ] meow_emission.reward_independent_of_version (0 ms)
+[ RUN      ] meow_emission.penalty_math_unchanged
+2026-09-18 05:23:07.230	E Block cumulative weight is too big: 40001, expected less than 40000
+[       OK ] meow_emission.penalty_math_unchanged (0 ms)
+[ RUN      ] meow_emission.supply_is_height_times_reward
+[       OK ] meow_emission.supply_is_height_times_reward (26 ms)
+[ RUN      ] meow_emission.tally_saturates_and_never_wraps
+[       OK ] meow_emission.tally_saturates_and_never_wraps (0 ms)
+[ RUN      ] meow_emission.dilution_is_one_over_n_minus_one
+[       OK ] meow_emission.dilution_is_one_over_n_minus_one (0 ms)
+[----------] 7 tests from meow_emission (26 ms total)
+
+[----------] 9 tests from meow_difficulty
+[ RUN      ] meow_difficulty.clamp
+[       OK ] meow_difficulty.clamp (0 ms)
+[ RUN      ] meow_difficulty.startup_uses_floor
+[       OK ] meow_difficulty.startup_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.computed_result_uses_floor
+[       OK ] meow_difficulty.computed_result_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.rounding_and_timestamp_sorting_preserved
+[       OK ] meow_difficulty.rounding_and_timestamp_sorting_preserved (0 ms)
+[ RUN      ] meow_difficulty.equal_timestamps_use_one_second
+[       OK ] meow_difficulty.equal_timestamps_use_one_second (0 ms)
+[ RUN      ] meow_difficulty.overflow_remains_error_not_floor
+[       OK ] meow_difficulty.overflow_remains_error_not_floor (0 ms)
+[ RUN      ] meow_difficulty.core_genesis_and_recalculation
+2026-09-18 05:23:07.256	I Loading blockchain from folder /tmp/meow-floor-9415651ec5a82f8b/lmdb ...
+2026-09-18 05:23:07.291	I Loading checkpoints
+2026-09-18 05:23:07.291	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:07.291	I Recalculating difficulties from height 0 to height 1
+2026-09-18 05:23:07.303	I Loading blockchain from folder /tmp/meow-floor-5db5ae540be27755/testnet/lmdb ...
+2026-09-18 05:23:07.377	I Loading checkpoints
+2026-09-18 05:23:07.377	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:07.377	I Recalculating difficulties from height 0 to height 1
+2026-09-18 05:23:07.383	I Loading blockchain from folder /tmp/meow-floor-8fb523366a77618b/stagenet/lmdb ...
+2026-09-18 05:23:07.459	I Loading checkpoints
+2026-09-18 05:23:07.459	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:07.459	I Recalculating difficulties from height 0 to height 1
+[       OK ] meow_difficulty.core_genesis_and_recalculation (208 ms)
+[ RUN      ] meow_difficulty.core_fixed_difficulty_override
+2026-09-18 05:23:07.465	I Loading blockchain from folder /tmp/meow-floor-c0730efcdab82eb7/lmdb ...
+2026-09-18 05:23:07.550	I Loading checkpoints
+[       OK ] meow_difficulty.core_fixed_difficulty_override (90 ms)
+[ RUN      ] meow_difficulty.core_window_lag_rollback_and_alternative_sampling
+2026-09-18 05:23:07.556	I Loading blockchain from folder /tmp/meow-floor-94bbfc74cb0bc634/lmdb ...
+2026-09-18 05:23:07.607	I Loading checkpoints
+2026-09-18 05:23:07.607	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:07.607	I Recalculating difficulties from height 0 to height 1
+2026-09-18 05:23:07.859	I Recalculating difficulties from height 0 to height 599
+2026-09-18 05:23:07.860	I Recalculating difficulties from height 1 to height 599
+2026-09-18 05:23:07.863	I Recalculating difficulties from height 0 to height 600
+2026-09-18 05:23:07.864	I Recalculating difficulties from height 1 to height 600
+2026-09-18 05:23:07.867	I Recalculating difficulties from height 0 to height 601
+2026-09-18 05:23:07.868	I Recalculating difficulties from height 1 to height 601
+2026-09-18 05:23:07.976	I Recalculating difficulties from height 0 to height 719
+2026-09-18 05:23:07.980	I Recalculating difficulties from height 1 to height 719
+2026-09-18 05:23:07.987	I Recalculating difficulties from height 0 to height 720
+2026-09-18 05:23:07.990	I Recalculating difficulties from height 1 to height 720
+2026-09-18 05:23:07.993	I Recalculating difficulties from height 0 to height 721
+2026-09-18 05:23:07.995	I Recalculating difficulties from height 1 to height 721
+2026-09-18 05:23:08.006	I Recalculating difficulties from height 0 to height 734
+2026-09-18 05:23:08.008	I Recalculating difficulties from height 1 to height 734
+2026-09-18 05:23:08.012	I Recalculating difficulties from height 0 to height 735
+2026-09-18 05:23:08.014	I Recalculating difficulties from height 1 to height 735
+2026-09-18 05:23:08.018	I Recalculating difficulties from height 0 to height 736
+2026-09-18 05:23:08.020	I Recalculating difficulties from height 2 to height 736
+2026-09-18 05:23:08.063	I Recalculating difficulties from height 0 to height 800
+2026-09-18 05:23:08.065	I Recalculating difficulties from height 66 to height 800
+2026-09-18 05:23:08.070	I Recalculating difficulties from height 0 to height 719
+2026-09-18 05:23:08.072	I Recalculating difficulties from height 1 to height 719
+2026-09-18 05:23:08.127	I Recalculating difficulties from height 0 to height 800
+2026-09-18 05:23:08.129	I Recalculating difficulties from height 66 to height 800
+[       OK ] meow_difficulty.core_window_lag_rollback_and_alternative_sampling (585 ms)
+[----------] 9 tests from meow_difficulty (883 ms total)
+
+[----------] 2 tests from meow_authorities
+[ RUN      ] meow_authorities.updates_fail_closed
+2026-09-18 05:23:08.139	W Automatic updates are disabled: no Meownero update authority is configured
+2026-09-18 05:23:08.139	W Automatic updates are disabled: no Meownero update authority is configured
+2026-09-18 05:23:08.139	W Automatic updates are disabled: no Meownero update authority is configured
+[       OK ] meow_authorities.updates_fail_closed (0 ms)
+[ RUN      ] meow_authorities.no_download_urls
+[       OK ] meow_authorities.no_download_urls (0 ms)
+[----------] 2 tests from meow_authorities (0 ms total)
+
+[----------] 1 test from cryptonote_protocol_handler
+[ RUN      ] cryptonote_protocol_handler.race_condition
+2026-09-18 05:23:08.140	I Loading blockchain from folder /tmp/daemon-7c5761ce91a257f7/main/lmdb ...
+2026-09-18 05:23:08.172	I Loading checkpoints
+2026-09-18 05:23:08.178	I 
+2026-09-18 05:23:08.178	I **********************************************************************
+2026-09-18 05:23:08.178	I The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-18 05:23:08.178	I 
+2026-09-18 05:23:08.178	I You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-18 05:23:08.178	I where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-18 05:23:08.178	I 
+2026-09-18 05:23:08.178	I Use the "help" command to see the list of available commands.
+2026-09-18 05:23:08.178	I Use "help <command>" to see a command's documentation.
+2026-09-18 05:23:08.178	I **********************************************************************
+2026-09-18 05:23:08.179	W public max out peers not set, using default
+2026-09-18 05:23:08.179	W public max out peers not set, using default
+2026-09-18 05:23:08.186	I Loading blockchain from folder /tmp/daemon-7c5761ce91a257f7/main/lmdb ...
+2026-09-18 05:23:08.187	I Loading checkpoints
+2026-09-18 05:23:08.187	I Loading blockchain from folder /tmp/daemon-7c5761ce91a257f7/alt/lmdb ...
+2026-09-18 05:23:08.219	I Loading checkpoints
+2026-09-18 05:23:08.220	I 
+2026-09-18 05:23:08.220	I **********************************************************************
+2026-09-18 05:23:08.220	I You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-18 05:23:08.220	I 
+2026-09-18 05:23:08.220	I Use the "help" command to see the list of available commands.
+2026-09-18 05:23:08.220	I **********************************************************************
+2026-09-18 05:23:08.220	I 
+2026-09-18 05:23:08.220	I **********************************************************************
+2026-09-18 05:23:08.220	I You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-18 05:23:08.220	I 
+2026-09-18 05:23:08.220	I Use the "help" command to see the list of available commands.
+2026-09-18 05:23:08.220	I **********************************************************************
+2026-09-18 05:23:10.615	I [127.0.0.1:46640 INC] Sync data returned a new top block candidate: 4095 -> 9596 [Your node is 5501 blocks (3.8 days) behind] 
+2026-09-18 05:23:10.615	I SYNCHRONIZATION started
+2026-09-18 05:23:10.623	W public max out peers not set, using default
+2026-09-18 05:23:11.018	I Synced 4096/9596 (42%, 5500 left)
+2026-09-18 05:23:11.317	I Synced 4097/9596 (42%, 5499 left)
+2026-09-18 05:23:11.318	W monerod is now disconnected from the network
+[       OK ] cryptonote_protocol_handler.race_condition (3218 ms)
+[----------] 1 test from cryptonote_protocol_handler (3218 ms total)
+
+[----------] 1 test from meow_hardforks
+[ RUN      ] meow_hardforks.single_jump_table
+[       OK ] meow_hardforks.single_jump_table (0 ms)
+[----------] 1 test from meow_hardforks (0 ms total)
+
+[----------] 2 tests from meow_wallet_hardforks
+[ RUN      ] meow_wallet_hardforks.sparse_table_and_invalid_versions
+[       OK ] meow_wallet_hardforks.sparse_table_and_invalid_versions (1 ms)
+[ RUN      ] meow_wallet_hardforks.inherited_network_activation_boundaries
+[       OK ] meow_wallet_hardforks.inherited_network_activation_boundaries (0 ms)
+[----------] 2 tests from meow_wallet_hardforks (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 24 tests from 7 test cases ran. (4129 ms total)
+[  PASSED  ] 24 tests.

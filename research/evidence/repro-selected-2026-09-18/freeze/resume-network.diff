@@ -1,0 +1,21 @@
+diff --git a/research/resume-network-2026-09-12.md b/research/resume-network-2026-09-12.md
+index 19e1ef7..421b44b 100644
+--- a/research/resume-network-2026-09-12.md
++++ b/research/resume-network-2026-09-12.md
+@@ -8,6 +8,16 @@ before penalties. The frozen clean15 reproduction remains the historical
+ shared decision document or host service was changed. No new agent, push,
+ publication, outreach or spend occurred.
+ 
++**Historical failure link (added September 15, 2026):** the first incremental
++selected 9/90 build on September 13 compiled but failed 7 of 1,237 native tests
++(six DNS cases run without network and `select_outputs.gamma`, median 149,160 vs
++120,960). The original failure evidence is preserved unchanged in
++[`evidence/selected-network-failure-2026-09-12/summary.json`](evidence/selected-network-failure-2026-09-12/summary.json);
++the later DNS-phase split and source-locked gamma fixture that resolved it, and
++the passing rebuilds of both profiles, are in
++[`recovery-network-2026-09-13.md`](recovery-network-2026-09-13.md). That failure
++is history, not current status.
++
+ ## Reproduction resumed exactly once
+ 
+ At inspection, old launcher PID `19457` did not exist, no network build container

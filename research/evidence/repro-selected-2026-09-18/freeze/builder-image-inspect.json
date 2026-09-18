@@ -1,0 +1,48 @@
+[
+    {
+        "Id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+        "RepoTags": [
+            "meownero-chain-builder:latest",
+            "meownero-monero-builder:latest"
+        ],
+        "RepoDigests": [],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-09-05T13:27:57.874503397-07:00",
+        "Config": {
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "DEBIAN_FRONTEND=noninteractive"
+            ],
+            "Cmd": [
+                "/bin/bash"
+            ],
+            "WorkingDir": "/src",
+            "Labels": {
+                "org.opencontainers.image.version": "24.04"
+            }
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 873161398,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/bwv3ijjxpthfo3anr6ezs4gvb/diff:/var/lib/docker/overlay2/6e3dffb3d4625a40d37b036c6d9ae4ad7620384dc452dbba96cc3d88aa0187e9/diff",
+                "MergedDir": "/var/lib/docker/overlay2/qggup2da59sbahsvxc27ppquy/merged",
+                "UpperDir": "/var/lib/docker/overlay2/qggup2da59sbahsvxc27ppquy/diff",
+                "WorkDir": "/var/lib/docker/overlay2/qggup2da59sbahsvxc27ppquy/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:98effb2dfe85d4c431f97d90482075f19e5fc3a57c2dd423d8bdfd4813620043",
+                "sha256:86a33f8cf62a81334e440800978517c03a0775a12c432972d62cae1da17ba06d",
+                "sha256:c733178cf9fcc69c90a88cd732790081ee5f10a0a4683d78a08ee91482ef2b1a"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-09-07T15:12:09.933954252-07:00"
+        }
+    }
+]

@@ -1,0 +1,74 @@
+Note: Google Test filter = meow_difficulty.*:difficulty.*
+[==========] Running 10 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from difficulty
+[ RUN      ] difficulty.check_hash
+[       OK ] difficulty.check_hash (0 ms)
+[----------] 1 test from difficulty (0 ms total)
+
+[----------] 9 tests from meow_difficulty
+[ RUN      ] meow_difficulty.clamp
+[       OK ] meow_difficulty.clamp (0 ms)
+[ RUN      ] meow_difficulty.startup_uses_floor
+[       OK ] meow_difficulty.startup_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.computed_result_uses_floor
+[       OK ] meow_difficulty.computed_result_uses_floor (0 ms)
+[ RUN      ] meow_difficulty.rounding_and_timestamp_sorting_preserved
+[       OK ] meow_difficulty.rounding_and_timestamp_sorting_preserved (0 ms)
+[ RUN      ] meow_difficulty.equal_timestamps_use_one_second
+[       OK ] meow_difficulty.equal_timestamps_use_one_second (0 ms)
+[ RUN      ] meow_difficulty.overflow_remains_error_not_floor
+[       OK ] meow_difficulty.overflow_remains_error_not_floor (0 ms)
+[ RUN      ] meow_difficulty.core_genesis_and_recalculation
+2026-09-18 05:23:11.511	I Loading blockchain from folder /tmp/meow-floor-9014258e916a4de9/lmdb ...
+2026-09-18 05:23:11.542	I Loading checkpoints
+2026-09-18 05:23:11.542	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:11.542	I Recalculating difficulties from height 0 to height 1
+2026-09-18 05:23:11.547	I Loading blockchain from folder /tmp/meow-floor-f1d000f679d974c1/testnet/lmdb ...
+2026-09-18 05:23:11.585	I Loading checkpoints
+2026-09-18 05:23:11.585	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:11.585	I Recalculating difficulties from height 0 to height 1
+2026-09-18 05:23:11.590	I Loading blockchain from folder /tmp/meow-floor-8f8b6880c3eda900/stagenet/lmdb ...
+2026-09-18 05:23:11.621	I Loading checkpoints
+2026-09-18 05:23:11.621	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:11.621	I Recalculating difficulties from height 0 to height 1
+[       OK ] meow_difficulty.core_genesis_and_recalculation (115 ms)
+[ RUN      ] meow_difficulty.core_fixed_difficulty_override
+2026-09-18 05:23:11.626	I Loading blockchain from folder /tmp/meow-floor-d764bc2bee4374fb/lmdb ...
+2026-09-18 05:23:11.659	I Loading checkpoints
+[       OK ] meow_difficulty.core_fixed_difficulty_override (38 ms)
+[ RUN      ] meow_difficulty.core_window_lag_rollback_and_alternative_sampling
+2026-09-18 05:23:11.663	I Loading blockchain from folder /tmp/meow-floor-a7fc8f025d40d449/lmdb ...
+2026-09-18 05:23:11.698	I Loading checkpoints
+2026-09-18 05:23:11.698	I Recalculating difficulties from height 0 to height 0
+2026-09-18 05:23:11.698	I Recalculating difficulties from height 0 to height 1
+2026-09-18 05:23:11.988	I Recalculating difficulties from height 0 to height 599
+2026-09-18 05:23:11.991	I Recalculating difficulties from height 1 to height 599
+2026-09-18 05:23:11.995	I Recalculating difficulties from height 0 to height 600
+2026-09-18 05:23:11.996	I Recalculating difficulties from height 1 to height 600
+2026-09-18 05:23:11.999	I Recalculating difficulties from height 0 to height 601
+2026-09-18 05:23:12.001	I Recalculating difficulties from height 1 to height 601
+2026-09-18 05:23:12.081	I Recalculating difficulties from height 0 to height 719
+2026-09-18 05:23:12.083	I Recalculating difficulties from height 1 to height 719
+2026-09-18 05:23:12.087	I Recalculating difficulties from height 0 to height 720
+2026-09-18 05:23:12.088	I Recalculating difficulties from height 1 to height 720
+2026-09-18 05:23:12.092	I Recalculating difficulties from height 0 to height 721
+2026-09-18 05:23:12.094	I Recalculating difficulties from height 1 to height 721
+2026-09-18 05:23:12.105	I Recalculating difficulties from height 0 to height 734
+2026-09-18 05:23:12.107	I Recalculating difficulties from height 1 to height 734
+2026-09-18 05:23:12.110	I Recalculating difficulties from height 0 to height 735
+2026-09-18 05:23:12.112	I Recalculating difficulties from height 1 to height 735
+2026-09-18 05:23:12.116	I Recalculating difficulties from height 0 to height 736
+2026-09-18 05:23:12.118	I Recalculating difficulties from height 2 to height 736
+2026-09-18 05:23:12.179	I Recalculating difficulties from height 0 to height 800
+2026-09-18 05:23:12.182	I Recalculating difficulties from height 66 to height 800
+2026-09-18 05:23:12.186	I Recalculating difficulties from height 0 to height 719
+2026-09-18 05:23:12.188	I Recalculating difficulties from height 1 to height 719
+2026-09-18 05:23:12.249	I Recalculating difficulties from height 0 to height 800
+2026-09-18 05:23:12.251	I Recalculating difficulties from height 66 to height 800
+[       OK ] meow_difficulty.core_window_lag_rollback_and_alternative_sampling (602 ms)
+[----------] 9 tests from meow_difficulty (755 ms total)
+
+[----------] Global test environment tear-down
+[==========] 10 tests from 2 test cases ran. (755 ms total)
+[  PASSED  ] 10 tests.

@@ -1,0 +1,1177 @@
+{
+  "run_root": "<repo>/build/repro-selected-20260918",
+  "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "historical_head": "7410c04bab0e304112710d63c3225c110bd8b4de",
+  "historical_tree": "4db958cb96d72943c5c2433bd5f4a8f730037148",
+  "inputs_manifest_sha256": "253747af6f15aef0379c8e04ec4815b71fcc404d742c731cc0e8cf8c526d443f",
+  "profiles": {
+    "selected-9-90": {
+      "builds": {
+        "first": {
+          "path": "<repo>/build/repro-selected-20260918/selected-9-90/first",
+          "build.exit": "0",
+          "offline.exit": "0",
+          "dns.exit": "0",
+          "container.exit": "0",
+          "result": {
+            "scope": "fresh selected source build, not a reproduction pair",
+            "profile": "selected-9-90",
+            "source_only": true,
+            "historical_head": "7410c04bab0e304112710d63c3225c110bd8b4de",
+            "historical_tree": "4db958cb96d72943c5c2433bd5f4a8f730037148",
+            "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+            "copied_with": "cp -a --reflink=auto; no hard-link copy",
+            "issuance_sha256": "de750169f3f3aac75de8325a09570343cc10df7cf2da52dec9b084ad0b3414fe",
+            "fixture_sha256": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "source_lock_sha256": "eefb8fc267460030e933da906bbe493722549089e9a8ec232284aedf556470df",
+            "fixture_source_lock_sha256": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma_fixture_sha256": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "gamma_source_lock_sha256": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "changed_file_sha256": {
+              "src/cryptonote_basic/cryptonote_basic_impl.cpp": "fa872674e95d23be23636713591fc275b14b8b4e6230a8f5a36bf19b7dcf4047",
+              "src/cryptonote_config.h": "16beaee17b95fb628cd383008f84207da49f29dc27ef98016138af5f60ea97da",
+              "tests/unit_tests/block_reward.cpp": "09340b5902ec0a59defc0d9d2a1b174b1519e21dd3f1c52bfbb0a5f6a753486d",
+              "tests/unit_tests/output_selection.cpp": "cba8e843e5e521b24263d77b50f28994e77b0a764429029327e997fbf230055e"
+            },
+            "target_seconds": 90,
+            "reward_atomic": 9000000000000,
+            "build_completed": true,
+            "capacity_normalization_enforced": false,
+            "fcmp_verified": false,
+            "tests": {
+              "consensus": {
+                "tests": "24",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:23:07",
+                "time": "4.129",
+                "name": "AllTests"
+              },
+              "difficulty": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:23:11",
+                "time": "0.755",
+                "name": "AllTests"
+              },
+              "floor": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:23:12",
+                "time": "0.864",
+                "name": "AllTests"
+              },
+              "full-native-offline": {
+                "tests": "1228",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:23:13",
+                "time": "78.925",
+                "name": "AllTests"
+              },
+              "dns": {
+                "tests": "9",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:24:33",
+                "time": "0.637",
+                "name": "AllTests"
+              },
+              "full-native": {
+                "tests": "1237",
+                "failures": "0",
+                "errors": "0",
+                "name": "AllTests"
+              }
+            },
+            "historical_source_preserved": true,
+            "historical_build_preserved": null,
+            "limits": [
+              "fresh selected source build, not a reproduction pair",
+              "native CI selection excludes only ban.subnet, http_server.response_soft_limit, notify.works; DNS-only phase uses normal networking",
+              "no runtime wallet/RPC/authority/P2P/FCMP readiness claim"
+            ]
+          },
+          "actual_sha256": {
+            "build/release/bin/monerod": "b79cb49dbea95c0eeff7dca8c945d65f4fab3d49fb626fcbe7a9343569d4a2c1",
+            "build/release/bin/monero-wallet-cli": "76ad8cb92d25decd91e0fc88152356dad2405703cac2190fb0508edb59301120",
+            "build/release/bin/monero-wallet-rpc": "5782abee489e8b245b42fd237ece34d6df1c67929c552960755fab41de3a921a",
+            "build/release/tests/unit_tests/unit_tests": "d9fd19c8c9028818487ad31c08890e81636600eef9776133de6e2f0341af63de",
+            "build/release/tests/unit_tests/meow_difficulty_floor_tests": "1426a07764615693d9391dafdc3f72adfd28c9f1660bf90349912a25972393e6"
+          },
+          "tests": {
+            "consensus": {
+              "tests": 24,
+              "failures": 0,
+              "errors": 0
+            },
+            "difficulty": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "floor": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native-offline": {
+              "tests": 1228,
+              "failures": 0,
+              "errors": 0
+            },
+            "dns": {
+              "tests": 9,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native": {
+              "tests": 1237,
+              "failures": 0,
+              "errors": 0
+            }
+          },
+          "cgroup": {
+            "memory.max": "4294967296",
+            "memory.swap.max": "0",
+            "cpu.max": "200000 100000",
+            "memory.peak": "3722952704",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+          },
+          "run_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "receipt_sha256": {
+            "BUILDER_IMAGE_ID": "fb6109955503ba274879a823b36bba28c4cec2f079574e8c64c93c1eb99032c0",
+            "SHA256SUMS": "7a46b5b3fa819ce0ff01e90bf8866633e57c8a6ecccac7646f1fca85e49f8b4f",
+            "VERSIONS": "0f906246e578128d584771a8f54d1c29df13a4c0bdfd94b7c89fde277b792b78",
+            "packages.txt": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9",
+            "source.diff": "35423c3bf1865f5bf58c524ba614e9936207e5bfdbbf5b5826a397ae7d8ef68f",
+            "issuance.patch": "de750169f3f3aac75de8325a09570343cc10df7cf2da52dec9b084ad0b3414fe",
+            "fixtures.patch": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "gamma-fixture.patch": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "fixture-source-lock.json": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma-fixture-source-lock.json": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "native-expected.txt": "e3ec92ec88c79e6c9706aecfdab40d1ee16c5a7c08456f3f975e9a74ba5a935e",
+            "dns-network-scope.txt": "a103f84d624c11becebf0509a37b851b738062604d6fc0d88c2eeaa0c891943b"
+          },
+          "versions": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\ncmake version 3.28.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\n",
+          "packages_sha256": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9"
+        },
+        "second": {
+          "path": "<repo>/build/repro-selected-20260918/selected-9-90/second",
+          "build.exit": "0",
+          "offline.exit": "0",
+          "dns.exit": "0",
+          "container.exit": "0",
+          "result": {
+            "scope": "fresh selected source build, not a reproduction pair",
+            "profile": "selected-9-90",
+            "source_only": true,
+            "historical_head": "7410c04bab0e304112710d63c3225c110bd8b4de",
+            "historical_tree": "4db958cb96d72943c5c2433bd5f4a8f730037148",
+            "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+            "copied_with": "cp -a --reflink=auto; no hard-link copy",
+            "issuance_sha256": "de750169f3f3aac75de8325a09570343cc10df7cf2da52dec9b084ad0b3414fe",
+            "fixture_sha256": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "source_lock_sha256": "eefb8fc267460030e933da906bbe493722549089e9a8ec232284aedf556470df",
+            "fixture_source_lock_sha256": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma_fixture_sha256": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "gamma_source_lock_sha256": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "changed_file_sha256": {
+              "src/cryptonote_basic/cryptonote_basic_impl.cpp": "fa872674e95d23be23636713591fc275b14b8b4e6230a8f5a36bf19b7dcf4047",
+              "src/cryptonote_config.h": "16beaee17b95fb628cd383008f84207da49f29dc27ef98016138af5f60ea97da",
+              "tests/unit_tests/block_reward.cpp": "09340b5902ec0a59defc0d9d2a1b174b1519e21dd3f1c52bfbb0a5f6a753486d",
+              "tests/unit_tests/output_selection.cpp": "cba8e843e5e521b24263d77b50f28994e77b0a764429029327e997fbf230055e"
+            },
+            "target_seconds": 90,
+            "reward_atomic": 9000000000000,
+            "build_completed": true,
+            "capacity_normalization_enforced": false,
+            "fcmp_verified": false,
+            "tests": {
+              "consensus": {
+                "tests": "24",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:54:51",
+                "time": "3.95",
+                "name": "AllTests"
+              },
+              "difficulty": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:54:55",
+                "time": "0.71",
+                "name": "AllTests"
+              },
+              "floor": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:54:56",
+                "time": "0.719",
+                "name": "AllTests"
+              },
+              "full-native-offline": {
+                "tests": "1228",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:54:57",
+                "time": "80.281",
+                "name": "AllTests"
+              },
+              "dns": {
+                "tests": "9",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T05:56:18",
+                "time": "0.685",
+                "name": "AllTests"
+              },
+              "full-native": {
+                "tests": "1237",
+                "failures": "0",
+                "errors": "0",
+                "name": "AllTests"
+              }
+            },
+            "historical_source_preserved": true,
+            "historical_build_preserved": null,
+            "limits": [
+              "fresh selected source build, not a reproduction pair",
+              "native CI selection excludes only ban.subnet, http_server.response_soft_limit, notify.works; DNS-only phase uses normal networking",
+              "no runtime wallet/RPC/authority/P2P/FCMP readiness claim"
+            ]
+          },
+          "actual_sha256": {
+            "build/release/bin/monerod": "b79cb49dbea95c0eeff7dca8c945d65f4fab3d49fb626fcbe7a9343569d4a2c1",
+            "build/release/bin/monero-wallet-cli": "76ad8cb92d25decd91e0fc88152356dad2405703cac2190fb0508edb59301120",
+            "build/release/bin/monero-wallet-rpc": "5782abee489e8b245b42fd237ece34d6df1c67929c552960755fab41de3a921a",
+            "build/release/tests/unit_tests/unit_tests": "d9fd19c8c9028818487ad31c08890e81636600eef9776133de6e2f0341af63de",
+            "build/release/tests/unit_tests/meow_difficulty_floor_tests": "1426a07764615693d9391dafdc3f72adfd28c9f1660bf90349912a25972393e6"
+          },
+          "tests": {
+            "consensus": {
+              "tests": 24,
+              "failures": 0,
+              "errors": 0
+            },
+            "difficulty": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "floor": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native-offline": {
+              "tests": 1228,
+              "failures": 0,
+              "errors": 0
+            },
+            "dns": {
+              "tests": 9,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native": {
+              "tests": 1237,
+              "failures": 0,
+              "errors": 0
+            }
+          },
+          "cgroup": {
+            "memory.max": "4294967296",
+            "memory.swap.max": "0",
+            "cpu.max": "200000 100000",
+            "memory.peak": "3470221312",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+          },
+          "run_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "receipt_sha256": {
+            "BUILDER_IMAGE_ID": "fb6109955503ba274879a823b36bba28c4cec2f079574e8c64c93c1eb99032c0",
+            "SHA256SUMS": "7a46b5b3fa819ce0ff01e90bf8866633e57c8a6ecccac7646f1fca85e49f8b4f",
+            "VERSIONS": "0f906246e578128d584771a8f54d1c29df13a4c0bdfd94b7c89fde277b792b78",
+            "packages.txt": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9",
+            "source.diff": "35423c3bf1865f5bf58c524ba614e9936207e5bfdbbf5b5826a397ae7d8ef68f",
+            "issuance.patch": "de750169f3f3aac75de8325a09570343cc10df7cf2da52dec9b084ad0b3414fe",
+            "fixtures.patch": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "gamma-fixture.patch": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "fixture-source-lock.json": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma-fixture-source-lock.json": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "native-expected.txt": "e3ec92ec88c79e6c9706aecfdab40d1ee16c5a7c08456f3f975e9a74ba5a935e",
+            "dns-network-scope.txt": "a103f84d624c11becebf0509a37b851b738062604d6fc0d88c2eeaa0c891943b"
+          },
+          "versions": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\ncmake version 3.28.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\n",
+          "packages_sha256": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9"
+        }
+      },
+      "pair": {
+        "executables_identical": true
+      },
+      "prior_2026_09_13_identical": true,
+      "prior_2026_09_13_sha256": {
+        "build/release/bin/monerod": "b79cb49dbea95c0eeff7dca8c945d65f4fab3d49fb626fcbe7a9343569d4a2c1",
+        "build/release/bin/monero-wallet-cli": "76ad8cb92d25decd91e0fc88152356dad2405703cac2190fb0508edb59301120",
+        "build/release/bin/monero-wallet-rpc": "5782abee489e8b245b42fd237ece34d6df1c67929c552960755fab41de3a921a",
+        "build/release/tests/unit_tests/unit_tests": "d9fd19c8c9028818487ad31c08890e81636600eef9776133de6e2f0341af63de",
+        "build/release/tests/unit_tests/meow_difficulty_floor_tests": "1426a07764615693d9391dafdc3f72adfd28c9f1660bf90349912a25972393e6"
+      }
+    },
+    "fallback-12-120": {
+      "builds": {
+        "first": {
+          "path": "<repo>/build/repro-selected-20260918/fallback-12-120/first",
+          "build.exit": "0",
+          "offline.exit": "0",
+          "dns.exit": "0",
+          "container.exit": "0",
+          "result": {
+            "scope": "fresh selected source build, not a reproduction pair",
+            "profile": "fallback-12-120",
+            "source_only": true,
+            "historical_head": "7410c04bab0e304112710d63c3225c110bd8b4de",
+            "historical_tree": "4db958cb96d72943c5c2433bd5f4a8f730037148",
+            "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+            "copied_with": "cp -a --reflink=auto; no hard-link copy",
+            "issuance_sha256": "0a81ee72f8b700a1299842a965b6dce650ce380b7dd1d92051a7ee4cc9fa5d06",
+            "fixture_sha256": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "source_lock_sha256": "eefb8fc267460030e933da906bbe493722549089e9a8ec232284aedf556470df",
+            "fixture_source_lock_sha256": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma_fixture_sha256": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "gamma_source_lock_sha256": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "changed_file_sha256": {
+              "src/cryptonote_basic/cryptonote_basic_impl.cpp": "fa872674e95d23be23636713591fc275b14b8b4e6230a8f5a36bf19b7dcf4047",
+              "src/cryptonote_config.h": "a370396596d3f4520e7ac0e383194663d1b58866558ff5fd6cd7c55d6cda0157",
+              "tests/unit_tests/block_reward.cpp": "09340b5902ec0a59defc0d9d2a1b174b1519e21dd3f1c52bfbb0a5f6a753486d",
+              "tests/unit_tests/output_selection.cpp": "cba8e843e5e521b24263d77b50f28994e77b0a764429029327e997fbf230055e"
+            },
+            "target_seconds": 120,
+            "reward_atomic": 12000000000000,
+            "build_completed": true,
+            "capacity_normalization_enforced": false,
+            "fcmp_verified": false,
+            "tests": {
+              "consensus": {
+                "tests": "24",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:26:00",
+                "time": "5.681",
+                "name": "AllTests"
+              },
+              "difficulty": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:26:06",
+                "time": "0.791",
+                "name": "AllTests"
+              },
+              "floor": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:26:07",
+                "time": "0.772",
+                "name": "AllTests"
+              },
+              "full-native-offline": {
+                "tests": "1228",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:26:08",
+                "time": "79.824",
+                "name": "AllTests"
+              },
+              "dns": {
+                "tests": "9",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:27:28",
+                "time": "0.646",
+                "name": "AllTests"
+              },
+              "full-native": {
+                "tests": "1237",
+                "failures": "0",
+                "errors": "0",
+                "name": "AllTests"
+              }
+            },
+            "historical_source_preserved": true,
+            "historical_build_preserved": null,
+            "limits": [
+              "fresh selected source build, not a reproduction pair",
+              "native CI selection excludes only ban.subnet, http_server.response_soft_limit, notify.works; DNS-only phase uses normal networking",
+              "no runtime wallet/RPC/authority/P2P/FCMP readiness claim"
+            ]
+          },
+          "actual_sha256": {
+            "build/release/bin/monerod": "177855bf7fb13adff357e87273e0c8f1caeb14c2ebf31d29d37b107380fb6948",
+            "build/release/bin/monero-wallet-cli": "76888400acb4381b621174043cf8305c6ab92ec8161f32efa5eeb12ad5dd322a",
+            "build/release/bin/monero-wallet-rpc": "242633af93cfb3aaf8e641da0fef2baae3d5e4b7c5f28a50a8641e80913cb8bd",
+            "build/release/tests/unit_tests/unit_tests": "68eae116d2a665002e2719258ceafc4afb76d6700dfe3e805ea44283b1ddae03",
+            "build/release/tests/unit_tests/meow_difficulty_floor_tests": "d420684dbb20de881e710ebc94b1f729520a0876340fe12b1bcd77874a094ac1"
+          },
+          "tests": {
+            "consensus": {
+              "tests": 24,
+              "failures": 0,
+              "errors": 0
+            },
+            "difficulty": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "floor": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native-offline": {
+              "tests": 1228,
+              "failures": 0,
+              "errors": 0
+            },
+            "dns": {
+              "tests": 9,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native": {
+              "tests": 1237,
+              "failures": 0,
+              "errors": 0
+            }
+          },
+          "cgroup": {
+            "memory.max": "4294967296",
+            "memory.swap.max": "0",
+            "cpu.max": "200000 100000",
+            "memory.peak": "3669147648",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+          },
+          "run_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "receipt_sha256": {
+            "BUILDER_IMAGE_ID": "fb6109955503ba274879a823b36bba28c4cec2f079574e8c64c93c1eb99032c0",
+            "SHA256SUMS": "061b435299716f0754db1c6800cd6e68346cc2214214fc7b7cf7532ebb46dafe",
+            "VERSIONS": "0f906246e578128d584771a8f54d1c29df13a4c0bdfd94b7c89fde277b792b78",
+            "packages.txt": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9",
+            "source.diff": "73b359e4b2f062154cfc7e70d5f71f0e696b125f852517773bc272eb244494dd",
+            "issuance.patch": "0a81ee72f8b700a1299842a965b6dce650ce380b7dd1d92051a7ee4cc9fa5d06",
+            "fixtures.patch": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "gamma-fixture.patch": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "fixture-source-lock.json": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma-fixture-source-lock.json": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "native-expected.txt": "e3ec92ec88c79e6c9706aecfdab40d1ee16c5a7c08456f3f975e9a74ba5a935e",
+            "dns-network-scope.txt": "a103f84d624c11becebf0509a37b851b738062604d6fc0d88c2eeaa0c891943b"
+          },
+          "versions": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\ncmake version 3.28.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\n",
+          "packages_sha256": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9"
+        },
+        "second": {
+          "path": "<repo>/build/repro-selected-20260918/fallback-12-120/second",
+          "build.exit": "0",
+          "offline.exit": "0",
+          "dns.exit": "0",
+          "container.exit": "0",
+          "result": {
+            "scope": "fresh selected source build, not a reproduction pair",
+            "profile": "fallback-12-120",
+            "source_only": true,
+            "historical_head": "7410c04bab0e304112710d63c3225c110bd8b4de",
+            "historical_tree": "4db958cb96d72943c5c2433bd5f4a8f730037148",
+            "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+            "copied_with": "cp -a --reflink=auto; no hard-link copy",
+            "issuance_sha256": "0a81ee72f8b700a1299842a965b6dce650ce380b7dd1d92051a7ee4cc9fa5d06",
+            "fixture_sha256": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "source_lock_sha256": "eefb8fc267460030e933da906bbe493722549089e9a8ec232284aedf556470df",
+            "fixture_source_lock_sha256": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma_fixture_sha256": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "gamma_source_lock_sha256": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "changed_file_sha256": {
+              "src/cryptonote_basic/cryptonote_basic_impl.cpp": "fa872674e95d23be23636713591fc275b14b8b4e6230a8f5a36bf19b7dcf4047",
+              "src/cryptonote_config.h": "a370396596d3f4520e7ac0e383194663d1b58866558ff5fd6cd7c55d6cda0157",
+              "tests/unit_tests/block_reward.cpp": "09340b5902ec0a59defc0d9d2a1b174b1519e21dd3f1c52bfbb0a5f6a753486d",
+              "tests/unit_tests/output_selection.cpp": "cba8e843e5e521b24263d77b50f28994e77b0a764429029327e997fbf230055e"
+            },
+            "target_seconds": 120,
+            "reward_atomic": 12000000000000,
+            "build_completed": true,
+            "capacity_normalization_enforced": false,
+            "fcmp_verified": false,
+            "tests": {
+              "consensus": {
+                "tests": "24",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:56:51",
+                "time": "5.387",
+                "name": "AllTests"
+              },
+              "difficulty": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:56:57",
+                "time": "0.763",
+                "name": "AllTests"
+              },
+              "floor": {
+                "tests": "10",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:56:58",
+                "time": "0.78",
+                "name": "AllTests"
+              },
+              "full-native-offline": {
+                "tests": "1228",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:56:59",
+                "time": "79.958",
+                "name": "AllTests"
+              },
+              "dns": {
+                "tests": "9",
+                "failures": "0",
+                "disabled": "0",
+                "errors": "0",
+                "timestamp": "2026-09-18T06:58:19",
+                "time": "0.648",
+                "name": "AllTests"
+              },
+              "full-native": {
+                "tests": "1237",
+                "failures": "0",
+                "errors": "0",
+                "name": "AllTests"
+              }
+            },
+            "historical_source_preserved": true,
+            "historical_build_preserved": null,
+            "limits": [
+              "fresh selected source build, not a reproduction pair",
+              "native CI selection excludes only ban.subnet, http_server.response_soft_limit, notify.works; DNS-only phase uses normal networking",
+              "no runtime wallet/RPC/authority/P2P/FCMP readiness claim"
+            ]
+          },
+          "actual_sha256": {
+            "build/release/bin/monerod": "177855bf7fb13adff357e87273e0c8f1caeb14c2ebf31d29d37b107380fb6948",
+            "build/release/bin/monero-wallet-cli": "76888400acb4381b621174043cf8305c6ab92ec8161f32efa5eeb12ad5dd322a",
+            "build/release/bin/monero-wallet-rpc": "242633af93cfb3aaf8e641da0fef2baae3d5e4b7c5f28a50a8641e80913cb8bd",
+            "build/release/tests/unit_tests/unit_tests": "68eae116d2a665002e2719258ceafc4afb76d6700dfe3e805ea44283b1ddae03",
+            "build/release/tests/unit_tests/meow_difficulty_floor_tests": "d420684dbb20de881e710ebc94b1f729520a0876340fe12b1bcd77874a094ac1"
+          },
+          "tests": {
+            "consensus": {
+              "tests": 24,
+              "failures": 0,
+              "errors": 0
+            },
+            "difficulty": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "floor": {
+              "tests": 10,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native-offline": {
+              "tests": 1228,
+              "failures": 0,
+              "errors": 0
+            },
+            "dns": {
+              "tests": 9,
+              "failures": 0,
+              "errors": 0
+            },
+            "full-native": {
+              "tests": 1237,
+              "failures": 0,
+              "errors": 0
+            }
+          },
+          "cgroup": {
+            "memory.max": "4294967296",
+            "memory.swap.max": "0",
+            "cpu.max": "200000 100000",
+            "memory.peak": "3563900928",
+            "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0"
+          },
+          "run_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "receipt_sha256": {
+            "BUILDER_IMAGE_ID": "fb6109955503ba274879a823b36bba28c4cec2f079574e8c64c93c1eb99032c0",
+            "SHA256SUMS": "061b435299716f0754db1c6800cd6e68346cc2214214fc7b7cf7532ebb46dafe",
+            "VERSIONS": "0f906246e578128d584771a8f54d1c29df13a4c0bdfd94b7c89fde277b792b78",
+            "packages.txt": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9",
+            "source.diff": "73b359e4b2f062154cfc7e70d5f71f0e696b125f852517773bc272eb244494dd",
+            "issuance.patch": "0a81ee72f8b700a1299842a965b6dce650ce380b7dd1d92051a7ee4cc9fa5d06",
+            "fixtures.patch": "360acc9ea7bd014225aa20ad93bee19c5f5444d126b36f93ffed0f913030f0e7",
+            "gamma-fixture.patch": "c2a6adb2e52529127943862613aee7fea8f5735b94129cd9713e111b7c09f508",
+            "fixture-source-lock.json": "59a6e62ad24e861a791d523b1670d837d8199580cf2cedba4c6991ca060d1c0d",
+            "gamma-fixture-source-lock.json": "9dc60e6563e3cbcc6c28f3b292ff421e35a6c8276a9dd2a6315d6a314427abcd",
+            "native-expected.txt": "e3ec92ec88c79e6c9706aecfdab40d1ee16c5a7c08456f3f975e9a74ba5a935e",
+            "dns-network-scope.txt": "a103f84d624c11becebf0509a37b851b738062604d6fc0d88c2eeaa0c891943b"
+          },
+          "versions": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\ncmake version 3.28.3\n\nCMake suite maintained and supported by Kitware (kitware.com/cmake).\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\nMonero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)\n",
+          "packages_sha256": "769dbcd72bac1dd528f5bd1833da29e0b788fdc50d9dee23791148ef6e6cd8d9"
+        }
+      },
+      "pair": {
+        "executables_identical": true
+      },
+      "prior_2026_09_13_identical": true,
+      "prior_2026_09_13_sha256": {
+        "build/release/bin/monerod": "177855bf7fb13adff357e87273e0c8f1caeb14c2ebf31d29d37b107380fb6948",
+        "build/release/bin/monero-wallet-cli": "76888400acb4381b621174043cf8305c6ab92ec8161f32efa5eeb12ad5dd322a",
+        "build/release/bin/monero-wallet-rpc": "242633af93cfb3aaf8e641da0fef2baae3d5e4b7c5f28a50a8641e80913cb8bd",
+        "build/release/tests/unit_tests/unit_tests": "68eae116d2a665002e2719258ceafc4afb76d6700dfe3e805ea44283b1ddae03",
+        "build/release/tests/unit_tests/meow_difficulty_floor_tests": "d420684dbb20de881e710ebc94b1f729520a0876340fe12b1bcd77874a094ac1"
+      }
+    }
+  },
+  "checks": [
+    {
+      "ok": true,
+      "check": "first: build.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: offline.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: dns.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: container.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: BUILDER_IMAGE_ID is the immutable builder"
+    },
+    {
+      "ok": true,
+      "check": "first: profile/target/reward == selected-9-90/90/9000000000000"
+    },
+    {
+      "ok": true,
+      "check": "first: source-only staging from historical 7410c04ba/4db958cb9"
+    },
+    {
+      "ok": true,
+      "check": "first: receipt records no capacity normalization and no FCMP verification"
+    },
+    {
+      "ok": true,
+      "check": "first: re-hashed executables match the runner SHA256SUMS"
+    },
+    {
+      "ok": true,
+      "check": "first: staged source HEAD/tree are the pinned historical revision"
+    },
+    {
+      "ok": true,
+      "check": "first: live tracked diff equals frozen source.diff"
+    },
+    {
+      "ok": true,
+      "check": "first: changed tracked files are exactly the overlay set ['src/cryptonote_basic/cryptonote_basic_impl.cpp', 'src/cryptonote_config.h', 'tests/unit_tests/block_reward.cpp', 'tests/unit_tests/output_selection.cpp']"
+    },
+    {
+      "ok": true,
+      "check": "first: overlay file hashes match the receipt"
+    },
+    {
+      "ok": true,
+      "check": "first: only modifications, no tracked deletions/renames"
+    },
+    {
+      "ok": true,
+      "check": "first: consensus 24/24 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: difficulty 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: floor 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: full-native-offline 1228/1228 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: dns 9/9 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: full-native 1237/1237 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: cgroup caps 4 GiB / no swap / 2 CPUs"
+    },
+    {
+      "ok": true,
+      "check": "first: no memory-limit/OOM events (low 0, high 0, max 0, oom 0, oom_kill 0, oom_group_kill 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: make.log carries no ccache activity"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90/first: live package manifest equals the frozen clean15 image manifest"
+    },
+    {
+      "ok": true,
+      "check": "second: build.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: offline.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: dns.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: container.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: BUILDER_IMAGE_ID is the immutable builder"
+    },
+    {
+      "ok": true,
+      "check": "second: profile/target/reward == selected-9-90/90/9000000000000"
+    },
+    {
+      "ok": true,
+      "check": "second: source-only staging from historical 7410c04ba/4db958cb9"
+    },
+    {
+      "ok": true,
+      "check": "second: receipt records no capacity normalization and no FCMP verification"
+    },
+    {
+      "ok": true,
+      "check": "second: re-hashed executables match the runner SHA256SUMS"
+    },
+    {
+      "ok": true,
+      "check": "second: staged source HEAD/tree are the pinned historical revision"
+    },
+    {
+      "ok": true,
+      "check": "second: live tracked diff equals frozen source.diff"
+    },
+    {
+      "ok": true,
+      "check": "second: changed tracked files are exactly the overlay set ['src/cryptonote_basic/cryptonote_basic_impl.cpp', 'src/cryptonote_config.h', 'tests/unit_tests/block_reward.cpp', 'tests/unit_tests/output_selection.cpp']"
+    },
+    {
+      "ok": true,
+      "check": "second: overlay file hashes match the receipt"
+    },
+    {
+      "ok": true,
+      "check": "second: only modifications, no tracked deletions/renames"
+    },
+    {
+      "ok": true,
+      "check": "second: consensus 24/24 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: difficulty 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: floor 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: full-native-offline 1228/1228 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: dns 9/9 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: full-native 1237/1237 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: cgroup caps 4 GiB / no swap / 2 CPUs"
+    },
+    {
+      "ok": true,
+      "check": "second: no memory-limit/OOM events (low 0, high 0, max 0, oom 0, oom_kill 0, oom_group_kill 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: make.log carries no ccache activity"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90/second: live package manifest equals the frozen clean15 image manifest"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: all five executables hash identically across first and second clean builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt BUILDER_IMAGE_ID identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt SHA256SUMS identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt VERSIONS identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt packages.txt identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt source.diff identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt issuance.patch identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt fixtures.patch identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt gamma-fixture.patch identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt fixture-source-lock.json identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt gamma-fixture-source-lock.json identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt native-expected.txt identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: receipt dns-network-scope.txt identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: result.json identical across builds apart from test timings"
+    },
+    {
+      "ok": true,
+      "check": "selected-9-90: hashes equal the September 13 recovered binaries (selected-9-90-launch-01) \u2014 same host/image, different day"
+    },
+    {
+      "ok": true,
+      "check": "first: build.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: offline.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: dns.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: container.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: BUILDER_IMAGE_ID is the immutable builder"
+    },
+    {
+      "ok": true,
+      "check": "first: profile/target/reward == fallback-12-120/120/12000000000000"
+    },
+    {
+      "ok": true,
+      "check": "first: source-only staging from historical 7410c04ba/4db958cb9"
+    },
+    {
+      "ok": true,
+      "check": "first: receipt records no capacity normalization and no FCMP verification"
+    },
+    {
+      "ok": true,
+      "check": "first: re-hashed executables match the runner SHA256SUMS"
+    },
+    {
+      "ok": true,
+      "check": "first: staged source HEAD/tree are the pinned historical revision"
+    },
+    {
+      "ok": true,
+      "check": "first: live tracked diff equals frozen source.diff"
+    },
+    {
+      "ok": true,
+      "check": "first: changed tracked files are exactly the overlay set ['src/cryptonote_basic/cryptonote_basic_impl.cpp', 'src/cryptonote_config.h', 'tests/unit_tests/block_reward.cpp', 'tests/unit_tests/output_selection.cpp']"
+    },
+    {
+      "ok": true,
+      "check": "first: overlay file hashes match the receipt"
+    },
+    {
+      "ok": true,
+      "check": "first: only modifications, no tracked deletions/renames"
+    },
+    {
+      "ok": true,
+      "check": "first: consensus 24/24 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: difficulty 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: floor 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: full-native-offline 1228/1228 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: dns 9/9 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: full-native 1237/1237 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "first: cgroup caps 4 GiB / no swap / 2 CPUs"
+    },
+    {
+      "ok": true,
+      "check": "first: no memory-limit/OOM events (low 0, high 0, max 0, oom 0, oom_kill 0, oom_group_kill 0)"
+    },
+    {
+      "ok": true,
+      "check": "first: make.log carries no ccache activity"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120/first: live package manifest equals the frozen clean15 image manifest"
+    },
+    {
+      "ok": true,
+      "check": "second: build.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: offline.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: dns.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: container.exit == 0 (got 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: BUILDER_IMAGE_ID is the immutable builder"
+    },
+    {
+      "ok": true,
+      "check": "second: profile/target/reward == fallback-12-120/120/12000000000000"
+    },
+    {
+      "ok": true,
+      "check": "second: source-only staging from historical 7410c04ba/4db958cb9"
+    },
+    {
+      "ok": true,
+      "check": "second: receipt records no capacity normalization and no FCMP verification"
+    },
+    {
+      "ok": true,
+      "check": "second: re-hashed executables match the runner SHA256SUMS"
+    },
+    {
+      "ok": true,
+      "check": "second: staged source HEAD/tree are the pinned historical revision"
+    },
+    {
+      "ok": true,
+      "check": "second: live tracked diff equals frozen source.diff"
+    },
+    {
+      "ok": true,
+      "check": "second: changed tracked files are exactly the overlay set ['src/cryptonote_basic/cryptonote_basic_impl.cpp', 'src/cryptonote_config.h', 'tests/unit_tests/block_reward.cpp', 'tests/unit_tests/output_selection.cpp']"
+    },
+    {
+      "ok": true,
+      "check": "second: overlay file hashes match the receipt"
+    },
+    {
+      "ok": true,
+      "check": "second: only modifications, no tracked deletions/renames"
+    },
+    {
+      "ok": true,
+      "check": "second: consensus 24/24 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: difficulty 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: floor 10/10 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: full-native-offline 1228/1228 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: dns 9/9 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: full-native 1237/1237 tests, 0 failures, 0 errors"
+    },
+    {
+      "ok": true,
+      "check": "second: cgroup caps 4 GiB / no swap / 2 CPUs"
+    },
+    {
+      "ok": true,
+      "check": "second: no memory-limit/OOM events (low 0, high 0, max 0, oom 0, oom_kill 0, oom_group_kill 0)"
+    },
+    {
+      "ok": true,
+      "check": "second: make.log carries no ccache activity"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120/second: live package manifest equals the frozen clean15 image manifest"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: all five executables hash identically across first and second clean builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt BUILDER_IMAGE_ID identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt SHA256SUMS identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt VERSIONS identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt packages.txt identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt source.diff identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt issuance.patch identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt fixtures.patch identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt gamma-fixture.patch identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt fixture-source-lock.json identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt gamma-fixture-source-lock.json identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt native-expected.txt identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: receipt dns-network-scope.txt identical across builds"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: result.json identical across builds apart from test timings"
+    },
+    {
+      "ok": true,
+      "check": "fallback-12-120: hashes equal the September 13 recovered binaries (fallback-12-120-run-01) \u2014 same host/image, different day"
+    }
+  ],
+  "all_ok": true,
+  "status": "PASS_SAME_HOST_SAME_IMAGE_PAIRS",
+  "limits": [
+    "same host, same immutable builder image; not an independently reconstructed toolchain (apt versions are unpinned in chain/Dockerfile)",
+    "source-only staging from the reconstructed historical clean15 source plus the existing selected/fallback overlays; no monetary or consensus change",
+    "native CI selection retains the three documented exclusions (ban.subnet, http_server.response_soft_limit, notify.works); DNS phase uses bridge networking",
+    "no runtime, capacity-normalization, FCMP, loaded-network, wallet/fee/aggregate or launch-readiness claim"
+  ]
+}

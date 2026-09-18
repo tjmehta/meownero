@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="24" failures="0" disabled="0" errors="0" timestamp="2026-09-18T05:54:51" time="3.95" name="AllTests">
+  <testsuite name="meow_address" tests="2" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="network_and_address_type_vectors" status="run" time="0" classname="meow_address" />
+    <testcase name="rejects_monero_base58_address" status="run" time="0" classname="meow_address" />
+  </testsuite>
+  <testsuite name="meow_emission" tests="7" failures="0" disabled="0" errors="0" time="0.024">
+    <testcase name="selected_reward_spacing_pair" status="run" time="0" classname="meow_emission" />
+    <testcase name="reward_independent_of_supply" status="run" time="0" classname="meow_emission" />
+    <testcase name="reward_independent_of_version" status="run" time="0" classname="meow_emission" />
+    <testcase name="penalty_math_unchanged" status="run" time="0.001" classname="meow_emission" />
+    <testcase name="supply_is_height_times_reward" status="run" time="0.023" classname="meow_emission" />
+    <testcase name="tally_saturates_and_never_wraps" status="run" time="0" classname="meow_emission" />
+    <testcase name="dilution_is_one_over_n_minus_one" status="run" time="0" classname="meow_emission" />
+  </testsuite>
+  <testsuite name="meow_difficulty" tests="9" failures="0" disabled="0" errors="0" time="0.68">
+    <testcase name="clamp" status="run" time="0" classname="meow_difficulty" />
+    <testcase name="startup_uses_floor" status="run" time="0" classname="meow_difficulty" />
+    <testcase name="computed_result_uses_floor" status="run" time="0" classname="meow_difficulty" />
+    <testcase name="rounding_and_timestamp_sorting_preserved" status="run" time="0" classname="meow_difficulty" />
+    <testcase name="equal_timestamps_use_one_second" status="run" time="0" classname="meow_difficulty" />
+    <testcase name="overflow_remains_error_not_floor" status="run" time="0" classname="meow_difficulty" />
+    <testcase name="core_genesis_and_recalculation" status="run" time="0.112" classname="meow_difficulty" />
+    <testcase name="core_fixed_difficulty_override" status="run" time="0.036" classname="meow_difficulty" />
+    <testcase name="core_window_lag_rollback_and_alternative_sampling" status="run" time="0.532" classname="meow_difficulty" />
+  </testsuite>
+  <testsuite name="meow_authorities" tests="2" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="updates_fail_closed" status="run" time="0" classname="meow_authorities" />
+    <testcase name="no_download_urls" status="run" time="0" classname="meow_authorities" />
+  </testsuite>
+  <testsuite name="cryptonote_protocol_handler" tests="1" failures="0" disabled="0" errors="0" time="3.246">
+    <testcase name="race_condition" status="run" time="3.246" classname="cryptonote_protocol_handler" />
+  </testsuite>
+  <testsuite name="meow_hardforks" tests="1" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="single_jump_table" status="run" time="0" classname="meow_hardforks" />
+  </testsuite>
+  <testsuite name="meow_wallet_hardforks" tests="2" failures="0" disabled="0" errors="0" time="0">
+    <testcase name="sparse_table_and_invalid_versions" status="run" time="0" classname="meow_wallet_hardforks" />
+    <testcase name="inherited_network_activation_boundaries" status="run" time="0" classname="meow_wallet_hardforks" />
+  </testsuite>
+</testsuites>

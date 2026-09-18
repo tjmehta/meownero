@@ -1,0 +1,33 @@
+Note: Google Test filter = AddressFromURL.*:DNSResolver.*
+[==========] Running 9 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 2 tests from AddressFromURL
+[ RUN      ] AddressFromURL.Success
+[       OK ] AddressFromURL.Success (104 ms)
+[ RUN      ] AddressFromURL.Failure
+[       OK ] AddressFromURL.Failure (7 ms)
+[----------] 2 tests from AddressFromURL (111 ms total)
+
+[----------] 7 tests from DNSResolver
+[ RUN      ] DNSResolver.IPv4Success
+[       OK ] DNSResolver.IPv4Success (94 ms)
+[ RUN      ] DNSResolver.IPv4Failure
+[       OK ] DNSResolver.IPv4Failure (56 ms)
+[ RUN      ] DNSResolver.DNSSECSuccess
+[       OK ] DNSResolver.DNSSECSuccess (57 ms)
+[ RUN      ] DNSResolver.DNSSECFailure
+2026-09-18 06:27:28.966	W Invalid DNSSEC A record signature for dnssec-failed.org: validation failure <dnssec-failed.org. A IN>: no keys have a DS with algorithm ECDSAP256SHA256 from 192.0.2.1 for key dnssec-failed.org. while building chain of trust
+[       OK ] DNSResolver.DNSSECFailure (238 ms)
+[ RUN      ] DNSResolver.IPv6Failure
+[       OK ] DNSResolver.IPv6Failure (51 ms)
+[ RUN      ] DNSResolver.GetTXTRecord
+TXT record for donate.getmonero.org: oa1:xmr recipient_address=888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H; recipient_name=Monero Development; tx_description=Donation to Monero Core Team;
+TXT record for donate.getmonero.org: oa1:btc recipient_address=1KTexdemPdxSBcG55heUuTjDRYqbC5ZL8H; recipient_name=Monero Development; tx_description=Donation to Monero Core Team;
+[       OK ] DNSResolver.GetTXTRecord (1 ms)
+[ RUN      ] DNSResolver.Localhost
+[       OK ] DNSResolver.Localhost (38 ms)
+[----------] 7 tests from DNSResolver (535 ms total)
+
+[----------] Global test environment tear-down
+[==========] 9 tests from 2 test cases ran. (646 ms total)
+[  PASSED  ] 9 tests.

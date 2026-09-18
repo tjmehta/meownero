@@ -1,0 +1,186 @@
+diff --git a/src/cryptonote_basic/cryptonote_basic_impl.cpp b/src/cryptonote_basic/cryptonote_basic_impl.cpp
+index 3d07e15..986857c 100644
+--- a/src/cryptonote_basic/cryptonote_basic_impl.cpp
++++ b/src/cryptonote_basic/cryptonote_basic_impl.cpp
+@@ -81,7 +81,7 @@ namespace cryptonote {
+   }
+   //-----------------------------------------------------------------------------------------------
+   bool get_block_reward(size_t median_weight, size_t current_block_weight, uint64_t already_generated_coins, uint64_t &reward, uint8_t version) {
+-    static_assert(DIFFICULTY_TARGET_V2%60==0&&DIFFICULTY_TARGET_V1%60==0,"difficulty targets must be a multiple of 60");
++    // Flat subsidy has no minute-based emission calculation or whole-minute constraint.
+     // Meownero: perpetual flat subsidy. Independent of already_generated_coins, hard-fork
+     // version, and target spacing (PLAN.md rev 4 §8.1). The block-weight penalty below is
+     // retained unchanged and is denominated in this constant.
+diff --git a/src/cryptonote_config.h b/src/cryptonote_config.h
+index 1fd5c41..7e9ec01 100644
+--- a/src/cryptonote_config.h
++++ b/src/cryptonote_config.h
+@@ -54,8 +54,8 @@
+ #define MONEY_SUPPLY                                    ((uint64_t)(-1))
+ #define EMISSION_SPEED_FACTOR_PER_MINUTE                (20)
+ #define FINAL_SUBSIDY_PER_MINUTE                        ((uint64_t)300000000000) // 3 * pow(10, 11) (unused by Meownero; kept for upstream diff hygiene)
+-// Meownero: perpetual flat subsidy, 0.9 MEOW per block (PLAN.md rev 4 §8.1). Genesis pays 0.
+-#define MEOW_BLOCK_REWARD                               ((uint64_t)900000000000) // 9 * pow(10, 11) = 0.9 * COIN
++// Meownero: gated local fallback-12-120 profile (decision 2026-09-12). Genesis pays 0.
++#define MEOW_BLOCK_REWARD                               ((uint64_t)12000000000000) // 12 * COIN
+ 
+ #define CRYPTONOTE_REWARD_BLOCKS_WINDOW                 100
+ #define CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V2    60000 //size of block (bytes) after which reward for block calculated using block size
+diff --git a/tests/unit_tests/block_reward.cpp b/tests/unit_tests/block_reward.cpp
+index e1560c1..3f92a23 100644
+--- a/tests/unit_tests/block_reward.cpp
++++ b/tests/unit_tests/block_reward.cpp
+@@ -1,13 +1,14 @@
+-// Meownero Candidate M control — emission unit tests.
++// Meownero selected/fallback local profiles — emission unit tests.
+ // Replaces Monero's tests/unit_tests/block_reward.cpp (which encodes the Monero curve).
+ // Invariants under test (PLAN.md rev 4 §8.1, §8.2):
+-//   E1  reward is exactly MEOW_BLOCK_REWARD = 0.9 * COIN at every already_generated_coins value
+-//   E2  reward is independent of hard-fork version and of the 60s/120s target distinction
++//   E1  reward matches the selected 9/90 or fallback 12/120 pair at every tally value
++//   E2  reward is independent of hard-fork version and of the historical/current target distinction
+ //   E3  block-weight penalty math is unchanged and is denominated in the constant
+-//   E4  supply(h) == h * MEOW_BLOCK_REWARD; the uint64 supply tally saturates (never wraps) at the
++//   E4  unpenalized supply(h) == h * MEOW_BLOCK_REWARD; the uint64 tally saturates at the
+ //       upstream MONEY_SUPPLY cap — horizon computed and asserted, not assumed
+ //   E5  dilution: year-N inflation of a flat schedule is 1/(N-1); no deflation exists at any height
+ #include "gtest/gtest.h"
++#include <boost/multiprecision/cpp_int.hpp>
+ #include "cryptonote_basic/cryptonote_basic_impl.h"
+ #include "cryptonote_config.h"
+ 
+@@ -16,6 +17,12 @@ using namespace cryptonote;
+ namespace
+ {
+   const uint64_t R = MEOW_BLOCK_REWARD;
++  // Independent values from the selected-policy decision; never derive expected
++  // reward/horizon from the production reward constant being tested.
++  const bool selected = DIFFICULTY_TARGET_V2 == 90;
++  const uint64_t expected_reward = selected ? UINT64_C(9000000000000) : UINT64_C(12000000000000);
++  const uint64_t expected_blocks_per_year = selected ? UINT64_C(350400) : UINT64_C(262800);
++  const uint64_t expected_last_unsaturated_height = selected ? UINT64_C(2049638) : UINT64_C(1537228);
+   const size_t small_block = CRYPTONOTE_BLOCK_GRANTED_FULL_REWARD_ZONE_V1 / 2;
+ 
+   uint64_t reward_at(uint64_t already_generated, uint8_t version = 1, size_t median = 0, size_t weight = small_block)
+@@ -27,10 +34,11 @@ namespace
+   }
+ 
+   // ---------------------------------------------------------------- E1
+-  TEST(meow_emission, constant_is_0_9_meow)
++  TEST(meow_emission, selected_reward_spacing_pair)
+   {
+-    ASSERT_EQ(R, UINT64_C(900000000000));
+-    ASSERT_EQ(R, (COIN * 9) / 10);
++    ASSERT_TRUE(DIFFICULTY_TARGET_V2 == 90 || DIFFICULTY_TARGET_V2 == 120);
++    ASSERT_EQ(R, expected_reward);
++    ASSERT_EQ(R, COIN * (selected ? 9 : 12));
+     ASSERT_EQ(CRYPTONOTE_DISPLAY_DECIMAL_POINT, 12);
+   }
+ 
+@@ -47,7 +55,7 @@ namespace
+   {
+     for (uint8_t v = 1; v <= 16; ++v)
+       ASSERT_EQ(reward_at(0, v), R) << "version " << int(v);
+-    ASSERT_EQ(reward_at(0, 1), reward_at(0, 2)); // V1 (60 s) vs V2 (120 s) target no longer matters
++    ASSERT_EQ(reward_at(0, 1), reward_at(0, 2)); // Historical V1 vs selected/fallback V2 target does not affect flat reward
+   }
+ 
+   // ---------------------------------------------------------------- E3
+@@ -77,22 +85,30 @@ namespace
+   TEST(meow_emission, supply_is_height_times_reward)
+   {
+     uint64_t agc = 0; // genesis pays 0 by consensus (construct_miner_tx / validate_miner_transaction)
+-    const uint64_t blocks_per_year = (365 * 24 * 3600) / DIFFICULTY_TARGET_V2; // 262,800
+-    ASSERT_EQ(blocks_per_year, UINT64_C(262800));
++    const uint64_t blocks_per_year = (365 * 24 * 3600) / DIFFICULTY_TARGET_V2;
++    ASSERT_EQ(blocks_per_year, expected_blocks_per_year);
++    using boost::multiprecision::uint128_t;
++    ASSERT_EQ(uint128_t(blocks_per_year) * R, uint128_t(3153600) * COIN);
+     for (uint64_t h = 1; h <= 10 * blocks_per_year; ++h)
+     {
+       agc = tally_step(agc, reward_at(agc));
+       if (h % blocks_per_year == 0)
+-        ASSERT_EQ(agc, h * R) << "height " << h;
++      {
++        const uint128_t issued = uint128_t(h) * R;
++        const uint64_t expected = issued > MONEY_SUPPLY ? MONEY_SUPPLY : issued.convert_to<uint64_t>();
++        ASSERT_EQ(agc, expected) << "height " << h;
++      }
+     }
+-    ASSERT_EQ(agc, UINT64_C(10) * 262800 * R); // 2,365,200 MEOW after 10 years
++    // Mathematical ten-year issuance exceeds the internal tally; it is not a cap.
++    ASSERT_EQ(uint128_t(10) * blocks_per_year * R, uint128_t(31536000) * COIN);
++    ASSERT_EQ(agc, MONEY_SUPPLY);
+   }
+ 
+   TEST(meow_emission, tally_saturates_and_never_wraps)
+   {
+     // Horizon: first height whose cumulative subsidy would exceed uint64::max.
+-    const uint64_t horizon = MONEY_SUPPLY / R; // 20,496,382 blocks ≈ 78.0 years at 120 s
+-    ASSERT_EQ(horizon, UINT64_C(20496382));
++    const uint64_t horizon = MONEY_SUPPLY / R;
++    ASSERT_EQ(horizon, expected_last_unsaturated_height);
+     ASSERT_GT(horizon * R, MONEY_SUPPLY - R); // last representable full step
+     uint64_t agc = (horizon - 1) * R;         // tally just before the edge
+     ASSERT_EQ(reward_at(agc), R);              // reward unaffected by the tally
+@@ -100,24 +116,24 @@ namespace
+     ASSERT_EQ(agc, horizon * R);
+     agc = tally_step(agc, R);                  // one past: saturates
+     ASSERT_EQ(agc, MONEY_SUPPLY);
+-    ASSERT_EQ(reward_at(agc), R);              // and emission continues at 0.9 forever
++    ASSERT_EQ(reward_at(agc), R);              // and the selected flat subsidy continues
+     ASSERT_EQ(tally_step(agc, R), MONEY_SUPPLY);
+-    // Recorded finding for ADR-001: with 12 decimal places the on-chain supply counter saturates after
+-    // ~78 years while emission continues correctly; atomic-unit choice must be decided with this number.
++    // Both selected profiles saturate the internal tally around 5.85 target-years.
++    // This fixture does not exercise full-node aggregate consumers or wallet balances.
+   }
+ 
+   // ---------------------------------------------------------------- E5
+   TEST(meow_emission, dilution_is_one_over_n_minus_one)
+   {
+     // inflation during year N == issuance_N / cumulative_{N-1} == 1/(N-1) for a flat schedule
+-    const long double year = 262800.0L * R;
++    const long double year = static_cast<long double>(expected_blocks_per_year) * R;
+     for (int n = 2; n <= 101; ++n)
+     {
+       long double infl = year / (year * (n - 1));
+       ASSERT_NEAR((double)infl, 1.0 / (n - 1), 1e-12) << "year " << n;
+     }
+     // no height has negative issuance: nothing is ever burned by consensus
+-    for (uint64_t agc : { UINT64_C(0), R * 262800, R * 262800 * 50 })
++    for (uint64_t agc : { UINT64_C(0), R * expected_blocks_per_year, MONEY_SUPPLY - R, MONEY_SUPPLY })
+       ASSERT_GT(reward_at(agc), 0u);
+   }
+ }
+diff --git a/tests/unit_tests/output_selection.cpp b/tests/unit_tests/output_selection.cpp
+index 0261920..68b1646 100644
+--- a/tests/unit_tests/output_selection.cpp
++++ b/tests/unit_tests/output_selection.cpp
+@@ -113,10 +113,14 @@ TEST(select_outputs, gamma)
+ {
+   std::vector<uint64_t> offsets;
+ 
+-  MKOFFSETS(300000, 1);
++  // Keep the historical fixture's wallclock horizon: truncation affects the median.
++  constexpr size_t history_seconds = 300000 * 120;
++  static_assert(history_seconds % DIFFICULTY_TARGET_V2 == 0, "exact fixture horizon");
++  MKOFFSETS(history_seconds / DIFFICULTY_TARGET_V2, 1);
+   tools::gamma_picker picker(offsets);
+-  std::vector<double> ages(100000);
+-  double age_scale = 120. * (offsets.size() / (double)n_outs);
++  // More draws reduce stochastic error; the original median bounds stay unchanged.
++  std::vector<double> ages(1000000);
++  double age_scale = double(DIFFICULTY_TARGET_V2) * (offsets.size() / (double)n_outs);
+   for (size_t i = 0; i < ages.size(); )
+   {
+     uint64_t o = picker.pick();
+@@ -124,7 +128,7 @@ TEST(select_outputs, gamma)
+       continue;
+     ages[i] = (n_outs - 1 - o) * age_scale;
+     ASSERT_GE(ages[i], 0);
+-    ASSERT_LE(ages[i], offsets.size() * 120);
++    ASSERT_LE(ages[i], history_seconds);
+     ++i;
+   }
+   double median = epee::misc_utils::median(ages);
