@@ -1,0 +1,71 @@
+{
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "receive_coinbase",
+      "result": "PASS",
+      "reward_atomic": 9000000000000,
+      "mined_blocks": 105,
+      "balance_atomic": 945000000000000,
+      "unlocked_atomic": 414000000000000,
+      "history_entries": 105
+    },
+    {
+      "case": "send_receive",
+      "result": "PASS",
+      "amount_atomic": 5000000000000,
+      "fee_atomic": 649800000,
+      "txid": "6fc6594f29ae6502c92a6c2f1dca3db8bd7dcf22d2ccfbdd29927d2d383ceb56",
+      "receiver_balance_atomic": 5000000000000
+    },
+    {
+      "case": "fee_atomic_units",
+      "result": "PASS",
+      "sender_balance_before": 945000000000000,
+      "sender_balance_after": 939999350200000,
+      "debit_atomic": 5000649800000,
+      "identity": "before - amount - fee == after"
+    },
+    {
+      "case": "restore_outgoing_metadata",
+      "result": "PASS",
+      "balance_atomic": 939999350200000,
+      "address_matches": true,
+      "recovered_out_txids": [
+        "6fc6594f29ae6502c92a6c2f1dca3db8bd7dcf22d2ccfbdd29927d2d383ceb56"
+      ]
+    },
+    {
+      "case": "restore_then_spend",
+      "result": "PASS",
+      "amount_atomic": 3000000000000,
+      "fee_atomic": 649800000,
+      "txid": "2592cd7b5b466a274c2ec004dcef4a36618d41322b3ba391bbf9c7efb8bceeef",
+      "restored_balance_after": 936998700400000,
+      "receiver_balance_atomic": 8000000000000
+    },
+    {
+      "case": "reopen",
+      "result": "PASS",
+      "balance_atomic": 936998700400000,
+      "in_entries": 105,
+      "out_entries": 2
+    },
+    {
+      "case": "aggregate_reporting",
+      "result": "PASS",
+      "height": 236,
+      "coinbase_blocks": 235,
+      "emission_atomic": 2115000000000000,
+      "fee_atomic": 1299600000,
+      "wallet_reported_fees": 1299600000,
+      "cross_check": "daemon fee tally == wallet fee reports"
+    }
+  ],
+  "reward_atomic": 9000000000000,
+  "height": 236,
+  "emission_atomic": 2115000000000000,
+  "fee_total_atomic": 1299600000,
+  "scope": "real selected 9/90 monerod + monero-wallet-rpc on an isolated fixed-difficulty chain; disposable keys; coinbase-funded; ring/CLSAG defaults; no external network",
+  "transport_observer_note": "wallet<->daemon is trusted loopback HTTP over the container network namespace with --network none; NOT an anonymity test. A real remote node would additionally observe the source address, the set of txids/outputs the wallet fetches, restore height and request timing. Transport hardening (Tor/i2p, untrusted-node behaviour) is not exercised here; see the controller checkpoint (chain/privacy-test.py) and the observer threat model in research/wallet-funded-2026-09-18.md."
+}
