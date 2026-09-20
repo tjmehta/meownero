@@ -1,0 +1,91 @@
+--- a/research/adversarial-consensus-2026-09-18.md
++++ b/research/adversarial-consensus-2026-09-18.md
+@@ -309,7 +309,7 @@
+ | # | Observation | Severity | Disposition |
+ |---|---|---|---|
+ | F1 | 90 s slow-link stale-probability criterion failed once at `accel=6` (TJS-39) | **resolved as harness cadence artifact** (was: medium/unresolved) | **RECONCILED via TJS-78** (§4): the `accel=1` target-rate re-run of the failing seeds s3/s4/s6 on a quiescent host gives `stale_p_max` 0.00511/0.00524/0.00507 (< 0.01), 0/3 fail, zero hot slots → emulated-link × accelerated-cadence queueing artifact, not a propagation regression. Original `accel=6` receipts preserved. **Still no 90 s GO** (FCMP/capacity/variable-DAA unmet) |
+-| F2 | No variable-difficulty deep-reorg evidence (all tests floor-1 → heavier==longer) | medium (gap) | Precondition for reorg-trust sign-off; needs a difficulty-varying harness. Open M2 |
++| F2 | Previously no variable-difficulty deep-reorg evidence (all tests floor-1 → heavier==longer) | **CLOSED (bounded evidence gap)** | **TJS-129 → independent accept → TJS-165 QA, 2026-09-20:** two frozen runs, AC1–AC4 PASS; shorter height 17/work 472 replaces height 36/work 467, 24 displaced. See [QA acceptance](qa-tjs165-2026-09-20.md). Timestamp-steered, isolated RPC/empty-block evidence only; not equal-work, live-hashrate economics, FCMP/F3, F4 or 90 s GO. |
+ | F7 | "Non-private tx rejection" acceptance item exercised only at PARSE level (version-1/RCTTypeNull proxies), not the mandatory-RingCT/minimum-rct-type CONSENSUS rule on a well-formed non-private tx (R1/TJS-43) | low–medium (claims/gap) | Original acceptance item **remains open**; wallet-rpc cannot build a well-formed transparent tx. Optional follow-up: hand-construct a well-formed v1/RCTTypeNull tx submitted past the fork height. No daemon defect implied |
+ | F3 | Matched-capacity, intended-crypto (FCMP) loaded partition/reorg absent (FCMP not in source) | high (gap, blocks GO) | Launch precondition; FCMP integration does not exist in pinned source. Open, not agent-closeable |
+ | F4 | Stock P2Pool incompatible; no pool/payout proof | high (gap) | Honest disposition preserved; first-class open item for any decentralized-mining claim (§5) |
+@@ -324,7 +324,24 @@
+ (TJS-41 at `678606f`) and historical evidence are preserved. Heavy runs serialized
+ under the existing lock with the ≥5 GiB preflight; no host service was stopped.
+ 
+-## Next bounded action
++## F2 acceptance update — TJS-165, 2026-09-20
++
++The original September 18 floor-1 scope above remains historically accurate. The
++subsequent TJS-129 variable-difficulty receipts close only the named **absence of
++variable-difficulty reorg evidence**, after independent review and QA readback:
++[QA verdict and exact binding](qa-tjs165-2026-09-20.md). Both runs satisfy the four
++predeclared criteria; no new daemon run was needed. Full historical daemon logs
++were deleted; retained reorg excerpts and harness receipts are the evidence, not
++a new QA witness. Equal-work retention was not exercised in these runs.
++
++This supersedes the F2 harness request below, not the broader reorg-trust or launch
++preconditions. Selfish mining/withholding, eclipse, meaningful live-hashrate
++competition, mature-window DAA behavior and matched-capacity FCMP remain outside
++this evidence. TJS-166 owns the R1–R4 report/future-receipt corrections; no original
++receipt is rewritten. **Observed behavior:** work-over-height selection is now
++evidenced above the floor, without establishing adversarial launch economics.
++
++## Next bounded action (historical; F2 superseded above)
+ 
+ Optional constructed-transaction case to close F7 (a hand-built well-formed
+ version-1 / RCTTypeNull tx submitted past the fork height, exercising the
+--- a/research/acceptance-tjs44-2026-09-18.md
++++ b/research/acceptance-tjs44-2026-09-18.md
+@@ -186,18 +186,20 @@
+ | Rollback/operator procedures | **DONE** | `docs/ops/rollback-recovery.md` |
+ | Findings resolved before acceptance | **DONE (review-accepted)** | TJS-43 R1–R3 ACCEPTED (`research/review-tjs43-recheck-2026-09-18.md`) |
+ | Well-formed non-private consensus rejection | **OPEN (F7)** | TJS-42 §1/F7 — parse-level only |
+-| Variable-difficulty deep-reorg economics | **OPEN (F2)** | TJS-42 F2 — all evidence floor-1 (heavier==longer) |
++| Variable-difficulty deep-reorg economics | **CLOSED (F2 evidence gap; bounded)** | TJS-129 → independent accept → TJS-165 QA; [exact acceptance](qa-tjs165-2026-09-20.md). Both frozen runs AC1–AC4 PASS: height 17/work 472 beats height 36/work 467; timestamp-steered, isolated RPC, empty blocks. No live-hashrate/equal-work/FCMP or launch claim. |
+ | Matched-capacity intended-crypto (FCMP) loaded partition/reorg | **OPEN (F3, blocks GO)** | TJS-42 F3 — FCMP absent from source |
+ | Decentralized mining / P2Pool payout | **OPEN (F4)** | TJS-42 §5 — stock P2Pool incompatible, no payout |
+ | Independent-toolchain reproducibility | **OPEN** | TJS-40 limits — apt pinning unaddressed |
+-| 90 s parameter GO | **NOT LOCKED** | needs F2/F3 + matched capacity; retain 90 s default |
++| 90 s parameter GO | **NOT LOCKED** | bounded F2 evidence accepted by TJS-165; still needs F3 + matched capacity and remaining launch gates; retain 90 s default |
+ 
+ ## 7. Unresolved launch gates (no public launch; every gate named)
+ 
+ - **F3 (high, blocks GO):** matched-capacity, **intended FCMP** loaded
+   partition/reorg — FCMP is not in the pinned source.
+-- **F2 (medium):** variable-difficulty deep-reorg economics (meaningful-hashrate
+-  adversary, selfish mining, timestamp+difficulty coupling, eclipse).
++- **F2 evidence gap closed by TJS-165 (2026-09-20); broader adversarial
++  economics remain unverified:** meaningful live-hashrate competition, selfish
++  mining/withholding and eclipse. Timestamp-steered young-chain DAA response is
++  evidenced, not a physical-miner race or complete reorg-trust sign-off.
+ - **F4 (high):** no functioning decentralized pool / payout proof.
+ - **F7 (low–medium):** mandatory-RingCT/minimum-rct-type consensus rule on a
+   **well-formed** non-private tx not exercised (wallet-rpc cannot build one).
+@@ -231,6 +233,24 @@
+ recorded. This is **not** release acceptance: TJS-44's launch gates remain open
+ and belong to product/QA at M2/M3 and to the human launch gates. Failures, if any
+ arise, go to the existing writing owner with a repro; QA edited no consensus
+-source. Next bounded action (product/QA, not agent-closeable now): close F2
+-(variable-difficulty reorg harness) and F3 (matched-capacity once an FCMP profile
++source. F2’s bounded evidence gap is now closed by TJS-165; next bounded action
++(product/QA, not agent-closeable now): F3 (matched-capacity once an FCMP profile
+ exists); optional F7 constructed-tx case; independent-toolchain reproducibility.
++
++## 10. F2 acceptance lineage addendum — TJS-165, 2026-09-20
++
++TJS-129 evidence → independent revision-bound **accept**
++(`review-tjs129-2026-09-20.md`) → **QA ACCEPT**
++([qa-tjs165-2026-09-20.md](qa-tjs165-2026-09-20.md)). QA rehashed MANIFEST
++9/9 and the original harness/binary receipts, checked both result files against
++the report table and original run receipts, and verified retained reorg log
++excerpts. No new daemon execution, rebuild or release occurred. This is a dated
++addendum to the original candidate, not a rewrite of its frozen dirty manifest.
++
++Only the F2 absence-of-variable-difficulty-evidence row changes disposition.
++Full daemon logs are unavailable; equal-work retention was not exercised here;
++source-overlay binding is inherited transitively through the accepted TJS-40/44
++binary. R1–R4 report/future-receipt corrections remain owned by TJS-166. F3/FCMP,
++F4, F7, independent-toolchain reproduction, 90 s GO and human launch gates are
++unchanged. **Observed behavior:** above-floor work beats height in the two
++retained runs; this is no claim of general economic safety or launch readiness.

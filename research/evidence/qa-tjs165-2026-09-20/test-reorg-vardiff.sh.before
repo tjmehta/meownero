@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Variable-difficulty (non-floor) reorg economics on the real selected daemon — closes F2.
+# Two isolated --offline mainnet-mode daemons, real RandomX PoW via submit_block nonce
+# search, explicit RPC block delivery, empty blocks, disposable fixture address, no
+# networking. Difficulty is driven above the floor by controlled timestamps (a hashpower
+# model on the real DAA) — not a live hashrate race; see the harness docstring.
+# Usage: bash chain/test-reorg-vardiff.sh <built-source> <new-output-directory>
+set -euo pipefail
+HERE=$(cd "$(dirname "$0")" && pwd)
+SRC=$(realpath "${1:?verified built source required}")
+WORK=$(realpath -m "${2:?new output directory required}")
+mkdir -m 700 "$WORK"   # refuse reuse, including preserved evidence directories
+IMG=$(docker image inspect "${MEOW_BUILDER_IMAGE:-meownero-chain-builder}" --format '{{.Id}}')
+printf '%s\n' "$IMG" > "$WORK/BUILDER_IMAGE_ID"
+git -C "$SRC" rev-parse HEAD 'HEAD^{tree}' > "$WORK/SOURCE_REVISIONS"
+sha256sum "$SRC/build/release/bin/monerod" > "$WORK/BINARY_SHA256"
+sha256sum "$HERE/test-reorg-vardiff.py" "$HERE/test-reorg-vardiff.sh" > "$WORK/INPUT_SHA256"
+
+docker run --rm --name "meow-reorg-vardiff-$$" --network none --memory 3g --memory-swap 3g \
+  --cpus 2 --pids-limit 512 --cap-drop ALL --security-opt no-new-privileges \
+  --user "$(id -u):$(id -g)" \
+  -v "$SRC:/src:ro" -v "$HERE:/harness:ro" -v "$WORK:/work" \
+  "$IMG" timeout 1800 python3 -B -u /harness/test-reorg-vardiff.py \
+  | tee "$WORK/harness.stdout.log"
+exit 0
