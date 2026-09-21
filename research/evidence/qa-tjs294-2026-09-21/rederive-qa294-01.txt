@@ -1,0 +1,56 @@
+OK   journey result PASS 
+OK   both peers identical header sets (full dict equality) {'headers': 8}
+OK   header chain linked with heights 0..top 
+OK   genesis pinned, reward 0, v1 
+OK   every mined block v16, reward 9 MEOW, 0 txes, not orphan 
+OK   cumulative work = running sum of difficulty (wide and plain) at every height {'difficulties': [1, 1, 1, 5, 26, 138, 729, 2890], 'total': 3791, 'hex': '0xecf'}
+OK   distinct nonces on mined blocks (native PoW signature) {'distinct': 7}
+OK   timestamps non-decreasing after genesis {'offsets_from_block1': [0, 21, 21, 21, 21, 28, 29]}
+OK   peer0 final get_info height/top/target/alt/pool match headers {'height': 8}
+OK   peer0 final tip header == headers[top] 
+OK   peer0 emission = top x 9 MEOW = sum(header reward); fees 0 63000000000000
+OK   peer0 cumulative_difficulty == sum(difficulty) 
+OK   peer0 result.peers[0] re-derived equal 
+OK   peer0 fresh start readback: height 1, mainnet mode, fork v16 at 1, template reward 9 MEOW 
+OK   peer1 final get_info height/top/target/alt/pool match headers {'height': 8}
+OK   peer1 final tip header == headers[top] 
+OK   peer1 emission = top x 9 MEOW = sum(header reward); fees 0 63000000000000
+OK   peer1 cumulative_difficulty == sum(difficulty) 
+OK   peer1 result.peers[1] re-derived equal 
+OK   peer1 fresh start readback: height 1, mainnet mode, fork v16 at 1, template reward 9 MEOW 
+OK   block 1 >= peer0 start_time; tip <= adjusted_time on both; restored peer1 start_time >= tip timestamp {'start_time': [1790006670, 1790006711], 'b1': 1790006679, 'tip': 1790006708}
+OK   payout tip is on the final chain and >= phase minimum 5
+OK   W address matches on every snapshot; no outgoing; no pending/pool/failed 
+OK   W history = exactly one coinbase per payout height 1..P 
+OK   every W history txid == canonical header miner_tx_hash at that height, amount 9 MEOW, type block 
+OK   W balance = P x 9 MEOW, unlocked 0 (coinbase immature, top < 60) {'balance': 45000000000000, 'unlocked_balance': 0}
+OK   W after plain restart == before (address, balance, incoming, outgoing, other) 
+OK   W after cold restore == before 
+OK   W scanned height: P+1 before, P+1 after restart, top+1 after restore (6, 6, 8)
+OK   offline blocks P+1..top were paid to the public fixture, not W (W history unchanged) 
+OK   plain restart: clean exit 0; shutdown tip == payout tip 
+OK   plain restart: first RPC readback height P+1 and top hash == stored tip; not yet synchronized 
+OK   plain restart: stored tip at DB open (receipt) == P; blocks_missed 0; state after == before 
+OK   cold backup taken from cleanly stopped restarted peer at the payout tip 
+OK   backup manifest: lmdb/data.mdb + lmdb/lock.mdb + p2pstate.bin with 64-hex sha256 {'28180/p2pstate.bin': 62, 'lmdb/data.mdb': 180224, 'lmdb/lock.mdb': 8192}
+OK   archive sha256 == result.backup_archive_sha256; bytes > sum(file bytes); kept under data/ {'bytes': 204800, 'path_relative_to_work': 'data/peer1-backup.tar', 'sha256': '9c797171c27557a6914ed812b7549239bbcd003f3f7eb276bb581a60e0a0d18c'}
+OK   data dir absent after destroy; restored manifest equal 
+OK   blocks mined while destroyed: off.height - P == blocks_missed == phases.offline_blocks; offline tip on final chain 7
+OK   restore: stored tip at DB open == backup height; first readback top hash == backup tip hash, height P+1 
+OK   rejoin: state_after_rejoin == peer0 final state == result.peers[0]; rejoin seconds > 0 0.715
+OK   timeline: backed_up < restored < restarted < caught_up; plain restart before backup 
+OK   restored peer: only loopback connections; sync_info height == top+1 
+OK   final peers-after: both peers have loopback connections with traffic both ways 
+OK   peer1 received only read RPC (+sync_info) from the runner ['get_block_header_by_height', 'get_block_template', 'get_coinbase_tx_sum', 'get_connections', 'get_info', 'get_last_block_header', 'hard_fork_info', 'sync_info']
+OK   peer0 write RPC exactly start_mining x2 + stop_mining x2 
+OK   five owned processes; peer1 restart and restore commands byte-equal to peer1 
+OK   peer commands: mainnet mode inside container (no testnet/stagenet/regtest/offline/fixed-difficulty), loopback binds, exclusive peering 
+OK   wallet RPC bound to peer1 daemon on loopback; no seed/keys/password/wallet-file on the command line 
+OK   all five owned exits 0; container caps 4 GiB/no swap/2 CPU; no OOM; elapsed < 1800 s {'elapsed_s': 44.9, 'peak_bytes': 2786811904}
+OK   container.exit 0, launcher.exit 0 
+OK   daemon stdout: peer1 opened at 0; restart opened at P; restore opened at P (backup tip) {'peer1': ['0'], 'peer1-restart': ['5'], 'peer1-restore': ['5']}
+OK   peer0.log Found block lines: one per mined height, hash and difficulty equal headers 7
+OK   peer1.log: three DB opens (0, P, P); offline block hashes appear after the restore open; no REORGANIZE/alternative 
+OK   peer1.log: no Found block lines (peer1 never mined) 
+SUMMARY PASS checks=54 fails=[]
+exit=0

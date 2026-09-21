@@ -1,0 +1,898 @@
+2026-09-21 16:04:30.548	    719d8a051a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-21 16:04:30.548	    719d8a051a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:INFO,global:INFO,stacktrace:INFO,logging:INFO,msgwriter:INFO,perf.*:DEBUG
+2026-09-21 16:04:30.548	    719d8a051a40	INFO	global	src/daemon/main.cpp:309	Monero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)
+2026-09-21 16:04:30.548	    719d8a051a40	INFO	daemon	src/daemon/main.cpp:371	Moving from main() into the daemonize now.
+2026-09-21 16:04:30.548	    719d8a051a40	INFO	global	src/daemon/protocol.h:53	Initializing cryptonote protocol...
+2026-09-21 16:04:30.548	    719d8a051a40	INFO	global	src/daemon/protocol.h:58	Cryptonote protocol initialized OK
+2026-09-21 16:04:30.549	    719d8a051a40	INFO	global	src/daemon/core.h:64	Initializing core...
+2026-09-21 16:04:30.549	    719d8a051a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:521	Loading blockchain from folder /work/data/peer1/lmdb ...
+2026-09-21 16:04:30.549	    719d8a051a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1464	LMDB memory map size: 1073741824
+2026-09-21 16:04:30.549	    719d8a051a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:348	Blockchain not loaded, generating genesis block.
+2026-09-21 16:04:30.583	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:30.583	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       98    get_next_long_term_block_weight
+2026-09-21 16:04:30.583	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      106      get_long_term_block_weights
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      125    update_next_cumulative_weight_limit
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8>
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<56316d3598ed0a46c353ff818a21261f06ebc4e82aab5369be4d7f6f783ff9e3>
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 0, difficulty:	1
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 0.000000000000(0.000000000000 + 0.000000000000), coinbase_weight: 75, cumulative weight: 75, 17(0/17)ms
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3940	batch transaction mode already enabled, but asked to enable batch mode
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3943	batch transactions enabled
+2026-09-21 16:04:30.584	    719d497fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:389	Blockchain initialized. last block: 0, d4539.h5.m15.s37 time ago, current difficulty: 1
+2026-09-21 16:04:30.584	    719d497fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      120      get_long_term_block_weights
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      152    update_next_cumulative_weight_limit
+2026-09-21 16:04:30.584	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:04:30.584	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	txpool	src/cryptonote_core/tx_pool.cpp:1714	Validating txpool contents for v16
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:696	Loading checkpoints
+2026-09-21 16:04:30.584	    719d8a051a40	INFO	global	src/daemon/core.h:81	Core initialized OK
+2026-09-21 16:04:30.584	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x5731f8e93a34]:__cxa_throw+0xb0) [0x5731f8e93a34]
+2026-09-21 16:04:30.584	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x5731f8ef8cb0] 
+2026-09-21 16:04:30.584	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x8598a9) [0x5731f96388a9] 
+2026-09-21 16:04:30.585	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x582694) [0x5731f9361694] 
+2026-09-21 16:04:30.585	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x583055) [0x5731f9362055] 
+2026-09-21 16:04:30.585	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x9cb84) [0x719d8a4cfb84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x719d8a4cfb84]
+2026-09-21 16:04:30.585	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7]  0x44) [0x719d8a55cb64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x719d8a55cb64]
+2026-09-21 16:04:30.585	    719d497fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:04:30.585	    719d8a051a40	INFO	global	src/daemon/p2p.h:64	Initializing p2p server...
+2026-09-21 16:04:30.586	    719d8a051a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-21 16:04:30.586	    719d8a051a40	INFO	net.p2p	src/p2p/net_node.inl:2845	Set limit-up to 8192 kB/s
+2026-09-21 16:04:30.586	    719d8a051a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.586	    719d8a051a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.p2p	src/p2p/net_node.inl:2857	Set limit-down to 32768 kB/s
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.p2p	src/p2p/net_node.inl:2879	Set limit-up to 8192 kB/s
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.p2p	src/p2p/net_node.inl:2883	Set limit-down to 32768 kB/s
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.p2p	src/p2p/net_node.inl:957	Binding (IPv4) on 127.0.0.1:28180
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.p2p	src/p2p/net_node.inl:970	Net service bound (IPv4) to 127.0.0.1:28180
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	global	src/daemon/p2p.h:69	p2p server initialized OK
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	global	src/daemon/rpc.h:63	Initializing core RPC server...
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	global	contrib/epee/include/net/http_server_impl_base.h:94	Binding on 127.0.0.1 (IPv4):28181
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	global	src/daemon/rpc.h:69	core RPC server initialized OK on port: 28181
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	global	src/daemon/rpc.h:74	Starting core RPC server...
+2026-09-21 16:04:30.587	    719d8a051a40	INFO	net.http	contrib/epee/include/net/http_server_impl_base.h:111	Run net_service loop( 2 threads)...
+2026-09-21 16:04:30.587	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:79	core RPC server started ok
+2026-09-21 16:04:30.588	[SRV_MAIN]	INFO	daemon	src/daemon/daemon.cpp:270	ZMQ server disabled
+2026-09-21 16:04:30.588	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:79	Starting p2p net loop...
+2026-09-21 16:04:30.588	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1032	Run net_service loop( 10 threads)...
+2026-09-21 16:04:30.977	    719d497fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX main cache initialized
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use the "help" command to see the list of available commands.
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use "help <command>" to see a command's documentation.
+2026-09-21 16:04:31.588	[P2P1]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-21 16:04:31.588	[P2P0]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:28080 922a819a-eb48-49e6-8de0-fc626bdb50d7 OUT] NEW CONNECTION
+2026-09-21 16:04:31.588	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:04:31.589	[P2P4]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 10 bytes received for category command-2010 initiated by peer
+2026-09-21 16:04:31.589	[P2P4]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:855	[127.0.0.1:28080 OUT] Received NOTIFY_GET_TXPOOL_COMPLEMENT (0 txes)
+2026-09-21 16:04:31.589	[P2P6]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 262 bytes received for category command-1001 initiated by us
+2026-09-21 16:04:31.589	[P2P6]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-21 16:04:31.589	[P2P6]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-21 16:04:31.589	[P2P6]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-21 16:04:31.589	[P2P6]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-21 16:04:31.589	[P2P6]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	Use the "help" command to see the list of available commands.
+2026-09-21 16:04:31.589	[P2P6]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-21 16:04:31.589	[P2P6]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-21 16:04:31.589	[P2P6]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-21 16:04:31.589	[P2P6]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2684	[127.0.0.1:28080 OUT] -->>NOTIFY_GET_TXPOOL_COMPLEMENT: hashes.size()=0
+2026-09-21 16:04:31.589	[P2P6]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 10 bytes sent for category command-2010 initiated by us
+2026-09-21 16:04:31.589	[P2P6]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2686	[127.0.0.1:28080 OUT] [0] state: requesting txpool complement in state normal
+2026-09-21 16:04:31.589	[P2P6]	INFO	net.p2p	src/p2p/net_node.inl:1199	[127.0.0.1:28080 OUT] New connection handshaked, pruning seed 0
+2026-09-21 16:04:31.590	[P2P7]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 34 bytes received for category command-2002 initiated by peer
+2026-09-21 16:04:31.590	[P2P7]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:885	[127.0.0.1:28080 OUT] Received NOTIFY_NEW_TRANSACTIONS (0 txes)
+2026-09-21 16:04:31.590	[P2P5]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:44354 383c8123-5a4d-4429-9fa3-2f98c3be4848 INC] NEW CONNECTION
+2026-09-21 16:04:31.590	[P2P3]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-21 16:04:31.590	[P2P3]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-21 16:04:31.590	[P2P3]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-21 16:04:31.590	[P2P3]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:04:31.630	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 172 bytes received for category command-1002 initiated by peer
+2026-09-21 16:04:31.630	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 172 bytes sent for category command-1002 initiated by us
+2026-09-21 16:04:31.677	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.677	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:44712 INC] Calling RPC method get_info
+2026-09-21 16:04:31.677	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:31.677	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      272    get_info
+2026-09-21 16:04:31.681	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.681	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:44726 INC] Calling RPC method get_info
+2026-09-21 16:04:31.681	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:31.681	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      154    get_info
+2026-09-21 16:04:31.681	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.681	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:44734 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:04:31.681	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:31.681	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        9      fill_block_header_response
+2026-09-21 16:04:31.681	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       38    get_block_header_by_height
+2026-09-21 16:04:31.682	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.682	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:168	[127.0.0.1:44750 INC] Calling RPC method hard_fork_info
+2026-09-21 16:04:31.682	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:31.682	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       10    hard_fork_info
+2026-09-21 16:04:31.682	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.682	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:148	[127.0.0.1:44764 INC] Calling RPC method get_block_template
+2026-09-21 16:04:31.682	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:31.683	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      437    getblocktemplate
+2026-09-21 16:04:31.684	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.684	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:44776 INC] Calling RPC method get_connections
+2026-09-21 16:04:31.684	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:31.684	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       73    get_connections
+2026-09-21 16:04:31.685	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.685	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:44778 INC] Calling RPC method get_connections
+2026-09-21 16:04:31.685	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:31.685	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       55    get_connections
+2026-09-21 16:04:38.465	[RPC0]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:34014 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_line(): Failed to match first line: 
+2026-09-21 16:04:38.465	[RPC0]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:34014 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 16:04:38.586	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /getheight
+2026-09-21 16:04:38.586	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:102	[127.0.0.1:34030 INC] calling /getheight
+2026-09-21 16:04:38.586	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:38.586	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       20    get_height
+2026-09-21 16:04:39.023	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:04:39.023	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:104	[127.0.0.1:34030 INC] calling /getblocks.bin
+2026-09-21 16:04:39.023	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:39.023	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      191    get_blocks
+2026-09-21 16:04:59.070	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:04:59.070	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:104	[127.0.0.1:34030 INC] calling /getblocks.bin
+2026-09-21 16:04:59.070	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:04:59.070	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      205    get_blocks
+2026-09-21 16:05:00.640	[P2P9]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.640	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.640	[P2P0]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <a11839cb7f226bb9dba7510c81be0f6784722437d9c2b5f7cd9e18a988dc3f5d> (height 2, 0 txes)
+2026-09-21 16:05:00.641	[P2P9]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <a11839cb7f226bb9dba7510c81be0f6784722437d9c2b5f7cd9e18a988dc3f5d> (height 2, 0 txes)
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x5731f8e93a34]:__cxa_throw+0xb0) [0x5731f8e93a34]
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x5731f8ef8cb0] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x5731f963b995] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x5731f9638bab] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x5824b5) [0x5731f93614b5] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5842a5) [0x5731f93632a5] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x560ae0) [0x5731f933fae0] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /binary/monerod(+0x50b9c2) [0x5731f92ea9c2] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /binary/monerod(+0x513a3e) [0x5731f92f2a3e] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /binary/monerod(+0x52cfad) [0x5731f930bfad] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /binary/monerod(+0x52d24d) [0x5731f930c24d] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /binary/monerod(+0x482780) [0x5731f9261780] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /binary/monerod(+0x1e369f) [0x5731f8fc269f] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /binary/monerod(+0x1e4eed) [0x5731f8fc3eed] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /binary/monerod(+0x4879be) [0x5731f92669be] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /binary/monerod(+0x488c63) [0x5731f9267c63] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /binary/monerod(+0x4891b3) [0x5731f92681b3] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /binary/monerod(+0x1688d5) [0x5731f8f478d5] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /binary/monerod(+0x4141e7) [0x5731f91f31e7] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /binary/monerod(+0x4490a6) [0x5731f92280a6] 
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x719d8aa3599f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x719d8aa3599f]
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x719d8a4cfb84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x719d8a4cfb84]
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x719d8a55cb64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x719d8a55cb64]
+2026-09-21 16:05:00.641	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:05:00.661	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.661	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF        1      get_long_term_block_weights
+2026-09-21 16:05:00.661	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       45    get_next_long_term_block_weight
+2026-09-21 16:05:00.661	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.662	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      220      get_long_term_block_weights
+2026-09-21 16:05:00.662	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      249    update_next_cumulative_weight_limit
+2026-09-21 16:05:00.662	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.662	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<a11839cb7f226bb9dba7510c81be0f6784722437d9c2b5f7cd9e18a988dc3f5d>
+2026-09-21 16:05:00.662	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<973637bb5e79fd101b84fedc3ecddf05ca70702300811ece8ccc071e9a23e186>
+2026-09-21 16:05:00.662	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 1, difficulty:	1
+2026-09-21 16:05:00.662	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 21(0/21)ms
+2026-09-21 16:05:00.667	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:00.667	[P2P3]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.667	[P2P3]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <1261133bdba69234bdad697e5889c2a770e4043566b1545b54fc3aa70c09b8d5> (height 3, 0 txes)
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x5731f8e93a34]:__cxa_throw+0xb0) [0x5731f8e93a34]
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x5731f8ef8cb0] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x5731f963b995] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x5731f9638bab] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x5824b5) [0x5731f93614b5] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5842a5) [0x5731f93632a5] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x560ae0) [0x5731f933fae0] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /binary/monerod(+0x50b9c2) [0x5731f92ea9c2] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /binary/monerod(+0x513a3e) [0x5731f92f2a3e] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /binary/monerod(+0x52cfad) [0x5731f930bfad] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /binary/monerod(+0x52d24d) [0x5731f930c24d] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /binary/monerod(+0x482780) [0x5731f9261780] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /binary/monerod(+0x1e369f) [0x5731f8fc269f] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /binary/monerod(+0x1e4eed) [0x5731f8fc3eed] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /binary/monerod(+0x4879be) [0x5731f92669be] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /binary/monerod(+0x488c63) [0x5731f9267c63] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /binary/monerod(+0x4891b3) [0x5731f92681b3] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /binary/monerod(+0x1688d5) [0x5731f8f478d5] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /binary/monerod(+0x4141e7) [0x5731f91f31e7] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /binary/monerod(+0x4490a6) [0x5731f92280a6] 
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x719d8aa3599f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x719d8aa3599f]
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x719d8a4cfb84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x719d8a4cfb84]
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x719d8a55cb64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x719d8a55cb64]
+2026-09-21 16:05:00.668	[P2P3]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:05:00.681	[P2P5]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.681	[P2P5]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <1261133bdba69234bdad697e5889c2a770e4043566b1545b54fc3aa70c09b8d5> (height 3, 0 txes)
+2026-09-21 16:05:00.682	[P2P3]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.683	[P2P3]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      102      get_long_term_block_weights
+2026-09-21 16:05:00.683	[P2P3]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      138    get_next_long_term_block_weight
+2026-09-21 16:05:00.683	[P2P3]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.683	[P2P3]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       99      get_long_term_block_weights
+2026-09-21 16:05:00.683	[P2P3]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      115    update_next_cumulative_weight_limit
+2026-09-21 16:05:00.683	[P2P3]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.683	[P2P3]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<1261133bdba69234bdad697e5889c2a770e4043566b1545b54fc3aa70c09b8d5>
+2026-09-21 16:05:00.683	[P2P3]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<e1782b8d80d2b8b19daadba10822acd29fef3ae623a561672ad061542a970f35>
+2026-09-21 16:05:00.683	[P2P3]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 2, difficulty:	1
+2026-09-21 16:05:00.683	[P2P3]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 15(0/15)ms
+2026-09-21 16:05:00.687	[P2P3]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:00.687	[P2P5]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.687	[P2P5]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <397c5e9893027b16ac41f0a545ad4330e5e943eea132d8374f49e19bc06b241e> (height 4, 0 txes)
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x5731f8e93a34]:__cxa_throw+0xb0) [0x5731f8e93a34]
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x5731f8ef8cb0] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x5731f963b995] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x5731f9638bab] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x5824b5) [0x5731f93614b5] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5842a5) [0x5731f93632a5] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x560ae0) [0x5731f933fae0] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /binary/monerod(+0x50b9c2) [0x5731f92ea9c2] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /binary/monerod(+0x513a3e) [0x5731f92f2a3e] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /binary/monerod(+0x52cfad) [0x5731f930bfad] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /binary/monerod(+0x52d24d) [0x5731f930c24d] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /binary/monerod(+0x482780) [0x5731f9261780] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /binary/monerod(+0x1e369f) [0x5731f8fc269f] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /binary/monerod(+0x1e4eed) [0x5731f8fc3eed] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /binary/monerod(+0x4879be) [0x5731f92669be] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /binary/monerod(+0x488c63) [0x5731f9267c63] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /binary/monerod(+0x4891b3) [0x5731f92681b3] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /binary/monerod(+0x1688d5) [0x5731f8f478d5] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /binary/monerod(+0x4141e7) [0x5731f91f31e7] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /binary/monerod(+0x4490a6) [0x5731f92280a6] 
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x719d8aa3599f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x719d8aa3599f]
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x719d8a4cfb84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x719d8a4cfb84]
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x719d8a55cb64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x719d8a55cb64]
+2026-09-21 16:05:00.688	[P2P5]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:05:00.704	[P2P5]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.705	[P2P5]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      189      get_long_term_block_weights
+2026-09-21 16:05:00.705	[P2P5]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      240    get_next_long_term_block_weight
+2026-09-21 16:05:00.705	[P2P5]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.705	[P2P5]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      185      get_long_term_block_weights
+2026-09-21 16:05:00.705	[P2P5]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      204    update_next_cumulative_weight_limit
+2026-09-21 16:05:00.705	[P2P5]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.705	[P2P5]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<397c5e9893027b16ac41f0a545ad4330e5e943eea132d8374f49e19bc06b241e>
+2026-09-21 16:05:00.705	[P2P5]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<18090bc647d3f2d6f7fc6a3a62159245121f941b8cb9e02d10a480dfb894301a>
+2026-09-21 16:05:00.705	[P2P5]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 3, difficulty:	5
+2026-09-21 16:05:00.705	[P2P5]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 17(0/17)ms
+2026-09-21 16:05:00.708	[P2P5]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:00.708	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.708	[P2P1]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <397c5e9893027b16ac41f0a545ad4330e5e943eea132d8374f49e19bc06b241e> (height 4, 0 txes)
+2026-09-21 16:05:00.802	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.802	[P2P5]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.802	[P2P0]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <39bf41181e514680041811b8aefb96065f16748bfe40d52ed80bf1e46b0b42db> (height 5, 0 txes)
+2026-09-21 16:05:00.802	[P2P5]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <39bf41181e514680041811b8aefb96065f16748bfe40d52ed80bf1e46b0b42db> (height 5, 0 txes)
+2026-09-21 16:05:00.817	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.818	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      114      get_long_term_block_weights
+2026-09-21 16:05:00.818	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      176    get_next_long_term_block_weight
+2026-09-21 16:05:00.818	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:00.818	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      139      get_long_term_block_weights
+2026-09-21 16:05:00.818	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      162    update_next_cumulative_weight_limit
+2026-09-21 16:05:00.818	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.818	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<39bf41181e514680041811b8aefb96065f16748bfe40d52ed80bf1e46b0b42db>
+2026-09-21 16:05:00.818	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<2894ec3abd6aca6998dd72d605b1ec6754f1ccd8b8182713147cd8fd4931e600>
+2026-09-21 16:05:00.818	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 4, difficulty:	26
+2026-09-21 16:05:00.818	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 16(0/16)ms
+2026-09-21 16:05:00.820	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:01.179	[P2P6]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:01.179	[P2P4]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:01.179	[P2P6]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <27c1a88855587faee8572533c6c74a962a957bf7d708c45eb560d292a98ec307> (height 6, 0 txes)
+2026-09-21 16:05:01.179	[P2P4]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <27c1a88855587faee8572533c6c74a962a957bf7d708c45eb560d292a98ec307> (height 6, 0 txes)
+2026-09-21 16:05:01.179	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:05:01.179	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x5731f8e93a34]:__cxa_throw+0xb0) [0x5731f8e93a34]
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x5731f8ef8cb0] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x5731f963b995] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x5731f9638bab] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x5824b5) [0x5731f93614b5] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5842a5) [0x5731f93632a5] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x560ae0) [0x5731f933fae0] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /binary/monerod(+0x50b9c2) [0x5731f92ea9c2] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /binary/monerod(+0x513a3e) [0x5731f92f2a3e] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /binary/monerod(+0x52cfad) [0x5731f930bfad] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /binary/monerod(+0x52d24d) [0x5731f930c24d] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /binary/monerod(+0x482780) [0x5731f9261780] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /binary/monerod(+0x1e369f) [0x5731f8fc269f] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /binary/monerod(+0x1e4eed) [0x5731f8fc3eed] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /binary/monerod(+0x4879be) [0x5731f92669be] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /binary/monerod(+0x488c63) [0x5731f9267c63] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /binary/monerod(+0x4891b3) [0x5731f92681b3] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /binary/monerod(+0x1688d5) [0x5731f8f478d5] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /binary/monerod(+0x4141e7) [0x5731f91f31e7] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /binary/monerod(+0x4490a6) [0x5731f92280a6] 
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21]  0x1699f) [0x719d8aa3599f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x719d8aa3599f]
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22]  0x9cb84) [0x719d8a4cfb84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x719d8a4cfb84]
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x44) [0x719d8a55cb64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x719d8a55cb64]
+2026-09-21 16:05:01.180	[P2P6]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:05:01.194	[P2P6]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.194	[P2P6]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      110      get_long_term_block_weights
+2026-09-21 16:05:01.194	[P2P6]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      178    get_next_long_term_block_weight
+2026-09-21 16:05:01.194	[P2P6]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.194	[P2P6]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      101      get_long_term_block_weights
+2026-09-21 16:05:01.194	[P2P6]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      124    update_next_cumulative_weight_limit
+2026-09-21 16:05:01.194	[P2P6]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:01.194	[P2P6]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<27c1a88855587faee8572533c6c74a962a957bf7d708c45eb560d292a98ec307>
+2026-09-21 16:05:01.194	[P2P6]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<e7a11fa5065c7128a44468360726dbc0206e1db710be49900cd855e81c37f300>
+2026-09-21 16:05:01.194	[P2P6]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 5, difficulty:	138
+2026-09-21 16:05:01.194	[P2P6]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 14(0/14)ms
+2026-09-21 16:05:01.196	[P2P6]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:01.335	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.335	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48294 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:01.335	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.335	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:01.335	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       29    get_last_block_header
+2026-09-21 16:05:01.336	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.336	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:48306 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:01.336	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.336	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       42    get_coinbase_tx_sum
+2026-09-21 16:05:01.379	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:05:01.379	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:104	[127.0.0.1:34030 INC] calling /getblocks.bin
+2026-09-21 16:05:01.379	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.379	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      232    get_blocks
+2026-09-21 16:05:01.430	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /get_transaction_pool_hashes.bin
+2026-09-21 16:05:01.430	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:127	[127.0.0.1:34030 INC] calling /get_transaction_pool_hashes.bin
+2026-09-21 16:05:01.430	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.430	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       69    get_transaction_pool_hashes
+2026-09-21 16:05:01.432	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.432	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:48308 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.432	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.432	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       16      fill_block_header_response
+2026-09-21 16:05:01.432	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       61    get_block_header_by_height
+2026-09-21 16:05:01.432	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.432	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:48312 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.432	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.432	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       13      fill_block_header_response
+2026-09-21 16:05:01.432	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       43    get_block_header_by_height
+2026-09-21 16:05:01.433	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.433	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:48328 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.433	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.433	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:01.433	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       26    get_block_header_by_height
+2026-09-21 16:05:01.433	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.433	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:48342 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.433	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.433	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:01.433	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       25    get_block_header_by_height
+2026-09-21 16:05:01.434	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.434	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:48354 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.434	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.434	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:01.434	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       26    get_block_header_by_height
+2026-09-21 16:05:01.444	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.444	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48366 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:01.444	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.444	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        9      fill_block_header_response
+2026-09-21 16:05:01.444	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       36    get_last_block_header
+2026-09-21 16:05:01.445	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.445	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:48368 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:01.445	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.445	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       40    get_coinbase_tx_sum
+2026-09-21 16:05:01.511	    719d33ffe6c0	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:44354 INC] [0] state: closed in state normal
+2026-09-21 16:05:01.511	    719d33ffe6c0	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:44354 383c8123-5a4d-4429-9fa3-2f98c3be4848 INC] CLOSE CONNECTION
+2026-09-21 16:05:01.511	    719d33ffe6c0	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:28080 OUT] [0] state: closed in state normal
+2026-09-21 16:05:01.511	    719d33ffe6c0	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:28080 922a819a-eb48-49e6-8de0-fc626bdb50d7 OUT] CLOSE CONNECTION
+2026-09-21 16:05:01.511	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1038	net_service loop stopped.
+2026-09-21 16:05:01.511	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:81	p2p net loop stopped
+2026-09-21 16:05:01.511	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:84	Stopping core RPC server...
+2026-09-21 16:05:01.511	[SRV_MAIN]	INFO	global	src/daemon/daemon.cpp:288	Node stopped.
+2026-09-21 16:05:01.512	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:96	Deinitializing core RPC server...
+2026-09-21 16:05:01.512	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:91	Deinitializing p2p...
+2026-09-21 16:05:01.512	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:410	Killing the net_node
+2026-09-21 16:05:01.594	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:414	Joined extra background net_node threads
+2026-09-21 16:05:01.594	[SRV_MAIN]	INFO	global	src/daemon/core.h:102	Deinitializing core...
+2026-09-21 16:05:01.595	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:75	Stopping cryptonote protocol...
+2026-09-21 16:05:01.595	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully
+2026-09-21 16:05:01.770	    7424ee539a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-21 16:05:01.770	    7424ee539a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:INFO,global:INFO,stacktrace:INFO,logging:INFO,msgwriter:INFO,perf.*:DEBUG
+2026-09-21 16:05:01.770	    7424ee539a40	INFO	global	src/daemon/main.cpp:309	Monero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)
+2026-09-21 16:05:01.770	    7424ee539a40	INFO	daemon	src/daemon/main.cpp:371	Moving from main() into the daemonize now.
+2026-09-21 16:05:01.770	    7424ee539a40	INFO	global	src/daemon/protocol.h:53	Initializing cryptonote protocol...
+2026-09-21 16:05:01.770	    7424ee539a40	INFO	global	src/daemon/protocol.h:58	Cryptonote protocol initialized OK
+2026-09-21 16:05:01.771	    7424ee539a40	INFO	global	src/daemon/core.h:64	Initializing core...
+2026-09-21 16:05:01.771	    7424ee539a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:521	Loading blockchain from folder /work/data/peer1/lmdb ...
+2026-09-21 16:05:01.771	    7424ee539a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3940	batch transaction mode already enabled, but asked to enable batch mode
+2026-09-21 16:05:01.771	    7424ee539a40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3943	batch transactions enabled
+2026-09-21 16:05:01.771	    7424ee539a40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:389	Blockchain initialized. last block: 5, d0.h0.m0.s1 time ago, current difficulty: 729
+2026-09-21 16:05:01.771	    7424ee539a40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.772	    7424ee539a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      119      get_long_term_block_weights
+2026-09-21 16:05:01.772	    7424ee539a40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      196    update_next_cumulative_weight_limit
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-21 16:05:01.772	    7424ee539a40	INFO	txpool	src/cryptonote_core/tx_pool.cpp:1714	Validating txpool contents for v16
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:05:01.772	    7424ee539a40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:696	Loading checkpoints
+2026-09-21 16:05:01.772	    7424ee539a40	INFO	global	src/daemon/core.h:81	Core initialized OK
+2026-09-21 16:05:01.772	    7424ee539a40	INFO	global	src/daemon/p2p.h:64	Initializing p2p server...
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x615b9f867a34]:__cxa_throw+0xb0) [0x615b9f867a34]
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x615b9f8cccb0] 
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x8598a9) [0x615ba000c8a9] 
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x582694) [0x615b9fd35694] 
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x583055) [0x615b9fd36055] 
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x9cb84) [0x7424ee9b7b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7424ee9b7b84]
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7]  0x44) [0x7424eea44b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7424eea44b64]
+2026-09-21 16:05:01.772	    7424ad7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.p2p	src/p2p/net_node.inl:2845	Set limit-up to 8192 kB/s
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.p2p	src/p2p/net_node.inl:2857	Set limit-down to 32768 kB/s
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.p2p	src/p2p/net_node.inl:2879	Set limit-up to 8192 kB/s
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.p2p	src/p2p/net_node.inl:2883	Set limit-down to 32768 kB/s
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.p2p	src/p2p/net_node.inl:957	Binding (IPv4) on 127.0.0.1:28180
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net.p2p	src/p2p/net_node.inl:970	Net service bound (IPv4) to 127.0.0.1:28180
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	global	src/daemon/p2p.h:69	p2p server initialized OK
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	global	src/daemon/rpc.h:63	Initializing core RPC server...
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	global	contrib/epee/include/net/http_server_impl_base.h:94	Binding on 127.0.0.1 (IPv4):28181
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	global	src/daemon/rpc.h:69	core RPC server initialized OK on port: 28181
+2026-09-21 16:05:01.774	    7424ee539a40	INFO	global	src/daemon/rpc.h:74	Starting core RPC server...
+2026-09-21 16:05:01.775	    7424ee539a40	INFO	net.http	contrib/epee/include/net/http_server_impl_base.h:111	Run net_service loop( 2 threads)...
+2026-09-21 16:05:01.775	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:79	core RPC server started ok
+2026-09-21 16:05:01.775	[SRV_MAIN]	INFO	daemon	src/daemon/daemon.cpp:270	ZMQ server disabled
+2026-09-21 16:05:01.775	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:79	Starting p2p net loop...
+2026-09-21 16:05:01.775	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1032	Run net_service loop( 10 threads)...
+2026-09-21 16:05:01.861	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.861	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:48384 INC] Calling RPC method get_info
+2026-09-21 16:05:01.861	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.861	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      226    get_info
+2026-09-21 16:05:01.863	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.863	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48400 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:01.863	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.863	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       14    get_last_block_header
+2026-09-21 16:05:01.965	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.965	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48402 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:01.965	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:01.965	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       11    get_last_block_header
+2026-09-21 16:05:02.067	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.067	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48414 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:02.067	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.067	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       11    get_last_block_header
+2026-09-21 16:05:02.146	    7424ad7fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX main cache initialized
+2026-09-21 16:05:02.169	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.169	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48426 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:02.169	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.169	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       10    get_last_block_header
+2026-09-21 16:05:02.271	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.271	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48438 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:02.271	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.271	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        8    get_last_block_header
+2026-09-21 16:05:02.373	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.373	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48452 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:02.373	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.373	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       11    get_last_block_header
+2026-09-21 16:05:02.475	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.475	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48456 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:02.475	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.475	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       14    get_last_block_header
+2026-09-21 16:05:02.577	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.577	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48464 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:02.577	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.577	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7    get_last_block_header
+2026-09-21 16:05:02.595	[P2P0]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:40090 efb6140e-5430-495d-8488-6ceca0d0d526 INC] NEW CONNECTION
+2026-09-21 16:05:02.595	[P2P4]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:40090 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-21 16:05:02.595	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-21 16:05:02.595	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-21 16:05:02.595	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-21 16:05:02.595	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-21 16:05:02.595	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	Use the "help" command to see the list of available commands.
+2026-09-21 16:05:02.595	[P2P4]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-21 16:05:02.595	[P2P4]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-21 16:05:02.595	[P2P4]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-21 16:05:02.595	[P2P4]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2684	[127.0.0.1:40090 INC] -->>NOTIFY_GET_TXPOOL_COMPLEMENT: hashes.size()=0
+2026-09-21 16:05:02.595	[P2P4]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:40090 INC] 10 bytes sent for category command-2010 initiated by us
+2026-09-21 16:05:02.595	[P2P4]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2686	[127.0.0.1:40090 INC] [0] state: requesting txpool complement in state normal
+2026-09-21 16:05:02.596	[P2P4]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:40090 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:05:02.678	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.678	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48476 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:02.678	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.678	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:02.678	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       41    get_last_block_header
+2026-09-21 16:05:02.679	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.679	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:48492 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:02.679	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.679	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       41    get_coinbase_tx_sum
+2026-09-21 16:05:02.679	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:02.679	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:48502 INC] Calling RPC method get_connections
+2026-09-21 16:05:02.679	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:02.679	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       72    get_connections
+2026-09-21 16:05:02.775	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:40090 INC] 172 bytes sent for category command-1002 initiated by us
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use the "help" command to see the list of available commands.
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use "help <command>" to see a command's documentation.
+2026-09-21 16:05:02.775	[P2P5]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-21 16:05:02.775	[P2P3]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:40090 INC] 172 bytes received for category command-1002 initiated by us
+2026-09-21 16:05:02.775	[P2P1]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:28080 6fcf13c7-b6f7-40ad-9c08-c8ed5ab53d3a OUT] NEW CONNECTION
+2026-09-21 16:05:02.775	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:05:02.776	[P2P6]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 262 bytes received for category command-1001 initiated by us
+2026-09-21 16:05:02.776	[P2P6]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-21 16:05:02.776	[P2P6]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-21 16:05:02.776	[P2P6]	INFO	net.p2p	src/p2p/net_node.inl:1199	[127.0.0.1:28080 OUT] New connection handshaked, pruning seed 0
+2026-09-21 16:05:06.716	[RPC0]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:48506 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_line(): Failed to match first line: 
+2026-09-21 16:05:06.716	[RPC0]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:48506 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 16:05:06.837	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:05:06.837	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:104	[127.0.0.1:48510 INC] calling /getblocks.bin
+2026-09-21 16:05:06.837	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.837	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_blocks
+2026-09-21 16:05:06.878	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /get_transaction_pool_hashes.bin
+2026-09-21 16:05:06.878	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:127	[127.0.0.1:48510 INC] calling /get_transaction_pool_hashes.bin
+2026-09-21 16:05:06.878	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.878	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       70    get_transaction_pool_hashes
+2026-09-21 16:05:06.879	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:06.879	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48514 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:06.879	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.879	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        9      fill_block_header_response
+2026-09-21 16:05:06.879	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       33    get_last_block_header
+2026-09-21 16:05:06.880	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:06.880	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:48524 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:06.880	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.880	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       40    get_coinbase_tx_sum
+2026-09-21 16:05:06.880	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:06.880	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48534 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:06.880	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.880	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:06.880	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       25    get_last_block_header
+2026-09-21 16:05:06.881	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:06.881	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:48538 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:06.881	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.881	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       39    get_coinbase_tx_sum
+2026-09-21 16:05:06.888	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:06.888	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:48546 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:06.888	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.888	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        9      fill_block_header_response
+2026-09-21 16:05:06.888	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       38    get_last_block_header
+2026-09-21 16:05:06.889	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:06.889	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:48560 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:06.889	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:06.889	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       40    get_coinbase_tx_sum
+2026-09-21 16:05:06.979	    7424acffd6c0	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:28080 OUT] [0] state: closed in state normal
+2026-09-21 16:05:06.979	    7424acffd6c0	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:28080 6fcf13c7-b6f7-40ad-9c08-c8ed5ab53d3a OUT] CLOSE CONNECTION
+2026-09-21 16:05:06.979	    7424acffd6c0	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:40090 INC] [0] state: closed in state normal
+2026-09-21 16:05:06.979	    7424acffd6c0	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:40090 efb6140e-5430-495d-8488-6ceca0d0d526 INC] CLOSE CONNECTION
+2026-09-21 16:05:06.979	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1038	net_service loop stopped.
+2026-09-21 16:05:06.979	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:81	p2p net loop stopped
+2026-09-21 16:05:06.979	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:84	Stopping core RPC server...
+2026-09-21 16:05:06.979	[SRV_MAIN]	INFO	global	src/daemon/daemon.cpp:288	Node stopped.
+2026-09-21 16:05:06.979	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:96	Deinitializing core RPC server...
+2026-09-21 16:05:06.979	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:91	Deinitializing p2p...
+2026-09-21 16:05:06.979	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:410	Killing the net_node
+2026-09-21 16:05:07.776	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:414	Joined extra background net_node threads
+2026-09-21 16:05:07.776	[SRV_MAIN]	INFO	global	src/daemon/core.h:102	Deinitializing core...
+2026-09-21 16:05:07.777	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:75	Stopping cryptonote protocol...
+2026-09-21 16:05:07.777	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully
+2026-09-21 16:05:11.254	    7123afedda40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-21 16:05:11.254	    7123afedda40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:INFO,global:INFO,stacktrace:INFO,logging:INFO,msgwriter:INFO,perf.*:DEBUG
+2026-09-21 16:05:11.254	    7123afedda40	INFO	global	src/daemon/main.cpp:309	Monero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)
+2026-09-21 16:05:11.254	    7123afedda40	INFO	daemon	src/daemon/main.cpp:371	Moving from main() into the daemonize now.
+2026-09-21 16:05:11.254	    7123afedda40	INFO	global	src/daemon/protocol.h:53	Initializing cryptonote protocol...
+2026-09-21 16:05:11.254	    7123afedda40	INFO	global	src/daemon/protocol.h:58	Cryptonote protocol initialized OK
+2026-09-21 16:05:11.255	    7123afedda40	INFO	global	src/daemon/core.h:64	Initializing core...
+2026-09-21 16:05:11.255	    7123afedda40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:521	Loading blockchain from folder /work/data/peer1/lmdb ...
+2026-09-21 16:05:11.255	    7123afedda40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3940	batch transaction mode already enabled, but asked to enable batch mode
+2026-09-21 16:05:11.255	    7123afedda40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3943	batch transactions enabled
+2026-09-21 16:05:11.255	    7123afedda40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:389	Blockchain initialized. last block: 5, d0.h0.m0.s11 time ago, current difficulty: 729
+2026-09-21 16:05:11.255	    7123afedda40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.256	    7123afedda40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      124      get_long_term_block_weights
+2026-09-21 16:05:11.256	    7123afedda40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      263    update_next_cumulative_weight_limit
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-21 16:05:11.256	    7123afedda40	INFO	txpool	src/cryptonote_core/tx_pool.cpp:1714	Validating txpool contents for v16
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-21 16:05:11.256	    7123afedda40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:696	Loading checkpoints
+2026-09-21 16:05:11.256	    7123afedda40	INFO	global	src/daemon/core.h:81	Core initialized OK
+2026-09-21 16:05:11.256	    7123afedda40	INFO	global	src/daemon/p2p.h:64	Initializing p2p server...
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x643da9a36a34]:__cxa_throw+0xb0) [0x643da9a36a34]
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x643da9a9bcb0] 
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x8598a9) [0x643daa1db8a9] 
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x582694) [0x643da9f04694] 
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x583055) [0x643da9f05055] 
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x9cb84) [0x7123b035bb84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7123b035bb84]
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7]  0x44) [0x7123b03e8b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7123b03e8b64]
+2026-09-21 16:05:11.256	    71236f1fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:05:11.258	    7123afedda40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.p2p	src/p2p/net_node.inl:2845	Set limit-up to 8192 kB/s
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.p2p	src/p2p/net_node.inl:2857	Set limit-down to 32768 kB/s
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.p2p	src/p2p/net_node.inl:2879	Set limit-up to 8192 kB/s
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.p2p	src/p2p/net_node.inl:2883	Set limit-down to 32768 kB/s
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.p2p	src/p2p/net_node.inl:957	Binding (IPv4) on 127.0.0.1:28180
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net.p2p	src/p2p/net_node.inl:970	Net service bound (IPv4) to 127.0.0.1:28180
+2026-09-21 16:05:11.259	    7123afedda40	INFO	global	src/daemon/p2p.h:69	p2p server initialized OK
+2026-09-21 16:05:11.259	    7123afedda40	INFO	global	src/daemon/rpc.h:63	Initializing core RPC server...
+2026-09-21 16:05:11.259	    7123afedda40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-21 16:05:11.259	    7123afedda40	INFO	global	contrib/epee/include/net/http_server_impl_base.h:94	Binding on 127.0.0.1 (IPv4):28181
+2026-09-21 16:05:11.259	    7123afedda40	INFO	global	src/daemon/rpc.h:69	core RPC server initialized OK on port: 28181
+2026-09-21 16:05:11.259	    7123afedda40	INFO	global	src/daemon/rpc.h:74	Starting core RPC server...
+2026-09-21 16:05:11.260	    7123afedda40	INFO	net.http	contrib/epee/include/net/http_server_impl_base.h:111	Run net_service loop( 2 threads)...
+2026-09-21 16:05:11.260	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:79	core RPC server started ok
+2026-09-21 16:05:11.260	[SRV_MAIN]	INFO	daemon	src/daemon/daemon.cpp:270	ZMQ server disabled
+2026-09-21 16:05:11.260	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:79	Starting p2p net loop...
+2026-09-21 16:05:11.260	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1032	Run net_service loop( 10 threads)...
+2026-09-21 16:05:11.348	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.348	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:40088 INC] Calling RPC method get_info
+2026-09-21 16:05:11.348	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.348	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      288    get_info
+2026-09-21 16:05:11.349	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.349	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40092 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:11.349	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.349	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       16      fill_block_header_response
+2026-09-21 16:05:11.349	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       58    get_block_header_by_height
+2026-09-21 16:05:11.352	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.352	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40106 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:11.352	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.352	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        9    get_last_block_header
+2026-09-21 16:05:11.454	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.454	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40110 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:11.454	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.454	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       10    get_last_block_header
+2026-09-21 16:05:11.555	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.555	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40112 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:11.555	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.555	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        8    get_last_block_header
+2026-09-21 16:05:11.629	    71236f1fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX main cache initialized
+2026-09-21 16:05:11.657	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.657	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40126 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:11.657	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.657	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       10    get_last_block_header
+2026-09-21 16:05:11.759	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.759	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40140 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:11.759	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.759	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        8    get_last_block_header
+2026-09-21 16:05:11.778	[P2P0]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:38814 d6802252-9140-4baa-8ca1-81ea7edc9a5a INC] NEW CONNECTION
+2026-09-21 16:05:11.778	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-21 16:05:11.778	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:508	[127.0.0.1:38814 INC] Sync data returned a new top block candidate: 6 -> 8 [Your node is 2 blocks (2.0 minutes) behind] 
+2026-09-21 16:05:11.778	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:508	SYNCHRONIZATION started
+2026-09-21 16:05:11.778	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:531	[127.0.0.1:38814 INC] Remote blockchain height: 8, id: <30ac58c812423f50fc46f0a8f79771449f4ed68972ce74d2aeca7577f9bc3755>
+2026-09-21 16:05:11.778	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:544	[127.0.0.1:38814 INC] [0] state: requesting callback in state synchronizing
+2026-09-21 16:05:11.778	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:05:11.778	[P2P9]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:282	[127.0.0.1:38814 INC] -->>NOTIFY_REQUEST_CHAIN: m_block_ids.size()=6
+2026-09-21 16:05:11.778	[P2P9]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 215 bytes sent for category command-2006 initiated by us
+2026-09-21 16:05:11.778	[P2P9]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:284	[127.0.0.1:38814 INC] [0] state: requesting chain in state synchronizing
+2026-09-21 16:05:11.779	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 416 bytes received for category command-2007 initiated by peer
+2026-09-21 16:05:11.779	[P2P1]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2472	[127.0.0.1:38814 INC] Received NOTIFY_RESPONSE_CHAIN_ENTRY: m_block_ids.size()=3, m_start_height=5, m_total_height=8, expect height=6
+2026-09-21 16:05:11.779	[P2P1]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2474	[127.0.0.1:38814 INC] [0] state: received chain in state synchronizing
+2026-09-21 16:05:11.779	[P2P1]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2070	[127.0.0.1:38814 INC] [0] state: resuming in state synchronizing
+2026-09-21 16:05:11.779	[P2P1]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2279	[127.0.0.1:38814 INC] -->>NOTIFY_REQUEST_GET_OBJECTS: blocks.size()=2requested blocks count=2 / 100 from 6, first hash <407cfea3a4e2b215f00d680222438be1d50c068f62e7fafee4dfa2a5b2599940>
+2026-09-21 16:05:11.779	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 84 bytes sent for category command-2003 initiated by us
+2026-09-21 16:05:11.779	[P2P1]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2290	[127.0.0.1:38814 INC] [0] state: requesting objects in state synchronizing
+2026-09-21 16:05:11.779	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 326 bytes received for category command-2004 initiated by peer
+2026-09-21 16:05:11.779	[P2P0]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1039	[127.0.0.1:38814 INC] Received NOTIFY_RESPONSE_GET_OBJECTS (2 blocks)
+2026-09-21 16:05:11.779	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1040	[127.0.0.1:38814 INC] [0] state: received objects in state synchronizing
+2026-09-21 16:05:11.779	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1350	[127.0.0.1:38814 INC] [0] state: adding blocks in state synchronizing
+2026-09-21 16:05:11.779	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-21 16:05:11.779	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x643da9a36a34]:__cxa_throw+0xb0) [0x643da9a36a34]
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x643da9a9bcb0] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x643daa1de995] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x643daa1dbbab] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x5824b5) [0x643da9f044b5] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5842a5) [0x643da9f062a5] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x560ae0) [0x643da9ee2ae0] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8] /binary/monerod(+0x4f2179) [0x643da9e74179] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9] /binary/monerod(+0x5d96d9) [0x643da9f5b6d9] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10] /binary/monerod(+0x5d9f3c) [0x643da9f5bf3c] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [11] /binary/monerod(+0x4ff942) [0x643da9e81942] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [12] /binary/monerod(+0x5269eb) [0x643da9ea89eb] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [13] /binary/monerod(+0x4bdf0e) [0x643da9e3ff0e] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [14] /binary/monerod(+0x4c35e3) [0x643da9e455e3] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [15] /binary/monerod(+0x1e3311) [0x643da9b65311] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [16] /binary/monerod(+0x1e4eed) [0x643da9b66eed] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [17] /binary/monerod(+0x4879be) [0x643da9e099be] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [18] /binary/monerod(+0x488c63) [0x643da9e0ac63] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [19] /binary/monerod(+0x4891b3) [0x643da9e0b1b3] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [20] /binary/monerod(+0x1688d5) [0x643da9aea8d5] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [21] /binary/monerod(+0x4141e7) [0x643da9d961e7] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [22] /binary/monerod(+0x4490a6) [0x643da9dcb0a6] 
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [23]  0x1699f) [0x7123b08c199f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7123b08c199f]
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [24]  0x9cb84) [0x7123b035bb84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7123b035bb84]
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [25]  0x44) [0x7123b03e8b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7123b03e8b64]
+2026-09-21 16:05:11.780	[P2P0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-21 16:05:11.810	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.810	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      132      get_long_term_block_weights
+2026-09-21 16:05:11.810	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      185    get_next_long_term_block_weight
+2026-09-21 16:05:11.810	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.810	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      118      get_long_term_block_weights
+2026-09-21 16:05:11.810	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      153    update_next_cumulative_weight_limit
+2026-09-21 16:05:11.810	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:11.810	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<407cfea3a4e2b215f00d680222438be1d50c068f62e7fafee4dfa2a5b2599940>
+2026-09-21 16:05:11.810	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<cff7fda6ea962c3e7e5f9f82624aed181f30d2f1173533163d2571a188294300>
+2026-09-21 16:05:11.810	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 6, difficulty:	729
+2026-09-21 16:05:11.810	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 15(0/15)ms
+2026-09-21 16:05:11.811	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.811	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      120      get_long_term_block_weights
+2026-09-21 16:05:11.811	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      147    get_next_long_term_block_weight
+2026-09-21 16:05:11.811	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.811	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      104      get_long_term_block_weights
+2026-09-21 16:05:11.811	[P2P0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      127    update_next_cumulative_weight_limit
+2026-09-21 16:05:11.811	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:11.811	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<30ac58c812423f50fc46f0a8f79771449f4ed68972ce74d2aeca7577f9bc3755>
+2026-09-21 16:05:11.811	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<d6ca0ca11fbc99f9342b4f2c16b8e5123d9a7583c2537ccb6ac3b79d2f561300>
+2026-09-21 16:05:11.811	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 7, difficulty:	2890
+2026-09-21 16:05:11.811	[P2P0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 15(0/15)ms
+2026-09-21 16:05:11.811	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1614	Synced 8/8 (0.031967 sec, 62.564520 blocks/sec), 0.000000 MB queued in 0 spans, stripe 0 -> 0
+2026-09-21 16:05:11.811	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:1622	[127.0.0.1:38814 INC] [0] state: stopping adding blocks in state synchronizing
+2026-09-21 16:05:11.811	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2079	[127.0.0.1:38814 INC] [0] state: resuming in state synchronizing
+2026-09-21 16:05:11.811	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-21 16:05:11.811	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-21 16:05:11.811	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-21 16:05:11.811	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-21 16:05:11.811	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	Use the "help" command to see the list of available commands.
+2026-09-21 16:05:11.811	[P2P0]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-21 16:05:11.811	[P2P0]	INFO	sync-info	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2421	Sync time: 0.000556148 min, idle time 4.05832%, 0 + 0 MB downloaded, 0% old spans, 0% bad spans
+2026-09-21 16:05:11.811	[P2P0]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-21 16:05:11.811	[P2P0]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-21 16:05:11.812	[P2P0]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2684	[127.0.0.1:38814 INC] -->>NOTIFY_GET_TXPOOL_COMPLEMENT: hashes.size()=0
+2026-09-21 16:05:11.812	[P2P0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 10 bytes sent for category command-2010 initiated by us
+2026-09-21 16:05:11.812	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2686	[127.0.0.1:38814 INC] [0] state: requesting txpool complement in state normal
+2026-09-21 16:05:11.812	[P2P4]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 34 bytes received for category command-2002 initiated by peer
+2026-09-21 16:05:11.812	[P2P4]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:885	[127.0.0.1:38814 INC] Received NOTIFY_NEW_TRANSACTIONS (0 txes)
+2026-09-21 16:05:11.861	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.861	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40142 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:11.861	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.861	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       11      fill_block_header_response
+2026-09-21 16:05:11.861	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       42    get_last_block_header
+2026-09-21 16:05:11.861	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.861	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:40150 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:11.861	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.861	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       49    get_coinbase_tx_sum
+2026-09-21 16:05:11.862	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.862	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40160 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:11.862	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.862	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       10      fill_block_header_response
+2026-09-21 16:05:11.862	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       35    get_last_block_header
+2026-09-21 16:05:11.862	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.862	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:40176 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:11.862	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.862	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       47    get_coinbase_tx_sum
+2026-09-21 16:05:11.863	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.863	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:179	[127.0.0.1:40182 INC] Calling RPC method sync_info
+2026-09-21 16:05:11.863	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.863	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       77    sync_info
+2026-09-21 16:05:11.863	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.863	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:40186 INC] Calling RPC method get_connections
+2026-09-21 16:05:11.863	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.863	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       74    get_connections
+2026-09-21 16:05:11.864	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:11.864	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:40196 INC] Calling RPC method get_connections
+2026-09-21 16:05:11.864	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:11.864	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       71    get_connections
+2026-09-21 16:05:12.260	[P2P9]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 172 bytes sent for category command-1002 initiated by us
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use the "help" command to see the list of available commands.
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use "help <command>" to see a command's documentation.
+2026-09-21 16:05:12.260	[P2P8]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-21 16:05:12.260	[P2P7]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:38814 INC] 172 bytes received for category command-1002 initiated by us
+2026-09-21 16:05:12.260	[P2P9]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:28080 7c95f806-93ca-4b6e-bc21-4c18242c6d50 OUT] NEW CONNECTION
+2026-09-21 16:05:12.260	[P2P9]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:05:12.261	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28080 OUT] 262 bytes received for category command-1001 initiated by us
+2026-09-21 16:05:12.261	[P2P1]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-21 16:05:12.261	[P2P1]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-21 16:05:12.261	[P2P1]	INFO	net.p2p	src/p2p/net_node.inl:1199	[127.0.0.1:28080 OUT] New connection handshaked, pruning seed 0
+2026-09-21 16:05:14.228	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:40200 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_line(): Failed to match first line: 
+2026-09-21 16:05:14.228	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:40200 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 16:05:14.349	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:05:14.349	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:104	[127.0.0.1:40212 INC] calling /getblocks.bin
+2026-09-21 16:05:14.349	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.349	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      232    get_blocks
+2026-09-21 16:05:14.391	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /get_transaction_pool_hashes.bin
+2026-09-21 16:05:14.391	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:127	[127.0.0.1:40212 INC] calling /get_transaction_pool_hashes.bin
+2026-09-21 16:05:14.391	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.391	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       74    get_transaction_pool_hashes
+2026-09-21 16:05:14.395	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.395	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40220 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:14.395	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.395	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       11      fill_block_header_response
+2026-09-21 16:05:14.395	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       40    get_last_block_header
+2026-09-21 16:05:14.395	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.395	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:40228 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:14.395	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.395	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      106    get_coinbase_tx_sum
+2026-09-21 16:05:14.400	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.400	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40240 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.400	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.400	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       12      fill_block_header_response
+2026-09-21 16:05:14.400	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       46    get_block_header_by_height
+2026-09-21 16:05:14.400	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.400	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40242 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.400	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.400	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:14.400	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       27    get_block_header_by_height
+2026-09-21 16:05:14.401	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.401	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40254 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.401	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.401	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        6      fill_block_header_response
+2026-09-21 16:05:14.401	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       24    get_block_header_by_height
+2026-09-21 16:05:14.401	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.401	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40256 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.401	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.401	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:14.401	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       26    get_block_header_by_height
+2026-09-21 16:05:14.402	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.402	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40266 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.402	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.402	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       12      fill_block_header_response
+2026-09-21 16:05:14.402	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       44    get_block_header_by_height
+2026-09-21 16:05:14.402	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.402	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40282 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.402	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.402	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-21 16:05:14.402	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       26    get_block_header_by_height
+2026-09-21 16:05:14.403	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.403	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40298 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       12      fill_block_header_response
+2026-09-21 16:05:14.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       46    get_block_header_by_height
+2026-09-21 16:05:14.403	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.403	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:40304 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:14.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       13      fill_block_header_response
+2026-09-21 16:05:14.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       47    get_block_header_by_height
+2026-09-21 16:05:14.406	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.406	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:40320 INC] Calling RPC method get_info
+2026-09-21 16:05:14.406	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.406	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      136    get_info
+2026-09-21 16:05:14.407	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.407	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:40322 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:14.407	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.407	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       11      fill_block_header_response
+2026-09-21 16:05:14.407	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       36    get_last_block_header
+2026-09-21 16:05:14.408	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.408	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:40328 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:14.408	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.408	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       47    get_coinbase_tx_sum
+2026-09-21 16:05:14.409	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:14.409	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:40340 INC] Calling RPC method get_connections
+2026-09-21 16:05:14.409	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-21 16:05:14.409	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       73    get_connections
+2026-09-21 16:05:14.434	[P2P5]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:38814 INC] [0] state: closed in state normal
+2026-09-21 16:05:14.434	[P2P5]	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:38814 d6802252-9140-4baa-8ca1-81ea7edc9a5a INC] CLOSE CONNECTION
+2026-09-21 16:05:14.435	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2853	Target height decreasing from 8 to 0
+2026-09-21 16:05:14.435	[P2P0]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-21 16:05:14.435	[P2P0]	WARNING	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2859	monerod is now disconnected from the network
+2026-09-21 16:05:14.435	[P2P0]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:28080 OUT] [0] state: closed in state normal
+2026-09-21 16:05:14.435	[P2P0]	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:28080 7c95f806-93ca-4b6e-bc21-4c18242c6d50 OUT] CLOSE CONNECTION
+2026-09-21 16:05:14.863	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1038	net_service loop stopped.
+2026-09-21 16:05:14.863	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:81	p2p net loop stopped
+2026-09-21 16:05:14.863	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:84	Stopping core RPC server...
+2026-09-21 16:05:14.863	[SRV_MAIN]	INFO	global	src/daemon/daemon.cpp:288	Node stopped.
+2026-09-21 16:05:14.863	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:96	Deinitializing core RPC server...
+2026-09-21 16:05:14.863	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:91	Deinitializing p2p...
+2026-09-21 16:05:14.863	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:410	Killing the net_node
+2026-09-21 16:05:15.260	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:414	Joined extra background net_node threads
+2026-09-21 16:05:15.260	[SRV_MAIN]	INFO	global	src/daemon/core.h:102	Deinitializing core...
+2026-09-21 16:05:15.264	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:75	Stopping cryptonote protocol...
+2026-09-21 16:05:15.264	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully

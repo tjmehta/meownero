@@ -1,0 +1,61 @@
+===== research/evidence/testnet-v0-recover-tjs287-2026-09-21/recover
+peer0.log lines=1842 sha256=c66286d2be5e37133c8bfb6217c384cae61811ab3da9cce1a414b75f85dfc683 REORGANIZE=0 alternative=0 ERROR=3 WARNING=6 found_block=7 db_open=1 deinit_core=1
+peer1.log lines=902 sha256=21e8f87fe87a0b08d72f549c626d0477a7fa872c1e32109dd0feda63cc67a0a5 REORGANIZE=0 alternative=0 ERROR=10 WARNING=9 found_block=0 db_open=3 deinit_core=3
+peer0 Found block:
+Found block <2283aee81ef4fbcea99f9a077fab6d3a93a57f4a43590741d7367ebb3f903ab3> at height 1 for difficulty: 1
+Found block <db816375d1dda2919f560c75dd91e94c08db95ae17f96f6e2d9e393d1c960d16> at height 2 for difficulty: 1
+Found block <12b9d4cf4c32c1224637d25e96bb7cae32fd1eabaec238337c4472bc72dc5566> at height 3 for difficulty: 5
+Found block <7dddc9e42bcede119ce77dd9cac9478ec15f28d7e6f9339352bbb1bc91da7b16> at height 4 for difficulty: 25
+Found block <a2ce81d1f987928108862681a3e33e512648c7ff611623932d1a40611de6e5df> at height 5 for difficulty: 127
+Found block <b5baa7b178db6d67412fb5964b8415aa80620db361c3a8e575969c5c39880ec3> at height 6 for difficulty: 647
+Found block <6d159c35a5ac2000849bbe66321ceb5dbc84373944acc0afdf83ac2b09607ec2> at height 7 for difficulty: 2499
+peer1 DB opens:
+Blockchain initialized. last block: 0, d4539.h4.m27.s50 time ago, current difficulty: 1
+Blockchain initialized. last block: 5, d0.h0.m0.s2 time ago, current difficulty: 647
+Blockchain initialized. last block: 5, d0.h0.m0.s12 time ago, current difficulty: 647
+peer1 stdout DB opens: peer1=1 restart=1 restore=1
+peer1.log lines mentioning offline blocks 6/7 after third DB open:
+INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:531	[127.0.0.1:45134 INC] Remote blockchain height: 8, id: <6d159c35a5ac2000849bbe
+INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2279	[127.0.0.1:45134 INC] -->>NOTIFY_REQUEST_GET_OBJECTS: blocks.size()=2req
+INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<b5baa7b178db6d67412fb5964b8415aa80620db361c3a8e575969c5c39880ec3>
+INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<6d159c35a5ac2000849bbe66321ceb5dbc84373944acc0afdf83ac2b09607ec2>
+peer1.log ERROR lines (unique, trimmed):
+ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:PORT INC] simple_http_connection_handler::handle_char_out: Error stat
+ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:PORT INC] simple_http_connection_handler<t_connection_context>::handl
+INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:
+WARNING	net.p2p	src/p2p/net_node.inl:1156	[127.0.0.1:PORT OUT] COMMAND_HANDSHAKE invoke failed. (-3, LEVIN_ERROR_CONNECTION_DESTROYED)
+peer0.log WARNING lines (unique, trimmed):
+INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category ba
+INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,d
+WARNING	net.p2p	src/p2p/net_node.inl:1156	[127.0.0.1:28180 OUT] COMMAND_HANDSHAKE invoke failed. (-3, LEVIN_ERROR_CONNECTION_DESTROYED)
+WARNING	net.p2p	src/p2p/net_node.inl:1215	[127.0.0.1:28180 OUT] COMMAND_HANDSHAKE Failed
+===== research/evidence/qa-tjs294-2026-09-21/qa294-01
+peer0.log lines=1782 sha256=530a914a50064d5a74d1e58b153ea23582b9d91719f5f8b95a627c0c9a199d1c REORGANIZE=0 alternative=0 ERROR=3 WARNING=6 found_block=7 db_open=1 deinit_core=1
+peer1.log lines=898 sha256=9657061383a700726049d9184e62995c1b581c2509249298773846169c3bff02 REORGANIZE=0 alternative=0 ERROR=9 WARNING=7 found_block=0 db_open=3 deinit_core=3
+peer0 Found block:
+Found block <a11839cb7f226bb9dba7510c81be0f6784722437d9c2b5f7cd9e18a988dc3f5d> at height 1 for difficulty: 1
+Found block <1261133bdba69234bdad697e5889c2a770e4043566b1545b54fc3aa70c09b8d5> at height 2 for difficulty: 1
+Found block <397c5e9893027b16ac41f0a545ad4330e5e943eea132d8374f49e19bc06b241e> at height 3 for difficulty: 5
+Found block <39bf41181e514680041811b8aefb96065f16748bfe40d52ed80bf1e46b0b42db> at height 4 for difficulty: 26
+Found block <27c1a88855587faee8572533c6c74a962a957bf7d708c45eb560d292a98ec307> at height 5 for difficulty: 138
+Found block <407cfea3a4e2b215f00d680222438be1d50c068f62e7fafee4dfa2a5b2599940> at height 6 for difficulty: 729
+Found block <30ac58c812423f50fc46f0a8f79771449f4ed68972ce74d2aeca7577f9bc3755> at height 7 for difficulty: 2890
+peer1 DB opens:
+Blockchain initialized. last block: 0, d4539.h5.m15.s37 time ago, current difficulty: 1
+Blockchain initialized. last block: 5, d0.h0.m0.s1 time ago, current difficulty: 729
+Blockchain initialized. last block: 5, d0.h0.m0.s11 time ago, current difficulty: 729
+peer1 stdout DB opens: peer1=1 restart=1 restore=1
+peer1.log lines mentioning offline blocks 6/7 after third DB open:
+INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:531	[127.0.0.1:38814 INC] Remote blockchain height: 8, id: <30ac58c812423f50fc46f0
+INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2279	[127.0.0.1:38814 INC] -->>NOTIFY_REQUEST_GET_OBJECTS: blocks.size()=2req
+INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<407cfea3a4e2b215f00d680222438be1d50c068f62e7fafee4dfa2a5b2599940>
+INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<30ac58c812423f50fc46f0a8f79771449f4ed68972ce74d2aeca7577f9bc3755>
+peer1.log ERROR lines (unique, trimmed):
+ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:PORT INC] simple_http_connection_handler::handle_char_out: Error stat
+ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:PORT INC] simple_http_connection_handler<t_connection_context>::handl
+INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:
+peer0.log WARNING lines (unique, trimmed):
+INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category ba
+INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,d
+WARNING	net.p2p	src/p2p/net_node.inl:1156	[127.0.0.1:28180 OUT] COMMAND_HANDSHAKE invoke failed. (-3, LEVIN_ERROR_CONNECTION_DESTROYED)
+WARNING	net.p2p	src/p2p/net_node.inl:1215	[127.0.0.1:28180 OUT] COMMAND_HANDSHAKE Failed

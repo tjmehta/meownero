@@ -1,0 +1,192 @@
+2026-09-21 16:04:30.548	I Monero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)
+2026-09-21 16:04:30.548	I Moving from main() into the daemonize now.
+2026-09-21 16:04:30.548	I Initializing cryptonote protocol...
+2026-09-21 16:04:30.548	I Cryptonote protocol initialized OK
+2026-09-21 16:04:30.549	I Initializing core...
+2026-09-21 16:04:30.549	I Loading blockchain from folder /work/data/peer1/lmdb ...
+2026-09-21 16:04:30.549	I LMDB memory map size: 1073741824
+2026-09-21 16:04:30.549	I Blockchain not loaded, generating genesis block.
+2026-09-21 16:04:30.584	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:04:30.584	I id:	<20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8>
+2026-09-21 16:04:30.584	I PoW:	<56316d3598ed0a46c353ff818a21261f06ebc4e82aab5369be4d7f6f783ff9e3>
+2026-09-21 16:04:30.584	I HEIGHT 0, difficulty:	1
+2026-09-21 16:04:30.584	I block reward: 0.000000000000(0.000000000000 + 0.000000000000), coinbase_weight: 75, cumulative weight: 75, 17(0/17)ms
+2026-09-21 16:04:30.584	I batch transaction mode already enabled, but asked to enable batch mode
+2026-09-21 16:04:30.584	I batch transactions enabled
+2026-09-21 16:04:30.584	I RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-21 16:04:30.584	I Blockchain initialized. last block: 0, d4539.h5.m15.s37 time ago, current difficulty: 1
+2026-09-21 16:04:30.584	I RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-21 16:04:30.584	I Validating txpool contents for v16
+2026-09-21 16:04:30.584	I Loading checkpoints
+2026-09-21 16:04:30.584	I Core initialized OK
+2026-09-21 16:04:30.585	I Initializing p2p server...
+2026-09-21 16:04:30.586	I Setting LIMIT: 8192 kbps
+2026-09-21 16:04:30.586	I Set limit-up to 8192 kB/s
+2026-09-21 16:04:30.586	I Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.586	I Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.587	I Set limit-down to 32768 kB/s
+2026-09-21 16:04:30.587	I Setting LIMIT: 8192 kbps
+2026-09-21 16:04:30.587	I Set limit-up to 8192 kB/s
+2026-09-21 16:04:30.587	I Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.587	I Setting LIMIT: 32768 kbps
+2026-09-21 16:04:30.587	I Set limit-down to 32768 kB/s
+2026-09-21 16:04:30.587	I Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-21 16:04:30.587	I Binding (IPv4) on 127.0.0.1:28180
+2026-09-21 16:04:30.587	I Net service bound (IPv4) to 127.0.0.1:28180
+2026-09-21 16:04:30.587	I p2p server initialized OK
+2026-09-21 16:04:30.587	I Initializing core RPC server...
+2026-09-21 16:04:30.587	I Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-21 16:04:30.587	I Binding on 127.0.0.1 (IPv4):28181
+2026-09-21 16:04:30.587	I core RPC server initialized OK on port: 28181
+2026-09-21 16:04:30.587	I Starting core RPC server...
+2026-09-21 16:04:30.587	I Run net_service loop( 2 threads)...
+2026-09-21 16:04:30.587	I core RPC server started ok
+2026-09-21 16:04:30.588	I ZMQ server disabled
+2026-09-21 16:04:30.588	I Starting p2p net loop...
+2026-09-21 16:04:30.588	I Run net_service loop( 10 threads)...
+2026-09-21 16:04:30.977	I RandomX main cache initialized
+2026-09-21 16:04:31.588	I 
+2026-09-21 16:04:31.588	I **********************************************************************
+2026-09-21 16:04:31.588	I The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-21 16:04:31.588	I 
+2026-09-21 16:04:31.588	I You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-21 16:04:31.588	I where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-21 16:04:31.588	I 
+2026-09-21 16:04:31.588	I Use the "help" command to see the list of available commands.
+2026-09-21 16:04:31.588	I Use "help <command>" to see a command's documentation.
+2026-09-21 16:04:31.588	I **********************************************************************
+2026-09-21 16:04:31.588	I [127.0.0.1:28080 922a819a-eb48-49e6-8de0-fc626bdb50d7 OUT] NEW CONNECTION
+2026-09-21 16:04:31.588	I [127.0.0.1:28080 OUT] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:04:31.589	I [127.0.0.1:28080 OUT] 10 bytes received for category command-2010 initiated by peer
+2026-09-21 16:04:31.589	I [127.0.0.1:28080 OUT] Received NOTIFY_GET_TXPOOL_COMPLEMENT (0 txes)
+2026-09-21 16:04:31.589	I [127.0.0.1:28080 OUT] 262 bytes received for category command-1001 initiated by us
+2026-09-21 16:04:31.589	I 
+2026-09-21 16:04:31.589	I **********************************************************************
+2026-09-21 16:04:31.589	I You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-21 16:04:31.589	I 
+2026-09-21 16:04:31.589	I Use the "help" command to see the list of available commands.
+2026-09-21 16:04:31.589	I **********************************************************************
+2026-09-21 16:04:31.589	I switching safe mode on
+2026-09-21 16:04:31.589	I clearing used stripe peers
+2026-09-21 16:04:31.589	I [127.0.0.1:28080 OUT] -->>NOTIFY_GET_TXPOOL_COMPLEMENT: hashes.size()=0
+2026-09-21 16:04:31.589	I [127.0.0.1:28080 OUT] 10 bytes sent for category command-2010 initiated by us
+2026-09-21 16:04:31.589	I [127.0.0.1:28080 OUT] [0] state: requesting txpool complement in state normal
+2026-09-21 16:04:31.589	I [127.0.0.1:28080 OUT] New connection handshaked, pruning seed 0
+2026-09-21 16:04:31.590	I [127.0.0.1:28080 OUT] 34 bytes received for category command-2002 initiated by peer
+2026-09-21 16:04:31.590	I [127.0.0.1:28080 OUT] Received NOTIFY_NEW_TRANSACTIONS (0 txes)
+2026-09-21 16:04:31.590	I [127.0.0.1:44354 383c8123-5a4d-4429-9fa3-2f98c3be4848 INC] NEW CONNECTION
+2026-09-21 16:04:31.590	I [127.0.0.1:44354 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-21 16:04:31.590	I switching safe mode on
+2026-09-21 16:04:31.590	I clearing used stripe peers
+2026-09-21 16:04:31.590	I [127.0.0.1:44354 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 16:04:31.630	I [127.0.0.1:28080 OUT] 172 bytes received for category command-1002 initiated by peer
+2026-09-21 16:04:31.630	I [127.0.0.1:28080 OUT] 172 bytes sent for category command-1002 initiated by us
+2026-09-21 16:04:31.677	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.677	I [127.0.0.1:44712 INC] Calling RPC method get_info
+2026-09-21 16:04:31.681	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.681	I [127.0.0.1:44726 INC] Calling RPC method get_info
+2026-09-21 16:04:31.681	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.681	I [127.0.0.1:44734 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:04:31.682	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.682	I [127.0.0.1:44750 INC] Calling RPC method hard_fork_info
+2026-09-21 16:04:31.682	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.682	I [127.0.0.1:44764 INC] Calling RPC method get_block_template
+2026-09-21 16:04:31.684	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.684	I [127.0.0.1:44776 INC] Calling RPC method get_connections
+2026-09-21 16:04:31.685	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:04:31.685	I [127.0.0.1:44778 INC] Calling RPC method get_connections
+2026-09-21 16:04:38.465	E [127.0.0.1:34014 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_line(): Failed to match first line: ????
+2026-09-21 16:04:38.465	E [127.0.0.1:34014 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 16:04:38.586	I HTTP [127.0.0.1] POST /getheight
+2026-09-21 16:04:38.586	I [127.0.0.1:34030 INC] calling /getheight
+2026-09-21 16:04:39.023	I HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:04:39.023	I [127.0.0.1:34030 INC] calling /getblocks.bin
+2026-09-21 16:04:59.070	I HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:04:59.070	I [127.0.0.1:34030 INC] calling /getblocks.bin
+2026-09-21 16:05:00.640	I [127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.640	I [127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.640	I [127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <a11839cb7f226bb9dba7510c81be0f6784722437d9c2b5f7cd9e18a988dc3f5d> (height 2, 0 txes)
+2026-09-21 16:05:00.641	I [127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <a11839cb7f226bb9dba7510c81be0f6784722437d9c2b5f7cd9e18a988dc3f5d> (height 2, 0 txes)
+2026-09-21 16:05:00.662	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.662	I id:	<a11839cb7f226bb9dba7510c81be0f6784722437d9c2b5f7cd9e18a988dc3f5d>
+2026-09-21 16:05:00.662	I PoW:	<973637bb5e79fd101b84fedc3ecddf05ca70702300811ece8ccc071e9a23e186>
+2026-09-21 16:05:00.662	I HEIGHT 1, difficulty:	1
+2026-09-21 16:05:00.662	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 21(0/21)ms
+2026-09-21 16:05:00.667	I [127.0.0.1:44354 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:00.667	I [127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.667	I [127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <1261133bdba69234bdad697e5889c2a770e4043566b1545b54fc3aa70c09b8d5> (height 3, 0 txes)
+2026-09-21 16:05:00.681	I [127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.681	I [127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <1261133bdba69234bdad697e5889c2a770e4043566b1545b54fc3aa70c09b8d5> (height 3, 0 txes)
+2026-09-21 16:05:00.683	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.683	I id:	<1261133bdba69234bdad697e5889c2a770e4043566b1545b54fc3aa70c09b8d5>
+2026-09-21 16:05:00.683	I PoW:	<e1782b8d80d2b8b19daadba10822acd29fef3ae623a561672ad061542a970f35>
+2026-09-21 16:05:00.683	I HEIGHT 2, difficulty:	1
+2026-09-21 16:05:00.683	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 15(0/15)ms
+2026-09-21 16:05:00.687	I [127.0.0.1:28080 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:00.687	I [127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.687	I [127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <397c5e9893027b16ac41f0a545ad4330e5e943eea132d8374f49e19bc06b241e> (height 4, 0 txes)
+2026-09-21 16:05:00.705	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.705	I id:	<397c5e9893027b16ac41f0a545ad4330e5e943eea132d8374f49e19bc06b241e>
+2026-09-21 16:05:00.705	I PoW:	<18090bc647d3f2d6f7fc6a3a62159245121f941b8cb9e02d10a480dfb894301a>
+2026-09-21 16:05:00.705	I HEIGHT 3, difficulty:	5
+2026-09-21 16:05:00.705	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 17(0/17)ms
+2026-09-21 16:05:00.708	I [127.0.0.1:44354 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:00.708	I [127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.708	I [127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <397c5e9893027b16ac41f0a545ad4330e5e943eea132d8374f49e19bc06b241e> (height 4, 0 txes)
+2026-09-21 16:05:00.802	I [127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.802	I [127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:00.802	I [127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <39bf41181e514680041811b8aefb96065f16748bfe40d52ed80bf1e46b0b42db> (height 5, 0 txes)
+2026-09-21 16:05:00.802	I [127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <39bf41181e514680041811b8aefb96065f16748bfe40d52ed80bf1e46b0b42db> (height 5, 0 txes)
+2026-09-21 16:05:00.818	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:00.818	I id:	<39bf41181e514680041811b8aefb96065f16748bfe40d52ed80bf1e46b0b42db>
+2026-09-21 16:05:00.818	I PoW:	<2894ec3abd6aca6998dd72d605b1ec6754f1ccd8b8182713147cd8fd4931e600>
+2026-09-21 16:05:00.818	I HEIGHT 4, difficulty:	26
+2026-09-21 16:05:00.818	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 16(0/16)ms
+2026-09-21 16:05:00.820	I [127.0.0.1:28080 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:01.179	I [127.0.0.1:44354 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:01.179	I [127.0.0.1:28080 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 16:05:01.179	I [127.0.0.1:44354 INC] [127.0.0.1:44354 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <27c1a88855587faee8572533c6c74a962a957bf7d708c45eb560d292a98ec307> (height 6, 0 txes)
+2026-09-21 16:05:01.179	I [127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <27c1a88855587faee8572533c6c74a962a957bf7d708c45eb560d292a98ec307> (height 6, 0 txes)
+2026-09-21 16:05:01.194	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 16:05:01.194	I id:	<27c1a88855587faee8572533c6c74a962a957bf7d708c45eb560d292a98ec307>
+2026-09-21 16:05:01.194	I PoW:	<e7a11fa5065c7128a44468360726dbc0206e1db710be49900cd855e81c37f300>
+2026-09-21 16:05:01.194	I HEIGHT 5, difficulty:	138
+2026-09-21 16:05:01.194	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 14(0/14)ms
+2026-09-21 16:05:01.196	I [127.0.0.1:28080 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 16:05:01.335	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.335	I [127.0.0.1:48294 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:01.336	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.336	I [127.0.0.1:48306 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:01.379	I HTTP [127.0.0.1] POST /getblocks.bin
+2026-09-21 16:05:01.379	I [127.0.0.1:34030 INC] calling /getblocks.bin
+2026-09-21 16:05:01.430	I HTTP [127.0.0.1] POST /get_transaction_pool_hashes.bin
+2026-09-21 16:05:01.430	I [127.0.0.1:34030 INC] calling /get_transaction_pool_hashes.bin
+2026-09-21 16:05:01.432	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.432	I [127.0.0.1:48308 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.432	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.432	I [127.0.0.1:48312 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.433	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.433	I [127.0.0.1:48328 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.433	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.433	I [127.0.0.1:48342 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.434	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.434	I [127.0.0.1:48354 INC] Calling RPC method get_block_header_by_height
+2026-09-21 16:05:01.444	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.444	I [127.0.0.1:48366 INC] Calling RPC method get_last_block_header
+2026-09-21 16:05:01.445	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 16:05:01.445	I [127.0.0.1:48368 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 16:05:01.511	I [127.0.0.1:44354 INC] [0] state: closed in state normal
+2026-09-21 16:05:01.511	I [127.0.0.1:44354 383c8123-5a4d-4429-9fa3-2f98c3be4848 INC] CLOSE CONNECTION
+2026-09-21 16:05:01.511	I [127.0.0.1:28080 OUT] [0] state: closed in state normal
+2026-09-21 16:05:01.511	I [127.0.0.1:28080 922a819a-eb48-49e6-8de0-fc626bdb50d7 OUT] CLOSE CONNECTION
+2026-09-21 16:05:01.511	I net_service loop stopped.
+2026-09-21 16:05:01.511	I p2p net loop stopped
+2026-09-21 16:05:01.511	I Stopping core RPC server...
+2026-09-21 16:05:01.511	I Node stopped.
+2026-09-21 16:05:01.512	I Deinitializing core RPC server...
+2026-09-21 16:05:01.512	I Deinitializing p2p...
+2026-09-21 16:05:01.512	I Killing the net_node
+2026-09-21 16:05:01.594	I Joined extra background net_node threads
+2026-09-21 16:05:01.594	I Deinitializing core...
+2026-09-21 16:05:01.595	I Stopping cryptonote protocol...
+2026-09-21 16:05:01.595	I Cryptonote protocol stopped successfully

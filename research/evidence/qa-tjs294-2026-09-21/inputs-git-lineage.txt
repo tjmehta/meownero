@@ -1,0 +1,63 @@
+TRACKED-EQUAL   chain/Dockerfile
+TRACKED-EQUAL   chain/build.sh
+TRACKED-EQUAL   chain/patches/0001-consensus-perpetual-flat-subsidy-of-0.9-MEOW-per-blo.patch
+TRACKED-EQUAL   chain/patches/0002-identity-Meownero-network-constants-and-zero-amount-.patch
+TRACKED-EQUAL   chain/patches/0003-consensus-mainnet-hard-fork-table-v1-0-v16-1-single-.patch
+TRACKED-EQUAL   chain/patches/0004-trust-surfaces-remove-inherited-checkpoints-block-ha.patch
+TRACKED-EQUAL   chain/patches/0005-tests-replace-block_reward-unit-tests-with-Meownero-.patch
+TRACKED-EQUAL   chain/patches/0006-consensus-launch-difficulty-floor-MEOW_MIN_DIFFICULT.patch
+TRACKED-EQUAL   chain/patches/0007-tests-encode-synthetic-miner-outputs-for-the-active-.patch
+TRACKED-EQUAL   chain/patches/0008-consensus-apply-launch-floor-to-startup-difficulty-a.patch
+TRACKED-EQUAL   chain/patches/0009-tests-adapt-address-and-URI-fixtures-to-Meownero-net.patch
+TRACKED-EQUAL   chain/patches/0010-trust-disable-inherited-update-blocklist-and-donatio.patch
+TRACKED-EQUAL   chain/patches/0011-tests-re-encode-multisig-fixtures-for-Meownero-testn.patch
+TRACKED-EQUAL   chain/patches/0012-tests-adapt-wallet-storage-caches-while-retaining-ge.patch
+TRACKED-EQUAL   chain/patches/0013-tests-retain-historical-archive-portability-under-Me.patch
+TRACKED-EQUAL   chain/patches/0014-wallet-validate-block-versions-by-fork-table-entry.patch
+TRACKED-EQUAL   chain/patches/0015-tests-compare-difficulty-callers-across-window-and-r.patch
+TRACKED-EQUAL   chain/testnet-v0/README.md
+TRACKED-EQUAL   chain/testnet-v0/baseline.json
+TRACKED-EQUAL   chain/testnet-v0/launch.py
+TRACKED-EQUAL   chain/testnet-v0/profile.json
+TRACKED-EQUAL   chain/testnet-v0/recover-journey.md
+TRACKED-EQUAL   chain/testnet-v0/recover.py
+TRACKED-EQUAL   chain/testnet-v0/test-recover-refusals.py
+TRACKED-EQUAL   chain/testnet-v0/test-refusals.py
+TRACKED-EQUAL   chain/testnet-v0/verify-recover.py
+TRACKED-EQUAL   chain/testnet-v0/verify.py
+TRACKED-EQUAL   chain/upstream.lock
+UNTRACKED-AT-HEAD docs/testnet-v0-freeze-tjs223-2026-09-20.md
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/MANIFEST.sha256
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/BUILDER_IMAGE_ID
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/SHA256SUMS
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/VERSIONS
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/cmake.log
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/packages.txt
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/profile-inputs.json
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/result.json
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/selected-9-90/first/source.diff
+TRACKED-EQUAL   research/evidence/repro-selected-2026-09-18/summary.json
+TRACKED-EQUAL   research/evidence/testnet-v0-launch-tjs229-2026-09-20/launch/INPUTS.sha256
+TRACKED-EQUAL   spikes/network-benchmark/build-profile.sh
+TRACKED-EQUAL   spikes/network-benchmark/stage-profile-build.py
+TRACKED-EQUAL   spikes/selected-issuance/fixture-source-lock.json
+TRACKED-EQUAL   spikes/selected-issuance/gamma-fixture-source-lock.json
+TRACKED-EQUAL   spikes/selected-issuance/selected-9-90.patch
+TRACKED-EQUAL   spikes/selected-issuance/selected-gamma-fixture.patch
+TRACKED-EQUAL   spikes/selected-issuance/selected-unit-fixtures.patch
+TRACKED-EQUAL   spikes/selected-issuance/source-lock.json
+--- recipe files at 3bc39cb vs INPUTS pins:
+3bc39cb-EQUAL recover.py
+3bc39cb-EQUAL verify-recover.py
+3bc39cb-EQUAL test-recover-refusals.py
+3bc39cb-EQUAL recover-journey.md
+--- run01 INPUTS vs run02 INPUTS:
+23c23
+< 6ef115cfadec8dfb55fe75c3c1c984dd6b5cc910902037ceb4eaab030b22fffe  chain/testnet-v0/recover.py
+---
+> 3a6391d4e3c339fe4b6e656e0b98a6252f2fcd233759660d253013083fac6da0  chain/testnet-v0/recover.py
+26c26
+< 4b5f40e7c7fa7bdd36441d08337ebfcf8c60e7a4db7bbf7ed83ff02e398ad880  chain/testnet-v0/verify-recover.py
+---
+> 7f2750490e3d4af6a9e0b5fc6353211301d1c0af2f60016ffc3ba22bbab66d8d  chain/testnet-v0/verify-recover.py
+diff_exit=1

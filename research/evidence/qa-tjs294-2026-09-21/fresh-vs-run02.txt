@@ -1,0 +1,17 @@
+result keys equal: True
+phases/scope/delivery equal: True
+run02 tip: {'cumulative_work': '0xcea', 'emission_atomic': 63000000000000, 'fees_atomic': 0, 'hash': '6d159c35a5ac2000849bbe66321ceb5dbc84373944acc0afdf83ac2b09607ec2', 'height': 7}
+qa294 tip: {'cumulative_work': '0xecf', 'emission_atomic': 63000000000000, 'fees_atomic': 0, 'hash': '30ac58c812423f50fc46f0a8f79771449f4ed68972ce74d2aeca7577f9bc3755', 'height': 7}
+run02 rejoin_s 0.613  qa294 rejoin_s 0.715
+archive sha differs (fresh chain): True
+genesis equal: True
+mined hashes all differ: True
+run02 difficulties [1, 1, 1, 5, 25, 127, 647, 2499]
+qa294 difficulties [1, 1, 1, 5, 26, 138, 729, 2890]
+process-commands equal: True
+container command equal except --name and -v work path: ['meow-tjs287-1722030', '<repo>/build/testnet-v0-recover-tjs287-run02:/work'] ['meow-tjs287-2557630', '<repo>/build/testnet-v0-recover-qa294-01:/work']
+profile-readback genesis/fork/template equal: True
+run02 elapsed 45.0 peak 2781372416 ; qa294 elapsed 44.9 peak 2786811904
+qa294 exits {'W': 0, 'peer0': 0, 'peer1': 0, 'peer1-restart': 0, 'peer1-restore': 0}
+qa294 backup files {'28180/p2pstate.bin': 62, 'lmdb/data.mdb': 180224, 'lmdb/lock.mdb': 8192} archive bytes 204800
+qa294 wallet heights [6, 6, 8]

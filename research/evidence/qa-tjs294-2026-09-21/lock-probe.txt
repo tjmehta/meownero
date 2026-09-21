@@ -1,0 +1,20 @@
+utc=2026-09-21T16:06:06Z
+journey window: 2026-09-21T16:04:29Z 2026-09-21T16:05:15Z 
+lock FREE after QA run (probe released immediately)
+meow containers now: 0 (meow-tjs* live or stopped; other names below are unrelated)
+live meownero workers before run: none (pgrep recover.py|payment.py|sync.py|launch.py|monerod|monero-wallet empty)
+container name used: meow-tjs287-2557630
+{
+  "command": [
+    "docker",
+    "rm",
+    "-f",
+    "meow-tjs287-2557630"
+  ],
+  "exit": 0,
+  "stderr": "Error response from daemon: No such container: meow-tjs287-2557630\n",
+  "stdout": ""
+}
+meow-n3	Exited (0) 2 weeks ago
+meow-n2	Exited (0) 2 weeks ago
+meow-n1	Exited (0) 2 weeks ago
