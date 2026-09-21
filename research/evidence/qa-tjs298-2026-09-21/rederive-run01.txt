@@ -1,0 +1,43 @@
+PASS R01 EVIDENCE.sha256 names exactly the top-level public files  [32 entries]
+PASS R02 every EVIDENCE entry hashes equal
+PASS R03 no data/ (private) entry in EVIDENCE
+PASS R04 launcher/container exit 0
+PASS R05 four owned processes all exit 0  [{'peer0': 0, 'peer1': 0, 'pool': 0, 'pool-restart': 0}]
+PASS R06 no OOM, peak under cap, wall under 1800 s  [peak 3342471168 B, wall 41.3 s]
+PASS R07 result.json PASS on the pinned pool
+PASS R08 restart command byte-identical to first pool command
+PASS R09 peer0 keeps --no-zmq; peer1 differs only by the loopback ZMQ publisher plus per-peer ports/paths  [peer0-only=['/work/peer0.conf', '/work/data/peer0', '127.0.0.1:28180', '28080', '28081', '--no-zmq', '/work/peer0.log'] peer1-only=['/work/peer1.conf', '/work/data/peer1', '127.0.0.1:28080', '28180', '28181', '--zmq-rpc-bind-ip', '--zmq-rpc-bind-port', '28182', '--zmq-pub', 'tcp://127.0.0.1:28183', '/work/peer1.log']]
+PASS R10 pool: fixture wallet, peer1 RPC 28181, ZMQ 28183, light mode, no cache, no DNS, loopback stratum/p2p, no miner flag
+PASS R11 both peers return identical header sets  [9 headers]
+PASS R12 header chain links and heights 0..N
+PASS R13 difficulties recorded (report)  [[1, 1, 1, 5, 26, 138, 666, 3010, 13846]]
+PASS R14 peer0 log Found block count == N; peer1 none  [peer0 8, peer1 0, N 8]
+PASS R15 all witness tips lie on the final chain  [attach 4 live 6 stop 6 down 8]
+PASS R16 attach job = tip+1 on tip hash; API agrees  [job height 5]
+PASS R17 live job = tip+1 on tip hash; API agrees; >=2 live blocks  [job height 7, live blocks 2]
+PASS R18 stopped at live tip with exit 0
+PASS R19 >=2 blocks mined while down; blocks_missed matches  [missed 2]
+PASS R20 resumed job = new tip+1 on new tip hash; API agrees  [job height 9 prev 2c7faa73ecd4]
+PASS R21 pool never found/submitted a block (API at every checkpoint)
+PASS R22 timeline order start<attach<live<stop<restart<resume  [attach +1.31 s, resume +1.20 s]
+PASS R23 three distinct job heights/targets, one RandomX seed (job_id is per-connection, always 1 on a fresh login)  [['1', '1', '1']]
+PASS R24 state after restart == final common tip
+PASS R25 pool statistics show no miner, no shares (report)  [{"hashRate": 10000, "miners": 0, "totalHashes": 0, "lastBlockFoundTime": 0, "totalBlocksFound": 0, "sidechainHeight": 0, "sidechainDifficulty": 100000, "pplnsWeight": 100000, "pplnsWindowSize": 2160}]
+PASS R26 peer1 received no write RPC from the runner  [['get_block_header_by_height', 'get_block_template', 'get_coinbase_tx_sum', 'get_connections', 'get_info', 'get_last_block_header', 'hard_fork_info']]
+PASS R27 peer0 write RPC exactly start_mining x3 / stop_mining x3
+PASS R28 pool.log has no BLOCK FOUND / submit_block
+PASS R29 pool.log shows two pool lives (report)  ["P2Pool v" banners 2, ZMQ mentions 25]
+PASS R30 pool.log: life 1 built templates on the live tip; life 2 parsed headers 0..N on restart  [life-1 templates [6, 7], ZMQ main-chain blocks [5, 6], life-2 parsed 0..8, N 8]
+PASS R31 peer1.log mentions ZMQ publisher
+PASS R32 container: network none, read-only, cap-drop, pids limit, pinned image, ro mounts for binary/pool/recipe  [['<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod:/binary/monerod:ro', '<repo>/build/tjs187-port-20260920/source/build-local/p2pool:/pool/p2pool:ro', '<repo>/chain/testnet-v0:/recipe:ro', '<repo>/build/testnet-v0-pool-restart-tjs297-run01:/work']]
+PASS R33 INPUTS pins: 50 lines, freeze-doc pool sources, accepted launch manifest
+PASS R34 INPUTS pins resolve in the repo root given
+PASS R35 BINARY pins: monerod b79cb49d…, p2pool bbc32406…
+PASS R36 work profile.json equals the pinned chain/testnet-v0/profile.json
+PASS R37 both peers hold loopback P2P with traffic after the restart
+PASS R38 final RPC: heights N+1, same tip, emission N*9 MEOW, fees 0, target 90
+PASS R39 native mining only on peer0 to the fixture, 1 thread
+PASS R40 usage samples for both pool lives; pool data dir persisted across restart (report)  [pool data files before stop 1, after restart 1]
+PASS R41 run.log event sequence  [['two_peer_profile_verified', 'mining_started', 'mining_stopped_converged', 'pool_attached_at_common_tip', 'mining_started', 'mining_stopped_converged', 'pool_followed_live_blocks', 'pool_stopped', 'mining_started', 'mining_stopped_converged', 'pool_restarted_resumed_at_common_tip', 'converged']]
+PASS R42 only the public fixture address appears in any receipt  [1 address(es)]
+RESULT PASS 42/42 checks on research/evidence/testnet-v0-pool-restart-tjs297-2026-09-21/pool-restart

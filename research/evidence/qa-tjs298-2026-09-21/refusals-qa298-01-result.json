@@ -1,0 +1,250 @@
+{
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "wrong-genesis",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-genesis.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-genesis-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong genesis_hash profile"
+    },
+    {
+      "case": "wrong-genesis-reward",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-genesis-reward.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-genesis-reward-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong genesis_reward_atomic profile"
+    },
+    {
+      "case": "wrong-reward",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-reward.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-reward-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong reward_atomic profile"
+    },
+    {
+      "case": "wrong-target",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-target.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-target-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong target_seconds profile"
+    },
+    {
+      "case": "wrong-fork",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-fork.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-fork-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong fork profile"
+    },
+    {
+      "case": "wrong-fork-height",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-fork-height.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-fork-height-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong fork profile"
+    },
+    {
+      "case": "wrong-pool",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-pool.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-pool-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong pool_profile profile"
+    },
+    {
+      "case": "pool-enabled",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/pool-enabled.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/pool-enabled-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong pool_enabled profile"
+    },
+    {
+      "case": "wrong-prefix",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-prefix.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-prefix-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong address_prefix profile"
+    },
+    {
+      "case": "testnet-mode",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--profile",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/testnet-mode.json",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/testnet-mode-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong network_mode profile"
+    },
+    {
+      "case": "stale-data",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/stale-data"
+      ],
+      "exit": 2,
+      "expected_message": "stale data/output directory refused"
+    },
+    {
+      "case": "wrong-binary",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-binary",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-binary-output"
+      ],
+      "exit": 2,
+      "expected_message": "binary SHA-256 mismatch"
+    },
+    {
+      "case": "wrong-pool-binary",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-pool-binary",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/wrong-pool-binary-output"
+      ],
+      "exit": 2,
+      "expected_message": "pool binary SHA-256 mismatch"
+    },
+    {
+      "case": "accepted-control",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/pool-restart.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--pool",
+        "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+        "--work",
+        "build/testnet-v0-pool-restart-refusals-qa298-01/control-output",
+        "--check-only"
+      ],
+      "exit": 0,
+      "expected_message": "PASS: accepted recipe manifest, profile, binary, pool and baseline inputs verified"
+    }
+  ]
+}

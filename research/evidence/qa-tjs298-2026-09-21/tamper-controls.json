@@ -1,0 +1,170 @@
+{
+  "api-tip-stale": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "resumed: pool API tip",
+    "last_line": "FAIL: resumed: pool API tip"
+  },
+  "attach-after-chain-moved": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "tip is not on the final chain",
+    "last_line": "FAIL: tip is not on the final chain"
+  },
+  "faithful": {
+    "as_expected": true,
+    "exit": 0,
+    "expected": "PASS_RECEIPT_RECONCILIATION",
+    "last_line": "}"
+  },
+  "final-tip-hash": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "RPC tip",
+    "last_line": "FAIL: RPC tip"
+  },
+  "header-link-break": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "header link",
+    "last_line": "FAIL: header link"
+  },
+  "live-blocks-short": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "live blocks while the pool ran",
+    "last_line": "FAIL: live blocks while the pool ran"
+  },
+  "manifest-removed": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "EVIDENCE.sha256",
+    "last_line": "FAIL: [Errno 2] No such file or directory: 'build/qa298-tamper/manifest-removed/EVIDENCE.sha256'"
+  },
+  "memory-cap": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "memory/swap cap",
+    "last_line": "FAIL: memory/swap cap"
+  },
+  "network-host": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "container network isolation",
+    "last_line": "FAIL: container network isolation"
+  },
+  "no-p2p-traffic": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "P2P traffic",
+    "last_line": "FAIL: P2P traffic"
+  },
+  "peer0-generateblocks": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "peer0 write RPC beyond native mining",
+    "last_line": "FAIL: peer0 write RPC beyond native mining"
+  },
+  "peer1-no-zmq": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "daemons must run the exact recipe commands",
+    "last_line": "FAIL: daemons must run the exact recipe commands"
+  },
+  "peer1-submit-block": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "peer1 received a block-injecting or mining RPC",
+    "last_line": "FAIL: peer1 received a block-injecting or mining RPC"
+  },
+  "phase-minimum": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "at least seven mined blocks required",
+    "last_line": "FAIL: at least seven mined blocks required"
+  },
+  "pool-binary-pin": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "pool binary pin",
+    "last_line": "FAIL: pool binary pin"
+  },
+  "pool-exit-1": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "pool stopped cleanly at the live tip",
+    "last_line": "FAIL: pool stopped cleanly at the live tip"
+  },
+  "pool-found-block": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "resumed: pool found blocks",
+    "last_line": "FAIL: resumed: pool found blocks"
+  },
+  "pool-log-block-found": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "the pool submitted or found a block",
+    "last_line": "FAIL: the pool submitted or found a block"
+  },
+  "pool-mining-flag": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "pool must not mine, merge-mine, proxy or carry credentials",
+    "last_line": "FAIL: pool must not mine, merge-mine, proxy or carry credentials"
+  },
+  "restart-command-changed": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "restart must reuse the exact pool command",
+    "last_line": "FAIL: restart must reuse the exact pool command"
+  },
+  "result-fail": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "journey did not pass on the pinned pool",
+    "last_line": "FAIL: journey did not pass on the pinned pool"
+  },
+  "resumed-job-height": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "resumed: job is not on the common tip",
+    "last_line": "FAIL: resumed: job is not on the common tip"
+  },
+  "resumed-prev-hash": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "resumed: job is not on the common tip",
+    "last_line": "FAIL: resumed: job is not on the common tip"
+  },
+  "rpc-final-height": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "height/target",
+    "last_line": "FAIL: height/target"
+  },
+  "seed-epoch": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "RandomX seed epoch changed within the witness",
+    "last_line": "FAIL: RandomX seed epoch changed within the witness"
+  },
+  "unsigned-edit": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "changed receipt: pool-restart.json",
+    "last_line": "FAIL: changed receipt: pool-restart.json"
+  },
+  "wallet-address": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "pool pays the public fixture address",
+    "last_line": "FAIL: pool pays the public fixture address"
+  },
+  "zero-blocks-missed": {
+    "as_expected": true,
+    "exit": 1,
+    "expected": "blocks mined while the pool was down",
+    "last_line": "FAIL: blocks mined while the pool was down"
+  }
+}

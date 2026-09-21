@@ -1,0 +1,932 @@
+2026-09-21 17:38:06.531	I Monero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)
+2026-09-21 17:38:06.531	I Moving from main() into the daemonize now.
+2026-09-21 17:38:06.531	I Initializing cryptonote protocol...
+2026-09-21 17:38:06.531	I Cryptonote protocol initialized OK
+2026-09-21 17:38:06.531	I Initializing core...
+2026-09-21 17:38:06.531	I Loading blockchain from folder /work/data/peer0/lmdb ...
+2026-09-21 17:38:06.532	I LMDB memory map size: 1073741824
+2026-09-21 17:38:06.532	I Blockchain not loaded, generating genesis block.
+2026-09-21 17:38:06.567	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:06.567	I id:	<20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8>
+2026-09-21 17:38:06.567	I PoW:	<56316d3598ed0a46c353ff818a21261f06ebc4e82aab5369be4d7f6f783ff9e3>
+2026-09-21 17:38:06.567	I HEIGHT 0, difficulty:	1
+2026-09-21 17:38:06.567	I block reward: 0.000000000000(0.000000000000 + 0.000000000000), coinbase_weight: 75, cumulative weight: 75, 19(0/19)ms
+2026-09-21 17:38:06.567	I RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-21 17:38:06.567	I RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-21 17:38:06.568	I batch transaction mode already enabled, but asked to enable batch mode
+2026-09-21 17:38:06.568	I batch transactions enabled
+2026-09-21 17:38:06.568	I Blockchain initialized. last block: 0, d4539.h6.m49.s13 time ago, current difficulty: 1
+2026-09-21 17:38:06.568	I Validating txpool contents for v16
+2026-09-21 17:38:06.568	I Loading checkpoints
+2026-09-21 17:38:06.568	I Core initialized OK
+2026-09-21 17:38:06.568	I Initializing p2p server...
+2026-09-21 17:38:06.572	I Setting LIMIT: 8192 kbps
+2026-09-21 17:38:06.572	I Set limit-up to 8192 kB/s
+2026-09-21 17:38:06.572	I Setting LIMIT: 32768 kbps
+2026-09-21 17:38:06.572	I Setting LIMIT: 32768 kbps
+2026-09-21 17:38:06.572	I Set limit-down to 32768 kB/s
+2026-09-21 17:38:06.572	I Setting LIMIT: 8192 kbps
+2026-09-21 17:38:06.572	I Set limit-up to 8192 kB/s
+2026-09-21 17:38:06.572	I Setting LIMIT: 32768 kbps
+2026-09-21 17:38:06.572	I Setting LIMIT: 32768 kbps
+2026-09-21 17:38:06.572	I Set limit-down to 32768 kB/s
+2026-09-21 17:38:06.572	I Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-21 17:38:06.572	I Binding (IPv4) on 127.0.0.1:28080
+2026-09-21 17:38:06.572	I Net service bound (IPv4) to 127.0.0.1:28080
+2026-09-21 17:38:06.572	I p2p server initialized OK
+2026-09-21 17:38:06.573	I Initializing core RPC server...
+2026-09-21 17:38:06.573	I Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-21 17:38:06.573	I Binding on 127.0.0.1 (IPv4):28081
+2026-09-21 17:38:06.573	I core RPC server initialized OK on port: 28081
+2026-09-21 17:38:06.573	I Starting core RPC server...
+2026-09-21 17:38:06.573	I Run net_service loop( 2 threads)...
+2026-09-21 17:38:06.573	I core RPC server started ok
+2026-09-21 17:38:06.573	I ZMQ server disabled
+2026-09-21 17:38:06.573	I Starting p2p net loop...
+2026-09-21 17:38:06.573	I Run net_service loop( 10 threads)...
+2026-09-21 17:38:06.643	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:06.643	I [127.0.0.1:59084 INC] Calling RPC method get_info
+2026-09-21 17:38:06.744	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:06.744	I [127.0.0.1:59092 INC] Calling RPC method get_info
+2026-09-21 17:38:06.845	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:06.845	I [127.0.0.1:59106 INC] Calling RPC method get_info
+2026-09-21 17:38:06.946	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:06.946	I [127.0.0.1:59118 INC] Calling RPC method get_info
+2026-09-21 17:38:06.957	I RandomX main cache initialized
+2026-09-21 17:38:07.047	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.047	I [127.0.0.1:59132 INC] Calling RPC method get_info
+2026-09-21 17:38:07.148	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.148	I [127.0.0.1:59136 INC] Calling RPC method get_info
+2026-09-21 17:38:07.249	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.249	I [127.0.0.1:59150 INC] Calling RPC method get_info
+2026-09-21 17:38:07.350	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.350	I [127.0.0.1:59164 INC] Calling RPC method get_info
+2026-09-21 17:38:07.451	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.451	I [127.0.0.1:59174 INC] Calling RPC method get_info
+2026-09-21 17:38:07.552	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.552	I [127.0.0.1:59188 INC] Calling RPC method get_info
+2026-09-21 17:38:07.573	I [127.0.0.1:45206 af421eaa-b9a9-4e1a-bd3e-fa45b024e5a6 INC] NEW CONNECTION
+2026-09-21 17:38:07.574	I [127.0.0.1:45206 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-21 17:38:07.574	I 
+2026-09-21 17:38:07.574	I **********************************************************************
+2026-09-21 17:38:07.574	I You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-21 17:38:07.574	I 
+2026-09-21 17:38:07.574	I Use the "help" command to see the list of available commands.
+2026-09-21 17:38:07.574	I **********************************************************************
+2026-09-21 17:38:07.574	I 
+2026-09-21 17:38:07.574	I **********************************************************************
+2026-09-21 17:38:07.574	I The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-21 17:38:07.574	I 
+2026-09-21 17:38:07.574	I You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-21 17:38:07.574	I where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-21 17:38:07.574	I 
+2026-09-21 17:38:07.574	I Use the "help" command to see the list of available commands.
+2026-09-21 17:38:07.574	I Use "help <command>" to see a command's documentation.
+2026-09-21 17:38:07.574	I **********************************************************************
+2026-09-21 17:38:07.574	I switching safe mode on
+2026-09-21 17:38:07.574	I [127.0.0.1:28180 99e19de2-f2e2-4d57-b027-cf0f4063eef4 OUT] NEW CONNECTION
+2026-09-21 17:38:07.574	I clearing used stripe peers
+2026-09-21 17:38:07.574	I [127.0.0.1:28180 OUT] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 17:38:07.574	I [127.0.0.1:45206 INC] -->>NOTIFY_GET_TXPOOL_COMPLEMENT: hashes.size()=0
+2026-09-21 17:38:07.574	I [127.0.0.1:45206 INC] 10 bytes sent for category command-2010 initiated by us
+2026-09-21 17:38:07.574	I [127.0.0.1:45206 INC] [0] state: requesting txpool complement in state normal
+2026-09-21 17:38:07.575	I [127.0.0.1:28180 OUT] 10 bytes received for category command-2010 initiated by peer
+2026-09-21 17:38:07.575	I [127.0.0.1:45206 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-21 17:38:07.575	I [127.0.0.1:28180 OUT] Received NOTIFY_GET_TXPOOL_COMPLEMENT (0 txes)
+2026-09-21 17:38:07.575	I [127.0.0.1:28180 OUT] 262 bytes received for category command-1001 initiated by us
+2026-09-21 17:38:07.575	I switching safe mode on
+2026-09-21 17:38:07.575	I clearing used stripe peers
+2026-09-21 17:38:07.575	I [127.0.0.1:28180 OUT] New connection handshaked, pruning seed 0
+2026-09-21 17:38:07.652	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.652	I [127.0.0.1:59200 INC] Calling RPC method get_info
+2026-09-21 17:38:07.654	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.654	I [127.0.0.1:59210 INC] Calling RPC method get_info
+2026-09-21 17:38:07.655	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.655	I [127.0.0.1:59212 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:07.655	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.655	I [127.0.0.1:59228 INC] Calling RPC method hard_fork_info
+2026-09-21 17:38:07.656	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.656	I [127.0.0.1:59242 INC] Calling RPC method get_block_template
+2026-09-21 17:38:07.659	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.660	I [127.0.0.1:59258 INC] Calling RPC method get_connections
+2026-09-21 17:38:07.661	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.661	I [127.0.0.1:59272 INC] Calling RPC method get_connections
+2026-09-21 17:38:07.662	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.662	I [127.0.0.1:59284 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:07.663	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.663	I [127.0.0.1:59286 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:07.663	I HTTP [127.0.0.1] POST /start_mining
+2026-09-21 17:38:07.663	I [127.0.0.1:59296 INC] calling /start_mining
+2026-09-21 17:38:07.663	I Mining has started with 1 threads, good luck!
+2026-09-21 17:38:07.663	I Ignoring battery
+2026-09-21 17:38:07.663	I Miner thread was started [0]
+2026-09-21 17:38:07.664	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.664	I [127.0.0.1:59308 INC] Calling RPC method get_info
+2026-09-21 17:38:07.765	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.765	I [127.0.0.1:59320 INC] Calling RPC method get_info
+2026-09-21 17:38:07.866	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.866	I [127.0.0.1:59330 INC] Calling RPC method get_info
+2026-09-21 17:38:07.967	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:07.967	I [127.0.0.1:54026 INC] Calling RPC method get_info
+2026-09-21 17:38:08.068	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.068	I [127.0.0.1:54028 INC] Calling RPC method get_info
+2026-09-21 17:38:08.169	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.169	I [127.0.0.1:54038 INC] Calling RPC method get_info
+2026-09-21 17:38:08.270	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.270	I [127.0.0.1:54042 INC] Calling RPC method get_info
+2026-09-21 17:38:08.371	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.371	I [127.0.0.1:54048 INC] Calling RPC method get_info
+2026-09-21 17:38:08.472	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.472	I [127.0.0.1:54052 INC] Calling RPC method get_info
+2026-09-21 17:38:08.573	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.573	I [127.0.0.1:54054 INC] Calling RPC method get_info
+2026-09-21 17:38:08.674	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.674	I [127.0.0.1:54066 INC] Calling RPC method get_info
+2026-09-21 17:38:08.775	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.775	I [127.0.0.1:54072 INC] Calling RPC method get_info
+2026-09-21 17:38:08.876	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.876	I [127.0.0.1:54088 INC] Calling RPC method get_info
+2026-09-21 17:38:08.977	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:08.977	I [127.0.0.1:54100 INC] Calling RPC method get_info
+2026-09-21 17:38:09.078	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.078	I [127.0.0.1:54116 INC] Calling RPC method get_info
+2026-09-21 17:38:09.179	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.179	I [127.0.0.1:54120 INC] Calling RPC method get_info
+2026-09-21 17:38:09.280	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.280	I [127.0.0.1:54122 INC] Calling RPC method get_info
+2026-09-21 17:38:09.381	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.381	I [127.0.0.1:54128 INC] Calling RPC method get_info
+2026-09-21 17:38:09.482	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.482	I [127.0.0.1:54138 INC] Calling RPC method get_info
+2026-09-21 17:38:09.583	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.583	I [127.0.0.1:54140 INC] Calling RPC method get_info
+2026-09-21 17:38:09.684	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.684	I [127.0.0.1:54152 INC] Calling RPC method get_info
+2026-09-21 17:38:09.784	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.784	I [127.0.0.1:54158 INC] Calling RPC method get_info
+2026-09-21 17:38:09.885	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.885	I [127.0.0.1:54160 INC] Calling RPC method get_info
+2026-09-21 17:38:09.986	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:09.986	I [127.0.0.1:54174 INC] Calling RPC method get_info
+2026-09-21 17:38:10.087	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.087	I [127.0.0.1:54186 INC] Calling RPC method get_info
+2026-09-21 17:38:10.188	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.188	I [127.0.0.1:54202 INC] Calling RPC method get_info
+2026-09-21 17:38:10.289	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.289	I [127.0.0.1:54206 INC] Calling RPC method get_info
+2026-09-21 17:38:10.390	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.390	I [127.0.0.1:54212 INC] Calling RPC method get_info
+2026-09-21 17:38:10.491	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.491	I [127.0.0.1:54222 INC] Calling RPC method get_info
+2026-09-21 17:38:10.591	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.592	I [127.0.0.1:54230 INC] Calling RPC method get_info
+2026-09-21 17:38:10.692	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.692	I [127.0.0.1:54242 INC] Calling RPC method get_info
+2026-09-21 17:38:10.793	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.793	I [127.0.0.1:54258 INC] Calling RPC method get_info
+2026-09-21 17:38:10.894	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.894	I [127.0.0.1:54272 INC] Calling RPC method get_info
+2026-09-21 17:38:10.995	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:10.995	I [127.0.0.1:54274 INC] Calling RPC method get_info
+2026-09-21 17:38:11.096	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.096	I [127.0.0.1:54290 INC] Calling RPC method get_info
+2026-09-21 17:38:11.197	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.197	I [127.0.0.1:54302 INC] Calling RPC method get_info
+2026-09-21 17:38:11.298	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.298	I [127.0.0.1:54306 INC] Calling RPC method get_info
+2026-09-21 17:38:11.399	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.399	I [127.0.0.1:54312 INC] Calling RPC method get_info
+2026-09-21 17:38:11.499	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.499	I [127.0.0.1:54318 INC] Calling RPC method get_info
+2026-09-21 17:38:11.600	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.600	I [127.0.0.1:54322 INC] Calling RPC method get_info
+2026-09-21 17:38:11.701	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.701	I [127.0.0.1:54324 INC] Calling RPC method get_info
+2026-09-21 17:38:11.802	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.802	I [127.0.0.1:54326 INC] Calling RPC method get_info
+2026-09-21 17:38:11.903	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:11.903	I [127.0.0.1:54328 INC] Calling RPC method get_info
+2026-09-21 17:38:12.004	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.004	I [127.0.0.1:54330 INC] Calling RPC method get_info
+2026-09-21 17:38:12.105	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.105	I [127.0.0.1:54342 INC] Calling RPC method get_info
+2026-09-21 17:38:12.206	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.206	I [127.0.0.1:54348 INC] Calling RPC method get_info
+2026-09-21 17:38:12.307	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.307	I [127.0.0.1:54356 INC] Calling RPC method get_info
+2026-09-21 17:38:12.408	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.408	I [127.0.0.1:54358 INC] Calling RPC method get_info
+2026-09-21 17:38:12.509	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.509	I [127.0.0.1:54370 INC] Calling RPC method get_info
+2026-09-21 17:38:12.610	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.610	I [127.0.0.1:54380 INC] Calling RPC method get_info
+2026-09-21 17:38:12.710	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.710	I [127.0.0.1:54384 INC] Calling RPC method get_info
+2026-09-21 17:38:12.811	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.811	I [127.0.0.1:54398 INC] Calling RPC method get_info
+2026-09-21 17:38:12.912	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:12.912	I [127.0.0.1:54410 INC] Calling RPC method get_info
+2026-09-21 17:38:13.013	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.013	I [127.0.0.1:54412 INC] Calling RPC method get_info
+2026-09-21 17:38:13.114	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.114	I [127.0.0.1:54426 INC] Calling RPC method get_info
+2026-09-21 17:38:13.215	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.215	I [127.0.0.1:54434 INC] Calling RPC method get_info
+2026-09-21 17:38:13.316	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.316	I [127.0.0.1:54438 INC] Calling RPC method get_info
+2026-09-21 17:38:13.416	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.416	I [127.0.0.1:54440 INC] Calling RPC method get_info
+2026-09-21 17:38:13.517	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.517	I [127.0.0.1:54448 INC] Calling RPC method get_info
+2026-09-21 17:38:13.618	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.618	I [127.0.0.1:54456 INC] Calling RPC method get_info
+2026-09-21 17:38:13.719	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.719	I [127.0.0.1:54458 INC] Calling RPC method get_info
+2026-09-21 17:38:13.820	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.820	I [127.0.0.1:54474 INC] Calling RPC method get_info
+2026-09-21 17:38:13.921	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:13.921	I [127.0.0.1:54484 INC] Calling RPC method get_info
+2026-09-21 17:38:14.022	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.022	I [127.0.0.1:54498 INC] Calling RPC method get_info
+2026-09-21 17:38:14.123	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.123	I [127.0.0.1:54510 INC] Calling RPC method get_info
+2026-09-21 17:38:14.224	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.224	I [127.0.0.1:54522 INC] Calling RPC method get_info
+2026-09-21 17:38:14.324	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.325	I [127.0.0.1:54526 INC] Calling RPC method get_info
+2026-09-21 17:38:14.425	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.425	I [127.0.0.1:54528 INC] Calling RPC method get_info
+2026-09-21 17:38:14.526	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.526	I [127.0.0.1:54534 INC] Calling RPC method get_info
+2026-09-21 17:38:14.627	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.627	I [127.0.0.1:54538 INC] Calling RPC method get_info
+2026-09-21 17:38:14.728	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.728	I [127.0.0.1:54554 INC] Calling RPC method get_info
+2026-09-21 17:38:14.829	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.829	I [127.0.0.1:54568 INC] Calling RPC method get_info
+2026-09-21 17:38:14.930	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:14.930	I [127.0.0.1:54572 INC] Calling RPC method get_info
+2026-09-21 17:38:15.031	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.031	I [127.0.0.1:54578 INC] Calling RPC method get_info
+2026-09-21 17:38:15.132	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.132	I [127.0.0.1:54580 INC] Calling RPC method get_info
+2026-09-21 17:38:15.233	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.233	I [127.0.0.1:54586 INC] Calling RPC method get_info
+2026-09-21 17:38:15.334	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.334	I [127.0.0.1:54602 INC] Calling RPC method get_info
+2026-09-21 17:38:15.435	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.435	I [127.0.0.1:54618 INC] Calling RPC method get_info
+2026-09-21 17:38:15.535	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.535	I [127.0.0.1:54626 INC] Calling RPC method get_info
+2026-09-21 17:38:15.636	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.636	I [127.0.0.1:54638 INC] Calling RPC method get_info
+2026-09-21 17:38:15.737	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.737	I [127.0.0.1:54652 INC] Calling RPC method get_info
+2026-09-21 17:38:15.838	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.838	I [127.0.0.1:54662 INC] Calling RPC method get_info
+2026-09-21 17:38:15.939	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:15.939	I [127.0.0.1:54670 INC] Calling RPC method get_info
+2026-09-21 17:38:16.040	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.040	I [127.0.0.1:54684 INC] Calling RPC method get_info
+2026-09-21 17:38:16.141	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.141	I [127.0.0.1:54692 INC] Calling RPC method get_info
+2026-09-21 17:38:16.242	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.242	I [127.0.0.1:54702 INC] Calling RPC method get_info
+2026-09-21 17:38:16.343	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.343	I [127.0.0.1:54708 INC] Calling RPC method get_info
+2026-09-21 17:38:16.444	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.444	I [127.0.0.1:54710 INC] Calling RPC method get_info
+2026-09-21 17:38:16.545	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.545	I [127.0.0.1:54714 INC] Calling RPC method get_info
+2026-09-21 17:38:16.645	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.646	I [127.0.0.1:54718 INC] Calling RPC method get_info
+2026-09-21 17:38:16.746	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.746	I [127.0.0.1:54726 INC] Calling RPC method get_info
+2026-09-21 17:38:16.847	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.847	I [127.0.0.1:54738 INC] Calling RPC method get_info
+2026-09-21 17:38:16.948	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:16.948	I [127.0.0.1:54750 INC] Calling RPC method get_info
+2026-09-21 17:38:17.049	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.049	I [127.0.0.1:54760 INC] Calling RPC method get_info
+2026-09-21 17:38:17.150	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.150	I [127.0.0.1:54770 INC] Calling RPC method get_info
+2026-09-21 17:38:17.251	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.251	I [127.0.0.1:54780 INC] Calling RPC method get_info
+2026-09-21 17:38:17.352	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.352	I [127.0.0.1:54790 INC] Calling RPC method get_info
+2026-09-21 17:38:17.453	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.453	I [127.0.0.1:54798 INC] Calling RPC method get_info
+2026-09-21 17:38:17.553	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.553	I [127.0.0.1:54804 INC] Calling RPC method get_info
+2026-09-21 17:38:17.654	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.654	I [127.0.0.1:54816 INC] Calling RPC method get_info
+2026-09-21 17:38:17.755	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.755	I [127.0.0.1:54830 INC] Calling RPC method get_info
+2026-09-21 17:38:17.856	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.856	I [127.0.0.1:54840 INC] Calling RPC method get_info
+2026-09-21 17:38:17.957	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:17.957	I [127.0.0.1:42398 INC] Calling RPC method get_info
+2026-09-21 17:38:18.058	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.058	I [127.0.0.1:42402 INC] Calling RPC method get_info
+2026-09-21 17:38:18.159	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.159	I [127.0.0.1:42412 INC] Calling RPC method get_info
+2026-09-21 17:38:18.260	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.260	I [127.0.0.1:42424 INC] Calling RPC method get_info
+2026-09-21 17:38:18.361	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.361	I [127.0.0.1:42426 INC] Calling RPC method get_info
+2026-09-21 17:38:18.461	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.461	I [127.0.0.1:42436 INC] Calling RPC method get_info
+2026-09-21 17:38:18.562	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.562	I [127.0.0.1:42444 INC] Calling RPC method get_info
+2026-09-21 17:38:18.663	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.663	I [127.0.0.1:42452 INC] Calling RPC method get_info
+2026-09-21 17:38:18.764	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.764	I [127.0.0.1:42464 INC] Calling RPC method get_info
+2026-09-21 17:38:18.865	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.865	I [127.0.0.1:42474 INC] Calling RPC method get_info
+2026-09-21 17:38:18.966	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:18.966	I [127.0.0.1:42478 INC] Calling RPC method get_info
+2026-09-21 17:38:19.067	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.067	I [127.0.0.1:42484 INC] Calling RPC method get_info
+2026-09-21 17:38:19.168	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.168	I [127.0.0.1:42492 INC] Calling RPC method get_info
+2026-09-21 17:38:19.269	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.269	I [127.0.0.1:42508 INC] Calling RPC method get_info
+2026-09-21 17:38:19.370	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.370	I [127.0.0.1:42510 INC] Calling RPC method get_info
+2026-09-21 17:38:19.471	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.471	I [127.0.0.1:42522 INC] Calling RPC method get_info
+2026-09-21 17:38:19.573	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.573	I [127.0.0.1:42526 INC] Calling RPC method get_info
+2026-09-21 17:38:19.674	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.674	I [127.0.0.1:42534 INC] Calling RPC method get_info
+2026-09-21 17:38:19.775	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.775	I [127.0.0.1:42544 INC] Calling RPC method get_info
+2026-09-21 17:38:19.876	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.876	I [127.0.0.1:42550 INC] Calling RPC method get_info
+2026-09-21 17:38:19.977	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:19.977	I [127.0.0.1:42556 INC] Calling RPC method get_info
+2026-09-21 17:38:20.078	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.078	I [127.0.0.1:42564 INC] Calling RPC method get_info
+2026-09-21 17:38:20.179	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.179	I [127.0.0.1:42566 INC] Calling RPC method get_info
+2026-09-21 17:38:20.279	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.280	I [127.0.0.1:42578 INC] Calling RPC method get_info
+2026-09-21 17:38:20.380	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.380	I [127.0.0.1:42588 INC] Calling RPC method get_info
+2026-09-21 17:38:20.481	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.481	I [127.0.0.1:42590 INC] Calling RPC method get_info
+2026-09-21 17:38:20.582	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.582	I [127.0.0.1:42600 INC] Calling RPC method get_info
+2026-09-21 17:38:20.683	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.683	I [127.0.0.1:42606 INC] Calling RPC method get_info
+2026-09-21 17:38:20.784	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.784	I [127.0.0.1:42620 INC] Calling RPC method get_info
+2026-09-21 17:38:20.885	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.885	I [127.0.0.1:42630 INC] Calling RPC method get_info
+2026-09-21 17:38:20.986	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:20.986	I [127.0.0.1:42646 INC] Calling RPC method get_info
+2026-09-21 17:38:21.086	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.086	I [127.0.0.1:42656 INC] Calling RPC method get_info
+2026-09-21 17:38:21.187	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.187	I [127.0.0.1:42664 INC] Calling RPC method get_info
+2026-09-21 17:38:21.288	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.288	I [127.0.0.1:42672 INC] Calling RPC method get_info
+2026-09-21 17:38:21.389	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.389	I [127.0.0.1:42678 INC] Calling RPC method get_info
+2026-09-21 17:38:21.490	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.490	I [127.0.0.1:42680 INC] Calling RPC method get_info
+2026-09-21 17:38:21.591	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.591	I [127.0.0.1:42682 INC] Calling RPC method get_info
+2026-09-21 17:38:21.692	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.692	I [127.0.0.1:42696 INC] Calling RPC method get_info
+2026-09-21 17:38:21.793	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.793	I [127.0.0.1:42698 INC] Calling RPC method get_info
+2026-09-21 17:38:21.894	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.894	I [127.0.0.1:42702 INC] Calling RPC method get_info
+2026-09-21 17:38:21.995	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:21.995	I [127.0.0.1:42716 INC] Calling RPC method get_info
+2026-09-21 17:38:22.096	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.096	I [127.0.0.1:42726 INC] Calling RPC method get_info
+2026-09-21 17:38:22.197	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.197	I [127.0.0.1:42742 INC] Calling RPC method get_info
+2026-09-21 17:38:22.297	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.297	I [127.0.0.1:42744 INC] Calling RPC method get_info
+2026-09-21 17:38:22.399	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.399	I [127.0.0.1:42754 INC] Calling RPC method get_info
+2026-09-21 17:38:22.500	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.500	I [127.0.0.1:42768 INC] Calling RPC method get_info
+2026-09-21 17:38:22.601	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.601	I [127.0.0.1:42776 INC] Calling RPC method get_info
+2026-09-21 17:38:22.701	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.702	I [127.0.0.1:42788 INC] Calling RPC method get_info
+2026-09-21 17:38:22.802	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.802	I [127.0.0.1:42804 INC] Calling RPC method get_info
+2026-09-21 17:38:22.903	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:22.903	I [127.0.0.1:42816 INC] Calling RPC method get_info
+2026-09-21 17:38:23.004	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.004	I [127.0.0.1:42824 INC] Calling RPC method get_info
+2026-09-21 17:38:23.105	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.105	I [127.0.0.1:42838 INC] Calling RPC method get_info
+2026-09-21 17:38:23.206	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.206	I [127.0.0.1:42846 INC] Calling RPC method get_info
+2026-09-21 17:38:23.307	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.307	I [127.0.0.1:42858 INC] Calling RPC method get_info
+2026-09-21 17:38:23.408	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.408	I [127.0.0.1:42872 INC] Calling RPC method get_info
+2026-09-21 17:38:23.509	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.509	I [127.0.0.1:42876 INC] Calling RPC method get_info
+2026-09-21 17:38:23.610	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.610	I [127.0.0.1:42890 INC] Calling RPC method get_info
+2026-09-21 17:38:23.711	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.711	I [127.0.0.1:42894 INC] Calling RPC method get_info
+2026-09-21 17:38:23.812	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.812	I [127.0.0.1:42902 INC] Calling RPC method get_info
+2026-09-21 17:38:23.913	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:23.913	I [127.0.0.1:42904 INC] Calling RPC method get_info
+2026-09-21 17:38:24.014	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.014	I [127.0.0.1:42906 INC] Calling RPC method get_info
+2026-09-21 17:38:24.114	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.114	I [127.0.0.1:42918 INC] Calling RPC method get_info
+2026-09-21 17:38:24.215	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.215	I [127.0.0.1:42926 INC] Calling RPC method get_info
+2026-09-21 17:38:24.316	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.316	I [127.0.0.1:42932 INC] Calling RPC method get_info
+2026-09-21 17:38:24.417	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.417	I [127.0.0.1:42934 INC] Calling RPC method get_info
+2026-09-21 17:38:24.518	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.518	I [127.0.0.1:42946 INC] Calling RPC method get_info
+2026-09-21 17:38:24.619	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.619	I [127.0.0.1:42948 INC] Calling RPC method get_info
+2026-09-21 17:38:24.720	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.720	I [127.0.0.1:42958 INC] Calling RPC method get_info
+2026-09-21 17:38:24.821	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.821	I [127.0.0.1:42970 INC] Calling RPC method get_info
+2026-09-21 17:38:24.922	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:24.922	I [127.0.0.1:42976 INC] Calling RPC method get_info
+2026-09-21 17:38:25.023	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.023	I [127.0.0.1:42978 INC] Calling RPC method get_info
+2026-09-21 17:38:25.124	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.124	I [127.0.0.1:42990 INC] Calling RPC method get_info
+2026-09-21 17:38:25.225	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.225	I [127.0.0.1:42994 INC] Calling RPC method get_info
+2026-09-21 17:38:25.326	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.326	I [127.0.0.1:43006 INC] Calling RPC method get_info
+2026-09-21 17:38:25.427	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.427	I [127.0.0.1:43022 INC] Calling RPC method get_info
+2026-09-21 17:38:25.527	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.527	I [127.0.0.1:43030 INC] Calling RPC method get_info
+2026-09-21 17:38:25.628	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.628	I [127.0.0.1:43046 INC] Calling RPC method get_info
+2026-09-21 17:38:25.729	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.729	I [127.0.0.1:43054 INC] Calling RPC method get_info
+2026-09-21 17:38:25.830	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.830	I [127.0.0.1:43066 INC] Calling RPC method get_info
+2026-09-21 17:38:25.931	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:25.931	I [127.0.0.1:43072 INC] Calling RPC method get_info
+2026-09-21 17:38:26.032	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.032	I [127.0.0.1:43080 INC] Calling RPC method get_info
+2026-09-21 17:38:26.133	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.133	I [127.0.0.1:43084 INC] Calling RPC method get_info
+2026-09-21 17:38:26.234	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.234	I [127.0.0.1:43086 INC] Calling RPC method get_info
+2026-09-21 17:38:26.334	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.334	I [127.0.0.1:43092 INC] Calling RPC method get_info
+2026-09-21 17:38:26.435	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.435	I [127.0.0.1:43096 INC] Calling RPC method get_info
+2026-09-21 17:38:26.536	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.536	I [127.0.0.1:43098 INC] Calling RPC method get_info
+2026-09-21 17:38:26.637	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.637	I [127.0.0.1:43100 INC] Calling RPC method get_info
+2026-09-21 17:38:26.738	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.738	I [127.0.0.1:43112 INC] Calling RPC method get_info
+2026-09-21 17:38:26.839	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.839	I [127.0.0.1:43122 INC] Calling RPC method get_info
+2026-09-21 17:38:26.940	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:26.940	I [127.0.0.1:43130 INC] Calling RPC method get_info
+2026-09-21 17:38:27.041	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.041	I [127.0.0.1:43144 INC] Calling RPC method get_info
+2026-09-21 17:38:27.141	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.141	I [127.0.0.1:43148 INC] Calling RPC method get_info
+2026-09-21 17:38:27.242	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.242	I [127.0.0.1:43154 INC] Calling RPC method get_info
+2026-09-21 17:38:27.343	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.343	I [127.0.0.1:43168 INC] Calling RPC method get_info
+2026-09-21 17:38:27.444	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.444	I [127.0.0.1:43178 INC] Calling RPC method get_info
+2026-09-21 17:38:27.545	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.545	I [127.0.0.1:43194 INC] Calling RPC method get_info
+2026-09-21 17:38:27.646	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.646	I [127.0.0.1:43196 INC] Calling RPC method get_info
+2026-09-21 17:38:27.747	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.747	I [127.0.0.1:43202 INC] Calling RPC method get_info
+2026-09-21 17:38:27.848	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.848	I [127.0.0.1:43210 INC] Calling RPC method get_info
+2026-09-21 17:38:27.948	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:27.949	I [127.0.0.1:35192 INC] Calling RPC method get_info
+2026-09-21 17:38:28.049	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.049	I [127.0.0.1:35204 INC] Calling RPC method get_info
+2026-09-21 17:38:28.150	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.150	I [127.0.0.1:35208 INC] Calling RPC method get_info
+2026-09-21 17:38:28.251	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.251	I [127.0.0.1:35220 INC] Calling RPC method get_info
+2026-09-21 17:38:28.352	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.352	I [127.0.0.1:35226 INC] Calling RPC method get_info
+2026-09-21 17:38:28.453	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.453	I [127.0.0.1:35228 INC] Calling RPC method get_info
+2026-09-21 17:38:28.554	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.554	I [127.0.0.1:35240 INC] Calling RPC method get_info
+2026-09-21 17:38:28.655	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.655	I [127.0.0.1:35256 INC] Calling RPC method get_info
+2026-09-21 17:38:28.756	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.756	I [127.0.0.1:35272 INC] Calling RPC method get_info
+2026-09-21 17:38:28.857	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.857	I [127.0.0.1:35284 INC] Calling RPC method get_info
+2026-09-21 17:38:28.957	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:28.958	I [127.0.0.1:35298 INC] Calling RPC method get_info
+2026-09-21 17:38:29.058	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:29.058	I [127.0.0.1:35310 INC] Calling RPC method get_info
+2026-09-21 17:38:29.061	I RandomX dataset initialized
+2026-09-21 17:38:29.065	I Found block <82025f291472abb379890e2af4914cae927b5a9ea1647c1793ea2829967520f4> at height 1 for difficulty: 1
+2026-09-21 17:38:29.068	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:29.068	I id:	<82025f291472abb379890e2af4914cae927b5a9ea1647c1793ea2829967520f4>
+2026-09-21 17:38:29.068	I PoW:	<b9b78a71436598e654be909cca99dc54d1904fd05acf079485c6078cd9f6baa6>
+2026-09-21 17:38:29.068	I HEIGHT 1, difficulty:	1
+2026-09-21 17:38:29.068	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 3(0/3)ms
+2026-09-21 17:38:29.073	I [127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:29.073	I [127.0.0.1:45206 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:29.077	I Found block <ac2903a48be90a5bba64a9452527ec92f9ff33288f9f1f561f9d1712c5209c76> at height 2 for difficulty: 1
+2026-09-21 17:38:29.079	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:29.079	I id:	<ac2903a48be90a5bba64a9452527ec92f9ff33288f9f1f561f9d1712c5209c76>
+2026-09-21 17:38:29.079	I PoW:	<51fe59181cb96489768c37ea658391d33517f40f22333c7c572c0bfc49756f54>
+2026-09-21 17:38:29.079	I HEIGHT 2, difficulty:	1
+2026-09-21 17:38:29.079	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-21 17:38:29.084	I [127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:29.084	I [127.0.0.1:45206 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:29.091	I Found block <c35b60e6b8c487b5cc5b9beb0f2f17b1bfbb104205a98c38e3f72b88b08a4073> at height 3 for difficulty: 5
+2026-09-21 17:38:29.093	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:29.093	I id:	<c35b60e6b8c487b5cc5b9beb0f2f17b1bfbb104205a98c38e3f72b88b08a4073>
+2026-09-21 17:38:29.093	I PoW:	<058dfc9ba340e771c3016d36f07bfe3f85a342d9a171e37e900d567bbf45d101>
+2026-09-21 17:38:29.093	I HEIGHT 3, difficulty:	5
+2026-09-21 17:38:29.093	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-21 17:38:29.101	I [127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 17:38:29.101	I [127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <82025f291472abb379890e2af4914cae927b5a9ea1647c1793ea2829967520f4> (height 2, 0 txes)
+2026-09-21 17:38:29.102	I [127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:29.102	I [127.0.0.1:45206 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:29.120	I [127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 17:38:29.120	I [127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <ac2903a48be90a5bba64a9452527ec92f9ff33288f9f1f561f9d1712c5209c76> (height 3, 0 txes)
+2026-09-21 17:38:29.136	I [127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 17:38:29.136	I [127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <c35b60e6b8c487b5cc5b9beb0f2f17b1bfbb104205a98c38e3f72b88b08a4073> (height 4, 0 txes)
+2026-09-21 17:38:29.159	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:29.159	I [127.0.0.1:35318 INC] Calling RPC method get_info
+2026-09-21 17:38:29.160	I HTTP [127.0.0.1] POST /stop_mining
+2026-09-21 17:38:29.160	I [127.0.0.1:35334 INC] calling /stop_mining
+2026-09-21 17:38:29.202	I Miner thread stopped [0]
+2026-09-21 17:38:29.260	I Mining has been stopped, 1 finished
+2026-09-21 17:38:29.261	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:29.261	I [127.0.0.1:35336 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:29.261	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:29.261	I [127.0.0.1:35346 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:29.263	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:29.263	I [127.0.0.1:35360 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:29.263	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:29.263	I [127.0.0.1:35370 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:30.470	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.470	I [127.0.0.1:35380 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:30.471	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.471	I [127.0.0.1:35394 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:30.471	I HTTP [127.0.0.1] POST /start_mining
+2026-09-21 17:38:30.471	I [127.0.0.1:35398 INC] calling /start_mining
+2026-09-21 17:38:30.471	I Mining has started with 1 threads, good luck!
+2026-09-21 17:38:30.472	I Ignoring battery
+2026-09-21 17:38:30.472	I Miner thread was started [0]
+2026-09-21 17:38:30.472	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.472	I [127.0.0.1:35408 INC] Calling RPC method get_info
+2026-09-21 17:38:30.573	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.573	I [127.0.0.1:35424 INC] Calling RPC method get_info
+2026-09-21 17:38:30.674	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.674	I [127.0.0.1:35430 INC] Calling RPC method get_info
+2026-09-21 17:38:30.715	I Found block <fe10ec097e7eb6261c1377fb28fe90c11bedcbbd07c55ea77014e34106613650> at height 4 for difficulty: 25
+2026-09-21 17:38:30.718	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:30.718	I id:	<fe10ec097e7eb6261c1377fb28fe90c11bedcbbd07c55ea77014e34106613650>
+2026-09-21 17:38:30.718	I PoW:	<bccba9beed24ead28c70882ddacf0945c2eb0e996c3e8a87eaf78f5e6c2dfb05>
+2026-09-21 17:38:30.718	I HEIGHT 4, difficulty:	25
+2026-09-21 17:38:30.718	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-21 17:38:30.720	I [127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:30.720	I [127.0.0.1:45206 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:30.738	I [127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 17:38:30.738	I [127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <fe10ec097e7eb6261c1377fb28fe90c11bedcbbd07c55ea77014e34106613650> (height 5, 0 txes)
+2026-09-21 17:38:30.775	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.775	I [127.0.0.1:35434 INC] Calling RPC method get_info
+2026-09-21 17:38:30.876	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.876	I [127.0.0.1:35448 INC] Calling RPC method get_info
+2026-09-21 17:38:30.977	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:30.977	I [127.0.0.1:35454 INC] Calling RPC method get_info
+2026-09-21 17:38:31.078	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.078	I [127.0.0.1:35464 INC] Calling RPC method get_info
+2026-09-21 17:38:31.179	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.179	I [127.0.0.1:35474 INC] Calling RPC method get_info
+2026-09-21 17:38:31.280	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.280	I [127.0.0.1:35488 INC] Calling RPC method get_info
+2026-09-21 17:38:31.325	I Found block <4952a6b3201e63402db7450124d60c1252f55634c51dab9c4e8c172fe1f04d43> at height 5 for difficulty: 122
+2026-09-21 17:38:31.328	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:31.328	I id:	<4952a6b3201e63402db7450124d60c1252f55634c51dab9c4e8c172fe1f04d43>
+2026-09-21 17:38:31.328	I PoW:	<c889f8cba7e2e2f9ee52c66b75327811d8cc5b205cb136ad49a0fecd4006a001>
+2026-09-21 17:38:31.328	I HEIGHT 5, difficulty:	122
+2026-09-21 17:38:31.328	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-21 17:38:31.330	I [127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:31.331	I [127.0.0.1:45206 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:31.351	I [127.0.0.1:45206 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 17:38:31.351	I [127.0.0.1:45206 INC] [127.0.0.1:45206 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <4952a6b3201e63402db7450124d60c1252f55634c51dab9c4e8c172fe1f04d43> (height 6, 0 txes)
+2026-09-21 17:38:31.381	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.381	I [127.0.0.1:35498 INC] Calling RPC method get_info
+2026-09-21 17:38:31.381	I HTTP [127.0.0.1] POST /stop_mining
+2026-09-21 17:38:31.381	I [127.0.0.1:35510 INC] calling /stop_mining
+2026-09-21 17:38:31.383	I Miner thread stopped [0]
+2026-09-21 17:38:31.481	I Mining has been stopped, 1 finished
+2026-09-21 17:38:31.482	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.482	I [127.0.0.1:35514 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:31.482	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.483	I [127.0.0.1:35530 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:31.484	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.484	I [127.0.0.1:35538 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:31.484	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.484	I [127.0.0.1:35542 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:31.518	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.518	I [127.0.0.1:35556 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:31.519	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.519	I [127.0.0.1:35564 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:31.519	I HTTP [127.0.0.1] POST /start_mining
+2026-09-21 17:38:31.519	I [127.0.0.1:35566 INC] calling /start_mining
+2026-09-21 17:38:31.519	I Mining has started with 1 threads, good luck!
+2026-09-21 17:38:31.519	I Ignoring battery
+2026-09-21 17:38:31.519	I Miner thread was started [0]
+2026-09-21 17:38:31.520	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.520	I [127.0.0.1:35570 INC] Calling RPC method get_info
+2026-09-21 17:38:31.620	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.620	I [127.0.0.1:35582 INC] Calling RPC method get_info
+2026-09-21 17:38:31.721	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.721	I [127.0.0.1:35588 INC] Calling RPC method get_info
+2026-09-21 17:38:31.822	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.822	I [127.0.0.1:35596 INC] Calling RPC method get_info
+2026-09-21 17:38:31.923	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:31.923	I [127.0.0.1:35606 INC] Calling RPC method get_info
+2026-09-21 17:38:32.024	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.024	I [127.0.0.1:35622 INC] Calling RPC method get_info
+2026-09-21 17:38:32.125	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.125	I [127.0.0.1:35634 INC] Calling RPC method get_info
+2026-09-21 17:38:32.226	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.226	I [127.0.0.1:35636 INC] Calling RPC method get_info
+2026-09-21 17:38:32.327	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.327	I [127.0.0.1:35642 INC] Calling RPC method get_info
+2026-09-21 17:38:32.341	I Found block <f70484461d891ea686ff218f4330afd993773159b3c450700379cf31d0d757cd> at height 6 for difficulty: 599
+2026-09-21 17:38:32.343	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:32.343	I id:	<f70484461d891ea686ff218f4330afd993773159b3c450700379cf31d0d757cd>
+2026-09-21 17:38:32.343	I PoW:	<faff50f937d5701b4bbfa83e7d09d6b19a59d4a1fc13881e32963204d5094700>
+2026-09-21 17:38:32.343	I HEIGHT 6, difficulty:	599
+2026-09-21 17:38:32.343	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-21 17:38:32.346	I [127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:32.346	I [127.0.0.1:45206 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:32.363	I [127.0.0.1:45206 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 17:38:32.363	I [127.0.0.1:45206 INC] [127.0.0.1:45206 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <f70484461d891ea686ff218f4330afd993773159b3c450700379cf31d0d757cd> (height 7, 0 txes)
+2026-09-21 17:38:32.428	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.428	I [127.0.0.1:35652 INC] Calling RPC method get_info
+2026-09-21 17:38:32.529	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.529	I [127.0.0.1:35654 INC] Calling RPC method get_info
+2026-09-21 17:38:32.630	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.630	I [127.0.0.1:35666 INC] Calling RPC method get_info
+2026-09-21 17:38:32.731	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.731	I [127.0.0.1:35680 INC] Calling RPC method get_info
+2026-09-21 17:38:32.832	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.832	I [127.0.0.1:35688 INC] Calling RPC method get_info
+2026-09-21 17:38:32.933	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:32.933	I [127.0.0.1:35700 INC] Calling RPC method get_info
+2026-09-21 17:38:33.033	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.033	I [127.0.0.1:35716 INC] Calling RPC method get_info
+2026-09-21 17:38:33.134	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.134	I [127.0.0.1:35720 INC] Calling RPC method get_info
+2026-09-21 17:38:33.235	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.235	I [127.0.0.1:35726 INC] Calling RPC method get_info
+2026-09-21 17:38:33.336	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.336	I [127.0.0.1:35736 INC] Calling RPC method get_info
+2026-09-21 17:38:33.437	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.437	I [127.0.0.1:35742 INC] Calling RPC method get_info
+2026-09-21 17:38:33.538	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.538	I [127.0.0.1:35750 INC] Calling RPC method get_info
+2026-09-21 17:38:33.639	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.639	I [127.0.0.1:35766 INC] Calling RPC method get_info
+2026-09-21 17:38:33.740	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.740	I [127.0.0.1:35780 INC] Calling RPC method get_info
+2026-09-21 17:38:33.841	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.841	I [127.0.0.1:35788 INC] Calling RPC method get_info
+2026-09-21 17:38:33.942	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:33.942	I [127.0.0.1:35802 INC] Calling RPC method get_info
+2026-09-21 17:38:34.042	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.043	I [127.0.0.1:35812 INC] Calling RPC method get_info
+2026-09-21 17:38:34.143	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.143	I [127.0.0.1:35820 INC] Calling RPC method get_info
+2026-09-21 17:38:34.244	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.244	I [127.0.0.1:35824 INC] Calling RPC method get_info
+2026-09-21 17:38:34.345	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.345	I [127.0.0.1:35830 INC] Calling RPC method get_info
+2026-09-21 17:38:34.446	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.446	I [127.0.0.1:35834 INC] Calling RPC method get_info
+2026-09-21 17:38:34.547	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.547	I [127.0.0.1:35836 INC] Calling RPC method get_info
+2026-09-21 17:38:34.648	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.648	I [127.0.0.1:35838 INC] Calling RPC method get_info
+2026-09-21 17:38:34.749	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.749	I [127.0.0.1:35846 INC] Calling RPC method get_info
+2026-09-21 17:38:34.850	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.850	I [127.0.0.1:35858 INC] Calling RPC method get_info
+2026-09-21 17:38:34.951	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:34.951	I [127.0.0.1:35870 INC] Calling RPC method get_info
+2026-09-21 17:38:35.052	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.052	I [127.0.0.1:35880 INC] Calling RPC method get_info
+2026-09-21 17:38:35.153	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.153	I [127.0.0.1:35896 INC] Calling RPC method get_info
+2026-09-21 17:38:35.253	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.254	I [127.0.0.1:35904 INC] Calling RPC method get_info
+2026-09-21 17:38:35.354	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.354	I [127.0.0.1:35906 INC] Calling RPC method get_info
+2026-09-21 17:38:35.455	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.455	I [127.0.0.1:35920 INC] Calling RPC method get_info
+2026-09-21 17:38:35.556	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.556	I [127.0.0.1:35924 INC] Calling RPC method get_info
+2026-09-21 17:38:35.657	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.657	I [127.0.0.1:35934 INC] Calling RPC method get_info
+2026-09-21 17:38:35.758	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.758	I [127.0.0.1:35948 INC] Calling RPC method get_info
+2026-09-21 17:38:35.859	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.859	I [127.0.0.1:35958 INC] Calling RPC method get_info
+2026-09-21 17:38:35.960	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:35.960	I [127.0.0.1:35972 INC] Calling RPC method get_info
+2026-09-21 17:38:36.061	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.061	I [127.0.0.1:35976 INC] Calling RPC method get_info
+2026-09-21 17:38:36.161	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.161	I [127.0.0.1:35982 INC] Calling RPC method get_info
+2026-09-21 17:38:36.262	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.262	I [127.0.0.1:35984 INC] Calling RPC method get_info
+2026-09-21 17:38:36.363	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.363	I [127.0.0.1:36000 INC] Calling RPC method get_info
+2026-09-21 17:38:36.464	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.464	I [127.0.0.1:36002 INC] Calling RPC method get_info
+2026-09-21 17:38:36.565	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.565	I [127.0.0.1:36006 INC] Calling RPC method get_info
+2026-09-21 17:38:36.666	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.666	I [127.0.0.1:36012 INC] Calling RPC method get_info
+2026-09-21 17:38:36.767	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.767	I [127.0.0.1:36016 INC] Calling RPC method get_info
+2026-09-21 17:38:36.868	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.868	I [127.0.0.1:36026 INC] Calling RPC method get_info
+2026-09-21 17:38:36.969	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:36.969	I [127.0.0.1:36038 INC] Calling RPC method get_info
+2026-09-21 17:38:37.070	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.070	I [127.0.0.1:36050 INC] Calling RPC method get_info
+2026-09-21 17:38:37.171	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.171	I [127.0.0.1:36058 INC] Calling RPC method get_info
+2026-09-21 17:38:37.272	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.272	I [127.0.0.1:36062 INC] Calling RPC method get_info
+2026-09-21 17:38:37.373	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.373	I [127.0.0.1:36070 INC] Calling RPC method get_info
+2026-09-21 17:38:37.474	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.474	I [127.0.0.1:36076 INC] Calling RPC method get_info
+2026-09-21 17:38:37.575	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.575	I [127.0.0.1:36080 INC] Calling RPC method get_info
+2026-09-21 17:38:37.676	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.676	I [127.0.0.1:36092 INC] Calling RPC method get_info
+2026-09-21 17:38:37.777	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.777	I [127.0.0.1:36100 INC] Calling RPC method get_info
+2026-09-21 17:38:37.878	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.878	I [127.0.0.1:36110 INC] Calling RPC method get_info
+2026-09-21 17:38:37.979	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:37.979	I [127.0.0.1:38276 INC] Calling RPC method get_info
+2026-09-21 17:38:38.080	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.080	I [127.0.0.1:38290 INC] Calling RPC method get_info
+2026-09-21 17:38:38.180	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.180	I [127.0.0.1:38298 INC] Calling RPC method get_info
+2026-09-21 17:38:38.281	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.281	I [127.0.0.1:38306 INC] Calling RPC method get_info
+2026-09-21 17:38:38.382	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.382	I [127.0.0.1:38318 INC] Calling RPC method get_info
+2026-09-21 17:38:38.483	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.483	I [127.0.0.1:38334 INC] Calling RPC method get_info
+2026-09-21 17:38:38.584	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.584	I [127.0.0.1:38336 INC] Calling RPC method get_info
+2026-09-21 17:38:38.686	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.686	I [127.0.0.1:38338 INC] Calling RPC method get_info
+2026-09-21 17:38:38.787	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.787	I [127.0.0.1:38342 INC] Calling RPC method get_info
+2026-09-21 17:38:38.888	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.888	I [127.0.0.1:38344 INC] Calling RPC method get_info
+2026-09-21 17:38:38.989	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:38.989	I [127.0.0.1:38348 INC] Calling RPC method get_info
+2026-09-21 17:38:39.090	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.090	I [127.0.0.1:38362 INC] Calling RPC method get_info
+2026-09-21 17:38:39.191	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.191	I [127.0.0.1:38364 INC] Calling RPC method get_info
+2026-09-21 17:38:39.292	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.292	I [127.0.0.1:38370 INC] Calling RPC method get_info
+2026-09-21 17:38:39.393	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.393	I [127.0.0.1:38376 INC] Calling RPC method get_info
+2026-09-21 17:38:39.494	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.494	I [127.0.0.1:38392 INC] Calling RPC method get_info
+2026-09-21 17:38:39.594	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.594	I [127.0.0.1:38400 INC] Calling RPC method get_info
+2026-09-21 17:38:39.695	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.695	I [127.0.0.1:38412 INC] Calling RPC method get_info
+2026-09-21 17:38:39.796	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.796	I [127.0.0.1:38428 INC] Calling RPC method get_info
+2026-09-21 17:38:39.897	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.897	I [127.0.0.1:38440 INC] Calling RPC method get_info
+2026-09-21 17:38:39.998	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:39.998	I [127.0.0.1:38450 INC] Calling RPC method get_info
+2026-09-21 17:38:40.099	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.099	I [127.0.0.1:38458 INC] Calling RPC method get_info
+2026-09-21 17:38:40.200	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.200	I [127.0.0.1:38460 INC] Calling RPC method get_info
+2026-09-21 17:38:40.301	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.301	I [127.0.0.1:38466 INC] Calling RPC method get_info
+2026-09-21 17:38:40.401	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.402	I [127.0.0.1:38482 INC] Calling RPC method get_info
+2026-09-21 17:38:40.502	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.502	I [127.0.0.1:38494 INC] Calling RPC method get_info
+2026-09-21 17:38:40.603	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.603	I [127.0.0.1:38500 INC] Calling RPC method get_info
+2026-09-21 17:38:40.704	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.704	I [127.0.0.1:38502 INC] Calling RPC method get_info
+2026-09-21 17:38:40.805	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.805	I [127.0.0.1:38512 INC] Calling RPC method get_info
+2026-09-21 17:38:40.906	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:40.906	I [127.0.0.1:38520 INC] Calling RPC method get_info
+2026-09-21 17:38:41.007	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:41.007	I [127.0.0.1:38528 INC] Calling RPC method get_info
+2026-09-21 17:38:41.108	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:41.108	I [127.0.0.1:38532 INC] Calling RPC method get_info
+2026-09-21 17:38:41.178	I Found block <48696463f3af6d66116e211cac62132be6d08295df96a6b842aa5bd13b5edaa9> at height 7 for difficulty: 2820
+2026-09-21 17:38:41.180	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-21 17:38:41.180	I id:	<48696463f3af6d66116e211cac62132be6d08295df96a6b842aa5bd13b5edaa9>
+2026-09-21 17:38:41.180	I PoW:	<9450d701bd855b7ebec56f30db55dadf334bf51bae39b2c44bb2c71a209a0600>
+2026-09-21 17:38:41.180	I HEIGHT 7, difficulty:	2820
+2026-09-21 17:38:41.180	I block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-21 17:38:41.190	I [127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:41.190	I [127.0.0.1:45206 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-21 17:38:41.209	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:41.209	I [127.0.0.1:38536 INC] Calling RPC method get_info
+2026-09-21 17:38:41.209	I [127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-21 17:38:41.209	I [127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <48696463f3af6d66116e211cac62132be6d08295df96a6b842aa5bd13b5edaa9> (height 8, 0 txes)
+2026-09-21 17:38:41.209	I HTTP [127.0.0.1] POST /stop_mining
+2026-09-21 17:38:41.209	I [127.0.0.1:38552 INC] calling /stop_mining
+2026-09-21 17:38:41.210	I Miner thread stopped [0]
+2026-09-21 17:38:41.310	I Mining has been stopped, 1 finished
+2026-09-21 17:38:41.310	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:41.310	I [127.0.0.1:38554 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:41.311	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:41.311	I [127.0.0.1:38570 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:41.312	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:41.312	I [127.0.0.1:38576 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:41.312	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:41.312	I [127.0.0.1:38592 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:42.519	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.520	I [127.0.0.1:38604 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:42.520	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.520	I [127.0.0.1:38606 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:42.521	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.521	I [127.0.0.1:38622 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.522	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.522	I [127.0.0.1:38636 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.522	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.522	I [127.0.0.1:38652 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.523	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.523	I [127.0.0.1:38660 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.523	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.523	I [127.0.0.1:38666 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.523	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.523	I [127.0.0.1:38668 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.524	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.524	I [127.0.0.1:38670 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.524	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.524	I [127.0.0.1:38674 INC] Calling RPC method get_block_header_by_height
+2026-09-21 17:38:42.528	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.528	I [127.0.0.1:38686 INC] Calling RPC method get_info
+2026-09-21 17:38:42.529	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.529	I [127.0.0.1:38700 INC] Calling RPC method get_last_block_header
+2026-09-21 17:38:42.529	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.529	I [127.0.0.1:38710 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-21 17:38:42.531	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-21 17:38:42.531	I [127.0.0.1:38726 INC] Calling RPC method get_connections
+2026-09-21 17:38:42.602	I [127.0.0.1:45206 INC] [0] state: closed in state normal
+2026-09-21 17:38:42.602	I [127.0.0.1:45206 af421eaa-b9a9-4e1a-bd3e-fa45b024e5a6 INC] CLOSE CONNECTION
+2026-09-21 17:38:42.602	I [127.0.0.1:28180 OUT] [0] state: closed in state normal
+2026-09-21 17:38:42.602	I [127.0.0.1:28180 99e19de2-f2e2-4d57-b027-cf0f4063eef4 OUT] CLOSE CONNECTION
+2026-09-21 17:38:42.602	I net_service loop stopped.
+2026-09-21 17:38:42.602	I p2p net loop stopped
+2026-09-21 17:38:42.602	I Stopping core RPC server...
+2026-09-21 17:38:42.603	I Node stopped.
+2026-09-21 17:38:42.603	I Deinitializing core RPC server...
+2026-09-21 17:38:42.603	I Deinitializing p2p...
+2026-09-21 17:38:42.603	I Killing the net_node
+2026-09-21 17:38:43.579	I Joined extra background net_node threads
+2026-09-21 17:38:43.580	I Deinitializing core...
+2026-09-21 17:38:43.580	I Stopping cryptonote protocol...
+2026-09-21 17:38:43.580	I Cryptonote protocol stopped successfully

@@ -1,0 +1,30 @@
+# F2: recover receipt count
+recover/EVIDENCE.sha256 entries: 32
+recover/ files incl manifest: 33
+86:- 34 public receipts pass `EVIDENCE.sha256`; 48 inputs pass `INPUTS.sha256`
+
+# M3 attempt-03 build-only receipts (sha256sum -c against the committed attempt-03/EVIDENCE.sha256, in build/testnet-v0-payment-tjs230-03)
+peer0.conf: OK
+peer0.log: OK
+peer0.stdout.log: OK
+peer1.conf: OK
+peer1.log: OK
+peer1.stdout.log: OK
+26547299	total
+
+# lineage FAIL line count at 0c14864 (the report §6 says eight)
+refused-attempt INPUTS FAILED lines: 9
+M3 attempt-03 EVIDENCE missing: 6
+manifests with any non-OK line: 5 of 40
+
+# F3: differing INPUTS lines refused vs accepted
+testnet-v0-sync-tjs242-2026-09-20/run01-per-ip-refused: 3 of 48 lines differ: chain/testnet-v0/verify-sync.py,chain/testnet-v0/sync-journey.md,chain/testnet-v0/sync.py
+testnet-v0-payment-tjs230-2026-09-20/attempt-01: 2 of 48 lines differ: chain/testnet-v0/payment-journey.md,chain/testnet-v0/payment.py
+testnet-v0-payment-tjs230-2026-09-20/attempt-02: 2 of 48 lines differ: chain/testnet-v0/payment-journey.md,chain/testnet-v0/payment.py
+testnet-v0-recover-tjs287-2026-09-21/run01-history-order-refused: 2 of 48 lines differ: chain/testnet-v0/verify-recover.py,chain/testnet-v0/recover.py
+
+# F3: refused pins vs all git blobs
+distinct refused pin hashes: 7
+blobs in object store: 1388
+refused pins found among blob contents: 0
+control: accepted pins found among blobs: 48 of 48

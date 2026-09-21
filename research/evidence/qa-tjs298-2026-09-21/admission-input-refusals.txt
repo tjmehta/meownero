@@ -1,0 +1,17 @@
+# Admission refusals not in test-pool-restart-refusals.py: transient one-byte edits of tracked pinned inputs, restored with git checkout
+launch INPUTS lines: 43
+README.md is a pinned accepted input
+spikes/p2pool/full-source-lock.json: REFUSED: pinned pool source input differs: spikes/p2pool/full-source-lock.json
+  exit=
+  restored: yes 0 dirty
+chain/testnet-v0/README.md: REFUSED: accepted recipe input differs: chain/testnet-v0/README.md
+  exit=
+  restored: yes 0 dirty
+research/evidence/testnet-v0-launch-tjs229-2026-09-20/launch/INPUTS.sha256: REFUSED: accepted recipe manifest mismatch
+  exit=
+  restored: yes 0 dirty
+control after restore:
+PASS: accepted recipe manifest, profile, binary, pool and baseline inputs verified; no process started
+exit=0
+no work dir created by refused/check-only runs
+git status of chain/ spikes/p2pool pins research/evidence launch: 0 entries
