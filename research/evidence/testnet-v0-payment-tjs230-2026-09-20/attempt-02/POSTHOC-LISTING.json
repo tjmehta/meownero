@@ -1,0 +1,126 @@
+{
+  "note": "Post-hoc listing written 2026-09-21 by the TJS-230 writer. The outer runner for run 02 was terminated with its herdr session before its finally-block wrote EVIDENCE.sha256, container.exit and cleanup.json; those three files therefore do not exist and were not fabricated. The inner container finished on its own after the 1,500 s funding wait and wrote result.json/resources.json itself. Large daemon logs are retained in the build directory and listed here by digest only. WORK/data (wallet files, wallet logs, chain DB) is private and excluded.",
+  "work_dir": "build/testnet-v0-payment-tjs230-02",
+  "files": [
+    {
+      "name": "BINARY.sha256",
+      "bytes": 392,
+      "sha256": "03fc538fda5b89ea7ae02103ce74fecf0e990182df515913211c62f2e309c81b",
+      "copied": true
+    },
+    {
+      "name": "INPUTS.sha256",
+      "bytes": 5936,
+      "sha256": "20d5ce2308fe48e62d6228f2044ab87722b0c06bccd84a93c6b20c9ef630cd35",
+      "copied": true
+    },
+    {
+      "name": "baseline.json",
+      "bytes": 6944,
+      "sha256": "86c8e8611bb8656ed0757c6e3e4f836fa24ac5b68faa2e48ac66e71079103189",
+      "copied": true
+    },
+    {
+      "name": "container-command.json",
+      "bytes": 1099,
+      "sha256": "2a6d5a79159f7847e719eb40b03ca2b487b406bb337a688a6f468442d2e19ff8",
+      "copied": true
+    },
+    {
+      "name": "launcher-command.json",
+      "bytes": 151,
+      "sha256": "3402fc7915fb85f554c74c262360c4be6f740e5a55ebb0140f2f127e94143a48",
+      "copied": true
+    },
+    {
+      "name": "peer0.conf",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "copied": false
+    },
+    {
+      "name": "peer0.log",
+      "bytes": 2951476,
+      "sha256": "7d9b9b60ab8ec2252cfcc7bee4a11c7462f57c97afc0d7e3bfa73efc29d385af",
+      "copied": false
+    },
+    {
+      "name": "peer0.stdout.log",
+      "bytes": 880135,
+      "sha256": "9778efb5ac347e850cba54197283899fe3fea922c8f151ad386f9c457469c537",
+      "copied": false
+    },
+    {
+      "name": "peer1.conf",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "copied": false
+    },
+    {
+      "name": "peer1.log",
+      "bytes": 193302,
+      "sha256": "29158e9540cbe48c61e35823e8bee6c62f894a6a3d9954136eb6e3aef7aa2e43",
+      "copied": false
+    },
+    {
+      "name": "peer1.stdout.log",
+      "bytes": 68966,
+      "sha256": "28ad7c51cc757cfcca8eeea60a289bc42fb8f486f6473650455bf7b5c67a24f7",
+      "copied": false
+    },
+    {
+      "name": "peers-before.json",
+      "bytes": 3167,
+      "sha256": "f0bf100fba1dd87b29ca24023ae5c5cedbd7e750d639eef22c724082a6e04aca",
+      "copied": true
+    },
+    {
+      "name": "preflight-resources.json",
+      "bytes": 75,
+      "sha256": "356e14063277a2d177a59d4492a08f028ab0fed374b7ccbddc371bd8435f13ae",
+      "copied": true
+    },
+    {
+      "name": "process-commands.json",
+      "bytes": 3157,
+      "sha256": "b6337d957bf30e841ab078c88bbdebefea337788eae6b919042c205dc5ff5c60",
+      "copied": true
+    },
+    {
+      "name": "profile-readback.json",
+      "bytes": 6797,
+      "sha256": "42997b1dd96ade7ac0c847c1b2e6c4fe5d218aa98dd7539feafdcc0d271d5c12",
+      "copied": true
+    },
+    {
+      "name": "profile.json",
+      "bytes": 441,
+      "sha256": "126345a8703a43150be6d1822fa1912c9492ebda9df420360371baa15be5ce29",
+      "copied": true
+    },
+    {
+      "name": "progress.json",
+      "bytes": 316,
+      "sha256": "67eb9de1a2d993a716aa1482971eecb3aa215271046ec956b214ef47f518d87c",
+      "copied": true
+    },
+    {
+      "name": "resources.json",
+      "bytes": 352,
+      "sha256": "dd537c1a23daa2da32327e387b66cceac5a5780f9265dc0e65705bf5adbf1dbf",
+      "copied": true
+    },
+    {
+      "name": "result.json",
+      "bytes": 469,
+      "sha256": "91d9b756baf545500972c9694bb6774714acbed6d9fc2549fb908e41ad5f7b53",
+      "copied": true
+    },
+    {
+      "name": "run.log",
+      "bytes": 335,
+      "sha256": "7d2fe539d36e9641e416ea919f40b3b823f808bbbb3d3a7eb9cd6f117dcb2913",
+      "copied": true
+    }
+  ]
+}
