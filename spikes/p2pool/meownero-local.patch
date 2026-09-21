@@ -1,0 +1,816 @@
+diff --git a/external/src/hardforks/hardforks.cpp b/external/src/hardforks/hardforks.cpp
+index 92d987a..19470a9 100644
+--- a/external/src/hardforks/hardforks.cpp
++++ b/external/src/hardforks/hardforks.cpp
+@@ -26,60 +26,22 @@
+ // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+ // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+-#ifdef _MSC_VER
+-#pragma warning(disable : 4514 4820)
+-#endif
+-
+ #include "hardforks.h"
+ 
+ #undef MONERO_DEFAULT_LOG_CATEGORY
+ #define MONERO_DEFAULT_LOG_CATEGORY "blockchain.hardforks"
+ 
+ const hardfork_t mainnet_hard_forks[] = {
+-  // version 1 from the start of the blockchain
+-  { 1, 1, 0, 1341378000 },
+-
+-  // version 2 starts from block 1009827, which is on or around the 20th of March, 2016. Fork time finalised on 2015-09-20. No fork voting occurs for the v2 fork.
+-  { 2, 1009827, 0, 1442763710 },
+-
+-  // version 3 starts from block 1141317, which is on or around the 24th of September, 2016. Fork time finalised on 2016-03-21.
+-  { 3, 1141317, 0, 1458558528 },
+-
+-  // version 4 starts from block 1220516, which is on or around the 5th of January, 2017. Fork time finalised on 2016-09-18.
+-  { 4, 1220516, 0, 1483574400 },
+-
+-  // version 5 starts from block 1288616, which is on or around the 15th of April, 2017. Fork time finalised on 2017-03-14.
+-  { 5, 1288616, 0, 1489520158 }, 
+-
+-  // version 6 starts from block 1400000, which is on or around the 16th of September, 2017. Fork time finalised on 2017-08-18.
+-  { 6, 1400000, 0, 1503046577 },
+-
+-  // version 7 starts from block 1546000, which is on or around the 6th of April, 2018. Fork time finalised on 2018-03-17.
+-  { 7, 1546000, 0, 1521303150 },
+-
+-  // version 8 starts from block 1685555, which is on or around the 18th of October, 2018. Fork time finalised on 2018-09-02.
+-  { 8, 1685555, 0, 1535889547 },
+-
+-  // version 9 starts from block 1686275, which is on or around the 19th of October, 2018. Fork time finalised on 2018-09-02.
+-  { 9, 1686275, 0, 1535889548 },
+-
+-  // version 10 starts from block 1788000, which is on or around the 9th of March, 2019. Fork time finalised on 2019-02-10.
+-  { 10, 1788000, 0, 1549792439 },
+-
+-  // version 11 starts from block 1788720, which is on or around the 10th of March, 2019. Fork time finalised on 2019-02-15.
+-  { 11, 1788720, 0, 1550225678 },
+-
+-  // version 12 starts from block 1978433, which is on or around the 30th of November, 2019. Fork time finalised on 2019-10-18.
+-  { 12, 1978433, 0, 1571419280 },
+-
+-  { 13, 2210000, 0, 1598180817 },
+-  { 14, 2210720, 0, 1598180818 },
+-
+-  { 15, 2688888, 0, 1656629117 },
+-  { 16, 2689608, 0, 1656629118 },
++  // Meownero: fresh chain, single jump. Genesis (height 0) is v1; every block from height 1 runs the current
++  // v16 rule set (RingCT coinbase, BP+, ring 16, view tags). Regtest-style {1@0, 16@1} rather than sixteen
++  // consecutive activations: the P2P handshake rejects a peer whose advertised top_version differs from the
++  // ideal version at height-1 (cryptonote_protocol_handler.inl), so every activation boundary above v6 costs
++  // one height of failed handshakes; a launch window with ten such boundaries is avoided by having none.
++  { 1, 0, 0, 1757030400 },
++  { 16, 1, 0, 1757030401 },
+ };
+ const size_t num_mainnet_hard_forks = sizeof(mainnet_hard_forks) / sizeof(mainnet_hard_forks[0]);
+-const uint64_t mainnet_hard_fork_version_1_till = 1009826;
++const uint64_t mainnet_hard_fork_version_1_till = 0;
+ 
+ const hardfork_t testnet_hard_forks[] = {
+   // version 1 from the start of the blockchain
+diff --git a/src/block_template.cpp b/src/block_template.cpp
+index 51e77a1..a4c5f1f 100644
+--- a/src/block_template.cpp
++++ b/src/block_template.cpp
+@@ -19,6 +19,7 @@
+  */
+ 
+ #include "common.h"
++#include "meownero.h"
+ #include "block_template.h"
+ #include "wallet.h"
+ #include "crypto.h"
+@@ -116,7 +117,11 @@ BlockTemplate& BlockTemplate::operator=(const BlockTemplate& b)
+ 	}
+ 
+ 	WriteLock lock(m_lock);
++	return copy_from_locked(b);
++}
+ 
++BlockTemplate& BlockTemplate::copy_from_locked(const BlockTemplate& b)
++{
+ 	m_sidechain = b.m_sidechain;
+ 	m_hasher = b.m_hasher;
+ 	m_templateId = b.m_templateId;
+@@ -168,12 +173,18 @@ BlockTemplate& BlockTemplate::operator=(const BlockTemplate& b)
+ 
+ static FORCEINLINE uint64_t get_base_reward(uint64_t already_generated_coins)
+ {
+-	const uint64_t result = ~already_generated_coins >> 19;
+-	return (result < BASE_BLOCK_REWARD) ? BASE_BLOCK_REWARD : result;
++	(void)already_generated_coins;
++	return meownero::REWARD;
+ }
+ 
+ static FORCEINLINE uint64_t get_block_reward(uint64_t base_reward, uint64_t median_weight, uint64_t fees, uint64_t weight)
+ {
++	// Explicit supported arithmetic domain; never wrap reward or denominator.
++	median_weight = std::max<uint64_t>(median_weight, 300000);
++	if ((median_weight >= (uint64_t{1} << 32)) || (fees > UINT64_MAX - base_reward)) {
++		LOGERR(1, "Meownero reward arithmetic domain exceeded");
++		PANIC_STOP();
++	}
+ 	if (weight <= median_weight) {
+ 		return base_reward + fees;
+ 	}
+@@ -232,7 +243,7 @@ void BlockTemplate::update(const MinerData& data, const Mempool& mempool, const
+ 	auto use_old_template = [this]() {
+ 		const uint32_t id = m_templateId - 1;
+ 		LOGWARN(4, "using old block template with ID = " << id);
+-		*this = *m_oldTemplates[id % array_size(&BlockTemplate::m_oldTemplates)];
++		copy_from_locked(*m_oldTemplates[id % array_size(&BlockTemplate::m_oldTemplates)]);
+ 	};
+ 
+ 	m_height = data.height;
+@@ -853,17 +864,8 @@ void BlockTemplate::select_mempool_transactions(const Mempool& mempool)
+ 	writeVarint(m_shares.size(), [&k](uint8_t) { ++k; });
+ 	writeVarint(m_mempoolTxs.size(), [&k](uint8_t) { ++k; });
+ 
+-	// Add a rough upper bound estimation of outputs' size. All outputs have <= 5 bytes for each output's reward (< 0.034359738368 XMR per output)
+-	k += m_shares.size() * (5 /* reward */ + 1 /* tx_type */ + HASH_SIZE /* stealth address */ + 1 /* viewtag */);
+-
+-	// >= 0.034359738368 XMR is required for a 6 byte varint, add 1 byte per each potential 6-byte varint
+-	{
+-		uint64_t r = BASE_BLOCK_REWARD;
+-		for (const auto& tx : m_mempoolTxs) {
+-			r += tx.fee;
+-		}
+-		k += r / 34359738368ULL;
+-	}
++	// MAX_OUTPUT_VALUE is 2^56 - 1: at most eight amount-varint bytes.
++	k += m_shares.size() * (8 /* reward */ + 1 /* tx_type */ + HASH_SIZE /* stealth address */ + 1 /* viewtag */);
+ 
+ 	const uint32_t max_transactions = static_cast<uint32_t>((MAX_BLOCK_SIZE > k) ? ((MAX_BLOCK_SIZE - k) / HASH_SIZE) : 0);
+ 	LOGINFO(6, max_transactions << " transactions can be taken with current block size limit");
+diff --git a/src/block_template.h b/src/block_template.h
+index 3902eb5..db655e1 100644
+--- a/src/block_template.h
++++ b/src/block_template.h
+@@ -71,6 +71,8 @@ public:
+ #endif
+ 
+ private:
++	// Caller holds m_lock; shared by assignment and failed-template rollback.
++	BlockTemplate& copy_from_locked(const BlockTemplate& b);
+ 	SideChain* m_sidechain;
+ 	RandomX_Hasher_Base* m_hasher;
+ 
+diff --git a/src/meownero.h b/src/meownero.h
+new file mode 100644
+index 0000000..1f068c8
+--- /dev/null
++++ b/src/meownero.h
+@@ -0,0 +1,13 @@
++// Local-only Meownero selected-profile port of pinned P2Pool. GPL-3.0.
++#pragma once
++#include <cstdint>
++namespace p2pool { namespace meownero {
++constexpr uint64_t REWARD = 9000000000000ULL;
++constexpr uint64_t BLOCK_TIME = 90;
++constexpr char GENESIS[] = "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8";
++// Domain separates the same-genesis 9/90 and 12/120 profiles and stock pools.
++// Retain upstream RandomX consensus-ID derivation over this additional input.
++constexpr char DOMAIN[] = "meownero-local-v2:bootstrap-prevhash-work:9-90:prefix120:"
++    "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8:"
++    "f88c8ef3f190992661dccc361878a7ba9b8bca29de5dba74eeb00b22698e9b2d";
++} }
+diff --git a/src/p2p_server.cpp b/src/p2p_server.cpp
+index dcff19b..3c9840c 100644
+--- a/src/p2p_server.cpp
++++ b/src/p2p_server.cpp
+@@ -45,9 +45,6 @@ LOG_CATEGORY(P2PServer)
+ static constexpr char saved_peer_list_file_name[] = "p2pool_peers.txt";
+ static constexpr char saved_onion_peer_list_file_name[] = "p2pool_onion_peers.txt";
+ static constexpr char saved_i2p_peer_list_file_name[] = "p2pool_i2p_peers.txt";
+-static const char* seed_nodes[] = { "seeds.p2pool.io", "main.p2poolpeers.net", "" };
+-static const char* seed_nodes_mini[] = { "seeds-mini.p2pool.io", "mini.p2poolpeers.net", "" };
+-static const char* seed_nodes_nano[] = { "seeds-nano.p2pool.io", "nano.p2poolpeers.net", ""};
+ 
+ static constexpr int DEFAULT_BACKLOG = 16;
+ static constexpr uint64_t DEFAULT_BAN_TIME = 600;
+@@ -723,203 +720,11 @@ void P2PServer::save_peer_list()
+ 
+ void P2PServer::load_peer_list()
+ {
+-	size_t old_size;
+-	{
+-		MutexLock lock(m_peerListLock);
+-		old_size = m_peerList.size();
+-	}
+-
+-	std::string saved_list;
+-
+-	// Load peers from seed nodes if we're on the default or mini sidechain
+-	auto load_from_seed_nodes = [&saved_list](const char** nodes, int p2p_port) {
+-		for (size_t i = 0; nodes[i][0]; ++i) {
+-			const char* cur_node = nodes[i];
+-			LOGINFO(4, "loading peers from " << cur_node);
+-
+-			// Prefer DNS TXT records
+-			const bool has_txt = get_dns_txt_records(cur_node, [&saved_list, cur_node](const char* s, size_t n) {
+-				if (!saved_list.empty()) {
+-					saved_list += ',';
+-				}
+-				LOGINFO(4, "added " << log::const_buf(s, n) << " from " << cur_node);
+-				saved_list.append(s, n);
+-			});
+-
+-			if (has_txt) {
+-				continue;
+-			}
+-
+-			addrinfo hints{};
+-			hints.ai_family = AF_UNSPEC;
+-			hints.ai_socktype = SOCK_STREAM;
+-			hints.ai_flags = AI_ADDRCONFIG;
+-
+-			addrinfo* result;
+-			int err = getaddrinfo(cur_node, nullptr, &hints, &result);
+-			if (err) {
+-				LOGWARN(4, "getaddrinfo failed for " << cur_node << ": " << gai_strerror(err) << ", retrying with IPv4 only");
+-				hints.ai_family = AF_INET;
+-				err = getaddrinfo(cur_node, nullptr, &hints, &result);
+-			}
+-			if (err == 0) {
+-				for (addrinfo* r = result; r != NULL; r = r->ai_next) {
+-					const char* addr_str;
+-					char addr_str_buf[64];
+-
+-					char buf[128];
+-					buf[0] = '\0';
+-
+-					log::Stream s(buf);
+-
+-					if (r->ai_family == AF_INET6) {
+-						addr_str = inet_ntop(AF_INET6, &reinterpret_cast<sockaddr_in6*>(r->ai_addr)->sin6_addr, addr_str_buf, sizeof(addr_str_buf));
+-						if (addr_str) {
+-							s << '[' << addr_str << "]:" << p2p_port << '\0';
+-						}
+-					}
+-					else {
+-						addr_str = inet_ntop(AF_INET, &reinterpret_cast<sockaddr_in*>(r->ai_addr)->sin_addr, addr_str_buf, sizeof(addr_str_buf));
+-						if (addr_str) {
+-							s << addr_str << ':' << p2p_port << '\0';
+-						}
+-					}
+-
+-					if (s.m_pos) {
+-						LOGINFO(4, "added " << static_cast<const char*>(buf) << " from " << cur_node);
+-						if (!saved_list.empty()) {
+-							saved_list += ',';
+-						}
+-						saved_list += buf;
+-					}
+-				}
+-				freeaddrinfo(result);
+-			}
+-			else {
+-				LOGWARN(3, "getaddrinfo failed for " << cur_node << ": " << gai_strerror(err));
+-			}
+-		}
+-	};
+-
+-	SideChain& s = m_pool->side_chain();
+-
+-	if (m_pool->params().m_dns) {
+-		if (s.is_default()) {
+-			load_from_seed_nodes(seed_nodes, DEFAULT_P2P_PORT);
+-		}
+-		else if (s.is_mini()) {
+-			load_from_seed_nodes(seed_nodes_mini, DEFAULT_P2P_PORT_MINI);
+-		}
+-		else if (s.is_nano()) {
+-			load_from_seed_nodes(seed_nodes_nano, DEFAULT_P2P_PORT_NANO);
+-		}
+-	}
+-
+-	// Finally load peers from p2pool_peers.txt and p2pool_onion_peers.txt
+-	std::vector<std::string> paths;
+-	paths.resize(Params::ProxyType::MAX);
+-
+-	const Params& params = m_pool->params();
+-
+-	paths[Params::ProxyType::PLAIN] = params.m_dataDir + saved_peer_list_file_name;
+-
+-	if (!m_socks5Proxy.empty() && (m_socks5ProxyType == Params::ProxyType::TOR)) {
+-		paths[Params::ProxyType::TOR] = params.m_dataDir + saved_onion_peer_list_file_name;
+-	}
+-
+-	if (!m_socks5Proxy.empty() && (m_socks5ProxyType == Params::ProxyType::I2P)) {
+-		paths[Params::ProxyType::I2P] = params.m_dataDir + saved_i2p_peer_list_file_name;
+-	}
+-
+-	for (int i = Params::ProxyType::PLAIN; i < Params::ProxyType::MAX; ++i) {
+-		const std::string& path = paths[i];
+-
+-		if (path.empty()) {
+-			continue;
+-		}
+-
+-		std::ifstream f(path);
+-
+-		if (f.is_open()) {
+-			std::string address;
+-			std::vector<hash> pubkeys;
+-
+-			while (f.good()) {
+-				std::getline(f, address);
+-
+-				if (!address.empty()) {
+-					if (i == Params::ProxyType::TOR) {
+-						const hash h = from_onion_v3(address);
+-						if (!h.empty()) {
+-							pubkeys.emplace_back(h);
+-						}
+-					}
+-					else if (i == Params::ProxyType::I2P) {
+-						const hash h = from_i2p_b32(address);
+-						if (!h.empty()) {
+-							pubkeys.emplace_back(h);
+-						}
+-					}
+-					else {
+-						if (!saved_list.empty()) {
+-							saved_list += ',';
+-						}
+-						saved_list += address;
+-					}
+-				}
+-			}
+-			f.close();
+-
+-			if (i == Params::ProxyType::TOR) {
+-				s.add_onion_pubkeys(pubkeys);
+-			}
+-			else if (i == Params::ProxyType::I2P) {
+-				s.add_i2p_dest_hashes(pubkeys);
+-			}
+-		}
+-	}
+-
+-	if (saved_list.empty()) {
+-		return;
+-	}
+-
+-	MutexLock lock(m_peerListLock);
+-
+-	parse_address_list(saved_list,
+-		[this](bool is_v6, const std::string& /*address*/, const std::string& ip, int port)
+-		{
+-			Peer p;
+-			if (!str_to_ip(is_v6, ip.c_str(), p.m_addr)) {
+-				return;
+-			}
+-			p.m_isV6 = is_v6;
+-			p.normalize();
+-
+-			// Don't allow private IPs in peer lists
+-			if (is_private_address(is_v6, p.m_addr)) {
+-				return;
+-			}
+-
+-			bool already_added = false;
+-			for (const Peer& peer : m_peerList) {
+-				if (peer.m_addr == p.m_addr) {
+-					already_added = true;
+-					break;
+-				}
+-			}
+-
+-			p.m_port = port;
+-			p.m_numFailedConnections = 0;
+-			p.m_lastSeen = seconds_since_epoch();
+-
+-			if (!already_added && (m_peerList.size() < MAX_PEER_LIST_SIZE) && !is_banned(p.m_isV6, p.m_addr)) {
+-				m_peerList.push_back(p);
+-			}
+-		});
+-
+-	LOGINFO(4, "peer list loaded (" << (m_peerList.size() - old_size) << " peers)");
++	// Local profile only uses explicitly supplied --addpeers. No DNS/bootstrap
++	// or peer file from a previous stock pool is consulted.
+ }
+ 
++
+ void P2PServer::load_monerod_peer_list()
+ {
+ 	if (m_pool->params().m_noClearnetP2P) {
+diff --git a/src/p2pool.cpp b/src/p2pool.cpp
+index 29231a0..8dc0506 100644
+--- a/src/p2pool.cpp
++++ b/src/p2pool.cpp
+@@ -16,6 +16,7 @@
+  */
+ 
+ #include "common.h"
++#include "meownero.h"
+ #include "p2pool.h"
+ #ifndef P2POOL_UNIT_TESTS
+ #include "zmq_reader.h"
+@@ -401,6 +402,10 @@ void p2pool::handle_tx(TxMempoolData& tx)
+ 
+ void p2pool::handle_miner_data(MinerData& data)
+ {
++	if ((data.height == 0) || (data.major_version != 16) || (data.median_weight >= (uint64_t{1} << 32))) {
++		LOGERR(1, "Meownero miner data outside supported profile");
++		PANIC_STOP();
++	}
+ #if TEST_MEMPOOL_PICKING_ALGORITHM
+ 	if (m_mempool->size() < data.tx_backlog.size()) {
+ 		m_mempool->swap_transactions(data.tx_backlog);
+@@ -518,6 +523,41 @@ void p2pool::handle_miner_data(MinerData& data)
+ 
+ void p2pool::get_missing_heights()
+ {
++	hash id;
++	{
++		WriteLock lock(m_mainchainLock);
++		if (!m_bootstrapRequests.empty()) {
++			id = m_bootstrapRequests.back();
++			m_bootstrapRequests.pop_back();
++		}
++	}
++	if (!id.empty()) {
++		char buf[log::Stream::BUF_SIZE + 1] = {};
++		log::Stream s(buf);
++		s << "{\"jsonrpc\":\"2.0\",\"id\":\"0\",\"method\":\"get_block_header_by_hash\",\"params\":{\"hash\":\"" << id << "\"}}" << '\0';
++		const Params::Host host = current_host();
++		JSONRPCRequest::call(host.m_address, host.m_rpcPort, buf, host.m_rpcLogin, m_params.m_socks5Proxy, host.m_rpcSSL, host.m_rpcSSL_Fingerprint,
++			[this, id](const JSONRPCRequest::CallbackData& data) {
++				ChainMain block;
++				const bool ok = parse_block_header(data.m_response.data(), data.m_response.size(), block, false) && (block.id == id);
++				{
++					WriteLock lock(m_mainchainLock);
++					m_bootstrapPending.erase(id);
++				}
++				if (ok) {
++					m_sideChain->retry_pending_headers();
++					update_block_template_async();
++				}
++				get_missing_heights();
++			}, [this, id](const JSONRPCRequest::CallbackData&) {
++				{
++					WriteLock lock(m_mainchainLock);
++					m_bootstrapPending.erase(id);
++				}
++				get_missing_heights();
++			});
++		return;
++	}
+ 	uint64_t h;
+ 	{
+ 		MutexLock lock(m_missingHeightsLock);
+@@ -1621,6 +1661,11 @@ void p2pool::parse_get_info_rpc(const char* data, size_t size)
+ 		return;
+ 	}
+ 
++	uint64_t target = 0;
++	if (!parseValue(result, "target", target) || (target != meownero::BLOCK_TIME)) {
++		LOGERR(1, "Meownero daemon target mismatch");
++		PANIC_STOP();
++	}
+ 	NetworkType monero_network = NetworkType::Invalid;
+ 
+ 	if (info.mainnet)  monero_network = NetworkType::Mainnet;
+@@ -1706,7 +1751,57 @@ void p2pool::parse_get_version_rpc(const char* data, size_t size)
+ 		PANIC_STOP();
+ 	}
+ 
+-	get_miner_data();
++	check_meownero_profile();
++}
++
++// Admission checks before starting any pool servers. RPC is trusted loopback.
++void p2pool::check_meownero_profile(uint64_t height)
++{
++    const Params::Host host = current_host();
++    const std::string request = "{\"jsonrpc\":\"2.0\",\"id\":\"0\",\"method\":\"get_block_header_by_height\",\"params\":{\"height\":" + std::to_string(height) + "}}";
++    JSONRPCRequest::call(host.m_address, host.m_rpcPort, request.c_str(), host.m_rpcLogin, m_params.m_socks5Proxy, host.m_rpcSSL, host.m_rpcSSL_Fingerprint,
++        [this, height, host](const JSONRPCRequest::CallbackData& data) {
++            ChainMain block;
++            if (parse_block_header(data.m_response.data(), data.m_response.size(), block)) {
++                hash genesis;
++                if (!from_hex(meownero::GENESIS, 64, genesis) || (block.height != height) ||
++                    ((height == 0) ? ((block.id != genesis) || (block.reward != 0)) : (block.reward != meownero::REWARD))) {
++                    LOGERR(1, "Meownero genesis/subsidy mismatch");
++                    PANIC_STOP();
++                }
++                if (height == 0) check_meownero_profile(1);
++                else get_miner_data();
++                return;
++            }
++            // No block 1 exists on a fresh chain. Its empty template must have
++            // the exact selected subsidy; no spendable funds exist for fees.
++            if (height != 1) {
++                LOGERR(1, "Meownero genesis unavailable");
++                PANIC_STOP();
++            }
++            char address[Wallet::ADDRESS_LENGTH + 1] = {};
++            char encoded[Wallet::ADDRESS_LENGTH];
++            m_params.m_miningWallet.encode(encoded);
++            memcpy(address, encoded, Wallet::ADDRESS_LENGTH);
++            const std::string req = std::string("{\"jsonrpc\":\"2.0\",\"id\":\"0\",\"method\":\"get_block_template\",\"params\":{\"wallet_address\":\"") + address + "\"}}";
++            JSONRPCRequest::call(host.m_address, host.m_rpcPort, req.c_str(), host.m_rpcLogin, m_params.m_socks5Proxy, host.m_rpcSSL, host.m_rpcSSL_Fingerprint,
++                [this](const JSONRPCRequest::CallbackData& reply) {
++                    rapidjson::Document doc;
++                    uint64_t h = 0, reward = 0;
++                    if (doc.Parse(reply.m_response.data(), reply.m_response.size()).HasParseError() || !doc.IsObject() ||
++                        !doc.HasMember("result") || !doc["result"].IsObject() ||
++                        !parseValue(doc["result"], "height", h) || !parseValue(doc["result"], "expected_reward", reward) ||
++                        (h != 1) || (reward != meownero::REWARD)) {
++                        LOGERR(1, "Meownero fresh-chain subsidy mismatch");
++                        PANIC_STOP();
++                    }
++                    get_miner_data();
++                }, [](const JSONRPCRequest::CallbackData& reply) {
++                    if (!reply.m_error.empty()) { LOGERR(1, "Meownero profile RPC failed"); PANIC_STOP(); }
++                });
++        }, [](const JSONRPCRequest::CallbackData& data) {
++            if (!data.m_error.empty()) { LOGERR(1, "Meownero profile RPC failed"); PANIC_STOP(); }
++        });
+ }
+ 
+ void p2pool::get_miner_data(bool retry)
+@@ -1809,7 +1904,7 @@ void p2pool::parse_get_miner_data_rpc(const char* data, size_t size)
+ 	}
+ }
+ 
+-bool p2pool::parse_block_header(const char* data, size_t size, ChainMain& c)
++bool p2pool::parse_block_header(const char* data, size_t size, ChainMain& c, bool canonical)
+ {
+ 	rapidjson::Document doc;
+ 	if (doc.Parse(data, size).HasParseError() || !doc.IsObject()) {
+@@ -1843,8 +1938,12 @@ bool p2pool::parse_block_header(const char* data, size_t size, ChainMain& c)
+ 
+ 	{
+ 		WriteLock lock(m_mainchainLock);
+-		m_mainchainByHeight[c.height] = c;
++		// A by-hash response may be an alternate fork at this height.
++		if (canonical) m_mainchainByHeight[c.height] = c;
+ 		m_mainchainByHash[c.id] = c;
++		if ((c.height <= SEEDHASH_EPOCH_BLOCKS + SEEDHASH_EPOCH_LAG) && !c.difficulty.empty() && (m_bootstrapHeaders.size() < 4096)) {
++			m_bootstrapHeaders[c.id] = c;
++		}
+ 	}
+ 
+ 	LOGINFO(4, "parsed block header for height " << c.height);
+@@ -1894,6 +1993,9 @@ uint32_t p2pool::parse_block_headers_range(const char* data, size_t size)
+ 			max_height = std::max(max_height, c.height);
+ 			m_mainchainByHeight[c.height] = c;
+ 			m_mainchainByHash[c.id] = c;
++			if ((c.height <= SEEDHASH_EPOCH_BLOCKS + SEEDHASH_EPOCH_LAG) && !c.difficulty.empty() && (m_bootstrapHeaders.size() < 4096)) {
++				m_bootstrapHeaders[c.id] = c;
++			}
+ 			++num_headers_parsed;
+ 		}
+ 	}
+@@ -2191,6 +2293,24 @@ void p2pool::api_update_aux_data()
+ 		});
+ }
+ 
++bool p2pool::get_bootstrap_difficulty(const hash& id, uint64_t height, difficulty_type& diff)
++{
++	if (id.empty() || (height > SEEDHASH_EPOCH_BLOCKS + SEEDHASH_EPOCH_LAG)) return false;
++	{
++		WriteLock lock(m_mainchainLock);
++		const auto it = m_bootstrapHeaders.find(id);
++		if (it != m_bootstrapHeaders.end()) {
++			if (it->second.height != height) return false;
++			diff = it->second.difficulty;
++			return !diff.empty();
++		}
++		if ((m_bootstrapPending.size() >= 64) || !m_bootstrapPending.insert(id).second) return false;
++		m_bootstrapRequests.push_back(id);
++	}
++	uv_async_send(&m_getMissingHeightsAsync);
++	return false;
++}
++
+ bool p2pool::get_difficulty_at_height(uint64_t height, difficulty_type& diff)
+ {
+ 	ReadLock lock(m_mainchainLock);
+diff --git a/src/p2pool.h b/src/p2pool.h
+index b61e6b3..e13e5f7 100644
+--- a/src/p2pool.h
++++ b/src/p2pool.h
+@@ -127,6 +127,7 @@ public:
+ 	void api_update_aux_data();
+ 
+ 	bool get_difficulty_at_height(uint64_t height, difficulty_type& diff);
++	bool get_bootstrap_difficulty(const hash& id, uint64_t height, difficulty_type& diff);
+ 
+ #if defined(WITH_RANDOMX) && !defined(P2POOL_UNIT_TESTS)
+ 	void start_mining(uint32_t threads);
+@@ -188,6 +189,10 @@ private:
+ 	mutable uv_rwlock_t m_mainchainLock;
+ 	std::map<uint64_t, ChainMain> m_mainchainByHeight;
+ 	unordered_map<hash, ChainMain> m_mainchainByHash;
++	// Only actual RPC headers, never ZMQ/template difficulty estimates.
++	unordered_map<hash, ChainMain> m_bootstrapHeaders;
++	unordered_set<hash> m_bootstrapPending;
++	std::vector<hash> m_bootstrapRequests;
+ 
+ 	mutable uv_rwlock_t m_minerDataLock;
+ 	MinerData m_minerData;
+@@ -203,12 +208,13 @@ private:
+ 	void parse_get_info_rpc(const char* data, size_t size);
+ 
+ 	void get_version();
++	void check_meownero_profile(uint64_t height = 0);
+ 	void parse_get_version_rpc(const char* data, size_t size);
+ 
+ 	void get_miner_data(bool retry = true);
+ 	void parse_get_miner_data_rpc(const char* data, size_t size);
+ 
+-	bool parse_block_header(const char* data, size_t size, ChainMain& c);
++	bool parse_block_header(const char* data, size_t size, ChainMain& c, bool canonical = true);
+ 	uint32_t parse_block_headers_range(const char* data, size_t size);
+ 
+ 	void api_update_network_stats();
+diff --git a/src/params.cpp b/src/params.cpp
+index 2fa67ea..3a36269 100644
+--- a/src/params.cpp
++++ b/src/params.cpp
+@@ -51,6 +51,9 @@ Params::Params(const std::vector<std::vector<std::string>>& args)
+ 		}
+ 	}
+ 
++	// Local test port: no automatic DNS discovery or public default listeners.
++	m_dns = false;
++	if (m_mini || m_nano || !m_mergeMiningHosts.empty()) throw std::invalid_argument("Meownero local profile only");
+ 	if (!m_onionAddress.empty()) {
+ 		m_onionPubkey = from_onion_v3(m_onionAddress);
+ 
+@@ -96,7 +99,7 @@ Params::Params(const std::vector<std::vector<std::string>>& args)
+ 	else if (m_p2pAddresses.empty()) {
+ 		char buf[48] = {};
+ 		log::Stream s(buf);
+-		s << "[::]:" << p2p_port << ",0.0.0.0:" << p2p_port;
++		s << "127.0.0.1:" << p2p_port;
+ 
+ 		m_p2pAddresses = buf;
+ 	}
+@@ -106,7 +109,7 @@ Params::Params(const std::vector<std::vector<std::string>>& args)
+ 
+ 		char buf[48] = {};
+ 		log::Stream s(buf);
+-		s << "[::]:" << stratum_port << ",0.0.0.0:" << stratum_port;
++		s << "127.0.0.1:" << stratum_port;
+ 
+ 		m_stratumAddresses = buf;
+ 	}
+@@ -521,6 +524,10 @@ bool Params::process_arg(const std::vector<std::string>& arg)
+ 
+ bool Params::valid() const
+ {
++	if ((m_hosts.size() != 1) || (m_hosts[0].m_address != "127.0.0.1") || !m_socks5Proxy.empty()) {
++		LOGERR(1, "Meownero local profile requires one trusted loopback daemon");
++		return false;
++	}
+ 	if (!m_mainWallet.valid() || !m_miningWallet.valid()) {
+ 		LOGERR(1, "Invalid wallet address. Try \"p2pool --help\".");
+ 		return false;
+diff --git a/src/side_chain.cpp b/src/side_chain.cpp
+index 9313655..b7c96b9 100644
+--- a/src/side_chain.cpp
++++ b/src/side_chain.cpp
+@@ -16,6 +16,7 @@
+  */
+ 
+ #include "common.h"
++#include "meownero.h"
+ #include "p2pool.h"
+ #include "side_chain.h"
+ #include "pool_block.h"
+@@ -66,7 +67,7 @@ SideChain::SideChain(p2pool* pool, NetworkType type, const char* pool_name)
+ 	: m_pool(pool)
+ 	, m_chainTip{ nullptr }
+ 	, m_seenWalletsLastPruneTime(0)
+-	, m_poolName(pool_name ? pool_name : "default")
++	, m_poolName(pool_name ? pool_name : "meownero-local-9-90")
+ 	, m_targetBlockTime(10)
+ 	, m_minDifficulty(MIN_DIFFICULTY, 0)
+ 	, m_chainWindowSize(2160)
+@@ -114,7 +115,8 @@ SideChain::SideChain(p2pool* pool, NetworkType type, const char* pool_name)
+ 	// cppcheck-suppress uninitvar
+ 	log::Stream s(buf);
+ 
+-	s << s_networkType     << '\0'
++	s << meownero::DOMAIN << '\0'
++	  << s_networkType     << '\0'
+ 	  << m_poolName        << '\0'
+ 	  << m_poolPassword    << '\0'
+ 	  << m_targetBlockTime << '\0'
+@@ -371,7 +373,11 @@ bool SideChain::get_shares(const PoolBlock* tip, std::vector<MinerShare>& shares
+ 
+ 	if (m_pool && !tip->m_parent.empty()) {
+ 		const uint64_t h = p2pool::get_seed_height(tip->m_txinGenHeight);
+-		if (!m_pool->get_difficulty_at_height(h, mainchain_diff)) {
++		// Genesis work is not a useful payout window for a newly bootstrapped
++		// chain. Before the first nonzero seed, bind the cap to the exact parent.
++		const bool have_work = h ? m_pool->get_difficulty_at_height(h, mainchain_diff) :
++			(tip->m_txinGenHeight && m_pool->get_bootstrap_difficulty(tip->m_prevId, tip->m_txinGenHeight - 1, mainchain_diff));
++		if (!have_work) {
+ 			LOGWARN(L, "get_shares: couldn't get mainchain difficulty for height = " << h);
+ 			return false;
+ 		}
+@@ -1609,8 +1615,30 @@ void SideChain::verify_loop(PoolBlock* block)
+ 	return;
+ }
+ 
++void SideChain::retry_pending_headers()
++{
++	WriteLock lock(m_sidechainLock);
++	std::vector<hash> pending;
++	for (const auto& entry : m_blocksById) {
++		if (!entry.second->m_verified) pending.push_back(entry.first);
++	}
++	for (const hash& id : pending) {
++		const auto it = m_blocksById.find(id);
++		if (it != m_blocksById.end()) verify_loop(it->second);
++	}
++}
++
+ void SideChain::verify(PoolBlock* block)
+ {
++	// Missing trusted-daemon context is pending, not an invalid-share verdict.
++	// PoW has already been checked by the unchanged incoming-share path.
++	if (m_pool && block->m_sidechainHeight && !p2pool::get_seed_height(block->m_txinGenHeight)) {
++		difficulty_type diff;
++		if (!block->m_txinGenHeight || !m_pool->get_bootstrap_difficulty(block->m_prevId, block->m_txinGenHeight - 1, diff)) {
++			block->m_verified = false;
++			return;
++		}
++	}
+ 	// Genesis block
+ 	if (block->m_sidechainHeight == 0) {
+ 		if (!block->m_parent.empty() ||
+@@ -2582,6 +2610,10 @@ bool SideChain::load_config(const std::string& filename)
+ 
+ bool SideChain::check_config() const
+ {
++	if ((s_networkType != NetworkType::Mainnet) || (m_poolName == "default") || (m_poolName == "mini") || (m_poolName == "nano")) {
++		LOGERR(1, "Meownero requires its own mainnet pool identity");
++		return false;
++	}
+ 	if (m_poolName.empty()) {
+ 		LOGERR(1, "name can't be empty");
+ 		return false;
+diff --git a/src/side_chain.h b/src/side_chain.h
+index f1d57c0..52d3974 100644
+--- a/src/side_chain.h
++++ b/src/side_chain.h
+@@ -25,7 +25,7 @@
+ 
+ namespace p2pool {
+ 
+-static constexpr uint64_t MONERO_BLOCK_TIME = 120;
++static constexpr uint64_t MONERO_BLOCK_TIME = 90; // Selected Meownero mainchain; sidechain timing is unchanged.
+ 
+ class p2pool;
+ class P2PServer;
+@@ -66,6 +66,7 @@ public:
+ 	[[nodiscard]] bool get_outputs_blob(PoolBlock* block, uint64_t total_reward, std::vector<uint8_t>& blob) const;
+ 
+ 	void print_status(bool obtain_sidechain_lock = true) const;
++	void retry_pending_headers();
+ 	[[nodiscard]] double get_reward_share(const Wallet& w) const;
+ 
+ 	// Consensus ID can be used to spawn independent P2Pools with their own sidechains
+diff --git a/src/wallet.cpp b/src/wallet.cpp
+index fdf8319..28c1984 100644
+--- a/src/wallet.cpp
++++ b/src/wallet.cpp
+@@ -35,9 +35,9 @@ namespace {
+ 
+ // Allow only regular addresses (no integrated addresses, no subaddresses)
+ // Values taken from cryptonote_config.h (CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX)
+-constexpr uint64_t valid_prefixes[] = { 18, 53, 24 };
++constexpr uint64_t valid_prefixes[] = { 120, 53, 24 };
+ 
+-constexpr uint64_t valid_prefixes_subaddress[] = { 42, 63, 36 };
++constexpr uint64_t valid_prefixes_subaddress[] = { 123, 63, 36 };
+ 
+ constexpr std::array<int, 9> block_sizes{ 0, 2, 3, 5, 6, 7, 9, 10, 11 };
+ constexpr int num_full_blocks = p2pool::Wallet::ADDRESS_LENGTH / block_sizes.back();
+@@ -154,6 +154,9 @@ bool Wallet::decode(const char* address)
+ 	}
+ 
+ 	m_prefix = data[0];
++	// This port supports regular Meownero mainnet addresses only.
++	if (m_prefix != valid_prefixes[0]) return false;
++	m_subaddress = false;
+ 
+ 	switch (m_prefix)
+ 	{
+@@ -195,6 +198,7 @@ bool Wallet::decode(const char* address)
+ 
+ bool Wallet::assign(const hash& spend_pub_key, const hash& view_pub_key, NetworkType type, bool subaddress)
+ {
++	if ((type != NetworkType::Mainnet) || subaddress) return false;
+ 	ge_p3 point;
+ 	if ((ge_frombytes_vartime(&point, spend_pub_key.h) != 0) || (ge_frombytes_vartime(&point, view_pub_key.h) != 0)) {
+ 		return false;
