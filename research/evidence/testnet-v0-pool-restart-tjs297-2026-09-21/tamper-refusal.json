@@ -1,0 +1,50 @@
+{
+  "api-tip-stale": {
+    "exit": 1,
+    "last_line": "FAIL: resumed: pool API tip"
+  },
+  "faithful": {
+    "exit": 0,
+    "last_line": "}"
+  },
+  "peer1-no-zmq": {
+    "exit": 1,
+    "last_line": "FAIL: daemons must run the exact recipe commands"
+  },
+  "peer1-submit-block": {
+    "exit": 1,
+    "last_line": "FAIL: peer1 received a block-injecting or mining RPC"
+  },
+  "pool-exit-1": {
+    "exit": 1,
+    "last_line": "FAIL: pool stopped cleanly at the live tip"
+  },
+  "pool-found-block": {
+    "exit": 1,
+    "last_line": "FAIL: resumed: pool found blocks"
+  },
+  "pool-mining-flag": {
+    "exit": 1,
+    "last_line": "FAIL: pool must not mine, merge-mine, proxy or carry credentials"
+  },
+  "restart-command-changed": {
+    "exit": 1,
+    "last_line": "FAIL: restart must reuse the exact pool command"
+  },
+  "resumed-job-height": {
+    "exit": 1,
+    "last_line": "FAIL: resumed: job is not on the common tip"
+  },
+  "resumed-prev-hash": {
+    "exit": 1,
+    "last_line": "FAIL: resumed: job is not on the common tip"
+  },
+  "unsigned": {
+    "exit": 1,
+    "last_line": "FAIL: [Errno 2] No such file or directory: 'build/testnet-v0-pool-restart-tjs297-tamper/unsigned/EVIDENCE.sha256'"
+  },
+  "zero-blocks-missed": {
+    "exit": 1,
+    "last_line": "FAIL: blocks mined while the pool was down"
+  }
+}
