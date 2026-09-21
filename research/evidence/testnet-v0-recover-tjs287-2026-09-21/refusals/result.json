@@ -1,0 +1,250 @@
+{
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "wrong-genesis",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-genesis.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-genesis-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong genesis_hash profile"
+    },
+    {
+      "case": "wrong-genesis-reward",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-genesis-reward.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-genesis-reward-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong genesis_reward_atomic profile"
+    },
+    {
+      "case": "wrong-reward",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-reward.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-reward-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong reward_atomic profile"
+    },
+    {
+      "case": "wrong-target",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-target.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-target-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong target_seconds profile"
+    },
+    {
+      "case": "wrong-fork",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-fork.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-fork-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong fork profile"
+    },
+    {
+      "case": "wrong-fork-height",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-fork-height.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-fork-height-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong fork profile"
+    },
+    {
+      "case": "wrong-pool",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-pool.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-pool-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong pool_profile profile"
+    },
+    {
+      "case": "pool-enabled",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/pool-enabled.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/pool-enabled-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong pool_enabled profile"
+    },
+    {
+      "case": "wrong-prefix",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-prefix.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-prefix-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong address_prefix profile"
+    },
+    {
+      "case": "testnet-mode",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--profile",
+        "build/testnet-v0-recover-tjs287-refusals02/testnet-mode.json",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/testnet-mode-output"
+      ],
+      "exit": 2,
+      "expected_message": "wrong network_mode profile"
+    },
+    {
+      "case": "stale-data",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/stale-data"
+      ],
+      "exit": 2,
+      "expected_message": "stale data/output directory refused"
+    },
+    {
+      "case": "wrong-binary",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-binary",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-binary-output"
+      ],
+      "exit": 2,
+      "expected_message": "binary SHA-256 mismatch"
+    },
+    {
+      "case": "wrong-wallet",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-wallet",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/wrong-wallet-output"
+      ],
+      "exit": 2,
+      "expected_message": "wallet SHA-256 mismatch"
+    },
+    {
+      "case": "accepted-control",
+      "command": [
+        "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "<repo>/chain/testnet-v0/recover.py",
+        "--binary",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+        "--wallet",
+        "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+        "--work",
+        "build/testnet-v0-recover-tjs287-refusals02/control-output",
+        "--check-only"
+      ],
+      "exit": 0,
+      "expected_message": "PASS: accepted recipe manifest, profile, binary, wallet and baseline inputs verified"
+    }
+  ]
+}

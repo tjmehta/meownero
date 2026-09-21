@@ -1,0 +1,131 @@
+{
+  "archive": {
+    "bytes": 204800,
+    "path_relative_to_work": "data/peer1-backup.tar",
+    "sha256": "072e535241f4b64f3dad494be2a1708ff132ac16f198caf051c106cba750cf56"
+  },
+  "backed_up_elapsed_s": 36.404282688046806,
+  "blocks_missed": 2,
+  "caught_up_elapsed_s": 41.46943482803181,
+  "connections": {
+    "connections": [
+      {
+        "address": "127.0.0.1:45134",
+        "address_type": 1,
+        "avg_download": 0,
+        "avg_upload": 0,
+        "connection_id": "1cab8f61780e48c584d44a4b4861e60e",
+        "current_download": 0,
+        "current_upload": 0,
+        "height": 8,
+        "host": "127.0.0.1",
+        "incoming": true,
+        "ip": "127.0.0.1",
+        "live_time": 0,
+        "local_ip": false,
+        "localhost": true,
+        "peer_id": "cd3f1cdc2439cffd",
+        "port": "45134",
+        "pruning_seed": 0,
+        "recv_count": 1170,
+        "recv_idle_time": 0,
+        "rpc_credits_per_hash": 0,
+        "rpc_port": 0,
+        "send_count": 703,
+        "send_idle_time": 0,
+        "state": "normal",
+        "support_flags": 1
+      }
+    ],
+    "status": "OK",
+    "untrusted": false
+  },
+  "data_dir_absent_after_destroy": true,
+  "first_rpc_info_after_restore": {
+    "height": 6,
+    "synchronized": false,
+    "top_block_hash": "a2ce81d1f987928108862681a3e33e512648c7ff611623932d1a40611de6e5df"
+  },
+  "rejoin_seconds_from_restart": 0.6126884379773401,
+  "restarted_elapsed_s": 40.85674639005447,
+  "restored_elapsed_s": 40.8567271020147,
+  "restored_manifest_equal": true,
+  "shutdown_exit_code": 0,
+  "source_manifest": {
+    "28180/p2pstate.bin": {
+      "bytes": 62,
+      "sha256": "128ddadfc24e0f8e2cbe3172c6dcd74c757fc4a59a8ad93195428b440257b992"
+    },
+    "lmdb/data.mdb": {
+      "bytes": 180224,
+      "sha256": "0c15fcd779cd04fb530f0ea8f158d2691137eafc99b3af22aaa795690a4fc2cf"
+    },
+    "lmdb/lock.mdb": {
+      "bytes": 8192,
+      "sha256": "d4dd24f529bf530e90828389a0d1b77978aac3914778a562f9270ac9f37dfa91"
+    }
+  },
+  "state_after_rejoin": {
+    "cumulative_work": "0xcea",
+    "emission_atomic": 63000000000000,
+    "fees_atomic": 0,
+    "hash": "6d159c35a5ac2000849bbe66321ceb5dbc84373944acc0afdf83ac2b09607ec2",
+    "height": 7
+  },
+  "stored_tip_at_open": 5,
+  "sync_info": {
+    "credits": 0,
+    "height": 8,
+    "next_needed_pruning_seed": 0,
+    "overview": "[]",
+    "peers": [
+      {
+        "info": {
+          "address": "127.0.0.1:45134",
+          "address_type": 1,
+          "avg_download": 0,
+          "avg_upload": 0,
+          "connection_id": "1cab8f61780e48c584d44a4b4861e60e",
+          "current_download": 0,
+          "current_upload": 0,
+          "height": 8,
+          "host": "127.0.0.1",
+          "incoming": true,
+          "ip": "127.0.0.1",
+          "live_time": 0,
+          "local_ip": false,
+          "localhost": true,
+          "peer_id": "cd3f1cdc2439cffd",
+          "port": "45134",
+          "pruning_seed": 0,
+          "recv_count": 1170,
+          "recv_idle_time": 0,
+          "rpc_credits_per_hash": 0,
+          "rpc_port": 0,
+          "send_count": 703,
+          "send_idle_time": 0,
+          "state": "normal",
+          "support_flags": 1
+        }
+      }
+    ],
+    "status": "OK",
+    "target_height": 0,
+    "top_hash": "",
+    "untrusted": false
+  },
+  "tip_at_backup": {
+    "cumulative_work": "0xa0",
+    "emission_atomic": 45000000000000,
+    "fees_atomic": 0,
+    "hash": "a2ce81d1f987928108862681a3e33e512648c7ff611623932d1a40611de6e5df",
+    "height": 5
+  },
+  "tip_mined_while_destroyed": {
+    "cumulative_work": "0xcea",
+    "emission_atomic": 63000000000000,
+    "fees_atomic": 0,
+    "hash": "6d159c35a5ac2000849bbe66321ceb5dbc84373944acc0afdf83ac2b09607ec2",
+    "height": 7
+  }
+}
