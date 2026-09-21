@@ -1,0 +1,56 @@
+===== peer0.log lines=168989 sha256=b5a72b238e4353450c9b40545e12b7f7afc6a37ad6094cafbc8c0bb323edb4d3
+mentions tx1=2 tx2=3 b101=3 b113=3 tip=3
+2026-09-21 04:24:06.655	[RPC1]	INFO	txpool	src/cryptonote_core/tx_pool.cpp:352	Transaction added to pool: txid <4e28f52f188ec63a63e9c61b36a1370436dd5765839544f7ddb3993511bd6122> weight: 2166 fee/byte: 300000, count: 1
+2026-09-21 04:24:13.233	[P2P5]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:891	Including transaction <4e28f52f188ec63a63e9c61b36a1370436dd5765839544f7ddb3993511bd6122>
+2026-09-21 04:24:55.804	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:592	Found block <67711ae518be31c6e34aa774d2f7b5f7ff58b48a7fcb6b61860df1409b60666b> at height 101 for difficulty: 39168
+2026-09-21 04:24:55.807	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<67711ae518be31c6e34aa774d2f7b5f7ff58b48a7fcb6b61860df1409b60666b>
+2026-09-21 04:24:55.831	[P2P0]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:58008 INC] [127.0.0.1:58008 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <67711ae518be31c6e34aa774d2f7b5f7ff58b48a7fcb
+2026-09-21 04:43:37.336	[P2P2]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:891	Including transaction <4fa2aa1ce64b6d1524acded265f2b564350d4999cba53dde01c11bb86295fc47>
+2026-09-21 04:43:37.348	[P2P2]	INFO	txpool	src/cryptonote_core/tx_pool.cpp:352	Transaction added to pool: txid <4fa2aa1ce64b6d1524acded265f2b564350d4999cba53dde01c11bb86295fc47> weight: 1507 fee/byte: 300000, count: 1
+2026-09-21 04:43:39.836	[P2P9]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:891	Including transaction <4fa2aa1ce64b6d1524acded265f2b564350d4999cba53dde01c11bb86295fc47>
+2026-09-21 04:45:19.640	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:592	Found block <3f69e38921ff292eeb2658129aff79fce06aa1f07a7b7d131b810c88254573b1> at height 113 for difficulty: 38806
+2026-09-21 04:45:19.643	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<3f69e38921ff292eeb2658129aff79fce06aa1f07a7b7d131b810c88254573b1>
+2026-09-21 04:45:19.663	[P2P0]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:58008 INC] [127.0.0.1:58008 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <3f69e38921ff292eeb2658129aff79fce06aa1f07a7b
+2026-09-21 04:53:06.353	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:592	Found block <2ccf565487abc19e433e1925a50a5a8a3bb756f6b0577da644488f8c731bb3d3> at height 124 for difficulty: 40574
+2026-09-21 04:53:06.356	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<2ccf565487abc19e433e1925a50a5a8a3bb756f6b0577da644488f8c731bb3d3>
+2026-09-21 04:53:06.379	[P2P8]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:58008 INC] [127.0.0.1:58008 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <2ccf565487abc19e433e1925a50a5a8a3bb756f6b057
+counts: REORGANIZE=0 alternative=0 ERROR=6 WARNING=2 found_block=124 block_added=125
+ERROR lines:
+2026-09-21 02:06:27.577	    73c2c4314a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,glo
+2026-09-21 02:06:31.843	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:46530 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_lin
+2026-09-21 02:06:31.843	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:46530 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 02:06:34.722	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:46550 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_lin
+2026-09-21 02:06:34.722	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:46550 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 04:24:06.661	[P2P9]	ERROR	net.p2p.tx	src/cryptonote_protocol/levin_notify.cpp:575	Unable to send transaction(s) via Dandelion++ stem
+first: 2026-09-21 02:06:27.577	    73c2c4314a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FA
+last:  2026-09-21 04:53:11.307	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully
+===== peer1.log lines=6741 sha256=cc8f6503d09e5949f45b756c3d55d5b0e6de5d423179f059c2cd9258ce8ba400
+mentions tx1=3 tx2=2 b101=3 b113=3 tip=3
+2026-09-21 04:24:09.916	[P2P3]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:891	Including transaction <4e28f52f188ec63a63e9c61b36a1370436dd5765839544f7ddb3993511bd6122>
+2026-09-21 04:24:09.978	[P2P3]	INFO	txpool	src/cryptonote_core/tx_pool.cpp:352	Transaction added to pool: txid <4e28f52f188ec63a63e9c61b36a1370436dd5765839544f7ddb3993511bd6122> weight: 2166 fee/byte: 300000, count: 1
+2026-09-21 04:24:12.916	[P2P6]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:891	Including transaction <4e28f52f188ec63a63e9c61b36a1370436dd5765839544f7ddb3993511bd6122>
+2026-09-21 04:24:55.810	[P2P7]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:37696 INC] [127.0.0.1:37696 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <67711ae518be31c6e34aa774d2f7b5f7ff58b48a7fcb
+2026-09-21 04:24:55.810	[P2P8]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <67711ae518be31c6e34aa774d2f7b5f7ff58b48a7fcb
+2026-09-21 04:24:55.828	[P2P7]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<67711ae518be31c6e34aa774d2f7b5f7ff58b48a7fcb6b61860df1409b60666b>
+2026-09-21 04:43:35.831	[RPC0]	INFO	txpool	src/cryptonote_core/tx_pool.cpp:352	Transaction added to pool: txid <4fa2aa1ce64b6d1524acded265f2b564350d4999cba53dde01c11bb86295fc47> weight: 1507 fee/byte: 300000, count: 1
+2026-09-21 04:43:38.602	[P2P4]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:891	Including transaction <4fa2aa1ce64b6d1524acded265f2b564350d4999cba53dde01c11bb86295fc47>
+2026-09-21 04:45:19.646	[P2P9]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:37696 INC] [127.0.0.1:37696 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <3f69e38921ff292eeb2658129aff79fce06aa1f07a7b
+2026-09-21 04:45:19.646	[P2P6]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <3f69e38921ff292eeb2658129aff79fce06aa1f07a7b
+2026-09-21 04:45:19.661	[P2P9]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<3f69e38921ff292eeb2658129aff79fce06aa1f07a7b7d131b810c88254573b1>
+2026-09-21 04:53:06.359	[P2P5]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:37696 INC] [127.0.0.1:37696 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <2ccf565487abc19e433e1925a50a5a8a3bb756f6b057
+2026-09-21 04:53:06.359	[P2P8]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28080 OUT] [127.0.0.1:28080 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <2ccf565487abc19e433e1925a50a5a8a3bb756f6b057
+2026-09-21 04:53:06.376	[P2P5]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<2ccf565487abc19e433e1925a50a5a8a3bb756f6b0577da644488f8c731bb3d3>
+counts: REORGANIZE=0 alternative=0 ERROR=8 WARNING=2 found_block=0 block_added=125
+ERROR lines:
+2026-09-21 02:06:27.577	    7a409a778a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,glo
+2026-09-21 02:06:40.942	[RPC0]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:40472 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_lin
+2026-09-21 02:06:40.942	[RPC0]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:40472 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 04:43:35.062	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:42664 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_lin
+2026-09-21 04:43:35.062	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:42664 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+2026-09-21 04:43:35.833	[P2P9]	ERROR	net.p2p.tx	src/cryptonote_protocol/levin_notify.cpp:575	Unable to send transaction(s) via Dandelion++ stem
+2026-09-21 04:53:10.921	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:433	[127.0.0.1:43196 INC] simple_http_connection_handler<t_connection_context>::handle_invoke_query_lin
+2026-09-21 04:53:10.921	[RPC1]	ERROR	net.http	contrib/epee/include/net/http_protocol_handler.inl:364	[127.0.0.1:43196 INC] simple_http_connection_handler::handle_char_out: Error state!!!
+first: 2026-09-21 02:06:27.577	    7a409a778a40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FA
+last:  2026-09-21 04:53:12.252	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully
+===== peer0.stdout.log found_block=124 first=2026-09-21 02:07:05.107	I Found block <6256e6d407318590aca6af707d111d2b6876fbd5be284df9dca9034763a0899d> at height 1 for
+===== peer1.stdout.log found_block=0

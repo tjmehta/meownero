@@ -1,0 +1,42 @@
+OK   funding = 100 blocks x 9 MEOW 900000000000000
+OK   sender debit = amount + fee (900000000000000, 5000000000000, 649800000, 894999350200000)
+OK   recipient credit = amount 
+OK   payment confirmed same height+hash on both peers {'block_hash': '67711ae518be31c6e34aa774d2f7b5f7ff58b48a7fcb6b61860df1409b60666b', 'height': 101, 'node': 0, 'txid': '4e28f52f188ec63a63e9c61b36a1370436dd5765839544f7ddb3993511bd6122'}
+OK   restore: address/history/balance equal 
+OK   restored spend debit = amount + fee 2999547900000
+OK   return credit to A 896999350200000
+OK   recovered spend confirmed same height+hash both peers {'block_hash': '3f69e38921ff292eeb2658129aff79fce06aa1f07a7b7d131b810c88254573b1', 'height': 113, 'node': 0, 'txid': '4fa2aa1ce64b6d1524acded265f2b564350d4999cba53dde01c11bb86295fc47'}
+OK   reopen preserves state incl. outgoing spend 
+OK   tx type 6 / ring 16 on every input, both peers, both txs 
+OK   txid in both mempools at relay 
+OK   peer0 header chain linked, 125 headers, v16 after genesis 
+OK   peer0 genesis pinned 
+OK   peer0 emission = 124 x 9 MEOW 1116000000000000
+OK   peer0 fee aggregate = fee1+fee2 1101900000
+OK   peer0 header reward sum = emission + fees 
+OK   peer0 block 101 reward = 9 MEOW + fee1; block 113 = 9 MEOW + fee2; others 9 MEOW 
+OK   peer0 num_txes: 1 at 101, 1 at 113, else 0 
+OK   peer0 cumulative difficulty = sum(difficulty) = wide tip 4531640
+OK   peer0 tip matches info 
+OK   peer0 confirmation hashes match canonical headers 
+OK   peer0 pow_hash empty (RPC default, not requested) and nonces non-constant {'distinct_nonces': 124}
+OK   peer1 header chain linked, 125 headers, v16 after genesis 
+OK   peer1 genesis pinned 
+OK   peer1 emission = 124 x 9 MEOW 1116000000000000
+OK   peer1 fee aggregate = fee1+fee2 1101900000
+OK   peer1 header reward sum = emission + fees 
+OK   peer1 block 101 reward = 9 MEOW + fee1; block 113 = 9 MEOW + fee2; others 9 MEOW 
+OK   peer1 num_txes: 1 at 101, 1 at 113, else 0 
+OK   peer1 cumulative difficulty = sum(difficulty) = wide tip 4531640
+OK   peer1 tip matches info 
+OK   peer1 confirmation hashes match canonical headers 
+OK   peer1 pow_hash empty (RPC default, not requested) and nonces non-constant {'distinct_nonces': 124}
+OK   both peers identical header hash list 
+OK   both peers identical difficulty list 
+OK   timestamps non-decreasing after genesis (no steering signature) {'min': 0, 'max': 400, 'median': 50, 'mean': 81.2}
+OK   block 1 timestamp >= daemon start_time and tip <= adjusted_time {'start': 1789956387, 'b1': 1789956402, 'tip': 1789966384, 'adj': 1789966474}
+OK   elapsed inside container consistent with 124 blocks near 90 s target 9982
+difficulty samples h1,h10,h25,h50,h100,h124: [1, 40887, 38163, 37869, 39121, 40574]
+block interval per 25:  [76.6, 82.2, 88.6, 84.2, 73.5]
+SUMMARY PASS checks=38 fails=[]
+exit=0
