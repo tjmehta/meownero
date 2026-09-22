@@ -1,0 +1,36 @@
+{
+  "blocks_missed": 2,
+  "delivery": "native mining on peer0 only; peer1, peer2 and the restarted peer1 receive through TCP P2P only",
+  "late_peer_sync_s": 1.3145585810416378,
+  "peers": [
+    {
+      "cumulative_work": "0x4413",
+      "emission_atomic": 81000000000000,
+      "fees_atomic": 0,
+      "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+      "height": 9
+    },
+    {
+      "cumulative_work": "0x4413",
+      "emission_atomic": 81000000000000,
+      "fees_atomic": 0,
+      "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+      "height": 9
+    },
+    {
+      "cumulative_work": "0x4413",
+      "emission_atomic": 81000000000000,
+      "fees_atomic": 0,
+      "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+      "height": 9
+    }
+  ],
+  "phases": {
+    "offline_blocks": 2,
+    "three_peer_blocks": 2,
+    "two_peer_min_top": 5
+  },
+  "restart_catch_up_s": 0.8212654030066915,
+  "result": "PASS",
+  "scope": "three local P2P peers; late join; clean restart; native miner and DAA; empty blocks"
+}

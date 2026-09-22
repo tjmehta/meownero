@@ -30,10 +30,12 @@ python3 -B chain/testnet-v0/verify-journey.py build/testnet-v0-journey-01
 sha256sum -c build/testnet-v0-journey-01/INPUTS.sha256
 ```
 
-Expect about 2 h 52 min of wall time, almost all of it the payment step's 124
-natively mined blocks at about 90 s each, a container peak of about 3.3 GiB
-under the 4 GiB cap, and about 30 MB of public receipts plus node databases
-under each step's `data` directory. The run passed when the journey exits 0,
+Expect three to three and a half hours of wall time (the accepted runs sum to
+2 h 51 min; the TJS-313 witness took 3 h 22 min), almost all of it the payment
+step's 124 natively mined blocks at about 90 s each with ordinary proof-of-work
+variance, a container peak of about 3.1 GiB under the 4 GiB cap, and about
+35 MB of public receipts plus node databases under each step's `data`
+directory. The run passed when the journey exits 0,
 `build/testnet-v0-journey-01/result.json` says `PASS`, and the verifier prints
 `PASS_JOURNEY_RECEIPT_RECONCILIATION` after re-running each milestone's own
 verifier and the cross-step checks. `steps.json` and `<step>.exit` show where a

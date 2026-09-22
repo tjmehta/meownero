@@ -1,0 +1,196 @@
+[
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/launch.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-run01/01-launch",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json"
+    ],
+    "container": "meow-tjs229-2050924",
+    "container_exit": "0",
+    "exit": 0,
+    "finished_utc": "2026-09-22T03:00:38+00:00",
+    "launcher_exit": "0",
+    "milestone": "M1 TJS-229 two-peer launch",
+    "peers": [
+      {
+        "cumulative_work": "0x22",
+        "emission_atomic": 36000000000000,
+        "fees_atomic": 0,
+        "hash": "f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d",
+        "height": 4
+      },
+      {
+        "cumulative_work": "0x22",
+        "emission_atomic": 36000000000000,
+        "fees_atomic": 0,
+        "hash": "f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d",
+        "height": 4
+      }
+    ],
+    "result": "PASS",
+    "seconds": 23.93988001695834,
+    "started_utc": "2026-09-22T03:00:14+00:00",
+    "step": "01-launch"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/payment.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-run01/02-payment",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--wallet",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc"
+    ],
+    "container": "meow-tjs230-2054434",
+    "container_exit": "0",
+    "exit": 0,
+    "finished_utc": "2026-09-22T06:19:19+00:00",
+    "milestone": "M2 TJS-230 payment, seed restore, reopen",
+    "peers": [
+      124,
+      "69aaf299a2082671d3a810fabb0c6e9f2b514e3fe24e91d9635b92b375f4126d",
+      "0x4d18ba"
+    ],
+    "result": "PASS",
+    "seconds": 11921.021823659015,
+    "started_utc": "2026-09-22T03:00:38+00:00",
+    "step": "02-payment"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/sync.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-run01/03-sync",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json"
+    ],
+    "container": "meow-tjs242-258576",
+    "container_exit": "0",
+    "exit": 0,
+    "finished_utc": "2026-09-22T06:20:52+00:00",
+    "launcher_exit": "0",
+    "milestone": "M3 TJS-242 late peer sync and restart",
+    "peers": [
+      {
+        "cumulative_work": "0x4413",
+        "emission_atomic": 81000000000000,
+        "fees_atomic": 0,
+        "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+        "height": 9
+      },
+      {
+        "cumulative_work": "0x4413",
+        "emission_atomic": 81000000000000,
+        "fees_atomic": 0,
+        "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+        "height": 9
+      },
+      {
+        "cumulative_work": "0x4413",
+        "emission_atomic": 81000000000000,
+        "fees_atomic": 0,
+        "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+        "height": 9
+      }
+    ],
+    "result": "PASS",
+    "seconds": 92.36739261302864,
+    "started_utc": "2026-09-22T06:19:19+00:00",
+    "step": "03-sync"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/recover.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-run01/04-recover",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--wallet",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json"
+    ],
+    "container": "meow-tjs287-296736",
+    "container_exit": "0",
+    "exit": 0,
+    "finished_utc": "2026-09-22T06:21:38+00:00",
+    "launcher_exit": "0",
+    "milestone": "M4 TJS-287 cold backup/restore and payout wallet",
+    "peers": [
+      {
+        "cumulative_work": "0x976",
+        "emission_atomic": 63000000000000,
+        "fees_atomic": 0,
+        "hash": "9a7385deb1383ba07023f4de75c492dff5010b5785904ed5022305319ece779d",
+        "height": 7
+      },
+      {
+        "cumulative_work": "0x976",
+        "emission_atomic": 63000000000000,
+        "fees_atomic": 0,
+        "hash": "9a7385deb1383ba07023f4de75c492dff5010b5785904ed5022305319ece779d",
+        "height": 7
+      }
+    ],
+    "result": "PASS",
+    "seconds": 46.82130565296393,
+    "started_utc": "2026-09-22T06:20:52+00:00",
+    "step": "04-recover"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/pool-restart.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-run01/05-pool-restart",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--pool",
+      "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json"
+    ],
+    "container": "meow-tjs297-311048",
+    "container_exit": "0",
+    "exit": 0,
+    "finished_utc": "2026-09-22T06:22:37+00:00",
+    "launcher_exit": "0",
+    "milestone": "M5 TJS-297 pool restart at the common tip",
+    "peers": [
+      {
+        "cumulative_work": "0xa83",
+        "emission_atomic": 63000000000000,
+        "fees_atomic": 0,
+        "hash": "009e0008a2cfff034dae65ed35ad324807eba304f35c3ae9fb16f6edf4572274",
+        "height": 7
+      },
+      {
+        "cumulative_work": "0xa83",
+        "emission_atomic": 63000000000000,
+        "fees_atomic": 0,
+        "hash": "009e0008a2cfff034dae65ed35ad324807eba304f35c3ae9fb16f6edf4572274",
+        "height": 7
+      }
+    ],
+    "result": "PASS",
+    "seconds": 58.99533705797512,
+    "started_utc": "2026-09-22T06:21:38+00:00",
+    "step": "05-pool-restart"
+  }
+]

@@ -1,0 +1,31 @@
+verify-journey.py pin derivation for run01 (journey executed under recipe commit 73ce72a; verifier fixed in 9cf676e)
+
+run01 INPUTS.sha256 line:
+a43be51c5719462180cc099c6b8e7471547b59015f7dbd93c4f5d65222c6c4ff  chain/testnet-v0/verify-journey.py
+
+git show 73ce72a:chain/testnet-v0/verify-journey.py | sha256sum:
+a43be51c5719462180cc099c6b8e7471547b59015f7dbd93c4f5d65222c6c4ff  -
+
+sha256sum chain/testnet-v0/verify-journey.py at 9cf676e:
+d18329d1808ba893c6fade953e4947bfe047ad6ba57e241362ecafdeeb604383  chain/testnet-v0/verify-journey.py
+
+git diff 73ce72a 9cf676e -- chain/testnet-v0/verify-journey.py:
+diff --git a/chain/testnet-v0/verify-journey.py b/chain/testnet-v0/verify-journey.py
+index aa50ad3..3cd13c4 100644
+--- a/chain/testnet-v0/verify-journey.py
++++ b/chain/testnet-v0/verify-journey.py
+@@ -114,8 +114,10 @@ def main():
+         require(genesis is None or head == genesis, f'{step}: genesis header differs from the first step')
+         genesis = head
+         readback = read(f'{step}/profile-readback.json')
+-        for n in ('0', '1'):
+-            row = readback[n]
++        # launch.py, sync.py, recover.py and pool-restart.py key the readback by peer; payment.py stores a list.
++        rows = list(readback.values()) if isinstance(readback, dict) else list(readback)
++        require(len(rows) == 2, f'{step}: two peer readbacks')
++        for row in rows:
+             require(row['info']['height'] == 1 and row['info']['nettype'] == 'mainnet' and row['info']['target'] == 90, f'{step}: fresh readback')
+             require(row['genesis']['hash'] == GENESIS and row['fork']['version'] == 16 and row['fork']['earliest_height'] == 1, f'{step}: fork readback')
+             require(row['template']['height'] == 1 and row['template']['expected_reward'] == REWARD, f'{step}: reward readback')
+
+Expected non-OK line in inputs-check.log at or after 9cf676e: chain/testnet-v0/verify-journey.py: FAILED (pre-fix verifier bytes); every other line OK.

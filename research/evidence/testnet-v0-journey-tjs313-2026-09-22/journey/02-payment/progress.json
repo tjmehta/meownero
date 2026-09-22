@@ -1,0 +1,288 @@
+[
+  {
+    "case": "profile_and_p2p_verified",
+    "funding": "solo",
+    "native_daa": true,
+    "network": "isolated-mainnet"
+  },
+  {
+    "case": "mining_started",
+    "limit_seconds": 18120,
+    "method": "start_mining",
+    "minimum_blocks": 100,
+    "node": 0,
+    "phase": "fund_solo_A",
+    "start_rpc_height": 1,
+    "threads": 1
+  },
+  {
+    "case": "mining_stopped",
+    "phase": "fund_solo_A",
+    "tip": [
+      100,
+      "279fc593184820aa3148e6989b20f1b0ed751958f3e927f92f5b909f4dbd5f65",
+      "0x3e9fe6"
+    ]
+  },
+  {
+    "case": "solo_funded",
+    "sender": {
+      "balance": 900000000000000,
+      "unlocked_balance": 369000000000000
+    },
+    "tip": [
+      100,
+      "279fc593184820aa3148e6989b20f1b0ed751958f3e927f92f5b909f4dbd5f65",
+      "0x3e9fe6"
+    ]
+  },
+  {
+    "amount": 5000000000000,
+    "case": "payment_relay",
+    "decoded": [
+      {
+        "fee": 649800000,
+        "in_pool": true,
+        "node": 0,
+        "rct_type": 6,
+        "ring_sizes": [
+          16,
+          16
+        ],
+        "version": 2
+      },
+      {
+        "fee": 649800000,
+        "in_pool": true,
+        "node": 1,
+        "rct_type": 6,
+        "ring_sizes": [
+          16,
+          16
+        ],
+        "version": 2
+      }
+    ],
+    "fee": 649800000,
+    "origin": 0,
+    "pools": [
+      [
+        "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde"
+      ],
+      [
+        "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde"
+      ]
+    ],
+    "txid": "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde"
+  },
+  {
+    "case": "mining_started",
+    "limit_seconds": 2280,
+    "method": "start_mining",
+    "minimum_blocks": 12,
+    "node": 0,
+    "phase": "confirm_payment",
+    "start_rpc_height": 101,
+    "threads": 1
+  },
+  {
+    "case": "mining_stopped",
+    "phase": "confirm_payment",
+    "tip": [
+      112,
+      "ee101956b1f532cdaa6e21a1add37359e057671b2392054d03e432e6caf1fd14",
+      "0x45f66f"
+    ]
+  },
+  {
+    "case": "payment_confirmed",
+    "confirmations": [
+      {
+        "block_hash": "199e7e6f0e375bc866a0aba26eddb4fe2a68c5b66aa7c1246b69f590de85fa42",
+        "height": 101,
+        "node": 0,
+        "txid": "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde"
+      },
+      {
+        "block_hash": "199e7e6f0e375bc866a0aba26eddb4fe2a68c5b66aa7c1246b69f590de85fa42",
+        "height": 101,
+        "node": 1,
+        "txid": "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde"
+      }
+    ],
+    "incoming": [
+      [
+        "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde",
+        5000000000000
+      ]
+    ],
+    "recipient": {
+      "balance": 5000000000000,
+      "unlocked_balance": 5000000000000
+    },
+    "sender_after": {
+      "balance": 894999350200000,
+      "unlocked_balance": 471999350200000
+    },
+    "sender_before": {
+      "balance": 900000000000000,
+      "unlocked_balance": 369000000000000
+    },
+    "txid": "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde"
+  },
+  {
+    "address_matches": true,
+    "case": "seed_restored",
+    "node": 1,
+    "original": {
+      "balance": {
+        "balance": 5000000000000,
+        "unlocked_balance": 5000000000000
+      },
+      "incoming": [
+        [
+          "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde",
+          5000000000000
+        ]
+      ],
+      "outgoing": []
+    },
+    "restored": {
+      "balance": {
+        "balance": 5000000000000,
+        "unlocked_balance": 5000000000000
+      },
+      "incoming": [
+        [
+          "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde",
+          5000000000000
+        ]
+      ],
+      "outgoing": []
+    }
+  },
+  {
+    "amount": 2000000000000,
+    "case": "recovered_spend_relay",
+    "decoded": [
+      {
+        "fee": 452100000,
+        "in_pool": true,
+        "node": 0,
+        "rct_type": 6,
+        "ring_sizes": [
+          16
+        ],
+        "version": 2
+      },
+      {
+        "fee": 452100000,
+        "in_pool": true,
+        "node": 1,
+        "rct_type": 6,
+        "ring_sizes": [
+          16
+        ],
+        "version": 2
+      }
+    ],
+    "fee": 452100000,
+    "origin": 1,
+    "pools": [
+      [
+        "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122"
+      ],
+      [
+        "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122"
+      ]
+    ],
+    "txid": "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122"
+  },
+  {
+    "case": "mining_started",
+    "limit_seconds": 2280,
+    "method": "start_mining",
+    "minimum_blocks": 12,
+    "node": 0,
+    "phase": "confirm_recovered_spend",
+    "start_rpc_height": 113,
+    "threads": 1
+  },
+  {
+    "case": "mining_stopped",
+    "phase": "confirm_recovered_spend",
+    "tip": [
+      124,
+      "69aaf299a2082671d3a810fabb0c6e9f2b514e3fe24e91d9635b92b375f4126d",
+      "0x4d18ba"
+    ]
+  },
+  {
+    "case": "recovered_spend_confirmed",
+    "confirmations": [
+      {
+        "block_hash": "84d358c11cf965a11e5a439213ea3d59088da136af4e1b58c41b9cdf0ae6f4e0",
+        "height": 113,
+        "node": 0,
+        "txid": "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122"
+      },
+      {
+        "block_hash": "84d358c11cf965a11e5a439213ea3d59088da136af4e1b58c41b9cdf0ae6f4e0",
+        "height": 113,
+        "node": 1,
+        "txid": "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122"
+      }
+    ],
+    "recipient": {
+      "balance": 896999350200000,
+      "unlocked_balance": 581999350200000
+    },
+    "sender": {
+      "balance": 2999547900000,
+      "unlocked_balance": 2999547900000
+    },
+    "txid": "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122"
+  },
+  {
+    "address_matches": true,
+    "after": {
+      "balance": {
+        "balance": 2999547900000,
+        "unlocked_balance": 2999547900000
+      },
+      "incoming": [
+        [
+          "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde",
+          5000000000000
+        ]
+      ],
+      "outgoing": [
+        [
+          "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122",
+          2000000000000,
+          452100000
+        ]
+      ]
+    },
+    "before": {
+      "balance": {
+        "balance": 2999547900000,
+        "unlocked_balance": 2999547900000
+      },
+      "incoming": [
+        [
+          "5b79de5f406f29ead235d7eee752dbf20035c446f69b3dbc672fd18540c77cde",
+          5000000000000
+        ]
+      ],
+      "outgoing": [
+        [
+          "df849392b7499473d1c17d5a6423761aa88e9d4002927bf1cb247d890f9f4122",
+          2000000000000,
+          452100000
+        ]
+      ]
+    },
+    "case": "wallet_reopened"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "delivery": "native mining on peer0; peer1 receives through TCP P2P only",
+  "peers": [
+    {
+      "cumulative_work": "0x22",
+      "emission_atomic": 36000000000000,
+      "fees_atomic": 0,
+      "hash": "f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d",
+      "height": 4
+    },
+    {
+      "cumulative_work": "0x22",
+      "emission_atomic": 36000000000000,
+      "fees_atomic": 0,
+      "hash": "f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d",
+      "height": 4
+    }
+  ],
+  "profile": {
+    "address_prefix": 120,
+    "fork": {
+      "genesis_version": 1,
+      "height": 1,
+      "version": 16
+    },
+    "genesis_hash": "20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8",
+    "genesis_reward_atomic": 0,
+    "network_mode": "isolated-mainnet",
+    "pool_enabled": false,
+    "pool_profile": "selected-9-90-prefix120",
+    "profile": "selected-9-90",
+    "recipe_version": 1,
+    "reward_atomic": 9000000000000,
+    "target_seconds": 90
+  },
+  "result": "PASS",
+  "scope": "two local P2P peers; native miner and DAA; empty blocks"
+}

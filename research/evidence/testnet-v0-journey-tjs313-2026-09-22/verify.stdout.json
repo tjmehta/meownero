@@ -1,0 +1,170 @@
+{
+  "result": "PASS_JOURNEY_RECEIPT_RECONCILIATION",
+  "steps": [
+    {
+      "step": "01-launch",
+      "top_index": 4,
+      "tip": "f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d",
+      "cumulative_work": "0x22",
+      "emission_atomic": 36000000000000,
+      "fees_atomic": 0,
+      "num_txes": 0,
+      "memory_peak_bytes": 2789576704
+    },
+    {
+      "step": "02-payment",
+      "top_index": 124,
+      "tip": "69aaf299a2082671d3a810fabb0c6e9f2b514e3fe24e91d9635b92b375f4126d",
+      "cumulative_work": "0x4d18ba",
+      "emission_atomic": 1116000000000000,
+      "fees_atomic": 1101900000,
+      "num_txes": 2,
+      "memory_peak_bytes": 2871332864
+    },
+    {
+      "step": "03-sync",
+      "top_index": 9,
+      "tip": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+      "cumulative_work": "0x4413",
+      "emission_atomic": 81000000000000,
+      "fees_atomic": 0,
+      "num_txes": 0,
+      "memory_peak_bytes": 3058708480
+    },
+    {
+      "step": "04-recover",
+      "top_index": 7,
+      "tip": "9a7385deb1383ba07023f4de75c492dff5010b5785904ed5022305319ece779d",
+      "cumulative_work": "0x976",
+      "emission_atomic": 63000000000000,
+      "fees_atomic": 0,
+      "num_txes": 0,
+      "memory_peak_bytes": 2780262400
+    },
+    {
+      "step": "05-pool-restart",
+      "top_index": 7,
+      "tip": "009e0008a2cfff034dae65ed35ad324807eba304f35c3ae9fb16f6edf4572274",
+      "cumulative_work": "0xa83",
+      "emission_atomic": 63000000000000,
+      "fees_atomic": 0,
+      "num_txes": 0,
+      "memory_peak_bytes": 3323445248
+    }
+  ],
+  "per_step": {
+    "01-launch": {
+      "result": "PASS_RECEIPT_RECONCILIATION",
+      "peers": [
+        {
+          "height": 4,
+          "hash": "f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d",
+          "cumulative_work": "0x22",
+          "emission_atomic": 36000000000000,
+          "fees_atomic": 0
+        },
+        {
+          "height": 4,
+          "hash": "f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d",
+          "cumulative_work": "0x22",
+          "emission_atomic": 36000000000000,
+          "fees_atomic": 0
+        }
+      ],
+      "memory_peak_bytes": 2789576704
+    },
+    "02-payment": {
+      "result": "PASS_PAYMENT_RECEIPT_RECONCILIATION",
+      "funding": "solo",
+      "fees_atomic": 1101900000,
+      "top_index": 124
+    },
+    "03-sync": {
+      "result": "PASS_RECEIPT_RECONCILIATION",
+      "peers": [
+        {
+          "height": 9,
+          "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+          "cumulative_work": "0x4413",
+          "emission_atomic": 81000000000000,
+          "fees_atomic": 0
+        },
+        {
+          "height": 9,
+          "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+          "cumulative_work": "0x4413",
+          "emission_atomic": 81000000000000,
+          "fees_atomic": 0
+        },
+        {
+          "height": 9,
+          "hash": "7b2b6246952d71f7d116ffe7a9c1673f631c2391d074b1a73b4d98775eb17131",
+          "cumulative_work": "0x4413",
+          "emission_atomic": 81000000000000,
+          "fees_atomic": 0
+        }
+      ],
+      "late_peer_sync_s": 1.3145585810416378,
+      "restart_catch_up_s": 0.8212654030066915,
+      "blocks_missed_while_offline": 2,
+      "memory_peak_bytes": 3058708480
+    },
+    "04-recover": {
+      "result": "PASS_RECEIPT_RECONCILIATION",
+      "peers": [
+        {
+          "height": 7,
+          "hash": "9a7385deb1383ba07023f4de75c492dff5010b5785904ed5022305319ece779d",
+          "cumulative_work": "0x976",
+          "emission_atomic": 63000000000000,
+          "fees_atomic": 0
+        },
+        {
+          "height": 7,
+          "hash": "9a7385deb1383ba07023f4de75c492dff5010b5785904ed5022305319ece779d",
+          "cumulative_work": "0x976",
+          "emission_atomic": 63000000000000,
+          "fees_atomic": 0
+        }
+      ],
+      "payout_blocks": 5,
+      "payout_balance_atomic": 45000000000000,
+      "restore_rejoin_s": 0.6127064349711873,
+      "blocks_missed_while_destroyed": 2,
+      "backup_files": 3,
+      "backup_archive_sha256": "80638c294718010507f9c65f74cd1497ba28300bab0af81a2be8f93db16df9c2",
+      "memory_peak_bytes": 2780262400
+    },
+    "05-pool-restart": {
+      "result": "PASS_RECEIPT_RECONCILIATION",
+      "peers": [
+        {
+          "height": 7,
+          "hash": "009e0008a2cfff034dae65ed35ad324807eba304f35c3ae9fb16f6edf4572274",
+          "cumulative_work": "0xa83",
+          "emission_atomic": 63000000000000,
+          "fees_atomic": 0
+        },
+        {
+          "height": 7,
+          "hash": "009e0008a2cfff034dae65ed35ad324807eba304f35c3ae9fb16f6edf4572274",
+          "cumulative_work": "0xa83",
+          "emission_atomic": 63000000000000,
+          "fees_atomic": 0
+        }
+      ],
+      "tip_at_attach": 3,
+      "tip_at_stop": 5,
+      "blocks_missed_while_down": 2,
+      "resume_seconds_from_restart": 1.3052043339703232,
+      "attach_seconds_from_start": 1.2044842169852927,
+      "pool_sha256": "bbc3240607bf40bd3db7e13f011ccf9eda431dddd751918a3ebf4e3aaf129fad",
+      "memory_peak_bytes": 3323445248
+    }
+  },
+  "journey_wall_seconds": 12143.150839023001,
+  "total_step_seconds": 12143.145738999941,
+  "memory_peak_bytes_max": 3323445248,
+  "chains": "five fresh two-peer chains from one genesis, one per accepted recipe; tips are per step, not cumulative",
+  "scope": "saved receipt consistency across the sequenced accepted recipes; not an independent operator run, audit, FCMP/F3, share or payout clearance, 90-second GO or mainnet readiness"
+}

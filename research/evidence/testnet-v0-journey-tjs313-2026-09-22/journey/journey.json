@@ -1,0 +1,49 @@
+{
+  "bound_wall_seconds": 29970,
+  "chains": "one fresh two-peer chain per step from the same genesis; the accepted recipes refuse existing node state",
+  "containers": "one at a time; each step owns its container and takes the shared heavy lock itself",
+  "expected_wall_seconds": 10281.199999999999,
+  "started_utc": "2026-09-22T03:00:14+00:00",
+  "steps": [
+    {
+      "accepted_seconds": 25.4,
+      "bound_seconds": 495,
+      "milestone": "M1 TJS-229 two-peer launch",
+      "name": "01-launch",
+      "script": "launch.py",
+      "verifier": "verify.py"
+    },
+    {
+      "accepted_seconds": 10004.9,
+      "bound_seconds": 24150,
+      "milestone": "M2 TJS-230 payment, seed restore, reopen",
+      "name": "02-payment",
+      "script": "payment.py",
+      "verifier": "verify-payment.py"
+    },
+    {
+      "accepted_seconds": 164.6,
+      "bound_seconds": 1575,
+      "milestone": "M3 TJS-242 late peer sync and restart",
+      "name": "03-sync",
+      "script": "sync.py",
+      "verifier": "verify-sync.py"
+    },
+    {
+      "accepted_seconds": 45.0,
+      "bound_seconds": 1875,
+      "milestone": "M4 TJS-287 cold backup/restore and payout wallet",
+      "name": "04-recover",
+      "script": "recover.py",
+      "verifier": "verify-recover.py"
+    },
+    {
+      "accepted_seconds": 41.3,
+      "bound_seconds": 1875,
+      "milestone": "M5 TJS-297 pool restart at the common tip",
+      "name": "05-pool-restart",
+      "script": "pool-restart.py",
+      "verifier": "verify-pool-restart.py"
+    }
+  ]
+}

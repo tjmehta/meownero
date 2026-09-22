@@ -1,0 +1,35 @@
+{
+  "backup_archive_sha256": "80638c294718010507f9c65f74cd1497ba28300bab0af81a2be8f93db16df9c2",
+  "blocks_missed_while_destroyed": 2,
+  "delivery": "native mining on peer0 only; peer1, the restarted peer1 and the restored peer1 receive through TCP P2P only",
+  "payout_tip": {
+    "cumulative_work": "0x7d",
+    "emission_atomic": 45000000000000,
+    "fees_atomic": 0,
+    "hash": "ae9f3178760e026b91b5d7696bbe31f89aed47f5fc72f983d6a6952217ad65a3",
+    "height": 5
+  },
+  "peers": [
+    {
+      "cumulative_work": "0x976",
+      "emission_atomic": 63000000000000,
+      "fees_atomic": 0,
+      "hash": "9a7385deb1383ba07023f4de75c492dff5010b5785904ed5022305319ece779d",
+      "height": 7
+    },
+    {
+      "cumulative_work": "0x976",
+      "emission_atomic": 63000000000000,
+      "fees_atomic": 0,
+      "hash": "9a7385deb1383ba07023f4de75c492dff5010b5785904ed5022305319ece779d",
+      "height": 7
+    }
+  ],
+  "phases": {
+    "offline_blocks": 2,
+    "payout_min_top": 5
+  },
+  "restore_rejoin_s": 0.6127064349711873,
+  "result": "PASS",
+  "scope": "two local P2P peers; payout wallet on peer 1; plain daemon restart; cold backup/destroy/restore of peer 1 data; native miner and DAA; empty blocks"
+}

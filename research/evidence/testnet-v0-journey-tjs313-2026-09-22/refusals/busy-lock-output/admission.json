@@ -1,0 +1,96 @@
+[
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/launch.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-refusals01/busy-lock-output/01-launch",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json",
+      "--check-only"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "stdout": "PASS: profile, binary and baseline inputs verified; no process started\n",
+    "step": "01-launch"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/payment.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-refusals01/busy-lock-output/02-payment",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--wallet",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+      "--check-only"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "stdout": "PASS_ADMISSION: accepted recipe manifest, daemon, wallet and profile pinned\n",
+    "step": "02-payment"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/sync.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-refusals01/busy-lock-output/03-sync",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json",
+      "--check-only"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "stdout": "PASS: accepted recipe manifest, profile, binary and baseline inputs verified; no process started\n",
+    "step": "03-sync"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/recover.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-refusals01/busy-lock-output/04-recover",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--wallet",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monero-wallet-rpc",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json",
+      "--check-only"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "stdout": "PASS: accepted recipe manifest, profile, binary, wallet and baseline inputs verified; no process started\n",
+    "step": "04-recover"
+  },
+  {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "<repo>/chain/testnet-v0/pool-restart.py",
+      "--work",
+      "<repo>/build/testnet-v0-journey-tjs313-refusals01/busy-lock-output/05-pool-restart",
+      "--binary",
+      "<repo>/build/repro-selected-20260918/selected-9-90/first/source/build/release/bin/monerod",
+      "--pool",
+      "<repo>/build/tjs187-port-20260920/source/build-local/p2pool",
+      "--profile",
+      "<repo>/chain/testnet-v0/profile.json",
+      "--check-only"
+    ],
+    "exit": 0,
+    "stderr": "",
+    "stdout": "PASS: accepted recipe manifest, profile, binary, pool and baseline inputs verified; no process started\n",
+    "step": "05-pool-restart"
+  }
+]

@@ -1,0 +1,809 @@
+2026-09-22 03:00:15.418	    7aa7affdaa40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-22 03:00:15.418	    7aa7affdaa40	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:INFO,global:INFO,stacktrace:INFO,logging:INFO,msgwriter:INFO,perf.*:DEBUG
+2026-09-22 03:00:15.418	    7aa7affdaa40	INFO	global	src/daemon/main.cpp:309	Monero 'Fluorine Fermi' (v0.18.5.1-7410c04ba)
+2026-09-22 03:00:15.418	    7aa7affdaa40	INFO	daemon	src/daemon/main.cpp:371	Moving from main() into the daemonize now.
+2026-09-22 03:00:15.418	    7aa7affdaa40	INFO	global	src/daemon/protocol.h:53	Initializing cryptonote protocol...
+2026-09-22 03:00:15.418	    7aa7affdaa40	INFO	global	src/daemon/protocol.h:58	Cryptonote protocol initialized OK
+2026-09-22 03:00:15.419	    7aa7affdaa40	INFO	global	src/daemon/core.h:64	Initializing core...
+2026-09-22 03:00:15.419	    7aa7affdaa40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:521	Loading blockchain from folder /work/data/peer0/lmdb ...
+2026-09-22 03:00:15.419	    7aa7affdaa40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1464	LMDB memory map size: 1073741824
+2026-09-22 03:00:15.419	    7aa7affdaa40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:348	Blockchain not loaded, generating genesis block.
+2026-09-22 03:00:15.450	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:15.450	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       83    get_next_long_term_block_weight
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      176      get_long_term_block_weights
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      203    update_next_cumulative_weight_limit
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8>
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<56316d3598ed0a46c353ff818a21261f06ebc4e82aab5369be4d7f6f783ff9e3>
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 0, difficulty:	1
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 0.000000000000(0.000000000000 + 0.000000000000), coinbase_weight: 75, cumulative weight: 75, 15(0/15)ms
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3940	batch transaction mode already enabled, but asked to enable batch mode
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:3943	batch transactions enabled
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX new main seed hash is 20ce111b9a74c7ce79fbaafd053afb71b2f2335e208fa7e993fb46c8c91964d8
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	blockchain	src/cryptonote_core/blockchain.cpp:389	Blockchain initialized. last block: 0, d4539.h16.m11.s22 time ago, current difficulty: 1
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      104      get_long_term_block_weights
+2026-09-22 03:00:15.451	    7aa7affdaa40	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      138    update_next_cumulative_weight_limit
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x636635745a34]:__cxa_throw+0xb0) [0x636635745a34]
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x6366357aacb0] 
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x8598a9) [0x636635eea8a9] 
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x582694) [0x636635c13694] 
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x583055) [0x636635c14055] 
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x9cb84) [0x7aa7b0458b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7aa7b0458b84]
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7]  0x44) [0x7aa7b04e5b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7aa7b04e5b64]
+2026-09-22 03:00:15.451	    7aa76f7fe6c0	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-22 03:00:15.452	    7aa7affdaa40	INFO	txpool	src/cryptonote_core/tx_pool.cpp:1714	Validating txpool contents for v16
+2026-09-22 03:00:15.452	    7aa7affdaa40	INFO	global	src/cryptonote_core/cryptonote_core.cpp:696	Loading checkpoints
+2026-09-22 03:00:15.452	    7aa7affdaa40	INFO	global	src/daemon/core.h:81	Core initialized OK
+2026-09-22 03:00:15.452	    7aa7affdaa40	INFO	global	src/daemon/p2p.h:64	Initializing p2p server...
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.p2p	src/p2p/net_node.inl:2845	Set limit-up to 8192 kB/s
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.p2p	src/p2p/net_node.inl:2857	Set limit-down to 32768 kB/s
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 8192 kbps
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.p2p	src/p2p/net_node.inl:2879	Set limit-up to 8192 kB/s
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.throttle	contrib/epee/src/network_throttle-detail.cpp:150	Setting LIMIT: 32768 kbps
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.p2p	src/p2p/net_node.inl:2883	Set limit-down to 32768 kB/s
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-22 03:00:15.453	    7aa7affdaa40	INFO	net.p2p	src/p2p/net_node.inl:957	Binding (IPv4) on 127.0.0.1:28080
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	net.p2p	src/p2p/net_node.inl:970	Net service bound (IPv4) to 127.0.0.1:28080
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	global	src/daemon/p2p.h:69	p2p server initialized OK
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	global	src/daemon/rpc.h:63	Initializing core RPC server...
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	net	contrib/epee/include/net/abstract_tcp_server2.inl:1469	Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	global	contrib/epee/include/net/http_server_impl_base.h:94	Binding on 127.0.0.1 (IPv4):28081
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	global	src/daemon/rpc.h:69	core RPC server initialized OK on port: 28081
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	global	src/daemon/rpc.h:74	Starting core RPC server...
+2026-09-22 03:00:15.454	    7aa7affdaa40	INFO	net.http	contrib/epee/include/net/http_server_impl_base.h:111	Run net_service loop( 2 threads)...
+2026-09-22 03:00:15.454	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:79	core RPC server started ok
+2026-09-22 03:00:15.454	[SRV_MAIN]	INFO	daemon	src/daemon/daemon.cpp:270	ZMQ server disabled
+2026-09-22 03:00:15.454	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:79	Starting p2p net loop...
+2026-09-22 03:00:15.454	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1032	Run net_service loop( 10 threads)...
+2026-09-22 03:00:15.509	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:15.509	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60124 INC] Calling RPC method get_info
+2026-09-22 03:00:15.509	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:15.510	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      222    get_info
+2026-09-22 03:00:15.711	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:15.711	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60138 INC] Calling RPC method get_info
+2026-09-22 03:00:15.711	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:15.711	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      158    get_info
+2026-09-22 03:00:15.824	    7aa76f7fe6c0	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX main cache initialized
+2026-09-22 03:00:15.912	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:15.912	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60146 INC] Calling RPC method get_info
+2026-09-22 03:00:15.912	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:15.912	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      145    get_info
+2026-09-22 03:00:16.112	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.112	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60154 INC] Calling RPC method get_info
+2026-09-22 03:00:16.112	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.113	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:16.313	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.313	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60164 INC] Calling RPC method get_info
+2026-09-22 03:00:16.313	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.313	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      146    get_info
+2026-09-22 03:00:16.454	[P2P0]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:45914 6aa19ead-b64b-40c5-8eb9-ef2d77f3197c INC] NEW CONNECTION
+2026-09-22 03:00:16.454	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-22 03:00:16.454	[P2P1]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-22 03:00:16.454	[P2P1]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-22 03:00:16.455	[P2P1]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-22 03:00:16.455	[P2P1]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	
+2026-09-22 03:00:16.455	[P2P1]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	Use the "help" command to see the list of available commands.
+2026-09-22 03:00:16.455	[P2P1]	INFO	global	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2409	**********************************************************************
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use the "help" command to see the list of available commands.
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	Use "help <command>" to see a command's documentation.
+2026-09-22 03:00:16.455	[P2P0]	INFO	global	src/cryptonote_core/cryptonote_core.cpp:1596	**********************************************************************
+2026-09-22 03:00:16.455	[P2P1]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-22 03:00:16.455	[P2P1]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-22 03:00:16.455	[P2P3]	INFO	net.p2p	src/p2p/net_node.inl:2688	[127.0.0.1:28180 b2cba6b9-8605-451f-ab0a-51b7e2c96a53 OUT] NEW CONNECTION
+2026-09-22 03:00:16.455	[P2P3]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 262 bytes sent for category command-1001 initiated by us
+2026-09-22 03:00:16.455	[P2P1]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2684	[127.0.0.1:45914 INC] -->>NOTIFY_GET_TXPOOL_COMPLEMENT: hashes.size()=0
+2026-09-22 03:00:16.455	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 10 bytes sent for category command-2010 initiated by us
+2026-09-22 03:00:16.455	[P2P1]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2686	[127.0.0.1:45914 INC] [0] state: requesting txpool complement in state normal
+2026-09-22 03:00:16.455	[P2P1]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-22 03:00:16.455	[P2P8]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 10 bytes received for category command-2010 initiated by peer
+2026-09-22 03:00:16.455	[P2P8]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:855	[127.0.0.1:28180 OUT] Received NOTIFY_GET_TXPOOL_COMPLEMENT (0 txes)
+2026-09-22 03:00:16.456	[P2P4]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 262 bytes received for category command-1001 initiated by us
+2026-09-22 03:00:16.456	[P2P4]	INFO	blockchain.db.lmdb	src/blockchain_db/lmdb/db_lmdb.cpp:1663	switching safe mode on
+2026-09-22 03:00:16.456	[P2P4]	INFO	net.p2p	src/p2p/net_node.inl:2980	clearing used stripe peers
+2026-09-22 03:00:16.456	[P2P4]	INFO	net.p2p	src/p2p/net_node.inl:1199	[127.0.0.1:28180 OUT] New connection handshaked, pruning seed 0
+2026-09-22 03:00:16.514	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.514	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60174 INC] Calling RPC method get_info
+2026-09-22 03:00:16.514	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.514	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:16.516	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.516	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60188 INC] Calling RPC method get_info
+2026-09-22 03:00:16.516	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.516	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      132    get_info
+2026-09-22 03:00:16.516	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.516	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:60202 INC] Calling RPC method get_block_header_by_height
+2026-09-22 03:00:16.516	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.516	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        8      fill_block_header_response
+2026-09-22 03:00:16.516	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       29    get_block_header_by_height
+2026-09-22 03:00:16.517	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.517	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:168	[127.0.0.1:60206 INC] Calling RPC method hard_fork_info
+2026-09-22 03:00:16.517	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.517	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7    hard_fork_info
+2026-09-22 03:00:16.517	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.517	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:148	[127.0.0.1:60212 INC] Calling RPC method get_block_template
+2026-09-22 03:00:16.517	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.518	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      448    getblocktemplate
+2026-09-22 03:00:16.521	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.521	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:60224 INC] Calling RPC method get_connections
+2026-09-22 03:00:16.521	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.521	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       52    get_connections
+2026-09-22 03:00:16.522	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.522	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:60228 INC] Calling RPC method get_connections
+2026-09-22 03:00:16.522	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.522	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       72    get_connections
+2026-09-22 03:00:16.523	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /start_mining
+2026-09-22 03:00:16.523	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:117	[127.0.0.1:60238 INC] calling /start_mining
+2026-09-22 03:00:16.523	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.523	[RPC1]	INFO	miner	src/cryptonote_basic/miner.cpp:410	Mining has started with 1 threads, good luck!
+2026-09-22 03:00:16.523	[RPC1]	INFO	miner	src/cryptonote_basic/miner.cpp:420	Ignoring battery
+2026-09-22 03:00:16.523	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      168    start_mining
+2026-09-22 03:00:16.523	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:529	Miner thread was started [0]
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x636635745a34]:__cxa_throw+0xb0) [0x636635745a34]
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x6366357aacb0] 
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x8599ea) [0x636635eea9ea] 
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x584e19) [0x636635c15e19] 
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x764783) [0x636635df5783] 
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6]  0x1699f) [0x7aa7b09be99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7aa7b09be99f]
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7]  0x9cb84) [0x7aa7b0458b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7aa7b0458b84]
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8]  0x44) [0x7aa7b04e5b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7aa7b04e5b64]
+2026-09-22 03:00:16.524	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-22 03:00:16.524	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.524	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60246 INC] Calling RPC method get_info
+2026-09-22 03:00:16.524	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.524	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      158    get_info
+2026-09-22 03:00:16.725	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.725	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60252 INC] Calling RPC method get_info
+2026-09-22 03:00:16.725	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.725	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:16.926	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:16.926	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60256 INC] Calling RPC method get_info
+2026-09-22 03:00:16.926	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:16.926	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:17.126	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:17.126	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60262 INC] Calling RPC method get_info
+2026-09-22 03:00:17.126	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:17.127	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:17.327	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:17.327	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60266 INC] Calling RPC method get_info
+2026-09-22 03:00:17.327	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:17.327	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      165    get_info
+2026-09-22 03:00:17.528	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:17.528	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60278 INC] Calling RPC method get_info
+2026-09-22 03:00:17.528	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:17.528	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:17.729	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:17.729	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:60294 INC] Calling RPC method get_info
+2026-09-22 03:00:17.729	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:17.729	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:17.930	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:17.930	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55106 INC] Calling RPC method get_info
+2026-09-22 03:00:17.930	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:17.930	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      156    get_info
+2026-09-22 03:00:18.131	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:18.131	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55112 INC] Calling RPC method get_info
+2026-09-22 03:00:18.131	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:18.131	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:18.332	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:18.332	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55126 INC] Calling RPC method get_info
+2026-09-22 03:00:18.332	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:18.332	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:18.533	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:18.533	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55138 INC] Calling RPC method get_info
+2026-09-22 03:00:18.533	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:18.533	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:18.734	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:18.734	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55146 INC] Calling RPC method get_info
+2026-09-22 03:00:18.734	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:18.734	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:18.934	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:18.935	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55150 INC] Calling RPC method get_info
+2026-09-22 03:00:18.935	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:18.935	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      172    get_info
+2026-09-22 03:00:19.135	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:19.135	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55162 INC] Calling RPC method get_info
+2026-09-22 03:00:19.135	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:19.136	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      184    get_info
+2026-09-22 03:00:19.336	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:19.336	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55170 INC] Calling RPC method get_info
+2026-09-22 03:00:19.336	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:19.337	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      172    get_info
+2026-09-22 03:00:19.537	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:19.537	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55172 INC] Calling RPC method get_info
+2026-09-22 03:00:19.537	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:19.538	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      171    get_info
+2026-09-22 03:00:19.738	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:19.738	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55178 INC] Calling RPC method get_info
+2026-09-22 03:00:19.738	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:19.738	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:19.939	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:19.939	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55190 INC] Calling RPC method get_info
+2026-09-22 03:00:19.939	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:19.939	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      172    get_info
+2026-09-22 03:00:20.140	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:20.140	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55192 INC] Calling RPC method get_info
+2026-09-22 03:00:20.140	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:20.140	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      168    get_info
+2026-09-22 03:00:20.341	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:20.341	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55198 INC] Calling RPC method get_info
+2026-09-22 03:00:20.341	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:20.341	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:20.542	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:20.542	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55210 INC] Calling RPC method get_info
+2026-09-22 03:00:20.542	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:20.542	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      145    get_info
+2026-09-22 03:00:20.743	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:20.743	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55212 INC] Calling RPC method get_info
+2026-09-22 03:00:20.743	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:20.743	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      189    get_info
+2026-09-22 03:00:20.944	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:20.944	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55214 INC] Calling RPC method get_info
+2026-09-22 03:00:20.944	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:20.944	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      130    get_info
+2026-09-22 03:00:21.145	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:21.145	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55218 INC] Calling RPC method get_info
+2026-09-22 03:00:21.145	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:21.145	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      170    get_info
+2026-09-22 03:00:21.346	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:21.346	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55228 INC] Calling RPC method get_info
+2026-09-22 03:00:21.346	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:21.346	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:21.547	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:21.547	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55240 INC] Calling RPC method get_info
+2026-09-22 03:00:21.547	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:21.547	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      171    get_info
+2026-09-22 03:00:21.748	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:21.748	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55242 INC] Calling RPC method get_info
+2026-09-22 03:00:21.748	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:21.748	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:21.948	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:21.948	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55254 INC] Calling RPC method get_info
+2026-09-22 03:00:21.949	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:21.949	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      151    get_info
+2026-09-22 03:00:22.149	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:22.149	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55260 INC] Calling RPC method get_info
+2026-09-22 03:00:22.149	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:22.150	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:22.350	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:22.350	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55274 INC] Calling RPC method get_info
+2026-09-22 03:00:22.350	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:22.350	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      172    get_info
+2026-09-22 03:00:22.551	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:22.551	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55282 INC] Calling RPC method get_info
+2026-09-22 03:00:22.551	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:22.551	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:22.752	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:22.752	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55296 INC] Calling RPC method get_info
+2026-09-22 03:00:22.752	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:22.752	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:22.953	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:22.953	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55300 INC] Calling RPC method get_info
+2026-09-22 03:00:22.953	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:22.953	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:23.154	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:23.154	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55314 INC] Calling RPC method get_info
+2026-09-22 03:00:23.154	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:23.154	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      164    get_info
+2026-09-22 03:00:23.355	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:23.355	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55328 INC] Calling RPC method get_info
+2026-09-22 03:00:23.355	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:23.355	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:23.556	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:23.556	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55330 INC] Calling RPC method get_info
+2026-09-22 03:00:23.556	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:23.556	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:23.757	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:23.757	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55342 INC] Calling RPC method get_info
+2026-09-22 03:00:23.757	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:23.757	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:23.958	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:23.958	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55354 INC] Calling RPC method get_info
+2026-09-22 03:00:23.958	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:23.958	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:24.158	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:24.158	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55364 INC] Calling RPC method get_info
+2026-09-22 03:00:24.158	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:24.159	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:24.359	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:24.360	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55378 INC] Calling RPC method get_info
+2026-09-22 03:00:24.360	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:24.360	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:24.560	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:24.560	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55384 INC] Calling RPC method get_info
+2026-09-22 03:00:24.560	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:24.561	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:24.761	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:24.761	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55394 INC] Calling RPC method get_info
+2026-09-22 03:00:24.761	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:24.761	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      146    get_info
+2026-09-22 03:00:24.962	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:24.962	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55404 INC] Calling RPC method get_info
+2026-09-22 03:00:24.962	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:24.962	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      152    get_info
+2026-09-22 03:00:25.163	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:25.163	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55410 INC] Calling RPC method get_info
+2026-09-22 03:00:25.163	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:25.163	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      163    get_info
+2026-09-22 03:00:25.364	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:25.364	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55420 INC] Calling RPC method get_info
+2026-09-22 03:00:25.364	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:25.364	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      167    get_info
+2026-09-22 03:00:25.565	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:25.565	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55432 INC] Calling RPC method get_info
+2026-09-22 03:00:25.565	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:25.565	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      116    get_info
+2026-09-22 03:00:25.766	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:25.766	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55444 INC] Calling RPC method get_info
+2026-09-22 03:00:25.766	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:25.766	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      122    get_info
+2026-09-22 03:00:25.967	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:25.967	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55456 INC] Calling RPC method get_info
+2026-09-22 03:00:25.967	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:25.967	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:26.168	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:26.168	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55464 INC] Calling RPC method get_info
+2026-09-22 03:00:26.168	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:26.168	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      189    get_info
+2026-09-22 03:00:26.369	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:26.369	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55466 INC] Calling RPC method get_info
+2026-09-22 03:00:26.369	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:26.369	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:26.570	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:26.570	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55470 INC] Calling RPC method get_info
+2026-09-22 03:00:26.570	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:26.570	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:26.771	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:26.771	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55482 INC] Calling RPC method get_info
+2026-09-22 03:00:26.771	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:26.771	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      161    get_info
+2026-09-22 03:00:26.972	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:26.972	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55498 INC] Calling RPC method get_info
+2026-09-22 03:00:26.972	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:26.972	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:27.173	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:27.173	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55510 INC] Calling RPC method get_info
+2026-09-22 03:00:27.173	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:27.173	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:27.374	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:27.374	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55516 INC] Calling RPC method get_info
+2026-09-22 03:00:27.374	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:27.374	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      163    get_info
+2026-09-22 03:00:27.575	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:27.575	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55528 INC] Calling RPC method get_info
+2026-09-22 03:00:27.575	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:27.575	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:27.776	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:27.776	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:55542 INC] Calling RPC method get_info
+2026-09-22 03:00:27.776	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:27.776	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:27.977	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:27.977	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49918 INC] Calling RPC method get_info
+2026-09-22 03:00:27.977	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:27.977	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      172    get_info
+2026-09-22 03:00:28.178	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:28.178	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49926 INC] Calling RPC method get_info
+2026-09-22 03:00:28.178	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:28.178	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:28.379	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:28.379	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49930 INC] Calling RPC method get_info
+2026-09-22 03:00:28.379	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:28.379	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:28.580	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:28.580	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49942 INC] Calling RPC method get_info
+2026-09-22 03:00:28.580	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:28.580	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      136    get_info
+2026-09-22 03:00:28.781	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:28.781	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49958 INC] Calling RPC method get_info
+2026-09-22 03:00:28.781	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:28.781	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      162    get_info
+2026-09-22 03:00:28.982	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:28.982	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49960 INC] Calling RPC method get_info
+2026-09-22 03:00:28.982	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:28.982	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:29.183	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:29.183	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49970 INC] Calling RPC method get_info
+2026-09-22 03:00:29.183	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:29.183	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      153    get_info
+2026-09-22 03:00:29.384	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:29.384	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49974 INC] Calling RPC method get_info
+2026-09-22 03:00:29.384	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:29.384	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      152    get_info
+2026-09-22 03:00:29.585	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:29.585	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49976 INC] Calling RPC method get_info
+2026-09-22 03:00:29.585	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:29.585	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:29.786	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:29.786	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49982 INC] Calling RPC method get_info
+2026-09-22 03:00:29.786	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:29.786	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      151    get_info
+2026-09-22 03:00:29.986	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:29.986	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49992 INC] Calling RPC method get_info
+2026-09-22 03:00:29.986	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:29.987	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      185    get_info
+2026-09-22 03:00:30.187	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:30.187	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:49998 INC] Calling RPC method get_info
+2026-09-22 03:00:30.187	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:30.188	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:30.388	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:30.388	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50010 INC] Calling RPC method get_info
+2026-09-22 03:00:30.388	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:30.389	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      182    get_info
+2026-09-22 03:00:30.589	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:30.589	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50014 INC] Calling RPC method get_info
+2026-09-22 03:00:30.589	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:30.590	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:30.790	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:30.790	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50026 INC] Calling RPC method get_info
+2026-09-22 03:00:30.790	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:30.791	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:30.991	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:30.991	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50038 INC] Calling RPC method get_info
+2026-09-22 03:00:30.991	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:30.992	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:31.192	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:31.192	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50046 INC] Calling RPC method get_info
+2026-09-22 03:00:31.192	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:31.192	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:31.393	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:31.393	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50048 INC] Calling RPC method get_info
+2026-09-22 03:00:31.393	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:31.393	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:31.594	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:31.594	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50056 INC] Calling RPC method get_info
+2026-09-22 03:00:31.594	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:31.594	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:31.795	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:31.795	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50070 INC] Calling RPC method get_info
+2026-09-22 03:00:31.795	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:31.795	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      171    get_info
+2026-09-22 03:00:31.996	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:31.996	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50078 INC] Calling RPC method get_info
+2026-09-22 03:00:31.996	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:31.996	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      157    get_info
+2026-09-22 03:00:32.197	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:32.197	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50090 INC] Calling RPC method get_info
+2026-09-22 03:00:32.197	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:32.197	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      142    get_info
+2026-09-22 03:00:32.398	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:32.398	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50100 INC] Calling RPC method get_info
+2026-09-22 03:00:32.398	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:32.398	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      169    get_info
+2026-09-22 03:00:32.599	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:32.599	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50112 INC] Calling RPC method get_info
+2026-09-22 03:00:32.599	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:32.599	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:32.800	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:32.800	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50126 INC] Calling RPC method get_info
+2026-09-22 03:00:32.800	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:32.800	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      160    get_info
+2026-09-22 03:00:33.001	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:33.001	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50136 INC] Calling RPC method get_info
+2026-09-22 03:00:33.001	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:33.001	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:33.202	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:33.202	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50148 INC] Calling RPC method get_info
+2026-09-22 03:00:33.202	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:33.202	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      144    get_info
+2026-09-22 03:00:33.403	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:33.403	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50150 INC] Calling RPC method get_info
+2026-09-22 03:00:33.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:33.403	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:33.604	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:33.604	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50166 INC] Calling RPC method get_info
+2026-09-22 03:00:33.604	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:33.604	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      146    get_info
+2026-09-22 03:00:33.805	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:33.805	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50168 INC] Calling RPC method get_info
+2026-09-22 03:00:33.805	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:33.805	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:34.005	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:34.005	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50170 INC] Calling RPC method get_info
+2026-09-22 03:00:34.005	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:34.006	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:34.206	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:34.206	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50184 INC] Calling RPC method get_info
+2026-09-22 03:00:34.206	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:34.207	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:34.407	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:34.407	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50186 INC] Calling RPC method get_info
+2026-09-22 03:00:34.407	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:34.407	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:34.608	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:34.608	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50202 INC] Calling RPC method get_info
+2026-09-22 03:00:34.608	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:34.608	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:34.809	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:34.809	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50214 INC] Calling RPC method get_info
+2026-09-22 03:00:34.809	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:34.809	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      164    get_info
+2026-09-22 03:00:35.010	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:35.010	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50216 INC] Calling RPC method get_info
+2026-09-22 03:00:35.010	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:35.010	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      157    get_info
+2026-09-22 03:00:35.211	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:35.211	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50224 INC] Calling RPC method get_info
+2026-09-22 03:00:35.211	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:35.211	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:35.412	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:35.412	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50234 INC] Calling RPC method get_info
+2026-09-22 03:00:35.412	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:35.412	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      150    get_info
+2026-09-22 03:00:35.613	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:35.613	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50238 INC] Calling RPC method get_info
+2026-09-22 03:00:35.613	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:35.613	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:35.813	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:35.814	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50246 INC] Calling RPC method get_info
+2026-09-22 03:00:35.814	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:35.814	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:36.014	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:36.014	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50250 INC] Calling RPC method get_info
+2026-09-22 03:00:36.014	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:36.015	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:36.215	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:36.215	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50252 INC] Calling RPC method get_info
+2026-09-22 03:00:36.215	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:36.215	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      148    get_info
+2026-09-22 03:00:36.416	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:36.416	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50268 INC] Calling RPC method get_info
+2026-09-22 03:00:36.416	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:36.416	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:36.617	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:36.617	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50276 INC] Calling RPC method get_info
+2026-09-22 03:00:36.617	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:36.617	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      161    get_info
+2026-09-22 03:00:36.818	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:36.818	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50290 INC] Calling RPC method get_info
+2026-09-22 03:00:36.818	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:36.818	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      161    get_info
+2026-09-22 03:00:37.019	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:37.019	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50292 INC] Calling RPC method get_info
+2026-09-22 03:00:37.019	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.019	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:37.220	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:37.220	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50302 INC] Calling RPC method get_info
+2026-09-22 03:00:37.220	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.220	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      160    get_info
+2026-09-22 03:00:37.421	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:37.421	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50310 INC] Calling RPC method get_info
+2026-09-22 03:00:37.421	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.421	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      110    get_info
+2026-09-22 03:00:37.622	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:37.622	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50326 INC] Calling RPC method get_info
+2026-09-22 03:00:37.622	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.622	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      155    get_info
+2026-09-22 03:00:37.823	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:37.823	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:50334 INC] Calling RPC method get_info
+2026-09-22 03:00:37.823	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.823	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      149    get_info
+2026-09-22 03:00:37.905	[miner 0]	INFO	randomx	contrib/epee/src/mlog.cpp:517	RandomX dataset initialized
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x636635745a34]:__cxa_throw+0xb0) [0x636635745a34]
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x6366357aacb0] 
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x636635eed995] 
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x636635eeabab] 
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x584bb3) [0x636635c15bb3] 
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5608b1) [0x636635bf18b1] 
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x76403b) [0x636635df503b] 
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8]  0x1699f) [0x7aa7b09be99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7aa7b09be99f]
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9]  0x9cb84) [0x7aa7b0458b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7aa7b0458b84]
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x44) [0x7aa7b04e5b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7aa7b04e5b64]
+2026-09-22 03:00:37.906	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-22 03:00:37.909	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:592	Found block <1aa351f4e44fd3cba5bc44fcca15f1f0308d11726406db3bbd532a346c134f9a> at height 1 for difficulty: 1
+2026-09-22 03:00:37.911	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.911	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF        0      get_long_term_block_weights
+2026-09-22 03:00:37.911	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       26    get_next_long_term_block_weight
+2026-09-22 03:00:37.911	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.911	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      100      get_long_term_block_weights
+2026-09-22 03:00:37.911	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      121    update_next_cumulative_weight_limit
+2026-09-22 03:00:37.911	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-22 03:00:37.911	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<1aa351f4e44fd3cba5bc44fcca15f1f0308d11726406db3bbd532a346c134f9a>
+2026-09-22 03:00:37.911	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<23691cdfc69cf74729b27800c7954dcc7b496d3001fa1ec4f2293689dfa42aeb>
+2026-09-22 03:00:37.911	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 1, difficulty:	1
+2026-09-22 03:00:37.911	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-22 03:00:37.916	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:37.916	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x636635745a34]:__cxa_throw+0xb0) [0x636635745a34]
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x6366357aacb0] 
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x636635eed995] 
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x636635eeabab] 
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x584bb3) [0x636635c15bb3] 
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5608b1) [0x636635bf18b1] 
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x76403b) [0x636635df503b] 
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8]  0x1699f) [0x7aa7b09be99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7aa7b09be99f]
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9]  0x9cb84) [0x7aa7b0458b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7aa7b0458b84]
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x44) [0x7aa7b04e5b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7aa7b04e5b64]
+2026-09-22 03:00:37.916	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-22 03:00:37.919	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:592	Found block <6e3253d6399ec7ebf363130b214e29790c919d29a754159e509d76868e899500> at height 2 for difficulty: 1
+2026-09-22 03:00:37.922	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.922	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      101      get_long_term_block_weights
+2026-09-22 03:00:37.922	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      142    get_next_long_term_block_weight
+2026-09-22 03:00:37.922	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.922	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      140      get_long_term_block_weights
+2026-09-22 03:00:37.922	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      159    update_next_cumulative_weight_limit
+2026-09-22 03:00:37.922	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-22 03:00:37.922	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<6e3253d6399ec7ebf363130b214e29790c919d29a754159e509d76868e899500>
+2026-09-22 03:00:37.922	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<84cb5c0e589a45bf4c19d67ae55be15974eee5f8e9701e9b8bca1371be97b0c5>
+2026-09-22 03:00:37.922	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 2, difficulty:	1
+2026-09-22 03:00:37.922	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-22 03:00:37.927	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:37.927	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x636635745a34]:__cxa_throw+0xb0) [0x636635745a34]
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x6366357aacb0] 
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x636635eed995] 
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x636635eeabab] 
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x584bb3) [0x636635c15bb3] 
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5608b1) [0x636635bf18b1] 
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x76403b) [0x636635df503b] 
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8]  0x1699f) [0x7aa7b09be99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7aa7b09be99f]
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9]  0x9cb84) [0x7aa7b0458b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7aa7b0458b84]
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x44) [0x7aa7b04e5b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7aa7b04e5b64]
+2026-09-22 03:00:37.927	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-22 03:00:37.940	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:592	Found block <741913523c70663daa962d6a6a3fa4dbef7585883f6eac95df55badaabf03a04> at height 3 for difficulty: 5
+2026-09-22 03:00:37.941	[P2P6]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 184 bytes received for category command-2008 initiated by peer
+2026-09-22 03:00:37.941	[P2P6]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:45914 INC] [127.0.0.1:45914 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <1aa351f4e44fd3cba5bc44fcca15f1f0308d11726406db3bbd532a346c134f9a> (height 2, 0 txes)
+2026-09-22 03:00:37.942	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.943	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      192      get_long_term_block_weights
+2026-09-22 03:00:37.943	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      231    get_next_long_term_block_weight
+2026-09-22 03:00:37.943	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:37.943	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      190      get_long_term_block_weights
+2026-09-22 03:00:37.943	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      218    update_next_cumulative_weight_limit
+2026-09-22 03:00:37.943	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-22 03:00:37.943	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<741913523c70663daa962d6a6a3fa4dbef7585883f6eac95df55badaabf03a04>
+2026-09-22 03:00:37.943	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<431a0e8d8e25514c6da09a3a0496a089e8d8913bf07bbbd17872fd3d004aca27>
+2026-09-22 03:00:37.943	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 3, difficulty:	5
+2026-09-22 03:00:37.943	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-22 03:00:37.946	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:37.946	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x636635745a34]:__cxa_throw+0xb0) [0x636635745a34]
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x6366357aacb0] 
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x636635eed995] 
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x636635eeabab] 
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x584bb3) [0x636635c15bb3] 
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5608b1) [0x636635bf18b1] 
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x76403b) [0x636635df503b] 
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8]  0x1699f) [0x7aa7b09be99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7aa7b09be99f]
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9]  0x9cb84) [0x7aa7b0458b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7aa7b0458b84]
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x44) [0x7aa7b04e5b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7aa7b04e5b64]
+2026-09-22 03:00:37.946	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-22 03:00:37.964	[P2P7]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-22 03:00:37.964	[P2P7]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <6e3253d6399ec7ebf363130b214e29790c919d29a754159e509d76868e899500> (height 3, 0 txes)
+2026-09-22 03:00:37.983	[P2P6]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-22 03:00:37.983	[P2P6]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <741913523c70663daa962d6a6a3fa4dbef7585883f6eac95df55badaabf03a04> (height 4, 0 txes)
+2026-09-22 03:00:38.000	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:592	Found block <f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d> at height 4 for difficulty: 26
+2026-09-22 03:00:38.003	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.003	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      102      get_long_term_block_weights
+2026-09-22 03:00:38.003	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      141    get_next_long_term_block_weight
+2026-09-22 03:00:38.003	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.003	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF       98      get_long_term_block_weights
+2026-09-22 03:00:38.003	[miner 0]	INFO	perf.blockchain	src/common/perf_timer.cpp:156	PERF      112    update_next_cumulative_weight_limit
+2026-09-22 03:00:38.003	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	+++++ BLOCK SUCCESSFULLY ADDED
+2026-09-22 03:00:38.003	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	id:	<f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d>
+2026-09-22 03:00:38.003	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	PoW:	<ec78da59885a8eb0bf362236f4e0da52a4087205db098a2dd662fafc22212501>
+2026-09-22 03:00:38.003	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	HEIGHT 4, difficulty:	26
+2026-09-22 03:00:38.003	[miner 0]	INFO	blockchain	src/cryptonote_core/blockchain.cpp:4490	block reward: 9.000000000000(9.000000000000 + 0.000000000000), coinbase_weight: 82, cumulative weight: 82, 2(0/2)ms
+2026-09-22 03:00:38.006	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:45914 INC] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:38.006	[miner 0]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 184 bytes sent for category command-2008 initiated by us
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:134	Exception: std::bad_alloc
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:135	Unwound call stack:
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [1]  0xb0) [0x636635745a34]:__cxa_throw+0xb0) [0x636635745a34]
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [2] /binary/monerod(+0x119cb0) [0x6366357aacb0] 
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [3] /binary/monerod(+0x85c995) [0x636635eed995] 
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [4] /binary/monerod(+0x859bab) [0x636635eeabab] 
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [5] /binary/monerod(+0x584bb3) [0x636635c15bb3] 
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [6] /binary/monerod(+0x5608b1) [0x636635bf18b1] 
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [7] /binary/monerod(+0x76403b) [0x636635df503b] 
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [8]  0x1699f) [0x7aa7b09be99f]:_64-linux-gnu/libboost_thread.so.1.83.0(+0x1699f) [0x7aa7b09be99f]
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [9]  0x9cb84) [0x7aa7b0458b84]:_64-linux-gnu/libc.so.6(+0x9cb84) [0x7aa7b0458b84]
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	    [10]  0x44) [0x7aa7b04e5b64]:_64-linux-gnu/libc.so.6(__clone+0x44) [0x7aa7b04e5b64]
+2026-09-22 03:00:38.006	[miner 0]	INFO	stacktrace	src/common/stack_trace.cpp:173	
+2026-09-22 03:00:38.023	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.023	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:37468 INC] Calling RPC method get_info
+2026-09-22 03:00:38.023	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.024	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      147    get_info
+2026-09-22 03:00:38.024	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /stop_mining
+2026-09-22 03:00:38.024	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:118	[127.0.0.1:37470 INC] calling /stop_mining
+2026-09-22 03:00:38.024	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.026	[P2P9]	INFO	net.p2p.traffic	contrib/epee/include/net/levin_protocol_handler_async.h:56	[127.0.0.1:28180 OUT] 184 bytes received for category command-2008 initiated by peer
+2026-09-22 03:00:38.026	[P2P9]	INFO	net.p2p.msg	src/cryptonote_protocol/cryptonote_protocol_handler.inl:621	[127.0.0.1:28180 OUT] [127.0.0.1:28180 OUT] Received NOTIFY_NEW_FLUFFY_BLOCK <f2a3b4170a366470301cb38bd3be3765da70814fec02d46c55469640d0a8933d> (height 5, 0 txes)
+2026-09-22 03:00:38.026	[miner 0]	INFO	global	src/cryptonote_basic/miner.cpp:609	Miner thread stopped [0]
+2026-09-22 03:00:38.124	[RPC1]	INFO	miner	src/cryptonote_basic/miner.cpp:469	Mining has been stopped, 1 finished
+2026-09-22 03:00:38.124	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF   100142    stop_mining
+2026-09-22 03:00:38.125	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.125	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:37486 INC] Calling RPC method get_last_block_header
+2026-09-22 03:00:38.125	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.125	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        9      fill_block_header_response
+2026-09-22 03:00:38.125	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       35    get_last_block_header
+2026-09-22 03:00:38.125	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.125	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:37498 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-22 03:00:38.125	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.125	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       36    get_coinbase_tx_sum
+2026-09-22 03:00:38.127	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.127	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:37508 INC] Calling RPC method get_last_block_header
+2026-09-22 03:00:38.127	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.127	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-22 03:00:38.127	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       25    get_last_block_header
+2026-09-22 03:00:38.127	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.127	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:37524 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-22 03:00:38.127	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.127	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       42    get_coinbase_tx_sum
+2026-09-22 03:00:38.128	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.128	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:37530 INC] Calling RPC method get_block_header_by_height
+2026-09-22 03:00:38.128	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.129	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        6      fill_block_header_response
+2026-09-22 03:00:38.129	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       25    get_block_header_by_height
+2026-09-22 03:00:38.129	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.129	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:37542 INC] Calling RPC method get_block_header_by_height
+2026-09-22 03:00:38.129	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.129	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-22 03:00:38.129	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       25    get_block_header_by_height
+2026-09-22 03:00:38.129	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.129	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:37550 INC] Calling RPC method get_block_header_by_height
+2026-09-22 03:00:38.129	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.129	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        7      fill_block_header_response
+2026-09-22 03:00:38.129	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       25    get_block_header_by_height
+2026-09-22 03:00:38.130	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.130	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:37566 INC] Calling RPC method get_block_header_by_height
+2026-09-22 03:00:38.130	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.130	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        6      fill_block_header_response
+2026-09-22 03:00:38.130	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       24    get_block_header_by_height
+2026-09-22 03:00:38.130	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.130	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:160	[127.0.0.1:37578 INC] Calling RPC method get_block_header_by_height
+2026-09-22 03:00:38.130	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.130	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        6      fill_block_header_response
+2026-09-22 03:00:38.130	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       22    get_block_header_by_height
+2026-09-22 03:00:38.133	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.133	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:167	[127.0.0.1:37586 INC] Calling RPC method get_info
+2026-09-22 03:00:38.133	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.134	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF      143    get_info
+2026-09-22 03:00:38.134	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.134	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:156	[127.0.0.1:37598 INC] Calling RPC method get_last_block_header
+2026-09-22 03:00:38.134	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.134	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF        6      fill_block_header_response
+2026-09-22 03:00:38.134	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       24    get_last_block_header
+2026-09-22 03:00:38.134	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.134	[RPC1]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:175	[127.0.0.1:37600 INC] Calling RPC method get_coinbase_tx_sum
+2026-09-22 03:00:38.134	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.134	[RPC1]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       34    get_coinbase_tx_sum
+2026-09-22 03:00:38.136	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:98	HTTP [127.0.0.1] POST /json_rpc
+2026-09-22 03:00:38.136	[RPC0]	INFO	daemon.rpc	src/rpc/core_rpc_server.h:166	[127.0.0.1:37602 INC] Calling RPC method get_connections
+2026-09-22 03:00:38.137	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:120	PERF             ----------
+2026-09-22 03:00:38.137	[RPC0]	INFO	perf.daemon.rpc	src/common/perf_timer.cpp:156	PERF       68    get_connections
+2026-09-22 03:00:38.170	[P2P8]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:45914 INC] [0] state: closed in state normal
+2026-09-22 03:00:38.170	[P2P8]	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:45914 6aa19ead-b64b-40c5-8eb9-ef2d77f3197c INC] CLOSE CONNECTION
+2026-09-22 03:00:38.171	[P2P1]	INFO	net.cn	src/cryptonote_protocol/cryptonote_protocol_handler.inl:2865	[127.0.0.1:28180 OUT] [0] state: closed in state normal
+2026-09-22 03:00:38.171	[P2P1]	INFO	net.p2p	src/p2p/net_node.inl:2707	[127.0.0.1:28180 b2cba6b9-8605-451f-ab0a-51b7e2c96a53 OUT] CLOSE CONNECTION
+2026-09-22 03:00:38.171	[SRV_MAIN]	INFO	net.p2p	src/p2p/net_node.inl:1038	net_service loop stopped.
+2026-09-22 03:00:38.171	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:81	p2p net loop stopped
+2026-09-22 03:00:38.171	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:84	Stopping core RPC server...
+2026-09-22 03:00:38.171	[SRV_MAIN]	INFO	global	src/daemon/daemon.cpp:288	Node stopped.
+2026-09-22 03:00:38.171	[SRV_MAIN]	INFO	global	src/daemon/rpc.h:96	Deinitializing core RPC server...
+2026-09-22 03:00:38.171	[SRV_MAIN]	INFO	global	src/daemon/p2p.h:91	Deinitializing p2p...
+2026-09-22 03:00:38.171	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:410	Killing the net_node
+2026-09-22 03:00:38.458	[SRV_MAIN]	INFO	net	src/p2p/net_node.h:414	Joined extra background net_node threads
+2026-09-22 03:00:38.458	[SRV_MAIN]	INFO	global	src/daemon/core.h:102	Deinitializing core...
+2026-09-22 03:00:38.459	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:75	Stopping cryptonote protocol...
+2026-09-22 03:00:38.459	[SRV_MAIN]	INFO	global	src/daemon/protocol.h:79	Cryptonote protocol stopped successfully

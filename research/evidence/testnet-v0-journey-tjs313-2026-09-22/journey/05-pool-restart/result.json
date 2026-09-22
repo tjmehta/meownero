@@ -1,0 +1,36 @@
+{
+  "blocks_missed_while_down": 2,
+  "delivery": "native mining on peer0 only; peer1 and the pool receive through TCP P2P and peer1 RPC/ZMQ only; no stratum miner, no pool share, no block submitted by the pool",
+  "peers": [
+    {
+      "cumulative_work": "0xa83",
+      "emission_atomic": 63000000000000,
+      "fees_atomic": 0,
+      "hash": "009e0008a2cfff034dae65ed35ad324807eba304f35c3ae9fb16f6edf4572274",
+      "height": 7
+    },
+    {
+      "cumulative_work": "0xa83",
+      "emission_atomic": 63000000000000,
+      "fees_atomic": 0,
+      "hash": "009e0008a2cfff034dae65ed35ad324807eba304f35c3ae9fb16f6edf4572274",
+      "height": 7
+    }
+  ],
+  "phases": {
+    "down_blocks": 2,
+    "initial_blocks": 3,
+    "live_blocks": 2
+  },
+  "pool_sha256": "bbc3240607bf40bd3db7e13f011ccf9eda431dddd751918a3ebf4e3aaf129fad",
+  "result": "PASS",
+  "resume_seconds_from_restart": 1.3052043339703232,
+  "scope": "two local P2P peers; F4 candidate pool on peer 1 (light mode, no miner); pool stopped and restarted with the identical command; native miner and DAA; empty blocks",
+  "tip_at_stop": {
+    "cumulative_work": "0x79",
+    "emission_atomic": 45000000000000,
+    "fees_atomic": 0,
+    "hash": "2a178f4e20a8a20894c35b6b9df09c5002591f4364ee5d58b1c62f53cb478338",
+    "height": 5
+  }
+}
