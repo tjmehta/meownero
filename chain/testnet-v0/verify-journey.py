@@ -114,8 +114,10 @@ def main():
         require(genesis is None or head == genesis, f'{step}: genesis header differs from the first step')
         genesis = head
         readback = read(f'{step}/profile-readback.json')
-        for n in ('0', '1'):
-            row = readback[n]
+        # launch.py, sync.py, recover.py and pool-restart.py key the readback by peer; payment.py stores a list.
+        rows = list(readback.values()) if isinstance(readback, dict) else list(readback)
+        require(len(rows) == 2, f'{step}: two peer readbacks')
+        for row in rows:
             require(row['info']['height'] == 1 and row['info']['nettype'] == 'mainnet' and row['info']['target'] == 90, f'{step}: fresh readback')
             require(row['genesis']['hash'] == GENESIS and row['fork']['version'] == 16 and row['fork']['earliest_height'] == 1, f'{step}: fork readback')
             require(row['template']['height'] == 1 and row['template']['expected_reward'] == REWARD, f'{step}: reward readback')
