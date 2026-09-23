@@ -3,10 +3,21 @@
 
 Usage: vanguard/verify.py [research/evidence/vanguard-tjs356-2026-09-23]
 
-It checks the manifest, the pins against vanguard/source-lock.json, run-to-run determinism,
-per-vector verdicts and required coverage, and the only permitted findings (VG-F1, VG-F2). It
-also decodes every CARROT address in results.json with an independent base58/Keccak-256
-decoder, so network prefixes, checksums and embedded keys are not taken on the harness's word.
+It checks:
+- the manifest;
+- the pins against vanguard/source-lock.json, including the exact upstream injection diff and the
+  upstream vector hashes;
+- run-to-run determinism;
+- the exact vector set pinned in vanguard/expected-vectors.txt (id, expectation, finding);
+- per-vector verdicts;
+- the raw verdicts behind the random-input classes;
+- required coverage;
+- the only permitted findings (VG-F1, VG-F2).
+
+A process abort counts as a rejection only where VG-F2 permits it. The script also decodes every
+CARROT address in results.json with an independent base58/Keccak-256 decoder, so network
+prefixes, checksums and embedded keys are not taken on the harness's word. Timings and memory
+figures are the harness's own receipts: they are checked for internal consistency only.
 """
 import hashlib
 import json
@@ -16,6 +27,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parent.parent
 LOCK = ROOT / 'vanguard' / 'source-lock.json'
+PINNED_VECTORS = ROOT / 'vanguard' / 'expected-vectors.txt'
 FIXED = [1, 2, 4, 8, 128]
 FRESH = [1, 2]
 DESTINATIONS = ['main', 'subaddress_1_0', 'subaddress_2_7', 'integrated']
@@ -31,6 +43,34 @@ FINDINGS = {
     'VG-F1': (re.compile(r'^fcmp_pp\.(fixed_\d+in|fresh_\d+in)\.extended_1_byte$'), 'accept'),
     'VG-F2': (re.compile(r'^fcmp_pp\.fixed_\d+in\.wrong_n_layers_minus_1$'), 'reject_abort_signal_6'),
 }
+# Fresh proofs are random, so the VG-F2 abort may or may not fire there; results.json records the class only.
+FRESH_ABORT = re.compile(r'^fcmp_pp\.fresh_\d+in\.wrong_n_layers_minus_1$')
+# The only change to the upstream tree besides the two new tests/vanguard files
+INJECTION_DIFF = '\n'.join([
+    'diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt',
+    'index a226678a5..0df2be097 100644',
+    '--- a/tests/CMakeLists.txt',
+    '+++ b/tests/CMakeLists.txt',
+    '@@ -137,3 +137,4 @@ set(enabled_tests',
+    ' ',
+    ' add_custom_target(tests DEPENDS enabled_tests)',
+    ' set_property(TARGET tests PROPERTY FOLDER "${folder}")',
+    '+add_subdirectory(vanguard)',
+    ''])
+# tests/data blobs at the upstream pin (git show e151643c:tests/data/<name> | sha256sum)
+UPSTREAM_VECTORS = {
+    'fcmp_pp_verify_inputs_1in.bin': '9b900cda8dc4184c9308f455501b1535ad22efad4b69d3f0a80466e15b1e0943',
+    'fcmp_pp_verify_inputs_2in.bin': '0340f519d9a00bd2f324cda7f13190ad981763aa6f36905dc5553584a5568e2b',
+    'fcmp_pp_verify_inputs_4in.bin': '717fc9c9df4364552496cf26bb50fc6db034b970f6a66fddb3a18c7ef8ce8d55',
+    'fcmp_pp_verify_inputs_8in.bin': 'b5918994c646b045ea5f8259cd460844b1f36e746b4180b886d3b0df9d74816c',
+    'fcmp_pp_verify_inputs_128in.bin': '649fc27f5e5b3fdeab6e73e5a403dcde578f81a6da26b194cfeb501015782fae',
+}
+# Vectors whose proofs or keys are drawn fresh each run; results.json records only their verdict class
+RANDOM_INPUT = ('fcmp_pp.fresh', 'sal.')
+
+
+def verdict_class(observed):
+    return 'accept' if observed == 'accept' else 'reject' if observed.startswith('reject') else observed
 
 
 def require(ok, message):
@@ -147,8 +187,12 @@ def main():
     for name, digest in listed.items():
         require(sha256(work / name) == digest, f'hash mismatch for {name}')
 
-    # 2. Pins: the evidence was produced from exactly the committed source lock.
-    require((work / 'source-lock.json').read_bytes() == LOCK.read_bytes(), 'evidence source-lock.json != vanguard/source-lock.json')
+    # 2. Pins: the evidence was produced from the committed source lock. The review citations are
+    # reference metadata that may be corrected after the build; every other key must match.
+    def pins(d):
+        return {k: v for k, v in d.items() if k != 'public_review_references'}
+    require(pins(json.loads((work / 'source-lock.json').read_text())) == pins(lock),
+            'evidence source-lock.json != vanguard/source-lock.json')
     require((work / 'upstream-head.txt').read_text().strip() == lock['upstream']['commit'], 'upstream HEAD != pin')
     submodules = {line.split()[1]: line.split()[0].lstrip('+-U') for line in (work / 'upstream-submodules.txt').read_text().splitlines()}
     require(submodules == lock['upstream']['submodules'], f'submodules != pin: {submodules}')
@@ -159,7 +203,9 @@ def main():
     status = (work / 'upstream-injection-status.txt').read_text().splitlines()
     require(sorted(status) == sorted([' M tests/CMakeLists.txt', '?? tests/vanguard/CMakeLists.txt', '?? tests/vanguard/vanguard_tests.cpp']),
             f'upstream tree carries more than the harness injection: {status}')
-    require((work / 'upstream-injection.diff').read_text().count('\n+add_subdirectory(vanguard)\n') == 1, 'injection diff')
+    require((work / 'upstream-injection.diff').read_text() == INJECTION_DIFF, 'upstream injection diff != the one-line harness hook')
+    upstream_vectors = dict(line.split('  ', 1)[::-1] for line in (work / 'upstream-vectors.sha256').read_text().splitlines())
+    require(upstream_vectors == UPSTREAM_VECTORS, 'upstream vector hashes != pin')
     harness = dict(line.split('  ', 1)[::-1] for line in (work / 'harness-source.sha256').read_text().splitlines())
     require(harness == {n: sha256(ROOT / 'vanguard/harness' / n) for n in ('CMakeLists.txt', 'vanguard_tests.cpp')},
             'evidence was built from a different harness source than vanguard/harness')
@@ -178,25 +224,34 @@ def main():
     vectors = {v['id']: v for v in results['vectors']}
     require(len(vectors) == len(results['vectors']), 'duplicate vector ids')
 
-    # 4. Verdicts: every vector matches its expectation, or carries one of the two documented findings exactly.
+    # 4. The vector set, order, expectations and findings are exactly the committed pin, so a
+    # dropped, added or relabelled vector fails even when the summary is rewritten to match.
+    pinned = [(line.split() + [''])[:3] for line in PINNED_VECTORS.read_text().splitlines() if not line.startswith('#')]
+    recorded = [[v['expect'], v['id'], v['finding']] for v in results['vectors']]
+    require(recorded == pinned, 'vector set != vanguard/expected-vectors.txt: '
+            f'{sorted(set(map(tuple, recorded)) ^ set(map(tuple, pinned)))[:4]}')
+
+    # 5. Verdicts. A non-finding rejection is a clean false or a caught exception. A process abort
+    # counts as a rejection only where VG-F2 permits it. Random-input vectors record only the class
+    # here; their raw verdicts are checked against the run metrics in step 8.
     known = 0
     for v in results['vectors']:
-        matches = v['observed'] == 'accept' if v['expect'] == 'accept' else v['observed'].startswith('reject')
+        random_input = v['id'].startswith(RANDOM_INPUT)
         if v['finding']:
             pattern, observed = FINDINGS[v['finding']]
-            require(pattern.match(v['id']) and v['observed'] == observed, f"finding {v['finding']} misapplied to {v['id']}")
+            require(pattern.match(v['id']) and v['observed'] == (verdict_class(observed) if random_input else observed),
+                    f"finding {v['finding']} misapplied to {v['id']}")
             known += 1
+        elif v['expect'] == 'accept':
+            require(v['observed'] == 'accept', f"{v['id']}: expected accept, observed {v['observed']}")
         else:
-            require(matches, f"{v['id']}: expected {v['expect']}, observed {v['observed']}")
+            allowed = {'reject'} if random_input else {'reject_false', 'reject_exception'}
+            require(v['observed'] in allowed, f"{v['id']}: expected reject, observed {v['observed']}")
         require(v['pass'] is True, f"{v['id']} not marked pass")
     summary = results['summary']
     require(summary == {'total': len(vectors), 'passed': len(vectors), 'known_findings': known, 'failed': 0}, f'summary {summary}')
-    for name, (pattern, _) in FINDINGS.items():
-        require(any(v['finding'] == name for v in results['vectors']), f'{name} did not reproduce')
-    require(all(vectors[f'fcmp_pp.{k}.extended_1_byte']['finding'] == 'VG-F1' for k in
-                [f'fixed_{n}in' for n in FIXED] + [f'fresh_{n}in' for n in FRESH]), 'VG-F1 not on every extended vector')
 
-    # 5. Coverage required by TJS-356.
+    # 6. Coverage required by TJS-356.
     def expect(vid, verdict):
         require(vid in vectors, f'missing vector {vid}')
         require(vectors[vid]['expect'] == verdict, f'{vid} expects {vectors[vid]["expect"]}')
@@ -218,7 +273,8 @@ def main():
             expect(p + s, 'reject')
         require(sum(1 for vid in vectors if vid.startswith(p + 'flip_byte_')) == 3, f'{p} byte flips')
     expect('fcmp_pp.fresh_1in.old_root_proof_vs_old_root', 'accept')
-    expect('fcmp_pp.fresh_1in.old_root_proof_vs_grown_root', 'reject')
+    grown = dict(kv.split('=') for kv in expect('fcmp_pp.fresh_1in.old_root_proof_vs_grown_root', 'reject')['detail'].split())
+    require(grown['grow_ok'] == 'true' and int(grown['grew_by']) > 0, f'tree did not grow, so the grown-root rejection is vacuous: {grown}')
     require('key_image_matches_legacy=true' in expect('sal.valid', 'accept')['detail'], 'SA/L key image != legacy key image')
     for s in ['wrong_signable_tx_hash', 'wrong_key_image', 'other_rerandomization_of_same_output', 'prove_with_wrong_x']:
         expect('sal.' + s, 'reject')
@@ -227,7 +283,7 @@ def main():
         for t in ['other_account_view_key', 'view_tag_flipped', 'input_context_changed', 'amount_commitment_replaced', 'encrypted_amount_flipped']:
             expect(f'carrot.scan.{s}.{t}', 'reject')
 
-    # 6. CARROT addresses, decoded independently of the upstream decoder.
+    # 7. CARROT addresses, decoded independently of the upstream decoder.
     keys = dict(kv.split('=') for kv in expect('carrot.keys.main_view_pubkey_is_kv_G', 'accept')['detail'].split())
     require(keys == {'K_s': ALICE_SPEND, 'K0_v': ALICE_VIEW}, f'CARROT key hierarchy drifted from the pin: {keys}')
     sub_spends = {}
@@ -260,14 +316,29 @@ def main():
         require(is_ed25519_point(candidate) == (i < index), f'non-point search disagrees at index {i}')
     require(keccak256(f'meownero-vanguard-tjs356/non-point/{index}'.encode()).hex() == bad['spend_bytes'], 'non-point bytes')
 
-    # 7. Resource receipts for both runs.
+    # 8. Raw verdicts and resource receipts for both runs. Each raw random-input verdict must be
+    # one the class permits and must reduce to the class recorded in results.json.
+    random_ids = {vid for vid in vectors if vid.startswith(RANDOM_INPUT)}
     for run in ('run1', 'run2'):
         metrics = json.loads((work / run / 'metrics.json').read_text())
         require(metrics['schema'] == 'meownero-vanguard-metrics/1', f'{run} metrics schema')
-        require(metrics['total_wall_seconds'] > 0 and metrics['peak_rss_kib'] > 0, f'{run} metrics')
-        random_ids = {vid for vid in vectors if vid.startswith(('fcmp_pp.fresh', 'sal.'))}
-        require(set(metrics['random_input_observed']) == random_ids, f'{run} raw observations incomplete')
-        require(json.loads((work / run / 'container.json').read_text())['container_memory_peak_bytes'] > 0, f'{run} container peak')
+        raw = metrics['random_input_observed']
+        require(set(raw) == random_ids, f'{run} raw observations incomplete')
+        for vid, observed in raw.items():
+            v = vectors[vid]
+            allowed = {'reject_false', 'reject_exception'}
+            if v['expect'] == 'accept' or v['finding'] == 'VG-F1':
+                allowed.add('accept')
+            if FRESH_ABORT.match(vid):
+                allowed.add(FINDINGS['VG-F2'][1])
+            require(observed in allowed, f'{run} raw verdict {observed} not permitted for {vid}')
+            require(verdict_class(observed) == v['observed'], f'{run} raw verdict {observed} does not reduce to {v["observed"]} for {vid}')
+        sections = [t for name, t in metrics['timings_seconds'].items() if name.startswith('section.')]
+        require(len(sections) == 5 and all(t > 0 for t in metrics['timings_seconds'].values())
+                and metrics['total_wall_seconds'] >= sum(sections), f'{run} wall time does not cover its section timings')
+        container_peak = json.loads((work / run / 'container.json').read_text())['container_memory_peak_bytes']
+        require(1024 <= metrics['peak_rss_kib'] and metrics['peak_rss_kib'] * 1024 <= container_peak,
+                f'{run} peak RSS {metrics["peak_rss_kib"]} KiB is not between 1 MiB and the container peak')
         require(f'vectors={len(vectors)} failed=0' in (work / run / 'stdout.log').read_text(), f'{run} stdout summary')
 
     print(f'PASS_VANGUARD_RECEIPTS vectors={len(vectors)} known_findings={known} '

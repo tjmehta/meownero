@@ -10,13 +10,16 @@ touch the accepted testnet v0 recipes or their builder image. It is not an audit
 | `source-lock.json` | Upstream, submodule, Cargo.lock, monero-oxide, crypto-bigint, builder image and rustc pins, with licenses and public review references (with scope caveats) |
 | `build.sh` | `prepare` clones and verifies the pins; `build` and `run` go through the heavy lock; `receipts` writes toolchain, artifact and pin receipts plus `MANIFEST.sha256` |
 | `harness/` | `vanguard_tests.cpp` and its CMake target. `build.sh` copies it into the scratch clone as `tests/vanguard` |
-| `verify.py` | Re-derives the claims from an evidence directory (manifest, pins, determinism, verdicts, coverage, findings, independent address decode) |
+| `expected-vectors.txt` | The pinned vector list: each vector's expectation and documented finding, in harness order |
+| `verify.py` | Checks an evidence directory: manifest, pins (including the exact upstream injection diff and vector hashes), determinism, the pinned vector list, verdicts, raw random-input verdicts, coverage, findings and an independent address decode |
+| `test-verify-refusals.py` | Tamper controls: each mutated copy of the evidence must be refused by `verify.py` |
 
 ## Run
 
 ```sh
 vanguard/build.sh all            # prepare, build (heavy lock), run twice (heavy lock), receipts
 vanguard/verify.py               # prints PASS_VANGUARD_RECEIPTS or FAIL <reason>
+vanguard/test-verify-refusals.py # prints PASS_VANGUARD_REFUSALS
 ```
 
 Scratch work lives in the gitignored `build/vanguard-src`. The evidence directory
@@ -44,7 +47,12 @@ class, and each run's `metrics.json` keeps the raw observation under
 
 Two observed deviations from the ideal verdict are documented rather than hidden.
 They are marked in `results.json` only when the exact observed verdict reproduces:
-- **VG-F1:** one appended byte is accepted.
-- **VG-F2:** an `n_layers - 1` claim aborts the process.
+- **VG-F1:** one appended byte is accepted. It is marked on all seven `extended_1_byte` vectors (five fixed, two fresh).
+- **VG-F2:** an `n_layers - 1` claim aborts the process. It is marked on the four fixed vectors that abort.
+
+`verify.py` accepts a process abort as a rejection only on those four fixed vectors and,
+as a raw observation, on the two fresh `wrong_n_layers_minus_1` vectors. On those two the
+abort depends on the random proof bytes, and `results.json` records the class `reject`.
+Every other rejection must be a clean `false` or a caught exception.
 
 See `research/vanguard-tjs356-2026-09-23.md`.

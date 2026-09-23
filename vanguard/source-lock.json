@@ -54,8 +54,8 @@
     "items": [
       {
         "component": "FCMP++ C++ integration (monero-project/monero)",
-        "reference": "Trail of Bits review, monero-project/monero PR #10360 @ 86a0aa46 (tob-fcmp.pdf sha256 4f649fe0e63a8870ae3930ea142eb405345ff07a1b5f3e2ff7741deed6dce540)",
-        "scope_caveat": "Covers the crypto integration phases only. Reports 6 informational findings: 5 resolved, #6 (FFI) partially resolved."
+        "reference": "Trail of Bits security review, trailofbits/publications@73e52c96cef59d42201ff5546090b76ca67a8014 reviews/2026-07-magicgrants-monerofcmp++crypto-securityreview.pdf (sha256 4f649fe0e63a8870ae3930ea142eb405345ff07a1b5f3e2ff7741deed6dce540), linked from the description of monero-project/monero PR #10360 'FCMP++: CurveTrees class & implementation of ed25519 outputs -> curve tree leaves function'. The same description links Cypher Stack cypherstack/fcmp-impl-audit@d7de33d08c48a3c249629e47f71ea72c938a3404 FCMP_Code_Implementation_Audit.pdf section 12 (not read for this harness)",
+        "scope_caveat": "Per the PR description, both reviewed an earlier state of that PR. The ToB report covers the crypto integration phases only and lists 6 informational findings: 5 resolved, and #6 (TOB-MAGIC-FCMP-6, the Rust FFI function selene_scalar_from_bytes depends on fragile memory layout) partially resolved."
       },
       {
         "component": "full-chain-membership-proofs, circuit-abstraction, ec-gadgets",
