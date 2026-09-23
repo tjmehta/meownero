@@ -1,0 +1,223 @@
+PASS fcmp_pp.fixed_1in.valid expect=accept observed=accept proof_bytes=6688 n_layers=7 membership_bytes=6208 per_input_region_bytes=480 layout_ok=true
+PASS fcmp_pp.fixed_1in.flip_input_tuple_byte0 expect=reject observed=reject_false offset=0
+PASS fcmp_pp.fixed_1in.flip_sal_proof_byte0 expect=reject observed=reject_false offset=96
+PASS fcmp_pp.fixed_1in.flip_membership_first_byte expect=reject observed=reject_false offset=480
+PASS fcmp_pp.fixed_1in.flip_membership_middle_byte expect=reject observed=reject_false offset=3584
+PASS fcmp_pp.fixed_1in.flip_membership_last_byte expect=reject observed=reject_false offset=6687
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_1in.truncated_1_byte expect=reject observed=reject_exception
+KNOWN fcmp_pp.fixed_1in.extended_1_byte expect=reject observed=accept finding=VG-F1
+PASS fcmp_pp.fixed_1in.wrong_tree_root expect=reject observed=reject_false
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_1in.wrong_n_layers_plus_1 expect=reject observed=reject_exception
+
+thread '<unnamed>' (17) panicked at /cargo-home/git/checkouts/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/src/lib.rs:933:14:
+claimed root is on a distinct layer than tree root
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+KNOWN fcmp_pp.fixed_1in.wrong_n_layers_minus_1 expect=reject observed=reject_abort_signal_6 finding=VG-F2
+PASS fcmp_pp.fixed_1in.wrong_signable_tx_hash expect=reject observed=reject_false
+PASS fcmp_pp.fixed_1in.wrong_key_image expect=reject observed=reject_false
+PASS fcmp_pp.fixed_1in.wrong_pseudo_out expect=reject observed=reject_false
+PASS fcmp_pp.fixed_2in.valid expect=accept observed=accept proof_bytes=8064 n_layers=7 membership_bytes=7104 per_input_region_bytes=960 layout_ok=true
+PASS fcmp_pp.fixed_2in.flip_input_tuple_byte0 expect=reject observed=reject_false offset=0
+PASS fcmp_pp.fixed_2in.flip_sal_proof_byte0 expect=reject observed=reject_false offset=96
+PASS fcmp_pp.fixed_2in.flip_membership_first_byte expect=reject observed=reject_false offset=960
+PASS fcmp_pp.fixed_2in.flip_membership_middle_byte expect=reject observed=reject_false offset=4512
+PASS fcmp_pp.fixed_2in.flip_membership_last_byte expect=reject observed=reject_false offset=8063
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_2in.truncated_1_byte expect=reject observed=reject_exception
+KNOWN fcmp_pp.fixed_2in.extended_1_byte expect=reject observed=accept finding=VG-F1
+PASS fcmp_pp.fixed_2in.wrong_tree_root expect=reject observed=reject_false
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_2in.wrong_n_layers_plus_1 expect=reject observed=reject_exception
+PASS fcmp_pp.fixed_2in.wrong_n_layers_minus_1 expect=reject observed=reject_false
+PASS fcmp_pp.fixed_2in.wrong_signable_tx_hash expect=reject observed=reject_false
+PASS fcmp_pp.fixed_2in.wrong_key_image expect=reject observed=reject_false
+PASS fcmp_pp.fixed_2in.wrong_pseudo_out expect=reject observed=reject_false
+PASS fcmp_pp.fixed_2in.swapped_key_images expect=reject observed=reject_false
+PASS fcmp_pp.fixed_2in.swapped_pseudo_outs expect=reject observed=reject_false
+PASS fcmp_pp.fixed_4in.valid expect=accept observed=accept proof_bytes=10688 n_layers=7 membership_bytes=8768 per_input_region_bytes=1920 layout_ok=true
+PASS fcmp_pp.fixed_4in.flip_input_tuple_byte0 expect=reject observed=reject_false offset=0
+PASS fcmp_pp.fixed_4in.flip_sal_proof_byte0 expect=reject observed=reject_false offset=96
+PASS fcmp_pp.fixed_4in.flip_membership_first_byte expect=reject observed=reject_false offset=1920
+PASS fcmp_pp.fixed_4in.flip_membership_middle_byte expect=reject observed=reject_false offset=6304
+PASS fcmp_pp.fixed_4in.flip_membership_last_byte expect=reject observed=reject_false offset=10687
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_4in.truncated_1_byte expect=reject observed=reject_exception
+KNOWN fcmp_pp.fixed_4in.extended_1_byte expect=reject observed=accept finding=VG-F1
+PASS fcmp_pp.fixed_4in.wrong_tree_root expect=reject observed=reject_false
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_4in.wrong_n_layers_plus_1 expect=reject observed=reject_exception
+
+thread '<unnamed>' (45) panicked at /cargo-home/git/checkouts/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/src/lib.rs:933:14:
+claimed root is on a distinct layer than tree root
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+KNOWN fcmp_pp.fixed_4in.wrong_n_layers_minus_1 expect=reject observed=reject_abort_signal_6 finding=VG-F2
+PASS fcmp_pp.fixed_4in.wrong_signable_tx_hash expect=reject observed=reject_false
+PASS fcmp_pp.fixed_4in.wrong_key_image expect=reject observed=reject_false
+PASS fcmp_pp.fixed_4in.wrong_pseudo_out expect=reject observed=reject_false
+PASS fcmp_pp.fixed_4in.swapped_key_images expect=reject observed=reject_false
+PASS fcmp_pp.fixed_4in.swapped_pseudo_outs expect=reject observed=reject_false
+PASS fcmp_pp.fixed_8in.valid expect=accept observed=accept proof_bytes=15808 n_layers=7 membership_bytes=11968 per_input_region_bytes=3840 layout_ok=true
+PASS fcmp_pp.fixed_8in.flip_input_tuple_byte0 expect=reject observed=reject_false offset=0
+PASS fcmp_pp.fixed_8in.flip_sal_proof_byte0 expect=reject observed=reject_false offset=96
+PASS fcmp_pp.fixed_8in.flip_membership_first_byte expect=reject observed=reject_false offset=3840
+PASS fcmp_pp.fixed_8in.flip_membership_middle_byte expect=reject observed=reject_false offset=9824
+PASS fcmp_pp.fixed_8in.flip_membership_last_byte expect=reject observed=reject_false offset=15807
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_8in.truncated_1_byte expect=reject observed=reject_exception
+KNOWN fcmp_pp.fixed_8in.extended_1_byte expect=reject observed=accept finding=VG-F1
+PASS fcmp_pp.fixed_8in.wrong_tree_root expect=reject observed=reject_false
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_8in.wrong_n_layers_plus_1 expect=reject observed=reject_exception
+
+thread '<unnamed>' (60) panicked at /cargo-home/git/checkouts/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/src/lib.rs:933:14:
+claimed root is on a distinct layer than tree root
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+KNOWN fcmp_pp.fixed_8in.wrong_n_layers_minus_1 expect=reject observed=reject_abort_signal_6 finding=VG-F2
+PASS fcmp_pp.fixed_8in.wrong_signable_tx_hash expect=reject observed=reject_false
+PASS fcmp_pp.fixed_8in.wrong_key_image expect=reject observed=reject_false
+PASS fcmp_pp.fixed_8in.wrong_pseudo_out expect=reject observed=reject_false
+PASS fcmp_pp.fixed_8in.swapped_key_images expect=reject observed=reject_false
+PASS fcmp_pp.fixed_8in.swapped_pseudo_outs expect=reject observed=reject_false
+PASS fcmp_pp.fixed_128in.valid expect=accept observed=accept proof_bytes=166080 n_layers=7 membership_bytes=104640 per_input_region_bytes=61440 layout_ok=true
+PASS fcmp_pp.fixed_128in.flip_input_tuple_byte0 expect=reject observed=reject_false offset=0
+PASS fcmp_pp.fixed_128in.flip_sal_proof_byte0 expect=reject observed=reject_false offset=96
+PASS fcmp_pp.fixed_128in.flip_membership_first_byte expect=reject observed=reject_false offset=61440
+PASS fcmp_pp.fixed_128in.flip_membership_middle_byte expect=reject observed=reject_false offset=113760
+PASS fcmp_pp.fixed_128in.flip_membership_last_byte expect=reject observed=reject_false offset=166079
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_128in.truncated_1_byte expect=reject observed=reject_exception
+KNOWN fcmp_pp.fixed_128in.extended_1_byte expect=reject observed=accept finding=VG-F1
+PASS fcmp_pp.fixed_128in.wrong_tree_root expect=reject observed=reject_false
+  (exception: fcmp_pp_verify_input_new failed with error code -5)
+PASS fcmp_pp.fixed_128in.wrong_n_layers_plus_1 expect=reject observed=reject_exception
+
+thread '<unnamed>' (75) panicked at /cargo-home/git/checkouts/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/src/lib.rs:933:14:
+claimed root is on a distinct layer than tree root
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+KNOWN fcmp_pp.fixed_128in.wrong_n_layers_minus_1 expect=reject observed=reject_abort_signal_6 finding=VG-F2
+PASS fcmp_pp.fixed_128in.wrong_signable_tx_hash expect=reject observed=reject_false
+PASS fcmp_pp.fixed_128in.wrong_key_image expect=reject observed=reject_false
+PASS fcmp_pp.fixed_128in.wrong_pseudo_out expect=reject observed=reject_false
+PASS fcmp_pp.fixed_128in.swapped_key_images expect=reject observed=reject_false
+PASS fcmp_pp.fixed_128in.swapped_pseudo_outs expect=reject observed=reject_false
+PASS fcmp_pp.fresh.tree_build expect=accept observed=accept leaves=25993 depth=3
+PASS fcmp_pp.fresh_1in.valid expect=accept observed=accept proof_bytes=4800 expected_bytes=4800 n_layers=4
+PASS fcmp_pp.fresh_1in.flip_byte_0 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_1in.flip_byte_2400 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_1in.flip_byte_4799 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_1in.truncated_1_byte expect=reject observed=reject raw=reject_false
+KNOWN fcmp_pp.fresh_1in.extended_1_byte expect=reject observed=accept finding=VG-F1
+PASS fcmp_pp.fresh_1in.wrong_n_layers_plus_1 expect=reject observed=reject raw=reject_false
+
+thread '<unnamed>' (98) panicked at /cargo-home/git/checkouts/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/src/lib.rs:933:14:
+claimed root is on a distinct layer than tree root
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+PASS fcmp_pp.fresh_1in.wrong_n_layers_minus_1 expect=reject observed=reject raw=reject_abort_signal_6
+PASS fcmp_pp.fresh_1in.rererandomized_input expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_1in.non_member_input expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_1in.flip_input_C_tilde_byte0 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_2in.valid expect=accept observed=accept proof_bytes=6272 expected_bytes=6272 n_layers=4
+PASS fcmp_pp.fresh_2in.flip_byte_0 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_2in.flip_byte_3136 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_2in.flip_byte_6271 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_2in.truncated_1_byte expect=reject observed=reject raw=reject_false
+KNOWN fcmp_pp.fresh_2in.extended_1_byte expect=reject observed=accept finding=VG-F1
+PASS fcmp_pp.fresh_2in.wrong_n_layers_plus_1 expect=reject observed=reject raw=reject_false
+
+thread '<unnamed>' (108) panicked at /cargo-home/git/checkouts/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/src/lib.rs:933:14:
+claimed root is on a distinct layer than tree root
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+PASS fcmp_pp.fresh_2in.wrong_n_layers_minus_1 expect=reject observed=reject raw=reject_abort_signal_6
+PASS fcmp_pp.fresh_2in.rererandomized_input expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_2in.non_member_input expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_2in.flip_input_C_tilde_byte0 expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_2in.swapped_inputs expect=reject observed=reject raw=reject_false
+PASS fcmp_pp.fresh_1in.old_root_proof_vs_old_root expect=accept observed=accept
+PASS fcmp_pp.fresh_1in.old_root_proof_vs_grown_root expect=reject observed=reject raw=reject_false grew_by=1 grow_ok=true
+PASS sal.valid expect=accept observed=accept proof_bytes=384 key_image_matches_legacy=true
+PASS sal.wrong_signable_tx_hash expect=reject observed=reject raw=reject_false
+PASS sal.wrong_key_image expect=reject observed=reject raw=reject_false
+PASS sal.flip_byte_0 expect=reject observed=reject raw=reject_false
+PASS sal.flip_byte_192 expect=reject observed=reject raw=reject_false
+PASS sal.flip_byte_383 expect=reject observed=reject raw=reject_false
+PASS sal.other_rerandomization_of_same_output expect=reject observed=reject raw=reject_false
+  (exception: fcmp_pp_prove_sal failed with code: -5)
+PASS sal.prove_with_wrong_x expect=reject observed=reject raw=reject_exception
+PASS carrot.keys.main_view_pubkey_is_kv_G expect=accept observed=accept K_s=8a00cf5798092b00484c9081dcd290e2d17dca32ec0fd54ab143ac4f10897802 K0_v=bf8390507be86c22af247133f355733c3f6a348e0aa90293ed61883a0ef3f0f6
+PASS carrot.keys.subaddress_rederivation_stable expect=accept observed=accept
+PASS carrot.address.main.mainnet.round_trip expect=accept observed=accept address=46rRy2inDw813juj2MSU39ewRUDSAgnHSDVcPnLgZWHu1TfHKiNnr1H6oUpiHpDexzB5Ujzig5LnuRk5dVtMBUwyUoex6c2
+PASS carrot.address.main.mainnet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.main.mainnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.main.mainnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.main.mainnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.main.testnet.round_trip expect=accept observed=accept address=9xPyTHP3WJE13juj2MSU39ewRUDSAgnHSDVcPnLgZWHu1TfHKiNnr1H6oUpiHpDexzB5Ujzig5LnuRk5dVtMBUwyUqxS5yz
+PASS carrot.address.main.testnet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.main.testnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.main.testnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.main.testnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.main.stagenet.round_trip expect=accept observed=accept address=574U3sdjsYE13juj2MSU39ewRUDSAgnHSDVcPnLgZWHu1TfHKiNnr1H6oUpiHpDexzB5Ujzig5LnuRk5dVtMBUwyUnFUPfF
+PASS carrot.address.main.stagenet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.main.stagenet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.main.stagenet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.main.stagenet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.mainnet.round_trip expect=accept observed=accept address=87myDykZ8wd6c4tpVk1sr4PL4o8YHbjpW6rRKmmvayULgPmvApf2ngT7rdApF2EZ9JRc7SReupFQ8MqqVKRi5EB7S88MyXb
+PASS carrot.address.subaddress_1_0.mainnet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.mainnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.mainnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.mainnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.testnet.round_trip expect=accept observed=accept address=BdW6WvwuuZV6c4tpVk1sr4PL4o8YHbjpW6rRKmmvayULgPmvApf2ngT7rdApF2EZ9JRc7SReupFQ8MqqVKRi5EB7S8g8bwV
+PASS carrot.address.subaddress_1_0.testnet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.testnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.testnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.testnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.stagenet.round_trip expect=accept observed=accept address=77Zw98qbVLX6c4tpVk1sr4PL4o8YHbjpW6rRKmmvayULgPmvApf2ngT7rdApF2EZ9JRc7SReupFQ8MqqVKRi5EB7S9uRJX3
+PASS carrot.address.subaddress_1_0.stagenet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.stagenet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.stagenet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.subaddress_1_0.stagenet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.mainnet.round_trip expect=accept observed=accept address=877Lc5vMa9HWvQEjiUteQ9MPowUREL7Rv2YzULELVgiHgHP4oGQCTPM9qwQPygm3kPCtgBYVhihDbNfXdYCb5ApNN8m6fD9
+PASS carrot.address.subaddress_2_7.mainnet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.mainnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.mainnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.mainnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.testnet.round_trip expect=accept observed=accept address=BcqTu37iLm9WvQEjiUteQ9MPowUREL7Rv2YzULELVgiHgHP4oGQCTPM9qwQPygm3kPCtgBYVhihDbNfXdYCb5ApNN8mSHAe
+PASS carrot.address.subaddress_2_7.testnet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.testnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.testnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.testnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.stagenet.round_trip expect=accept observed=accept address=76uJXF1PvYBWvQEjiUteQ9MPowUREL7Rv2YzULELVgiHgHP4oGQCTPM9qwQPygm3kPCtgBYVhihDbNfXdYCb5ApNN9xudxo
+PASS carrot.address.subaddress_2_7.stagenet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.stagenet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.stagenet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.subaddress_2_7.stagenet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.integrated.mainnet.round_trip expect=accept observed=accept address=4GZ6yqYGqCe13juj2MSU39ewRUDSAgnHSDVcPnLgZWHu1TfHKiNnr1H6oUpiHpDexzB5Ujzig5LnuRk5dVtMBUwyiFbXoERi9zMKumQrFd
+PASS carrot.address.integrated.mainnet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.integrated.mainnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.integrated.mainnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.integrated.mainnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.integrated.testnet.round_trip expect=accept observed=accept address=A86eU6CY7Zk13juj2MSU39ewRUDSAgnHSDVcPnLgZWHu1TfHKiNnr1H6oUpiHpDexzB5Ujzig5LnuRk5dVtMBUwyiFbXoERi9zMKv36fW8
+PASS carrot.address.integrated.testnet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.integrated.testnet.decoded_as_stagenet expect=reject observed=reject_false
+PASS carrot.address.integrated.testnet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.integrated.testnet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.integrated.stagenet.round_trip expect=accept observed=accept address=5Gm94gTEUok13juj2MSU39ewRUDSAgnHSDVcPnLgZWHu1TfHKiNnr1H6oUpiHpDexzB5Ujzig5LnuRk5dVtMBUwyiFbXoERi9zMKxJrhAA
+PASS carrot.address.integrated.stagenet.decoded_as_mainnet expect=reject observed=reject_false
+PASS carrot.address.integrated.stagenet.decoded_as_testnet expect=reject observed=reject_false
+PASS carrot.address.integrated.stagenet.checksum_char_changed expect=reject observed=reject_false
+PASS carrot.address.integrated.stagenet.truncated_1_char expect=reject observed=reject_false
+PASS carrot.address.main.testnet.invalid_spend_point expect=reject observed=reject_false non_point_index=2 spend_bytes=6cbf492e2b58348219e747617b6c12071920465f9ea0339b74f6b5934b379c02
+PASS carrot.scan.main.recipient_view_key expect=accept observed=accept amount=1234567
+PASS carrot.scan.main.other_account_view_key expect=reject observed=reject_false
+PASS carrot.scan.main.view_tag_flipped expect=reject observed=reject_false
+PASS carrot.scan.main.input_context_changed expect=reject observed=reject_false
+PASS carrot.scan.main.amount_commitment_replaced expect=reject observed=reject_false
+PASS carrot.scan.main.encrypted_amount_flipped expect=reject observed=reject_false
+PASS carrot.scan.subaddress_1_0.recipient_view_key expect=accept observed=accept amount=1234567
+PASS carrot.scan.subaddress_1_0.other_account_view_key expect=reject observed=reject_false
+PASS carrot.scan.subaddress_1_0.view_tag_flipped expect=reject observed=reject_false
+PASS carrot.scan.subaddress_1_0.input_context_changed expect=reject observed=reject_false
+PASS carrot.scan.subaddress_1_0.amount_commitment_replaced expect=reject observed=reject_false
+PASS carrot.scan.subaddress_1_0.encrypted_amount_flipped expect=reject observed=reject_false
+vectors=187 failed=0

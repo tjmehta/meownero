@@ -1,0 +1,9 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index a226678a5..0df2be097 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -137,3 +137,4 @@ set(enabled_tests
+ 
+ add_custom_target(tests DEPENDS enabled_tests)
+ set_property(TARGET tests PROPERTY FOLDER "${folder}")
++add_subdirectory(vanguard)
