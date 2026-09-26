@@ -59,6 +59,10 @@ Hashes from the initial bundle:
 
 The receipt verifier and all eight re-manifested refusal cases passed. The upstream scratch checkout was restored to its two pre-existing test registrations. No upstream tracked implementation file changed.
 
+The implementation is committed at `fb592a02ef7e0917532c1c915f8696b8af43f9dc`. A second author bundle, `research/evidence/vanguard-transaction-tjs751-2026-09-26-exact01/`, records that exact commit and the same source and binary hashes. Its cached build took 5.63 seconds with peak 256,966,656 bytes; runs took 14.08 and 13.55 seconds with peaks 594,440,192 and 595,116,032 bytes. Both again passed all 53 checks, the receipt verifier, and all eight refusal controls, with zero OOM events. Its manifest SHA-256 is `44f819a792529abd61bf80ecbbd7c5818dc6e9a28fc871690cec86e5f35c167c`. This warm rerun reused compiled objects and is not an independent rebuild.
+
+The evidence/report commit adds no implementation changes relative to `fb592a0`. Independent QA must use the exact final candidate, rerun the mandatory commands above, inspect rejection stages and trusted anchor handling, and report required findings before this slice can be accepted.
+
 ## Remaining integration gates
 
 | Gate | Required runnable evidence before acceptance |

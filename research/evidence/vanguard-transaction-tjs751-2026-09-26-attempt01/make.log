@@ -1,0 +1,95 @@
+[  2%] Building CXX object src/device_trezor/CMakeFiles/obj_device_trezor.dir/device_trezor.cpp.o
+[  2%] Built target obj_device_trezor
+[  4%] Built target easylogging
+[ 13%] Built target randomx
+[ 22%] Built target obj_epee
+[ 22%] Built target epee
+[ 34%] Built target obj_cncrypto
+[ 34%] Built target cncrypto
+[ 34%] Linking CXX static library libdevice_trezor.a
+[ 34%] Built target device_trezor
+[ 36%] Built target lmdb
+[ 38%] Built target mx25519_static
+[ 38%] Built target wire
+[ 38%] Built target genversion
+[ 38%] Built target obj_version
+[ 38%] Built target version
+[ 50%] Built target monero-crypto-amd64-64-24k
+[ 50%] Built target wallet-crypto
+[ 56%] Built target obj_carrot_core
+[ 56%] Built target carrot_core
+[ 59%] Built target obj_device
+[ 65%] Built target obj_common
+[ 65%] Built target common
+[ 65%] Building fcmp++ rust lib
+    Finished `release` profile [optimized] target(s) in 0.09s
+Finished copying fcmp++ rust targets
+[ 65%] Built target fcmp_pp_rust
+[ 68%] Built target obj_fcmp_pp
+[ 68%] Built target fcmp_pp
+[ 70%] Built target obj_ringct_basic
+[ 70%] Built target ringct_basic
+[ 72%] Built target obj_cryptonote_format_utils_basic
+[ 72%] Built target cryptonote_format_utils_basic
+[ 72%] Built target device
+[ 77%] Built target obj_carrot_impl
+[ 77%] Built target obj_checkpoints
+[ 77%] Built target checkpoints
+[ 79%] Built target obj_cryptonote_basic
+[ 79%] Built target cryptonote_basic
+[ 79%] Built target carrot_impl
+[ 79%] Built target obj_ringct
+[ 79%] Built target ringct
+[ 81%] Built target obj_cryptonote_core
+[ 81%] Built target obj_hardforks
+[ 84%] Built target hardforks
+[ 84%] Built target obj_blockchain_db
+[ 84%] Built target blockchain_db
+[ 86%] Built target cryptonote_core
+[ 86%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig.cpp.o
+[ 86%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_account.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_account_kex_impl.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_clsag_context.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_kex_msg.cpp.o
+[ 88%] Building CXX object src/multisig/CMakeFiles/obj_multisig.dir/multisig_tx_builder_ringct.cpp.o
+[ 88%] Built target obj_multisig
+[ 88%] Linking CXX static library libmultisig.a
+[ 88%] Built target multisig
+[ 93%] Built target obj_net
+[ 93%] Built target net
+[ 93%] Building CXX object src/mnemonics/CMakeFiles/obj_mnemonics.dir/electrum-words.cpp.o
+[ 93%] Built target obj_mnemonics
+[ 93%] Linking CXX static library libmnemonics.a
+[ 93%] Built target mnemonics
+[ 93%] Building CXX object src/rpc/CMakeFiles/obj_rpc_base.dir/rpc_args.cpp.o
+[ 93%] Building CXX object src/rpc/CMakeFiles/obj_rpc_base.dir/rpc_handler.cpp.o
+[ 93%] Built target obj_rpc_base
+[ 93%] Linking CXX static library librpc_base.a
+[ 93%] Built target rpc_base
+[ 93%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/fee_priority.cpp.o
+[ 93%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/hot_cold.cpp.o
+[ 95%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/wallet2.cpp.o
+/src/src/wallet/wallet2.cpp: In member function 'void tools::wallet2::refresh(bool, uint64_t, uint64_t&, bool&, bool, uint64_t)':
+/src/src/wallet/wallet2.cpp:3400:20: warning: 'i' may be used uninitialized [-Wmaybe-uninitialized]
+ 3400 |   for (std::size_t i = start_parsed_block_i; i < parsed_blocks.size(); ++i)
+      |                    ^
+[ 95%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/wallet_args.cpp.o
+[ 95%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/pending_tx_validation.cpp.o
+[ 95%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/ringdb.cpp.o
+[ 95%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/node_rpc_proxy.cpp.o
+[ 95%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/message_store.cpp.o
+[ 97%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/message_transporter.cpp.o
+[ 97%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/misc_wallet_utils.cpp.o
+[ 97%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/scanning_tools.cpp.o
+[ 97%] Building CXX object src/wallet/CMakeFiles/obj_wallet.dir/tx_builder.cpp.o
+[ 97%] Built target obj_wallet
+[ 97%] Linking CXX static library ../../lib/libwallet.a
+[ 97%] Built target wallet
+[ 97%] Built target obj_p2p
+[ 97%] Built target p2p
+[ 97%] Building CXX object tests/vanguard_transaction/CMakeFiles/vanguard_transaction_tests.dir/transaction_tests.cpp.o
+[ 97%] Building CXX object tests/vanguard_transaction/CMakeFiles/vanguard_transaction_tests.dir/__/vanguard_boundary/verify.cpp.o
+[ 97%] Building CXX object tests/vanguard_transaction/CMakeFiles/vanguard_transaction_tests.dir/__/core_tests/chaingen.cpp.o
+[ 97%] Building CXX object tests/vanguard_transaction/CMakeFiles/vanguard_transaction_tests.dir/__/core_tests/fcmp_pp.cpp.o
+[100%] Linking CXX executable vanguard_transaction_tests
+[100%] Built target vanguard_transaction_tests
