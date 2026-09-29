@@ -57,27 +57,38 @@ Every other rejection must be a clean `false` or a caught exception.
 
 See `research/vanguard-tjs356-2026-09-23.md`.
 
-## Bounded two-core sync and reorg diagnostic (TJS-953)
+## Bounded sync and reorg integration (TJS-953)
 
-`sync/sync_tests.cpp` runs two separate FAKECHAIN core databases in one
-network-disabled process. It relays serialized prerequisite and FCMP++
-transactions, delivers one block ahead of its predecessor, restarts the peer
-without clearing its database, then feeds a competing branch that changes the
-stored tree root at the spend's reference height. The cores must converge on
-tip hash, root, depth, spent key-image state, chain transaction presence and
-pool state. A block carrying the old transaction as an explicit supplement must
-fail on the changed root, and the stale pool entry must be removed.
+`sync/sync_tests.cpp` exercises two FAKECHAIN cores in one process. It delivers
+serialized transactions and an out-of-order block, restarts the peer with its
+database retained, switches to a competing v17 branch, and switches back. The
+cores converge on tip hash, trusted root and depth, transaction validity, pool
+state, and key-image rollback and reapplication. Stale-root transactions are
+rejected through both a block supplement and the retained pool. TJS-959 accepted
+the exact one-process slice at `d5b4afbb` as bounded engineering evidence.
 
 ```sh
 python3 -B vanguard/run-sync.py --out build/vanguard-sync-exact01
 python3 -B vanguard/verify-sync.py build/vanguard-sync-exact01
 ```
 
-The runner requires the accepted pinned upstream scratch checkout and cache
-from `build.sh prepare`, uses the existing heavy-work lock, and caps each
-network-disabled container at two CPUs, 4 GiB memory, 256 PIDs and 900 seconds.
-It writes two fresh executions and a source, command, cgroup and state receipt.
-The test is a diagnostic slice, not completion of TJS-953: the two cores share
-a process, the original branch is not reapplied after the deep reorg, and
-independent exact-commit QA remains open. See the TJS-953 report for the
-observed reverse-switch failure and next action.
+`sync/process_tests.cpp` adds two operating-system processes, each with its own
+FAKECHAIN core and LMDB directory. Transactions and blocks cross anonymous
+pipes as serialized frames. It exercises the same bounded delivery, fork,
+stale-root, and reverse-switch paths. Peer restart retains its database;
+subsequent blocks are admitted after restart, without a backlog pull.
+
+```sh
+python3 -B vanguard/run-sync-process.py --out build/vanguard-sync-process-exact02
+python3 -B vanguard/verify-sync-process.py build/vanguard-sync-process-exact02
+```
+
+Both runners use the accepted pinned upstream scratch checkout and cache from
+`build.sh prepare`, the existing heavy-work lock, and network-disabled
+containers capped at two CPUs, 4 GiB memory, 256 PIDs, and 900 seconds. They
+write two fresh executions with source, command, cgroup, and state receipts.
+TJS-958 accepted the two-process code commit `10a26e0` and receipt bundle at
+`572a1e2` with no required findings, closing the stated two-process delivery
+gate as engineering evidence. See
+`research/vanguard-sync-process-tjs953-2026-09-29.md` for the exact commands,
+hashes, and limits. This does not exercise daemon P2P or socket transport.
