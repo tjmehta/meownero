@@ -161,7 +161,8 @@ bool read_all(int fd, void* data, size_t size)
   {
     const auto count = read(fd, ptr, size);
     if (count < 0 && errno == EINTR) continue;
-    if (count < 0 || (count == 0 && !first)) throw std::runtime_error("socket read");
+    if (count < 0) throw std::runtime_error("socket read");
+    if (count == 0 && !first) throw std::runtime_error("short socket frame");
     if (count == 0) return false;
     first = false;
     ptr += count;
@@ -378,6 +379,13 @@ struct Peer
     if (!read_frame(connection).empty()) throw std::runtime_error("oversized frame not disconnected");
     disconnect();
   }
+  void inject_truncated_frame()
+  {
+    const uint32_t declared = 8;
+    write_all(connection, &declared, sizeof(declared));
+    write_all(connection, "H", 1);
+    disconnect();
+  }
   std::string call(const std::string& data)
   {
     write_frame(connection, data);
@@ -542,6 +550,9 @@ int main(int argc, char** argv)
     peer.inject_oversized_frame();
     require(std::stol(peer.connect()) == peer_pid && peer.local_stream(), "oversized_frame_reconnect");
     require(initial.str() == peer.state().str(), "malformed_frame_keeps_chain_state");
+    peer.inject_truncated_frame();
+    require(std::stol(peer.connect()) == peer_pid && peer.local_stream(), "truncated_frame_reconnect");
+    require(initial.str() == peer.state().str(), "truncated_frame_keeps_chain_state");
     require(peer.call("R") == "1", "peer_restart");
     require(initial.str() == peer.state().str(), "restart_cross_process_catchup");
     snapshot("restart_b", peer.state());

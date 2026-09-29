@@ -60,6 +60,7 @@ def verify(out):
         for required in ("distinct_process_ids", "private_unix_stream_connected",
                          "socket_reconnected_same_peer", "replayed_tip_keeps_chain_state",
                          "oversized_frame_reconnect", "malformed_frame_keeps_chain_state",
+                         "truncated_frame_reconnect", "truncated_frame_keeps_chain_state",
                          "socket_path_removed", "peer_reordered_block_not_applied",
                          "spend_delivered_to_both_processes", "initial_cross_process_convergence",
                          "restart_cross_process_catchup", "reference_after_v17_fork_60",
@@ -76,7 +77,7 @@ def verify(out):
         assert processes[0][1] != processes[1][1]
         assert not (out / run / "nodes" / "peer.sock").exists()
         assert (out / run / "rejected-frames.tsv").read_text().splitlines() == [
-            "oversized_or_short\tbad socket frame"]
+            "oversized_or_short\tbad socket frame", "oversized_or_short\tshort socket frame"]
         states = [line.split("\t") for line in (out / run / "states.tsv").read_text().splitlines()]
         assert [row[0] for row in states] == ["before_a", "before_b", "restart_b", "fork_prefix_a", "fork_a", "fork_b", "reverse_a", "reverse_b"]
         assert all(len(row) == 8 and len(row[2]) == 64 and len(row[3]) == 64 for row in states)
