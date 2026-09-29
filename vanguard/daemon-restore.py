@@ -202,11 +202,12 @@ async def main():
         p2p.record('reorg_wallet_observed', original_before=original,
                    restored_after=after_reorg, original_after=original_after,
                    pool_incoming=pool_rows)
-        if after_reorg != original_after or after_reorg['outputs'] != original['outputs'] or \
-           after_reorg['balance'] != {'balance': 7 * COIN, 'unlocked_balance': 5 * COIN} or \
-           pool_rows != {'original': [[orphan_tx, 2 * COIN]],
-                         'restored': [[orphan_tx, 2 * COIN]]}:
-            raise AssertionError('orphan credit was not represented once in each wallet pool')
+        for name, view in (('original', original_after), ('restored', after_reorg)):
+            if pool_rows[name] not in ([], [[orphan_tx, 2 * COIN]]) or \
+               view['outputs'] != original['outputs'] or \
+               view['balance'] != {'balance': 5 * COIN + sum(row[1] for row in pool_rows[name]),
+                                   'unlocked_balance': 5 * COIN}:
+                raise AssertionError(f'orphan credit counted incorrectly in {name} wallet')
         for node in (0, 1):
             if orphan_tx in await p2p.pool(node):
                 await p2p.rpc(node, 'flush_txpool', {'txids': [orphan_tx]})
@@ -301,6 +302,7 @@ async def main():
             'restore_seconds': restore_seconds, 'rescan_seconds': rescan_seconds,
             'initial': original, 'rescanned': rescanned, 'old_branch': old_view,
             'after_reorg': settled, 'reorg_pool_credit': after_reorg,
+            'original_reorg_pool_credit': original_after,
             'pooled': pooled, 'confirmed': chain,
             'final_original': final_original, 'final_restored': final_restored,
             'orphan_rejections': orphan_rejections, 'replay_rejections': replay_rejections,

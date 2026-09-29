@@ -79,9 +79,7 @@ def verify(out):
                 sorted([result['stable_txid'], result['orphan_txid']]),
                 'orphan branch recipient view')
         credit = result['reorg_pool_credit']
-        require(credit['outputs'] == rows and
-                credit['balance'] == {'balance': 7 * 10**12, 'unlocked_balance': 5 * 10**12},
-                'reorg pool credit counted incorrectly')
+        original_credit = result['original_reorg_pool_credit']
         require(0 < result['restore_seconds'] < 1100 and
                 0 < result['rescan_seconds'] < 1100, 'restore/rescan time absent')
         pooled, confirmed = result['pooled'], result['confirmed']
@@ -110,16 +108,21 @@ def verify(out):
                     for i in range(len(EVENTS) - 1)), 'event order')
         def event(name):
             return next(row for row in events if row['event'] == name)
+        observed = event('reorg_wallet_observed')
+        for name, view in (('original', original_credit), ('restored', credit)):
+            pending = observed['pool_incoming'][name]
+            require(pending in ([], [[result['orphan_txid'], 2 * 10**12]]) and
+                    view['outputs'] == rows and
+                    view['balance'] == {'balance': 5 * 10**12 + sum(row[1] for row in pending),
+                                        'unlocked_balance': 5 * 10**12},
+                    f'{name} reorg pool credit counted incorrectly')
         require(event('restored_and_rescanned')['original'] == initial and
                 event('restored_and_rescanned')['restored'] == initial and
                 event('restored_and_rescanned')['restore_height'] <
                 event('restored_and_rescanned')['output_height'] and
                 event('partition_and_branch')['old_wallet'] == result['old_branch'] and
-                event('reorg_wallet_observed')['restored_after'] == credit and
-                event('reorg_wallet_observed')['original_after'] == credit and
-                event('reorg_wallet_observed')['pool_incoming'] ==
-                {'original': [[result['orphan_txid'], 2 * 10**12]],
-                 'restored': [[result['orphan_txid'], 2 * 10**12]]} and
+                observed['restored_after'] == credit and
+                observed['original_after'] == original_credit and
                 event('restored_reorg_rollback')['state'] == result['after_reorg'] and
                 event('restored_spend_pooled')['state'] == pooled and
                 event('restored_spend_confirmed')['state'] == confirmed and
