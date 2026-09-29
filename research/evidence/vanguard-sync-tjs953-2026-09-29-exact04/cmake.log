@@ -1,0 +1,63 @@
+-- CMake version 3.28.3
+-- Using ccache: /usr/bin/ccache
+-- Building without build tag
+-- Building for a 64-bit system
+-- Building internal libraries as static
+-- Stack trace on exception disabled
+-- Using OpenSSL include dir at /usr/include
+-- Using 64-bit LMDB from source tree
+-- Setting CXX flag -maes
+-- Setting C flag -maes
+-- Build architecture: x86_64
+-- Using HIDAPI include dir at /usr/include/hidapi
+-- Trezor: support disabled by USE_DEVICE_TREZOR
+-- Building on x86_64 for default
+-- AES support enabled
+-- Performing Test _Werror__Wbidi_chars=any_c
+-- Performing Test _Werror__Wbidi_chars=any_c - Success
+-- Performing Test _Werror__Wbidi_chars=any_cxx
+-- Performing Test _Werror__Wbidi_chars=any_cxx - Success
+-- Performing Test _Werror__fcf_protection=full_c
+-- Performing Test _Werror__fcf_protection=full_c - Success
+-- Performing Test _Werror__fcf_protection=full_cxx
+-- Performing Test _Werror__fcf_protection=full_cxx - Success
+-- Performing Test _Werror__Werror=switch_c
+-- Performing Test _Werror__Werror=switch_c - Success
+-- Performing Test _Werror__Werror=switch_cxx
+-- Performing Test _Werror__Werror=switch_cxx - Success
+-- Performing Test _Werror__Werror=return_type_c
+-- Performing Test _Werror__Werror=return_type_c - Success
+-- Performing Test _Werror__Werror=return_type_cxx
+-- Performing Test _Werror__Werror=return_type_cxx - Success
+-- Performing Test _Werror__Wformat__Werror=format_security_c
+-- Performing Test _Werror__Wformat__Werror=format_security_c - Success
+-- Performing Test _Werror__Wformat__Werror=format_security_cxx
+-- Performing Test _Werror__Wformat__Werror=format_security_cxx - Success
+-- Using C security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wformat -Wformat -Wformat-security -Wbidi-chars=any -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type -Wformat -Werror=format-security
+-- Using C++ security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wformat -Wformat -Wformat-security -Wbidi-chars=any -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type -Wformat -Werror=format-security
+-- Using linker security hardening flags:  -pie -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+-- Found Boost Version: 1.83.0
+-- Boost components: filesystem;thread;chrono;serialization;program_options
+-- Found readline library at: /usr
+-- Found Git: /usr/bin/git
+-- You are currently on commit e151643c5
+-- You are ahead of or behind a tagged release
+-- Wallet crypto is using amd64-64-24k backend
+-- Using Rust target x86_64-unknown-linux-gnu
+-- Trezor: support disabled
+-- Building tests
+-- Copying test data directory...
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'requests'
+CMake Warning at tests/functional_tests/CMakeLists.txt:64 (message):
+  functional_tests_rpc and check_missing_rpc_methods skipped, needs the
+  'requests', 'zmq', and 'deepdiff' python modules
+
+
+-- Wallet crypto bench is using cn;amd64-64-24k;amd64-51-30k
+-- Not building debug utilities
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done (1.5s)
+-- Generating done (0.5s)
+-- Build files have been written to: /src/build/vanguard
