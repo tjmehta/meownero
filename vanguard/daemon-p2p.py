@@ -375,8 +375,8 @@ async def main():
         record('fcmp_transaction_relayed', txid=txid, key_image=image,
                tx_bytes=len(txblob), packet_sha256=digest(tx_packet),
                pools=[sorted(await pool(n)) for n in (0, 1)])
-        await bridge.inject('duplicate-transaction', 'a_to_b', tx_packet)
         before = await snapshot(image)
+        await bridge.inject('duplicate-transaction', 'a_to_b', tx_packet)
         await asyncio.sleep(1)
         await unchanged(before, image)
         bad_tx = bytearray(txblob)
@@ -431,8 +431,8 @@ async def main():
         bridge.rejoin()
         await wait_for(equal_tip, 'P2P reorg after reconnect', 180)
         rolled = await snapshot(image)
-        if any(status == 1 for status in rolled['key_images']):
-            raise AssertionError('confirmed key image survived reorg')
+        if rolled['key_images'] != [2, 2] or any(txid not in entries for entries in rolled['pools']):
+            raise AssertionError('confirmed spend did not return to both pools after reorg')
         old_header = (await rpc(0, 'get_block_header_by_hash', {'hash': old_tip[1]}))['block_header']
         if not old_header['orphan_status']:
             raise AssertionError('old transaction block not orphaned')

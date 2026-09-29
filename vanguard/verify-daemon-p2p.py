@@ -66,7 +66,9 @@ def verify(out):
         result = json.loads((work / 'public/result.json').read_text())
         if result['result'] != 'PASS' or result['bridge_connections'] < 2 or result['bridge_bytes'] <= 0:
             raise AssertionError('witness result or reconnect')
-        if result['confirmed']['key_images'] != [1, 1] or 1 in result['rolled_back']['key_images']:
+        if result['confirmed']['key_images'] != [1, 1] or \
+           result['rolled_back']['key_images'] != [2, 2] or \
+           any(result['txid'] not in entries for entries in result['rolled_back']['pools']):
             raise AssertionError('key image chain-state transition')
         if result['confirmed']['tips'][0] != result['confirmed']['tips'][1] or \
            result['rolled_back']['tips'][0] != result['rolled_back']['tips'][1]:
@@ -75,6 +77,9 @@ def verify(out):
         names = [event['event'] for event in events]
         if not all(name in names for name in REQUIRED_EVENTS):
             raise AssertionError('required event absent')
+        rollback = next(event for event in events if event['event'] == 'reorg_key_image_rollback')
+        if rollback['state'] != result['rolled_back']:
+            raise AssertionError('rollback event/result mismatch')
         ready = next(event for event in events if event['event'] == 'p2p_ready')
         if ready['daemon_peer_counts'][0] < 1 or ready['daemon_peer_counts'][1] < 1:
             raise AssertionError('native daemon handshake absent')
