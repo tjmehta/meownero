@@ -12,7 +12,7 @@ import time
 
 ROOT = Path(__file__).resolve().parent.parent
 PIN = json.loads((ROOT / "vanguard/source-lock.json").read_text())
-SOURCE_FILES = [ROOT / p for p in ("vanguard/sync/CMakeLists.txt", "vanguard/sync/sync_tests.cpp",
+SOURCE_FILES = [ROOT / p for p in ("vanguard/sync/CMakeLists.txt", "vanguard/sync/sync_tests.cpp", "vanguard/sync/fixture.cpp",
                                      "vanguard/run-sync.py", "vanguard/verify-sync.py")]
 
 
@@ -49,10 +49,10 @@ def main():
         if prior != accepted:
             raise SystemExit("unexpected upstream test registration")
         target = up / "tests/vanguard_sync"
-        if target.exists() and any(p.name not in {f.name for f in SOURCE_FILES[:2]} for p in target.iterdir()):
+        if target.exists() and any(p.name not in {f.name for f in SOURCE_FILES[:3]} for p in target.iterdir()):
             raise SystemExit("unexpected injected source")
         target.mkdir(exist_ok=True)
-        for path in SOURCE_FILES[:2]:
+        for path in SOURCE_FILES[:3]:
             shutil.copy2(path, target / path.name)
         rust = Path(os.environ.get("RUST_TOOLCHAIN_DIR", str(Path.home() / ".rustup/toolchains/stable-x86_64-unknown-linux-gnu")))
         if command([str(rust / "bin/rustc"), "-V"]) != PIN["builder"]["rustc"]:

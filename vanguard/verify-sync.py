@@ -49,16 +49,32 @@ def verify(out):
         names = [row[0] for row in checks]
         for required in ("reordered_block_not_applied", "source_tx_admitted", "peer_tx_admitted",
                          "initial_convergence", "restart_catchup_convergence", "trusted_root_changed",
-                         "fork_convergence", "source_key_image_rolled_back", "stale_pool_entry_removed",
-                         "stale_proof_block_rejected", "invalid_block_state_unchanged"):
+                         "reference_after_v17_fork_60", "fork_convergence", "source_key_image_rolled_back",
+                         "fork_pool_convergence", "stale_root_spend_rejected", "invalid_block_state_unchanged",
+                         "reverse_convergence", "reverse_tip_restored", "reverse_key_image_reapplied"):
             assert names.count(required) == 1, required
         states = [line.split("\t") for line in (out / run / "states.tsv").read_text().splitlines()]
-        assert [row[0] for row in states] == ["before_a", "before_b", "restart_b", "fork_prefix_b", "fork_a", "fork_b"]
+        assert [row[0] for row in states] == ["before_a", "before_b", "restart_b", "fork_prefix_b", "fork_a", "fork_b", "reverse_a", "reverse_b"]
         assert all(len(row) == 8 and len(row[2]) == 64 and len(row[3]) == 64 for row in states)
         assert states[0][1:] == states[1][1:] == states[2][1:]
         assert states[4][1:] == states[5][1:]
+        assert states[6][1:] == states[7][1:]
         assert states[0][3] != states[4][3] and states[0][4] == states[4][4]
         assert states[0][5:7] == ["1", "1"] and states[4][5:7] == ["0", "0"]
+        assert states[6][3] == states[0][3] and states[6][5:7] == ["1", "1"]
+        assert states[4][7] == states[5][7] == "1", "stale pool transaction remained on v17"
+        controls = [line.split("\t") for line in (out / run / "controls.tsv").read_text().splitlines()]
+        assert [row[0] for row in controls] == ["stale_root_a", "stale_root_b", "reverse_spend_alt_b",
+                                               "reverse_extension_a", "reverse_extension_b",
+                                               "reverse_extension_a", "reverse_extension_b",
+                                               "reverse_extension_a", "reverse_extension_b"]
+        assert all(len(row) == 6 for row in controls)
+        assert all(row[1:] == ["1", "0", "0", "1", "0"] for row in controls[:2])
+        assert controls[2][1:] == ["0", "0", "0", "1", "0"]
+        assert controls[-2][1:] == controls[-1][1:] == ["0", "1", "0", "0", "1"]
+        log = (out / run / "core.log").read_text()
+        assert log.count("Failed to batch verify FCMP++ txs") >= 4, "stale spend rejection stage absent"
+        assert "Validating txpool for v17" in log and "txpool contents for v17" in log
     print("PASS_VANGUARD_SYNC two_runs=2")
 
 

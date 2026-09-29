@@ -16,6 +16,7 @@ using namespace cryptonote;
 namespace {
 std::ofstream checks;
 std::ofstream states;
+std::ofstream controls;
 
 void require(bool ok, const std::string& name)
 {
@@ -62,8 +63,13 @@ bool send_tx(core& c, const transaction& source)
   transaction tx{};
   crypto::hash id{};
   tx_verification_context tvc{};
-  if (!parse_and_validate_tx_from_blob(blob, tx, id)) return false;
-  return c.handle_incoming_tx(blob, tx, id, tvc, relay_method::fluff, false) && !tvc.m_verifivation_failed;
+  if (!parse_and_validate_tx_from_blob(blob, tx, id)) { std::cerr << "tx parse failed\n"; return false; }
+  const bool result = c.handle_incoming_tx(blob, tx, id, tvc, relay_method::fluff, false);
+  if (!result || tvc.m_verifivation_failed)
+    std::cerr << "tx admission failed height=" << c.get_current_blockchain_height()
+              << " hash=" << hex(id) << " result=" << result
+              << " verify=" << tvc.m_verifivation_failed << '\n';
+  return result && !tvc.m_verifivation_failed;
 }
 
 block_verification_context send_block(core& c, const block& source, const transaction* supplement = nullptr)
@@ -94,7 +100,22 @@ void accepted(core& c, const block& b, const std::string& name, const transactio
   require(!result.m_verifivation_failed && c.get_tail_id() == get_block_hash(b), name);
 }
 
+void context(const std::string& name, core& c, const block_verification_context& bvc, const transaction& tx)
+{
+  controls << name << '\t' << bvc.m_verifivation_failed << '\t'
+           << bvc.m_added_to_main_chain << '\t' << bvc.m_marked_as_orphaned << '\t'
+           << c.pool_has_tx(get_transaction_hash(tx)) << '\t'
+           << c.get_blockchain_storage().have_tx_keyimges_as_spent(tx) << '\n';
+}
+
 struct Anchor { crypto::ec_point root{}; uint8_t depth{}; };
+constexpr uint64_t fork_height = 80;
+struct V17Options
+{
+  const std::pair<uint8_t, uint64_t> forks[5] = {{1, 0}, {2, 1},
+    {HF_VERSION_BULLETPROOF_PLUS, 78}, {HF_VERSION_FCMP_PLUS_PLUS, fork_height}, {0, 0}};
+  const test_options value{forks, 0};
+};
 Anchor anchor(core& c, uint64_t reference)
 {
   Anchor result;
@@ -141,6 +162,20 @@ block empty_block(core& c, const block& prev, const account_base& miner, uint64_
   test_generator{}.fill_nonce(b, get_test_difficulty(b.major_version), height);
   return b;
 }
+
+// The harness-owned generator supplies valid v17 miner outputs and a proof over
+// that output tree. Reheader each generated block using its node's stored root.
+block v17_block(core& c, block b, const block& prev, uint64_t height)
+{
+  b.major_version = HF_VERSION_FCMP_PLUS_PLUS;
+  b.minor_version = HF_VERSION_FCMP_PLUS_PLUS;
+  b.prev_id = get_block_hash(prev);
+  b.fcmp_pp_n_tree_layers = c.get_blockchain_storage().get_db().get_tree_root_at_blk_idx(
+    get_default_last_locked_block_index(height - 1), b.fcmp_pp_tree_root);
+  b.invalidate_hashes();
+  test_generator{}.fill_nonce(b, get_test_difficulty(b.major_version), height);
+  return b;
+}
 }
 
 int main(int argc, char** argv)
@@ -151,12 +186,13 @@ int main(int argc, char** argv)
   alarm(900);
   checks.open("checks.tsv");
   states.open("states.tsv");
+  controls.open("controls.tsv");
   try
   {
     tools::on_startup();
     tools::set_max_concurrency(2);
     mlog_configure("core.log", false);
-    mlog_set_log_level(0);
+    mlog_set_log("*:WARNING,global:INFO,verify:DEBUG,txpool:DEBUG");
     std::vector<test_event_entry> events;
     require(gen_fcmp_pp_tx_from_bpp{}.generate(events), "generated_valueless_chain");
     std::vector<block> original;
@@ -166,13 +202,14 @@ int main(int argc, char** argv)
       if (event.type() == typeid(block)) original.push_back(boost::get<block>(event));
       if (event.type() == typeid(std::vector<transaction>)) spend = boost::get<std::vector<transaction>>(event).front();
     }
-    require(original.size() == 140 && spend.rct_signatures.type == rct::RCTTypeFcmpPlusPlus,
+    require(original.size() == 142 && spend.rct_signatures.type == rct::RCTTypeFcmpPlusPlus,
       "fixture_shape");
-    require(spend.rct_signatures.p.reference_block == 138, "reference_height");
+    require(spend.rct_signatures.p.reference_block == 140, "reference_height");
     const auto txid = get_transaction_hash(spend);
-    get_test_options<gen_fcmp_pp_tx_from_bpp> opts;
-    Node a(std::string(argv[1]) + "/a", &opts.test_options);
-    Node b(std::string(argv[1]) + "/b", &opts.test_options);
+    V17Options opts;
+    require(spend.rct_signatures.p.reference_block >= fork_height + 60, "reference_after_v17_fork_60");
+    Node a(std::string(argv[1]) + "/a", &opts.value);
+    Node b(std::string(argv[1]) + "/b", &opts.value);
     require(a.c().set_genesis_block(original[0]) && b.c().set_genesis_block(original[0]), "same_genesis");
 
     // Relay each serialized prerequisite transaction before its containing block.
@@ -192,12 +229,15 @@ int main(int argc, char** argv)
       }
       else if (event.type() == typeid(block))
       {
-        const auto& blk = boost::get<block>(event);
-        const auto height = get_block_height(blk);
+        const auto height = get_block_height(boost::get<block>(event));
         if (height == 0) continue;
+        if (height >= fork_height && height != 137)
+          original[height] = v17_block(a.c(), original[height], original[height - 1], height);
+        const auto& blk = original[height];
         accepted(a.c(), blk, "source_block_accepted");
         if (height == 136)
         {
+          original[137] = v17_block(a.c(), original[137], blk, 137);
           const auto tip = b.c().get_tail_id();
           const auto early = send_block(b.c(), original[137]);
           require(!early.m_added_to_main_chain && b.c().get_tail_id() == tip, "reordered_block_not_applied");
@@ -215,32 +255,44 @@ int main(int argc, char** argv)
 
     account_base miner;
     miner.generate();
-    // B builds a competing branch from 79. The changed miner output unlocks
-    // before reference block 138, changing that trusted tree root.
-    b.c().get_blockchain_storage().pop_blocks(61, true);
-    require(b.c().get_tail_id() == get_block_hash(original[78]), "peer_branch_split");
+    std::vector<block> old_extension;
+    auto old_tip = original.back();
+    for (unsigned h = 142; h <= 144; ++h)
+    {
+      auto next = empty_block(a.c(), old_tip, miner);
+      accepted(a.c(), next, "old_extension_prepared");
+      old_extension.push_back(next);
+      old_tip = next;
+    }
+    a.c().get_blockchain_storage().pop_blocks(old_extension.size(), true);
+    require(same(a.c(), b.c(), spend), "old_extension_builder_restored");
+
+    // B builds a competing v17 branch from 80. The changed miner output unlocks
+    // before reference block 140, changing that trusted tree root.
+    b.c().get_blockchain_storage().pop_blocks(62, true);
+    require(b.c().get_tail_id() == get_block_hash(original[79]), "peer_branch_split");
     std::vector<block> fork;
-    for (unsigned h = 79; h <= 138; ++h)
+    for (unsigned h = fork_height; h <= 140; ++h)
     {
       auto next = original[h];
-      if (h == 79)
+      if (h == fork_height)
       {
-        next.miner_tx.vout.front().target = original[78].miner_tx.vout.front().target;
-        next.miner_tx.invalidate_hashes();
+        const auto generated = b.c().get_blockchain_storage().get_db().get_block_already_generated_coins(h - 1);
+        require(construct_miner_tx(h, 300000, generated, 0, 0,
+          miner.get_keys().m_account_address, next.miner_tx, blobdata(), 6, HF_VERSION_FCMP_PLUS_PLUS),
+          "fork_v17_miner_created");
       }
-      if (h > 79) next.prev_id = get_block_hash(fork.back());
-      next.invalidate_hashes();
-      test_generator{}.fill_nonce(next, get_test_difficulty(next.major_version), h);
+      next = v17_block(b.c(), next, h == fork_height ? original[79] : fork.back(), h);
       accepted(b.c(), next, "peer_fork_block_accepted");
       fork.push_back(next);
     }
-    const auto before = anchor(a.c(), 138);
-    const auto after = anchor(b.c(), 138);
+    const auto before = anchor(a.c(), 140);
+    const auto after = anchor(b.c(), 140);
     require(before.root != after.root, "trusted_root_changed");
     require(before.depth == after.depth, "trusted_depth_recorded");
     snapshot("fork_prefix_b", b.c(), spend);
     auto prev = fork.back();
-    for (unsigned h = 139; h <= 141; ++h)
+    for (unsigned h = 141; h <= 143; ++h)
     {
       auto next = empty_block(b.c(), prev, miner);
       accepted(b.c(), next, "peer_fork_tip_accepted");
@@ -258,7 +310,7 @@ int main(int argc, char** argv)
     }
     require(same(a.c(), b.c(), spend), "fork_convergence");
     require(!a.c().get_blockchain_storage().have_tx_keyimges_as_spent(spend), "source_key_image_rolled_back");
-    require(!a.c().pool_has_tx(txid) && !b.c().pool_has_tx(txid), "stale_pool_entry_removed");
+    require(a.c().pool_has_tx(txid) == b.c().pool_has_tx(txid), "fork_pool_convergence");
     snapshot("fork_a", a.c(), spend);
     snapshot("fork_b", b.c(), spend);
 
@@ -269,10 +321,35 @@ int main(int argc, char** argv)
     const auto invalid = empty_block(b.c(), fork.back(), miner, fee, &spend);
     const auto a_bad = send_block(a.c(), invalid, &spend);
     const auto b_bad = send_block(b.c(), invalid, &spend);
-    require(a_bad.m_verifivation_failed && b_bad.m_verifivation_failed, "stale_proof_block_rejected");
+    context("stale_root_a", a.c(), a_bad, spend);
+    context("stale_root_b", b.c(), b_bad, spend);
+    require(a_bad.m_verifivation_failed && b_bad.m_verifivation_failed, "stale_root_spend_rejected");
     require(same(a.c(), b.c(), spend), "invalid_block_state_unchanged");
 
-    require(bool(checks) && bool(states), "receipt_streams_ok");
+    // Restore the original v17 branch. The spend is supplied with its old
+    // alternate block even if a node happens to retain it in its pool.
+    for (unsigned h = fork_height; h < original.size(); ++h)
+    {
+      const auto outcome = send_block(b.c(), original[h], h == 141 ? &spend : nullptr);
+      if (h == 141) context("reverse_spend_alt_b", b.c(), outcome, spend);
+      require(!outcome.m_verifivation_failed, "peer_old_alternative_accepted");
+    }
+    for (const auto& next : old_extension)
+    {
+      const auto a_reverse = send_block(a.c(), next);
+      const auto b_reverse = send_block(b.c(), next);
+      context("reverse_extension_a", a.c(), a_reverse, spend);
+      context("reverse_extension_b", b.c(), b_reverse, spend);
+      require(!a_reverse.m_verifivation_failed && !b_reverse.m_verifivation_failed,
+        "reverse_extension_accepted");
+    }
+    require(same(a.c(), b.c(), spend), "reverse_convergence");
+    require(a.c().get_tail_id() == get_block_hash(old_extension.back()), "reverse_tip_restored");
+    require(a.c().get_blockchain_storage().have_tx_keyimges_as_spent(spend), "reverse_key_image_reapplied");
+    snapshot("reverse_a", a.c(), spend);
+    snapshot("reverse_b", b.c(), spend);
+
+    require(bool(checks) && bool(states) && bool(controls), "receipt_streams_ok");
     tools::threadpool::getInstanceForCompute().recycle();
     return 0;
   }
