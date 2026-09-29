@@ -1,111 +1,42 @@
 # Vanguard bounded sync and reorg diagnostic (TJS-953)
 
-**Status:** partial engineering witness, not TJS-953 acceptance. The complete
-two-process integration and key-image reapplication after the competing-branch
-switch are blocked pending the actions below. Independent exact-commit QA has
-been requested separately. No public network, wallet keys of value, mainnet,
-remote push, spend, external audit or readiness claim is involved.
+**Status:** exact-commit two-core witness ready for fresh independent QA, not TJS-953 acceptance. Both cores share one process and receive serialized local delivery. Two-process delivery is a separate required gate. No public network, mainnet, remote push, spend of value, external audit, or security-readiness claim is involved. The accepted v0 activation, recipes, builder image, and TJS-751 slice remain unchanged.
 
-## Pinned implementation and scope
+## Current code and fixture
 
-The code commit is `30d520af7eb9c1961624857443b1b6f77a452125`, on top of
-accepted TJS-751 `eb81b9296fe5d0eb8a077e9a415c84e590fadb07`. It compiles
-the pinned upstream FCMP++ source `e151643c5269c83bf24a83b2548e2493876026b2`
-and uses the accepted v0 builder image ID
-`sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e`.
-The source lock remains unchanged.
+The code commit is `951b1eb456a98564fc9a7744c551e1c99cd2cf0d`, following the earlier TJS-953 commit `3e7a5f4c028adb1a42dd07eacd8c99d56e8bf287` and accepted TJS-751 base `eb81b9296fe5d0eb8a077e9a415c84e590fadb07`. The pinned upstream FCMP++ source is `e151643c5269c83bf24a83b2548e2493876026b2`. The source lock and accepted builder image are unchanged.
 
-`vanguard/sync/sync_tests.cpp` uses two independent LMDB folders and actual
-`cryptonote::core` instances in FAKECHAIN mode. It transports serialized
-blocks/transactions through a deterministic local delivery sequence; there is
-no P2P transport or second process. Its original FCMP++ transaction and chain
-come from pinned upstream `tests/core_tests/fcmp_pp.cpp`, compiled unchanged.
-One peer receives block 137 ahead of 136, then receives the predecessor and
-continues. It is restarted with `--keep-fakechain` and its database retained.
+`vanguard/sync/fixture.cpp` is a harness-owned derivative of the pinned upstream FCMP++ generator. It adds two valueless blocks after the Bulletproof+ prerequisite and creates v17 miner outputs from height 80 onward. `vanguard/sync/sync_tests.cpp` supplies v17 header roots from each core's database. The FAKECHAIN schedule is v2 at height 1, v15 at 78, and v17 at 80. The FCMP++ spend's reference block is 140, exactly 60 blocks after the competing fork begins at 80; both branches stay on v17 during switching. The old v17→v15 confounder is absent.
 
-The fork splits after height 78. It replaces one valid synthetic coinbase
-output at height 79 and changes subsequent block hashes. This output enters
-the FCMP++ tree before the transaction's reference height 138. A fresh branch
-through height 141 overtakes the original height-139 branch. Both cores then
-agree on tip hash, stored root/depth, transaction absence, and unspent key
-image. The stale transaction leaves both pools. A candidate block with the
-original transaction supplied explicitly is rejected on the new root, while
-the active branch remains unchanged. This last control avoids mistaking a
-missing-pool-transaction rejection for a proof rejection, although the exact
-internal rejection stage still merits independent QA inspection.
+Two independent LMDB folders and `cryptonote::core` instances receive serialized transactions and blocks. Block 137 arrives before 136 on one core and is retried after its parent. That core restarts with its database retained. A different v17 miner output at height 80 changes the trusted root at reference height 140, and a branch through height 143 overtakes the original height-141 branch. Both cores agree on tip, root/depth, absence of the original confirmed spend, and unspent key image. A new block with the old spend explicitly supplied and a correct new-branch header root fails FCMP++ batch verification on both cores. The `stale_root_a` and `stale_root_b` controls record failed block verification and unchanged key-image state; `core.log` records the `verify` batch failure and `txpool` v17 validation.
+
+The old branch is then delivered as an alternative, with the spend explicitly supplied alongside its height-141 block on the peer. Three precomputed old-branch blocks overtake the competing branch. Both cores restore the original trusted root, confirmed spend, and spent key image. `controls.tsv` records the alternative spend delivery and the final reverse-switch block contexts. The reverse harness is part of the code commit above.
+
+**Open pool finding:** after switching to the competing v17 branch, both cores retain the old spend in their pools (`fork_a` and `fork_b` show pool=1), although blocks containing it fail FCMP++ verification. Pool revalidation runs at v17 but does not evict this stale-root entry. This differs from the old fixture's v15 eviction and needs independent QA assessment and a separate owner decision within the no-core-change boundary. The witness proves block rejection and reverse key-image reapplication, not pool eviction or full TJS-953 acceptance.
 
 ## Exact-commit receipt
 
-Run from the task worktree with the prepared pinned scratch checkout and Rust
-cache:
+From this worktree and the prepared pinned scratch checkout and Rust cache:
 
 ```sh
-python3 -B vanguard/run-sync.py --out build/vanguard-sync-exact01
-python3 -B vanguard/verify-sync.py build/vanguard-sync-exact01
-sha256sum build/vanguard-sync-exact01/MANIFEST.sha256
+python3 -B vanguard/run-sync.py --out build/vanguard-sync-exact02
+python3 -B vanguard/verify-sync.py build/vanguard-sync-exact02
+python3 -B vanguard/verify-sync.py research/evidence/vanguard-sync-tjs953-2026-09-29-exact02
+sha256sum research/evidence/vanguard-sync-tjs953-2026-09-29-exact02/MANIFEST.sha256
 ```
 
-The exact-commit bundle is durably copied to
-`research/evidence/vanguard-sync-tjs953-2026-09-29-exact01/`. Its `receipt.json`
-records the complete Docker argv,
-source SHA-256s, commit, pinned image and toolchain, binary hash, wall time,
-cgroup CPU and memory metrics. `MANIFEST.sha256` covers the raw checks, node
-databases, logs and before/after state receipts. The runner restored the
-accepted upstream CMake registration after its injected build; the task
-branch is clean.
+The bundle is committed under `research/evidence/vanguard-sync-tjs953-2026-09-29-exact02/`. `receipt.json` records the complete Docker commands, exact code commit and source hashes, pinned image/toolchain, binary SHA-256, wall time and cgroup metrics. `MANIFEST.sha256` covers raw checks, states, controls, logs and databases; its SHA-256 is `cdd1d341a022895008229e02e568c78aa24c49ceb0b612cc0fa685b5d3059d51`. The binary is 24,611,448 bytes, SHA-256 `9b2ea1dfd848b6d10739a4ea280ca9ec5ff35e452582e2ea0072ae5976d037a5`.
 
-| Stage | Wall seconds | CPU usage seconds | Peak bytes | Exit |
+| Stage | Wall seconds | CPU seconds | Peak bytes | Exit |
 | --- | ---: | ---: | ---: | ---: |
-| Warm cached build | 5.58 | 4.97 | 231,272,448 | 0 |
-| Run 1 | 21.41 | 21.89 | 604,143,616 | 0 |
-| Run 2 | 20.90 | 21.33 | 601,055,232 | 0 |
+| Build | 23.07 | 20.54 | 1,369,145,344 | 0 |
+| Run 1 | 30.88 | 30.70 | 622,309,376 | 0 |
+| Run 2 | 37.44 | 34.24 | 617,734,144 | 0 |
 
-Each container had `--network=none --pull=never --cpus=2 --memory=4g
---memory-swap=4g --pids-limit=256 --ulimit core=0`; both runs had zero cgroup
-OOM/OOM-kill events. The binary is 24,602,760 bytes, SHA-256
-`c644394e32f2ca94939b9d61bb8e4628ada8acda6aac6a747c295e98a16b2df8`.
-Both runs passed 435 recorded checks and the receipt reconciler. The named
-check streams match at SHA-256
-`414fd305690e1836f9f2eccd44ed2c0a937e3066adf68da4c477a6d0008786e0`.
-The manifest SHA-256 is
-`d30c81e0abe403e104266f768e5a0306cc0e90cbfa361c56c7da963450152054`.
-Synthetic account and proof randomness changes chain and root hashes between
-runs; each run's exact values are in `run1/states.tsv` and `run2/states.tsv`.
+All containers used `--pull=never --network=none --cpus=2 --memory=4g --memory-swap=4g --pids-limit=256 --ulimit core=0`; cgroup OOM and OOM-kill counts were zero. Both runs and the receipt reconciler passed 515 named checks. Their check streams match at SHA-256 `fdb2f26bdcc99b573589264cb3b05e8db046c74bcd2a8e86ff41e3c5a94b1c5d`. Synthetic keys and proof randomness change absolute roots and tips between runs; the per-run values are in `states.tsv`.
 
-In run 1, both original nodes held tip
-`3f6571f3a550ee63b2bccebdfd2e99b42a32437c5b02583541c2c0ffb97da947`,
-root `94f46ca7471ae78b4338cbdcd050719fcfe9eb8c2d817ab210786c95f228ffdf`,
-depth 2, confirmed transaction and spent key image. After the fork, both held
-tip `90e20276e027ec1eab5ae12bf40a0155c75c7ab3cac24ab9d8988421fdfc5c15`,
-root `01afbcb6c8c03df1ba59d43925e6c272d96a91ee423e726c8d81908ce329119a`,
-depth 2, no confirmed transaction and no spent key image. Run 2 reached the
-same state relationships with different synthetic hashes.
+## Earlier evidence and correction
 
-## Unaccepted reverse path and concrete blocker
+The earlier `3e7a5f4` diagnostic and its exact01 bundle remain preserved. Its reverse attempt crossed from v17 to v15; pool revalidation then dropped the CARROT spend, so its pool-removal check did not establish stale-root invalidation. It did not prove reverse key-image reapplication. The prior report transcribed the reverse-attempt `core.log` hash incorrectly. The correct SHA-256 of `research/evidence/vanguard-sync-tjs953-2026-09-29-reverse-attempt/core.log` is `cbcd56db62106c49b063877d6ad2bae2784180b3761c5d16bb0870709c970074`.
 
-Before narrowing the committed witness, a local reverse-branch trial generated
-old-branch blocks 140–142, switched both cores to the competing branch, then
-redelivered the old extension. The branch switch back at height 142 failed in
-`Blockchain::switch_to_alternative_blockchain` (pinned upstream
-`src/cryptonote_core/blockchain.cpp:1246`). The stale transaction was absent
-from the pool after the first reorg. Supplying it with the last extension block
-still failed. `research/evidence/vanguard-sync-tjs953-2026-09-29-reverse-attempt/`
-retains `checks.tsv`, `states.tsv`, `stderr.log` and `core.log` from that attempt
-(`core.log` SHA-256
-`cbcd56db62106c49cce39cde82a4c9ce21ec71e904c0e3e08d0870709c970074`).
-The log also reports a CARROT output being checked under pre-FCMP fork v15
-during the deep rollback; that does not by itself identify the decisive failure.
-Later unpublished trial variants crashed during the first branch switch, so
-they are not acceptance evidence. Their identical check-stream SHA-256 is
-`6fd0514b3244306e69f6f68a4905b80375602f4f1ece39dec9c7eff6770bb938`.
-
-**Next action and owner:** Meownero Privacy Cryptography should first move the
-driver to two separate processes with explicit serialized delivery and capture
-the block verification context at each reverse-switch step. Reproduce the
-reverse failure at the pinned commit, determine whether the old transaction is
-lost as the pool is revalidated while crossing fork v15, and make the smallest
-safe fix at the responsible core/pool boundary or adjust the fixture only if
-the original branch is invalid by consensus. Then prove key-image reapplication
-and obtain a new independent exact-commit QA verdict from Meownero Adversarial
-Release Assurance. Until that happens, TJS-953 is blocked. Wallet restore,
-subsequent spend, broader cases and loaded performance remain separate gates.
+Independent exact-commit review is required on this new candidate. Two-process delivery, wallet restore/subsequent spend, broader cases and loaded performance remain separate unaccepted gates. TJS-958 remains dependency-gated.
