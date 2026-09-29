@@ -5,6 +5,7 @@ import importlib.util
 import json
 import math
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -51,6 +52,9 @@ def verify(out):
                          "initial_convergence", "restart_catchup_convergence", "trusted_root_changed",
                          "reference_after_v17_fork_60", "fork_convergence", "source_key_image_rolled_back",
                          "fork_pool_convergence", "stale_root_spend_rejected", "invalid_block_state_unchanged",
+                         "stale_root_pool_spend_rejected", "invalid_pool_block_state_unchanged",
+                         "peer_alt_spend_present_before_flush", "peer_alt_spend_flushed",
+                         "peer_alt_supplement_admitted",
                          "reverse_convergence", "reverse_tip_restored", "reverse_key_image_reapplied"):
             assert names.count(required) == 1, required
         states = [line.split("\t") for line in (out / run / "states.tsv").read_text().splitlines()]
@@ -64,16 +68,22 @@ def verify(out):
         assert states[6][3] == states[0][3] and states[6][5:7] == ["1", "1"]
         assert states[4][7] == states[5][7] == "1", "stale pool transaction remained on v17"
         controls = [line.split("\t") for line in (out / run / "controls.tsv").read_text().splitlines()]
-        assert [row[0] for row in controls] == ["stale_root_a", "stale_root_b", "reverse_spend_alt_b",
+        assert [row[0] for row in controls] == ["stale_root_a", "stale_root_b",
+                                               "stale_root_pool_a", "stale_root_pool_b", "reverse_spend_alt_b",
                                                "reverse_extension_a", "reverse_extension_b",
                                                "reverse_extension_a", "reverse_extension_b",
                                                "reverse_extension_a", "reverse_extension_b"]
         assert all(len(row) == 6 for row in controls)
-        assert all(row[1:] == ["1", "0", "0", "1", "0"] for row in controls[:2])
-        assert controls[2][1:] == ["0", "0", "0", "1", "0"]
+        assert all(row[1:] == ["1", "0", "0", "1", "0"] for row in controls[:4])
+        assert controls[4][1:] == ["0", "0", "0", "1", "0"]
         assert controls[-2][1:] == controls[-1][1:] == ["0", "1", "0", "0", "1"]
         log = (out / run / "core.log").read_text()
         assert log.count("Failed to batch verify FCMP++ txs") >= 4, "stale spend rejection stage absent"
+        assert log.count("Failed to verify input FCMP++ signatures") >= 2, "pool-path rejection absent"
+        removals = list(re.finditer(r"Removing txid <([0-9a-f]{64})> from the pool", log))
+        assert len(removals) == 1, "peer pre-supplement pool flush absent"
+        assert log.find("Transaction added to pool: txid <" + removals[0].group(1) + ">", removals[0].end()) > 0, \
+            "alternative spend supplement admission absent"
         assert "Validating txpool for v17" in log and "txpool contents for v17" in log
     print("PASS_VANGUARD_SYNC two_runs=2")
 

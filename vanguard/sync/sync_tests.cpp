@@ -192,7 +192,7 @@ int main(int argc, char** argv)
     tools::on_startup();
     tools::set_max_concurrency(2);
     mlog_configure("core.log", false);
-    mlog_set_log("*:WARNING,global:INFO,verify:DEBUG,txpool:DEBUG");
+    mlog_set_log("*:WARNING,global:INFO,blockchain:INFO,verify:DEBUG,txpool:DEBUG");
     std::vector<test_event_entry> events;
     require(gen_fcmp_pp_tx_from_bpp{}.generate(events), "generated_valueless_chain");
     std::vector<block> original;
@@ -326,12 +326,35 @@ int main(int argc, char** argv)
     require(a_bad.m_verifivation_failed && b_bad.m_verifivation_failed, "stale_root_spend_rejected");
     require(same(a.c(), b.c(), spend), "invalid_block_state_unchanged");
 
-    // Restore the original v17 branch. The spend is supplied with its old
-    // alternate block even if a node happens to retain it in its pool.
+    // The retained pool entry must also fail when a block takes it from the
+    // pool instead of using an explicit supplement.
+    const auto a_pool_bad = send_block(a.c(), invalid);
+    const auto b_pool_bad = send_block(b.c(), invalid);
+    context("stale_root_pool_a", a.c(), a_pool_bad, spend);
+    context("stale_root_pool_b", b.c(), b_pool_bad, spend);
+    require(a_pool_bad.m_verifivation_failed && b_pool_bad.m_verifivation_failed
+      && !a_pool_bad.m_missing_txs && !b_pool_bad.m_missing_txs,
+      "stale_root_pool_spend_rejected");
+    require(same(a.c(), b.c(), spend) && a.c().get_tail_id() == get_block_hash(fork.back()),
+      "invalid_pool_block_state_unchanged");
+
+    // Restore the original v17 branch. Remove B's retained entry just before
+    // old 141 so its supplement is the only source of the spend on that peer.
     for (unsigned h = fork_height; h < original.size(); ++h)
     {
+      if (h == 141)
+      {
+        require(b.c().pool_has_tx(txid), "peer_alt_spend_present_before_flush");
+        require(b.c().get_blockchain_storage().flush_txes_from_pool({txid})
+          && !b.c().pool_has_tx(txid), "peer_alt_spend_flushed");
+      }
       const auto outcome = send_block(b.c(), original[h], h == 141 ? &spend : nullptr);
-      if (h == 141) context("reverse_spend_alt_b", b.c(), outcome, spend);
+      if (h == 141)
+      {
+        context("reverse_spend_alt_b", b.c(), outcome, spend);
+        require(!outcome.m_missing_txs && b.c().pool_has_tx(txid),
+          "peer_alt_supplement_admitted");
+      }
       require(!outcome.m_verifivation_failed, "peer_old_alternative_accepted");
     }
     for (const auto& next : old_extension)
