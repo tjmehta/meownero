@@ -1,0 +1,595 @@
+2026-09-29 09:21:42.342	    7b71255f0a80	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-29 09:21:42.342	    7b71255f0a80	INFO	logging	contrib/epee/src/mlog.cpp:274	New log categories: *:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	Test tx: {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  "version": 2, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  "unlock_time": 0, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  "vin": [ {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      "key": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "amount": 0, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "key_offsets": [ ], 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "k_image": "ec89c332ec046984569e04423b5bfdf60d2f9b31deee6f8eb561397427ea7a71"
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    }], 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  "vout": [ {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      "amount": 0, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      "target": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "carrot_v1": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "key": "02bdf3173fd53976773d4ff87d863f56d53c270aa01b5ae077d9338c3e8bf7fd", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "view_tag": "218988", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "encrypted_janus_anchor": "1eb1887ce73047cbf789ea105378758d"
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    }, {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      "amount": 0, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      "target": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "carrot_v1": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "key": "71d96ba90ca53cc90e0c2f7907c981a740db5e44fd4458c47070a34188579c5f", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "view_tag": "de901b", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "encrypted_janus_anchor": "2b606fb863a9daf4b07c3ee21bb2f680"
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    }, {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      "amount": 0, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      "target": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "carrot_v1": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "key": "9816d4cb7f16c30f92a55b5cf39103d4e09b7e4b32691669a908a8e21c175f11", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "view_tag": "9d1936", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	          "encrypted_janus_anchor": "470a07b4cbb0af2de6acae510c120b3e"
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    }
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  ], 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  "extra": [ 4, 3, 187, 207, 162, 64, 120, 181, 24, 202, 26, 124, 157, 70, 249, 151, 120, 199, 78, 105, 42, 39, 198, 141, 114, 180, 116, 104, 35, 101, 152, 236, 98, 40, 61, 125, 190, 226, 15, 67, 84, 58, 93, 234, 28, 7, 115, 58, 59, 211, 11, 86, 241, 118, 76, 246, 78, 47, 184, 204, 76, 50, 13, 137, 162, 44, 168, 185, 63, 54, 101, 153, 70, 55, 63, 5, 150, 235, 17, 63, 16, 216, 136, 98, 191, 64, 193, 42, 53, 129, 165, 221, 51, 178, 2, 92, 108, 53, 2, 9, 1, 248, 47, 52, 2, 75, 132, 254, 144
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  ], 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  "rct_signatures": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "type": 7, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "txnFee": 78720000000, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "ecdhInfo": [ {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "amount": "191db6ad96ad4fe9"
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }, {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "amount": "ea6bf2df5a725b36"
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }, {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "amount": "6fdf385ac3f7a057"
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }], 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "outPk": [ "6ee7afb088aa76e39fe6b39cd13c078f50760ce765650a44dc66c128e1df444e", "1b6578ef222c8d8dd6576d02c33e5057e2dcb6351b9b01b8ac1360b008f8a4ad", "2518775b29c527c39e48cc30db1227a45d2cd8315534c54448ed00a8dd351ba2"]
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  }, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  "rctsig_prunable": {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "nbp": 1, 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "bpp": [ {
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "A": "bdc637beff1c8b19fee0dd49d753c5809292bc8d6a7354241dc4147dcfb59796", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "A1": "3c8e0e1e5c5d1c7426243182e7cbcc90463eb024096e39a0ce7099acef53722c", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "B": "d31f32e553cb2dfded2269d7aacd6936052aed5412c08b923ea6a2ba0ec1f764", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "r1": "f93a8f3848845b9e5f798a25a2a21efb697f0e96ee38cc0bda9c6a72c7dd3900", 
+2026-09-29 09:21:50.302	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "s1": "45afc0f9caa2bd1ce32402372387aa9d45ba910c5547be033412c2a3a3883209", 
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "d1": "edd7cc006563d11a986a35d24c45849b879e8b9b530f3678918c256e76e32e01", 
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "L": [ "9fd34ba0160473cc7eae153a5d647d9649501f364fd7fe568b12eea722d8ee44", "75f886142dd99bea8313c107962068570a4d7fb8e37bc60191dde1527e9b314a", "0ad3978685db04f7a12090a00a7c7925d779dfdbba1f111fe4e68238dfb6da9e", "c2db455a76c13660d0995fdf15c957cad94cf25697a682eb90c18fbd60a5c394", "560acb7528a810162dd38b3774adf14b5204602049dcbbc9f19e76834ccffc19", "e373e24e40063bfa0990c3a6effe0fec4ef4275b462b93a0db752adcfd5e8553", "8dedc49e71d643f8af7ec6bfbff2baa94b52954ec19463d4be008dc5311329eb", "0f75ce3ceaf6c68c13f00177f5a0118d40d7906238d719f4bace320ff46fbbdf"
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        ], 
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        "R": [ "7290f108a74f7c2706501f15326af2dd9c111169bfe90fd43ce3a9e14b349571", "d7da2436ceea274f5fce9e01f0400d103c0f3ea1da8f4369b72791974a0fa4bb", "7988eccf462b0c30a03d42d4040de00b23076a191204878c168105434f40e851", "157665a5e4c170f729676d9abbefe7d262c2a577ad4ecb973568968e37f1e681", "184cf2b30fdce6a62610e7e35c29e29c139b13bd3c1598975304a2e450b59b64", "460eeb3b799bacb3f39799c3bde680acf7e5270625d3df69478c9406b264fdb8", "8d0f635dbd52e76d453c069cadad003ced9556165a31602647f860639e7a1471", "6d58b355bc953662e9bc616950a81cfcc51e9b51b24c5fa57992036e4c211702"
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	        ]
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	      }
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    ], 
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "reference_block": 138, 
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "n_tree_layers": 2, 
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "fcmp_pp": "e197ce15c65bce4d1d178d5601d4bcfc891ea7134d4abaf11dd4e9a6ede7ee1b9c5ae1e9360874f007cafd57a106f3bc83309a780c1deb449766f85d29c7ea26f30b39836a578300becb24ae4c613762417dc609bc9a8ba0ea19364fd47ab5f1120e12e32653f04c06fd6b20c65e16fa3ddc5ead4008397293abfa568c4ea393fc555aebf32b4ed66a6d8f2333ba9a38fb28515ec50162271cb3a5509e8b88d04ce7625c295450f0cf87a9144c44c6db33a26cd0f9b5a06caa40738475a9099d246d591c9a37b749e711fc1e13a140ac1a2c7a7eb62463a03d7f668d8b19de2d452c3b5518fa2d5ce29e93f2c36303e50f519b0b5e4830d832f9bb94d4c6eeddc69ff6bc27e4cc207f4975b48a20484f5db9810d7ca7edbbb7b7b3076d01d8c726c387b6904865cfafdf4f07618facf32404cc21cfc9e52fb95087f3c5385105b122dd2a6c9ecd7cc8345ceddd3fcfba9736db983656602a932f1ce38a03c30203f0cd95e3978749bf61f135ae98b57d8120d568e87eab43aed3fcb9dfe53f03c33fe48f85f83e14af4278c94d8105cb4275cd02f644455f4477adc7f8f4220f5b1bd702edf515a63af33220c1af486825b85fbf07419fcaa78e5411942d8e0a5a5da0c0be769ba11aef2828f4a9a187abe7fd22ebcf0a41d78b98b1e5ed0503c2f84fda529622cfb58a76b2eda9f2d06078cd9796c0a3563dfb74165c06734c95d96cf5e932d9b730e19757d28c0d720b2aa83e912237d5f1c79c3cd0a4dd105396a7e6a6b8288b1e29e795f6a6e237766174736e11120faa891b90b01b27c6851bc7df63539310ead31831f0d7878be645619800e98ef81768e6498b9b6167c2c1dc120488511b91bf87bbcee401917422de4b9ed1f74583f87bbd6aa5da63c5415c04a006e20514a9e96dd29587459630766c308870c8c9f3c43f791261defa33931ff2ee583b8086cb6c081704c99dc61f262b50f2029dabe219706e61f7caf432539be9625f72ea84cbd191ab69348b9f313a10299faef977914c84abe19869117e53bf26d731db3edfa0af960b8674a13e0abbe1d0a3d657f6810c4e62177b3705261df37ae3340caf45f58e9b736339f669562d0fd685f7ee453ac1095bd4ee31cd5d73c69ef95d0154d9c53620425977e68877b30a6194d6fb13e3d785550af905114667023d84c11eb34e1fe899282d8954607960437cb4e48531e3ef5dfbbaecb9536882967f4bff2fb07e3105af87b59384f3518e3a0bdc22ba678995ab485e29de872dc3ed9f2871209729cc4b089d07cb16e9cfd1f6a80c29e599aa9e80d7b6aa4a32f87d1f8002d45f3035db4770df5cc1fd6ea22f2bf8afa07e55c6a7cce0eebd52a49a1c9663e60dc8c9e11ef4569428d06f79119bf7db9de8b2b5642b0a2d8f32ee2c17175d8fbcec767d895df4d8d9771687c0853e11a427806c66062d409c8aec5c5817321947416e01ea6d2173dbba904fe4843ad3f70a6c3428252f93ddbd12420aa09f606a937c6dbd2b939425bd5d04da22d88e250db19939aa98f71276ccbb5c82f9e974c17ea0522f65f5fb375e21dcf27dee3ab3359493f1b46c9ff8c78ad115511449a07509e936518913debc06be590a2078eb6df0089e6ca2934d47ceef31a1627c765ae34db12e88c457d6c9f8efceea06f59e699a69f56d63143ee59b89306aec5c39f0ad1a9ffafb912290259d2f6ece231c29c8fc2e9a77f3eaf2fa68474cd801eb3c5293fb23b83b59fa1bd2f0d280b4b1a1e18ddabbf8e9988905640d461ae55c737013e366ac8b02801bc52dea90c9619f2b0a1b3ae67f2e86964125550d347427cae21ed102013b1329f9bfd09802fa890cd8ab091ccd622f5b35ed44717d3b54612ba9611a546693b9c093f1b0f4b449730b356be94c41ea1c08e106f5722b9b708f0ef29488ad7f878aef9e795006cc8c87227398a07c36881be11d1c68adafb19c53c94c325c9d35de0061c5d7fd9ca59320eac77d934f141013035f810940948855e476dbec2a623fe478e1346f9f8ada88d40ae338a1b91db6db00baa21e7a9f82efcf87e5c1f8dac53861b7e94440e0afdfbf387ae3188ec75167968fc04f7284e744fea634956fcaefcd330709dc5f36a2b4307979dfe141ae2b3d644fc329a1858d8b91c59ab9b6b34ac3f1fecfebcf89fe9893e92dfea989a7463c1410b4d13813ab97da1d8e6de57829c3b2399dcb847fc40b799555960aac3a3bf30265332ecc735967c7e09c4ffe93f6369f9532a5219f56e5d4bb9bd9c30d0d2972b28b377850070540ca4ce0bc07b821c9e5545995f38f259540d6f554383c5a242c074c5848c07e59ef17ea0770e064b2625559c03eca526bf719ca1ecd0b0f2ed6b466e672258ea4e0a960f7936e3332aa36a9c20403ecb4b7769cf602ce34531933751afd48ac6b196e9697336743ede2c8e819ea6287b5378809624f623dd318bf67dc3a92b232a3f8bafb8c2d1ae60e9dd4ec5dfef58a5c625a35f9d4883ebe56b954cb0d89403d7dbb1692522ffd4334c89774294f0da5b0002c08b3474fae3a5f023f2be43da8a044b1031e319de4d63a6829f0869bbb0e0a50ccfc24ffb552d3152018d376ac75a072b371bfe47c81c311c9160ceffc7f077f33c67fa583d2a63a5cf217305348cece271d90106d7dcd07f3f37e7cc763652855e666e045259be6337248439b0f9625e81c9e7f9ca2dc1bfa7898610d1792afda70ee178c0347534e3c986963896bb91cff2cc092e05a16d8f5d4d85153df4198b1200caa7a21cb86d87de3b7219aadddac8a68d8d4d7a9f9180126c34c76b64447b8587f0fb2acddd1b26f6f8eb612f34306498f67c18bf5645bee0c1015b5561602cefe026f803259434138b6371060e1e4dc44685c5dd55c2d761d279501e8ec6b048d4770327bad86ade6c4e1763ea82b6b5f09a4257ba19364d66e0bc1adbc2f7c3bc0a9499b212990e0d5bfa1ece93f37cfa568eaef06bed65b66001b478c62e9d6b9c90200d9a2f056a3dfe2d07caa2153a4a2ed38e50b699a6bcb795983a0ab05f95e55a8e3c3df5a270d6e97d35dc6cd82b9f235a218841e1716282b29445bc62a30c06300bf5bd3e9971ced825df52b10ec534540f8b413054a63236567156ef1104f698b583eb31ee310c2636faef9fb5dcd7784b0be6411ca56d38229a50e2927f59b2e2193dc40da1f3712e95713d9dee4c4104463e592e7e117f3eed05ba12d0600a2be3fa9ccbc0c67b5df73e790d73c9bf9366298f34b40872baffb5394bbef5a27be15b9b5ce8af3e14304373ba78cb2478356933ca109ba568892de95674f19d4e65f040da2ff3eb551e553b85f6522ac605edac964ea35ed50dec811aac7f63cdf16fa6f84e5651b4a4f25193ddb05388b891e6900215460a82781e93d42b47a423c80c0a8ac12e5ce94b04843f2be15e607f5a688176634b42965bc20fb7d1a0220115934cd24a4a69424af47526221a088cb1569b68704a9410295f9d8551d250e014695354bae175195a734425418b84a8f790555bd5246ff8beb0c64bd7ec12e1063511a60b872a4caf6f2537619ef41a6e0557ad91cdfb40985245db4eee3a3b0cb106cd074eabe934e1d32de533ac17d2c7f52003b19f2747d3add281944571b5705c69f46dec57c918e25d3b11bf923f33830359f1341156b9b82297301696601c053e41e1a4a2293e464dd74b28122dc60af6611600e1a29f179fb48bbf7c7115bbf2cd3a368f61910e744bd48325058bce69c1925a11b8d9f6748898d6ba7b22b1fd5a45e43cd362c76d7313280e41c29e37cccf2e1964a50a6c2988b33a84442d62c0f70344a3757865abeb3abe902213dfb9a558443ad8c14e3cf8d32eb2c611e6f901e7933fb353eae99b4faca35bc15b6904fe11751b457a13bd2decb6307cfbfa8b592bd8b70959057b487c414bacf56cc381849d7f3dc94942a1e887eef42ae094352e9956757057e9c5c0fe49ced6e7e72fb806baa18f8ec2b42921e8e2ab14b6c123f2b74e8d6b4353d0bf5150a613f0441be200e321bc993e1761c2bf3455fd50426c002eae557af02f7c0f18b2fdbfccc938bc88be50f07de84465266cf1db99de64b6fc2cf72bbcd785cdf58276e4199ae6a70c4def9ad74f5c66ef34ddc10b9113ed4c2165c3ae974aadd4e1d5fb8b428cf3ade7dc173408c4f91598d84d59311e0b2c6070adbed400dce2086614e78cf36bce29ca42324dedf0e0d6126feca94a2f85851b756fce4e374b43efed525c55a6b7237a5c3bf1b307b44ebf38f7c5cec9dbfd4edaf95f26981011fb13b37bd66c1545c9b034460785107ca1ce7c430561c710328c2a3313eac825359b3bfc74d40aceeb0e1915d031098d8c039cb996d4004f376d0f6cc2708219d41a5abda0cb448eb22995a818289a5702de7cd0b853a68b398cb300175c0a99400eac2e1ec811bf3950e194d653b396fe9fa454ca600e7723ed3f4339c2ee19d2d9dd93f625eb72d16db7f634513d4d66e7c66b0d4c69759de8af35804acf8849a27462323a21267ce8b751ee00b55c62e879b52f0cfa22f6e8ef7bb1b7caf4cfbe11b30df609dfbe302d5d3699404829bc2467759085e0e4e65cf0f829ebeab1544016c36a566fd5d4caf07f8f086137ab10d050202860afb7a9186d9e8b235e7e28467ddff02ed147beb64bad6b364638ede66d08c2b4857b9461a091f91feedbc8fb28c4f0fe3a31c06618fd89b2cf118345dc47f1ee2e8b7d4b4c72757be9c62f21f871da6d7405a43983a9cf5a614d9993c5defbaa86a16ea6ee1bafa9e676a18f84808a535f43cfd2e1ed4126edce7421b90b677a9d8f968f982eccf1352e685c8eabdddbde7e775151614653b4b5f3e61d6a5797cd0074ad3af1e697fca6c0b611e17f1c62e3e5dba1839ae0d651d0c78b5a88592589312be3512ac402a804d4e8fb16a56e01b4229b192f4d972b0e374d6b031802fc33925ad8e2f03b5daa94e33b0fdea2017e9e3d217e40cf9b2dab507fb048f7e883c5958f604dd39a057bc47804d586a2303ebfd83bc493cdd3ac3a90f72dc9ed5529055f38a172f472f99cc2c3992eaeaaba3f02304558672ad076e38ff42829673d7d5eb24fea1e13b03a018e9d8a03e4fb585762556caf8d82b4f3ee0c0652937a2e1f9ed22cf285b9a5d845b2f73b190ac34ca766365a469f2940cf16b08a01d755c02e8ee5b346a2d0da85f56e17ea94182096fed55d0beae576bdfdbc5e35ff02d0315249231eba5f43d5741660b2a18289fb6aa30fd4d5f8edfe0ccbb3fa3da783d9cb27cd0d13d4889700d26d2e91a0375781bc6090c34ff6576eaaa3145f519d761c07bce4c54110f058c4e8980ff73b11a066eab7618e15c78356be88d06b1d4f56d842009b1c5a6810c2a69fdcc9e3acc14fbdbd4ff699b294446996d34cd07001dd4a599bcd5a54b1a0e6b5e3a57d2c6e24103977cea2162e64f4c8cda69f20b772a469749858c2c67ecdd55778271207e94c5f093515d0e6cb067f7f47b4448ac841562e29352dc567a69c25b5d5a1363e876de3af65b4e92b9b2bac5e69e417c06fb2cfef21e67aad81e08882e5d344018d89d0e6c5fb0e839d660d025c861d883de1ec40d17d7a5c0c3c89dd654f7cc6b4c3bad68e99bc9e77484bafee42f7730f91ffd81b2ce0f73f24cf969f361bdc5abfc7981efc5dce998f98df37d748198281b6f589102c52ffcf9f82855e1ecc2c60f8c1da03fd8c6f127a69690d89bbe29e8ca3e1ef5bbbbe327d2caf4e48a45b828df2c6246ab8d973a771dbdee2b169d6a11ceb4ccf42c94ca1f9d57e5e4078c9df1b85be496643611237579ddc2e684650260c8916a4afce61e9efd60c82da2fe11d5f3bef4e2a0384fc8e81c571977f22626d777c6e1a6df7f56a73ea61ba3a28c7e993849d16de911c7e88d5869b00c7970f826bacff49982a167178360a9f8159c7c9600bc3f158043623938f519f75e36f0fb539a5bcffb6ec818", 
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	    "pseudoOuts": [ "4aa5daeedb5de49e89678d688c118f989250de7c5675e02bce70aa4a0590754b"]
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	  }
+2026-09-29 09:21:50.303	    7b71255f0a80	WARNING	tests.core	tests/core_tests/fcmp_pp.cpp:436	}
+2026-09-29 09:21:50.417	    7b71255f0a80	INFO	global	src/cryptonote_core/cryptonote_core.cpp:500	Loading blockchain from folder /out/nodes/a/fake/lmdb ...
+2026-09-29 09:21:50.452	    7b71255f0a80	INFO	global	src/cryptonote_core/cryptonote_core.cpp:709	Loading checkpoints
+2026-09-29 09:21:50.453	    7b71255f0a80	INFO	global	src/cryptonote_core/cryptonote_core.cpp:500	Loading blockchain from folder /out/nodes/b/fake/lmdb ...
+2026-09-29 09:21:50.487	    7b71255f0a80	INFO	global	src/cryptonote_core/cryptonote_core.cpp:709	Loading checkpoints
+2026-09-29 09:21:53.222	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v15
+2026-09-29 09:21:53.243	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v15
+2026-09-29 09:21:55.871	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v17
+2026-09-29 09:21:55.890	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v17
+2026-09-29 09:21:56.014	    7b71255f0a80	INFO	global	src/cryptonote_core/cryptonote_core.cpp:500	Loading blockchain from folder /out/nodes/b/fake/lmdb ...
+2026-09-29 09:21:56.016	    7b71255f0a80	INFO	global	src/cryptonote_core/cryptonote_core.cpp:709	Loading checkpoints
+2026-09-29 09:21:56.202	    7b71255f0a80	ERROR	cn	src/cryptonote_basic/cryptonote_format_utils.cpp:1325	wrong non-coinbase transaction output type 'N10cryptonote18txout_to_carrot_v1E' for fork v15 in transaction id=<bb6d76687c850c2da92dc880950f6d08bbfb8580d8c242515491dfd50a838950>
+2026-09-29 09:21:58.825	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v17
+2026-09-29 09:21:59.064	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 79
+2026-09-29 09:21:59.064	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<438697d6f0482ea1f3bf472d3f972efe66f447e0af30aa4242486d3c9e51b467>
+2026-09-29 09:21:59.064	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<17e96c2e73d6703ad6f77ce48708198fb0d7043df84e0f01eb873e7c8fdb2239>
+2026-09-29 09:21:59.064	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.094	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 80
+2026-09-29 09:21:59.094	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<04f9e956b681b9e28c4d18d76d7365522a67b081f82d9bd62222972ac1d34dde>
+2026-09-29 09:21:59.094	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<ddf2f5c18978a8ee09bcd5d0dc96b28ebaadbf59d378784b48d910b78bab662c>
+2026-09-29 09:21:59.094	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 81
+2026-09-29 09:21:59.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<1664999e66ea1251e1e50b4a285730440822f56986359588c86027469ea4f7d1>
+2026-09-29 09:21:59.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<401dfa47b90e18547aeab2dcd7c2706c8fb85c8ba08cf355a5ff00d846634cd5>
+2026-09-29 09:21:59.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 82
+2026-09-29 09:21:59.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<651d76dfe1d2c66ffd68d950c0e9e1b91e80261321e783db0b6d437cf88bfb05>
+2026-09-29 09:21:59.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<79d593d3e3ed610f8b053db44d158a723789340d0de5a758b6df7a6fc3a891ac>
+2026-09-29 09:21:59.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.180	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 83
+2026-09-29 09:21:59.180	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<d2d4b47f1083fa18038f2c0db84590831b3b91913c0a35e185bd25e80aa4b5a9>
+2026-09-29 09:21:59.180	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<e1f7d07a24608bd61b13acd077b6f76c1b6b162e73cd221b067f5f83f9a79c9c>
+2026-09-29 09:21:59.180	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.212	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 84
+2026-09-29 09:21:59.212	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<f6d2f931f7a25599ce7fd2f972388c6067acab21769067a77800560f2e9bc555>
+2026-09-29 09:21:59.212	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<5412d5f625d547f4ea059e5e8223364bbd9645c0b04bb6913be1f7cd487b86f5>
+2026-09-29 09:21:59.212	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.240	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 85
+2026-09-29 09:21:59.240	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9b9d3af015faa99e8d5bbbed5bd06dd5f4a60ea97c0f33b95da19f0b7f3fff63>
+2026-09-29 09:21:59.240	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<42216a218274e912d6ea5af5e0bbbb4165f5e81c886ec837d8eeffa61a586486>
+2026-09-29 09:21:59.240	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.268	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 86
+2026-09-29 09:21:59.268	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<6427b9e2c07489ddab29748839edf093c50765115954ba83a5c3cbca4bdcd4bf>
+2026-09-29 09:21:59.268	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<50fc416476b1075a2028da4df44804efbb54a005a0d4b3c0ce22b2443fa28ed9>
+2026-09-29 09:21:59.268	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.298	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 87
+2026-09-29 09:21:59.298	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<da3ad061212c7bd0f443abac1e86690b2094d6491e3aeb7dcece946272037c3a>
+2026-09-29 09:21:59.298	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<0554d4f76fe64d0bcf020ba32b1aac7dbd5648444ec86b8fbe138398d0f3c68c>
+2026-09-29 09:21:59.298	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.326	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 88
+2026-09-29 09:21:59.326	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<cf717deb660d7d60bb7887a5f8ea7e87e35453991e83e1e44d14e3acf0414a96>
+2026-09-29 09:21:59.327	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<0342a39cdbc3e114eec6d9ed8cd02ef4ccf7149e1dbb0c0316f8944a82387df4>
+2026-09-29 09:21:59.327	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.353	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 89
+2026-09-29 09:21:59.353	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<67e09a1b94ea7f79579a20149c6217c9e685910fa4b5f262c45eb4372632e91d>
+2026-09-29 09:21:59.353	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<de81f0aa3c6056843698db0d699f39c6e70ebff1f2da7b89f75cb2504a3d17bd>
+2026-09-29 09:21:59.353	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.381	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 90
+2026-09-29 09:21:59.381	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<ca26b78c0f4e4dc450b42aca212652bfc21fde3d26e59a327f54a0a59045e6a8>
+2026-09-29 09:21:59.381	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<2f950bb4ce159ca19a84ff23c309242d73e9474e304651c844987d0c4088ae39>
+2026-09-29 09:21:59.381	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.409	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 91
+2026-09-29 09:21:59.409	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<11c799481ec512f48bbc8e267df98843c3d5ae2d1fb106c39df2ec67e13f5d2f>
+2026-09-29 09:21:59.409	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<93846f934bd6956dc80285c5eca779bc92c15abbe5d2b82daac0687b885bb6c9>
+2026-09-29 09:21:59.409	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.436	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 92
+2026-09-29 09:21:59.436	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<27b555aaf9090da173c68473379304ecf1a23111eb8e335d1ea6979349178b79>
+2026-09-29 09:21:59.436	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<3d982ad42dea8c4856395c82421bd38bd263b954b3850418fe14ae9cadb3798b>
+2026-09-29 09:21:59.436	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.464	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 93
+2026-09-29 09:21:59.464	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e66dee4affab28953127072d050618b892a308ae464a87bb384df3a91438ec38>
+2026-09-29 09:21:59.464	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<3d4ee15444fc2404a0efea59aa5df79e23b73fc08c36c04f8ac2d34dc7df03d1>
+2026-09-29 09:21:59.464	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.493	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 94
+2026-09-29 09:21:59.493	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<882ae39a32039d25a7696774b7f34ba8c278878f7ba0c9f138a6713d4d55cc92>
+2026-09-29 09:21:59.493	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<2f2d9194c0cd7063050bb00209fee96b5ac25c0594d51a06645d12711f1fbd37>
+2026-09-29 09:21:59.493	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.523	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 95
+2026-09-29 09:21:59.523	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9b7231f2fe20a445fd92051f17194318f3a71d7146546f453b646aefe11ed3c8>
+2026-09-29 09:21:59.523	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<4fe67021c43295f7052bbc7fe7a1bdd4f1560c5c3fa16f7dad7c1329f38e9a97>
+2026-09-29 09:21:59.523	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.554	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 96
+2026-09-29 09:21:59.554	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<3d5a69802d6874c42e73d5dfdd0c1747d85a3f10dbec1e2e60734009cffb7e1f>
+2026-09-29 09:21:59.554	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<56a548609ac84adc7393fb3e8b6cbd03d59bb641484f71defee359475e02881a>
+2026-09-29 09:21:59.554	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.581	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 97
+2026-09-29 09:21:59.581	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<a7ac9cc92ddd7cc1498c74be2b98bb2968fdaab9fa9d001b3c17af9f420ab0a2>
+2026-09-29 09:21:59.581	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<9308ce5ff043baf17c84d8e4edc1a00f54d058e1ecf15ffb16e935d9953833b9>
+2026-09-29 09:21:59.581	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.609	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 98
+2026-09-29 09:21:59.609	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<5cc7535aa9e6e0862f4b794979af63c7fa67665772a7f9bc7068cf12c73f82a8>
+2026-09-29 09:21:59.609	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<2dc9758fb80eb8ffdcc3af285d44a31e0cb9fa653d3c62f82e9429e6f5b2fe93>
+2026-09-29 09:21:59.609	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.636	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 99
+2026-09-29 09:21:59.636	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e92ad0c9d640d64e186158182ea8bc499939cfb1593c7f3cd452ec5893aeb6e8>
+2026-09-29 09:21:59.636	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<f019d750c9b4f3c95b23b09a0b416f2a68fd709052dccbab9380ed1f18c47ae4>
+2026-09-29 09:21:59.636	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.664	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 100
+2026-09-29 09:21:59.664	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<985b94f86159f9028b7704eb5c0f70daa2358998dbb88317ed7d3c2b88bf1f15>
+2026-09-29 09:21:59.664	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<8e6029b8042b9bb05102dd69dc11048e1dc7387768d3703ce9dcdd1ca74d541d>
+2026-09-29 09:21:59.664	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.691	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 101
+2026-09-29 09:21:59.691	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<af8a1cbf6ee6d2b01b09263c2ed1939473317c8b0eafce9eb264263d85816d25>
+2026-09-29 09:21:59.691	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<75e52ccb0b4f02f4ea5c6345eb45cd28c4aef6e0fa132fe85860d4fe30af47a0>
+2026-09-29 09:21:59.691	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.718	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 102
+2026-09-29 09:21:59.718	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<18cb9bc5db8ced6d5ec3b3733b60bb5b353f89aec960b175283e6815c1cc9af4>
+2026-09-29 09:21:59.718	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<5ada93f78ae54b6651d5668df283ab168f897e1b71d8c0746c86276ae3fc9162>
+2026-09-29 09:21:59.718	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.746	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 103
+2026-09-29 09:21:59.747	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<ede12aa2b5f93ed9330a7d07da2029ec2d72a3a3bf155863a3d43b5229d7dbea>
+2026-09-29 09:21:59.747	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<9754f46658c8cf4790f3a4303cea617c86ee4bd49710779376ef456006bed325>
+2026-09-29 09:21:59.747	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.775	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 104
+2026-09-29 09:21:59.775	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<6cc0ad699910d30a52267ceef673b09b1e7e6b0c317fa66ea55c82446285bf9b>
+2026-09-29 09:21:59.775	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<c6928c4c20ae2d6465a36ca05da3437a31b5e051770a43294d1993b8558c1c2c>
+2026-09-29 09:21:59.775	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.803	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 105
+2026-09-29 09:21:59.803	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<97275860838c18dcfac0814f18657a9c0c1966e1b1c1e01ff8f26f0a58a77d98>
+2026-09-29 09:21:59.803	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<6e8881d8fd34f88c0f61bb9895cf7c604a9f428b0fbe29627ac04a4e2e430367>
+2026-09-29 09:21:59.803	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.833	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 106
+2026-09-29 09:21:59.833	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<a131a29d1fb5ecd4c0dc3ad0eeb2e03acbf5bda9409d6fe13140a0ab4e858cc4>
+2026-09-29 09:21:59.833	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<4f761b44d3d5583a513193a638c096badc40db6e12295ba79d018b52ffba3ab6>
+2026-09-29 09:21:59.833	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.862	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 107
+2026-09-29 09:21:59.862	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<683140768eaba26bbe5e628e663f84f1684d116b7cc9e6fbbf4cfb9c8228a49f>
+2026-09-29 09:21:59.862	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<863d3528823fdeb51eb42792a7596ab57ee4bb5b65949a8d4619cb7d8c222883>
+2026-09-29 09:21:59.862	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.892	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 108
+2026-09-29 09:21:59.892	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<17328e0488ff9d8faf9aa3e9c1772106e5080bcf9c1eae78e4bc54308c0dc645>
+2026-09-29 09:21:59.892	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<c810adf668635ab5122c14b96425b93ca0fa2f9df3cbfa2170a21ccd6050cfd6>
+2026-09-29 09:21:59.892	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.923	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 109
+2026-09-29 09:21:59.923	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<43421b8798a99ae7926eb1bc98d8408e20496f980823d932a75efb2dab368dc2>
+2026-09-29 09:21:59.923	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<0cb01e224bcd3973a4b408b29ef71f367bd4f0db0e8bcafb8702002aa3c0f718>
+2026-09-29 09:21:59.923	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.952	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 110
+2026-09-29 09:21:59.952	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<6d0c2ff7ad4461f2f73e28ce7af483296e41f4c73a777fa06ea58f8dc1dc450c>
+2026-09-29 09:21:59.952	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<31fec10e90ac1b4bee18697402c7f0ef606f23c4f0a034a77c64e2d3b79c73f8>
+2026-09-29 09:21:59.952	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:21:59.980	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 111
+2026-09-29 09:21:59.980	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9c2c20a2993a6fa121e639e88800f99e3ca019ba3f8b27a2f1c558eb78579fb9>
+2026-09-29 09:21:59.980	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<d215fae2ea5db5ba8bb0d1da75653d4ed10969ff6eb480d7d32004590c5de504>
+2026-09-29 09:21:59.980	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.009	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 112
+2026-09-29 09:22:00.009	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<c54c7e90ae277bf1aca41d3b6671aae537ff137eac200457f93ec3703df64cd6>
+2026-09-29 09:22:00.009	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<17f1d884094837f225279bfbe04441ce8ea135311cc516827d146ee05ca18c1d>
+2026-09-29 09:22:00.009	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.038	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 113
+2026-09-29 09:22:00.038	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<1f70c65054b4c94dab4548d9e77774274fc5990c9a2d786b7fed86ec58f92a7a>
+2026-09-29 09:22:00.038	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<4e41be3b1abead63d656d4980672c8741fa11cabe0b5186052ecee7f83921df5>
+2026-09-29 09:22:00.038	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.066	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 114
+2026-09-29 09:22:00.066	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<4a91e56b3106df91e87576b1deb6a8e7c5029812603624fcd2f362cf74140cef>
+2026-09-29 09:22:00.066	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<f9894e77f209c73ea90ba0ff5d577379a8aa34d9cf81376914331eb608541a46>
+2026-09-29 09:22:00.066	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.095	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 115
+2026-09-29 09:22:00.095	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<bf89383dbe6b87ef63fe1b7e494843ac7da2b213a9ba02f88e84bbfc53da41cd>
+2026-09-29 09:22:00.095	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<fbfe686f632294ae6757ed753cc5de30901b92d84276fd12346edd460f82c15f>
+2026-09-29 09:22:00.095	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 116
+2026-09-29 09:22:00.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<982b49a2e1fb53565e0159e43805100b760794fe39bab57824ab06ac7bb41849>
+2026-09-29 09:22:00.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<16995e5dee062b2f29b0a5b0db2c109d6e5709ec07a167af1dc03112dc5557eb>
+2026-09-29 09:22:00.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 117
+2026-09-29 09:22:00.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<a02b3b15a772f8e509d183d4f417dd757d741cd73440f36a868f731f6039cf84>
+2026-09-29 09:22:00.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<1fe257c30a8a7b6c05bdacc6fd1e60e704485b8fa1e3ed082738133e3c2c0bc7>
+2026-09-29 09:22:00.151	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.178	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 118
+2026-09-29 09:22:00.178	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<04561337632545f344eb11de1ffc983b7b7d766c8f0523cca40d99bae7611099>
+2026-09-29 09:22:00.178	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<d85cb30f5c2b1f5401285ead133c040ba01dec4881f5da87518bc057fb9559a5>
+2026-09-29 09:22:00.178	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.208	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 119
+2026-09-29 09:22:00.208	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<97f77c0c8b08313d6246654e8576c9c5b9876b6d4dc0ad6e376cc3490beb0f90>
+2026-09-29 09:22:00.208	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<34268cd47bff8281ce0e2a4d24e231b9c393eba048e22a1186fb91c5fb5971eb>
+2026-09-29 09:22:00.208	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.237	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 120
+2026-09-29 09:22:00.237	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<95499a3097fe20a5f23f64670d9ac6ac166411fd5d7bc6fc637640ed7b9668b5>
+2026-09-29 09:22:00.237	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<edc3470a9fa7d39d75e536eaa622a0b1913734f45197e22f478230d817a26f92>
+2026-09-29 09:22:00.237	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.265	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 121
+2026-09-29 09:22:00.265	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e937212693b49e6dc8fafdc90a83e38222a049a16343898948004b3ea9734a52>
+2026-09-29 09:22:00.265	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<746db1578ce12892df7095053e699dface2aaad01dd38e8035cf5b0a986a1d8f>
+2026-09-29 09:22:00.265	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.293	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 122
+2026-09-29 09:22:00.293	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<f51a6b9cb5049fe355aed945a6e09b679ed79e5b798baf3660db1c5b3617a4cd>
+2026-09-29 09:22:00.293	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<5b985f9899e1265ad4602f6fb31150f7f315a5d630734c4d2ed21e578d935032>
+2026-09-29 09:22:00.293	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.320	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 123
+2026-09-29 09:22:00.320	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<0f2973c84de0ffd884baeb6de83ed2c1038106ab1bfab19adc9a24287a405ad0>
+2026-09-29 09:22:00.320	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<c2ffee10235e5a3882ee1897a5be171ae1934c4419b6ee680f7acc53e35ab436>
+2026-09-29 09:22:00.320	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.348	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 124
+2026-09-29 09:22:00.348	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<0ebf5ed70cf01360eb5daa0f68c1a1c3f1a3824f4257ea2bdba6da718a3df3f0>
+2026-09-29 09:22:00.348	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<f5f214c6e916818821aee08c35af9e2937964ca98b8177fd790d3de30f61d50c>
+2026-09-29 09:22:00.348	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 125
+2026-09-29 09:22:00.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<1ebfa9c767e29596095cfbca98b7bf99d01b25dc472a9f99c624d662d533404e>
+2026-09-29 09:22:00.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<665de75a090c6910c4ccc53a24e0c9ae0a3fbbe9201350a02d34b112b6ca2d04>
+2026-09-29 09:22:00.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.405	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 126
+2026-09-29 09:22:00.405	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<efb2ee785c28040959bce00feb84268fa4067da63eb054748bb9be2726f25275>
+2026-09-29 09:22:00.405	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<13fcf96903dc6f7f959d8069f6d3592894e153eacc6a8689d92559e68fcef8ab>
+2026-09-29 09:22:00.405	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.432	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 127
+2026-09-29 09:22:00.432	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9f8f40942761314344047977ac350ad54d6c65da10c63b8c7266103462f1a575>
+2026-09-29 09:22:00.432	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<6cad274850910fa4975342e8d6bcba3e3cfbd02c5491eb0aac063231ca07fd53>
+2026-09-29 09:22:00.432	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.461	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 128
+2026-09-29 09:22:00.461	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<8a1362bdb6fdf9d0917a4a87903cf1a85f555ae88594720de088ebeb3fd8e95e>
+2026-09-29 09:22:00.461	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<c22cfa9e4879b24ee886fa79d071d2c5dbf44cfaaee50185e3d7be8be0b7bc91>
+2026-09-29 09:22:00.461	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.489	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 129
+2026-09-29 09:22:00.489	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<b71ec88457ef2dfe97913922e6dae8851855aa7c3bd54f92305b1b944fc399bc>
+2026-09-29 09:22:00.489	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<b0fccf324eee670dc22120b8542b51673850a56065d1cfbef747e37c1db99321>
+2026-09-29 09:22:00.489	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.518	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 130
+2026-09-29 09:22:00.518	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<dee5f1ef87e570c499a4a334065c95d37dd750b4ed62a6a4af4a2f46c2e3c0c8>
+2026-09-29 09:22:00.518	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<9ea58c6a7604299b59810432c052a0759ecc9150a41ff2ec4f8f122d71562737>
+2026-09-29 09:22:00.518	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.545	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 131
+2026-09-29 09:22:00.545	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<fe19ffc2e97d8fec3277c348eeefbe694fea84b97a1b9c07a6dbba2112690e72>
+2026-09-29 09:22:00.545	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<d84efac45c590813dfc3121d18adebaf076d3d0a3eeb62c241799db6cf497630>
+2026-09-29 09:22:00.545	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.573	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 132
+2026-09-29 09:22:00.573	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<fbfe83ecd6fbf0009e7dbca498f408a96aea2b2ec85432f7ddbec3cc226e0ce2>
+2026-09-29 09:22:00.573	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<4bcd31888b5d299d43142a3377ac387d50dba01f6272f88c8953d630afe2cf68>
+2026-09-29 09:22:00.573	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.600	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 133
+2026-09-29 09:22:00.600	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<eb8d5c8be57af99c72adaf4e4e19d23e19c0f87473265d5ad4529b7d3dd2aa6f>
+2026-09-29 09:22:00.600	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<b15f031c312859f87adce4aa535503de470c5a57f789c736339f82d67005e563>
+2026-09-29 09:22:00.600	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.628	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 134
+2026-09-29 09:22:00.628	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<cfad6a6dd18da0d56923921642958f7b4a074c874024d4fec80fd35dbe858360>
+2026-09-29 09:22:00.628	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<321e155bfc493690f2ff26ff0177db26a66775ff06c931e025920f9c18be407f>
+2026-09-29 09:22:00.628	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 135
+2026-09-29 09:22:00.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9eeced3e9b72688fd3c3a320bddce576dbc8fe53d54f23b907ca50f30e13e7e1>
+2026-09-29 09:22:00.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<01a890cc2bef15dba7bec831b4a5c281aa71ba329832fb8711bcf41529b56a82>
+2026-09-29 09:22:00.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 136
+2026-09-29 09:22:00.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<66912e7b0631c69d474376c000e1bf2b24eaabe6ceb9c61be0d05637342c2cd2>
+2026-09-29 09:22:00.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<bed9426f18b8085e2727499c4ba8309b57db89a9e738caf49c69e8ae02fbe548>
+2026-09-29 09:22:00.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.712	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 137
+2026-09-29 09:22:00.712	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<a6703acb1b5d415302bd2227c7a50e6854e032881758bb897fd38bb1f2475c30>
+2026-09-29 09:22:00.712	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<566e2c51dcb3ea851693a8f791ac8e4b3676c68fa1a834b46313beef3e21c0e3>
+2026-09-29 09:22:00.712	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.740	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 138
+2026-09-29 09:22:00.740	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e30694e19190b2a3f923f24c517e27877b5da950f3e975b195ea03aba2c95337>
+2026-09-29 09:22:00.740	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<387f77dd7ae8af7d4a051892a277ef56aa4d401ba418945e7f7539e30d6e9d3d>
+2026-09-29 09:22:00.740	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.770	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 139
+2026-09-29 09:22:00.770	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<df16daeeb042bb4cbc8d339657117241168df44eadd1c6dc7feea1f2fe65d867>
+2026-09-29 09:22:00.770	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<248a9b3a89e1dedb4a6b6a2bf0eafcf7b0d9e26b931fd77cefe0e960eba10d23>
+2026-09-29 09:22:00.770	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:00.799	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2279	###### REORGANIZE on height: 79 of 139 with cum_difficulty 140
+2026-09-29 09:22:00.799	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2279	 alternative blockchain size: 62 with cum_difficulty 141
+2026-09-29 09:22:00.800	    7b71255f0a80	ERROR	cn	src/cryptonote_basic/cryptonote_format_utils.cpp:1325	wrong non-coinbase transaction output type 'N10cryptonote18txout_to_carrot_v1E' for fork v15 in transaction id=<bb6d76687c850c2da92dc880950f6d08bbfb8580d8c242515491dfd50a838950>
+2026-09-29 09:22:01.920	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v17
+2026-09-29 09:22:01.971	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 79
+2026-09-29 09:22:01.971	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e50aa9c943b9e8332365413cae70322cc9ee302894aafa4c9e7c1c47ac452515>
+2026-09-29 09:22:01.971	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<70b6ca8070502b291b7978d6fc3c573506b7d2efd5a4f19fa567423e26fc5cec>
+2026-09-29 09:22:01.971	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:01.984	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 80
+2026-09-29 09:22:01.984	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<186613e763bb98271a13534b2d1bdd61ecb56ebc3b786a42a99b64f2eff3a0d2>
+2026-09-29 09:22:01.984	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<c4b0d38d99da6e2b575e3093fa68149325e733ad87d55fdde5ba527d6a1af92f>
+2026-09-29 09:22:01.984	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:01.999	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 81
+2026-09-29 09:22:01.999	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<3678c803b3106d1778cdf7f16b48b3972ea6483904948175ecfdfa6e5d7e13a2>
+2026-09-29 09:22:01.999	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<c1f1cc5be92bae5a8a270ab7e6654f90105ab057f778179cf33a513820cb6da1>
+2026-09-29 09:22:01.999	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.013	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 82
+2026-09-29 09:22:02.013	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<7e791e8672efbebd9155fcbd7c3bc92fa6fa61bacf5a61ea0a554d4f094576b0>
+2026-09-29 09:22:02.013	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<9282dd4c808204d2b03999c06a238e86bb94c0ede0697ece8b5a74e1249eddf9>
+2026-09-29 09:22:02.013	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.026	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 83
+2026-09-29 09:22:02.026	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<669ad3543eb8291b40394772baec43c55010db49e4c7b7ec177ed2ea4260b28b>
+2026-09-29 09:22:02.026	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<33c761218df29ff1d9f189d898b204776f35d21c8bd2f9db382334cbc85f1a5f>
+2026-09-29 09:22:02.026	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.042	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 84
+2026-09-29 09:22:02.042	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<3311f42b93701686c973faf8156504ca94b94bc01d690935eb3332894cf775b5>
+2026-09-29 09:22:02.042	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<92d72b737568e1887b6ea2cbbb09b7def2a557562261e0d02e00269a85294889>
+2026-09-29 09:22:02.042	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.058	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 85
+2026-09-29 09:22:02.058	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<de101eb29278fa6183dd381d143cc23397c54cc8a1a84aaee0aeb4a2bc7713ad>
+2026-09-29 09:22:02.058	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<1b3072a49671bb13e093e44fdd925c7ea72ea234836122f02f984c6f944d6d3d>
+2026-09-29 09:22:02.058	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.071	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 86
+2026-09-29 09:22:02.071	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<238731a2bd12e358cbbcfec0a7659b7c83bffb14955b5bbe0ffd5a67ad06f992>
+2026-09-29 09:22:02.071	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<909629874c3c5dbe6de9e78a82302b2d6ca0da5afc773e157bceb9cc51e92c82>
+2026-09-29 09:22:02.071	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.084	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 87
+2026-09-29 09:22:02.084	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<0195feb8d7b84a62406122cc667b4892b3d17c51d2aacc57aea25174b95f7172>
+2026-09-29 09:22:02.084	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<37684b1ede84e5ed9fe3e819a728a3196205b3175976ceeb20e1ffef5dde73b0>
+2026-09-29 09:22:02.084	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.097	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 88
+2026-09-29 09:22:02.097	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<df1442fcbeee804567b992157c3cc95b60b8b42a5f3bb6e4a3f5a9331aec6cf4>
+2026-09-29 09:22:02.097	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<e950ddf9afcd620273b024ce95553362367363781f4d1e5aee33bc2140d2d8e2>
+2026-09-29 09:22:02.098	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.110	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 89
+2026-09-29 09:22:02.110	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<d36027c4222492fa58ef8142e4f954740325121172f90aff347211233120987a>
+2026-09-29 09:22:02.110	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<185d53bd550099765e0c18714550b27149ed9563ed29634d8b26d5f04d68369e>
+2026-09-29 09:22:02.110	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 90
+2026-09-29 09:22:02.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e150cf531f799cf7e7a872f4d9ea8e7fbf338aeac013b0e1269d85aee63b99a2>
+2026-09-29 09:22:02.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<d461e8e9e52ae619b50e3cabacfbf47941073cb6babb43b2ee4e17105147af5a>
+2026-09-29 09:22:02.123	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.136	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 91
+2026-09-29 09:22:02.136	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<080f540dd6134942f9f139f03cea2bd91cf7be05086cb31e85bb0ebc50fa663f>
+2026-09-29 09:22:02.136	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<1a30f9cf533b13b68c6161c7b4f0e81bea053685b44fa34f674028f69f9d2c9c>
+2026-09-29 09:22:02.136	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.150	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 92
+2026-09-29 09:22:02.150	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<81b5a7c76d8f772c4bb82ff237135d4b30f4526bfe09a1afd4f3454901fa8fd9>
+2026-09-29 09:22:02.150	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<b2e829b4523af8b17e7ae522555eefa9484c1f4e018794788c8f1b3c99dcd6d7>
+2026-09-29 09:22:02.150	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.163	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 93
+2026-09-29 09:22:02.163	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<cc5f88b8e2c2e0b2a6933f2b2d24b1de6789f58e2a4d47b23e23469aafd2fe73>
+2026-09-29 09:22:02.163	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<794add7907dae3691fac8c55ee4b4e16f0ba5429edcf5a5b0200d7e4efb41423>
+2026-09-29 09:22:02.163	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.177	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 94
+2026-09-29 09:22:02.177	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<50c19c84578a180d9f25d78a3cab989f961d53a52307e67564d219abf3176208>
+2026-09-29 09:22:02.177	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<f2ad8a0673efe0092aae398fc49ed73c7a52001aa41c91caa27881f2ef04fe97>
+2026-09-29 09:22:02.177	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.191	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 95
+2026-09-29 09:22:02.192	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<080f44dac50b88dc73965a598f085485c2bb5613c2e1e9f7aa6799cfa1f73e6d>
+2026-09-29 09:22:02.192	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<5536b6e8fb1f176840e5ce1ce0773cf466d714d21030b401346eb1bd58d9c678>
+2026-09-29 09:22:02.192	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.206	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 96
+2026-09-29 09:22:02.206	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<c74f916f8efa74ba5ab3cb6657785ea4b573f25c4a149e86fb2b5dd856ba205c>
+2026-09-29 09:22:02.206	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<445d09d339e166c32e73a700ca75005f631222b28630dab2e6e2bf131fff48e3>
+2026-09-29 09:22:02.206	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.219	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 97
+2026-09-29 09:22:02.219	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<ca2e347428c2531c3da2d10c597421ca2dbc04cce23745e64e53ab2ee90a4197>
+2026-09-29 09:22:02.219	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<24eef410884611fad6ccd09b2bb47b340a400af4536e5b93d51014b3b5e1b990>
+2026-09-29 09:22:02.219	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.232	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 98
+2026-09-29 09:22:02.232	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<775cfd259476fd3de52b32d05ab71074cfe682f9da104747869ebc1084ea7422>
+2026-09-29 09:22:02.232	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<202d17ff012bf5c1b32d0adfb7e39fde70f203d8804c2cbbc3072261873b6da5>
+2026-09-29 09:22:02.232	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.246	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 99
+2026-09-29 09:22:02.246	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<d3df6e5b0b3a3fb9d019c102f5a2b5f5ec1dcd9ef034ba4038608cea78cc85b5>
+2026-09-29 09:22:02.246	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<d789335496ce4062604079ba050586f9d7f2a368fd480ee91f7bb2a8e837531a>
+2026-09-29 09:22:02.246	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.259	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 100
+2026-09-29 09:22:02.259	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<b7ce00369743dc55517ed83b1f8fbd6eccfd8c079aab386ed8e2e0baef1434e3>
+2026-09-29 09:22:02.259	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<2d35a3645d69af29b90bea24ead1a8ef370b262fc17de985bb7d9f1c3ea72657>
+2026-09-29 09:22:02.259	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.272	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 101
+2026-09-29 09:22:02.272	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9b4e6e8876dcd6ef61c760a1c861faab4cb45445cd2cb3172fb5b729d1775aa6>
+2026-09-29 09:22:02.272	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<4609f4efd13ce3266f7e2b7e08b6c2a9c87a9005c590dbddafba97d37257d487>
+2026-09-29 09:22:02.272	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.285	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 102
+2026-09-29 09:22:02.285	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<297bbd5c506e42b7c72ac37b65e51d820fe36b203e16929fabee1565da78d3d7>
+2026-09-29 09:22:02.285	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<544051f40d74e8431bc9fe7779c75d1b4282038057e707f816db3ef125791a0c>
+2026-09-29 09:22:02.285	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.299	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 103
+2026-09-29 09:22:02.299	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e3c6bd65b71ca8c8779f9b73facb9797ba134e7022bdc54c0d5de5554f04e667>
+2026-09-29 09:22:02.299	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<525f710f471e10d4d1e25a2d15c27725567acc27f8551ecf3483e14e33602ee0>
+2026-09-29 09:22:02.299	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.312	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 104
+2026-09-29 09:22:02.312	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<254ad110da2f1fe1f9ce5ffa1dd4fd7e5310b984028a1d90b27c8a21749889c3>
+2026-09-29 09:22:02.312	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<cde527044bd88b64d0dd34d2569e783614b32ee9c0e88bcb37fa3d7fa77e3417>
+2026-09-29 09:22:02.312	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.325	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 105
+2026-09-29 09:22:02.325	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<5dabb59e94a0b6d6e42d0f7ba46d0eee66f31041c6be86589439999281f10cff>
+2026-09-29 09:22:02.325	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<4ca0c03aeb48a48c7063b35c690e1461dfdfa1f83f1b9a782d35de443d7e6fc4>
+2026-09-29 09:22:02.325	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.338	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 106
+2026-09-29 09:22:02.338	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<d334a94d0dff225cd3065e7914c8e41ba4df459aeabd6f00b2f9b059ffa608bc>
+2026-09-29 09:22:02.338	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<22a60206f86595e31448ce58b707d29375afb5c83c4d36f12117afc70ce14f3f>
+2026-09-29 09:22:02.338	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.351	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 107
+2026-09-29 09:22:02.351	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<bc3b38040294e327daf37c6a8b9ed11d38838db95da37de79714c2c40de70a2a>
+2026-09-29 09:22:02.351	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<e6e96ced41d7194d066f4b40ee9970f7b673b51ecb744086a6006b6fa958a279>
+2026-09-29 09:22:02.351	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.363	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 108
+2026-09-29 09:22:02.363	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<bbd2b7c103236d9013a5d45d5aeb9acf388ce0815f393c27c83883557bca4df3>
+2026-09-29 09:22:02.364	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<eb0235ea6e7199ffd1a9929d48d852a39fd1c406c23b93f28b43dc7157e499d2>
+2026-09-29 09:22:02.364	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 109
+2026-09-29 09:22:02.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<ed2236b9fff18ed5cf33d80a63e634b3ee8812abd0b0b8dbad9372e070fe3894>
+2026-09-29 09:22:02.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<13671707c1ab7903b262f49c70bb98e6ef628ff491e8ceaf06c1a53d201fa528>
+2026-09-29 09:22:02.376	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.389	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 110
+2026-09-29 09:22:02.389	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<3b71b0ea81d0097781b8119cf5cf478ea0132f73945d20c44e5b7c87a23455b6>
+2026-09-29 09:22:02.389	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<7212e83579ae11a712849d253aac4d4acaa3a4ad149ccb5497a5575469ba95fe>
+2026-09-29 09:22:02.389	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.403	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 111
+2026-09-29 09:22:02.403	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<4a10afbb80f2765c0dcfaf2e27b294ce35c2dd5986f17442156177951bb9fc37>
+2026-09-29 09:22:02.403	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<3bccc083e7e8b24765450a2319427849b2db801c5bebfe4a27f2c378f941a7a0>
+2026-09-29 09:22:02.403	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.416	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 112
+2026-09-29 09:22:02.416	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<2b9aaca8ad336bf4969d61eb93b1cd1e578860db80785355099909981cbf8ad9>
+2026-09-29 09:22:02.416	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<fee26dc291273b61d4a59346899e0655b9ff95a3304789635c8d47f601b3a060>
+2026-09-29 09:22:02.416	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.429	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 113
+2026-09-29 09:22:02.429	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<2832519fd28502685a7f85a129f7c5ff520489dc0945436191b25f18ba887aa1>
+2026-09-29 09:22:02.429	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<67f4c315d3fddbfa7ad38e33d8f12da84923c3dfc308afabb5f963aa93940056>
+2026-09-29 09:22:02.429	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.443	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 114
+2026-09-29 09:22:02.443	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9fb4813e8bb18ef86dc704d1006be79ed64a1c0970f312df6c5445e695b2b5b1>
+2026-09-29 09:22:02.443	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<44981165246ba71c98e00bd49138b05dd03cc6f4631b016129b3aefa7ef8e82c>
+2026-09-29 09:22:02.443	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.456	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 115
+2026-09-29 09:22:02.456	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<fe14b042398546a2d6b0060ce6bb96084ef686fa9b8fe7e33d8f4faba5e823f1>
+2026-09-29 09:22:02.456	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<72524ad23a579120c9787fc8c31b761d3ba2a0b0937fd0aa52785960ef3905b9>
+2026-09-29 09:22:02.456	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.470	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 116
+2026-09-29 09:22:02.470	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<3244d8863aefc2612e95e7761ea8485cd6c453eed84a0e59ab9c364bbd1d37e1>
+2026-09-29 09:22:02.470	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<b63d6527f1531f06c3836d538825d5e0ad3592cf944b37de2c6f8a8944167940>
+2026-09-29 09:22:02.470	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.483	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 117
+2026-09-29 09:22:02.483	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<85792b6d4208e633e535a586efbefbb010087b8bb17ae48dab1b8114a01dd263>
+2026-09-29 09:22:02.483	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<572d67d384a59cb324c87713537994634964d9961c32dcf4cf76be3e769d5f1a>
+2026-09-29 09:22:02.483	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.496	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 118
+2026-09-29 09:22:02.496	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<8f1d0cbce3dd303b04cc4a6a14e93c275733aafd4515e7bd9dfa387e0ffe34ed>
+2026-09-29 09:22:02.496	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<2bca2f3ccb8c3be6cc1ee6d362d10d583faf153e1e2d0b31200a4b0e78112ca3>
+2026-09-29 09:22:02.496	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.509	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 119
+2026-09-29 09:22:02.509	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<6cedc19862e43ac75c46191ce0f3c44ed53132281fee4713e54b00b9c11100eb>
+2026-09-29 09:22:02.509	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<7266c084abf188ffc4513a03bff61ef5893407001d5201fa79949ee293e1b3cd>
+2026-09-29 09:22:02.509	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.522	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 120
+2026-09-29 09:22:02.522	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<42c8eb6a1464bf59a33ee1c12ad499d85d5fd98aeaae9fcd275ba904021eebbe>
+2026-09-29 09:22:02.522	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<a7fab88978266e269caf6aa0fb43735987b53de60e1d8f412441c49e590fb2e8>
+2026-09-29 09:22:02.522	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.536	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 121
+2026-09-29 09:22:02.536	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<b6fdd7fe28dec91c71eb3859c9730735eeaf15868b3c0faf220b02ef1b8fba7f>
+2026-09-29 09:22:02.536	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<7f9c9e5fea72d8a0efb2d6219daaf0ea9acf85cdad30575295fe3ae0292950e2>
+2026-09-29 09:22:02.536	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.550	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 122
+2026-09-29 09:22:02.550	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e8e818f40316bf189213a96cafae7cccb6421bb01036d1415bf8cd3a7f5f521c>
+2026-09-29 09:22:02.550	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<44172d7e76dbf43e416e87a4c0e32f57b6cf06654e04d11888d0eef0746e7ccc>
+2026-09-29 09:22:02.550	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.563	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 123
+2026-09-29 09:22:02.564	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<dae273059b412901205e6b2cbb2e0fabf76b4c6f52f994a41ccd29a3070fc066>
+2026-09-29 09:22:02.564	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<ebf31c9b0340c5b7d403d7640af3e9e8e8b78068d7190316c2b1bafda111ac55>
+2026-09-29 09:22:02.564	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.577	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 124
+2026-09-29 09:22:02.577	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<dd3dedae4450a78bd3d4991f421bed23239e934ddba9fb650104ee4b5d8592e9>
+2026-09-29 09:22:02.577	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<6606be3078b1438ea5ee47af8a5d9ba7c33e9e9a090c259f05c1144f07d5c8f9>
+2026-09-29 09:22:02.577	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.590	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 125
+2026-09-29 09:22:02.590	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<14a979034b739e3aaccbed456861188274eaaa6c502b1005845878e1ad646d40>
+2026-09-29 09:22:02.590	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<605f53f4f967e8d4c3153cd15538710e007d2f52126055af7c578c8feed9f06f>
+2026-09-29 09:22:02.590	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.603	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 126
+2026-09-29 09:22:02.603	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<93e5f14910efed4973e01e2baf62c3a61f1963a62a06297018bf82072501ad2e>
+2026-09-29 09:22:02.603	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<925d6199a00a3fffcb680f9e8e63004a29d1664dcdd0dea15cbe50e7792c9701>
+2026-09-29 09:22:02.603	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.616	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 127
+2026-09-29 09:22:02.616	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<88a5995953940de20cdfc7b1df6760064ba6939632b614068c89d0ebf0570a63>
+2026-09-29 09:22:02.616	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<11a10323760305831004bfb7a394c7c29fed1d9304fbb3fb03d1e57cdecae50a>
+2026-09-29 09:22:02.616	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.630	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 128
+2026-09-29 09:22:02.630	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<482d447cb643ecc4d86203dfa4c451cdca5b41fe883f571c817a87748c096195>
+2026-09-29 09:22:02.630	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<b7044f13eeaae9ee940ea0f9da2c4732b83b89539293b44688cd3a9e1a05c391>
+2026-09-29 09:22:02.630	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.643	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 129
+2026-09-29 09:22:02.643	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<b3c6d401bb8b497aa978047e12f0d9da140afdd17b73e58edcb75ec2cc8a892f>
+2026-09-29 09:22:02.643	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<bbd52aa4c8bc42bfab3d78329199f054266abaae0130eb497aefc0ac46f39ebc>
+2026-09-29 09:22:02.643	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 130
+2026-09-29 09:22:02.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<bb268010b4b3dbc72afe773e32bc8c3b07b5e9142d7c22bb6c923134fb00e297>
+2026-09-29 09:22:02.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<2d04b619a8a9e0df6460e7b12aede35833dbe0a32cc6fb5c74bfbe8b4eb01648>
+2026-09-29 09:22:02.657	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.670	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 131
+2026-09-29 09:22:02.670	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<db8f0a572c1fc7d3cd9ac01ad569acd51f27df95cea3bc3ac4693af75a46e341>
+2026-09-29 09:22:02.670	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<c409ce92dd14da8f7b178befa4b24685a3a61e952ce9fcec6126ea0298c92f28>
+2026-09-29 09:22:02.670	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 132
+2026-09-29 09:22:02.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<d777eb64b65f514bfb742355808137afb58c06e0e85d3a1f1567fe8f896595a1>
+2026-09-29 09:22:02.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<b30e3c22ecb9b178ba373bff39c9376386279268f0fa93b88bc60d079179100c>
+2026-09-29 09:22:02.684	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.697	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 133
+2026-09-29 09:22:02.697	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<b4dc06b6465c1d554dac4cdcc2b8e73019a7a08652309ae0efb88f0f6626449b>
+2026-09-29 09:22:02.697	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<4164eb6088ca0d3e1e57d6358a196e064803ac6a103f9d945d7d0b68ecaa3ec2>
+2026-09-29 09:22:02.697	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.711	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 134
+2026-09-29 09:22:02.711	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<b5644fa3481fcf507799c101fde3bb53893b132dc729539787be3192250fe911>
+2026-09-29 09:22:02.711	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<8264b6a99e3df116d5cd48482a805b22fef6c7de31fdc66d3f062d066c19c860>
+2026-09-29 09:22:02.711	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.723	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 135
+2026-09-29 09:22:02.723	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<2969556ce73b66d0905e2f9cd2b4844c94e8f20b8e5a59716437440e13f7faf9>
+2026-09-29 09:22:02.723	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<5fb404b4d374ae7c9febd80877a64abdb3663dd74005be3aa7b174c1a18d3c7d>
+2026-09-29 09:22:02.723	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.737	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 136
+2026-09-29 09:22:02.737	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e35e4b4dcb0ef5ba9a5c6ac29f49c7036dbcc83300a46f26be4a07917c983730>
+2026-09-29 09:22:02.737	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<5a64251064d8aabeadf1e65fa168b3d6b3b2b645e473b0789c26f4d81cfbf325>
+2026-09-29 09:22:02.737	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.750	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 137
+2026-09-29 09:22:02.750	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<8cc123bcac5a38ba0a2172b50d2af2974d58031ef17394286e3d5a25030f5e5f>
+2026-09-29 09:22:02.750	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<9cddc8764a264c4f27c449e0884d0479532b3b05b7207e370b491b163108e0c3>
+2026-09-29 09:22:02.750	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.763	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 138
+2026-09-29 09:22:02.763	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<e8d4060e91de93a3d65d613fb89319541f34e2ed7d9c657709ed1ecc94e215e9>
+2026-09-29 09:22:02.763	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<569cdb217788fa2a3218b1069889d9e3b504cd92157a1ebbd0230859f6036573>
+2026-09-29 09:22:02.763	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.778	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 139
+2026-09-29 09:22:02.778	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<a05c6d86469a47e4e7caed969ff340ac4384b99a3aabcb04205e3d020dc6c12f>
+2026-09-29 09:22:02.778	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<71337e7644a1ad5eab870614d8dd4d4e712aee6cbdb01b2bef62c337af2d53df>
+2026-09-29 09:22:02.778	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.778	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:1321	REORGANIZE SUCCESS! on height: 79, new blockchain size: 141
+2026-09-29 09:22:02.942	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 140
+2026-09-29 09:22:02.942	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<eedd7c43c7fe77fdb508e39d89fc38e13ed38e453aef9c582f984aa204111bef>
+2026-09-29 09:22:02.942	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<5e47a47cd16aa3b827961e254361cb0af5aa7eb92827746c53eb71817f2a2922>
+2026-09-29 09:22:02.942	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:02.989	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 141
+2026-09-29 09:22:02.989	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	id:	<9ee084454b56bef27fe372c7711a06b5eda75a7974786eb2563ad6622aa5e62e>
+2026-09-29 09:22:02.989	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	PoW:	<1035b0c7fc1ccb9532864587bbc213d2adfa8b6c517081824c49b2b24a9f9486>
+2026-09-29 09:22:02.989	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2290	difficulty:	1
+2026-09-29 09:22:03.056	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2279	###### REORGANIZE on height: 79 of 141 with cum_difficulty 142
+2026-09-29 09:22:03.056	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:2279	 alternative blockchain size: 64 with cum_difficulty 143
+2026-09-29 09:22:03.057	    7b71255f0a80	ERROR	cn	src/cryptonote_basic/cryptonote_format_utils.cpp:1325	wrong non-coinbase transaction output type 'N10cryptonote18txout_to_carrot_v1E' for fork v15 in transaction id=<bb6d76687c850c2da92dc880950f6d08bbfb8580d8c242515491dfd50a838950>
+2026-09-29 09:22:04.113	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v17
+2026-09-29 09:22:04.129	    7b71255f0a80	ERROR	blockchain	src/cryptonote_core/blockchain.cpp:1246	Failed to switch to alternative blockchain
+2026-09-29 09:22:05.198	    7b71255f0a80	INFO	global	src/cryptonote_core/blockchain.cpp:4986	Validating txpool for v17
