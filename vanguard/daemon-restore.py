@@ -127,6 +127,8 @@ async def main():
         stable_height = original['outputs'][0]['block_height']
         restore_height = stable_height - 1
         p2p.record('carrot_received', txid=stable_tx, tx_version=stable_decoded['version'],
+                   rct_type=stable_decoded['rct_signatures']['type'],
+                   output_types=[list(output['target']) for output in stable_decoded['vout']],
                    output_count=len(stable_decoded['vout']), output=original['outputs'][0],
                    balance=original['balance'], restore_height=restore_height)
 
@@ -266,6 +268,8 @@ async def main():
             raise AssertionError('restored FCMP++ spend not in both pools')
         p2p.record('restored_spend_pooled', txid=spend_tx, key_image=image,
                    tx_version=spend_decoded['version'],
+                   rct_type=spend_decoded['rct_signatures']['type'],
+                   output_types=[list(output['target']) for output in spend_decoded['vout']],
                    blob_sha256=p2p.digest(bytes.fromhex(spend_blob)), state=pooled)
         confirmed = await p2p.rpc(1, 'generateblocks',
             {'wallet_address': addresses['sender'], 'amount_of_blocks': 1})

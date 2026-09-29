@@ -11,7 +11,8 @@ EVENTS = ('network_containment', 'bridge_ready', 'p2p_ready', 'carrot_received',
           'restored_and_rescanned', 'bridge_partitioned', 'partition_and_branch',
           'bridge_rejoined', 'reorg_wallet_observed', 'restored_reorg_rollback',
           'orphan_spend_refused', 'same_key_image_alternative_built',
-          'restored_spend_pooled', 'restored_spend_confirmed',
+          'restored_spend_pool_observed', 'restored_spend_pooled',
+          'restored_spend_confirmed',
           'spent_key_image_replay_refused')
 
 
@@ -137,6 +138,11 @@ def verify(out):
                 event('restored_reorg_rollback')['orphan'] in
                 event('partition_and_branch')['old_blocks'],
                 'native peer or orphan evidence absent')
+        for name in ('carrot_received', 'restored_spend_pooled'):
+            row = event(name)
+            require(row['rct_type'] == 7 and row['output_types'] and
+                    all(types == ['carrot_v1'] for types in row['output_types']),
+                    f'{name} FCMP++/CARROT receipt')
         wire = [json.loads(line) for line in (work / 'wire.jsonl').read_text().splitlines()]
         require(sum(row['direction'] == 'a_to_b' and row['command'] == 2002 for row in wire) >= 2 and
                 any(row['direction'] == 'b_to_a' for row in wire) and
@@ -146,7 +152,8 @@ def verify(out):
         containment = json.loads((work / 'containment.json').read_text())
         require(live['interfaces'] == containment['interfaces'] == ['lo'] and
                 not live['routes'] and not containment['routes'] and
-                live['socket_mode'] == '0o600' and len(live['listeners']) >= 7,
+                live['socket_mode'] == '0o600' and len(live['listeners']) >= 5 and
+                len(containment['listeners_before_shutdown']) >= 10,
                 'live network containment')
         exits = [row for row in events if row['event'] == 'process_exit']
         require(len(exits) == 7 and not any(row['returncode'] for row in exits),
