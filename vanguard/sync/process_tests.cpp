@@ -5,6 +5,7 @@
 #include "common/util.h"
 #include "cryptonote_core/tx_verification_utils.h"
 #include "cryptonote_core/cryptonote_tx_utils.h"
+#include "serialization/binary_utils.h"
 
 #include <cerrno>
 #include <csignal>
