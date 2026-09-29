@@ -1,6 +1,6 @@
 # Vanguard bounded sync and reorg diagnostic (TJS-953)
 
-**Status:** corrected two-core witness pending fresh exact-commit independent QA, not TJS-953 acceptance. Both cores share one process and receive serialized local delivery. Two-process delivery is a separate required gate. No public network, mainnet, remote push, spend of value, external audit, or security-readiness claim is involved. The accepted v0 activation, recipes, builder image, and TJS-751 slice remain unchanged.
+**Status:** TJS-959's third independent exact-commit QA accepted this bounded two-core, one-process witness as engineering evidence at `d5b4afbb82c1859cf98012555a6dddde3d0c6c42` with no required findings. Its follow-up clarifies that only core B's full reverse proof re-verification was established. TJS-953 as a whole is not accepted; the separate two-process candidate is documented in `research/vanguard-sync-process-tjs953-2026-09-29.md`. No public network, mainnet, remote push, spend of value, external audit, or security-readiness claim is involved. The accepted v0 activation, recipes, builder image, and TJS-751 slice remain unchanged.
 
 ## Current code and fixture
 
@@ -39,4 +39,4 @@ All containers used `--pull=never --network=none --cpus=2 --memory=4g --memory-s
 
 The earlier `3e7a5f4` diagnostic and its exact01 bundle remain preserved. Its reverse attempt crossed from v17 to v15; pool revalidation then dropped the CARROT spend, so its pool-removal check did not establish stale-root invalidation. It did not prove reverse key-image reapplication. The prior report transcribed the reverse-attempt `core.log` hash incorrectly. The correct SHA-256 of `research/evidence/vanguard-sync-tjs953-2026-09-29-reverse-attempt/core.log` is `cbcd56db62106c49b063877d6ad2bae2784180b3761c5d16bb0870709c970074`.
 
-Independent exact-commit review is required on this new candidate. Two-process delivery, wallet restore/subsequent spend, broader cases and loaded performance remain separate unaccepted gates. TJS-958 remains dependency-gated.
+The independent exact-commit verdict is TJS-959 comment `358aee1a-60a4-4f8c-bf5f-9e3d5983e0b5`; its correction is comment `1bb73e6a-d45a-4fac-b4a9-5c6bff9a1368`. The separate two-process candidate requires its own independent QA. Wallet restore/subsequent spend, broader cases and loaded performance remain separate unaccepted gates.
