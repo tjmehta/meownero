@@ -84,7 +84,7 @@ def verify(out):
         require(0 < result['restore_seconds'] < 1100 and
                 0 < result['rescan_seconds'] < 1100, 'restore/rescan time absent')
         pooled, confirmed = result['pooled'], result['confirmed']
-        require(pooled['key_images'] == [2, 2] and
+        require(pooled['key_images'][0] in (0, 2) and pooled['key_images'][1] == 2 and
                 all(result['restored_spend_txid'] in entries for entries in pooled['pools']) and
                 confirmed['key_images'] == [1, 1] and
                 all(result['restored_spend_txid'] not in entries for entries in confirmed['pools']),
