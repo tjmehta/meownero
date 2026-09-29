@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 EVENTS = ('network_containment', 'bridge_ready', 'p2p_ready', 'carrot_received',
           'restored_and_rescanned', 'bridge_partitioned', 'partition_and_branch',
           'bridge_rejoined', 'reorg_wallet_observed', 'restored_reorg_rollback',
-          'orphan_spend_refused',
+          'orphan_spend_refused', 'same_key_image_alternative_built',
           'restored_spend_pooled', 'restored_spend_confirmed',
           'spent_key_image_replay_refused')
 
@@ -98,6 +98,9 @@ def verify(out):
             require({row['node'] for row in result[name]} == {0, 1} and
                     all(row['status'] != 'OK' for row in result[name]),
                     f'{name} not refused on both daemons')
+        require(result['same_key_image_alternative_txid'] != result['restored_spend_txid'] and
+                all(row['double_spend'] for row in result['replay_rejections']),
+                'distinct same-key-image double spend not refused')
 
         events = [json.loads(line) for line in (work / 'events.jsonl').read_text().splitlines()]
         names = [event['event'] for event in events]
@@ -121,6 +124,12 @@ def verify(out):
                 event('restored_spend_confirmed')['state'] == confirmed and
                 event('restored_spend_confirmed')['original'] == result['final_original'] and
                 event('orphan_spend_refused')['rejections'] == result['orphan_rejections'] and
+                event('same_key_image_alternative_built')['key_image'] ==
+                result['stable_key_image'] and
+                event('same_key_image_alternative_built')['txid'] ==
+                result['same_key_image_alternative_txid'] and
+                event('spent_key_image_replay_refused')['txid'] ==
+                result['same_key_image_alternative_txid'] and
                 event('spent_key_image_replay_refused')['rejections'] == result['replay_rejections'],
                 'event/result state mismatch')
         require(event('p2p_ready')['daemon_peer_counts'][0] >= 1 and
@@ -140,7 +149,7 @@ def verify(out):
                 live['socket_mode'] == '0o600' and len(live['listeners']) >= 7,
                 'live network containment')
         exits = [row for row in events if row['event'] == 'process_exit']
-        require(len(exits) == 6 and not any(row['returncode'] for row in exits),
+        require(len(exits) == 7 and not any(row['returncode'] for row in exits),
                 'owned process exit status')
     print('PASS_DAEMON_RESTORE_RECEIPT_RECONCILIATION')
 

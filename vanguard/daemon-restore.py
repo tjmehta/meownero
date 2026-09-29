@@ -227,6 +227,27 @@ async def main():
                    key_image=orphan_view['outputs'][0]['key_image'], rejections=orphan_rejections,
                    state=before_negative)
 
+        alternate_port = 19094
+        start_wallet('alternate', alternate_port, 1)
+        await p2p.wait_for(lambda: wallet(alternate_port, 'get_version'), 'alternate wallet RPC')
+        alternate_seed = (await wallet(ports['original'], 'query_key',
+                                       {'key_type': 'mnemonic'}))['key']
+        await wallet(alternate_port, 'restore_deterministic_wallet',
+            {'seed': alternate_seed, 'restore_height': restore_height,
+             'filename': 'alternate', 'password': '', 'autosave_current': True})
+        del alternate_seed
+        if await state(alternate_port) != original:
+            raise AssertionError('alternate wallet did not recover stable input')
+        alternate = await wallet(alternate_port, 'transfer',
+            {'destinations': [{'amount': COIN, 'address': addresses['orphan']}],
+             'do_not_relay': True, 'get_tx_hex': True})
+        alternate_blob, alternate_tx = alternate['tx_blob'], alternate['tx_hash']
+        if not alternate_blob or alternate['spent_key_images']['key_images'] != [image] or \
+           any([alternate_tx in await p2p.pool(node) for node in (0, 1)]):
+            raise AssertionError('alternate same-key-image spend was not held offline')
+        p2p.record('same_key_image_alternative_built', txid=alternate_tx,
+                   key_image=image, blob_sha256=p2p.digest(bytes.fromhex(alternate_blob)))
+
         spent = await wallet(ports['restored'], 'transfer',
             {'destinations': [{'amount': 2 * COIN, 'address': addresses['sender']}],
              'get_tx_hex': True})
@@ -244,7 +265,8 @@ async def main():
            any(spend_tx not in pool for pool in pooled['pools']):
             raise AssertionError('restored FCMP++ spend not in both pools')
         p2p.record('restored_spend_pooled', txid=spend_tx, key_image=image,
-                   tx_version=spend_decoded['version'], state=pooled)
+                   tx_version=spend_decoded['version'],
+                   blob_sha256=p2p.digest(bytes.fromhex(spend_blob)), state=pooled)
         confirmed = await p2p.rpc(1, 'generateblocks',
             {'wallet_address': addresses['sender'], 'amount_of_blocks': 1})
         await p2p.wait_for(p2p.equal_tip, 'restored spend block relay', 180)
@@ -262,14 +284,16 @@ async def main():
             block=confirmed['blocks'][0], state=chain, original=final_original,
             restored=final_restored)
         before_replay = await p2p.snapshot(image)
-        replay_rejections = [await rejected_raw(node, spend_blob, 'spent key-image replay')
+        replay_rejections = [await rejected_raw(node, alternate_blob, 'spent key-image replay')
                              for node in (0, 1)]
         await p2p.unchanged(before_replay, image)
-        p2p.record('spent_key_image_replay_refused', txid=spend_tx,
+        p2p.record('spent_key_image_replay_refused', txid=alternate_tx,
+                   confirmed_txid=spend_tx, key_image=image,
                    rejections=replay_rejections, state=before_replay)
         (PUBLIC / 'result.json').write_text(json.dumps({'result': 'PASS',
             'stable_txid': stable_tx, 'stable_key_image': image, 'orphan_txid': orphan_tx,
             'orphan_spend_txid': orphan_spend_tx, 'restored_spend_txid': spend_tx,
+            'same_key_image_alternative_txid': alternate_tx,
             'restore_seconds': restore_seconds, 'rescan_seconds': rescan_seconds,
             'initial': original, 'rescanned': rescanned, 'old_branch': old_view,
             'after_reorg': settled, 'reorg_pool_credit': after_reorg,
