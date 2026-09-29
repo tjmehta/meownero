@@ -56,3 +56,28 @@ abort depends on the random proof bytes, and `results.json` records the class `r
 Every other rejection must be a clean `false` or a caught exception.
 
 See `research/vanguard-tjs356-2026-09-23.md`.
+
+## Bounded two-core sync and reorg diagnostic (TJS-953)
+
+`sync/sync_tests.cpp` runs two separate FAKECHAIN core databases in one
+network-disabled process. It relays serialized prerequisite and FCMP++
+transactions, delivers one block ahead of its predecessor, restarts the peer
+without clearing its database, then feeds a competing branch that changes the
+stored tree root at the spend's reference height. The cores must converge on
+tip hash, root, depth, spent key-image state, chain transaction presence and
+pool state. A block carrying the old transaction as an explicit supplement must
+fail on the changed root, and the stale pool entry must be removed.
+
+```sh
+python3 -B vanguard/run-sync.py --out build/vanguard-sync-exact01
+python3 -B vanguard/verify-sync.py build/vanguard-sync-exact01
+```
+
+The runner requires the accepted pinned upstream scratch checkout and cache
+from `build.sh prepare`, uses the existing heavy-work lock, and caps each
+network-disabled container at two CPUs, 4 GiB memory, 256 PIDs and 900 seconds.
+It writes two fresh executions and a source, command, cgroup and state receipt.
+The test is a diagnostic slice, not completion of TJS-953: the two cores share
+a process, the original branch is not reapplied after the deep reorg, and
+independent exact-commit QA remains open. See the TJS-953 report for the
+observed reverse-switch failure and next action.
