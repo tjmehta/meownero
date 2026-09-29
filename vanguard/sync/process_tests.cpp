@@ -1,5 +1,5 @@
-// Two FAKECHAIN cores in separate processes. The parent delivers serialized
-// transactions and blocks over pipes; neither core shares a database or pool.
+// Two FAKECHAIN cores in separate processes. Serialized headers, transactions,
+// and blocks cross a private Unix socket; neither core shares a database or pool.
 #include "fcmp_pp.h"
 #include "chaingen.h"
 #include "common/util.h"
@@ -7,12 +7,16 @@
 #include "cryptonote_core/cryptonote_tx_utils.h"
 
 #include <cerrno>
+#include <csignal>
 #include <cstring>
 #include <fstream>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/resource.h>
+#include <sys/un.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -143,7 +147,7 @@ void write_all(int fd, const void* data, size_t size)
   {
     const auto count = write(fd, ptr, size);
     if (count < 0 && errno == EINTR) continue;
-    if (count <= 0) throw std::runtime_error("pipe write");
+    if (count <= 0) throw std::runtime_error("socket write");
     ptr += count;
     size -= count;
   }
@@ -156,7 +160,7 @@ bool read_all(int fd, void* data, size_t size)
   {
     const auto count = read(fd, ptr, size);
     if (count < 0 && errno == EINTR) continue;
-    if (count < 0 || (count == 0 && !first)) throw std::runtime_error("pipe read");
+    if (count < 0 || (count == 0 && !first)) throw std::runtime_error("socket read");
     if (count == 0) return false;
     first = false;
     ptr += count;
@@ -166,7 +170,7 @@ bool read_all(int fd, void* data, size_t size)
 }
 void write_frame(int fd, const std::string& data)
 {
-  if (data.size() > 16 * 1024 * 1024) throw std::runtime_error("pipe frame too large");
+  if (data.size() > 16 * 1024 * 1024) throw std::runtime_error("socket frame too large");
   const uint32_t size = data.size();
   write_all(fd, &size, sizeof(size));
   write_all(fd, data.data(), data.size());
@@ -175,9 +179,9 @@ std::string read_frame(int fd)
 {
   uint32_t size = 0;
   if (!read_all(fd, &size, sizeof(size))) return {};
-  if (!size || size > 16 * 1024 * 1024) throw std::runtime_error("bad pipe frame");
+  if (!size || size > 16 * 1024 * 1024) throw std::runtime_error("bad socket frame");
   std::string data(size, '\0');
-  if (!read_all(fd, data.data(), size)) throw std::runtime_error("short pipe frame");
+  if (!read_all(fd, data.data(), size)) throw std::runtime_error("short socket frame");
   return data;
 }
 void append_blob(std::string& out, const std::string& blob)
@@ -212,7 +216,7 @@ block_verification_context parse_context(const std::string& line)
     throw std::runtime_error("peer block context parse");
   return bvc;
 }
-int worker(int input, int output, const std::string& dir)
+int worker(int listener, const std::string& dir)
 {
   try
   {
@@ -224,14 +228,26 @@ int worker(int input, int output, const std::string& dir)
     Node node(dir, &opts.value);
     transaction spend{};
     bool have_spend = false;
-    write_frame(output, "O" + std::to_string(getpid()));
-    for (std::string request; !(request = read_frame(input)).empty(); )
+    for (;;)
     {
+      const int connection = accept(listener, nullptr, nullptr);
+      if (connection < 0 && errno == EINTR) continue;
+      if (connection < 0) throw std::runtime_error("socket accept");
+      std::string expected_header;
       try
       {
+        write_frame(connection, "O" + std::to_string(getpid()));
+        for (std::string request; !(request = read_frame(connection)).empty(); )
+        {
         const char command = request[0];
         std::string result;
-        if (command == 'X') { write_frame(output, "Oexit"); break; }
+        if (command == 'X')
+        {
+          write_frame(connection, "Oexit");
+          close(connection);
+          tools::threadpool::getInstanceForCompute().recycle();
+          return 0;
+        }
         if (command == 'G')
         {
           block b{};
@@ -248,6 +264,16 @@ int worker(int input, int output, const std::string& dir)
           if (command == 'S') { spend = tx; have_spend = true; }
           result = send_tx(node.c(), tx) ? "1" : "0";
         }
+        else if (command == 'H')
+        {
+          block_header header{};
+          const auto blob = request.substr(1);
+          if (!serialization::parse_binary(blob, header) ||
+              t_serializable_object_to_blob(header) != blob)
+            throw std::runtime_error("peer header parse");
+          expected_header = blob;
+          result = blob;
+        }
         else if (command == 'B')
         {
           size_t pos = 1;
@@ -256,6 +282,10 @@ int worker(int input, int output, const std::string& dir)
           if (pos != request.size()) throw std::runtime_error("peer block trailing bytes");
           block b{};
           if (!parse_and_validate_block_from_blob(blob, b)) throw std::runtime_error("peer block parse");
+          if (expected_header.empty() ||
+              t_serializable_object_to_blob(static_cast<const block_header&>(b)) != expected_header)
+            throw std::runtime_error("peer header/block mismatch");
+          expected_header.clear();
           transaction tx{};
           const transaction* supplement = nullptr;
           if (!extra.empty())
@@ -276,16 +306,24 @@ int worker(int input, int output, const std::string& dir)
           result = state(node.c(), spend).str();
         }
         else throw std::runtime_error("unknown peer command");
-        write_frame(output, "O" + result);
+        write_frame(connection, "O" + result);
+        }
       }
       catch (const std::exception& error)
       {
-        write_frame(output, "E" + std::string(error.what()));
-        return 1;
+        // A bad length or truncated frame tears down only this connection.
+        // The core and its database survive for a fresh connection.
+        if (std::string(error.what()) != "bad socket frame" &&
+            std::string(error.what()) != "short socket frame")
+        {
+          close(connection);
+          throw;
+        }
+        std::ofstream("rejected-frames.tsv", std::ios::app) << "oversized_or_short\t"
+          << error.what() << '\n';
       }
+      close(connection);
     }
-    tools::threadpool::getInstanceForCompute().recycle();
-    return 0;
   }
   catch (const std::exception& error)
   {
@@ -295,19 +333,54 @@ int worker(int input, int output, const std::string& dir)
 }
 struct Peer
 {
-  int input, output;
+  int connection{-1};
   pid_t pid;
-  Peer(int read_fd, int write_fd, pid_t child): input(read_fd), output(write_fd), pid(child) {}
+  std::string path;
+  Peer(std::string socket_path, pid_t child): pid(child), path(std::move(socket_path)) {}
   ~Peer()
   {
-    if (output >= 0) close(output);
-    if (input >= 0) close(input);
-    if (pid > 0) { int status; waitpid(pid, &status, 0); }
+    disconnect();
+    if (pid > 0) { kill(pid, SIGTERM); int status; waitpid(pid, &status, 0); }
+  }
+  void disconnect()
+  {
+    if (connection >= 0) { close(connection); connection = -1; }
+  }
+  std::string connect()
+  {
+    connection = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (connection < 0) throw std::runtime_error("socket create");
+    sockaddr_un addr{};
+    addr.sun_family = AF_UNIX;
+    if (path.size() >= sizeof(addr.sun_path)) throw std::runtime_error("socket path too long");
+    std::memcpy(addr.sun_path, path.c_str(), path.size() + 1);
+    if (::connect(connection, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0)
+      throw std::runtime_error("socket connect");
+    const auto ready = read_frame(connection);
+    if (ready.size() < 2 || ready[0] != 'O') throw std::runtime_error("socket greeting");
+    return ready.substr(1);
+  }
+  bool local_stream() const
+  {
+    sockaddr_un addr{};
+    socklen_t len = sizeof(addr);
+    int kind = 0;
+    socklen_t kind_len = sizeof(kind);
+    return getpeername(connection, reinterpret_cast<sockaddr*>(&addr), &len) == 0 &&
+      addr.sun_family == AF_UNIX && path == addr.sun_path &&
+      getsockopt(connection, SOL_SOCKET, SO_TYPE, &kind, &kind_len) == 0 && kind == SOCK_STREAM;
+  }
+  void inject_oversized_frame()
+  {
+    const uint32_t bad = 16 * 1024 * 1024 + 1;
+    write_all(connection, &bad, sizeof(bad));
+    if (!read_frame(connection).empty()) throw std::runtime_error("oversized frame not disconnected");
+    disconnect();
   }
   std::string call(const std::string& data)
   {
-    write_frame(output, data);
-    const auto reply = read_frame(input);
+    write_frame(connection, data);
+    const auto reply = read_frame(connection);
     if (reply.empty()) throw std::runtime_error("peer exited");
     if (reply[0] != 'O') throw std::runtime_error("peer: " + reply.substr(1));
     return reply.substr(1);
@@ -315,13 +388,16 @@ struct Peer
   bool tx(const transaction& t, bool spend = false)
   { return call(std::string(1, spend ? 'S' : 'T') + t_serializable_object_to_blob(t)) == "1"; }
   block_verification_context block(const cryptonote::block& b, const transaction* tx = nullptr)
-  { return parse_context(call(block_message(b, tx))); }
+  {
+    const auto header = t_serializable_object_to_blob(static_cast<const block_header&>(b));
+    if (call("H" + header) != header) throw std::runtime_error("header roundtrip");
+    return parse_context(call(block_message(b, tx)));
+  }
   State state() { return parse_state(call("Q")); }
   bool finish()
   {
     if (call("X") != "exit") return false;
-    close(output); output = -1;
-    close(input); input = -1;
+    disconnect();
     int status = 0;
     if (waitpid(pid, &status, 0) != pid) return false;
     pid = -1;
@@ -365,25 +441,33 @@ int main(int argc, char** argv)
   struct rlimit limit{0, 0};
   setrlimit(RLIMIT_CORE, &limit);
   alarm(900);
-  int to_peer[2], from_peer[2];
-  if (pipe(to_peer) || pipe(from_peer)) return 2;
+  const std::string socket_dir = argv[1];
+  if (mkdir(socket_dir.c_str(), 0700) != 0) return 2;
+  umask(0077);
+  const std::string socket_path = socket_dir + "/peer.sock";
+  sockaddr_un addr{};
+  if (socket_path.size() >= sizeof(addr.sun_path)) return 2;
+  const int listener = socket(AF_UNIX, SOCK_STREAM, 0);
+  if (listener < 0) return 2;
+  addr.sun_family = AF_UNIX;
+  std::memcpy(addr.sun_path, socket_path.c_str(), socket_path.size() + 1);
+  if (bind(listener, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) || listen(listener, 2)) return 2;
   const pid_t child = fork();
   if (child < 0) return 2;
   if (child == 0)
   {
-    close(to_peer[1]); close(from_peer[0]);
-    const int code = worker(to_peer[0], from_peer[1], std::string(argv[1]) + "/b");
-    close(to_peer[0]); close(from_peer[1]);
+    const int code = worker(listener, socket_dir + "/b");
+    close(listener);
     return code;
   }
-  close(to_peer[0]); close(from_peer[1]);
-  Peer peer(from_peer[0], to_peer[1], child);
+  close(listener);
+  Peer peer(socket_path, child);
   checks.open("checks.tsv"); states.open("states.tsv"); controls.open("controls.tsv");
   try
   {
-    const auto ready = read_frame(peer.input);
-    require(ready.size() > 1 && ready[0] == 'O', "peer_process_ready");
-    const auto peer_pid = std::stol(ready.substr(1));
+    const auto peer_pid = std::stol(peer.connect());
+    require(peer.local_stream(), "private_unix_stream_connected");
+    require(peer_pid > 1, "peer_process_ready");
     require(peer_pid == child && peer_pid != getpid(), "distinct_process_ids");
     std::ofstream processes("processes.tsv");
     processes << "source\t" << getpid() << "\npeer\t" << peer_pid << '\n';
@@ -412,7 +496,7 @@ int main(int argc, char** argv)
     require(a.c().set_genesis_block(original[0]) &&
       peer.call("G" + t_serializable_object_to_blob(original[0])) == "1", "same_genesis");
 
-    // Every transaction and block crosses the pipe before entering the peer.
+    // Every transaction, header, and block crosses the socket before entering the peer.
     // Block 137 arrives before 136 there, then is retried after its parent.
     for (const auto& event : events)
     {
@@ -450,6 +534,13 @@ int main(int argc, char** argv)
     require(initial.str() == peer.state().str() && initial.spent && initial.chain,
       "initial_cross_process_convergence");
     snapshot("before_a", initial); snapshot("before_b", peer.state());
+    peer.disconnect();
+    require(std::stol(peer.connect()) == peer_pid && peer.local_stream(), "socket_reconnected_same_peer");
+    require(!peer.block(original.back()).m_verifivation_failed && initial.str() == peer.state().str(),
+      "replayed_tip_keeps_chain_state");
+    peer.inject_oversized_frame();
+    require(std::stol(peer.connect()) == peer_pid && peer.local_stream(), "oversized_frame_reconnect");
+    require(initial.str() == peer.state().str(), "malformed_frame_keeps_chain_state");
     require(peer.call("R") == "1", "peer_restart");
     require(initial.str() == peer.state().str(), "restart_cross_process_catchup");
     snapshot("restart_b", peer.state());
@@ -566,6 +657,7 @@ int main(int argc, char** argv)
       "reverse_cross_process_convergence_and_key_image_reapplication");
     snapshot("reverse_a", reverse_a); snapshot("reverse_b", reverse_b);
     require(peer.finish(), "peer_clean_exit");
+    require(unlink(socket_path.c_str()) == 0, "socket_path_removed");
     require(bool(checks) && bool(states) && bool(controls), "receipt_streams_ok");
     tools::threadpool::getInstanceForCompute().recycle();
     return 0;
