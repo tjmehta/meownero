@@ -66,6 +66,10 @@ async def rejected_raw(node, blob, label):
             'invalid_input': result.get('invalid_input', False)}
 
 
+async def orphan_absent(txid):
+    return all([txid not in await p2p.pool(node) for node in (0, 1)])
+
+
 async def main():
     PRIVATE.mkdir(mode=0o700)
     PUBLIC.mkdir(mode=0o755)
@@ -189,15 +193,31 @@ async def main():
         await p2p.wait_for(p2p.equal_tip, 'native P2P reorg', 180)
         after_reorg = await state(ports['restored'])
         original_after = await state(ports['original'])
+        pool_rows = {}
+        for name in ('original', 'restored'):
+            rows = (await wallet(ports[name], 'get_transfers', {'pool': True})).get('pool', [])
+            pool_rows[name] = sorted([[row['txid'], row['amount']] for row in rows])
         p2p.record('reorg_wallet_observed', original_before=original,
-                   restored_after=after_reorg, original_after=original_after)
-        if after_reorg != original or original_after != original:
-            raise AssertionError('restored wallet did not roll back and converge exactly')
+                   restored_after=after_reorg, original_after=original_after,
+                   pool_incoming=pool_rows)
+        if after_reorg != original_after or after_reorg['outputs'] != original['outputs'] or \
+           after_reorg['balance'] != {'balance': 7 * COIN, 'unlocked_balance': 5 * COIN} or \
+           pool_rows != {'original': [[orphan_tx, 2 * COIN]],
+                         'restored': [[orphan_tx, 2 * COIN]]}:
+            raise AssertionError('orphan credit was not represented once in each wallet pool')
+        for node in (0, 1):
+            if orphan_tx in await p2p.pool(node):
+                await p2p.rpc(node, 'flush_txpool', {'txids': [orphan_tx]})
+        await p2p.wait_for(lambda: orphan_absent(orphan_tx), 'orphan pool flush')
+        settled = await state(ports['restored'])
+        original_settled = await state(ports['original'])
+        if settled != original or original_settled != original:
+            raise AssertionError('restored wallet did not settle after orphan pool removal')
         old_header = (await p2p.rpc(0, 'get_block_header_by_hash',
             {'hash': old_branch['blocks'][-1]}))['block_header']
         if not old_header['orphan_status']:
             raise AssertionError('old recipient branch not orphaned')
-        p2p.record('restored_reorg_rollback', state=after_reorg,
+        p2p.record('restored_reorg_rollback', state=settled,
                    orphan=old_branch['blocks'][-1], tip=await p2p.equal_tip())
 
         before_negative = await p2p.snapshot(image)
@@ -249,7 +269,8 @@ async def main():
             'orphan_spend_txid': orphan_spend_tx, 'restored_spend_txid': spend_tx,
             'restore_seconds': restore_seconds, 'rescan_seconds': rescan_seconds,
             'initial': original, 'rescanned': rescanned, 'old_branch': old_view,
-            'after_reorg': after_reorg, 'pooled': pooled, 'confirmed': chain,
+            'after_reorg': settled, 'reorg_pool_credit': after_reorg,
+            'pooled': pooled, 'confirmed': chain,
             'final_original': final_original, 'final_restored': final_restored,
             'orphan_rejections': orphan_rejections, 'replay_rejections': replay_rejections,
             'final_tip': await p2p.equal_tip(), 'bridge_connections': bridge.connections,

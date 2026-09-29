@@ -9,7 +9,8 @@ import subprocess
 ROOT = Path(__file__).resolve().parent.parent
 EVENTS = ('network_containment', 'bridge_ready', 'p2p_ready', 'carrot_received',
           'restored_and_rescanned', 'bridge_partitioned', 'partition_and_branch',
-          'bridge_rejoined', 'restored_reorg_rollback', 'orphan_spend_refused',
+          'bridge_rejoined', 'reorg_wallet_observed', 'restored_reorg_rollback',
+          'orphan_spend_refused',
           'restored_spend_pooled', 'restored_spend_confirmed',
           'spent_key_image_replay_refused')
 
@@ -76,6 +77,10 @@ def verify(out):
                 sorted(row['tx_hash'] for row in result['old_branch']['outputs']) ==
                 sorted([result['stable_txid'], result['orphan_txid']]),
                 'orphan branch recipient view')
+        credit = result['reorg_pool_credit']
+        require(credit['outputs'] == rows and
+                credit['balance'] == {'balance': 7 * 10**12, 'unlocked_balance': 5 * 10**12},
+                'reorg pool credit counted incorrectly')
         require(0 < result['restore_seconds'] < 1100 and
                 0 < result['rescan_seconds'] < 1100, 'restore/rescan time absent')
         pooled, confirmed = result['pooled'], result['confirmed']
@@ -106,6 +111,11 @@ def verify(out):
                 event('restored_and_rescanned')['restore_height'] <
                 event('restored_and_rescanned')['output_height'] and
                 event('partition_and_branch')['old_wallet'] == result['old_branch'] and
+                event('reorg_wallet_observed')['restored_after'] == credit and
+                event('reorg_wallet_observed')['original_after'] == credit and
+                event('reorg_wallet_observed')['pool_incoming'] ==
+                {'original': [[result['orphan_txid'], 2 * 10**12]],
+                 'restored': [[result['orphan_txid'], 2 * 10**12]]} and
                 event('restored_reorg_rollback')['state'] == result['after_reorg'] and
                 event('restored_spend_pooled')['state'] == pooled and
                 event('restored_spend_confirmed')['state'] == confirmed and
