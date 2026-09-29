@@ -72,23 +72,29 @@ python3 -B vanguard/run-sync.py --out build/vanguard-sync-exact01
 python3 -B vanguard/verify-sync.py build/vanguard-sync-exact01
 ```
 
-`sync/process_tests.cpp` adds two operating-system processes, each with its own
-FAKECHAIN core and LMDB directory. Transactions and blocks cross anonymous
-pipes as serialized frames. It exercises the same bounded delivery, fork,
-stale-root, and reverse-switch paths. Peer restart retains its database;
-subsequent blocks are admitted after restart, without a backlog pull.
+At the accepted TJS-953 commit, `sync/process_tests.cpp` added two operating
+system processes, each with its own FAKECHAIN core and LMDB directory.
+Transactions and blocks crossed anonymous pipes as serialized frames. That
+receipt remains pinned at `10a26e0` and `572a1e2`.
+
+The current `sync/process_tests.cpp` extends that witness with a private Unix
+socket, serialized headers before blocks, reconnect and tip replay, and
+recovery after oversized and truncated frames. It exercises the same bounded
+fork, stale-root, and reverse-switch paths. Peer core restart retains its
+database; subsequent blocks are admitted after restart without a backlog pull.
 
 ```sh
-python3 -B vanguard/run-sync-process.py --out build/vanguard-sync-process-exact02
-python3 -B vanguard/verify-sync-process.py build/vanguard-sync-process-exact02
+python3 -B vanguard/run-sync-process.py --out build/vanguard-socket-tjs990-exact01
+python3 -B vanguard/verify-sync-process.py build/vanguard-socket-tjs990-exact01
 ```
 
 Both runners use the accepted pinned upstream scratch checkout and cache from
 `build.sh prepare`, the existing heavy-work lock, and network-disabled
 containers capped at two CPUs, 4 GiB memory, 256 PIDs, and 900 seconds. They
 write two fresh executions with source, command, cgroup, and state receipts.
-TJS-958 accepted the two-process code commit `10a26e0` and receipt bundle at
-`572a1e2` with no required findings, closing the stated two-process delivery
-gate as engineering evidence. See
-`research/vanguard-sync-process-tjs953-2026-09-29.md` for the exact commands,
-hashes, and limits. This does not exercise daemon P2P or socket transport.
+TJS-958 accepted the pipe-based two-process code commit `10a26e0` and receipt
+bundle at `572a1e2` with no required findings. See
+`research/vanguard-sync-process-tjs953-2026-09-29.md` for that historical
+result. The new socket receipt and limits are in
+`research/vanguard-socket-tjs990-2026-09-29.md`. Neither result exercises the
+daemon's P2P protocol.
