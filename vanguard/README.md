@@ -98,3 +98,29 @@ bundle at `572a1e2` with no required findings. See
 result. The new socket receipt and limits are in
 `research/vanguard-socket-tjs990-2026-09-29.md`. Neither result exercises the
 daemon's P2P protocol.
+
+## Native daemon P2P over the private socket (TJS-996)
+
+`run-daemon-p2p.py` builds the pinned upstream `monerod` and wallet RPC, then
+starts two distinct regtest daemon processes with separate LMDB directories
+inside one network-disabled container. Node A's exclusive peer is a loopback
+proxy. The proxy carries unmodified native Levin P2P frames through a mode-0600
+AF_UNIX stream to node B's loopback listener. The harness captures exact
+transaction and block notifications, then replays or changes those frames on
+the same stream. It records both daemons' RPC state and parser logs.
+
+```sh
+python3 -B vanguard/run-daemon-p2p.py --out build/vanguard-daemon-p2p-tjs996-exact01
+python3 -B vanguard/verify-daemon-p2p.py build/vanguard-daemon-p2p-tjs996-exact01
+```
+
+The witness covers an FCMP++ transaction relayed into both pools and confirmed
+on both chains, duplicate and malformed P2P notifications, a partition and
+longer competing branch, key-image chain-state rollback after reconnection,
+and later healthy block relay. The malformed transaction changes its binary
+varint; malformed header and block change the captured block's header and
+coinbase body. The verifier checks exact source hashes, raw native frames,
+daemon rejection logs, state snapshots, the manifest, loopback-only listeners,
+container flags, and cgroup OOM counts. This is an accelerated fixed-difficulty
+regtest with disposable wallet keys; it does not establish loaded 90s/120s
+performance, public-network safety, payout behavior, or launch readiness.
