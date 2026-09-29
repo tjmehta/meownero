@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parent.parent
 PIN = json.loads((ROOT / 'vanguard/source-lock.json').read_text())
 SOURCES = ['vanguard/daemon-p2p.py', 'vanguard/run-daemon-p2p.py',
            'vanguard/verify-daemon-p2p.py', 'vanguard/source-lock.json']
+RESTORE_SOURCES = SOURCES + ['vanguard/daemon-restore.py', 'vanguard/verify-daemon-restore.py']
 IMAGE = PIN['builder']['image_id']
 
 
@@ -30,6 +31,7 @@ def main():
     parser.add_argument('--src', type=Path, default=ROOT / 'build/vanguard-src')
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--runs', type=int, choices=(1, 2), default=2)
+    parser.add_argument('--scenario', choices=('p2p', 'restore'), default='p2p')
     args = parser.parse_args()
     src, out = args.src.resolve(), args.out.resolve()
     up = src / 'monero-fcmp'
@@ -54,9 +56,10 @@ def main():
     with open('/tmp/meownero-swarm-20260912-heavy.lock', 'a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         out.mkdir(parents=True)
-        receipt = {'schema': 'meownero-vanguard-daemon-p2p/1',
+        restore = args.scenario == 'restore'
+        receipt = {'schema': 'meownero-vanguard-daemon-restore/1' if restore else 'meownero-vanguard-daemon-p2p/1',
             'candidate_commit': output(['git', '-C', str(ROOT), 'rev-parse', 'HEAD']),
-            'source_sha256': {source: sha(ROOT / source) for source in SOURCES},
+            'source_sha256': {source: sha(ROOT / source) for source in (RESTORE_SOURCES if restore else SOURCES)},
             'upstream_commit': PIN['upstream']['commit'], 'builder_image': IMAGE,
             'rustc': PIN['builder']['rustc'], 'binary': {}, 'commands': [], 'metrics': {}}
         shutil.copy2(ROOT / 'vanguard/source-lock.json', out / 'source-lock.json')
@@ -101,12 +104,14 @@ def main():
             stage = f'run{number}'
             work = out / stage
             work.mkdir()
-            container(stage, 'timeout 1100 python3 -B /harness/daemon-p2p.py', work, readonly=True)
+            script = 'daemon-restore.py' if restore else 'daemon-p2p.py'
+            container(stage, f'timeout 1100 python3 -B /harness/{script}', work, readonly=True)
         (out / 'receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
         (out / 'MANIFEST.sha256').write_text(''.join(
             f'{sha(path)}  {path.relative_to(out)}\n' for path in sorted(out.rglob('*'))
             if path.is_file() and 'private' not in path.parts and path.name != 'MANIFEST.sha256'))
-        subprocess.run(['python3', '-B', str(ROOT / 'vanguard/verify-daemon-p2p.py'), str(out)], check=True)
+        verifier = 'verify-daemon-restore.py' if restore else 'verify-daemon-p2p.py'
+        subprocess.run(['python3', '-B', str(ROOT / 'vanguard' / verifier), str(out)], check=True)
 
 
 if __name__ == '__main__':
