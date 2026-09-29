@@ -189,6 +189,8 @@ async def main():
         await p2p.wait_for(p2p.equal_tip, 'native P2P reorg', 180)
         after_reorg = await state(ports['restored'])
         original_after = await state(ports['original'])
+        p2p.record('reorg_wallet_observed', original_before=original,
+                   restored_after=after_reorg, original_after=original_after)
         if after_reorg != original or original_after != original:
             raise AssertionError('restored wallet did not roll back and converge exactly')
         old_header = (await p2p.rpc(0, 'get_block_header_by_hash',
