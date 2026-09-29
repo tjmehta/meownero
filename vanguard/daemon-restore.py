@@ -238,6 +238,8 @@ async def main():
         await p2p.wait_for(lambda: p2p.pool_contains(0, spend_tx), 'restored spend origin pool')
         spend_decoded, _ = await transaction(0, spend_tx)
         pooled = await p2p.snapshot(image)
+        p2p.record('restored_spend_pool_observed', txid=spend_tx,
+                   key_image=image, state=pooled)
         if pooled['key_images'] != [2, 2] or any(spend_tx not in pool for pool in pooled['pools']):
             raise AssertionError('restored FCMP++ spend not in both pools')
         p2p.record('restored_spend_pooled', txid=spend_tx, key_image=image,
