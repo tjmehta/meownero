@@ -56,3 +56,39 @@ abort depends on the random proof bytes, and `results.json` records the class `r
 Every other rejection must be a clean `false` or a caught exception.
 
 See `research/vanguard-tjs356-2026-09-23.md`.
+
+## Bounded sync and reorg integration (TJS-953)
+
+`sync/sync_tests.cpp` exercises two FAKECHAIN cores in one process. It delivers
+serialized transactions and an out-of-order block, restarts the peer with its
+database retained, switches to a competing v17 branch, and switches back. The
+cores converge on tip hash, trusted root and depth, transaction validity, pool
+state, and key-image rollback and reapplication. Stale-root transactions are
+rejected through both a block supplement and the retained pool. TJS-959 accepted
+the exact one-process slice at `d5b4afbb` as bounded engineering evidence.
+
+```sh
+python3 -B vanguard/run-sync.py --out build/vanguard-sync-exact01
+python3 -B vanguard/verify-sync.py build/vanguard-sync-exact01
+```
+
+`sync/process_tests.cpp` adds two operating-system processes, each with its own
+FAKECHAIN core and LMDB directory. Transactions and blocks cross anonymous
+pipes as serialized frames. It exercises the same bounded delivery, fork,
+stale-root, and reverse-switch paths. Peer restart retains its database;
+subsequent blocks are admitted after restart, without a backlog pull.
+
+```sh
+python3 -B vanguard/run-sync-process.py --out build/vanguard-sync-process-exact02
+python3 -B vanguard/verify-sync-process.py build/vanguard-sync-process-exact02
+```
+
+Both runners use the accepted pinned upstream scratch checkout and cache from
+`build.sh prepare`, the existing heavy-work lock, and network-disabled
+containers capped at two CPUs, 4 GiB memory, 256 PIDs, and 900 seconds. They
+write two fresh executions with source, command, cgroup, and state receipts.
+TJS-958 accepted the two-process code commit `10a26e0` and receipt bundle at
+`572a1e2` with no required findings, closing the stated two-process delivery
+gate as engineering evidence. See
+`research/vanguard-sync-process-tjs953-2026-09-29.md` for the exact commands,
+hashes, and limits. This does not exercise daemon P2P or socket transport.
