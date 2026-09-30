@@ -26,28 +26,32 @@ def main():
         raise AssertionError(f'clean evidence failed: {clean.stdout}{clean.stderr}')
     scratch = os.environ.get('PAPERCLIP_RUN_SCRATCH_DIR') or os.environ.get('PAPERCLIP_SCRATCH_DIR')
     with tempfile.TemporaryDirectory(dir=scratch) as tmp:
-        work = Path(tmp) / 'evidence'
-        shutil.copytree(source, work)
-        for run in sorted(work.glob('run*/public')):
-            result_path = run / 'result.json'
-            result = json.loads(result_path.read_text())
-            result['rolled_back']['key_images'] = [0, 0]
-            result['rolled_back']['pools'] = [[], []]
-            result_path.write_text(json.dumps(result, indent=2) + '\n')
-            events_path = run / 'events.jsonl'
-            events = [json.loads(row) for row in events_path.read_text().splitlines()]
-            for event in events:
-                if event['event'] == 'reorg_key_image_rollback':
-                    event['state'] = result['rolled_back']
-            events_path.write_text(''.join(json.dumps(row, sort_keys=True) + '\n' for row in events))
-        (work / 'MANIFEST.sha256').write_text(''.join(
-            f'{sha(path)}  {path.relative_to(work)}\n' for path in sorted(work.rglob('*'))
-            if path.is_file() and 'private' not in path.parts and path.name != 'MANIFEST.sha256'))
-        rejected = subprocess.run([sys.executable, '-B', str(VERIFY), str(work)],
-                                  capture_output=True, text=True)
-        if rejected.returncode == 0 or 'key image chain-state transition' not in rejected.stderr:
-            raise AssertionError(f'hash-consistent unspent rollback was not refused: '
-                                 f'{rejected.stdout}{rejected.stderr}')
+        for case in ('missing-pool', 'unspent-key-image'):
+            work = Path(tmp) / case
+            shutil.copytree(source, work)
+            for run in sorted(work.glob('run*/public')):
+                result_path = run / 'result.json'
+                result = json.loads(result_path.read_text())
+                if case == 'missing-pool':
+                    result['rolled_back']['pools'] = [[], []]
+                else:
+                    result['rolled_back']['key_images'] = [0, 0]
+                result_path.write_text(json.dumps(result, indent=2) + '\n')
+                events_path = run / 'events.jsonl'
+                events = [json.loads(row) for row in events_path.read_text().splitlines()]
+                for event in events:
+                    if event['event'] == 'reorg_key_image_rollback':
+                        event['state'] = result['rolled_back']
+                events_path.write_text(''.join(json.dumps(row, sort_keys=True) + '\n' for row in events))
+            (work / 'MANIFEST.sha256').write_text(''.join(
+                f'{sha(path)}  {path.relative_to(work)}\n' for path in sorted(work.rglob('*'))
+                if path.is_file() and 'private' not in path.parts and path.name != 'MANIFEST.sha256'))
+            rejected = subprocess.run([sys.executable, '-B', str(VERIFY), str(work)],
+                                      capture_output=True, text=True)
+            if rejected.returncode == 0 or 'key image chain-state transition' not in rejected.stderr:
+                raise AssertionError(f'{case} was not refused: '
+                                     f'{rejected.stdout}{rejected.stderr}')
+            print(f'EXPECTED_REFUSAL {case}: key image chain-state transition')
     print('PASS_DAEMON_P2P_HASH_CONSISTENT_REFUSAL')
 
 

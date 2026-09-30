@@ -7,6 +7,14 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
+# Independently rebuilt for TJS-1032; these pins live outside receipt bundles.
+# A different source/toolchain build needs new independently checked pins.
+EXPECTED_BINARIES = {
+    'monerod': {'sha256': '5ba64f2e04e21550575b396b250bcebba01471c4246d74d88e679f06cee86509',
+                'bytes': 29872608},
+    'monero-wallet-rpc': {'sha256': 'cf2ea70c353c5124e86f2bfac46da28fad2993af28636ab28ca7ea9db81678f2',
+                          'bytes': 33545392},
+}
 EVENTS = ('network_containment', 'bridge_ready', 'p2p_ready', 'carrot_received',
           'restored_and_rescanned', 'bridge_partitioned', 'partition_and_branch',
           'bridge_rejoined', 'reorg_wallet_observed', 'restored_reorg_rollback',
@@ -53,7 +61,9 @@ def verify(out):
         require(all(flag in command for flag in required), 'container containment flag absent')
         require(receipt['builder_image'] in command, 'builder image mismatch')
     require(not any(metric['exit'] for metric in receipt['metrics'].values()), 'nonzero container exit')
-    require(set(receipt['binary']) == {'monerod', 'monero-wallet-rpc'}, 'binary pins absent')
+    require(set(receipt['binary']) == set(EXPECTED_BINARIES), 'binary pins absent')
+    for name, expected in EXPECTED_BINARIES.items():
+        require(receipt['binary'][name] == expected, f'binary pin mismatch: {name}')
     for stage in receipt['metrics']:
         work = out if stage == 'build' else out / stage
         counts = dict(row.split() for row in (work / f'{stage}.memory-events').read_text().splitlines())
@@ -88,6 +98,11 @@ def verify(out):
                 confirmed['key_images'] == [1, 1] and
                 all(result['restored_spend_txid'] not in entries for entries in confirmed['pools']),
                 'restored spend pool/chain transition')
+        require(len(pooled['tips']) == 2 and pooled['tips'][0] == pooled['tips'][1] and
+                len(confirmed['tips']) == 2 and confirmed['tips'][0] == confirmed['tips'][1],
+                'cross-daemon tip divergence')
+        require(result['final_tip'] == confirmed['tips'][0],
+                'final tip/confirmed snapshot mismatch')
         require(result['final_original'] == result['final_restored'] and
                 any(row['tx_hash'] == result['stable_txid'] and row['spent'] and
                     row['key_image'] == result['stable_key_image']
@@ -108,6 +123,10 @@ def verify(out):
                     for i in range(len(EVENTS) - 1)), 'event order')
         def event(name):
             return next(row for row in events if row['event'] == name)
+        confirmed_event = event('restored_spend_confirmed')
+        require(confirmed_event['state']['tips'][0] == result['final_tip'] and
+                confirmed_event['block'] == result['final_tip'][1],
+                'final tip/confirmed event mismatch')
         observed = event('reorg_wallet_observed')
         for name, view in (('original', original_credit), ('restored', credit)):
             pending = observed['pool_incoming'][name]
