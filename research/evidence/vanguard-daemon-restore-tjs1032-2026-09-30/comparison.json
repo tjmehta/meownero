@@ -1,0 +1,546 @@
+{
+  "writer_candidate": "9057e7bc220b5b690e978b69f3dcb583402807ce",
+  "qa_checkout": "40be047b6ed89745c94d22b3a36537b138bc91ee",
+  "source_hashes_equal": true,
+  "binary_receipts_equal": true,
+  "binary": {
+    "monerod": {
+      "sha256": "5ba64f2e04e21550575b396b250bcebba01471c4246d74d88e679f06cee86509",
+      "bytes": 29872608
+    },
+    "monero-wallet-rpc": {
+      "sha256": "cf2ea70c353c5124e86f2bfac46da28fad2993af28636ab28ca7ea9db81678f2",
+      "bytes": 33545392
+    }
+  },
+  "source_lock_equal": true,
+  "source_lock_sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+  "event_sequences_equal": true,
+  "runs": {
+    "writer_run1": {
+      "sha256": {
+        "result.json": "1107ec30c6659766cf912aa0b4c23af13773c33dfde1e442e1e2eae0ce120d48",
+        "events.jsonl": "f4d03c810baa8954c920c358b56280a4465fcf5f12d5501aa4ab104dd487a36a",
+        "wire.jsonl": "8c8faaa5502da16130cd660bf04aa9b1e54a4f4dc44f4cd8a8c43362fffba247",
+        "containment.json": "e00bc54ae00b0c32eab74d29b57e5766d679d8f9c873b82073cf2b9939eef2ea",
+        "network-live.json": "2db60621626b0aea93db36d072dcce239113f8598295ce1596b82382b14bf31b"
+      },
+      "event_sequence": [
+        "network_containment",
+        "bridge_ready",
+        "process_started",
+        "process_started",
+        "bridge_connected",
+        "p2p_ready",
+        "process_started",
+        "process_started",
+        "process_started",
+        "process_started",
+        "carrot_received",
+        "restored_and_rescanned",
+        "bridge_partitioned",
+        "partition_and_branch",
+        "bridge_rejoined",
+        "bridge_connected",
+        "reorg_wallet_observed",
+        "restored_reorg_rollback",
+        "orphan_spend_refused",
+        "process_started",
+        "same_key_image_alternative_built",
+        "restored_spend_pool_observed",
+        "restored_spend_pooled",
+        "restored_spend_confirmed",
+        "spent_key_image_replay_refused",
+        "bridge_partitioned",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit"
+      ],
+      "wire_histogram": {
+        "a_to_b:1001": 2,
+        "a_to_b:1002": 1,
+        "a_to_b:2002": 2,
+        "a_to_b:2003": 1,
+        "a_to_b:2004": 1,
+        "a_to_b:2006": 1,
+        "a_to_b:2007": 1,
+        "a_to_b:2008": 82,
+        "a_to_b:2010": 1,
+        "a_to_b:2011": 1,
+        "b_to_a:1001": 2,
+        "b_to_a:1002": 1,
+        "b_to_a:2003": 1,
+        "b_to_a:2004": 1,
+        "b_to_a:2006": 1,
+        "b_to_a:2007": 1,
+        "b_to_a:2008": 1,
+        "b_to_a:2010": 1,
+        "b_to_a:2011": 1,
+        "b_to_a:2012": 1
+      },
+      "wire_count": 104,
+      "stable_txid": "f3bc23f208d9f2dd03fac819c2fbf2d54c747975b55c33c2e3973a7eccc4e9fb",
+      "stable_key_image": "59d1d274a00d329ca58f0037799f8e179883fcfd20e178b788d5e1822c32e8f3",
+      "orphan_txid": "f99db3d63dc9d53fc1e3ba82f0fa4c2aa326c3344706aa8341b83d807784243c",
+      "restored_spend_txid": "0f8e22f1088150ea9da7d203ce35ef62ae765c436d786cf7deb2aa010f0ed013",
+      "alternate_spend_txid": "bbe9156b2aa198f27a9dc0d30fefa5d9558c352fedd14c60086bd4c644a16ec9",
+      "original_reorg_pool": [
+        [
+          "f99db3d63dc9d53fc1e3ba82f0fa4c2aa326c3344706aa8341b83d807784243c",
+          2000000000000
+        ]
+      ],
+      "restored_reorg_pool": [
+        [
+          "f99db3d63dc9d53fc1e3ba82f0fa4c2aa326c3344706aa8341b83d807784243c",
+          2000000000000
+        ]
+      ],
+      "pooled_key_image_status": [
+        0,
+        2
+      ],
+      "confirmed_key_image_status": [
+        1,
+        1
+      ],
+      "pooled_height": 94,
+      "confirmed_height": 95,
+      "orphan_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        }
+      ],
+      "replay_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        }
+      ],
+      "network": {
+        "interfaces": [
+          "lo"
+        ],
+        "routes": [],
+        "socket_mode": "0o600",
+        "live_listeners": 5,
+        "shutdown_listeners": 10
+      }
+    },
+    "writer_run2": {
+      "sha256": {
+        "result.json": "0465372a3f0e8c73207a56093b81b78b3b407656e4f445e933d790c97778aca9",
+        "events.jsonl": "b64a2d6d1695022c0d2dcc2119d2687be99a5ac32c32b301fc97dba985df5b5c",
+        "wire.jsonl": "8105d54b927d42403eeafd2ec320fbe55a34be979e876d4337ad823e5f05e261",
+        "containment.json": "f566c90a5e412056823c409ec3769c095acc15591619b05bccc43b3893953384",
+        "network-live.json": "6afeacafccb2233a5e8a59bacd5e84156041b7ae84f05b7f2ab30e47cecb9ea5"
+      },
+      "event_sequence": [
+        "network_containment",
+        "bridge_ready",
+        "process_started",
+        "process_started",
+        "bridge_connected",
+        "p2p_ready",
+        "process_started",
+        "process_started",
+        "process_started",
+        "process_started",
+        "carrot_received",
+        "restored_and_rescanned",
+        "bridge_partitioned",
+        "partition_and_branch",
+        "bridge_rejoined",
+        "bridge_connected",
+        "reorg_wallet_observed",
+        "restored_reorg_rollback",
+        "orphan_spend_refused",
+        "process_started",
+        "same_key_image_alternative_built",
+        "restored_spend_pool_observed",
+        "restored_spend_pooled",
+        "restored_spend_confirmed",
+        "spent_key_image_replay_refused",
+        "bridge_partitioned",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit"
+      ],
+      "wire_histogram": {
+        "a_to_b:1001": 2,
+        "a_to_b:1002": 2,
+        "a_to_b:2002": 2,
+        "a_to_b:2003": 1,
+        "a_to_b:2004": 1,
+        "a_to_b:2006": 1,
+        "a_to_b:2007": 1,
+        "a_to_b:2008": 82,
+        "a_to_b:2010": 1,
+        "a_to_b:2011": 1,
+        "b_to_a:1001": 2,
+        "b_to_a:1002": 2,
+        "b_to_a:2003": 1,
+        "b_to_a:2004": 1,
+        "b_to_a:2006": 1,
+        "b_to_a:2007": 1,
+        "b_to_a:2008": 1,
+        "b_to_a:2010": 1,
+        "b_to_a:2011": 1,
+        "b_to_a:2012": 1
+      },
+      "wire_count": 106,
+      "stable_txid": "f92e3dc3e45452a797b37eeba9f105a42973a1b14e81c424597f4c21a4bad832",
+      "stable_key_image": "f10cb7dd59b16c3e0ab7cd72714ec553841579b6f77e72458a1020ebf7d09c4a",
+      "orphan_txid": "64e9c1215f6e68634cae4c8e30a42997b6163135bb61acf969107d13da532481",
+      "restored_spend_txid": "d6fad86be1399f5e258c1223c91f54a977712e46d682aed195a5fcb93fff0d3a",
+      "alternate_spend_txid": "febb3451968849a3fcc3dbc9d26c0be2850e2a2ac47821f2024a4e60c979a830",
+      "original_reorg_pool": [
+        [
+          "64e9c1215f6e68634cae4c8e30a42997b6163135bb61acf969107d13da532481",
+          2000000000000
+        ]
+      ],
+      "restored_reorg_pool": [
+        [
+          "64e9c1215f6e68634cae4c8e30a42997b6163135bb61acf969107d13da532481",
+          2000000000000
+        ]
+      ],
+      "pooled_key_image_status": [
+        0,
+        2
+      ],
+      "confirmed_key_image_status": [
+        1,
+        1
+      ],
+      "pooled_height": 94,
+      "confirmed_height": 95,
+      "orphan_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        }
+      ],
+      "replay_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        }
+      ],
+      "network": {
+        "interfaces": [
+          "lo"
+        ],
+        "routes": [],
+        "socket_mode": "0o600",
+        "live_listeners": 5,
+        "shutdown_listeners": 10
+      }
+    },
+    "qa_run1": {
+      "sha256": {
+        "result.json": "69a948cad2eba5fef1ab7716d34a4f3ca3a13bc10cb4b2c1c371a26f5dd34884",
+        "events.jsonl": "8cc5c3fdaa021a034ad46c482d915406135484d65d77d2cc7bb0ee991ae991ee",
+        "wire.jsonl": "3caddf0f48440b108cd8cc3da7b0add463184c827957844431c6fcfefda0536d",
+        "containment.json": "c5abc53ed5716cc2820d6ea6b5b1d0f79594f26d5914c509db09ebd570593d8e",
+        "network-live.json": "53466dd60ca79471be88969851eb4b687e620b1a3f8fd1d5618425af29a6dcfe"
+      },
+      "event_sequence": [
+        "network_containment",
+        "bridge_ready",
+        "process_started",
+        "process_started",
+        "bridge_connected",
+        "p2p_ready",
+        "process_started",
+        "process_started",
+        "process_started",
+        "process_started",
+        "carrot_received",
+        "restored_and_rescanned",
+        "bridge_partitioned",
+        "partition_and_branch",
+        "bridge_rejoined",
+        "bridge_connected",
+        "reorg_wallet_observed",
+        "restored_reorg_rollback",
+        "orphan_spend_refused",
+        "process_started",
+        "same_key_image_alternative_built",
+        "restored_spend_pool_observed",
+        "restored_spend_pooled",
+        "restored_spend_confirmed",
+        "spent_key_image_replay_refused",
+        "bridge_partitioned",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit"
+      ],
+      "wire_histogram": {
+        "a_to_b:1001": 2,
+        "a_to_b:1002": 2,
+        "a_to_b:2002": 2,
+        "a_to_b:2003": 1,
+        "a_to_b:2004": 1,
+        "a_to_b:2006": 1,
+        "a_to_b:2007": 1,
+        "a_to_b:2008": 82,
+        "a_to_b:2010": 1,
+        "a_to_b:2011": 1,
+        "b_to_a:1001": 2,
+        "b_to_a:1002": 2,
+        "b_to_a:2003": 1,
+        "b_to_a:2004": 1,
+        "b_to_a:2006": 1,
+        "b_to_a:2007": 1,
+        "b_to_a:2008": 1,
+        "b_to_a:2010": 1,
+        "b_to_a:2011": 1,
+        "b_to_a:2012": 1
+      },
+      "wire_count": 106,
+      "stable_txid": "11681cb1ecf9c8e1f23fabb4d56cdf9b6ab0995c74c29d437bae51232e07ea0a",
+      "stable_key_image": "f55f83739d92aff7d288a09b603c2aef6d2db4731d3b01cd8b0c81fa90e177b5",
+      "orphan_txid": "2af713f7ad160757f30ffead410107bcffffce407dd46ff64282031de22afddd",
+      "restored_spend_txid": "54a6b6cd457a1828df86deeedbb613fb46c0b1aab85034c9522abe372012833c",
+      "alternate_spend_txid": "ec89936f5a5c8b12615ae0380e83b504f26b566aa558102c13d7892af307b8c6",
+      "original_reorg_pool": [
+        [
+          "2af713f7ad160757f30ffead410107bcffffce407dd46ff64282031de22afddd",
+          2000000000000
+        ]
+      ],
+      "restored_reorg_pool": [
+        [
+          "2af713f7ad160757f30ffead410107bcffffce407dd46ff64282031de22afddd",
+          2000000000000
+        ]
+      ],
+      "pooled_key_image_status": [
+        0,
+        2
+      ],
+      "confirmed_key_image_status": [
+        1,
+        1
+      ],
+      "pooled_height": 94,
+      "confirmed_height": 95,
+      "orphan_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        }
+      ],
+      "replay_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        }
+      ],
+      "network": {
+        "interfaces": [
+          "lo"
+        ],
+        "routes": [],
+        "socket_mode": "0o600",
+        "live_listeners": 5,
+        "shutdown_listeners": 10
+      }
+    },
+    "qa_run2": {
+      "sha256": {
+        "result.json": "04969d8b3cf060647398e2f141c9bef3bd2de913dc066ec3da9ad670281250f4",
+        "events.jsonl": "723f0cfa71a6034a5cb4d3116e2a4795e7eb51e8285e6928b9633b0294394579",
+        "wire.jsonl": "c0a1ae7e45ea2f026fac31e852ad635d8afcb4e914862bb5d8519223f7b8417a",
+        "containment.json": "6002aee776befa98dce66612b2d287ca8873dad1d26c991287a118202491eac9",
+        "network-live.json": "f56739b6fca508f787a277ec3f71156e9e288f798b873ba3c5d5d2f079f06e61"
+      },
+      "event_sequence": [
+        "network_containment",
+        "bridge_ready",
+        "process_started",
+        "process_started",
+        "bridge_connected",
+        "p2p_ready",
+        "process_started",
+        "process_started",
+        "process_started",
+        "process_started",
+        "carrot_received",
+        "restored_and_rescanned",
+        "bridge_partitioned",
+        "partition_and_branch",
+        "bridge_rejoined",
+        "bridge_connected",
+        "reorg_wallet_observed",
+        "restored_reorg_rollback",
+        "orphan_spend_refused",
+        "process_started",
+        "same_key_image_alternative_built",
+        "restored_spend_pool_observed",
+        "restored_spend_pooled",
+        "restored_spend_confirmed",
+        "spent_key_image_replay_refused",
+        "bridge_partitioned",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit",
+        "process_exit"
+      ],
+      "wire_histogram": {
+        "a_to_b:1001": 2,
+        "a_to_b:1002": 2,
+        "a_to_b:2002": 2,
+        "a_to_b:2003": 1,
+        "a_to_b:2004": 1,
+        "a_to_b:2006": 1,
+        "a_to_b:2007": 1,
+        "a_to_b:2008": 82,
+        "a_to_b:2010": 1,
+        "a_to_b:2011": 1,
+        "b_to_a:1001": 2,
+        "b_to_a:1002": 2,
+        "b_to_a:2003": 1,
+        "b_to_a:2004": 1,
+        "b_to_a:2006": 1,
+        "b_to_a:2007": 1,
+        "b_to_a:2008": 1,
+        "b_to_a:2010": 1,
+        "b_to_a:2011": 1,
+        "b_to_a:2012": 1
+      },
+      "wire_count": 106,
+      "stable_txid": "13a3e6e058b9e5034d702a9963b54f76c7bbd8974f550d9e32d5c2d5cae7e046",
+      "stable_key_image": "09a0d223a7040ed1019854d865ff8d71b4ba2f8a8f235ee8572b9a083cf7577a",
+      "orphan_txid": "3c5388e72ee793299d8fdd4899f0c067eb7f07021d533877e0e9ab7e2ac8d981",
+      "restored_spend_txid": "971057e17db53bf1864a70a08e5e9a23a8a2705b71904f7c9463ef8d12750992",
+      "alternate_spend_txid": "bb517e7b8c8b33fb31fba282638f2186cb3856cd52938b8c3926e6c22a9d994a",
+      "original_reorg_pool": [
+        [
+          "3c5388e72ee793299d8fdd4899f0c067eb7f07021d533877e0e9ab7e2ac8d981",
+          2000000000000
+        ]
+      ],
+      "restored_reorg_pool": [
+        [
+          "3c5388e72ee793299d8fdd4899f0c067eb7f07021d533877e0e9ab7e2ac8d981",
+          2000000000000
+        ]
+      ],
+      "pooled_key_image_status": [
+        0,
+        2
+      ],
+      "confirmed_key_image_status": [
+        1,
+        1
+      ],
+      "pooled_height": 94,
+      "confirmed_height": 95,
+      "orphan_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": false,
+          "invalid_input": true
+        }
+      ],
+      "replay_rejections": [
+        {
+          "node": 0,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        },
+        {
+          "node": 1,
+          "status": "Failed",
+          "double_spend": true,
+          "invalid_input": true
+        }
+      ],
+      "network": {
+        "interfaces": [
+          "lo"
+        ],
+        "routes": [],
+        "socket_mode": "0o600",
+        "live_listeners": 5,
+        "shutdown_listeners": 10
+      }
+    }
+  },
+  "comparison": "All four runs satisfy the same semantic assertions. Transaction IDs, frame hashes, wire counts, and timing are intentionally variable."
+}
