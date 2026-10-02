@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and run the bounded two-process Vanguard witness in isolated containers."""
+"""Build and run the bounded two-process Vanguard socket witness offline."""
 import argparse
 import fcntl
 import hashlib
@@ -71,21 +71,24 @@ def main():
             raise SystemExit("unexpected existing sync registration")
         if (target / "fixture.cpp").read_bytes() != SOURCE_FILES[2].read_bytes():
             raise SystemExit("unexpected existing valueless fixture")
-        if prior_process_source is not None and prior_process_source != SOURCE_FILES[1].read_bytes():
+        accepted_process_source = subprocess.check_output(
+            ["git", "-C", str(ROOT), "show", "10a26e0:vanguard/sync/process_tests.cpp"])
+        if prior_process_source not in (None, SOURCE_FILES[1].read_bytes(), accepted_process_source):
             raise SystemExit("unexpected existing process source")
         rust = Path(os.environ.get("RUST_TOOLCHAIN_DIR", str(Path.home() / ".rustup/toolchains/stable-x86_64-unknown-linux-gnu")))
         if command([str(rust / "bin/rustc"), "-V"]) != PIN["builder"]["rustc"]:
             raise SystemExit("Rust toolchain mismatch")
         out.mkdir(parents=True)
         shutil.copy2(ROOT / "vanguard/source-lock.json", out / "source-lock.json")
-        receipt = {"commit": command(["git", "rev-parse", "HEAD"]),
+        receipt = {"commit": command(["git", "rev-parse", "HEAD"]), "transport": "AF_UNIX/SOCK_STREAM",
                    "source_sha256": {str(p.relative_to(ROOT)): sha(p) for p in SOURCE_FILES},
                    "upstream": PIN["upstream"]["commit"], "image": PIN["builder"]["image_id"],
                    "rustc": PIN["builder"]["rustc"], "binary": {}, "commands": [], "metrics": {}}
 
         def container(stage, script, readonly=False):
             name = f"vanguard-sync-process-{os.getpid()}-{stage}"
-            argv = ["docker", "run", "--name", name, "--rm", "--pull=never", "--network=none", "--cpus=2",
+            argv = ["docker", "run", "--name", name, "--rm", "--pull=never", "--network=none",
+                    "--cap-drop=ALL", "--security-opt=no-new-privileges", "--cpus=2",
                     "--memory=4g", "--memory-swap=4g", "--pids-limit=256", "--ulimit", "core=0",
                     "-u", f"{os.getuid()}:{os.getgid()}", "-v", f"{up}:/src" + (":ro" if readonly else ""),
                     "-v", f"{src / 'cargo-home'}:/cargo-home" + (":ro" if readonly else ""),
