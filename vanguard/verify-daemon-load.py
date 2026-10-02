@@ -34,6 +34,34 @@ def metric(value, label):
     require(math.isfinite(value) and 0 < value < 180, label)
 
 
+def output_identities(wallet):
+    fields = ('tx_hash', 'amount', 'key_image', 'pubkey', 'block_height')
+    return sorted(tuple(row[field] for field in fields) for row in wallet['outputs'])
+
+
+def container_command(command, image, stage):
+    # Pin the runner's Docker option layout. Only names, uid/gid and host mount
+    # paths vary; no extra/duplicate option can override a required restriction.
+    require(len(command) == 39, f'{stage} container containment')
+    options = list(command[:35])
+    for index in (4, 16, 18, 20, 22, 24, 26):
+        options[index] = None
+    require(options == ['docker', 'run', '--rm', '--name', None, *REQUIRED,
+                        '-u', None, '-v', None, '-v', None, '-v', None,
+                        '-v', None, '-v', None, '-e', 'CARGO_HOME=/cargo-home',
+                        '-e', 'CARGO_NET_OFFLINE=true', '-e',
+                        'PATH=/opt/rust/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+                        '-w', '/out'] and command[36:38] == ['bash', '-euc'],
+            f'{stage} container containment')
+    require(command[35] == image, f'{stage} selected builder image')
+    readonly = ':ro' if stage != 'build' else ''
+    for index, destination in ((18, '/src' + readonly), (20, '/cargo-home' + readonly),
+                               (22, '/opt/rust:ro'), (24, '/harness:ro'), (26, '/out')):
+        require(command[index].endswith(':' + destination) and
+                Path(command[index].split(':', 1)[0]).is_absolute(),
+                f'{stage} container mount configuration')
+
+
 def verify(out, src):
     receipt = json.loads((out / 'receipt.json').read_text())
     require(receipt['schema'] == 'meownero-vanguard-daemon-load/1', 'receipt schema')
@@ -60,13 +88,16 @@ def verify(out, src):
               if p.is_file() and 'private' not in p.relative_to(out).parts and
               p.name != 'MANIFEST.sha256'}
     require(actual == manifest, 'manifest mismatch')
-    require(json.loads((out / 'source-lock.json').read_text()) ==
-            json.loads((ROOT / 'vanguard/source-lock.json').read_text()), 'source lock mismatch')
+    lock = json.loads((ROOT / 'vanguard/source-lock.json').read_text())
+    require(json.loads((out / 'source-lock.json').read_text()) == lock, 'source lock mismatch')
+    for field, expected in (('upstream_commit', lock['upstream']['commit']),
+                            ('rustc', lock['builder']['rustc']),
+                            ('builder_image', lock['builder']['image_id'])):
+        require(receipt[field] == expected, f'receipt lineage: {field}')
 
     require(len(receipt['commands']) == 3, 'two trials required')
-    for command in receipt['commands']:
-        require(all(flag in command for flag in REQUIRED) and
-                receipt['builder_image'] in command, 'container containment')
+    for stage, command in zip(('build', 'run1', 'run2'), receipt['commands']):
+        container_command(command, lock['builder']['image_id'], stage)
     require(set(receipt['metrics']) == {'build', 'run1', 'run2'}, 'metric stage set')
     for stage, stage_metric in receipt['metrics'].items():
         require(stage_metric['exit'] == 0 and 0 < stage_metric['wall_seconds'] <
@@ -133,6 +164,16 @@ def verify(out, src):
         for phase in ('restore', 'rescan'):
             metric(result['restore'][phase]['wall_seconds'], f'wallet {phase} time')
         spend = result['restored_spend']
+        original = result['restore']['original']
+        require(output_identities(result['workloads'][-1]['receiver']) ==
+                output_identities(original) == output_identities(spend['wallet']),
+                'restore output identity reconciliation')
+        original_images = [row['key_image'] for row in original['outputs']]
+        require(len(set(original_images)) == len(original_images) and
+                spend['key_image'] in original_images, 'restored spend original key image')
+        require(all(not row['spent'] for row in original['outputs']) and
+                all(row['spent'] == (row['key_image'] == spend['key_image'])
+                    for row in spend['wallet']['outputs']), 'restored spend output state')
         require(spend['tips'][0] == spend['tips'][1] and spend['txid'] not in all_ids and
                 any(row['key_image'] == spend['key_image'] and row['spent']
                     for row in spend['wallet']['outputs']), 'wallet-visible restored spend')
@@ -144,9 +185,12 @@ def verify(out, src):
             require(control['state_unchanged'] and len(control['responses']) == 2 and
                     all(row.get('status') != 'OK' for row in control['responses']),
                     f'{name} refusal')
-        require(all(row.get('double_spend') for row in
-                    result['controls']['duplicate_key_image']['responses']) and
-                result['controls']['duplicate_key_image']['confirmed_txid'] == spend['txid'],
+        duplicate = result['controls']['duplicate_key_image']
+        require(duplicate['key_image'] == spend['key_image'], 'duplicate key image input identity')
+        require(duplicate['alternate_txid'] != duplicate['confirmed_txid'],
+                'duplicate key image distinct candidate')
+        require(all(row.get('double_spend') and row.get('invalid_input') for row in
+                    duplicate['responses']) and duplicate['confirmed_txid'] == spend['txid'],
                 'duplicate key image classification')
         require(result['controls']['invalid_proof']['source_txid'] == spend['txid'] and
                 result['controls']['invalid_proof']['mutation'] == 'last transaction byte xor 01' and
@@ -171,6 +215,9 @@ def verify(out, src):
                     [row['tips'] for row in result['workloads']] and
                 events[names.index('restored_spend_confirmed')]['tips'] == spend['tips'],
                 'event/result tip claim mismatch')
+        duplicate_event = events[names.index('duplicate_key_image_refused')]
+        require(all(duplicate_event[key] == value for key, value in duplicate.items()),
+                'duplicate key image event/result mismatch')
         containment = json.loads((public / 'containment.json').read_text())
         require(containment['interfaces'] == ['lo'] and not containment['routes'] and
                 len(containment['listeners_before_shutdown']) >= 7,

@@ -66,6 +66,72 @@ def main():
         assert invalid.returncode != 0 and 'invalid_proof refusal' in invalid.stderr
         print('REFUSED hash-consistent invalid-proof acceptance: invalid_proof refusal')
 
+        def refuse(name, label, mutate):
+            tampered = base / name
+            copy_public(source, tampered)
+            result_path = tampered / 'run1/public/result.json'
+            event_path = tampered / 'run1/public/events.jsonl'
+            receipt_path = tampered / 'receipt.json'
+            result = json.loads(result_path.read_text())
+            events = [json.loads(line) for line in event_path.read_text().splitlines()]
+            receipt = json.loads(receipt_path.read_text())
+            mutate(result, events, receipt)
+            result_path.write_text(json.dumps(result, indent=2) + '\n')
+            event_path.write_text(''.join(json.dumps(row) + '\n' for row in events))
+            receipt_path.write_text(json.dumps(receipt, indent=2) + '\n')
+            manifest(tampered)
+            invalid = check(tampered, src)
+            assert invalid.returncode != 0 and label in invalid.stderr, (name, invalid.stderr)
+            print(f'REFUSED {name}: {label}')
+
+        # Each immutable output field must survive receipt reconciliation at
+        # both restore and post-spend checkpoints, even with a valid manifest.
+        for checkpoint in ('original', 'post-spend'):
+            for field, wrong in (('key_image', '0' * 64), ('tx_hash', '0' * 64),
+                                 ('pubkey', '0' * 64), ('amount', 1), ('block_height', 999)):
+                def mutate(result, events, receipt):
+                    wallet = (result['restore']['original'] if checkpoint == 'original'
+                              else result['restored_spend']['wallet'])
+                    wallet['outputs'][0][field] = wrong
+                refuse(f'{checkpoint}-output-{field}', 'restore output identity reconciliation', mutate)
+
+        refuse('spent-input-absent-from-original', 'restored spend original key image',
+               lambda result, events, receipt:
+               result['restored_spend'].update(key_image='0' * 64))
+
+        for name, field, wrong, label in (
+                ('duplicate-unrelated-input', 'key_image', '0' * 64,
+                 'duplicate key image input identity'),
+                ('duplicate-same-candidate', 'alternate_txid', None,
+                 'duplicate key image distinct candidate')):
+            def mutate(result, events, receipt):
+                duplicate = result['controls']['duplicate_key_image']
+                value = wrong if wrong is not None else duplicate['confirmed_txid']
+                duplicate[field] = value
+                next(row for row in events if row['event'] ==
+                     'duplicate_key_image_refused')[field] = value
+            refuse(name, label, mutate)
+        refuse('duplicate-event-unrelated-input', 'duplicate key image event/result mismatch',
+               lambda result, events, receipt:
+               next(row for row in events if row['event'] ==
+                    'duplicate_key_image_refused').update(key_image='0' * 64))
+
+        for field, wrong in (('upstream_commit', '0' * 40), ('rustc', 'wrong toolchain'),
+                             ('builder_image', 'bash')):
+            refuse('receipt-' + field, 'receipt lineage: ' + field,
+                   lambda result, events, receipt: receipt.update({field: wrong}))
+        refuse('wrong-selected-image', 'build selected builder image',
+               lambda result, events, receipt: receipt['commands'][0].__setitem__(35, 'bash'))
+
+        # Mutations are command data only. Test each stage separately so a bad
+        # trial cannot hide behind a correctly contained build command.
+        for index, stage in enumerate(('build', 'run1', 'run2')):
+            for option in ('--privileged', '--cap-add=SYS_ADMIN', '--network=host',
+                           '--cpus=8', '--memory=8g', '--memory-swap=8g',
+                           '--pids-limit=-1', '--security-opt=seccomp=unconfined'):
+                refuse(f'{stage}-{option[2:]}', f'{stage} container containment',
+                       lambda result, events, receipt: receipt['commands'][index].insert(5, option))
+
         # This intentionally demonstrates the post-run authenticity limit.
         tampered = base / 'equal-wrong-tips'
         copy_public(source, tampered)
