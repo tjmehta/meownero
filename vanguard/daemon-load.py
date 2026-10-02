@@ -165,9 +165,10 @@ async def main():
                     raise AssertionError('construction omitted raw FCMP++ transaction')
                 admitted, admission = await measured('pool admission', submit(0, blob))
                 if admitted.get('status') != 'OK':
-                    raise AssertionError(f'origin pool refused level {level}')
+                    raise AssertionError(f'origin pool refused level {level}: {admitted}')
                 _, convergence = await measured('inter-daemon pool convergence',
                     p2p.wait_for(lambda t=txid: p2p.pool_contains(1, t), 'peer pool', 120))
+                await wallet('sender', 'refresh')
                 decoded = json.loads((await p2p.endpoint(0, 'get_transactions',
                     {'txs_hashes': [txid], 'decode_as_json': True}))['txs'][0]['as_json'])
                 if decoded['rct_signatures']['type'] != 7 or not all(
