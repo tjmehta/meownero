@@ -40,14 +40,14 @@ def verify(out, src):
     commit = receipt['candidate_commit']
     require(len(commit) == 40 and all(c in '0123456789abcdef' for c in commit), 'commit format')
     subprocess.run(['git', '-C', str(ROOT), 'merge-base', '--is-ancestor', commit, 'HEAD'], check=True)
-    expected_sources = {name: sha(ROOT / name) for name in
-        ('vanguard/daemon-p2p.py', 'vanguard/run-daemon-p2p.py',
-         'vanguard/verify-daemon-p2p.py', 'vanguard/source-lock.json',
-         'vanguard/daemon-load.py', 'vanguard/verify-daemon-load.py')}
-    require(receipt['source_sha256'] == expected_sources, 'current source hash mismatch')
-    for name, expected in expected_sources.items():
+    source_names = ('vanguard/daemon-p2p.py', 'vanguard/run-daemon-p2p.py',
+                    'vanguard/verify-daemon-p2p.py', 'vanguard/source-lock.json',
+                    'vanguard/daemon-load.py', 'vanguard/verify-daemon-load.py')
+    expected_sources = {}
+    for name in source_names:
         blob = subprocess.check_output(['git', '-C', str(ROOT), 'show', f'{commit}:{name}'])
-        require(hashlib.sha256(blob).hexdigest() == expected, f'exact-commit source: {name}')
+        expected_sources[name] = hashlib.sha256(blob).hexdigest()
+    require(receipt['source_sha256'] == expected_sources, 'exact-commit source mismatch')
 
     manifest = {}
     for line in (out / 'MANIFEST.sha256').read_text().splitlines():
@@ -149,7 +149,9 @@ def verify(out, src):
                 result['controls']['duplicate_key_image']['confirmed_txid'] == spend['txid'],
                 'duplicate key image classification')
         require(result['controls']['invalid_proof']['source_txid'] == spend['txid'] and
-                result['controls']['invalid_proof']['mutation'] == 'last transaction byte xor 01',
+                result['controls']['invalid_proof']['mutation'] == 'last transaction byte xor 01' and
+                all(row.get('invalid_input') and not row.get('double_spend') for row in
+                    result['controls']['invalid_proof']['responses']),
                 'invalid proof identity')
         require(result['reorg']['recovered_tips'][0] == result['reorg']['recovered_tips'][1] and
                 result['reorg']['recovered_tips'][0][1] == result['reorg']['branch1'][-1] and
@@ -163,7 +165,11 @@ def verify(out, src):
                      'restored_spend_confirmed', 'duplicate_key_image_refused', 'scenario_complete'):
             require(names.count(name) == 1, f'event absent/duplicate: {name}')
         require(names.count('workload_level') == 2 and
-                events[names.index('scenario_complete')]['tips'] == result['reorg']['recovered_tips'],
+                events[names.index('scenario_complete')]['tips'] == result['reorg']['recovered_tips'] and
+                events[names.index('idle_baseline')]['metric'] == result['baseline'] and
+                [event['tips'] for event in events if event['event'] == 'workload_level'] ==
+                    [row['tips'] for row in result['workloads']] and
+                events[names.index('restored_spend_confirmed')]['tips'] == spend['tips'],
                 'event/result tip claim mismatch')
         containment = json.loads((public / 'containment.json').read_text())
         require(containment['interfaces'] == ['lo'] and not containment['routes'] and
@@ -171,7 +177,7 @@ def verify(out, src):
                 'live network containment claim')
         for name in ('daemon0.log', 'daemon1.log'):
             log = (public / name).read_text()
-            require('Failed to verify input FCMP++ signatures' in log,
+            require('rct signature semantics check failed: simple-style batch verification failed' in log,
                     f'{name} invalid-proof verification stage absent')
     print('PASS_LOAD_RECEIPT_STRUCTURE two_runs=2')
     print('PASS_LOCAL_EXECUTABLE_BYTES monerod+wallet_rpc')
