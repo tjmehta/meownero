@@ -124,3 +124,39 @@ daemon rejection logs, state snapshots, the manifest, loopback-only listeners,
 container flags, and cgroup OOM counts. This is an accelerated fixed-difficulty
 regtest with disposable wallet keys; it does not establish loaded 90s/120s
 performance, public-network safety, payout behavior, or launch readiness.
+
+## Finite native two-daemon load witness (TJS-1171)
+
+`daemon-load.py` reuses the private native P2P bridge. In each of two fresh
+network-disabled regtest trials, it records a three-second idle baseline,
+one transaction, then two transactions in a second level. It times wallet
+construction, origin pool admission (which includes daemon validation), peer
+pool observation, block admission and tip convergence. A fresh wallet is
+restored and rescanned, spends one received CARROT output, and sees that spend
+confirmed on both daemons. An invalid RCT signature and a distinct spend of the
+same key image must be refused by both. A short partition and competing empty
+branches exercise reorg recovery without adding a fee or payout gate.
+
+```sh
+# Use a private, pinned local source/cache with build/vanguard configured first.
+# No public network is used by the build or trials. Output must be new.
+python3 -B vanguard/run-daemon-p2p.py --scenario load \
+  --src build/vanguard-src --out build/vanguard-load-new
+python3 -B vanguard/verify-daemon-load.py build/vanguard-load-new \
+  --src build/vanguard-src
+python3 -B vanguard/test-daemon-load-refusals.py build/vanguard-load-new \
+  --src build/vanguard-src --scratch build
+```
+
+The runner holds the shared heavy-work lock nonblocking, preflights five GiB
+of memory and disk, uses the pinned local image without pulls, and limits each
+container to two CPUs, four GiB, 256 PIDs, no network, no capabilities and no
+new privileges. Its fixed workload seed is 1171, with four confirmed transactions,
+five wallet constructions, at most 90 blocks and 1,000 seconds per scenario. Private wallet files
+and mnemonic phrases stay outside the evidence manifest.
+
+The verifier checks manifest/source lineage, recorded controls and metrics, and
+the bytes of both executables at `--src`. Since it runs after the daemons exit,
+it labels recorded chain tips as unverified live claims. Its result is bounded
+receipt reconciliation, not independent live-tip authentication or a security
+or capacity verdict. See `research/vanguard-daemon-load-tjs1171-2026-10-01.md`.
