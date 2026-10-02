@@ -1,0 +1,26 @@
+[
+  {
+    "case": "receipt-rehashed",
+    "exit": 1,
+    "stdout": "",
+    "stderr_tail": "AssertionError: exact-commit source mismatch: vanguard/daemon-restore.py"
+  },
+  {
+    "case": "bundle-file",
+    "exit": 1,
+    "stdout": "",
+    "stderr_tail": "AssertionError: manifest mismatch: run1/public/result.json"
+  },
+  {
+    "case": "binary-hash-rehashed",
+    "exit": 0,
+    "stdout": "PASS_DAEMON_RESTORE_RECEIPT_RECONCILIATION",
+    "stderr_tail": ""
+  },
+  {
+    "case": "divergent-confirmed-tips-rehashed",
+    "exit": 0,
+    "stdout": "PASS_DAEMON_RESTORE_RECEIPT_RECONCILIATION",
+    "stderr_tail": ""
+  }
+]

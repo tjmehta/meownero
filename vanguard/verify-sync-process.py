@@ -38,10 +38,12 @@ def verify(out):
     assert receipt["upstream"] == runner.PIN["upstream"]["commit"]
     assert receipt["image"] == runner.PIN["builder"]["image_id"]
     assert receipt["rustc"] == runner.PIN["builder"]["rustc"]
+    assert receipt["transport"] == "AF_UNIX/SOCK_STREAM"
     assert len(receipt["commands"]) == 3
     assert receipt["binary"]["bytes"] > 0 and len(receipt["binary"]["sha256"]) == 64
     for stage, argv in zip(("build", "run1", "run2"), receipt["commands"]):
-        for flag in ("--pull=never", "--network=none", "--cpus=2", "--memory=4g", "--memory-swap=4g",
+        for flag in ("--pull=never", "--network=none", "--cap-drop=ALL", "--security-opt=no-new-privileges",
+                     "--cpus=2", "--memory=4g", "--memory-swap=4g",
                      "--pids-limit=256", receipt["image"]):
             assert flag in argv, "containment missing: " + flag
         metric = receipt["metrics"][stage]
@@ -55,7 +57,11 @@ def verify(out):
         checks = [line.split("\t") for line in (out / run / "checks.tsv").read_text().splitlines()]
         assert len(checks) > 450 and all(len(row) == 2 and row[1] == "pass" for row in checks)
         names = [row[0] for row in checks]
-        for required in ("distinct_process_ids", "peer_reordered_block_not_applied",
+        for required in ("distinct_process_ids", "private_unix_stream_connected",
+                         "socket_reconnected_same_peer", "replayed_tip_keeps_chain_state",
+                         "oversized_frame_reconnect", "malformed_frame_keeps_chain_state",
+                         "truncated_frame_reconnect", "truncated_frame_keeps_chain_state",
+                         "socket_path_removed", "peer_reordered_block_not_applied",
                          "spend_delivered_to_both_processes", "initial_cross_process_convergence",
                          "restart_cross_process_catchup", "reference_after_v17_fork_60",
                          "trusted_root_changed_across_processes", "fork_cross_process_convergence_and_rollback",
@@ -69,6 +75,9 @@ def verify(out):
         assert [row[0] for row in processes] == ["source", "peer"]
         assert all(len(row) == 2 and int(row[1]) > 1 for row in processes)
         assert processes[0][1] != processes[1][1]
+        assert not (out / run / "nodes" / "peer.sock").exists()
+        assert (out / run / "rejected-frames.tsv").read_text().splitlines() == [
+            "oversized_or_short\tbad socket frame", "oversized_or_short\tshort socket frame"]
         states = [line.split("\t") for line in (out / run / "states.tsv").read_text().splitlines()]
         assert [row[0] for row in states] == ["before_a", "before_b", "restart_b", "fork_prefix_a", "fork_a", "fork_b", "reverse_a", "reverse_b"]
         assert all(len(row) == 8 and len(row[2]) == 64 and len(row[3]) == 64 for row in states)

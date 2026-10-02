@@ -1,0 +1,872 @@
+2026-09-30 13:05:26.524	I Monero 'Fluorine Fermi' (v0.18.1.0-e151643c5)
+2026-09-30 13:05:26.524	I Moving from main() into the daemonize now.
+2026-09-30 13:05:26.524	I Initializing cryptonote protocol...
+2026-09-30 13:05:26.524	I Cryptonote protocol initialized OK
+2026-09-30 13:05:26.524	I Initializing core...
+2026-09-30 13:05:26.524	I Loading blockchain from folder /out/private/daemon1/fake/lmdb ...
+2026-09-30 13:05:26.525	I LMDB memory map size: 1073741824
+2026-09-30 13:05:26.525	I Blockchain not loaded, generating genesis block.
+2026-09-30 13:05:26.557	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:26.557	I id:	<418015bb9ae982a1975da7d79277c2705727a56894ba0fb246adaabb1f4632e3>
+2026-09-30 13:05:26.557	I PoW:	<8a7b1a780e99eec31a9425b7d89c283421b2042a337d5700dfd4a7d6eb7bd774>
+2026-09-30 13:05:26.557	I HEIGHT 0, difficulty:	1
+2026-09-30 13:05:26.557	I block reward: 17.592186044415(17.592186044415 + 0.000000000000), coinbase_weight: 80, cumulative weight: 80, 16(0/16)ms
+2026-09-30 13:05:26.557	I RandomX new main seed hash is 418015bb9ae982a1975da7d79277c2705727a56894ba0fb246adaabb1f4632e3
+2026-09-30 13:05:26.557	I RandomX dataset is not enabled by default. Use MONERO_RANDOMX_FULL_MEM environment variable to enable it.
+2026-09-30 13:05:26.557	I Blockchain initialized. last block: 0, d4548.h2.m16.s33 time ago, current difficulty: 1
+2026-09-30 13:05:26.558	I Validating txpool contents for v18
+2026-09-30 13:05:26.558	I Loading checkpoints
+2026-09-30 13:05:26.558	I Core initialized OK
+2026-09-30 13:05:26.558	I Initializing p2p server...
+2026-09-30 13:05:26.559	I Setting LIMIT: 8192 kbps
+2026-09-30 13:05:26.559	I Set limit-up to 8192 kB/s
+2026-09-30 13:05:26.559	I Setting LIMIT: 32768 kbps
+2026-09-30 13:05:26.559	I Setting LIMIT: 32768 kbps
+2026-09-30 13:05:26.559	I Set limit-down to 32768 kB/s
+2026-09-30 13:05:26.559	I Setting LIMIT: 8192 kbps
+2026-09-30 13:05:26.559	I Set limit-up to 8192 kB/s
+2026-09-30 13:05:26.559	I Setting LIMIT: 32768 kbps
+2026-09-30 13:05:26.559	I Setting LIMIT: 32768 kbps
+2026-09-30 13:05:26.559	I Set limit-down to 32768 kB/s
+2026-09-30 13:05:26.560	I Set server type to: 2 from name: P2P, prefix_name = P2P
+2026-09-30 13:05:26.560	I Binding (IPv4) on 127.0.0.1:19180
+2026-09-30 13:05:26.560	I Net service bound (IPv4) to 127.0.0.1:19180
+2026-09-30 13:05:26.560	I p2p server initialized OK
+2026-09-30 13:05:26.560	I Initializing core RPC server...
+2026-09-30 13:05:26.560	I Set server type to: 1 from name: RPC, prefix_name = RPC
+2026-09-30 13:05:26.560	I Binding on 127.0.0.1 (IPv4):19181
+2026-09-30 13:05:26.560	I core RPC server initialized OK on port: 19181
+2026-09-30 13:05:26.560	I Starting core RPC server...
+2026-09-30 13:05:26.560	I Run net_service loop (2 threads)...
+2026-09-30 13:05:26.560	I core RPC server started ok
+2026-09-30 13:05:26.560	I ZMQ server disabled
+2026-09-30 13:05:26.560	I Starting p2p net loop...
+2026-09-30 13:05:26.560	I Run net_service loop (10 threads)...
+2026-09-30 13:05:26.692	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:26.692	I [127.0.0.1:51442 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:26.979	I RandomX main cache initialized
+2026-09-30 13:05:27.561	I 
+2026-09-30 13:05:27.561	I **********************************************************************
+2026-09-30 13:05:27.561	I The daemon will start synchronizing with the network. This may take a long time to complete.
+2026-09-30 13:05:27.561	I 
+2026-09-30 13:05:27.561	I You can set the level of process detailization through "set_log <level|categories>" command,
+2026-09-30 13:05:27.561	I where <level> is between 0 (no details) and 4 (very verbose), or custom category based levels (eg, *:WARNING).
+2026-09-30 13:05:27.561	I 
+2026-09-30 13:05:27.561	I Use the "help" command to see the list of available commands.
+2026-09-30 13:05:27.561	I Use "help <command>" to see a command's documentation.
+2026-09-30 13:05:27.561	I **********************************************************************
+2026-09-30 13:05:27.561	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:27.561	I [127.0.0.1:50840 5e354520-e56b-4ea6-93f3-f00c4a7a5c14 INC] NEW CONNECTION
+2026-09-30 13:05:27.561	I [127.0.0.1:50840 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-30 13:05:27.561	I 
+2026-09-30 13:05:27.561	I **********************************************************************
+2026-09-30 13:05:27.561	I You are now synchronized with the network. You may now start monero-wallet-cli.
+2026-09-30 13:05:27.561	I 
+2026-09-30 13:05:27.561	I Use the "help" command to see the list of available commands.
+2026-09-30 13:05:27.561	I **********************************************************************
+2026-09-30 13:05:27.561	I switching safe mode on
+2026-09-30 13:05:27.561	I clearing used stripe peers
+2026-09-30 13:05:27.562	I [127.0.0.1:50840 INC] -->>NOTIFY_GET_TXPOOL_COMPLEMENT: hashes.size()=0
+2026-09-30 13:05:27.562	I [127.0.0.1:50840 INC] 10 bytes sent for category command-2010 initiated by us
+2026-09-30 13:05:27.562	I [127.0.0.1:50840 INC] [0] state: requesting txpool complement in state normal
+2026-09-30 13:05:27.562	I [127.0.0.1:50840 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-30 13:05:27.563	I [127.0.0.1:50840 INC] 10 bytes received for category command-2010 initiated by peer
+2026-09-30 13:05:27.563	I [127.0.0.1:50840 INC] Received NOTIFY_GET_TXPOOL_COMPLEMENT (0 txes)
+2026-09-30 13:05:27.563	I [127.0.0.1:50840 INC] -->>NOTIFY_TX_POOL_HASH: txs.size()=0
+2026-09-30 13:05:27.563	I [127.0.0.1:50840 INC] 10 bytes sent for category command-2011 initiated by us
+2026-09-30 13:05:27.695	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:27.695	I [127.0.0.1:51446 INC] Calling RPC method get_connections
+2026-09-30 13:05:27.706	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:27.706	I [127.0.0.1:51456 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:28.561	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:29.561	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:30.562	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:31.562	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:32.561	I Cleaned up 0 stale requests
+2026-09-30 13:05:32.562	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:33.562	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:34.563	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:35.563	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:35.628	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.628	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <56aeaebe3a84f9d99c53a439a444905281ddb0b50925737d5989241b95b15a9c> (height 1, 0 txes, peer's height: 2)
+2026-09-30 13:05:35.643	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.643	I id:	<56aeaebe3a84f9d99c53a439a444905281ddb0b50925737d5989241b95b15a9c>
+2026-09-30 13:05:35.643	I PoW:	<b3690b38bf6d5aa91654030d7a7739bf91b4ade84d65acf505472f767c86a781>
+2026-09-30 13:05:35.643	I HEIGHT 1, difficulty:	1
+2026-09-30 13:05:35.643	I block reward: 35.184338534400(35.184338534400 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:35.669	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.669	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <77be90df5d48fdcab957b3683dc0796ac87bc5d012da3a563a9766b3c929ae99> (height 2, 0 txes, peer's height: 3)
+2026-09-30 13:05:35.685	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.685	I id:	<77be90df5d48fdcab957b3683dc0796ac87bc5d012da3a563a9766b3c929ae99>
+2026-09-30 13:05:35.685	I PoW:	<c6ed3d5c3479249325c7d21b0ad0e9b476a6f8251304688909397905544ba7d3>
+2026-09-30 13:05:35.685	I HEIGHT 2, difficulty:	1
+2026-09-30 13:05:35.685	I block reward: 35.184271425600(35.184271425600 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:35.701	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.701	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <38424eaf08d11a681def624b21dcb285da0d4ac761276cbc17cccc080f7c1efe> (height 3, 0 txes, peer's height: 4)
+2026-09-30 13:05:35.715	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.715	I id:	<38424eaf08d11a681def624b21dcb285da0d4ac761276cbc17cccc080f7c1efe>
+2026-09-30 13:05:35.715	I PoW:	<7581756f11d7aa03276a7d539d84dad00926f7a969d3ac90d2b35cf6a57f79ec>
+2026-09-30 13:05:35.715	I HEIGHT 3, difficulty:	1
+2026-09-30 13:05:35.715	I block reward: 35.184204316927(35.184204316927 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:35.731	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.731	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <f2522698960a17e64649ff5f7f8f480f6b6cc6d243e4a65168985b9c20be362d> (height 4, 0 txes, peer's height: 5)
+2026-09-30 13:05:35.745	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.745	I id:	<f2522698960a17e64649ff5f7f8f480f6b6cc6d243e4a65168985b9c20be362d>
+2026-09-30 13:05:35.745	I PoW:	<d1a7dfd6be750528cc35e70c3923272b35ec13f7fd2700c6eaa607df593476ef>
+2026-09-30 13:05:35.745	I HEIGHT 4, difficulty:	1
+2026-09-30 13:05:35.745	I block reward: 35.184137208383(35.184137208383 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:35.762	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.762	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <6359dc2573cd679b3e37590e2e021b1346f91bea5c4e07dcfc62d779319608fb> (height 5, 0 txes, peer's height: 6)
+2026-09-30 13:05:35.778	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.778	I id:	<6359dc2573cd679b3e37590e2e021b1346f91bea5c4e07dcfc62d779319608fb>
+2026-09-30 13:05:35.778	I PoW:	<91b83fbd9fbf8b8fb4448f127014526e285ccc4c40e3a3e5c18eb1dc5f7bda61>
+2026-09-30 13:05:35.778	I HEIGHT 5, difficulty:	1
+2026-09-30 13:05:35.778	I block reward: 35.184070099967(35.184070099967 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/15)ms
+2026-09-30 13:05:35.794	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.794	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <fd5343f36ec3ac6c604c448a4e0097be11b4b6edef6033a7266658cfc7b4eda4> (height 6, 0 txes, peer's height: 7)
+2026-09-30 13:05:35.809	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.809	I id:	<fd5343f36ec3ac6c604c448a4e0097be11b4b6edef6033a7266658cfc7b4eda4>
+2026-09-30 13:05:35.809	I PoW:	<bd3e1663f0a6a78391da9a1a2f1823218683cfdd8ee69853cf37eaea36083d7f>
+2026-09-30 13:05:35.809	I HEIGHT 6, difficulty:	1
+2026-09-30 13:05:35.809	I block reward: 35.184002991679(35.184002991679 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:35.825	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.825	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <abfc4adc331024a910ab012c37c640bfadec28b7084c546c77edb6d0fc544215> (height 7, 0 txes, peer's height: 8)
+2026-09-30 13:05:35.840	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.840	I id:	<abfc4adc331024a910ab012c37c640bfadec28b7084c546c77edb6d0fc544215>
+2026-09-30 13:05:35.840	I PoW:	<8bf96a969d3259db809fb8ca6ab4ad9f3bf2724f752250572d2ceba54e486010>
+2026-09-30 13:05:35.840	I HEIGHT 7, difficulty:	1
+2026-09-30 13:05:35.840	I block reward: 35.183935883519(35.183935883519 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/14)ms
+2026-09-30 13:05:35.856	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.856	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <8a8bdf194df857ec7c5bbd8ef7c8f1a70692886d994238fabbee0e7f30b86399> (height 8, 0 txes, peer's height: 9)
+2026-09-30 13:05:35.870	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.870	I id:	<8a8bdf194df857ec7c5bbd8ef7c8f1a70692886d994238fabbee0e7f30b86399>
+2026-09-30 13:05:35.870	I PoW:	<9bb5797f96e0f4fa6c7dd4a5da0e317ccf2858daca7405738d116fdfda6d635f>
+2026-09-30 13:05:35.870	I HEIGHT 8, difficulty:	1
+2026-09-30 13:05:35.870	I block reward: 35.183868775487(35.183868775487 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:35.886	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.886	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <4010f4cb4e53707c532b903c4366c805a459527d14fed39679ca111b2e543e76> (height 9, 0 txes, peer's height: 10)
+2026-09-30 13:05:35.901	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.901	I id:	<4010f4cb4e53707c532b903c4366c805a459527d14fed39679ca111b2e543e76>
+2026-09-30 13:05:35.901	I PoW:	<01f340cb16f44c13337584bea0aa34f924e93148d1449a354041b651a6a69e53>
+2026-09-30 13:05:35.901	I HEIGHT 9, difficulty:	1
+2026-09-30 13:05:35.901	I block reward: 35.183801667583(35.183801667583 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:35.917	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.917	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <bdc7b22a4ab36750f56db2456275342417bb43df8d007a391349ceb1309a449a> (height 10, 0 txes, peer's height: 11)
+2026-09-30 13:05:35.930	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.930	I id:	<bdc7b22a4ab36750f56db2456275342417bb43df8d007a391349ceb1309a449a>
+2026-09-30 13:05:35.930	I PoW:	<4cfd7c111c2dd5f6461b998521e5244bf74a4941984f0af3e19157183d52f813>
+2026-09-30 13:05:35.930	I HEIGHT 10, difficulty:	1
+2026-09-30 13:05:35.930	I block reward: 35.183734559807(35.183734559807 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:35.949	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.949	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <9a750f12f3674b6e871f5fa4b8f4f434adfb9d4892286c950c2f16cf8f86ab37> (height 11, 0 txes, peer's height: 12)
+2026-09-30 13:05:35.965	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.965	I id:	<9a750f12f3674b6e871f5fa4b8f4f434adfb9d4892286c950c2f16cf8f86ab37>
+2026-09-30 13:05:35.965	I PoW:	<b36f069e96da9c1675a53b9eecf2f1954479c8cb99e4357fb0458a672098c544>
+2026-09-30 13:05:35.965	I HEIGHT 11, difficulty:	1
+2026-09-30 13:05:35.965	I block reward: 35.183667452159(35.183667452159 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:35.981	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:35.981	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <1ba61410bb423d6148fcf77621d8c9943cf604f8b0b6282b42246bcc75481fa6> (height 12, 0 txes, peer's height: 13)
+2026-09-30 13:05:35.997	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:35.997	I id:	<1ba61410bb423d6148fcf77621d8c9943cf604f8b0b6282b42246bcc75481fa6>
+2026-09-30 13:05:35.997	I PoW:	<ba043ea533daf5eb8d5dfbf757c8e9d86f9efc26eed4ffe3b14c4846701f1630>
+2026-09-30 13:05:35.997	I HEIGHT 12, difficulty:	1
+2026-09-30 13:05:35.998	I block reward: 35.183600344639(35.183600344639 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/15)ms
+2026-09-30 13:05:36.017	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.017	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <ca5170a968b6a72ed1fd3642bc28949a0f07d3c2c81eed53524a6462ac342795> (height 13, 0 txes, peer's height: 14)
+2026-09-30 13:05:36.033	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.033	I id:	<ca5170a968b6a72ed1fd3642bc28949a0f07d3c2c81eed53524a6462ac342795>
+2026-09-30 13:05:36.033	I PoW:	<4157b4f038e1e9c55e6a4715d5d3aa16ca6a5420602442e35c4e9446fc94162f>
+2026-09-30 13:05:36.033	I HEIGHT 13, difficulty:	1
+2026-09-30 13:05:36.033	I block reward: 35.183533237247(35.183533237247 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:36.049	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.049	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <02d5ec47288a0316a3acedc0f95f5061a575c87f8ab5a0794d5bd2ae3786d494> (height 14, 0 txes, peer's height: 15)
+2026-09-30 13:05:36.064	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.064	I id:	<02d5ec47288a0316a3acedc0f95f5061a575c87f8ab5a0794d5bd2ae3786d494>
+2026-09-30 13:05:36.064	I PoW:	<bb0dc1c343871554e04e0ad794cb1d17ee2a0740e453ee0e7a7909e3a1c2954b>
+2026-09-30 13:05:36.064	I HEIGHT 14, difficulty:	1
+2026-09-30 13:05:36.064	I block reward: 35.183466129983(35.183466129983 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.085	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.085	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <bbbcf3c9ce0c20e09a7cef99c29b9befdcca27f88abb18fcd12ebfe325b896d4> (height 15, 0 txes, peer's height: 16)
+2026-09-30 13:05:36.099	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.099	I id:	<bbbcf3c9ce0c20e09a7cef99c29b9befdcca27f88abb18fcd12ebfe325b896d4>
+2026-09-30 13:05:36.099	I PoW:	<43c60bc3ab34419dd6eae4ff59a5d60c12a79eb599b65b58353adcb6d7b08985>
+2026-09-30 13:05:36.099	I HEIGHT 15, difficulty:	1
+2026-09-30 13:05:36.099	I block reward: 35.183399022847(35.183399022847 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 13(0/13)ms
+2026-09-30 13:05:36.117	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.117	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <4b57572248de0870608c72a98c02349f3be358163ee2901a6e54cb76d05efaf4> (height 16, 0 txes, peer's height: 17)
+2026-09-30 13:05:36.131	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.131	I id:	<4b57572248de0870608c72a98c02349f3be358163ee2901a6e54cb76d05efaf4>
+2026-09-30 13:05:36.131	I PoW:	<608666a9a7b54db05ccd49c03fc83c30b50154aa390133693f992a39465037cf>
+2026-09-30 13:05:36.131	I HEIGHT 16, difficulty:	1
+2026-09-30 13:05:36.131	I block reward: 35.183331915839(35.183331915839 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:36.152	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.152	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <a27830a3e5a7739855dd0bb775dc97224ae046e2346c5ee5799e4cad89584cd4> (height 17, 0 txes, peer's height: 18)
+2026-09-30 13:05:36.167	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.167	I id:	<a27830a3e5a7739855dd0bb775dc97224ae046e2346c5ee5799e4cad89584cd4>
+2026-09-30 13:05:36.167	I PoW:	<8f8be4c4a164ade9e93700d34dff097bc070229b61dc5e5f3c15cf05023ac782>
+2026-09-30 13:05:36.167	I HEIGHT 17, difficulty:	1
+2026-09-30 13:05:36.167	I block reward: 35.183264808959(35.183264808959 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.185	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.185	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <cb56f6aff96b391e85e1047d8a793f05beecc1f91643d24ce2b94db47bf3c176> (height 18, 0 txes, peer's height: 19)
+2026-09-30 13:05:36.198	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.198	I id:	<cb56f6aff96b391e85e1047d8a793f05beecc1f91643d24ce2b94db47bf3c176>
+2026-09-30 13:05:36.198	I PoW:	<58dd9931522948385afc6033e9dbd11603dc4f88893f4c34a89ad93f9ea82051>
+2026-09-30 13:05:36.198	I HEIGHT 18, difficulty:	1
+2026-09-30 13:05:36.198	I block reward: 35.183197702207(35.183197702207 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.216	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.216	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <1ebb7dba9ed1b3af7770092eef1ec97c6db37149eb94e5806a44fa02987a7f67> (height 19, 0 txes, peer's height: 20)
+2026-09-30 13:05:36.234	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.234	I id:	<1ebb7dba9ed1b3af7770092eef1ec97c6db37149eb94e5806a44fa02987a7f67>
+2026-09-30 13:05:36.234	I PoW:	<ca31ca16249797e718a09732dcbe778408a503fe8310e7b8b0a009ca1f8e3486>
+2026-09-30 13:05:36.234	I HEIGHT 19, difficulty:	1
+2026-09-30 13:05:36.234	I block reward: 35.183130595583(35.183130595583 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 19(0/18)ms
+2026-09-30 13:05:36.254	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.254	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <198216027523cdee7bca953be11bfa7296ca8dfd7f966a0449680e155acd3bb6> (height 20, 0 txes, peer's height: 21)
+2026-09-30 13:05:36.268	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.268	I id:	<198216027523cdee7bca953be11bfa7296ca8dfd7f966a0449680e155acd3bb6>
+2026-09-30 13:05:36.268	I PoW:	<aa72b2c9d5551c49a74cae6c74403520f9caf77c48e3c3da53992e8f769cf767>
+2026-09-30 13:05:36.268	I HEIGHT 20, difficulty:	1
+2026-09-30 13:05:36.268	I block reward: 35.183063489087(35.183063489087 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/14)ms
+2026-09-30 13:05:36.287	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.287	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <0dfc9789118ca4d866de014d3fdf8f89812aeb24f170024a68f5b33561e20507> (height 21, 0 txes, peer's height: 22)
+2026-09-30 13:05:36.305	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.305	I id:	<0dfc9789118ca4d866de014d3fdf8f89812aeb24f170024a68f5b33561e20507>
+2026-09-30 13:05:36.305	I PoW:	<064732071f13e77c9f311823d542f86e5a60fdde977d4a8909974f3f89739072>
+2026-09-30 13:05:36.305	I HEIGHT 21, difficulty:	1
+2026-09-30 13:05:36.305	I block reward: 35.182996382719(35.182996382719 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 17(0/16)ms
+2026-09-30 13:05:36.328	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.328	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <68b425e05a485042f6ac0b5bc9bfe8aeb882e7474b7eaaf46c5c8ee8b0e2055a> (height 22, 0 txes, peer's height: 23)
+2026-09-30 13:05:36.346	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.346	I id:	<68b425e05a485042f6ac0b5bc9bfe8aeb882e7474b7eaaf46c5c8ee8b0e2055a>
+2026-09-30 13:05:36.346	I PoW:	<22ed152f64a9f5b195aec144f5a4a332adebf4a6128a87c90fcfe56d50d2136b>
+2026-09-30 13:05:36.346	I HEIGHT 22, difficulty:	1
+2026-09-30 13:05:36.346	I block reward: 35.182929276479(35.182929276479 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 17(0/17)ms
+2026-09-30 13:05:36.366	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.366	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <cb92229f05086ca1b8dbc264597c427cb136ac32e57e65c291c5b5a403bed39b> (height 23, 0 txes, peer's height: 24)
+2026-09-30 13:05:36.383	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.383	I id:	<cb92229f05086ca1b8dbc264597c427cb136ac32e57e65c291c5b5a403bed39b>
+2026-09-30 13:05:36.383	I PoW:	<f97fd02cc208f84c5efe09025dafd0cad23729a00a579b0b7b530946f5df8391>
+2026-09-30 13:05:36.383	I HEIGHT 23, difficulty:	1
+2026-09-30 13:05:36.383	I block reward: 35.182862170367(35.182862170367 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 18(0/18)ms
+2026-09-30 13:05:36.405	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.405	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <121eecf44d5133774101883efdcaeda65938bc7ed40b84df5e031685891dfd51> (height 24, 0 txes, peer's height: 25)
+2026-09-30 13:05:36.422	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.422	I id:	<121eecf44d5133774101883efdcaeda65938bc7ed40b84df5e031685891dfd51>
+2026-09-30 13:05:36.422	I PoW:	<29698ac00a80609fd529185768e1b4973d54aef0b8ee0f172cefec3f5a6df7f6>
+2026-09-30 13:05:36.422	I HEIGHT 24, difficulty:	1
+2026-09-30 13:05:36.422	I block reward: 35.182795064383(35.182795064383 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/16)ms
+2026-09-30 13:05:36.440	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.440	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <3d54fbb377f75a538236886b2e724c428093a228127c97d380bba8d92da5218d> (height 25, 0 txes, peer's height: 26)
+2026-09-30 13:05:36.456	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.456	I id:	<3d54fbb377f75a538236886b2e724c428093a228127c97d380bba8d92da5218d>
+2026-09-30 13:05:36.456	I PoW:	<0ba90af8c45d1422751e8d09bd5f07f4455fa0763a457fa0bcb3491a26114926>
+2026-09-30 13:05:36.456	I HEIGHT 25, difficulty:	1
+2026-09-30 13:05:36.456	I block reward: 35.182727958527(35.182727958527 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/16)ms
+2026-09-30 13:05:36.475	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.475	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <e1b3be75326ffb3b46c25ecf22cffe0a04a1d23f24b3a8893a616258dbd5dd46> (height 26, 0 txes, peer's height: 27)
+2026-09-30 13:05:36.491	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.491	I id:	<e1b3be75326ffb3b46c25ecf22cffe0a04a1d23f24b3a8893a616258dbd5dd46>
+2026-09-30 13:05:36.491	I PoW:	<17f40bffe4cd4441db9c4d9556eb2b3f29b12f3570dc2b46bf06d22fd8a23d6d>
+2026-09-30 13:05:36.491	I HEIGHT 26, difficulty:	1
+2026-09-30 13:05:36.491	I block reward: 35.182660852799(35.182660852799 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:36.507	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.507	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <bdb2ba002e1c83351620555fb02b3d4a4fe09b6e12051299ad44baa184d0cc99> (height 27, 0 txes, peer's height: 28)
+2026-09-30 13:05:36.521	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.521	I id:	<bdb2ba002e1c83351620555fb02b3d4a4fe09b6e12051299ad44baa184d0cc99>
+2026-09-30 13:05:36.521	I PoW:	<b892210531ffdbb241ba23d979d806f8df05225150b7f802110a2acf31e1972c>
+2026-09-30 13:05:36.521	I HEIGHT 27, difficulty:	1
+2026-09-30 13:05:36.521	I block reward: 35.182593747199(35.182593747199 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.538	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.538	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <7638665c9c9fbdc05e363f16dd8a0dfccf3079de6ea24bce5b5ee00ad5737dc6> (height 28, 0 txes, peer's height: 29)
+2026-09-30 13:05:36.555	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.555	I id:	<7638665c9c9fbdc05e363f16dd8a0dfccf3079de6ea24bce5b5ee00ad5737dc6>
+2026-09-30 13:05:36.556	I PoW:	<8b077fe79b65ceabc037293e64b7156eb768c47071acd0f320c5200482c50d83>
+2026-09-30 13:05:36.556	I HEIGHT 28, difficulty:	1
+2026-09-30 13:05:36.556	I block reward: 35.182526641727(35.182526641727 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 17(0/16)ms
+2026-09-30 13:05:36.563	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:36.574	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.574	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <780deeb45dc6e49db62a6d23559f10299a7b6d45a476f3ab57993c3f521ebb92> (height 29, 0 txes, peer's height: 30)
+2026-09-30 13:05:36.589	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.589	I id:	<780deeb45dc6e49db62a6d23559f10299a7b6d45a476f3ab57993c3f521ebb92>
+2026-09-30 13:05:36.589	I PoW:	<900da2aa8058beb912638f51cdea88d5624dd656c9e9571753e8d537bb04b78e>
+2026-09-30 13:05:36.589	I HEIGHT 29, difficulty:	1
+2026-09-30 13:05:36.589	I block reward: 35.182459536383(35.182459536383 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.605	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.605	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <6822a51fc5958afd709b99e542994bee64b354a8fcf4991fb35aa23bef9f99b6> (height 30, 0 txes, peer's height: 31)
+2026-09-30 13:05:36.619	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.619	I id:	<6822a51fc5958afd709b99e542994bee64b354a8fcf4991fb35aa23bef9f99b6>
+2026-09-30 13:05:36.619	I PoW:	<453941b584dd84d89d188625439f6d19c81047d92d43bff5b1cebbb5fb448e80>
+2026-09-30 13:05:36.619	I HEIGHT 30, difficulty:	1
+2026-09-30 13:05:36.619	I block reward: 35.182392431167(35.182392431167 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 13(0/13)ms
+2026-09-30 13:05:36.636	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.636	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <65a47f3028a2de82507414220c8e61cff26d448f915a089d2810e0bcfc402bfc> (height 31, 0 txes, peer's height: 32)
+2026-09-30 13:05:36.651	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.651	I id:	<65a47f3028a2de82507414220c8e61cff26d448f915a089d2810e0bcfc402bfc>
+2026-09-30 13:05:36.651	I PoW:	<e9f012af7b5244b279322e51824d83cad6f90d3b0e2a41fad75c64cd6d7066bf>
+2026-09-30 13:05:36.651	I HEIGHT 31, difficulty:	1
+2026-09-30 13:05:36.651	I block reward: 35.182325326078(35.182325326078 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:36.668	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.668	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <b595adaa374177527cbb23322fc39871eac1fb240a242dd198d5280e2c929cab> (height 32, 0 txes, peer's height: 33)
+2026-09-30 13:05:36.682	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.682	I id:	<b595adaa374177527cbb23322fc39871eac1fb240a242dd198d5280e2c929cab>
+2026-09-30 13:05:36.682	I PoW:	<354a0e0728900959829696796412c726de7c3aaea8d6844d625d01346ae94191>
+2026-09-30 13:05:36.682	I HEIGHT 32, difficulty:	1
+2026-09-30 13:05:36.682	I block reward: 35.182258221118(35.182258221118 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/13)ms
+2026-09-30 13:05:36.701	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.701	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <ce53494f12035c428c902569ca3598b0eabff4aa32e8b0cf5316a89a131f950f> (height 33, 0 txes, peer's height: 34)
+2026-09-30 13:05:36.715	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.715	I id:	<ce53494f12035c428c902569ca3598b0eabff4aa32e8b0cf5316a89a131f950f>
+2026-09-30 13:05:36.715	I PoW:	<70f4645601199bce380f3157a85c5ad2cb22dae3cfc361fa32512e05460f5722>
+2026-09-30 13:05:36.715	I HEIGHT 33, difficulty:	1
+2026-09-30 13:05:36.715	I block reward: 35.182191116286(35.182191116286 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.736	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.736	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <9c55addd21513ef3c475cc2dc9c1a7261343b7c2915e1d7d4fc391c211da9cc3> (height 34, 0 txes, peer's height: 35)
+2026-09-30 13:05:36.750	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.750	I id:	<9c55addd21513ef3c475cc2dc9c1a7261343b7c2915e1d7d4fc391c211da9cc3>
+2026-09-30 13:05:36.750	I PoW:	<b53062cbb395a3155fa1b6282edc6210bda1f11b68f546e954cc6666a69f3cf9>
+2026-09-30 13:05:36.750	I HEIGHT 34, difficulty:	1
+2026-09-30 13:05:36.750	I block reward: 35.182124011582(35.182124011582 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.769	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.769	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <b610f0fcc53d1888664f872f32506b73fc78520ac275a82375e72ed4c1e338f0> (height 35, 0 txes, peer's height: 36)
+2026-09-30 13:05:36.786	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.786	I id:	<b610f0fcc53d1888664f872f32506b73fc78520ac275a82375e72ed4c1e338f0>
+2026-09-30 13:05:36.786	I PoW:	<e04e120f5a84a2ba20d2d5fb76a7f8066a4d0818b724424095eea5225170640c>
+2026-09-30 13:05:36.786	I HEIGHT 35, difficulty:	1
+2026-09-30 13:05:36.786	I block reward: 35.182056907006(35.182056907006 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/16)ms
+2026-09-30 13:05:36.809	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.809	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <aac9486ad9609b31044718e43f83ac0b414db95c058f46ae2bb81c325f1467c9> (height 36, 0 txes, peer's height: 37)
+2026-09-30 13:05:36.823	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.823	I id:	<aac9486ad9609b31044718e43f83ac0b414db95c058f46ae2bb81c325f1467c9>
+2026-09-30 13:05:36.823	I PoW:	<ad66388dc3e932b44851c9b6aeba9264f8290a002ad647596442eb17fcc98ae7>
+2026-09-30 13:05:36.823	I HEIGHT 36, difficulty:	1
+2026-09-30 13:05:36.823	I block reward: 35.181989802558(35.181989802558 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/13)ms
+2026-09-30 13:05:36.848	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.848	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <2b88aea3214998e2afba53d888b20334408bbd98ab1b629b43a3fc152e4bcbbf> (height 37, 0 txes, peer's height: 38)
+2026-09-30 13:05:36.863	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.863	I id:	<2b88aea3214998e2afba53d888b20334408bbd98ab1b629b43a3fc152e4bcbbf>
+2026-09-30 13:05:36.863	I PoW:	<1ef38e264a48737dfbdd071ca3c93918df0bebac13567b4a5af7c6dc057dd6f4>
+2026-09-30 13:05:36.863	I HEIGHT 37, difficulty:	1
+2026-09-30 13:05:36.863	I block reward: 35.181922698238(35.181922698238 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:36.882	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.882	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <388b5424c652cd0506dfc350ed95ed120f390d0d9ae4035b2e41e5215439e6ce> (height 38, 0 txes, peer's height: 39)
+2026-09-30 13:05:36.899	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.899	I id:	<388b5424c652cd0506dfc350ed95ed120f390d0d9ae4035b2e41e5215439e6ce>
+2026-09-30 13:05:36.899	I PoW:	<6a3272ff2e44ecd72a06144a103b7686b5bf89ddeb1f3b4bd6d418aab2b3a8cb>
+2026-09-30 13:05:36.899	I HEIGHT 38, difficulty:	1
+2026-09-30 13:05:36.899	I block reward: 35.181855594046(35.181855594046 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 17(0/17)ms
+2026-09-30 13:05:36.916	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.916	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <157e7b324a463a839256f4b5350d5b4aa75bdf780d7b3098a0d15307397c957e> (height 39, 0 txes, peer's height: 40)
+2026-09-30 13:05:36.934	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.934	I id:	<157e7b324a463a839256f4b5350d5b4aa75bdf780d7b3098a0d15307397c957e>
+2026-09-30 13:05:36.934	I PoW:	<bf52b346e2d6e80928e40b22ad5ad1c1bff997a4d27100e13ccd8e4bb3b0ec8e>
+2026-09-30 13:05:36.934	I HEIGHT 39, difficulty:	1
+2026-09-30 13:05:36.934	I block reward: 35.181788489981(35.181788489981 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 19(0/19)ms
+2026-09-30 13:05:36.955	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.955	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <3f50a727602fc28b864dfc14f03058af1cccd8a7b48458822203f96c1b83cdfe> (height 40, 0 txes, peer's height: 41)
+2026-09-30 13:05:36.975	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:36.975	I id:	<3f50a727602fc28b864dfc14f03058af1cccd8a7b48458822203f96c1b83cdfe>
+2026-09-30 13:05:36.975	I PoW:	<3cac535d337d5d45ff4e1efbe8a9263fdef5b4dc8b670a394a3850a9bdf44dda>
+2026-09-30 13:05:36.975	I HEIGHT 40, difficulty:	1
+2026-09-30 13:05:36.975	I block reward: 35.181721386045(35.181721386045 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 19(0/19)ms
+2026-09-30 13:05:36.995	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:36.995	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <2e77332bb08d35650bce0ccb0682360599bf81e85c79a16eb381ad5539776564> (height 41, 0 txes, peer's height: 42)
+2026-09-30 13:05:37.013	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.013	I id:	<2e77332bb08d35650bce0ccb0682360599bf81e85c79a16eb381ad5539776564>
+2026-09-30 13:05:37.013	I PoW:	<de96e0b702f0f2166a8086375e08d66ca5cfd916741035380f93c50a612f2b4b>
+2026-09-30 13:05:37.013	I HEIGHT 41, difficulty:	1
+2026-09-30 13:05:37.013	I block reward: 35.181654282237(35.181654282237 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 18(0/17)ms
+2026-09-30 13:05:37.033	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.033	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <7ad4b837bbe8acdc7f69f79497a7bf9da5b305bb2ed3733a971385c6e392059d> (height 42, 0 txes, peer's height: 43)
+2026-09-30 13:05:37.053	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.053	I id:	<7ad4b837bbe8acdc7f69f79497a7bf9da5b305bb2ed3733a971385c6e392059d>
+2026-09-30 13:05:37.053	I PoW:	<a3ee505e99231c0060a20698e00a38c8263fa45720ce19e71fa7be8917c6e0a8>
+2026-09-30 13:05:37.053	I HEIGHT 42, difficulty:	1
+2026-09-30 13:05:37.053	I block reward: 35.181587178557(35.181587178557 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 19(0/19)ms
+2026-09-30 13:05:37.077	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.077	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <d4091454052895fc424580fabff8b9924be34e1bd2b25d2ffbc8b675284dab95> (height 43, 0 txes, peer's height: 44)
+2026-09-30 13:05:37.092	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.092	I id:	<d4091454052895fc424580fabff8b9924be34e1bd2b25d2ffbc8b675284dab95>
+2026-09-30 13:05:37.092	I PoW:	<10a3d4a0f00ab6405de8554d0c5d9f015cf99172c7208e2b7f3dfb91787de21b>
+2026-09-30 13:05:37.092	I HEIGHT 43, difficulty:	1
+2026-09-30 13:05:37.092	I block reward: 35.181520075005(35.181520075005 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:37.111	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.111	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <e6e49ad4c4465890948a32e8c18180793285f4ecb8d042f956de4ede45c50091> (height 44, 0 txes, peer's height: 45)
+2026-09-30 13:05:37.125	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.125	I id:	<e6e49ad4c4465890948a32e8c18180793285f4ecb8d042f956de4ede45c50091>
+2026-09-30 13:05:37.125	I PoW:	<8a9ea52b592d8313de63849bd2f06675c2d6db8e748d14b771255ae473ba8cea>
+2026-09-30 13:05:37.125	I HEIGHT 44, difficulty:	1
+2026-09-30 13:05:37.125	I block reward: 35.181452971580(35.181452971580 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 13(0/13)ms
+2026-09-30 13:05:37.147	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.147	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <79e81d3daa49f62becba5ab03f08a1e59beff520cfcde864fb6163b626c60a46> (height 45, 0 txes, peer's height: 46)
+2026-09-30 13:05:37.162	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.162	I id:	<79e81d3daa49f62becba5ab03f08a1e59beff520cfcde864fb6163b626c60a46>
+2026-09-30 13:05:37.162	I PoW:	<ea3c2732fd1b78a3a6ff31ccdef52f585493fe30bad28a57917e9cea75e8326b>
+2026-09-30 13:05:37.162	I HEIGHT 45, difficulty:	1
+2026-09-30 13:05:37.162	I block reward: 35.181385868284(35.181385868284 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:37.184	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.184	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <d96525b6e4af79cba17e27830cf033fb7843334bd51d06b6c467ed5dded08cc6> (height 46, 0 txes, peer's height: 47)
+2026-09-30 13:05:37.199	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.199	I id:	<d96525b6e4af79cba17e27830cf033fb7843334bd51d06b6c467ed5dded08cc6>
+2026-09-30 13:05:37.199	I PoW:	<b78830ce5f0d447520fad1444b9dd6518d9db074a156e2fcbd889b48a110fd87>
+2026-09-30 13:05:37.199	I HEIGHT 46, difficulty:	1
+2026-09-30 13:05:37.199	I block reward: 35.181318765116(35.181318765116 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:37.217	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.217	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <81606c5dc8da81887d693a5affe71cccb84fe2fbbe1e8c7a7e93e965548be7d9> (height 47, 0 txes, peer's height: 48)
+2026-09-30 13:05:37.232	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.232	I id:	<81606c5dc8da81887d693a5affe71cccb84fe2fbbe1e8c7a7e93e965548be7d9>
+2026-09-30 13:05:37.232	I PoW:	<defb43b046f5dda22494d2d3f657195dc2b894e1cbac7d2f1c7438f0ca6b8c2a>
+2026-09-30 13:05:37.232	I HEIGHT 47, difficulty:	1
+2026-09-30 13:05:37.232	I block reward: 35.181251662076(35.181251662076 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/14)ms
+2026-09-30 13:05:37.250	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.250	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <12d0e1a2e420fc295dd8473300b8b4fae9b786219a347ca70332dd2ca81f5ecf> (height 48, 0 txes, peer's height: 49)
+2026-09-30 13:05:37.264	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.265	I id:	<12d0e1a2e420fc295dd8473300b8b4fae9b786219a347ca70332dd2ca81f5ecf>
+2026-09-30 13:05:37.265	I PoW:	<10e057d20c965c85e74871ceb2c643fc7adb741abb027948429f6d66cec02dfd>
+2026-09-30 13:05:37.265	I HEIGHT 48, difficulty:	1
+2026-09-30 13:05:37.265	I block reward: 35.181184559163(35.181184559163 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:37.285	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:37.285	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <d9f499234b3b91594195254787d3951fe3a8362e39b9f87fe49f3eb9f97c3813> (height 49, 0 txes, peer's height: 50)
+2026-09-30 13:05:37.300	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:37.300	I id:	<d9f499234b3b91594195254787d3951fe3a8362e39b9f87fe49f3eb9f97c3813>
+2026-09-30 13:05:37.300	I PoW:	<f3ccbe47c721dd9f4a02b8d77d0719f2b4c6a17f0e1d7dfabcad82c6b6e58a7d>
+2026-09-30 13:05:37.300	I HEIGHT 49, difficulty:	1
+2026-09-30 13:05:37.300	I block reward: 35.181117456379(35.181117456379 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:37.562	I Cleaned up 0 stale requests
+2026-09-30 13:05:37.564	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:38.212	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:38.212	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <2dc4bfe2b9814c787ba95f3003c1c0fe3e1d182f187f35f9f7dfd675e3a4f3a2> (height 50, 0 txes, peer's height: 51)
+2026-09-30 13:05:38.564	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:38.833	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:38.833	I [127.0.0.1:50782 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:39.062	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.062	I id:	<2dc4bfe2b9814c787ba95f3003c1c0fe3e1d182f187f35f9f7dfd675e3a4f3a2>
+2026-09-30 13:05:39.062	I PoW:	<9eb96dabdd5e39d1fa111605064262607e3602b364e1d9b5f1f8d0b71813791e>
+2026-09-30 13:05:39.062	I HEIGHT 50, difficulty:	1
+2026-09-30 13:05:39.062	I block reward: 35.181050353723(35.181050353723 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:39.067	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.067	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <af59d9c0348be77efc4e27f6936af29d55fd8041eff67adb2d90b2d4e80b6174> (height 51, 0 txes, peer's height: 52)
+2026-09-30 13:05:39.082	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.082	I id:	<af59d9c0348be77efc4e27f6936af29d55fd8041eff67adb2d90b2d4e80b6174>
+2026-09-30 13:05:39.082	I PoW:	<769a49bc406e83d9a5b8772ebde02d39d7b6243089fdec3c513c9835a6929532>
+2026-09-30 13:05:39.082	I HEIGHT 51, difficulty:	1
+2026-09-30 13:05:39.082	I block reward: 35.180983251195(35.180983251195 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/14)ms
+2026-09-30 13:05:39.086	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.086	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <05a56b721c3898e457621b3bb1b3823bc49b040bb6b36d9df4432ee1994a487c> (height 52, 0 txes, peer's height: 53)
+2026-09-30 13:05:39.101	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.101	I id:	<05a56b721c3898e457621b3bb1b3823bc49b040bb6b36d9df4432ee1994a487c>
+2026-09-30 13:05:39.101	I PoW:	<820dd890df10e64c485d6b98689dd16fae558111fe87620580f5236b39f51224>
+2026-09-30 13:05:39.101	I HEIGHT 52, difficulty:	1
+2026-09-30 13:05:39.101	I block reward: 35.180916148794(35.180916148794 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:39.106	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.106	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <958c489c42ead05294ae4d6a6bbe1ef462839b1fcd8c1b60939591ac2458b1a0> (height 53, 0 txes, peer's height: 54)
+2026-09-30 13:05:39.121	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.121	I id:	<958c489c42ead05294ae4d6a6bbe1ef462839b1fcd8c1b60939591ac2458b1a0>
+2026-09-30 13:05:39.121	I PoW:	<4d06dc264e5e769fbb177d68afd6a2551affc6103b7e5f2950caddc0a141a8c7>
+2026-09-30 13:05:39.121	I HEIGHT 53, difficulty:	1
+2026-09-30 13:05:39.121	I block reward: 35.180849046522(35.180849046522 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/14)ms
+2026-09-30 13:05:39.123	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.123	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <ef44b9528da5ef89d1d858b299e2e46efdd0d07471f10dcc5e3e45883ebf1298> (height 54, 0 txes, peer's height: 55)
+2026-09-30 13:05:39.140	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.140	I id:	<ef44b9528da5ef89d1d858b299e2e46efdd0d07471f10dcc5e3e45883ebf1298>
+2026-09-30 13:05:39.140	I PoW:	<bc6a0ec7fd40b494bdfa0860fb7a3b4d2091630a4cdcdf1396accb9ac61997b1>
+2026-09-30 13:05:39.140	I HEIGHT 54, difficulty:	1
+2026-09-30 13:05:39.140	I block reward: 35.180781944378(35.180781944378 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/16)ms
+2026-09-30 13:05:39.143	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.143	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <e9b68a8b96a54c1ac8814411e5f6c741b84df4bf420cded99e7c1d655fd4ae91> (height 55, 0 txes, peer's height: 56)
+2026-09-30 13:05:39.157	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.157	I id:	<e9b68a8b96a54c1ac8814411e5f6c741b84df4bf420cded99e7c1d655fd4ae91>
+2026-09-30 13:05:39.157	I PoW:	<e0b619f45a1ea1b441031fcf91f4459e2bbcb861a3708cd1e5e2518b50f772c8>
+2026-09-30 13:05:39.157	I HEIGHT 55, difficulty:	1
+2026-09-30 13:05:39.157	I block reward: 35.180714842361(35.180714842361 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:39.160	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.160	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <160b76f1d07b4e78a2206366c851790e6045c6af464d14cc228d878d0d32ee90> (height 56, 0 txes, peer's height: 57)
+2026-09-30 13:05:39.174	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.174	I id:	<160b76f1d07b4e78a2206366c851790e6045c6af464d14cc228d878d0d32ee90>
+2026-09-30 13:05:39.174	I PoW:	<04ae66b97e2f9b283fe3bcd47717b4bd4b960f31d7e46fe61e7026ad0200d63d>
+2026-09-30 13:05:39.174	I HEIGHT 56, difficulty:	1
+2026-09-30 13:05:39.174	I block reward: 35.180647740473(35.180647740473 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 13(0/13)ms
+2026-09-30 13:05:39.177	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.177	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <03b45a68445a5cc1d7f6b8aaf6f766cf551b950a1abec6e4c427b2a074883dd1> (height 57, 0 txes, peer's height: 58)
+2026-09-30 13:05:39.192	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.192	I id:	<03b45a68445a5cc1d7f6b8aaf6f766cf551b950a1abec6e4c427b2a074883dd1>
+2026-09-30 13:05:39.192	I PoW:	<530c95c5aed2c0aad273127b0586f14539c4e91138d79701d93d271f93a75d5a>
+2026-09-30 13:05:39.192	I HEIGHT 57, difficulty:	1
+2026-09-30 13:05:39.192	I block reward: 35.180580638713(35.180580638713 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/13)ms
+2026-09-30 13:05:39.196	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.196	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <ffc6654fb11aae623885bbb760a486d2d51239ca332b339148d560025c536156> (height 58, 0 txes, peer's height: 59)
+2026-09-30 13:05:39.210	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.210	I id:	<ffc6654fb11aae623885bbb760a486d2d51239ca332b339148d560025c536156>
+2026-09-30 13:05:39.210	I PoW:	<bdca7033fccfd24e2f12df5940902529e92ca9b9d85693aef1bd3a894b31ca7b>
+2026-09-30 13:05:39.210	I HEIGHT 58, difficulty:	1
+2026-09-30 13:05:39.210	I block reward: 35.180513537080(35.180513537080 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 13(0/13)ms
+2026-09-30 13:05:39.214	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.214	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <68c8ea135b054ee837f1be77efa0aeeef80a04b88769f9f0c658be5460c9752d> (height 59, 0 txes, peer's height: 60)
+2026-09-30 13:05:39.230	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.230	I id:	<68c8ea135b054ee837f1be77efa0aeeef80a04b88769f9f0c658be5460c9752d>
+2026-09-30 13:05:39.230	I PoW:	<fa97a200b45e7104d916d0e44ab43260b6ecaaf9381d41b29cccdf56690e2216>
+2026-09-30 13:05:39.230	I HEIGHT 59, difficulty:	1
+2026-09-30 13:05:39.230	I block reward: 35.180446435576(35.180446435576 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/15)ms
+2026-09-30 13:05:39.232	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.232	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <ab7c8303ad534b6f39ec8a53563dc2863462d910eeca098f157a5ed23934f2ef> (height 60, 0 txes, peer's height: 61)
+2026-09-30 13:05:39.249	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.249	I id:	<ab7c8303ad534b6f39ec8a53563dc2863462d910eeca098f157a5ed23934f2ef>
+2026-09-30 13:05:39.249	I PoW:	<7aafbaaa15f6a4851692c2302e62efc6dcb4b99d2e6928292dbb35d3e691f905>
+2026-09-30 13:05:39.249	I HEIGHT 60, difficulty:	1
+2026-09-30 13:05:39.249	I block reward: 35.180379334199(35.180379334199 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/15)ms
+2026-09-30 13:05:39.254	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.254	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <e47ece4d8580194bb403c04bd778b22e4ad875e532448ad2569ee7593a64c756> (height 61, 0 txes, peer's height: 62)
+2026-09-30 13:05:39.271	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.271	I id:	<e47ece4d8580194bb403c04bd778b22e4ad875e532448ad2569ee7593a64c756>
+2026-09-30 13:05:39.271	I PoW:	<8ea6a61523ad7c489c93c5a21800ec1bc114e8bf6a6df7035bec646615ebe5e2>
+2026-09-30 13:05:39.271	I HEIGHT 61, difficulty:	1
+2026-09-30 13:05:39.271	I block reward: 35.180312232951(35.180312232951 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/16)ms
+2026-09-30 13:05:39.274	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.274	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <6069a201c07612a34b96f946dba8719a332f871701dceb6429948fe64f7df610> (height 62, 0 txes, peer's height: 63)
+2026-09-30 13:05:39.289	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.289	I id:	<6069a201c07612a34b96f946dba8719a332f871701dceb6429948fe64f7df610>
+2026-09-30 13:05:39.289	I PoW:	<8cc6eed56d7478f8f388122f4ef19a4fb4da4ddfdcc008121a30d39303acc606>
+2026-09-30 13:05:39.289	I HEIGHT 62, difficulty:	1
+2026-09-30 13:05:39.289	I block reward: 35.180245131830(35.180245131830 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 15(0/14)ms
+2026-09-30 13:05:39.292	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.292	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <c5a712689a57c59e11f6e5b1b49a08cf1b0fe7f140f52162ca53e679ae922324> (height 63, 0 txes, peer's height: 64)
+2026-09-30 13:05:39.307	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.307	I id:	<c5a712689a57c59e11f6e5b1b49a08cf1b0fe7f140f52162ca53e679ae922324>
+2026-09-30 13:05:39.307	I PoW:	<311e4a0e87f26bec5cf1b0da1523696294f453315a3bf628d52e490b52defc9b>
+2026-09-30 13:05:39.307	I HEIGHT 63, difficulty:	1
+2026-09-30 13:05:39.307	I block reward: 35.180178030838(35.180178030838 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:39.310	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.310	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <5bfb83656639112bb5353d03742bfca585d8dbfba56a5a3b5f49464516b4e52c> (height 64, 0 txes, peer's height: 65)
+2026-09-30 13:05:39.314	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:39.314	I [127.0.0.1:50786 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:39.325	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.325	I id:	<5bfb83656639112bb5353d03742bfca585d8dbfba56a5a3b5f49464516b4e52c>
+2026-09-30 13:05:39.325	I PoW:	<be80073bda43583f333cf7b6d53048cb2d4716095358aeb8a0a064aa2547caf2>
+2026-09-30 13:05:39.325	I HEIGHT 64, difficulty:	1
+2026-09-30 13:05:39.325	I block reward: 35.180110929974(35.180110929974 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 14(0/14)ms
+2026-09-30 13:05:39.329	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.329	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <78b2966b085f66ffe8a3fa6b1a3276ddbff43fb85d42919dcf72e35c0e39546d> (height 65, 0 txes, peer's height: 66)
+2026-09-30 13:05:39.345	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.345	I id:	<78b2966b085f66ffe8a3fa6b1a3276ddbff43fb85d42919dcf72e35c0e39546d>
+2026-09-30 13:05:39.345	I PoW:	<65893b9521c4b334151076ff7277133a4527cd270fed2997137f50acf14ba89c>
+2026-09-30 13:05:39.345	I HEIGHT 65, difficulty:	1
+2026-09-30 13:05:39.345	I block reward: 35.180043829237(35.180043829237 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 16(0/15)ms
+2026-09-30 13:05:39.353	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.353	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <c6d249dee0d6070fab3965119d3f10e84ef147687a9e29b1fcf17d833390e300> (height 66, 0 txes, peer's height: 67)
+2026-09-30 13:05:39.367	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.367	I id:	<c6d249dee0d6070fab3965119d3f10e84ef147687a9e29b1fcf17d833390e300>
+2026-09-30 13:05:39.367	I PoW:	<9219ef8f0322d54740c8245b07971927760c469e4b6cf23c43127e7823c13f78>
+2026-09-30 13:05:39.367	I HEIGHT 66, difficulty:	1
+2026-09-30 13:05:39.367	I block reward: 35.179976728629(35.179976728629 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 13(0/13)ms
+2026-09-30 13:05:39.380	I [127.0.0.1:50840 INC] 238 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.380	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <e4ef1977f969169c536f87aabd034348b0a65a3c9aaa3eacb7ed28a22783fa61> (height 67, 0 txes, peer's height: 68)
+2026-09-30 13:05:39.393	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.393	I id:	<e4ef1977f969169c536f87aabd034348b0a65a3c9aaa3eacb7ed28a22783fa61>
+2026-09-30 13:05:39.393	I PoW:	<1ddba87cd817d5056686aa275c3883ef0dbc32ec0dd68396e6b0309118d9840c>
+2026-09-30 13:05:39.393	I HEIGHT 67, difficulty:	1
+2026-09-30 13:05:39.393	I block reward: 35.179909628148(35.179909628148 + 0.000000000000), coinbase_weight: 103, cumulative weight: 103, 13(0/13)ms
+2026-09-30 13:05:39.396	I [127.0.0.1:50840 INC] 239 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.396	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <98c70f4edfc984b0497d2e42962fdbff720fd77c91e44d3fa881ad51e27288cb> (height 68, 0 txes, peer's height: 69)
+2026-09-30 13:05:39.411	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.411	I id:	<98c70f4edfc984b0497d2e42962fdbff720fd77c91e44d3fa881ad51e27288cb>
+2026-09-30 13:05:39.411	I PoW:	<6bf93e78bcefff30469c85195091e26cc0307e7972a7fa629cd42d29d57294c9>
+2026-09-30 13:05:39.411	I HEIGHT 68, difficulty:	1
+2026-09-30 13:05:39.411	I block reward: 35.179842527796(35.179842527796 + 0.000000000000), coinbase_weight: 104, cumulative weight: 104, 14(0/14)ms
+2026-09-30 13:05:39.416	I [127.0.0.1:50840 INC] 239 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.416	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <90f74cf82e612069e5808e1d182259c58c841e7d267d2f186aa40f58d71feb68> (height 69, 0 txes, peer's height: 70)
+2026-09-30 13:05:39.430	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.430	I id:	<90f74cf82e612069e5808e1d182259c58c841e7d267d2f186aa40f58d71feb68>
+2026-09-30 13:05:39.430	I PoW:	<879f5baaa4ac4153c3af1c0c24e7267114f8cf2c009f79dec9752122d37aeef6>
+2026-09-30 13:05:39.430	I HEIGHT 69, difficulty:	1
+2026-09-30 13:05:39.430	I block reward: 35.179775427571(35.179775427571 + 0.000000000000), coinbase_weight: 104, cumulative weight: 104, 13(0/13)ms
+2026-09-30 13:05:39.433	I [127.0.0.1:50840 INC] 239 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:39.433	I [127.0.0.1:50840 INC] [127.0.0.1:50840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <2b424013cbd0628c7922ce0b5b54471f33fbb739b4795ec4a235a7a81e8e785f> (height 70, 0 txes, peer's height: 71)
+2026-09-30 13:05:39.447	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:39.447	I id:	<2b424013cbd0628c7922ce0b5b54471f33fbb739b4795ec4a235a7a81e8e785f>
+2026-09-30 13:05:39.447	I PoW:	<fd4d55b76610671e11d778d75f64ea62b4c539743b1dda584b479a6f96ec5f2d>
+2026-09-30 13:05:39.447	I HEIGHT 70, difficulty:	1
+2026-09-30 13:05:39.447	I block reward: 35.179708327474(35.179708327474 + 0.000000000000), coinbase_weight: 104, cumulative weight: 104, 14(0/13)ms
+2026-09-30 13:05:39.564	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:39.577	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:39.577	I [127.0.0.1:50796 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:39.578	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:39.578	I [127.0.0.1:50804 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:40.564	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:41.565	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:42.563	I Cleaned up 0 stale requests
+2026-09-30 13:05:42.565	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:43.565	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:43.860	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:43.860	I [127.0.0.1:50806 INC] calling /get_transaction_pool
+2026-09-30 13:05:44.111	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:44.111	I [127.0.0.1:50820 INC] calling /get_transaction_pool
+2026-09-30 13:05:44.362	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:44.362	I [127.0.0.1:50834 INC] calling /get_transaction_pool
+2026-09-30 13:05:44.566	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:44.613	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:44.613	I [127.0.0.1:50850 INC] calling /get_transaction_pool
+2026-09-30 13:05:44.864	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:44.864	I [127.0.0.1:50858 INC] calling /get_transaction_pool
+2026-09-30 13:05:45.116	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:45.116	I [127.0.0.1:50874 INC] calling /get_transaction_pool
+2026-09-30 13:05:45.367	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:45.367	I [127.0.0.1:50888 INC] calling /get_transaction_pool
+2026-09-30 13:05:45.566	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:45.618	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:45.618	I [127.0.0.1:50898 INC] calling /get_transaction_pool
+2026-09-30 13:05:45.868	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:45.869	I [127.0.0.1:50910 INC] calling /get_transaction_pool
+2026-09-30 13:05:46.119	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:46.120	I [127.0.0.1:50922 INC] calling /get_transaction_pool
+2026-09-30 13:05:46.365	I [127.0.0.1:50840 INC] 46 bytes received for category command-2011 initiated by peer
+2026-09-30 13:05:46.365	I [127.0.0.1:50840 INC] Received NOTIFY_TX_POOL_HASH (1 txes)
+2026-09-30 13:05:46.365	I Requesting from peer: 5e354520e56b4ea693f3f00c4a7a5c14 the transaction: <45890bcda284071d05eb3841eaf5901500ec4c00e17427f88c799f0b1bd85245>
+2026-09-30 13:05:46.365	I [127.0.0.1:50840 INC] Requesting 1 transactions via NOTIFY_REQUEST_TX_POOL_TXS (nonce=4)
+2026-09-30 13:05:46.365	I [127.0.0.1:50840 INC] 57 bytes sent for category command-2012 initiated by us
+2026-09-30 13:05:46.366	I [127.0.0.1:50840 INC] 7168 bytes received for category command-2002 initiated by peer
+2026-09-30 13:05:46.366	I [127.0.0.1:50840 INC] Received NOTIFY_NEW_TRANSACTIONS (1 txes)
+2026-09-30 13:05:46.366	I [127.0.0.1:50840 INC] Including tx <45890bcda284071d05eb3841eaf5901500ec4c00e17427f88c799f0b1bd85245>
+2026-09-30 13:05:46.366	I Processing 1 txs received from peer 5e354520e56b4ea693f3f00c4a7a5c14 (nonce=4)
+2026-09-30 13:05:46.370	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:46.371	I [127.0.0.1:50932 INC] calling /get_transaction_pool
+2026-09-30 13:05:46.566	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:47.295	I Transaction added to pool: txid <45890bcda284071d05eb3841eaf5901500ec4c00e17427f88c799f0b1bd85245> weight: 9093 fee/byte: 1.2e+06, count: 1, pool total weight: 9093
+2026-09-30 13:05:47.295	I Decremented in_flight_requests count for peer: 5e354520e56b4ea693f3f00c4a7a5c14, current in_flight_requests: 0
+2026-09-30 13:05:47.298	W Unable to send transaction(s), no available connections
+2026-09-30 13:05:47.300	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:47.300	I [127.0.0.1:50942 INC] calling /get_transaction_pool
+2026-09-30 13:05:47.303	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:47.303	I [127.0.0.1:50944 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:47.305	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:47.305	I [127.0.0.1:50956 INC] calling /get_transaction_pool
+2026-09-30 13:05:47.307	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:47.307	I [127.0.0.1:50958 INC] calling /is_key_image_spent
+2026-09-30 13:05:47.308	I [127.0.0.1:50840 INC] 7168 bytes received for category command-2002 initiated by peer
+2026-09-30 13:05:47.308	I [127.0.0.1:50840 INC] Received NOTIFY_NEW_TRANSACTIONS (1 txes)
+2026-09-30 13:05:47.308	I [127.0.0.1:50840 INC] Including tx <45890bcda284071d05eb3841eaf5901500ec4c00e17427f88c799f0b1bd85245>
+2026-09-30 13:05:47.563	I Cleaned up 0 stale requests
+2026-09-30 13:05:47.566	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:48.309	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:48.309	I [127.0.0.1:43900 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:48.311	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:48.311	I [127.0.0.1:43912 INC] calling /get_transaction_pool
+2026-09-30 13:05:48.313	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:48.313	I [127.0.0.1:43922 INC] calling /is_key_image_spent
+2026-09-30 13:05:48.314	I [127.0.0.1:50840 INC] 7168 bytes received for category command-2002 initiated by peer
+2026-09-30 13:05:48.314	I [127.0.0.1:50840 INC] Received NOTIFY_NEW_TRANSACTIONS (1 txes)
+2026-09-30 13:05:48.314	E Failed to parse transaction from blob
+2026-09-30 13:05:48.314	I [127.0.0.1:50840 INC] Failed to parse incoming tx, dropping connection
+2026-09-30 13:05:48.314	I Removing all requests for disconnected peer: 5e354520e56b4ea693f3f00c4a7a5c14
+2026-09-30 13:05:48.314	I [127.0.0.1:50840 INC] [0] state: closed in state normal
+2026-09-30 13:05:48.314	I [127.0.0.1:50840 5e354520-e56b-4ea6-93f3-f00c4a7a5c14 INC] CLOSE CONNECTION
+2026-09-30 13:05:48.565	I [127.0.0.1:45840 ba285b3f-b19b-4289-9dda-06dcb5ec5d4c INC] NEW CONNECTION
+2026-09-30 13:05:48.566	I [127.0.0.1:45840 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-30 13:05:48.566	I switching safe mode on
+2026-09-30 13:05:48.566	I clearing used stripe peers
+2026-09-30 13:05:48.566	I [127.0.0.1:45840 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-30 13:05:48.567	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:49.567	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:50.317	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:50.317	I [127.0.0.1:43938 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:50.319	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:50.319	I [127.0.0.1:43946 INC] calling /get_transaction_pool
+2026-09-30 13:05:50.320	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:50.320	I [127.0.0.1:43958 INC] calling /is_key_image_spent
+2026-09-30 13:05:50.359	I [127.0.0.1:45840 INC] 271 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:50.359	I [127.0.0.1:45840 INC] [127.0.0.1:45840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <3dbac038914e3b1d356612a3c2c7e257c1241bca62a1c0e0716e6d92508f4e3f> (height 71, 0 txes, peer's height: 72)
+2026-09-30 13:05:50.360	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:50.360	I [127.0.0.1:43970 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:50.378	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:50.378	I id:	<3dbac038914e3b1d356612a3c2c7e257c1241bca62a1c0e0716e6d92508f4e3f>
+2026-09-30 13:05:50.378	I PoW:	<2788c6cece239bc7b77fcfd835eca98c29c1d78d15d892351de91679f2440411>
+2026-09-30 13:05:50.378	I HEIGHT 71, difficulty:	1
+2026-09-30 13:05:50.378	I block reward: 35.190552827506(35.179641227506 + 0.010911600000), coinbase_weight: 104, cumulative weight: 9197, 17(0/16)ms
+2026-09-30 13:05:50.567	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:50.630	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:50.630	I [127.0.0.1:43974 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:50.631	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:50.631	I [127.0.0.1:43990 INC] calling /is_key_image_spent
+2026-09-30 13:05:50.673	I [127.0.0.1:45840 INC] 239 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:50.673	I [127.0.0.1:45840 INC] [127.0.0.1:45840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <a5b84cd57c32771fb8e535b215488e3bcabf9f5cc0e6ac233a6b9a55d8d48e51> (height 72, 0 txes, peer's height: 73)
+2026-09-30 13:05:50.675	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:50.675	I [127.0.0.1:44002 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:50.691	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:50.691	I id:	<a5b84cd57c32771fb8e535b215488e3bcabf9f5cc0e6ac233a6b9a55d8d48e51>
+2026-09-30 13:05:50.691	I PoW:	<c6f8767e2057c9851ead1045694679569f833f01aee607ea77f04799abb9d408>
+2026-09-30 13:05:50.691	I HEIGHT 72, difficulty:	1
+2026-09-30 13:05:50.691	I block reward: 35.179574127665(35.179574127665 + 0.000000000000), coinbase_weight: 104, cumulative weight: 104, 17(0/16)ms
+2026-09-30 13:05:50.943	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:50.943	I [127.0.0.1:44012 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:50.944	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:50.944	I [127.0.0.1:44024 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:50.945	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:50.945	I [127.0.0.1:44038 INC] calling /get_transaction_pool
+2026-09-30 13:05:50.946	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:50.946	I [127.0.0.1:44054 INC] calling /is_key_image_spent
+2026-09-30 13:05:50.948	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:50.948	I [127.0.0.1:44062 INC] Calling RPC method get_block_header_by_hash
+2026-09-30 13:05:50.949	I [127.0.0.1:45840 INC] 239 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:50.949	I [127.0.0.1:45840 INC] [127.0.0.1:45840 INC] Received NOTIFY_NEW_FLUFFY_BLOCK <a5b84cd57c32771fb8e535b215488e3bcabf9f5cc0e6ac233a6b9a55d8d48e51> (height 72, 0 txes, peer's height: 73)
+2026-09-30 13:05:51.567	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:51.950	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:51.950	I [127.0.0.1:44070 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:51.951	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:51.951	I [127.0.0.1:44078 INC] calling /get_transaction_pool
+2026-09-30 13:05:51.952	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:51.952	I [127.0.0.1:44088 INC] calling /is_key_image_spent
+2026-09-30 13:05:51.953	I [127.0.0.1:45840 INC] 239 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:51.953	E Failed to parse block from blob
+2026-09-30 13:05:51.953	E [127.0.0.1:45840 INC] sent wrong block: failed to parse and validate block: 8080808080808080808038914e3b1d356612a3c2c7e257c1241bca62a1c0e0716e6d92508f4e3f0000000002840101ff4801b1d89390eeff07011a14a84ed777c11c640c4911c2aeeab0fd5639e5f35121ebc960b81d2a8e25f16366d52f5447e0d555667b35cbfe6282616355240165b6f72205b0ecd8e688b7d5019c47dccb006c67d5957c29d42c785b5979812402010000000151790b1485d20fe1f6406672d094cba8a7fb6859deb6222aa4fdde6fb648fbb2, dropping connection
+2026-09-30 13:05:51.953	I Removing all requests for disconnected peer: ba285b3fb19b42899dda06dcb5ec5d4c
+2026-09-30 13:05:51.953	I [127.0.0.1:45840 INC] [0] state: closed in state normal
+2026-09-30 13:05:51.954	I [127.0.0.1:45840 ba285b3f-b19b-4289-9dda-06dcb5ec5d4c INC] CLOSE CONNECTION
+2026-09-30 13:05:52.564	I Cleaned up 0 stale requests
+2026-09-30 13:05:52.567	I [127.0.0.1:45856 e3dc93eb-3aa2-4d2f-acd2-671cae21edfa INC] NEW CONNECTION
+2026-09-30 13:05:52.567	I [127.0.0.1:45856 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-30 13:05:52.567	I switching safe mode on
+2026-09-30 13:05:52.568	I clearing used stripe peers
+2026-09-30 13:05:52.568	I [127.0.0.1:45856 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-30 13:05:52.568	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:52.955	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:52.955	I [127.0.0.1:44102 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:52.956	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:52.956	I [127.0.0.1:44112 INC] calling /get_transaction_pool
+2026-09-30 13:05:52.958	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:52.958	I [127.0.0.1:44122 INC] calling /is_key_image_spent
+2026-09-30 13:05:52.958	I [127.0.0.1:45856 INC] 239 bytes received for category command-2008 initiated by peer
+2026-09-30 13:05:52.958	E Failed to parse block from blob
+2026-09-30 13:05:52.958	E [127.0.0.1:45856 INC] sent wrong block: failed to parse and validate block: 1212ae92f4d5063dbac038914e3b1d356612a3c2c7e257c1241bca62a1c0e0716e6d92508f4e3f0000000000840101ff4801b1d89390eeff07011a14a84ed777c11c640c4911c2aeeab0fd5639e5f35121ebc960b81d2a8e25f16366d52f5447e0d555667b35cbfe6282616355240165b6f72205b0ecd8e688b7d5019c47dccb006c67d5957c29d42c785b5979812402010000000151790b1485d20fe1f6406672d094cba8a7fb6859deb6222aa4fdde6fb648fbb2, dropping connection
+2026-09-30 13:05:52.959	I Removing all requests for disconnected peer: e3dc93eb3aa24d2facd2671cae21edfa
+2026-09-30 13:05:52.959	I [127.0.0.1:45856 INC] [0] state: closed in state normal
+2026-09-30 13:05:52.959	I [127.0.0.1:45856 e3dc93eb-3aa2-4d2f-acd2-671cae21edfa INC] CLOSE CONNECTION
+2026-09-30 13:05:53.568	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:53.569	I [127.0.0.1:45870 6e344347-0f26-42fa-b92d-1c64cffcd331 INC] NEW CONNECTION
+2026-09-30 13:05:53.569	I [127.0.0.1:45870 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-30 13:05:53.569	I switching safe mode on
+2026-09-30 13:05:53.569	I clearing used stripe peers
+2026-09-30 13:05:53.569	I [127.0.0.1:45870 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-30 13:05:53.959	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:53.959	I [127.0.0.1:44132 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:53.960	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:53.960	I [127.0.0.1:44146 INC] calling /get_transaction_pool
+2026-09-30 13:05:53.961	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:53.961	I [127.0.0.1:44158 INC] calling /is_key_image_spent
+2026-09-30 13:05:53.962	I Removing all requests for disconnected peer: 6e3443470f2642fab92d1c64cffcd331
+2026-09-30 13:05:53.962	I [127.0.0.1:45870 INC] [0] state: closed in state normal
+2026-09-30 13:05:53.962	I [127.0.0.1:45870 6e344347-0f26-42fa-b92d-1c64cffcd331 INC] CLOSE CONNECTION
+2026-09-30 13:05:53.963	I HTTP [127.0.0.1] POST /pop_blocks
+2026-09-30 13:05:53.963	I [127.0.0.1:44160 INC] calling /pop_blocks
+2026-09-30 13:05:53.966	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:53.966	I [127.0.0.1:44168 INC] Calling RPC method flush_txpool
+2026-09-30 13:05:53.966	I Removing txid <45890bcda284071d05eb3841eaf5901500ec4c00e17427f88c799f0b1bd85245> from the pool
+2026-09-30 13:05:53.967	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:53.967	I [127.0.0.1:44176 INC] Calling RPC method generateblocks
+2026-09-30 13:05:53.995	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:53.995	I id:	<48bc79cc60845baefbc3bbdd1c71506cc45c6d9b4445a6889a575e364927df0a>
+2026-09-30 13:05:53.995	I PoW:	<405c5c781013efa8d05944cce35f7c17c4d2a9d107c41e27094d1170352abb06>
+2026-09-30 13:05:53.995	I HEIGHT 71, difficulty:	1
+2026-09-30 13:05:53.995	I block reward: 35.179641227506(35.179641227506 + 0.000000000000), coinbase_weight: 104, cumulative weight: 104, 13(0/13)ms
+2026-09-30 13:05:54.026	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:54.026	I id:	<d675f5ff8a0d5f03ee7c0930259cb24d57d5a70070f39759cb272a34a3484b5c>
+2026-09-30 13:05:54.026	I PoW:	<06578f2722fc40ad59410c0b3c0ee6379ef82fa8893aba2d2e01aa75a509b989>
+2026-09-30 13:05:54.026	I HEIGHT 72, difficulty:	1
+2026-09-30 13:05:54.026	I block reward: 35.179574127665(35.179574127665 + 0.000000000000), coinbase_weight: 104, cumulative weight: 104, 14(0/13)ms
+2026-09-30 13:05:54.055	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:54.055	I id:	<4922c3e59d16b90d571c217d545554a02c1c7b8bc0a0f290e1b80aad7c9c4373>
+2026-09-30 13:05:54.055	I PoW:	<9e718ddcff3c01113c07d22c218b87d0e6e70afe0eb4e540429c37e3b7df1974>
+2026-09-30 13:05:54.055	I HEIGHT 73, difficulty:	1
+2026-09-30 13:05:54.055	I block reward: 35.179507027953(35.179507027953 + 0.000000000000), coinbase_weight: 104, cumulative weight: 104, 13(0/13)ms
+2026-09-30 13:05:54.059	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.059	I [127.0.0.1:44180 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:54.059	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.059	I [127.0.0.1:44196 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:54.061	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.061	I [127.0.0.1:44210 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:54.312	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.312	I [127.0.0.1:44222 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:54.564	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.564	I [127.0.0.1:44238 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:54.568	I [<none> OUT] [priority]Connect failed to 127.0.0.1:20180
+2026-09-30 13:05:54.570	I [127.0.0.1:45884 d0d9bdcb-bc10-478c-a156-d19cd2f59af9 INC] NEW CONNECTION
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] 262 bytes received for category command-1001 initiated by peer
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] Remote blockchain height: 73, id: <a5b84cd57c32771fb8e535b215488e3bcabf9f5cc0e6ac233a6b9a55d8d48e51>
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] [0] state: requesting callback in state synchronizing
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] 262 bytes sent for category command-1001 initiated by us
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] -->>NOTIFY_REQUEST_CHAIN: m_block_ids.size()=17
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] 567 bytes sent for category command-2006 initiated by us
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] [0] state: requesting chain in state synchronizing
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] 535 bytes received for category command-2006 initiated by peer
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] Received NOTIFY_REQUEST_CHAIN (16 blocks
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] -->>NOTIFY_RESPONSE_CHAIN_ENTRY: m_start_height=70, m_total_height=74, m_block_ids.size()=4
+2026-09-30 13:05:54.571	I [127.0.0.1:45884 INC] 511 bytes sent for category command-2007 initiated by us
+2026-09-30 13:05:54.572	I [127.0.0.1:45884 INC] 503 bytes received for category command-2007 initiated by peer
+2026-09-30 13:05:54.572	I [127.0.0.1:45884 INC] Received NOTIFY_RESPONSE_CHAIN_ENTRY: m_block_ids.size()=3, m_start_height=70, m_total_height=73, expect height=74
+2026-09-30 13:05:54.572	I [127.0.0.1:45884 INC] [0] state: received chain in state synchronizing
+2026-09-30 13:05:54.572	I [127.0.0.1:45884 INC] [0] state: resuming in state synchronizing
+2026-09-30 13:05:54.572	I Maximum average of blocksize for current batches : 0
+2026-09-30 13:05:54.572	I Max block size seen within the last 100 blocks is 104 bytes and the max average blocksize in the queue is 0 bytes
+2026-09-30 13:05:54.572	I blocks are tiny, 104 bytes, sync 100 blocks in next batch
+2026-09-30 13:05:54.572	I [127.0.0.1:45884 INC] -->>NOTIFY_REQUEST_GET_OBJECTS: blocks.size()=2requested blocks count=2 / 100 from 71, first hash <3dbac038914e3b1d356612a3c2c7e257c1241bca62a1c0e0716e6d92508f4e3f>
+2026-09-30 13:05:54.572	I [127.0.0.1:45884 INC] 84 bytes sent for category command-2003 initiated by us
+2026-09-30 13:05:54.572	I [127.0.0.1:45884 INC] [0] state: requesting objects in state synchronizing
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] 116 bytes received for category command-2003 initiated by peer
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] Received NOTIFY_REQUEST_GET_OBJECTS (3 blocks)
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] -->>NOTIFY_RESPONSE_GET_OBJECTS: blocks.size()=3, rsp.m_current_blockchain_height=74, missed_ids.size()=0
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] 627 bytes sent for category command-2004 initiated by us
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] 6744 bytes received for category command-2004 initiated by peer
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] Received NOTIFY_RESPONSE_GET_OBJECTS (2 blocks)
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] [0] state: received objects in state synchronizing
+2026-09-30 13:05:54.573	I [127.0.0.1:45884 INC] [0] state: adding blocks in state synchronizing
+2026-09-30 13:05:54.632	I Transaction added to pool: txid <45890bcda284071d05eb3841eaf5901500ec4c00e17427f88c799f0b1bd85245> weight: 9093 fee/byte: 1.2e+06, count: 1, pool total weight: 9093
+2026-09-30 13:05:54.632	I ----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 71
+2026-09-30 13:05:54.632	I id:	<3dbac038914e3b1d356612a3c2c7e257c1241bca62a1c0e0716e6d92508f4e3f>
+2026-09-30 13:05:54.632	I PoW:	<2788c6cece239bc7b77fcfd835eca98c29c1d78d15d892351de91679f2440411>
+2026-09-30 13:05:54.632	I difficulty:	1
+2026-09-30 13:05:54.646	I ----- BLOCK ADDED AS ALTERNATIVE ON HEIGHT 72
+2026-09-30 13:05:54.646	I id:	<a5b84cd57c32771fb8e535b215488e3bcabf9f5cc0e6ac233a6b9a55d8d48e51>
+2026-09-30 13:05:54.646	I PoW:	<c6f8767e2057c9851ead1045694679569f833f01aee607ea77f04799abb9d408>
+2026-09-30 13:05:54.646	I difficulty:	1
+2026-09-30 13:05:54.649	I [127.0.0.1:45884 INC] [0] state: stopping adding blocks in state synchronizing
+2026-09-30 13:05:54.649	I [127.0.0.1:45884 INC] [0] state: resuming in state synchronizing
+2026-09-30 13:05:54.649	I switching safe mode on
+2026-09-30 13:05:54.649	I clearing used stripe peers
+2026-09-30 13:05:54.816	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.816	I [127.0.0.1:44250 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:54.818	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.818	I [127.0.0.1:44254 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:54.819	I HTTP [127.0.0.1] POST /get_transaction_pool
+2026-09-30 13:05:54.819	I [127.0.0.1:44256 INC] calling /get_transaction_pool
+2026-09-30 13:05:54.821	I HTTP [127.0.0.1] POST /is_key_image_spent
+2026-09-30 13:05:54.821	I [127.0.0.1:44272 INC] calling /is_key_image_spent
+2026-09-30 13:05:54.822	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.822	I [127.0.0.1:44288 INC] Calling RPC method generateblocks
+2026-09-30 13:05:54.851	I +++++ BLOCK SUCCESSFULLY ADDED
+2026-09-30 13:05:54.851	I id:	<45f4243704b9028ab5a911d7fa5299911cf827a8bd23aa8367dcaf6d087e03ae>
+2026-09-30 13:05:54.851	I PoW:	<401f9e9ea43a795014a5e448d8ba36fe8731660d3c219ecde03cdf9c23acae45>
+2026-09-30 13:05:54.851	I HEIGHT 74, difficulty:	1
+2026-09-30 13:05:54.851	I block reward: 35.190351528368(35.179439928368 + 0.010911600000), coinbase_weight: 104, cumulative weight: 9197, 13(0/13)ms
+2026-09-30 13:05:54.854	I [127.0.0.1:45884 INC] 271 bytes sent for category command-2008 initiated by us
+2026-09-30 13:05:54.871	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:54.871	I [127.0.0.1:44290 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:55.123	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:55.123	I [127.0.0.1:44292 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:55.124	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:55.124	I [127.0.0.1:44296 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:55.126	I HTTP [127.0.0.1] POST /json_rpc
+2026-09-30 13:05:55.126	I [127.0.0.1:44304 INC] Calling RPC method get_last_block_header
+2026-09-30 13:05:55.136	I Target height decreasing from 73 to 0
+2026-09-30 13:05:55.136	I switching safe mode on
+2026-09-30 13:05:55.136	W monerod is now disconnected from the network
+2026-09-30 13:05:55.136	I Removing all requests for disconnected peer: d0d9bdcbbc10478ca156d19cd2f59af9
+2026-09-30 13:05:55.136	I [127.0.0.1:45884 INC] [0] state: closed in state normal
+2026-09-30 13:05:55.136	I [127.0.0.1:45884 d0d9bdcb-bc10-478c-a156-d19cd2f59af9 INC] CLOSE CONNECTION
+2026-09-30 13:05:55.184	I net_service loop stopped.
+2026-09-30 13:05:55.184	I p2p net loop stopped
+2026-09-30 13:05:55.184	I Stopping core RPC server...
+2026-09-30 13:05:55.184	I Node stopped.
+2026-09-30 13:05:55.184	I Deinitializing core RPC server...
+2026-09-30 13:05:55.184	I Deinitializing p2p...
+2026-09-30 13:05:55.184	I Killing the net_node
+2026-09-30 13:05:55.564	I Joined extra background net_node threads
+2026-09-30 13:05:55.564	I Deinitializing core...
+2026-09-30 13:05:55.565	I Stopping cryptonote protocol...
+2026-09-30 13:05:55.565	I Cryptonote protocol stopped successfully
