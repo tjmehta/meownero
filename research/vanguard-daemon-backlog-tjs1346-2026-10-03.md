@@ -24,13 +24,31 @@ before draining. One generated block drained each observed cohort. The same
 trial then queues and drains eight fresh transactions. Selected key images and
 their original input identities are disjoint across all sixteen transactions.
 
-The verifier reconciles raw RPC references with queue snapshots, selected inputs,
+The verifier requires distinct native RPC transcripts, disposable wallet seed
+digests and transaction identities across trials. It reconciles raw RPC
+references with queue snapshots, selected inputs,
 decoded CARROT output keys, generated block responses, exact transaction
 membership in both nodes' blocks, confirmation heights, wallet outputs and
 balances. It accounts for every `generateblocks` and `transfer` call, checks all
 four native child exits, container exits, resource limits and source/executable
 pins. Queue and completion events are checked against the result. It preserves
 the explicit historical-tip limitation.
+
+Independent review TJS-1347, revision `b14c23bb-2a87-47bf-8718-e364c6805e0c`,
+returned changes-needed for `6214523a517a1dab338b674e1b2834e8b6f89a79`.
+Its original-trial audit passed, while eight rehashed contradictions passed the
+old verifier. Corrections bind RPC indices and finite, nonoverlapping timestamps
+from construction through pending snapshots and the complete queue to generation,
+confirmations and receiver observations. Reused queue/refill snapshots and mining
+RPCs are refused. Both nodes' block headers must identify the generated main-chain
+block and agree with its body. Each pending decoded response must have the exact
+transaction hash, pool state and any returned full native hex. Transfer requests
+must pay the recorded receiver address and seeded amount. Final cgroup peaks
+replace pre-shutdown samples in the resource table below.
+
+These are verifier, control and reporting corrections. The executed scenario,
+runner and original native receipts remain byte-identical. Validation and the
+new exact-candidate review are recorded separately from historical execution.
 
 ## Source and build evidence
 
@@ -103,11 +121,13 @@ and scheduling. Neither isolates cryptographic verification cost.
 
 | Trial | Container wall s | Scenario s | Cgroup CPU s | Peak bytes | Final daemon A/B RSS bytes | Generated blocks |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| 1 | 76.547 | 73.480 | 44.933 | 871,133,184 | 356,585,472 / 386,760,704 | 92 |
-| 2 | 70.027 | 68.759 | 43.185 | 870,830,080 | 359,882,752 / 388,755,456 | 92 |
+| 1 | 76.547 | 73.480 | 44.933 | 933,072,896 | 356,585,472 / 386,760,704 | 92 |
+| 2 | 70.027 | 68.759 | 43.185 | 947,458,048 | 359,882,752 / 388,755,456 | 92 |
 
 RSS is sampled, not a per-process high-water mark. Cgroup peak is the whole
-container high-water mark. Both trials have zero OOM/OOM-kill events, no
+container high-water mark from the final `run1.memory` and `run2.memory`
+receipts, including shutdown. Pre-shutdown `final_sample` peaks were
+871,133,184 and 870,830,080 bytes. Both trials have zero OOM/OOM-kill events, no
 non-loopback interface or route, and only loopback listeners. Caps are two CPUs,
 4 GiB memory/swap, 256 PIDs, no capabilities and no new privileges. The runner
 holds the existing shared heavy lock nonblocking. Both 1,000-second scenario and
@@ -122,7 +142,7 @@ PASS_LOCAL_EXECUTABLE_BYTES monerod+wallet_rpc
 UNVERIFIED_LIVE_TIPS post-run RPC records are historical claims, including writer /proc hashes
 ```
 
-The refusal suite passes with 24 refused contradictions and one explicit
+The corrected refusal suite passes with 41 refused contradictions and one explicit
 historical limit. It rebuilds each mutated manifest and checks that it passes
 `sha256sum -c` before invoking the verifier. Named controls cover missing and
 duplicate transactions, pending-input reuse, fake pool convergence, a coherent
@@ -132,6 +152,13 @@ blocks, a wrong raw generate count, silent cohort reduction, binary and upstream
 claims, conflicting containment options and time limits. A wrong local
 executable is also refused. A coherent equal-wrong genesis hash across results,
 events and raw RPC remains accepted only with `UNVERIFIED_LIVE_TIPS`.
+The added controls cover replayed transcripts, reused seed digests, replayed
+transaction identities with relabeled seeds, queue/drain chronology and stale
+snapshots, timestamps, mining RPCs, block identity/main-chain status, decoded
+native identity/bytes/count/pool state and actual transfer destinations. The
+original bundle retains its historical 24-control log. Current correction checks
+are archived separately under
+`research/evidence/vanguard-daemon-backlog-tjs1346-qa-corrections-2026-10-03`.
 
 The first control-suite invocation failed in that final historical-limit
 mutation because it traversed RPC reference IDs as tip arrays. The corrected

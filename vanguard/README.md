@@ -170,6 +170,10 @@ and spent key images must be disjoint, all sixteen hashes must occur exactly onc
 in the generated blocks, and receiver CARROT output identities and balances must
 reconcile. The sender refreshes after each admission using the accepted load
 gate's reservation route. The existing load and P2P gates remain unchanged.
+The verifier rejects replayed trials and binds RPC chronology from construction
+through both pending pools to generation and confirmations. Native block hashes,
+main-chain status, decoded transaction bytes and transfer destinations must agree
+with the recorded workload. Historical records still carry `UNVERIFIED_LIVE_TIPS`.
 
 ```sh
 python3 -B vanguard/run-daemon-backlog.py --src /absolute/private/vanguard-src \

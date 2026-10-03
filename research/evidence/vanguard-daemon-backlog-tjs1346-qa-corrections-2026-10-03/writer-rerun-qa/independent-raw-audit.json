@@ -1,0 +1,148 @@
+{
+  "result": "PASS_INDEPENDENT_RAW_AUDIT",
+  "fresh_historical_wallets_distinct": true,
+  "trials": [
+    {
+      "trial": 1,
+      "raw_rpc_rows": 489,
+      "generated_blocks": 92,
+      "funded_outputs": 90,
+      "selected_disjoint_inputs": 25,
+      "cohorts": [
+        {
+          "cohort": 1,
+          "tx_count": 8,
+          "queued_pool_counts": [
+            8,
+            8
+          ],
+          "queued_rpc_ids": {
+            "pools": [
+              313,
+              314
+            ],
+            "tips": [
+              311,
+              312
+            ]
+          },
+          "drain_rpc_ids": [
+            319
+          ],
+          "drain_height": 91,
+          "receiver_balance": {
+            "balance": 8350000000000,
+            "unlocked_balance": 0
+          },
+          "duration_seconds": 35.059782141121104
+        },
+        {
+          "cohort": 2,
+          "tx_count": 8,
+          "queued_pool_counts": [
+            8,
+            8
+          ],
+          "queued_rpc_ids": {
+            "pools": [
+              449,
+              450
+            ],
+            "tips": [
+              447,
+              448
+            ]
+          },
+          "drain_rpc_ids": [
+            455
+          ],
+          "drain_height": 92,
+          "receiver_balance": {
+            "balance": 16830000000000,
+            "unlocked_balance": 0
+          },
+          "duration_seconds": 13.46381853800267
+        }
+      ],
+      "final_receiver_outputs": 16,
+      "scenario_seconds": 73.4800819279626,
+      "process_exits": {
+        "daemon0": 0,
+        "daemon1": 0,
+        "receiver": 0,
+        "sender": 0
+      }
+    },
+    {
+      "trial": 2,
+      "raw_rpc_rows": 467,
+      "generated_blocks": 92,
+      "funded_outputs": 90,
+      "selected_disjoint_inputs": 24,
+      "cohorts": [
+        {
+          "cohort": 1,
+          "tx_count": 8,
+          "queued_pool_counts": [
+            8,
+            8
+          ],
+          "queued_rpc_ids": {
+            "pools": [
+              295,
+              296
+            ],
+            "tips": [
+              293,
+              294
+            ]
+          },
+          "drain_rpc_ids": [
+            301
+          ],
+          "drain_height": 91,
+          "receiver_balance": {
+            "balance": 8350000000000,
+            "unlocked_balance": 0
+          },
+          "duration_seconds": 32.481283124070615
+        },
+        {
+          "cohort": 2,
+          "tx_count": 8,
+          "queued_pool_counts": [
+            8,
+            8
+          ],
+          "queued_rpc_ids": {
+            "pools": [
+              427,
+              428
+            ],
+            "tips": [
+              425,
+              426
+            ]
+          },
+          "drain_rpc_ids": [
+            433
+          ],
+          "drain_height": 92,
+          "receiver_balance": {
+            "balance": 16830000000000,
+            "unlocked_balance": 0
+          },
+          "duration_seconds": 11.23497676406987
+        }
+      ],
+      "final_receiver_outputs": 16,
+      "scenario_seconds": 68.75932330195792,
+      "process_exits": {
+        "daemon0": 0,
+        "daemon1": 0,
+        "receiver": 0,
+        "sender": 0
+      }
+    }
+  ]
+}

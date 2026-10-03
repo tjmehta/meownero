@@ -85,6 +85,7 @@ def verify(out, src):
         require(path.stat().st_size == size and sha(path) == digest, 'local executable bytes: ' + name)
         require(receipt['binary'][name] == {'sha256': digest, 'bytes': size}, 'binary claim')
 
+    trial_transcripts, trial_seeds, trial_transactions = set(), set(), set()
     for number in (1, 2):
         public = out / f'run{number}/public'
         r = json.loads((public / 'result.json').read_text())
@@ -94,8 +95,20 @@ def verify(out, src):
                 r['time_limit_seconds'] == 1000 and r['transactions'] == 16 and
                 0 < r['wall_seconds'] < 1000 and len(r['cohorts']) == 2, 'workload count/budget')
         raw = [json.loads(line) for line in (public / 'rpc.jsonl').read_text().splitlines()]
+        transcript = hashlib.sha256(json.dumps(raw, sort_keys=True).encode()).hexdigest()
+        require(transcript not in trial_transcripts, 'fresh trial RPC transcript')
+        trial_transcripts.add(transcript)
+        seeds = r['wallet_seed_sha256']
+        require(set(seeds) == {'sender', 'receiver'} and len(set(seeds.values())) == 2 and
+                not trial_seeds.intersection(seeds.values()), 'fresh trial wallet seeds')
+        trial_seeds.update(seeds.values())
         require([row['id'] for row in raw] == list(range(len(raw))) and
-                all(0 <= row['ended_s'] - row['began_s'] < 180 for row in raw), 'RPC receipt sequence/time')
+                all(math.isfinite(row['began_s']) and math.isfinite(row['ended_s']) and
+                    0 <= row['began_s'] <= row['ended_s'] < row['began_s'] + 180 for row in raw) and
+                all(a['ended_s'] <= b['began_s'] for a, b in zip(raw, raw[1:])),
+                'RPC receipt sequence/time')
+        require(not any(row['request'].get('method') == 'start_mining' or row['path'] == 'start_mining'
+                        for row in raw), 'paused mining RPCs')
 
         def rpc(i, port, path, method=None):
             require(isinstance(i, int) and 0 <= i < len(raw), 'RPC reference')
@@ -104,8 +117,15 @@ def verify(out, src):
                     (method is None or row['request']['method'] == method), 'RPC reference method/port')
             return row
 
+        def ordered(refs, label):
+            require(all(isinstance(i, int) and 0 <= i < len(raw) for i in refs) and
+                    all(a < b for a, b in zip(refs, refs[1:])), label)
+
         def snap(s):
             require(len(s['tips']) == len(s['pools']) == 2 and s['tips'][0] == s['tips'][1], 'tip equality')
+            refs = s['rpc_ids']['tips'] + s['rpc_ids']['pools']
+            require(len(refs) == 4, 'snapshot RPC count')
+            ordered(refs, 'snapshot RPC chronology')
             for n in (0, 1):
                 h = rpc(s['rpc_ids']['tips'][n], 19081 + n * 100, 'json_rpc',
                         'get_last_block_header')['response']['result']['block_header']
@@ -114,9 +134,13 @@ def verify(out, src):
                 pools = rpc(s['rpc_ids']['pools'][n], 19081 + n * 100,
                             'get_transaction_pool')['response'].get('transactions', [])
                 require(s['pools'][n] == sorted(tx['id_hash'] for tx in pools), 'pool RPC reconciliation')
+            return refs
 
         def wallet(w, name):
             port = {'sender': 19090, 'receiver': 19190}[name]
+            refs = [w['rpc_ids'][key] for key in ('refresh', 'balance', 'outputs')]
+            ordered(refs, 'wallet RPC chronology')
+            rpc(refs[0], port, 'json_rpc', 'refresh')
             balance = rpc(w['rpc_ids']['balance'], port, 'json_rpc', 'get_balance')['response']['result']
             rows = rpc(w['rpc_ids']['outputs'], port, 'json_rpc', 'incoming_transfers')['response']['result'].get('transfers', [])
             fields = ('tx_hash', 'amount', 'key_image', 'pubkey', 'block_height', 'spent')
@@ -128,9 +152,20 @@ def verify(out, src):
                     len({row['pubkey'] for row in w['outputs']}) == len(w['outputs']) and
                     w['balance']['balance'] == sum(row['amount'] for row in w['outputs'] if not row['spent']) and
                     0 <= w['balance']['unlocked_balance'] <= w['balance']['balance'], 'wallet identity/balance')
+            return refs
 
-        snap(r['genesis'])
+        genesis_refs = snap(r['genesis'])
         require(r['genesis']['tips'][0][0] == 0 and r['genesis']['pools'] == [[], []], 'fresh genesis')
+        address_calls = [row for row in raw if row['request'].get('method') == 'get_address']
+        require(len(address_calls) == 2 and {row['port'] for row in address_calls} == {19090, 19190},
+                'wallet address RPC set')
+        addresses = {}
+        for row in address_calls:
+            value = rpc(row['id'], row['port'], 'json_rpc', 'get_address')['response']['result']
+            require(value['address'] and value['addresses'][0]['address_index'] == 0 and
+                    value['addresses'][0]['address'] == value['address'], 'wallet address RPC binding')
+            addresses[row['port']] = value['address']
+        require(addresses[19090] != addresses[19190], 'distinct sender/receiver addresses')
         generated = r['generated']
         require(3 <= len(generated) <= 7 and generated[0]['label'] == 'funding' and
                 generated[0]['count'] == 90 and r['blocks'] == sum(g['count'] for g in generated) <= 96,
@@ -139,11 +174,15 @@ def verify(out, src):
         require([g['rpc_id'] for g in generated] == [row['id'] for row in generate_calls],
                 'all generated block RPCs accounted')
         prior_tip, block_hashes = r['genesis']['tips'], []
+        generated_end = genesis_refs[-1]
         for g in generated:
             call = rpc(g['rpc_id'], 19081, 'json_rpc', 'generateblocks')
             require(call['request']['params']['amount_of_blocks'] == g['count'] == len(g['hashes']) and
                     call['response']['result']['blocks'] == g['hashes'], 'generated RPC count/hashes')
-            snap(g['before']); snap(g['after'])
+            require(call['request']['params']['wallet_address'] == addresses[19090], 'funding recipient')
+            before_refs, after_refs = snap(g['before']), snap(g['after'])
+            ordered([generated_end, *before_refs, g['rpc_id'], *after_refs], 'generated RPC chronology')
+            generated_end = after_refs[-1]
             require(g['before']['tips'] == prior_tip and
                     g['after']['tips'][0][0] == prior_tip[0][0] + g['count'] and
                     g['after']['tips'][0][1] == g['hashes'][-1], 'generated tip continuity')
@@ -151,19 +190,24 @@ def verify(out, src):
             prior_tip = g['after']['tips']
             block_hashes.extend(g['hashes'])
         require(len(set(block_hashes)) == r['blocks'], 'duplicate generated block')
-        wallet(r['funded_sender'], 'sender')
+        funded_refs = wallet(r['funded_sender'], 'sender')
         original_inputs = {row['key_image']: row for row in r['funded_sender']['outputs']}
         require(len(original_inputs) >= 16 and all(not row['spent'] for row in original_inputs.values()),
                 'independent funding outputs')
         rng, ids, images, amounts, immutable = random.Random(1346), [], set(), {}, {}
         require(not r['initial_receiver']['outputs'] and r['initial_receiver']['balance']['balance'] == 0,
                 'fresh receiver')
-        wallet(r['initial_receiver'], 'receiver')
+        initial_refs = wallet(r['initial_receiver'], 'receiver')
+        ordered([*snap(generated[0]['after']), *funded_refs, *initial_refs], 'funded wallet RPC chronology')
+        ordered([genesis_refs[-1], *[row['id'] for row in address_calls],
+                 snap(generated[0]['before'])[0]], 'wallet address RPC chronology')
+        cursor = initial_refs[-1]
         labels = []
         for index, c in enumerate(r['cohorts'], 1):
             require(c['cohort'] == index and c['count'] == len(c['transactions']) == 8, 'cohort transaction count')
-            for s in ('before', 'queued', 'after'):
-                snap(c[s])
+            before_refs, queued_refs, after_refs = [snap(c[s]) for s in ('before', 'queued', 'after')]
+            ordered([cursor, *before_refs], 'refill RPC chronology')
+            cursor = before_refs[-1]
             require(c['before']['pools'] == c['after']['pools'] == [[], []] and
                     c['before']['tips'] == (generated[0]['after']['tips'] if index == 1 else
                                            r['cohorts'][0]['after']['tips']), 'refill/drain continuity')
@@ -182,24 +226,36 @@ def verify(out, src):
                         tx['txid'] == value['tx_hash'] and tx['fee'] == value['fee'] and
                         tx['key_images'] == value['spent_key_images']['key_images'] and
                         tx['bytes'] == len(bytes.fromhex(value['tx_blob'])) > 1000, 'construction RPC binding')
+                require(made['request']['params']['destinations'] ==
+                        [{'address': addresses[19190], 'amount': tx['amount']}], 'transfer destination binding')
                 admission = rpc(tx['admission_rpc_id'], 19081, 'send_raw_transaction')
                 require(admission['response']['status'] == 'OK' and
                         admission['request']['tx_as_hex'] == value['tx_blob'] and
                         admission['request']['do_not_relay'] is False, 'admission RPC binding')
                 decoded_call = rpc(tx['decoded_rpc_id'], 19081, 'get_transactions')
                 require(decoded_call['request']['txs_hashes'] == [tx['txid']], 'decoded identity')
-                decoded = json.loads(decoded_call['response']['txs'][0]['as_json'])
+                native = decoded_call['response'].get('txs', [])
+                require(len(native) == 1 and native[0]['tx_hash'] == tx['txid'] and
+                        native[0]['in_pool'] is True, 'decoded native identity/pool')
+                require(not native[0]['as_hex'] or native[0]['as_hex'] == value['tx_blob'],
+                        'decoded native serialized bytes')
+                decoded = json.loads(native[0]['as_json'])
                 require(decoded['rct_signatures']['type'] == 7 and
                         sorted(v['key']['k_image'] for v in decoded['vin']) == sorted(selected) and
                         all('carrot_v1' in v['target'] for v in decoded['vout']), 'FCMP CARROT input shape')
                 decoded_outputs[tx['txid']] = decoded['vout']
                 ids.append(tx['txid']); current.append(tx['txid']); images.update(selected)
                 amounts[tx['txid']] = tx['amount']
-                snap(tx['pending'])
+                pending_refs = snap(tx['pending'])
+                ordered([cursor, made['id'], admission['id'], decoded_call['id'], *pending_refs],
+                        'queue RPC chronology')
+                cursor = pending_refs[-1]
                 require(tx['pending']['tips'] == c['before']['tips'] and
                         tx['pending']['pools'] == [sorted(current)] * 2, 'paused mining incremental queue')
                 for name in ('construction', 'origin_admission', 'peer_pool_convergence', 'reservation_refresh'):
                     phase(tx[name])
+            ordered([cursor, *queued_refs], 'queued snapshot RPC chronology')
+            cursor = queued_refs[-1]
             require(c['queued']['pools'] == [sorted(current)] * 2 and
                     c['queued']['tips'] == c['before']['tips'], 'eight simultaneous peer pools')
             require(0 < c['queue_seconds'] < c['duration_seconds'] < 180 and
@@ -212,18 +268,31 @@ def verify(out, src):
             for label, contents, refs in zip(c['generated_labels'], c['block_contents'], c['block_rpc_ids']):
                 g = next(row for row in generated if row['label'] == label)
                 require(g['count'] == 1 and g['label'].startswith(f'cohort{index}-drain'), 'cohort block binding')
+                drain_before, drain_after = snap(g['before']), snap(g['after'])
+                ordered([cursor, *drain_before, g['rpc_id'], *drain_after],
+                        'queue before drain RPC chronology')
+                cursor = drain_after[-1]
                 for n in (0, 1):
                     call = rpc(refs[n], 19081 + n * 100, 'json_rpc', 'get_block')
                     require(call['request']['params']['hash'] == g['hashes'][0] and
                             contents[n] == json.loads(call['response']['result']['json']), 'block RPC binding')
                     require(call['response']['result']['block_header']['height'] == g['after']['tips'][0][0],
                             'block height binding')
+                    header = call['response']['result']['block_header']
+                    require(header['hash'] == g['hashes'][0] and header['orphan_status'] is False,
+                            'native block identity/main-chain')
+                    require(header['prev_hash'] == g['before']['tips'][0][1] == contents[n]['prev_id'] and
+                            header['num_txes'] == len(contents[n]['tx_hashes']), 'native block body binding')
                 require(contents[0]['tx_hashes'] == contents[1]['tx_hashes'], 'peer block membership')
                 mined.extend(contents[0]['tx_hashes'])
                 heights.update({txid: g['after']['tips'][0][0] for txid in contents[0]['tx_hashes']})
             require(Counter(mined) == Counter(current) and len(mined) == 8, 'exactly once confirmation')
             require(c['after']['tips'] == g['after']['tips'], 'drained tip continuity')
             confirmed = c['confirmed']
+            ordered([cursor, *confirmed['rpc_ids'],
+                     *[ref for pair in c['block_rpc_ids'] for ref in pair],
+                     *wallet(c['receiver'], 'receiver'), *after_refs], 'confirmation RPC chronology')
+            cursor = after_refs[-1]
             for n in (0, 1):
                 call = rpc(confirmed['rpc_ids'][n], 19081 + n * 100, 'get_transactions')
                 txs = call['response'].get('txs', [])
@@ -233,7 +302,6 @@ def verify(out, src):
                         'confirmed RPC identity/count')
                 require(all(tx['block_height'] == heights.get(tx['tx_hash'], immutable.get(tx['tx_hash'], [0]*5)[4])
                             for tx in txs), 'confirmed block height')
-            wallet(c['receiver'], 'receiver')
             outputs = c['receiver']['outputs']
             require(len(outputs) == len(ids) and {o['tx_hash']: o['amount'] for o in outputs} == amounts and
                     all(not o['spent'] for o in outputs) and c['receiver']['balance'] ==
@@ -247,12 +315,19 @@ def verify(out, src):
                         for o in outputs if o['tx_hash'] in decoded_outputs), 'receiver CARROT output binding')
             immutable = identities
         require(labels == [g['label'] for g in generated[1:]] and len(ids) == 16, 'all drain blocks accounted')
+        require(not trial_transactions.intersection(ids), 'fresh trial transaction identities')
+        trial_transactions.update(ids)
         require([row['id'] for row in raw if row['request'].get('method') == 'transfer'] ==
                 [tx['construction_rpc_id'] for c in r['cohorts'] for tx in c['transactions']],
                 'all wallet constructions accounted')
-        snap(r['final'])
+        require([row['id'] for row in raw if row['path'] == 'send_raw_transaction'] ==
+                [tx['admission_rpc_id'] for c in r['cohorts'] for tx in c['transactions']],
+                'all native admissions accounted')
+        final_refs = snap(r['final'])
         require(r['final']['tips'] == prior_tip and r['final']['pools'] == [[], []], 'final convergence/drain')
-        wallet(r['final_receiver'], 'receiver'); wallet(r['final_sender'], 'sender')
+        final_sender_refs = wallet(r['final_sender'], 'sender')
+        final_receiver_refs = wallet(r['final_receiver'], 'receiver')
+        ordered([cursor, *final_sender_refs, *final_receiver_refs, *final_refs], 'final RPC chronology')
         require(load.output_identities(r['final_receiver']) == load.output_identities(r['cohorts'][-1]['receiver']) and
                 r['final_receiver']['balance'] == r['cohorts'][-1]['receiver']['balance'], 'final receiver identities')
         final_inputs = {o['key_image']: o for o in r['final_sender']['outputs']}

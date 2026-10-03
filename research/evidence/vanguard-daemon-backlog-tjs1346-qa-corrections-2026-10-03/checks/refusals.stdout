@@ -1,0 +1,43 @@
+REFUSED missing-transaction: cohort transaction count
+REFUSED duplicate-transaction: duplicate transaction
+REFUSED pending-input-reuse: disjoint funded inputs
+REFUSED fake-pool-convergence: pool RPC reconciliation
+REFUSED coherent-seven-in-pools: eight simultaneous peer pools
+REFUSED wrong-wallet-amount: wallet RPC reconciliation
+REFUSED wrong-wallet-pubkey: wallet RPC reconciliation
+REFUSED wrong-wallet-key_image: wallet RPC reconciliation
+REFUSED wrong-wallet-tx_hash: wallet RPC reconciliation
+REFUSED wrong-wallet-block_height: wallet RPC reconciliation
+REFUSED coherent-wrong-CARROT-output: receiver CARROT output binding
+REFUSED nonzero-child-exit: successful child exits
+REFUSED nonzero-child-exit-event: child exit events
+REFUSED count-budget-mismatch: generated block count/budget
+REFUSED zero-generated-blocks: generated block count/budget
+REFUSED wrong-generated-RPC-count: generated RPC count/hashes
+REFUSED silent-cohort-reduction: workload count/budget
+REFUSED nonzero-container-exit: container exit/time
+REFUSED wrong-recorded-binary: binary claim
+REFUSED wrong-upstream-pin: lineage upstream_commit
+REFUSED conflicting-network-option: container containment
+REFUSED phase-over-budget: phase time budget
+REFUSED scenario-over-budget: workload count/budget
+REFUSED replayed-trial1-as-trial2: fresh trial RPC transcript
+REFUSED reused-trial-wallet-seed: fresh trial wallet seeds
+REFUSED replayed-trial-with-relabelled-seeds: fresh trial transaction identities
+REFUSED drain-before-eighth-submission: generated RPC chronology
+REFUSED reused-eight-hash-queued-snapshot: queued snapshot RPC chronology
+REFUSED reused-refill-snapshot: refill RPC chronology
+REFUSED RPC-timestamp-inversion: RPC receipt sequence/time
+REFUSED RPC-nonfinite-timestamp: RPC receipt sequence/time
+REFUSED unexpected-mining-RPC: paused mining RPCs
+REFUSED peer-block-hash: native block identity/main-chain
+REFUSED peer-block-orphan_status: native block identity/main-chain
+REFUSED decoded-native-tx_hash: decoded native identity/pool
+REFUSED decoded-native-in_pool: decoded native identity/pool
+REFUSED decoded-native-duplicate-response: decoded native identity/pool
+REFUSED decoded-native-tx-unrelated-blob: decoded native serialized bytes
+REFUSED transfer-request-wrong-amount: transfer destination binding
+REFUSED transfer-request-pays-sender: transfer destination binding
+LIMIT coherent-equal-wrong-genesis: UNVERIFIED_LIVE_TIPS
+REFUSED wrong-local-executable: local executable bytes: monerod
+PASS_BACKLOG_REFUSALS refused=41 historical_limit=1

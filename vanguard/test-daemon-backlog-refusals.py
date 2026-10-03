@@ -32,7 +32,7 @@ def main():
         base = Path(tmp)
         refused = []
 
-        def test(name, label, mutate):
+        def test(name, label, mutate=None, mutate_bundle=None):
             out = base / name
             controls.copy_public(args.out, out)
             p = out / 'run1/public'
@@ -40,11 +40,14 @@ def main():
             rpc = [json.loads(line) for line in (p / 'rpc.jsonl').read_text().splitlines()]
             events = [json.loads(line) for line in (p / 'events.jsonl').read_text().splitlines()]
             receipt = json.loads((out / 'receipt.json').read_text())
-            mutate(result, rpc, events, receipt)
+            if mutate is not None:
+                mutate(result, rpc, events, receipt)
             (p / 'result.json').write_text(json.dumps(result) + '\n')
             (p / 'rpc.jsonl').write_text(''.join(json.dumps(row) + '\n' for row in rpc))
             (p / 'events.jsonl').write_text(''.join(json.dumps(row) + '\n' for row in events))
             (out / 'receipt.json').write_text(json.dumps(receipt) + '\n')
+            if mutate_bundle is not None:
+                mutate_bundle(out)
             controls.manifest(out)
             manifest = subprocess.run(['sha256sum', '-c', 'MANIFEST.sha256'], cwd=out, capture_output=True)
             assert manifest.returncode == 0, name
@@ -113,6 +116,114 @@ def main():
              lambda r, raw, e, b: r['cohorts'][0]['transactions'][0]['construction'].update(wall_seconds=181))
         test('scenario-over-budget', 'workload count/budget',
              lambda r, raw, e, b: r.update(wall_seconds=1001))
+
+        def replay(out):
+            shutil.rmtree(out / 'run2/public')
+            shutil.copytree(out / 'run1/public', out / 'run2/public')
+        test('replayed-trial1-as-trial2', 'fresh trial RPC transcript', mutate_bundle=replay)
+
+        def reused_seed(out):
+            seed = json.loads((out / 'run1/public/result.json').read_text())['wallet_seed_sha256']['sender']
+            p = out / 'run2/public'
+            r = json.loads((p / 'result.json').read_text())
+            r['wallet_seed_sha256']['sender'] = seed
+            rows = [json.loads(line) for line in (p / 'rpc.jsonl').read_text().splitlines()]
+            for row in rows:
+                if row['port'] == 19090 and row['request'].get('method') == 'query_key':
+                    row['response']['redacted_seed_sha256'] = seed
+            (p / 'result.json').write_text(json.dumps(r) + '\n')
+            (p / 'rpc.jsonl').write_text(''.join(json.dumps(row) + '\n' for row in rows))
+        test('reused-trial-wallet-seed', 'fresh trial wallet seeds', mutate_bundle=reused_seed)
+
+        def relabelled_replay(out):
+            p = out / 'run2/public'
+            seeds = json.loads((p / 'result.json').read_text())['wallet_seed_sha256']
+            replay(out)
+            r = json.loads((p / 'result.json').read_text())
+            r['wallet_seed_sha256'] = seeds
+            rows = [json.loads(line) for line in (p / 'rpc.jsonl').read_text().splitlines()]
+            for row in rows:
+                row['began_s'] += 1000
+                row['ended_s'] += 1000
+                if row['request'].get('method') == 'query_key':
+                    row['response']['redacted_seed_sha256'] = seeds['sender' if row['port'] == 19090 else 'receiver']
+            (p / 'result.json').write_text(json.dumps(r) + '\n')
+            (p / 'rpc.jsonl').write_text(''.join(json.dumps(row) + '\n' for row in rows))
+        test('replayed-trial-with-relabelled-seeds', 'fresh trial transaction identities',
+             mutate_bundle=relabelled_replay)
+
+        def early_drain(r, raw, events, receipt):
+            # Preserve all call contents, rebind references and retain increasing
+            # timestamps, as in independent QA's F2 counterexample.
+            drain = r['generated'][1]['rpc_id']
+            eighth = r['cohorts'][0]['transactions'][-1]['construction_rpc_id']
+            times = [(row['began_s'], row['ended_s']) for row in raw]
+            raw.insert(eighth, raw.pop(drain))
+            mapping = {row['id']: i for i, row in enumerate(raw)}
+            for i, row in enumerate(raw):
+                row.update(id=i, began_s=times[i][0], ended_s=times[i][1])
+
+            def refs(value):
+                if isinstance(value, int):
+                    return mapping[value]
+                if isinstance(value, list):
+                    return [refs(v) for v in value]
+                return {k: refs(v) for k, v in value.items()}
+
+            def visit(value):
+                if isinstance(value, dict):
+                    for key, child in list(value.items()):
+                        if key.endswith('_rpc_id') or key == 'rpc_id':
+                            value[key] = mapping[child]
+                        elif key in ('rpc_ids', 'block_rpc_ids'):
+                            value[key] = refs(child)
+                        else:
+                            visit(child)
+                elif isinstance(value, list):
+                    for child in value:
+                        visit(child)
+            visit(r); visit(events)
+        test('drain-before-eighth-submission', 'generated RPC chronology', early_drain)
+        test('reused-eight-hash-queued-snapshot', 'queued snapshot RPC chronology',
+             lambda r, raw, e, b: r['cohorts'][0].update(queued=r['cohorts'][0]['transactions'][-1]['pending']))
+        test('reused-refill-snapshot', 'refill RPC chronology',
+             lambda r, raw, e, b: r['cohorts'][1].update(before=r['cohorts'][0]['after']))
+        test('RPC-timestamp-inversion', 'RPC receipt sequence/time',
+             lambda r, raw, e, b: raw[1].update(began_s=raw[0]['began_s'], ended_s=raw[0]['ended_s']))
+        test('RPC-nonfinite-timestamp', 'RPC receipt sequence/time',
+             lambda r, raw, e, b: raw[0].update(began_s=float('nan')))
+
+        def mining(r, raw, events, receipt):
+            raw.append({'id': len(raw), 'port': 19081, 'path': 'start_mining',
+                        'request': {'miner_address': 'contradictory-mining-request'},
+                        'response': {'status': 'OK'}, 'began_s': raw[-1]['ended_s'] + 0.1,
+                        'ended_s': raw[-1]['ended_s'] + 0.2})
+        test('unexpected-mining-RPC', 'paused mining RPCs', mining)
+
+        for field, wrong in (('hash', '0' * 64), ('orphan_status', True)):
+            test('peer-block-' + field, 'native block identity/main-chain',
+                 lambda r, raw, e, b, f=field, v=wrong:
+                 raw[r['cohorts'][0]['block_rpc_ids'][0][1]]['response']['result']['block_header'].update({f: v}))
+        for field, wrong in (('tx_hash', '0' * 64), ('in_pool', False)):
+            test('decoded-native-' + field, 'decoded native identity/pool',
+                 lambda r, raw, e, b, f=field, v=wrong:
+                 raw[r['cohorts'][0]['transactions'][0]['decoded_rpc_id']]['response']['txs'][0].update({f: v}))
+        test('decoded-native-duplicate-response', 'decoded native identity/pool',
+             lambda r, raw, e, b: raw[r['cohorts'][0]['transactions'][0]['decoded_rpc_id']]['response']['txs'].append(
+                 raw[r['cohorts'][0]['transactions'][0]['decoded_rpc_id']]['response']['txs'][0]))
+        test('decoded-native-tx-unrelated-blob', 'decoded native serialized bytes',
+             lambda r, raw, e, b: raw[r['cohorts'][0]['transactions'][0]['decoded_rpc_id']]['response']['txs'][0].update(
+                 as_hex=raw[r['cohorts'][0]['transactions'][1]['construction_rpc_id']]['response']['result']['tx_blob']))
+        test('transfer-request-wrong-amount', 'transfer destination binding',
+             lambda r, raw, e, b: raw[r['cohorts'][0]['transactions'][0]['construction_rpc_id']]['request']['params'][
+                 'destinations'][0].update(amount=r['cohorts'][0]['transactions'][0]['amount'] + 1))
+
+        def pays_sender(r, raw, events, receipt):
+            address = next(row['response']['result']['address'] for row in raw
+                           if row['port'] == 19090 and row['request'].get('method') == 'get_address')
+            raw[r['cohorts'][0]['transactions'][0]['construction_rpc_id']]['request']['params'][
+                'destinations'][0]['address'] = address
+        test('transfer-request-pays-sender', 'transfer destination binding', pays_sender)
 
         def false_genesis(r, raw, events, receipt):
             # A coherent historical forgery is outside receipt authentication.

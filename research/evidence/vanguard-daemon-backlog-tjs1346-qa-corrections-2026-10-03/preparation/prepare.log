@@ -1,0 +1,228 @@
+-- CMake version 3.28.3
+-- Using ccache: /usr/bin/ccache
+-- Building without build tag
+-- Building for a 64-bit system
+-- Building internal libraries as static
+-- Stack trace on exception disabled
+-- Using OpenSSL include dir at /usr/include
+-- Using 64-bit LMDB from source tree
+-- Setting CXX flag -maes
+-- Setting C flag -maes
+-- Build architecture: x86_64
+-- Using HIDAPI include dir at /usr/include/hidapi
+-- Trezor: support disabled by USE_DEVICE_TREZOR
+-- Building on x86_64 for default
+-- AES support enabled
+-- Performing Test _Werror__Wbidi_chars=any_c
+-- Performing Test _Werror__Wbidi_chars=any_c - Success
+-- Performing Test _Werror__Wbidi_chars=any_cxx
+-- Performing Test _Werror__Wbidi_chars=any_cxx - Success
+-- Performing Test _Werror__fcf_protection=full_c
+-- Performing Test _Werror__fcf_protection=full_c - Success
+-- Performing Test _Werror__fcf_protection=full_cxx
+-- Performing Test _Werror__fcf_protection=full_cxx - Success
+-- Performing Test _Werror__Werror=switch_c
+-- Performing Test _Werror__Werror=switch_c - Success
+-- Performing Test _Werror__Werror=switch_cxx
+-- Performing Test _Werror__Werror=switch_cxx - Success
+-- Performing Test _Werror__Werror=return_type_c
+-- Performing Test _Werror__Werror=return_type_c - Success
+-- Performing Test _Werror__Werror=return_type_cxx
+-- Performing Test _Werror__Werror=return_type_cxx - Success
+-- Performing Test _Werror__Wformat__Werror=format_security_c
+-- Performing Test _Werror__Wformat__Werror=format_security_c - Success
+-- Performing Test _Werror__Wformat__Werror=format_security_cxx
+-- Performing Test _Werror__Wformat__Werror=format_security_cxx - Success
+-- Using C security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wformat -Wformat -Wformat-security -Wbidi-chars=any -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type -Wformat -Werror=format-security
+-- Using C++ security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wformat -Wformat -Wformat-security -Wbidi-chars=any -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type -Wformat -Werror=format-security
+-- Using linker security hardening flags:  -pie -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+-- Found Boost Version: 1.83.0
+-- Boost components: filesystem;thread;chrono;serialization;program_options
+-- Found readline library at: /usr
+-- Found Git: /usr/bin/git
+-- You are currently on commit e151643c5
+-- You are ahead of or behind a tagged release
+-- Wallet crypto is using amd64-64-24k backend
+-- Using Rust target x86_64-unknown-linux-gnu
+-- Trezor: support disabled
+-- Building tests
+-- Copying test data directory...
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'requests'
+CMake Warning at tests/functional_tests/CMakeLists.txt:64 (message):
+  functional_tests_rpc and check_missing_rpc_methods skipped, needs the
+  'requests', 'zmq', and 'deepdiff' python modules
+
+
+-- Wallet crypto bench is using cn;amd64-64-24k;amd64-51-30k
+-- Not building debug utilities
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done (3.5s)
+-- Generating done (0.7s)
+-- Build files have been written to: /src/build/vanguard
+[  2%] Built target obj_device
+[  2%] Built target easylogging
+[ 12%] Built target randomx
+[ 20%] Built target obj_epee
+[ 20%] Built target epee
+[ 20%] Built target genversion
+[ 22%] Built target obj_version
+[ 22%] Built target version
+[ 30%] Built target obj_cncrypto
+[ 30%] Built target cncrypto
+[ 36%] Built target obj_common
+[ 36%] Built target common
+[ 48%] Built target monero-crypto-amd64-64-24k
+[ 48%] Built target wallet-crypto
+[ 50%] Building fcmp++ rust lib
+    Finished `release` profile [optimized] target(s) in 0.57s
+Finished copying fcmp++ rust targets
+[ 50%] Built target fcmp_pp_rust
+[ 52%] Built target obj_fcmp_pp
+[ 52%] Built target fcmp_pp
+[ 54%] Built target obj_ringct_basic
+[ 54%] Built target ringct_basic
+[ 54%] Built target obj_cryptonote_format_utils_basic
+[ 54%] Built target cryptonote_format_utils_basic
+[ 54%] Built target device
+[ 56%] Built target lmdb
+[ 58%] Built target mx25519_static
+[ 60%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee_readline.dir/readline_buffer.cpp.o
+[ 60%] Built target obj_epee_readline
+[ 60%] Linking CXX static library libepee_readline.a
+[ 60%] Built target epee_readline
+[ 60%] Built target wire
+[ 60%] Building CXX object contrib/epee/src/wire/json/CMakeFiles/wire-json.dir/write.cpp.o
+[ 62%] Linking CXX static library libwire-json.a
+[ 62%] Built target wire-json
+[ 66%] Built target obj_carrot_core
+[ 66%] Built target carrot_core
+[ 72%] Built target obj_carrot_impl
+[ 72%] Built target obj_checkpoints
+[ 72%] Built target checkpoints
+[ 76%] Built target obj_cryptonote_basic
+[ 78%] Built target cryptonote_basic
+[ 78%] Built target carrot_impl
+[ 78%] Built target obj_ringct
+[ 80%] Built target ringct
+[ 82%] Built target obj_cryptonote_core
+[ 82%] Built target obj_hardforks
+[ 82%] Built target hardforks
+[ 82%] Built target obj_blockchain_db
+[ 82%] Built target blockchain_db
+[ 82%] Built target cryptonote_core
+[ 84%] Built target obj_net
+[ 84%] Built target net
+[ 84%] Built target obj_rpc_base
+[ 84%] Built target rpc_base
+[ 84%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o
+[ 84%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/rpc_version_str.cpp.o
+[ 86%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/instantiations.cpp.o
+[ 86%] Built target obj_rpc
+[ 88%] Built target obj_p2p
+[ 88%] Built target p2p
+[ 90%] Built target obj_cryptonote_protocol
+[ 90%] Built target cryptonote_protocol
+[ 90%] Linking CXX static library librpc.a
+[ 90%] Built target rpc
+[ 90%] Building CXX object src/rpc/CMakeFiles/obj_rpc_pub.dir/zmq_pub.cpp.o
+[ 90%] Built target obj_rpc_pub
+[ 90%] Built target obj_serialization
+[ 90%] Built target serialization
+[ 90%] Linking CXX static library librpc_pub.a
+[ 90%] Built target rpc_pub
+[ 90%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/message.cpp.o
+[ 90%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/daemon_messages.cpp.o
+[ 90%] Built target obj_daemon_messages
+[ 92%] Linking CXX static library libdaemon_messages.a
+[ 92%] Built target daemon_messages
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/daemon_handler.cpp.o
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_restricted_methods.cpp.o
+[ 94%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_pub.cpp.o
+[ 94%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_server.cpp.o
+[ 94%] Built target obj_daemon_rpc_server
+[ 94%] Linking CXX static library libdaemon_rpc_server.a
+[ 94%] Built target daemon_rpc_server
+[ 94%] Building CXX object src/daemonizer/CMakeFiles/obj_daemonizer.dir/posix_fork.cpp.o
+[ 94%] Built target obj_daemonizer
+[ 94%] Linking CXX static library libdaemonizer.a
+[ 94%] Built target daemonizer
+[ 94%] Generating generated_testnet_blocks.c
+[ 96%] Generating generated_checkpoints.c
+[ 96%] Generating generated_stagenet_blocks.c
+[ 96%] Building CXX object src/blocks/CMakeFiles/obj_blocks.dir/blocks.cpp.o
+[ 96%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_checkpoints.c.o
+[ 98%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_testnet_blocks.c.o
+[ 98%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_stagenet_blocks.c.o
+[ 98%] Built target obj_blocks
+[ 98%] Linking CXX static library libblocks.a
+[ 98%] Built target blocks
+[ 98%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_parser_executor.cpp.o
+[ 98%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_server.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/daemon.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/executor.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/main.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/rpc_command_executor.cpp.o
+[100%] Linking CXX executable ../../bin/monerod
+[100%] Built target daemon
+[  0%] Built target obj_device_trezor
+[  0%] Built target easylogging
+[ 10%] Built target randomx
+[ 19%] Built target obj_epee
+[ 19%] Built target epee
+[ 28%] Built target obj_cncrypto
+[ 28%] Built target cncrypto
+[ 28%] Built target device_trezor
+[ 30%] Built target lmdb
+[ 32%] Built target mx25519_static
+[ 34%] Built target obj_epee_readline
+[ 34%] Built target epee_readline
+[ 34%] Built target wire
+[ 34%] Built target genversion
+[ 36%] Built target obj_version
+[ 36%] Built target version
+[ 50%] Built target monero-crypto-amd64-64-24k
+[ 50%] Built target wallet-crypto
+[ 54%] Built target obj_carrot_core
+[ 54%] Built target carrot_core
+[ 56%] Built target obj_device
+[ 63%] Built target obj_common
+[ 63%] Built target common
+[ 65%] Built target fcmp_pp_rust
+[ 67%] Built target obj_fcmp_pp
+[ 67%] Built target fcmp_pp
+[ 69%] Built target obj_ringct_basic
+[ 69%] Built target ringct_basic
+[ 69%] Built target obj_cryptonote_format_utils_basic
+[ 69%] Built target cryptonote_format_utils_basic
+[ 69%] Built target device
+[ 76%] Built target obj_carrot_impl
+[ 76%] Built target obj_checkpoints
+[ 76%] Built target checkpoints
+[ 80%] Built target obj_cryptonote_basic
+[ 82%] Built target cryptonote_basic
+[ 82%] Built target carrot_impl
+[ 82%] Built target obj_ringct
+[ 84%] Built target ringct
+[ 86%] Built target obj_cryptonote_core
+[ 86%] Built target obj_hardforks
+[ 86%] Built target hardforks
+[ 86%] Built target obj_blockchain_db
+[ 86%] Built target blockchain_db
+[ 86%] Built target cryptonote_core
+[ 89%] Built target obj_multisig
+[ 89%] Built target multisig
+[ 91%] Built target obj_net
+[ 91%] Built target net
+[ 93%] Built target obj_mnemonics
+[ 93%] Built target mnemonics
+[ 93%] Built target obj_rpc_base
+[ 93%] Built target rpc_base
+[ 97%] Built target obj_wallet
+[ 97%] Built target wallet
+[ 97%] Built target obj_daemonizer
+[ 97%] Built target daemonizer
+[ 97%] Building CXX object src/wallet/CMakeFiles/wallet_rpc_server.dir/wallet_rpc_server.cpp.o
+[100%] Linking CXX executable ../../bin/monero-wallet-rpc
+[100%] Built target wallet_rpc_server
