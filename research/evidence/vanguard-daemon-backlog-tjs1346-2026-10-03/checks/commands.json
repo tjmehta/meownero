@@ -1,0 +1,22 @@
+{
+  "verifier": [
+    "python3",
+    "-B",
+    "vanguard/verify-daemon-backlog.py",
+    "research/evidence/vanguard-daemon-backlog-tjs1346-2026-10-03",
+    "--src",
+    "<agent-scratch>"
+  ],
+  "refusals": [
+    "python3",
+    "-B",
+    "vanguard/test-daemon-backlog-refusals.py",
+    "research/evidence/vanguard-daemon-backlog-tjs1346-2026-10-03",
+    "--src",
+    "<agent-scratch>",
+    "--scratch",
+    "<agent-scratch>"
+  ],
+  "final_refusals_exit": 0,
+  "first_refusals_exit": 1
+}

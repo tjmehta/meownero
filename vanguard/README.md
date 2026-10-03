@@ -160,3 +160,44 @@ the bytes of both executables at `--src`. Since it runs after the daemons exit,
 it labels recorded chain tips as unverified live claims. Its result is bounded
 receipt reconciliation, not independent live-tip authentication or a security
 or capacity verdict. See `research/vanguard-daemon-load-tjs1171-2026-10-01.md`.
+
+## Finite native backlog and drain gate (TJS-1346)
+
+The separate backlog gate queues eight transactions with mining paused, observes
+the exact eight hashes on both native peer pools, drains them into blocks, then
+repeats with eight fresh transactions. It runs two fresh trials. Selected inputs
+and spent key images must be disjoint, all sixteen hashes must occur exactly once
+in the generated blocks, and receiver CARROT output identities and balances must
+reconcile. The sender refreshes after each admission using the accepted load
+gate's reservation route. The existing load and P2P gates remain unchanged.
+
+```sh
+python3 -B vanguard/run-daemon-backlog.py --src /absolute/private/vanguard-src \
+  --out research/evidence/vanguard-backlog-new
+python3 -B vanguard/verify-daemon-backlog.py research/evidence/vanguard-backlog-new \
+  --src /absolute/private/vanguard-src
+python3 -B vanguard/test-daemon-backlog-refusals.py research/evidence/vanguard-backlog-new \
+  --src /absolute/private/vanguard-src --scratch "$PAPERCLIP_RUN_SCRATCH_DIR"
+```
+
+Commit the candidate and keep the task checkout clean before running. Use a
+private copy of the pinned source/cache prepared by `build.sh`, with CMake already
+configured at `monero-fcmp/build/vanguard`. The runner verifies upstream,
+submodules, Cargo.lock, Rust and exact executable pins. It uses cached binaries
+when present or rebuilds the two native targets offline under the shared heavy
+lock. No public network participates in either trial.
+
+Each trial starts with ninety funding blocks, allows at most three drain blocks
+per cohort and ninety-six generated blocks total, and enforces a 1,000-second
+scenario budget and 180-second phase limits. Container caps match the accepted
+gate. Public raw RPC, native P2P metadata, commands, exits, cgroup counters and
+wallet snapshots accompany the summary. Disposable seeds are digested, and
+private wallet/database directories are removed after successful trials.
+
+Construction, origin admission including validation, and peer-pool observation
+are timed separately. The confirmed rate includes queueing, draining and wallet
+observation. This finite depth-eight workload does not measure saturation,
+sustained capacity or production block timing. Writer-side `/proc` byte hashes
+bind recorded observations to claimed running processes. Post-run reconciliation
+still reports `UNVERIFIED_LIVE_TIPS`; it does not authenticate historical state
+or substitute for independent exact-candidate review.

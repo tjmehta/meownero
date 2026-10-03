@@ -289,6 +289,13 @@ def verify(out, src):
         require(containment['interfaces'] == ['lo'] and not containment['routes'] and
                 containment['socket_mode'] == '0o600' and len(containment['listeners_before_shutdown']) >= 6,
                 'loopback containment claims')
+        ready = [e for e in events if e['event'] == 'bridge_ready']
+        require(len(ready) == 1 and ready[0]['socket_mode'] == containment['socket_mode'],
+                'observed socket mode reconciliation')
+        seed_rows = [row for row in raw if row['request'].get('method') == 'query_key']
+        require(len(seed_rows) == 2 and {row['port']: row['response']['redacted_seed_sha256'] for row in seed_rows}
+                == {19090: r['wallet_seed_sha256']['sender'], 19190: r['wallet_seed_sha256']['receiver']},
+                'seed digest reconciliation')
         require(all(row['local'].startswith(('0100007F:', '00000000000000000000000001000000:'))
                     for row in containment['listeners_before_shutdown']), 'loopback listener addresses')
         require(r['bridge']['connections'] >= 1 and r['bridge']['bytes'] > 0 and

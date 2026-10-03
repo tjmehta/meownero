@@ -121,7 +121,7 @@ def main():
                 if isinstance(value, dict):
                     if 'tips' in value:
                         for tip in value['tips']:
-                            if tip[0] == 0:
+                            if isinstance(tip, list) and len(tip) >= 2 and tip[0] == 0:
                                 tip[1] = '0' * 64
                     for child in value.values():
                         visit(child)

@@ -1,0 +1,12 @@
+1207: 
+1208:       // add spent key images
+1209:       tools::wallet_rpc::key_image_list key_image_list;
+1210:       bool all_are_txin_to_key = std::all_of(ptx.tx.vin.begin(), ptx.tx.vin.end(), [&](const cryptonote::txin_v& s_e) -> bool
+1211:       {
+1212:         CHECKED_GET_SPECIFIC_VARIANT(s_e, const cryptonote::txin_to_key, in, false);
+1213:         key_image_list.key_images.push_back(epee::string_tools::pod_to_hex(in.k_image));
+1214:         return true;
+1215:       });
+1216:       THROW_WALLET_EXCEPTION_IF(!all_are_txin_to_key, error::unexpected_txin_type, ptx.tx);
+1217:       fill(spent_key_images, key_image_list);
+1218:     }

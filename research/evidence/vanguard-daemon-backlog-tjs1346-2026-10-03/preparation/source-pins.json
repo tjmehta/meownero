@@ -1,0 +1,18 @@
+{
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "upstream_diff": "diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt\nindex a226678a5..0b55b92ca 100644\n--- a/tests/CMakeLists.txt\n+++ b/tests/CMakeLists.txt\n@@ -137,3 +137,5 @@ set(enabled_tests\n \n add_custom_target(tests DEPENDS enabled_tests)\n set_property(TARGET tests PROPERTY FOLDER \"${folder}\")\n+add_subdirectory(vanguard)\n+add_subdirectory(vanguard_boundary)",
+  "submodules": "52eb8108c5bdec04579160ae17225d66034bd723 external/gtest (release-1.8.0-3544-g52eb8108)\n 420ccc2f5012ee1f8e02c1976e89620e1b0959f6 external/mx25519 (remotes/origin/backup-inv-15-g420ccc2)\n aaafe71322df6602c21a5c72937ac284724ae561 external/randomx (v2.0.1)\n 24b5e7a8b27f42fa16b96fc70aade9106cf7102f external/rapidjson (v1.1.0-763-g24b5e7a8)\n-ba96d0b1161f540656efdaed035b3c062b60e006 external/rapidjson/thirdparty/gtest\n e887b2fb4bfcfcc454b2005472ad1df6f2191f52 external/supercop (remotes/origin/monero)",
+  "rustc_vV": "rustc 1.93.0 (254b59607 2026-01-19)\nbinary: rustc\ncommit-hash: 254b59607d4417e9dffbc307138ae5c86280fe4c\ncommit-date: 2026-01-19\nhost: x86_64-unknown-linux-gnu\nrelease: 1.93.0\nLLVM version: 21.1.8",
+  "builder_image_id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "semantic_source_sha256": {
+    "src/cryptonote_config.h": "1b372c5a49b913928bc6c85793d0c4befce4ad45f596d6c7fd3b0ada9d8cdc18",
+    "src/wallet/wallet2.cpp": "dcd8aabd8d6c8798e0eb9665d5db3944b2e18abfb15cecf19794cace8c01fce8",
+    "src/wallet/wallet_rpc_server.cpp": "6333aadf5c7591a927ab763807e38f166445e45bfca2679e268592206ef05d6e",
+    "src/cryptonote_basic/cryptonote_basic.h": "776228655556cecbf1b221aed67fc96753df2046d892ad89ea698afe5c64599a"
+  },
+  "binary_sha256": {
+    "monerod": "5ba64f2e04e21550575b396b250bcebba01471c4246d74d88e679f06cee86509",
+    "monero-wallet-rpc": "cf2ea70c353c5124e86f2bfac46da28fad2993af28636ab28ca7ea9db81678f2"
+  },
+  "funding_reason": "Pinned coinbase unlock window 60; requested 90 funding blocks; native selected 25 and 24 independent inputs in two trials. No workload adjustment."
+}

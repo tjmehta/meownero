@@ -1,0 +1,33 @@
+4046:         continue;
+4047: 
+4048:       const std::size_t i = it_ki->second;
+4049:       if (i >= m_transfers.size())
+4050:         continue;
+4051:       const transfer_details &td = m_transfers.at(i);
+4052:       if (td.m_key_image != key_image)
+4053:         continue;
+4054:       if (td.m_spent == spent)
+4055:         continue;
+4056: 
+4057:       LOG_PRINT_L1("Resetting spent status for output " << vini << ": " << key_image << " (spent=" << spent << ")");
+4058:       if (spent)
+4059:         set_spent(i, 0);
+4060:       else
+4061:         set_unspent(i);
+4062:     }
+4063:   };
+4064: 
+4065:   // TODO: set tx_propagation_timeout to CRYPTONOTE_DANDELIONPP_EMBARGO_AVERAGE * 3 / 2 after v15 hardfork
+4066:   constexpr const std::chrono::seconds tx_propagation_timeout{500};
+4067:   if (seen_in_pool)
+4068:   {
+4069:     if (tx_details.m_state != wallet2::unconfirmed_transfer_details::pending_in_pool)
+4070:     {
+4071:       tx_details.m_state = wallet2::unconfirmed_transfer_details::pending_in_pool;
+4072:       MINFO("Pending txid " << txid << " seen in pool, marking as pending in pool");
+4073:     }
+4074: 
+4075:     // The inputs are spent, they're in the pool! It's possible the tx was previously marked as failed, so we
+4076:     // make sure to re-mark the outputs as spent.
+4077:     set_tx_key_images_spent(true/*spent*/);
+4078:   }
