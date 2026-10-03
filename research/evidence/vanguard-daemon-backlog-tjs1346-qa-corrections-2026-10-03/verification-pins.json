@@ -1,0 +1,34 @@
+{
+  "schema": "tjs1346-qa-corrections/1",
+  "original_review_candidate": "6214523a517a1dab338b674e1b2834e8b6f89a79",
+  "original_review_revision": "b14c23bb-2a87-47bf-8718-e364c6805e0c",
+  "native_execution_commit": "36c82383187c405330d63f0db8981db2ec651650",
+  "native_receipt_manifest_sha256": "88242884ddf5761e0c6aad8325d86d6fc8ddaff26980c14ba829dc76650a640d",
+  "checked_source_sha256": {
+    "vanguard/verify-daemon-backlog.py": "74806d9309d4fe9f39bc6b583b55448e6c848abd183a75a8dfe9c840d199aac2",
+    "vanguard/test-daemon-backlog-refusals.py": "4db85523a226068fa4c2418d7c1afc4e3225c8c3f8b555759b1d01925591896f",
+    "vanguard/daemon-backlog.py": "0e8eba4a3ae2cc6a69ffc6d813e39722cac91e76d3169bb8f84b70de5ab47c39",
+    "vanguard/run-daemon-backlog.py": "61ec26309a75d732d7a384823fb5a25e40c5a604405683e8251d8f188f7661b7",
+    "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001"
+  },
+  "local_binary": {
+    "monerod": {
+      "sha256": "5ba64f2e04e21550575b396b250bcebba01471c4246d74d88e679f06cee86509",
+      "bytes": 29872608
+    },
+    "monero-wallet-rpc": {
+      "sha256": "cf2ea70c353c5124e86f2bfac46da28fad2993af28636ab28ca7ea9db81678f2",
+      "bytes": 33545392
+    }
+  },
+  "qa_recipe_sha256": "8266bfa5f1762f797fc4020c70cccab55532f00faed921806f04b1df2fceae32",
+  "fresh_native_trials_in_this_correction_run": 0,
+  "writer_refused_cases": 41,
+  "writer_rerun_of_qa_refused_cases": 11,
+  "independent_acceptance": false,
+  "limits": [
+    "UNVERIFIED_LIVE_TIPS",
+    "historical receipts are not authenticated running state",
+    "copied pinned primitive cache with offline incremental native target rebuild"
+  ]
+}

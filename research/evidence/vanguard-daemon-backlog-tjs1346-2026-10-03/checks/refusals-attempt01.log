@@ -1,0 +1,52 @@
+REFUSED missing-transaction: cohort transaction count
+REFUSED duplicate-transaction: duplicate transaction
+REFUSED pending-input-reuse: disjoint funded inputs
+REFUSED fake-pool-convergence: pool RPC reconciliation
+REFUSED coherent-seven-in-pools: eight simultaneous peer pools
+REFUSED wrong-wallet-amount: wallet RPC reconciliation
+REFUSED wrong-wallet-pubkey: wallet RPC reconciliation
+REFUSED wrong-wallet-key_image: wallet RPC reconciliation
+REFUSED wrong-wallet-tx_hash: wallet RPC reconciliation
+REFUSED wrong-wallet-block_height: wallet RPC reconciliation
+REFUSED coherent-wrong-CARROT-output: receiver CARROT output binding
+REFUSED nonzero-child-exit: successful child exits
+REFUSED nonzero-child-exit-event: child exit events
+REFUSED count-budget-mismatch: generated block count/budget
+REFUSED zero-generated-blocks: generated block count/budget
+REFUSED wrong-generated-RPC-count: generated RPC count/hashes
+REFUSED silent-cohort-reduction: workload count/budget
+REFUSED nonzero-container-exit: container exit/time
+REFUSED wrong-recorded-binary: binary claim
+REFUSED wrong-upstream-pin: lineage upstream_commit
+REFUSED conflicting-network-option: container containment
+REFUSED phase-over-budget: phase time budget
+REFUSED scenario-over-budget: workload count/budget
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 150, in <module>
+    main()
+    ~~~~^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 137, in main
+    test('coherent-equal-wrong-genesis', None, false_genesis)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 43, in test
+    mutate(result, rpc, events, receipt)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 131, in false_genesis
+    visit(r); visit(events)
+    ~~~~~^^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 127, in visit
+    visit(child)
+    ~~~~~^^^^^^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 130, in visit
+    visit(child)
+    ~~~~~^^^^^^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 127, in visit
+    visit(child)
+    ~~~~~^^^^^^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 127, in visit
+    visit(child)
+    ~~~~~^^^^^^^
+  File "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/vanguard/test-daemon-backlog-refusals.py", line 124, in visit
+    if tip[0] == 0:
+       ~~~^^^
+TypeError: 'int' object is not subscriptable

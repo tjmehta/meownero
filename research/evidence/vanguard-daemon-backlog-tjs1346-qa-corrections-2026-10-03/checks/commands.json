@@ -1,0 +1,82 @@
+[
+  {
+    "name": "baseline",
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/verify-daemon-backlog.py",
+      "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/research/evidence/vanguard-daemon-backlog-tjs1346-2026-10-03",
+      "--src",
+      "<agent-scratch>"
+    ],
+    "exit": 0,
+    "wall_seconds": 3.2410369887948036
+  },
+  {
+    "name": "refusals",
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/test-daemon-backlog-refusals.py",
+      "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/research/evidence/vanguard-daemon-backlog-tjs1346-2026-10-03",
+      "--src",
+      "<agent-scratch>",
+      "--scratch",
+      "<agent-scratch>"
+    ],
+    "exit": 0,
+    "wall_seconds": 228.3936225748621
+  },
+  {
+    "name": "qa-regressions",
+    "command": [
+      "python3",
+      "-B",
+      "<agent-scratch>",
+      "--repo",
+      "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate",
+      "--bundle",
+      "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/research/evidence/vanguard-daemon-backlog-tjs1346-2026-10-03",
+      "--src",
+      "<agent-scratch>",
+      "--out",
+      "<agent-scratch>"
+    ],
+    "exit": 0,
+    "wall_seconds": 35.83012059587054
+  },
+  {
+    "name": "load",
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/verify-daemon-load.py",
+      "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/research/evidence/vanguard-daemon-load-tjs1171-2026-10-01",
+      "--src",
+      "<agent-scratch>"
+    ],
+    "exit": 0,
+    "wall_seconds": 1.0619027090724558
+  },
+  {
+    "name": "p2p",
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/verify-daemon-p2p.py",
+      "~/Developer/.worktrees/meownero/TJS-1346-meownero-vanguard-finite-native-transaction-backlog-and-drain-gate/research/evidence/vanguard-daemon-p2p-tjs996-2026-09-29"
+    ],
+    "exit": 0,
+    "wall_seconds": 1.7897243509069085
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "wall_seconds": 0.08417185093276203
+  }
+]

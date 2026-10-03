@@ -1,0 +1,101 @@
+[
+  {
+    "name": "replayed-trial1-as-trial2",
+    "expected": "refuse: two fresh trials",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: fresh trial RPC transcript\n",
+    "rehash_verified": true,
+    "manifest_sha256": "354d5d630ff44c115a4334f5699115b06e272ac6b5f15f4499ae81e9ec94119d"
+  },
+  {
+    "name": "drain-before-eighth-submission",
+    "expected": "refuse: paused mining and queue before drain",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: generated RPC chronology\n",
+    "rehash_verified": true,
+    "manifest_sha256": "e93bca944959e0eb18d1409d9f02796dfb9e1689d14b87b421fb32fb621575c3"
+  },
+  {
+    "name": "peer-block-header-wrong-hash",
+    "expected": "refuse: generated block identity",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: native block identity/main-chain\n",
+    "rehash_verified": true,
+    "manifest_sha256": "ceed16a15a7eef0aef12935d745206099352e071c6e5db020698f7e48d098463"
+  },
+  {
+    "name": "peer-block-marked-orphan",
+    "expected": "refuse: block on peer main chain",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: native block identity/main-chain\n",
+    "rehash_verified": true,
+    "manifest_sha256": "9efeedd588f15eb5053bd5e00f1ab48f070e924643436073b0320ab8986d02db"
+  },
+  {
+    "name": "decoded-native-tx-wrong-hash",
+    "expected": "refuse: decoded transaction identity",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: decoded native identity/pool\n",
+    "rehash_verified": true,
+    "manifest_sha256": "47497fc8fee277c17864cd311836cb7c005a008d51af13d8926723939225844f"
+  },
+  {
+    "name": "decoded-native-tx-unrelated-blob",
+    "expected": "refuse: decoded/submitted bytes binding",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: decoded native serialized bytes\n",
+    "rehash_verified": true,
+    "manifest_sha256": "0db636402a4c86f0da808625777fddf5af819245547fe63b0d29bb4b58043e42"
+  },
+  {
+    "name": "transfer-request-wrong-amount",
+    "expected": "refuse: requested transfer amount",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: transfer destination binding\n",
+    "rehash_verified": true,
+    "manifest_sha256": "148c761908e0ae3463790251310a4fc7aea4d3dc18ce7b5c00b1e3960cf30db9"
+  },
+  {
+    "name": "transfer-request-pays-sender",
+    "expected": "refuse: requested receiver identity",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: transfer destination binding\n",
+    "rehash_verified": true,
+    "manifest_sha256": "786833fca67dfcde5875ed91dc8be2f98a4433409e1c8cd934771b53737b5c15"
+  },
+  {
+    "name": "cross-cohort-duplicate",
+    "expected": "refuse: duplicate transaction",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: duplicate transaction\n",
+    "rehash_verified": true,
+    "manifest_sha256": "a27417b1547f6c4b740b73462fa44f61d846873e4a6df40f65ea6965c6e6ea6c"
+  },
+  {
+    "name": "unaccounted-generate",
+    "expected": "refuse: all generated block RPCs accounted",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: all generated block RPCs accounted\n",
+    "rehash_verified": true,
+    "manifest_sha256": "1b729be4bda14c76c564295ca0768cc72f4192a0a8163f902836487deed6c5c6"
+  },
+  {
+    "name": "unaccounted-transfer",
+    "expected": "refuse: all wallet constructions accounted",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: all wallet constructions accounted\n",
+    "rehash_verified": true,
+    "manifest_sha256": "7c932791e0e54111f07eae6a0e1d73dc5db88c4dba30e36563116e453e9f0ebc"
+  }
+]
