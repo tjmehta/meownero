@@ -46,6 +46,9 @@ def request(port, path, body):
         if body.get('method') == 'restore_deterministic_wallet':
             seed = observed_body['params'].pop('seed')
             observed_body['params']['redacted_seed_sha256'] = hashlib.sha256(seed.encode()).hexdigest()
+            echoed_seed = observed_value.get('result', {}).pop('seed', None)
+            if echoed_seed is not None:
+                observed_value['result']['redacted_seed_sha256'] = hashlib.sha256(echoed_seed.encode()).hexdigest()
             if 'error' in observed_value:
                 observed_value = {'error': {'code': observed_value['error'].get('code')}}
         row = {'id': len(RPC_ROWS), 'port': port, 'path': path,
@@ -426,7 +429,7 @@ async def restore_and_controls(addresses, seeds):
     corrupt = bytearray.fromhex(made['tx_blob'])
     corrupt[-1] ^= 1
     await unchanged_control('malformed', '00')
-    await unchanged_control('invalid_signature', corrupt.hex())
+    await unchanged_control('altered_transaction', corrupt.hex())
     admitted = await endpoint(0, 'send_raw_transaction', {'tx_as_hex': made['tx_blob'], 'do_not_relay': False})
     assert admitted.get('status') == 'OK'
     payment['admission_rpc_id'] = admitted.rpc_id

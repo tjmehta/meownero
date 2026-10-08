@@ -63,15 +63,19 @@ def main():
         else:
             raise AssertionError('contradiction accepted: ' + name)
         shutil.rmtree(target)
-    for name, control in (('invalid-accepted', 'invalid_signature'), ('conflict-accepted', 'conflicting_spend'),
-                          ('healthy-payment-after-controls-failed', None)):
+    for name, control in (('invalid-accepted', 'altered_transaction'), ('conflict-accepted', 'conflicting_spend'),
+                          ('healthy-payment-after-controls-failed', None), ('private-rpc-material', 'private')):
         target = work / name
         shutil.copytree(baseline, target, ignore=shutil.ignore_patterns('private'))
         scenario = json.loads((target / 'run1/public/result.json').read_text())
         path = target / 'run1/public/rpc.jsonl'
         raw = [json.loads(line) for line in path.read_text().splitlines()]
-        ids = scenario['controls'][control]['rpc_ids'] if control else [
-            scenario['cohorts'][3]['transactions'][0]['admission_rpc_id']]
+        if control == 'private':
+            raw[scenario['restore']['restore_rpc_id']]['response']['result']['seed'] = 'synthetic refusal marker'
+            ids = []
+        else:
+            ids = scenario['controls'][control]['rpc_ids'] if control else [
+                scenario['cohorts'][3]['transactions'][0]['admission_rpc_id']]
         for i in ids:
             raw[i]['response']['status'] = 'OK' if control else 'Failed'
         path.write_text(''.join(json.dumps(row) + '\n' for row in raw))

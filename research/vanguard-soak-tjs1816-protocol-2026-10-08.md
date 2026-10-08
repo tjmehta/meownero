@@ -1,6 +1,6 @@
 # Longer native payment and recovery protocol
 
-Protocol revision 4 for TJS-1816, frozen on 2026-10-08 before measured native execution.
+Protocol revision 5 for TJS-1816, frozen on 2026-10-08 before its fresh measured native execution.
 The assigned outcome remains incomplete until both fresh trials, verifier
 controls and independent acceptance finish. The scenario and verifier are now
 implemented; no passing native result is inferred from that implementation.
@@ -53,6 +53,20 @@ must still be 0600. Persistent chain and wallet files remain under the bind
 mounted private evidence directory. This changes storage portability, not native
 P2P, transaction admission or any measured acceptance row. The failed attempt
 is not one of the two required trials.
+
+Revision 5 follows the prepublication privacy check on `soak02`: the native
+wallet-restore response echoes its mnemonic as `result.seed`. The logger must
+replace that response field with a SHA256 digest, as it already does for the
+query response and restore request. The verifier must reject any nonempty
+private RPC field and bind both restore digests to the original wallet digest.
+The first native scenario passed, but this trial set is excluded from acceptance;
+its second trial was stopped using its exact owned container identity. Preserve
+the original echoed-response log only in the private directory and a documented
+sanitized public diagnostic. Run two entirely fresh measured trials from the
+corrected logger. This revision also names the negative input accurately:
+`altered_transaction` flips the final serialized transaction byte with XOR 1.
+It tests rejection of that changed transaction, not a signature-only mutation
+or independent cryptographic soundness.
 
 ## Environment and containment
 
@@ -117,7 +131,7 @@ may be reused by another valid workload payment.
 | 6 minutes | Gracefully stop, reap and reopen sender B's wallet RPC with the same wallet files. Compare address, outputs and balances. Execute cohort 2 from B. |
 | 12 minutes | Gracefully restart node A with its persistent chain directory and unchanged command. Compare its pre/post chain and reestablish native handshake. Partition the bridge, queue all eight cohort-3 payments at A, require B's pool remains empty, then reconnect, complete handshake, request native relay of those exact eight txids, require both exact pools and drain. |
 | 18 minutes | Record a common tip with empty pools, partition, generate one empty branch block on A and two on B, require distinct branches, reconnect and require both nodes adopt B's exact longer tip. Verify A's losing block is orphaned and all prior payments remain on the main chain with unchanged wallet credits. |
-| 24 minutes | Unlock received outputs with 12 synchronized empty blocks, restore recipient A from its disposable mnemonic into a fresh wallet, rescan and compare address, outputs, amounts, balances and spent flags. Build two distinct spends of one received key image. Both nodes must reject a malformed transaction encoding and a changed-signature transaction without state change. Confirm the valid restored-wallet spend on both nodes. Both nodes must reject the distinct conflicting spend with the native double-spend indication and unchanged state. Execute cohort 4 from B after those rejections. |
+| 24 minutes | Unlock received outputs with 12 synchronized empty blocks, restore recipient A from its disposable mnemonic into a fresh wallet, rescan and compare address, outputs, amounts, balances and spent flags. Build two distinct spends of one received key image. Both nodes must reject a malformed transaction encoding and a transaction with its final byte altered without state change. Confirm the valid restored-wallet spend on both nodes. Both nodes must reject the distinct conflicting spend with the native double-spend indication and unchanged state. Execute cohort 4 from B after those rejections. |
 | 29 minutes | Reconcile all 32 workload payments and the restored spend, both wallets and the main chain. Require empty pools, native peer connections, healthy RPC and live executable identities. Continue heartbeats and sampling until at least 1,800 measured seconds have elapsed, then record final observations and controlled shutdown. |
 
 Wait to each earliest time only after the preceding phase succeeds. Keep native

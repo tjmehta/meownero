@@ -129,6 +129,17 @@ def verify(out, src=None):
                 'fresh wallet seeds')
         wallet_seeds.update(r['wallet_seed_sha256'].values())
         raw = [json.loads(s) for s in (stage / 'public/rpc.jsonl').read_text().splitlines()]
+        def public_fields(value):
+            if isinstance(value, dict):
+                for key, child in value.items():
+                    require(key not in {'seed', 'mnemonic', 'spend_key', 'view_key', 'tx_key', 'tx_metadata',
+                                        'tx_key_list', 'tx_metadata_list'} or not child, 'private RPC material')
+                    public_fields(child)
+            elif isinstance(value, list):
+                for child in value:
+                    public_fields(child)
+        for row in raw:
+            public_fields(row)
         transcript = sha(stage / 'public/rpc.jsonl')
         require(transcript not in transcripts, 'fresh RPC transcript')
         transcripts.add(transcript)
@@ -324,6 +335,7 @@ def verify(out, src=None):
         restore_call = rpc(restore['restore_rpc_id'], PORTS['restored'], 'json_rpc', 'restore_deterministic_wallet')
         require('seed' not in restore_call['request']['params'] and
                 restore_call['request']['params']['redacted_seed_sha256'] == r['wallet_seed_sha256']['recipientA'] and
+                restore_call['response']['result']['redacted_seed_sha256'] == r['wallet_seed_sha256']['recipientA'] and
                 restore_call['response']['result']['address'] == r['addresses']['recipientA'], 'restore seed/address binding')
         rpc(restore['rescan_rpc_id'], PORTS['restored'], 'json_rpc', 'rescan_blockchain')
         spend = r['restored_spend']
@@ -351,7 +363,7 @@ def verify(out, src=None):
         bindings(spend, spend['confirmed'])
         require(spend['txid'] not in transactions, 'fresh restored spend')
         transactions.add(spend['txid'])
-        require(set(r['controls']) == {'malformed', 'invalid_signature', 'conflicting_spend'}, 'negative control coverage')
+        require(set(r['controls']) == {'malformed', 'altered_transaction', 'conflicting_spend'}, 'negative control coverage')
         for label, control in r['controls'].items():
             snap(control['before'], True, True); snap(control['after'], True, True)
             require(control['before']['tips'] == control['after']['tips'], 'rejection state integrity')
@@ -365,7 +377,7 @@ def verify(out, src=None):
                 require(a['id'] < rejected['id'] < b['id'], 'rejection chronology')
                 require(rejected['id'] < r['cohorts'][3]['transactions'][0]['admission_rpc_id'], 'healthy payment after bad input')
         mutated = bytearray.fromhex(spend['blob']); mutated[-1] ^= 1
-        require(r['controls']['malformed']['blob'] == '00' and r['controls']['invalid_signature']['blob'] == mutated.hex(), 'distinct negative inputs')
+        require(r['controls']['malformed']['blob'] == '00' and r['controls']['altered_transaction']['blob'] == mutated.hex(), 'distinct negative inputs')
         alternate_call = rpc(r['alternate']['construction_rpc_id'], PORTS['recipientA'], 'json_rpc', 'sweep_single')
         alternate = alternate_call['response']['result']
         require(alternate['tx_hash'] == r['alternate']['txid'] != spend['txid'] and
