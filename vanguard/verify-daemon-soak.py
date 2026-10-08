@@ -100,8 +100,12 @@ def verify(out, src=None):
                 config['NanoCpus'] == 2_000_000_000 and config['PidsLimit'] == 256 and
                 config['CapDrop'] == ['ALL'] and 'no-new-privileges' in config['SecurityOpt'] and
                 not config['Privileged'] and not config['PortBindings'], 'live containment caps')
+        tmpfs = next(c for c in command if c.startswith('--tmpfs=/run/vanguard:')).split(':', 1)[1]
+        require(config['Tmpfs'] == {'/run/vanguard': tmpfs} and
+                all(flag in tmpfs.split(',') for flag in ('rw', 'noexec', 'nosuid', 'nodev', 'size=1m', 'mode=0700')),
+                'private socket tmpfs')
         mounts = {m['Destination']: m for m in live[5]}
-        require(set(mounts) == {'/src', '/harness', '/out'} and not mounts['/src']['RW'] and
+        require(set(mounts) in ({'/src', '/harness', '/out'}, {'/src', '/harness', '/out', '/run/vanguard'}) and not mounts['/src']['RW'] and
                 not mounts['/harness']['RW'] and mounts['/out']['RW'], 'live mounts')
         available = int(next(line.split()[1] for line in (stage / 'vm-memory-before.txt').read_text().splitlines()
                              if line.startswith('MemAvailable:')))

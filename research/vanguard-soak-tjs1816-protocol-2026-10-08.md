@@ -1,6 +1,6 @@
 # Longer native payment and recovery protocol
 
-Protocol revision 3 for TJS-1816, frozen on 2026-10-08 before native execution.
+Protocol revision 4 for TJS-1816, frozen on 2026-10-08 before measured native execution.
 The assigned outcome remains incomplete until both fresh trials, verifier
 controls and independent acceptance finish. The scenario and verifier are now
 implemented; no passing native result is inferred from that implementation.
@@ -43,6 +43,16 @@ backoff; this bounded phase tests explicit retry through native P2P rather than
 claiming automatic timer recovery. Bind that RPC between the isolated full queue
 and the observed full peer queue. No transactions are injected directly into the
 peer pool, and mining remains paused until both exact queues agree.
+
+Revision 4 follows the preserved `soak01` failure before any native process or
+payment started. Colima virtiofs rejected `chmod` on a socket in the host bind
+mount. Put only the transient AF_UNIX bridge socket at
+`/run/vanguard/p2p.sock` on a task-owned 1 MiB tmpfs, with `noexec,nosuid,nodev`,
+directory mode 0700 and the container user's uid/gid. Its actual socket mode
+must still be 0600. Persistent chain and wallet files remain under the bind
+mounted private evidence directory. This changes storage portability, not native
+P2P, transaction admission or any measured acceptance row. The failed attempt
+is not one of the two required trials.
 
 ## Environment and containment
 

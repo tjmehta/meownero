@@ -97,6 +97,7 @@ def main():
                 argv = ['docker', '--context', 'colima', 'run', '--rm', '--name', name,
                         '--pull=never', '--network=none', '--cap-drop=ALL', '--security-opt=no-new-privileges',
                         '--cpus=2', '--memory=4g', '--memory-swap=4g', '--pids-limit=256', '--ulimit', 'core=0',
+                        f'--tmpfs=/run/vanguard:rw,noexec,nosuid,nodev,size=1m,mode=0700,uid={os.getuid()},gid={os.getgid()}',
                         '-u', f'{os.getuid()}:{os.getgid()}', '-v', f'{up}:/src:ro',
                         '-v', f'{ROOT / "vanguard"}:/harness:ro', '-v', f'{stage}:/out',
                         '-w', '/out', IMAGE, 'bash', '-euc', script]

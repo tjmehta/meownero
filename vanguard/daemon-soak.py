@@ -451,6 +451,7 @@ async def main():
     assert not Path('/proc/net/route').read_text().splitlines()[1:]
     RESULT['architecture'] = os.uname().machine
     bridge = p2p.Bridge()
+    bridge.socket = Path('/run/vanguard/p2p.sock')
     await bridge.start()
     sampling = asyncio.create_task(monitor())
     seeds = {}
