@@ -63,14 +63,17 @@ def main():
         else:
             raise AssertionError('contradiction accepted: ' + name)
         shutil.rmtree(target)
-    for name, control in (('invalid-accepted', 'invalid_signature'), ('conflict-accepted', 'conflicting_spend')):
+    for name, control in (('invalid-accepted', 'invalid_signature'), ('conflict-accepted', 'conflicting_spend'),
+                          ('healthy-payment-after-controls-failed', None)):
         target = work / name
         shutil.copytree(baseline, target, ignore=shutil.ignore_patterns('private'))
         scenario = json.loads((target / 'run1/public/result.json').read_text())
         path = target / 'run1/public/rpc.jsonl'
         raw = [json.loads(line) for line in path.read_text().splitlines()]
-        for i in scenario['controls'][control]['rpc_ids']:
-            raw[i]['response']['status'] = 'OK'
+        ids = scenario['controls'][control]['rpc_ids'] if control else [
+            scenario['cohorts'][3]['transactions'][0]['admission_rpc_id']]
+        for i in ids:
+            raw[i]['response']['status'] = 'OK' if control else 'Failed'
         path.write_text(''.join(json.dumps(row) + '\n' for row in raw))
         rehash(target)
         try:
@@ -80,6 +83,32 @@ def main():
         else:
             raise AssertionError('accepted bad input passed: ' + name)
         shutil.rmtree(target)
+    target = work / 'unrelated-recipient-public-key'
+    shutil.copytree(baseline, target, ignore=shutil.ignore_patterns('private'))
+    result_path = target / 'run1/public/result.json'
+    scenario = json.loads(result_path.read_text())
+    state = scenario['cohorts'][0]['recipient_state']
+    first = state['outputs'][0]
+    original_key = first['pubkey']
+    first['pubkey'] = '0' * 64
+    state['outputs'].sort(key=lambda o: (o['tx_hash'], o['pubkey']))
+    raw_path = target / 'run1/public/rpc.jsonl'
+    raw = [json.loads(line) for line in raw_path.read_text().splitlines()]
+    transfers = raw[state['rpc_ids'][2]]['response']['result']['transfers']
+    for row in transfers:
+        if row['pubkey'] == original_key:
+            row['pubkey'] = '0' * 64
+    result_path.write_text(json.dumps(scenario, indent=2) + '\n')
+    raw_path.write_text(''.join(json.dumps(row) + '\n' for row in raw))
+    rehash(target)
+    try:
+        verifier.verify(target)
+    except AssertionError as error:
+        assert 'CARROT output key/amount/height binding' in str(error)
+        results.append({'case': 'unrelated-recipient-public-key', 'result': 'REFUSED', 'reason': str(error)})
+    else:
+        raise AssertionError('wallet public key unrelated to native outputs was accepted')
+    shutil.rmtree(target)
     for name, relative, replacement in (
         ('oom-counter', 'run1/final.memory-events', 'low 0\nhigh 0\nmax 0\noom 1\noom_kill 1\n'),
         ('missing-final-peak', 'run1/final.memory', None)):

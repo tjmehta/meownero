@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Reconcile new soak receipts. Historical live tips are never authenticated here."""
 import argparse
-from collections import Counter
 import hashlib
-import importlib.util
 import json
 import math
 from pathlib import Path
@@ -76,6 +74,10 @@ def verify(out, src=None):
         for name, value in receipt['binary'].items():
             p = src / 'monero-fcmp/build/vanguard/bin' / name
             require(value == {'sha256': sha(p), 'bytes': p.stat().st_size}, 'local executable bytes')
+            with p.open('rb') as stream:
+                header = stream.read(20)
+            require(header[:4] == b'\x7fELF' and header[4:6] == b'\x02\x01' and
+                    int.from_bytes(header[18:20], 'little') == 183, 'native ARM64 ELF executable')
     require(len(receipt['commands']) == len(receipt['trials']) == 2 and 0 < receipt['wall_seconds'] < 7000, 'two trials budget')
     workload_seeds, wallet_seeds, transactions, transcripts = set(), set(), set(), set()
     for number, command in enumerate(receipt['commands'], 1):
@@ -195,6 +197,15 @@ def verify(out, src=None):
                 headers.append((header['height'], header['hash'], header['prev_hash'], body['tx_hashes']))
             require(headers[0] == headers[1], 'peer block agreement')
 
+        def output_binding(output, payment):
+            for node, bound in enumerate(payment['confirmed']):
+                tx = rpc(bound['tx_rpc_id'], 19081 + 100 * node, 'get_transactions')['response']['txs'][0]
+                decoded = json.loads(tx['as_json'])
+                keys = [v['target']['carrot_v1']['key'] for v in decoded['vout']]
+                require(keys.count(output['pubkey']) == 1 and output['tx_hash'] == payment['txid'] and
+                        output['amount'] == payment['amount'] and output['block_height'] == bound['height'],
+                        'recipient CARROT output key/amount/height binding')
+
         snap(r['genesis'], True, True)
         require(r['genesis']['tips'][0][0] == 0, 'fresh chain')
         for name, address in r['addresses'].items():
@@ -275,6 +286,8 @@ def verify(out, src=None):
             wanted = {txid: t['amount'] for txid, t in payments.items() if t['recipient'] == recipient}
             outputs = c['recipient_state']['outputs']
             require(len(outputs) == len(wanted) and {o['tx_hash']: o['amount'] for o in outputs} == wanted, 'exact recipient credits')
+            for output in outputs:
+                output_binding(output, payments[output['tx_hash']])
         transactions.update(trial_ids)
         for name, restart in (('senderB', r['wallet_restart']), ('daemon0', r['daemon_restart'])):
             generations = [g for g in r['generations'] if g['name'] == name]
@@ -321,6 +334,20 @@ def verify(out, src=None):
                 spend['source_txid'] in payments and spend['source_amount'] == payments[spend['source_txid']]['amount'] and
                 spend['amount'] == made['response']['result']['amount'] and spend['fee'] == made['response']['result']['fee'] and
                 spend['amount'] + spend['fee'] == spend['source_amount'], 'restored successful spend')
+        source_outputs = [o for o in restore['original']['outputs'] if o['tx_hash'] == spend['source_txid']]
+        require(len(source_outputs) == 1 and not source_outputs[0]['spent'] and
+                source_outputs[0]['amount'] == spend['source_amount'] and
+                spend['key_images'] == [source_outputs[0]['key_image']] and
+                made['request']['params'] == {'key_image': source_outputs[0]['key_image'], 'do_not_relay': True,
+                    'get_tx_hex': True, 'address': spend['destination']}, 'restored source input binding')
+        admitted = rpc(spend['admission_rpc_id'], 19081, 'send_raw_transaction')
+        require(admitted['request'] == {'tx_as_hex': spend['blob'], 'do_not_relay': False} and
+                admitted['response']['status'] == 'OK' and made['id'] < admitted['id'], 'restored spend admission')
+        snap(spend['queued'], True)
+        require(spend['queued']['pools'] == [[spend['txid']], [spend['txid']]] and
+                admitted['id'] < spend['queued']['rpc_ids'][0] and
+                spend['queued']['rpc_ids'][-1] < generated['restored-spend']['rpc_id'] and
+                generated['restored-spend']['count'] == 1, 'restored spend queue before drain')
         bindings(spend, spend['confirmed'])
         require(spend['txid'] not in transactions, 'fresh restored spend')
         transactions.add(spend['txid'])
@@ -339,15 +366,22 @@ def verify(out, src=None):
                 require(rejected['id'] < r['cohorts'][3]['transactions'][0]['admission_rpc_id'], 'healthy payment after bad input')
         mutated = bytearray.fromhex(spend['blob']); mutated[-1] ^= 1
         require(r['controls']['malformed']['blob'] == '00' and r['controls']['invalid_signature']['blob'] == mutated.hex(), 'distinct negative inputs')
-        alternate = rpc(r['alternate']['construction_rpc_id'], PORTS['recipientA'], 'json_rpc', 'sweep_single')['response']['result']
+        alternate_call = rpc(r['alternate']['construction_rpc_id'], PORTS['recipientA'], 'json_rpc', 'sweep_single')
+        alternate = alternate_call['response']['result']
         require(alternate['tx_hash'] == r['alternate']['txid'] != spend['txid'] and
-                alternate['tx_blob'] == r['controls']['conflicting_spend']['blob'] and alternate['spent_key_images']['key_images'] == spend['key_images'], 'actual conflicting spend')
+                alternate['tx_blob'] == r['controls']['conflicting_spend']['blob'] and
+                alternate['spent_key_images']['key_images'] == spend['key_images'] and
+                alternate_call['request']['params'] == {'key_image': source_outputs[0]['key_image'], 'do_not_relay': True,
+                    'get_tx_hex': True, 'address': r['addresses']['recipientB']}, 'actual conflicting spend')
         require(set(r['final_bindings']) == trial_ids | {spend['txid']}, 'final complete transaction binding')
         for txid, rows in r['final_bindings'].items():
             bindings(spend if txid == spend['txid'] else payments[txid], rows)
             require(rows[0]['tx_rpc_id'] > r['cohorts'][3]['transactions'][-1]['admission_rpc_id'], 'final binding freshness')
         for name, state_row in r['final_wallets'].items():
             wallet(state_row, name)
+        restored_credit = [o for o in r['final_wallets']['senderA']['outputs'] if o['tx_hash'] == spend['txid']]
+        require(len(restored_credit) == 1 and not restored_credit[0]['spent'], 'restored spend exactly-once destination credit')
+        output_binding(restored_credit[0], spend)
         require(comparable(r['final_wallets']['recipientA']) == comparable(r['final_wallets']['restored']), 'final restored history')
         for name in ('recipientA', 'recipientB'):
             wanted = {t['txid']: t['amount'] for t in payments.values() if t['recipient'] == name}
@@ -355,6 +389,8 @@ def verify(out, src=None):
             require(len(outputs) == 16 and {o['tx_hash']: o['amount'] for o in outputs} == wanted and
                     {o['tx_hash'] for o in outputs if o['spent']} == ({spend['source_txid']} if name == 'recipientA' else set()),
                     'final exact credits and restored input spend')
+            for output in outputs:
+                output_binding(output, payments[output['tx_hash']])
         for name in ('senderA', 'senderB'):
             work = [t for t in payments.values() if t['sender'] == name]
             outputs = r['final_wallets'][name]['outputs']
