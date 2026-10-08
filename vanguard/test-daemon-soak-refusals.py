@@ -7,6 +7,7 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+from soak_public import export, PUBLIC_FILES
 
 spec = importlib.util.spec_from_file_location('verify_soak', Path(__file__).with_name('verify-daemon-soak.py'))
 verifier = importlib.util.module_from_spec(spec)
@@ -49,6 +50,41 @@ def main():
         ('shutdown-metrics', lambda r: r['shutdown_sample'].update(memory_peak_bytes=0)),
     ]
     results = []
+    # Synthetic database bytes only. Rehashing must not turn a private export
+    # into accepted evidence, including when database bytes replace a log.
+    database = b'\0' * 16 + bytes.fromhex('dec0efbe') + b'\0' * 4096
+    for name, relative in (
+        ('ring-database-inclusion', 'run1/.shared-ringdb/data.mdb'),
+        ('unlisted-wallet-cache', 'run2/public/wallet-cache'),
+        ('database-renamed-as-log', 'run1/docker.stderr.log')):
+        target = work / name
+        shutil.copytree(baseline, target)
+        path = target / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(database)
+        rehash(target)
+        try:
+            verifier.verify(target)
+        except AssertionError as error:
+            results.append({'case': name, 'result': 'REFUSED', 'reason': str(error)})
+        else:
+            raise AssertionError('database export accepted: ' + name)
+        if relative not in PUBLIC_FILES:
+            exported = work / (name + '-export')
+            receipt = export(target, exported)
+            assert receipt['excluded_original_manifest_entries'] == [relative]
+            assert verifier.verify(exported)['result'] == 'PASS_SOAK_RECEIPT_RECONCILIATION'
+            shutil.rmtree(exported)
+        else:
+            exported = work / (name + '-export')
+            try:
+                export(target, exported)
+            except AssertionError as error:
+                assert 'binary/database public evidence' in str(error)
+            else:
+                raise AssertionError('exported database disguised as text')
+            shutil.rmtree(exported)
+        shutil.rmtree(target)
     for name, mutate in cases:
         target = work / name
         shutil.copytree(baseline, target, ignore=shutil.ignore_patterns('private'))

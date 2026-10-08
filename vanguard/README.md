@@ -223,12 +223,16 @@ existing evidence directory.
 ```sh
 python3 -B vanguard/prepare-soak-build-mac.py --work /owned/path/build01
 python3 -B vanguard/run-daemon-soak.py --src /owned/path/build01 --out /owned/path/soak01
-python3 -B vanguard/verify-daemon-soak.py /owned/path/soak01 --src /owned/path/build01
-python3 -B vanguard/test-daemon-soak-refusals.py /owned/path/soak01 --work /owned/path/controls01
+python3 -B vanguard/soak_public.py /owned/path/soak01 --out /owned/path/public01 --archive /owned/path/public01.tar.gz
+python3 -B vanguard/verify-daemon-soak.py /owned/path/public01 --src /owned/path/build01
+python3 -B vanguard/test-daemon-soak-refusals.py /owned/path/public01 --work /owned/path/controls01
 ```
 
-Run preparation and native execution only on build-mac. Public packaging must exclude
-every `private` directory, which contains disposable wallet seeds and state.
+Run preparation and native execution only on build-mac. Keep the original output
+private, including wallet state and the default `.shared-ringdb` outside the
+`private` directory. Publish only the exporter archive. It copies the 56 named
+text receipts/logs, checks their original hashes and regenerates the manifest.
+The public verifier rejects any extra directory/file, symlink or binary content.
 Passing receipts describe this accelerated contained regtest; they do not prove
 production security, sustained capacity or WAN readiness. Independent acceptance
 and parent verification remain required.

@@ -7,6 +7,7 @@ import math
 from pathlib import Path
 import random
 import subprocess
+from soak_public import validate_public_tree
 
 ROOT = Path(__file__).resolve().parent.parent
 IMAGE = 'sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b'
@@ -36,6 +37,7 @@ def comparable(row):
 
 
 def verify(out, src=None):
+    validate_public_tree(out)
     manifest = {}
     for line in (out / 'MANIFEST.sha256').read_text().splitlines():
         digest, name = line.split('  ', 1)
