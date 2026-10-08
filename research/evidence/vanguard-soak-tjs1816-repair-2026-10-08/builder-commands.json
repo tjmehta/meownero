@@ -1,0 +1,53 @@
+[
+  {
+    "probe": "builder-inspect",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context colima image inspect sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b --format '{{json .Id}} {{json .Architecture}} {{json .Os}} {{json .RootFS}} {{json .Config.Labels}}'; docker --context colima history --no-trunc sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b"
+    ],
+    "started_utc": "2026-10-08T15:47:21.274014+00:00",
+    "wall_seconds": 1.1932632511015981,
+    "exit": 0
+  },
+  {
+    "probe": "builder-tools",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context colima run --rm --pull=never --name tjs1816-tool-probe-5a24 --network=none --cap-drop=ALL --security-opt=no-new-privileges --cpus=1 --memory=512m --memory-swap=512m --pids-limit=64 --ulimit core=0 sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b sh -c 'uname -m; cat /etc/os-release; command -v rustc cargo cmake gcc g++ curl git python3; gcc --version; cmake --version; dpkg-query -W'"
+    ],
+    "started_utc": "2026-10-08T15:47:22.467310+00:00",
+    "wall_seconds": 1.262972315074876,
+    "exit": 0
+  },
+  {
+    "probe": "remote-caches",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "find <repo>/build -maxdepth 3 -type d; ls -l ~/.cargo/registry/cache ~/.rustup/toolchains; git -C <repo> status --porcelain; df -k ~/Developer"
+    ],
+    "started_utc": "2026-10-08T15:47:23.730317+00:00",
+    "wall_seconds": 1.124443664913997,
+    "exit": 0
+  }
+]

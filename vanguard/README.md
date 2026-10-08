@@ -205,3 +205,26 @@ sustained capacity or production block timing. Writer-side `/proc` byte hashes
 bind recorded observations to claimed running processes. Post-run reconciliation
 still reports `UNVERIFIED_LIVE_TIPS`; it does not authenticate historical state
 or substitute for independent exact-candidate review.
+
+## Longer build-mac payment and recovery trials
+
+The separate [frozen protocol](../research/vanguard-soak-tjs1816-protocol-2026-10-08.md)
+requires two fresh native ARM64 trials, each with at least 1,800 measured seconds,
+32 confirmed payments, persistent restarts, queued reconnect, a controlled reorg,
+wallet restore and later spend, and native rejection controls. Existing gate
+implementations and their x86 pins remain unchanged. This runner requires the
+verified task-owned build produced on build-mac; it refuses a dirty candidate or an
+existing evidence directory.
+
+```sh
+python3 -B vanguard/prepare-soak-build-mac.py --work /owned/path/build01
+python3 -B vanguard/run-daemon-soak.py --src /owned/path/build01 --out /owned/path/soak01
+python3 -B vanguard/verify-daemon-soak.py /owned/path/soak01 --src /owned/path/build01
+python3 -B vanguard/test-daemon-soak-refusals.py /owned/path/soak01 --work /owned/path/controls01
+```
+
+Run preparation and native execution only on build-mac. Public packaging must exclude
+every `private` directory, which contains disposable wallet seeds and state.
+Passing receipts describe this accelerated contained regtest; they do not prove
+production security, sustained capacity or WAN readiness. Independent acceptance
+and parent verification remain required.

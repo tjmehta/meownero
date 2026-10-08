@@ -1,8 +1,9 @@
 # Longer native payment and recovery protocol
 
-Protocol revision 1 for TJS-1816, frozen before native execution. The assigned
-outcome remains incomplete. This protocol is an execution specification, not an
-implemented runner or a passing test package.
+Protocol revision 2 for TJS-1816, frozen on 2026-10-08 before native execution.
+The assigned outcome remains incomplete until both fresh trials, verifier
+controls and independent acceptance finish. The scenario and verifier are now
+implemented; no passing native result is inferred from that implementation.
 
 The accepted starting commit is
 `72e572bd2c6725eb59d5598852d782185e225504`. Extend the existing native private P2P
@@ -10,6 +11,30 @@ bridge, load and backlog code without changing their accepted gates. Keep the
 FCMP++ upstream, submodule and Cargo.lock pins in `vanguard/source-lock.json`.
 Changing the protocol requires a new dated revision published before its trial.
 Do not reuse historical runs as either new trial.
+
+Revision 2 records the observed Linux/ARM64 builder
+`sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b`
+already cached on build-mac. The accepted x86 image and executable pins remain
+unchanged in the existing gates. The new build uses native ARM64 GCC 13.3,
+CMake 3.28.3 and Rust 1.93.0, installed only under the owned staging directory
+from the official standalone rustc, cargo and rust-std archives. Record each
+archive's official SHA256 and actual bytes. Dependency preparation may use a
+task-owned capped container with ordinary bridge networking and no published
+ports; native build and trials are offline. No host toolchain is installed.
+The three Rust archive hashes observed during preparation are respectively
+`1a9045695892ec08d8e9751bf7cf7db71fe27a6202dd12ce13aca48d0602dbde`,
+`5998940b8b97286bb67facb1a85535eeb3d4d7a61e36a85e386e5c0c5cfe5266`, and
+`84e82ff52c39c64dfd0e1c2d58fd3d5309d1d2502378131544c0d486b44af20a`.
+The original upstream/submodule/Cargo.lock pins and every measured protocol
+row below remain required. Selected workload inputs are bound to the sender's
+current unspent-output snapshot before each cohort, allowing native selection
+of newly mature change without allowing input reuse. The losing-branch orphan
+receipt is required on node A, which actually held that branch.
+
+The documented Colima recovery moved only the three stale PID/socket entries
+and made one successful unchanged-profile startup retry. The live dockerman
+CI listener is a separate potential runtime consumer. Leave the shared runtime
+running while that consumer remains; clean only exact task-owned containers.
 
 ## Environment and containment
 

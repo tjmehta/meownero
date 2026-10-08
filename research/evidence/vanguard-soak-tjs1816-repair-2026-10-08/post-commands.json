@@ -1,0 +1,138 @@
+[
+  {
+    "probe": "post-profile",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "shasum -a 256 ~/.colima/default/colima.yaml; ps -p 75180 -o pid,ppid,user,lstart,comm; colima status"
+    ],
+    "started_utc": "2026-10-08T15:46:34.137678+00:00",
+    "wall_seconds": 1.544583620969206,
+    "exit": 0
+  },
+  {
+    "probe": "docker-version",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context colima version --format \"{{json .}}\""
+    ],
+    "started_utc": "2026-10-08T15:46:35.682380+00:00",
+    "wall_seconds": 1.072604093933478,
+    "exit": 0
+  },
+  {
+    "probe": "docker-info",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context colima info --format \"{{json .}}\""
+    ],
+    "started_utc": "2026-10-08T15:46:36.755145+00:00",
+    "wall_seconds": 1.2707802129443735,
+    "exit": 0
+  },
+  {
+    "probe": "containers",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context colima ps -a --no-trunc --format \"{{json .}}\""
+    ],
+    "started_utc": "2026-10-08T15:46:38.026161+00:00",
+    "wall_seconds": 1.193152543157339,
+    "exit": 0
+  },
+  {
+    "probe": "images",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context colima image ls --no-trunc --format \"{{json .}}\""
+    ],
+    "started_utc": "2026-10-08T15:46:39.219509+00:00",
+    "wall_seconds": 1.09286208008416,
+    "exit": 0
+  },
+  {
+    "probe": "vm-capacity",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "colima ssh -- sh -c 'uname -a; cat /proc/meminfo; df -k / /var/lib/docker; ps -eo pid,ppid,comm'"
+    ],
+    "started_utc": "2026-10-08T15:46:40.312592+00:00",
+    "wall_seconds": 1.2917242438998073,
+    "exit": 0
+  },
+  {
+    "probe": "post-metadata",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "ls -liT ~/.colima/_lima/colima/ha.pid ~/.colima/_lima/colima/vz.pid ~/.colima/_lima/colima/ha.sock; cat ~/.colima/_lima/tjs1816-recovery-5a24c6b6-20261008/receipt.json"
+    ],
+    "started_utc": "2026-10-08T15:46:41.604485+00:00",
+    "wall_seconds": 1.233773378888145,
+    "exit": 0
+  },
+  {
+    "probe": "runner",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "ps -axo pid,ppid,user,lstart,comm | egrep \"Runner.Listener|dockerman\""
+    ],
+    "started_utc": "2026-10-08T15:46:42.838470+00:00",
+    "wall_seconds": 1.3051363069098443,
+    "exit": 0
+  }
+]
