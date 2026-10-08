@@ -1,6 +1,8 @@
 # build-mac startup failure and stale process identity
 
-TJS-1816 remains BLOCKED. The authorized existing-profile startup was attempted
+Historical startup diagnostic, superseded by the [completed writer results](vanguard-soak-tjs1816-results-2026-10-08.md). The subsequent authorized repair and native trials are recorded there.
+
+TJS-1816 was BLOCKED at this attempt. The authorized existing-profile startup was attempted
 once and failed before Docker became available. There were zero heavy builds,
 native trials, payments or recovery events. The requested test outcome is incomplete.
 

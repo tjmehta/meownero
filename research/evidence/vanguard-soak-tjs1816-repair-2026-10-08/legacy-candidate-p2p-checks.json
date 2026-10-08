@@ -1,0 +1,24 @@
+[
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "vanguard/verify-daemon-p2p.py",
+      "research/evidence/vanguard-daemon-p2p-tjs996-2026-09-29"
+    ],
+    "exit": 0,
+    "stdout": "PASS_DAEMON_P2P_RECEIPT_RECONCILIATION\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "python3",
+      "-B",
+      "vanguard/test-daemon-p2p-refusals.py",
+      "research/evidence/vanguard-daemon-p2p-tjs996-2026-09-29"
+    ],
+    "exit": 0,
+    "stdout": "EXPECTED_REFUSAL missing-pool: key image chain-state transition\nEXPECTED_REFUSAL unspent-key-image: key image chain-state transition\nPASS_DAEMON_P2P_HASH_CONSISTENT_REFUSAL\n",
+    "stderr": ""
+  }
+]

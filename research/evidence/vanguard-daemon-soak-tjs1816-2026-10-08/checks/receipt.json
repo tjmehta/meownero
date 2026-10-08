@@ -1,0 +1,39 @@
+{
+  "checker_commit": "b6c46cd8526b34822ecdbd62a2c5b84ec3372cec",
+  "native_commit": "978d2d10b0eb48c6143c09ccf494da640804df0a",
+  "source_sha256": {
+    "verify-daemon-soak.py": "60b5456396fbd0160c2b11c7b84f4e00ab4b1fa1ef1674ba3f170b3e19114373",
+    "test-daemon-soak-refusals.py": "6327083a56b2babb0717d0b030efeef8de26fba2c8c56189491a70a5c977e291"
+  },
+  "commands": [
+    {
+      "label": "baseline",
+      "argv": [
+        "python3",
+        "-B",
+        "~/Developer/tjs1816-5a24c6b6/candidate-check-v5/vanguard/verify-daemon-soak.py",
+        "~/Developer/tjs1816-5a24c6b6/soak03",
+        "--src",
+        "~/Developer/tjs1816-5a24c6b6/build01"
+      ],
+      "started_utc": "2026-10-08T17:58:18.884945+00:00",
+      "exit": 0,
+      "wall_seconds": 0.5617188749602064
+    },
+    {
+      "label": "refusals",
+      "argv": [
+        "python3",
+        "-B",
+        "~/Developer/tjs1816-5a24c6b6/candidate-check-v5/vanguard/test-daemon-soak-refusals.py",
+        "~/Developer/tjs1816-5a24c6b6/soak03",
+        "--work",
+        "~/Developer/tjs1816-5a24c6b6/refusals03"
+      ],
+      "started_utc": "2026-10-08T17:58:19.446787+00:00",
+      "exit": 0,
+      "wall_seconds": 15.298554292065091
+    }
+  ],
+  "result": "PASS_OFFLINE_BASELINE_AND_28_REFUSAL_INVOCATIONS"
+}

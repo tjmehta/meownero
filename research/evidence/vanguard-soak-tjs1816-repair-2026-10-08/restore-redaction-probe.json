@@ -1,0 +1,11 @@
+{
+  "result": "PASS_RESTORE_LOGGER_REDACTION_PROBE",
+  "source_sha256": "709abb97cd337215f461552d896034008a02e8d497bb2dc3a94419dd2b866ad9",
+  "checks": [
+    "restore request digest",
+    "echoed native response digest",
+    "internal wallet response preserved",
+    "native error text redacted"
+  ],
+  "limits": "Synthetic response matching observed native restore shape; fresh corrected native trials still required."
+}

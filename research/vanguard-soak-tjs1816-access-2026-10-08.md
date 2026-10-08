@@ -1,6 +1,8 @@
 # Longer Vanguard tests: build-mac runtime blocker
 
-TJS-1816 is incomplete. No heavy build, native payment trial, recovery event or
+Historical preflight, superseded by the [completed writer results](vanguard-soak-tjs1816-results-2026-10-08.md). The observations below describe the earlier blocked attempt.
+
+TJS-1816 was incomplete at this preflight. No heavy build, native payment trial, recovery event or
 new verifier baseline ran. Writer disposition is BLOCKED on an unavailable
 contained Docker runtime on build-mac. The accepted work is not reopened.
 

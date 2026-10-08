@@ -208,6 +208,10 @@ or substitute for independent exact-candidate review.
 
 ## Longer build-mac payment and recovery trials
 
+The [2026-10-08 writer results](../research/vanguard-soak-tjs1816-results-2026-10-08.md)
+record two fresh passing 30-minute ARM64 trials and the verifier/refusal checks.
+Independent acceptance and parent integration remain pending.
+
 The separate [frozen protocol](../research/vanguard-soak-tjs1816-protocol-2026-10-08.md)
 requires two fresh native ARM64 trials, each with at least 1,800 measured seconds,
 32 confirmed payments, persistent restarts, queued reconnect, a controlled reorg,

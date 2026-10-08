@@ -1,0 +1,127 @@
+{
+  "trials": [
+    {
+      "trial": 1,
+      "result": "PASS_SCENARIO",
+      "measured_seconds": 1800.159949211,
+      "payments": 32,
+      "restored_spends": 1,
+      "blocks_generated": 200,
+      "rpc_rows": 2833,
+      "resource_samples": 186,
+      "memory_start_bytes": 941764608,
+      "memory_end_bytes": 1191886848,
+      "memory_final_peak_bytes": 1192308736,
+      "memory_current_min_bytes": 941764608,
+      "memory_current_max_bytes": 1191886848,
+      "memory_current_fit_bytes_per_minute": 5380629.934770918,
+      "measured_cpu_seconds": 45.433457,
+      "construction_rpc": {
+        "count": 32,
+        "min_s": 0.4699813490001361,
+        "median_s": 0.5715150655001935,
+        "p95_s": 0.7855009369995969,
+        "max_s": 1.5584423660000084
+      },
+      "origin_admission_rpc": {
+        "count": 32,
+        "min_s": 0.016469907000100648,
+        "median_s": 0.018230016499956037,
+        "p95_s": 0.04272509399993396,
+        "max_s": 0.9081363290001718
+      },
+      "first_peer_pool_observation_after_admission": {
+        "count": 32,
+        "min_s": 0.019034429999919666,
+        "median_s": 4.19538872399994,
+        "p95_s": 6.8610664480002015,
+        "max_s": 7.602333336999891
+      },
+      "construction_to_confirmed_observation": {
+        "count": 32,
+        "min_s": 1.21125879300007,
+        "median_s": 7.575166155500028,
+        "p95_s": 42.8852266240001,
+        "max_s": 48.05586957999958
+      },
+      "cohort_rates_tps": [
+        1.2969012786774583,
+        0.18668718828508668,
+        0.6864731490455875,
+        0.16593231373592365
+      ],
+      "child_exits": [
+        {
+          "name": "daemon0",
+          "generation": 1,
+          "exit": 0
+        },
+        {
+          "name": "daemon1",
+          "generation": 1,
+          "exit": 0
+        },
+        {
+          "name": "senderA",
+          "generation": 1,
+          "exit": 0
+        },
+        {
+          "name": "senderB",
+          "generation": 1,
+          "exit": 0
+        },
+        {
+          "name": "recipientA",
+          "generation": 1,
+          "exit": 0
+        },
+        {
+          "name": "recipientB",
+          "generation": 1,
+          "exit": 0
+        },
+        {
+          "name": "senderB",
+          "generation": 2,
+          "exit": 0
+        },
+        {
+          "name": "daemon0",
+          "generation": 2,
+          "exit": 0
+        },
+        {
+          "name": "restored",
+          "generation": 1,
+          "exit": 0
+        }
+      ],
+      "oom_events": {
+        "high": 0,
+        "low": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_group_kill": 0,
+        "oom_kill": 0
+      },
+      "final_pools": [
+        [],
+        []
+      ],
+      "final_tips": [
+        [
+          199,
+          "92f77629fffe8d966692ea22ee97a6dc02ea27d1310c62eb2984564c2c27f673",
+          "0xc8"
+        ],
+        [
+          199,
+          "92f77629fffe8d966692ea22ee97a6dc02ea27d1310c62eb2984564c2c27f673",
+          "0xc8"
+        ]
+      ]
+    }
+  ],
+  "limits": "Idle wall time is excluded from cohort rates; observation delays are RPC sampling bounds. Current-memory fit includes native state and cache, not a leak or production-capacity finding."
+}

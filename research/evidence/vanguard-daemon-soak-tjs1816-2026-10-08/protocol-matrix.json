@@ -1,0 +1,212 @@
+[
+  {
+    "row": 1,
+    "requirement": "Published frozen revision 5 before fresh trials",
+    "status": "PASS",
+    "evidence": "Board revision 5 published 16:55:19Z; native start 16:55:50Z; protocol-v5-publication.json."
+  },
+  {
+    "row": 2,
+    "requirement": "Exact native source/ARM64 image/toolchain/binary provenance",
+    "status": "PASS",
+    "evidence": "receipt.json, preparation/receipt.json and live/final probes; ARM64 machine 183; actual binary hashes."
+  },
+  {
+    "row": 3,
+    "requirement": "Fresh independent workload and disposable-wallet seeds",
+    "status": "PASS",
+    "evidence": "Verifier rejects workload/wallet/tx replay; eight unique wallet seed digests and addresses; freshness audit."
+  },
+  {
+    "row": 4,
+    "requirement": "Trial 1 at least 1800 measured seconds after warmup",
+    "status": "PASS",
+    "evidence": "run1/public/result.json: 1800.180243631 s after 31.748607991 s warmup."
+  },
+  {
+    "row": 5,
+    "requirement": "Trial 2 at least 1800 measured seconds after warmup",
+    "status": "PASS",
+    "evidence": "run2/public/result.json: 1800.172313108 s after 29.653462992 s warmup."
+  },
+  {
+    "row": 6,
+    "requirement": "32 confirmed exactly-once payments per trial",
+    "status": "PASS",
+    "evidence": "Both result.transactions plus chronological RPC and final_bindings: 32 each, 64 total; two additional restored spends."
+  },
+  {
+    "row": 7,
+    "requirement": "Four depth-eight queued cohorts with paused mining and bounded drains",
+    "status": "PASS",
+    "evidence": "Four cohort records per trial, exact queues before mining; 200 generated blocks per trial below cap 210."
+  },
+  {
+    "row": 8,
+    "requirement": "Both-node tx bytes/hash/block/previous-hash/main-chain binding",
+    "status": "PASS",
+    "evidence": "Both result.final_bindings and get_transactions/get_block RPC rows; exact membership, previous hash and non-orphan status."
+  },
+  {
+    "row": 9,
+    "requirement": "Exact recipient CARROT key/destination/amount and principal/fee/input accounting",
+    "status": "PASS",
+    "evidence": "Construction RPC destinations/amounts/fees/key images and recipient CARROT output keys; native input/credit reconciliation."
+  },
+  {
+    "row": 10,
+    "requirement": "Persistent sender wallet restart and later payment",
+    "status": "PASS",
+    "evidence": "wallet_restart before/after wallet RPC observations, same files/address/state and later cohort 2."
+  },
+  {
+    "row": 11,
+    "requirement": "Persistent daemon restart with same state and live executable identity",
+    "status": "PASS",
+    "evidence": "daemon_restart before/after tips, generation 2 live identity, same persistent chain command."
+  },
+  {
+    "row": 12,
+    "requirement": "Partitioned full queue, reconnect and explicit native relay retry",
+    "status": "PASS",
+    "evidence": "cohort 3 isolated full A queue, empty B queue, reconnect handshake, explicit relay_tx and exact peer queue."
+  },
+  {
+    "row": 13,
+    "requirement": "Controlled partition, longer-chain rejoin and losing-branch orphan",
+    "status": "PASS",
+    "evidence": "reorg records and raw losing-branch orphan RPC on node A; exact longer B tip adopted on both."
+  },
+  {
+    "row": 14,
+    "requirement": "Restored recipient history and later confirmed spend",
+    "status": "PASS",
+    "evidence": "restore request/echo digests match original; restored history/output states and restored_spend bindings."
+  },
+  {
+    "row": 15,
+    "requirement": "Both-node malformed transaction rejection without state change",
+    "status": "PASS",
+    "evidence": "controls.malformed: native non-admission and unchanged pools/tips on both nodes."
+  },
+  {
+    "row": 16,
+    "requirement": "Both-node altered final-byte transaction rejection without state change",
+    "status": "PASS",
+    "evidence": "controls.altered_transaction: final byte XOR 1; native rejection and unchanged pools/tips on both nodes."
+  },
+  {
+    "row": 17,
+    "requirement": "Distinct conflicting-spend double-spend rejection",
+    "status": "PASS",
+    "evidence": "controls.conflicting_spend: distinct transaction shares restored key image; native double_spend indication on both."
+  },
+  {
+    "row": 18,
+    "requirement": "Healthy eight-payment cohort after all negative controls",
+    "status": "PASS",
+    "evidence": "Healthy cohort 4 follows restored spend and all six node rejection responses."
+  },
+  {
+    "row": 19,
+    "requirement": "Final empty queues, peers and complete main-chain/wallet reconciliation",
+    "status": "PASS",
+    "evidence": "final pools empty on both, matching tips, final_peer_rpc_ids and complete wallet/binding checks."
+  },
+  {
+    "row": 20,
+    "requirement": "Chronological raw RPC/events and linked references",
+    "status": "PASS",
+    "evidence": "2805/2843 chronological RPC rows; events, wire and linked method/port/timing references."
+  },
+  {
+    "row": 21,
+    "requirement": "Live executable/command/PID-start identities for all generations",
+    "status": "PASS",
+    "evidence": "Nine generations per trial, /proc executable hash/command/PID/start identities including replacements."
+  },
+  {
+    "row": 22,
+    "requirement": "Start/end/final peak memory, trend, CPU and payment timings",
+    "status": "PASS",
+    "evidence": "186 samples per trial, start/end/shutdown resources and final cgroup files; summary.json timings/trend/CPU."
+  },
+  {
+    "row": 23,
+    "requirement": "All nine child-generation exits 0 per trial and OOM counters 0",
+    "status": "PASS",
+    "evidence": "All 18 child generations exit 0, cleanup_errors empty, every memory event counter 0."
+  },
+  {
+    "row": 24,
+    "requirement": "Private offline container containment, caps and serial heavy lock",
+    "status": "PASS",
+    "evidence": "Exact docker commands, inspect/cgroup/interface/listener receipts; offline network none, caps and shared serial lock."
+  },
+  {
+    "row": 25,
+    "requirement": "Exact owned-container cleanup and shared runtime preservation",
+    "status": "PASS",
+    "evidence": "Both exact containers absent, runner exit 0, final docker inventory empty and heavy lock available; CI/simulator preserved."
+  },
+  {
+    "row": 26,
+    "requirement": "Pre-transfer private-field/credential audit",
+    "status": "PASS",
+    "evidence": "Remote native audit before transfer, restore digest audit, and final selected-file credential/private-field audit."
+  },
+  {
+    "row": 27,
+    "requirement": "Passing fresh two-trial verifier baseline with local executable bytes",
+    "status": "PASS",
+    "evidence": "checks/baseline.stdout.log and receipt: exit 0 with --src build01; PASS_SOAK_RECEIPT_RECONCILIATION."
+  },
+  {
+    "row": 28,
+    "requirement": "Rehashed targeted adversarial refusals with no overlapping coverage credit",
+    "status": "PASS",
+    "evidence": "checks/refusals-result.json: 28 REFUSED after passing baseline; overlap not distinct coverage."
+  },
+  {
+    "row": 29,
+    "requirement": "Accepted 12 legacy source gates unchanged",
+    "status": "PASS",
+    "evidence": "accepted-gate-preservation.json: 12 source files SHA-identical to accepted base."
+  },
+  {
+    "row": 30,
+    "requirement": "Legacy P2P receipt baseline and refusal suite",
+    "status": "PASS",
+    "evidence": "legacy-candidate-p2p-checks.json: old receipt reconciliation and refusal invocations exit 0; historical regression only."
+  },
+  {
+    "row": 31,
+    "requirement": "Legacy load/backlog ARM-substitution identity guards",
+    "status": "PASS",
+    "evidence": "legacy-arm-substitution.json: load/backlog reject different monerod bytes; not full suite execution."
+  },
+  {
+    "row": 32,
+    "requirement": "Full old x86 load/backlog refusal suites",
+    "status": "NOT_RUN",
+    "evidence": "Original pinned x86 executables absent; ARM substitutions correctly refused. Full suites not credited."
+  },
+  {
+    "row": 33,
+    "requirement": "Hashed public raw package and exact candidate for independent reviewer",
+    "status": "PASS",
+    "evidence": "Complete 60-file public native archive, nested manifest, hashed checks/report and source bindings; exact final commit/attachment hashes in handoff."
+  },
+  {
+    "row": 34,
+    "requirement": "Independent exact-candidate acceptance",
+    "status": "NOT_RUN",
+    "evidence": "Pending existing independent reviewer ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6. Writer cannot accept."
+  },
+  {
+    "row": 35,
+    "requirement": "Parent local integration and next cross-host handoff",
+    "status": "NOT_RUN",
+    "evidence": "Pending independent acceptance; parent owns local integration, isolated cross-host follow-up and WhatsApp delivery."
+  }
+]

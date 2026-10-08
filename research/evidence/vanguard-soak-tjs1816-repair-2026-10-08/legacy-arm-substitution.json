@@ -1,0 +1,47 @@
+[
+  {
+    "gate": "load",
+    "argv": [
+      "python3",
+      "-B",
+      "~/Developer/tjs1816-5a24c6b6/candidate-run/vanguard/verify-daemon-load.py",
+      "~/Developer/tjs1816-5a24c6b6/candidate-run/research/evidence/vanguard-daemon-load-tjs1171-2026-10-01",
+      "--src",
+      "~/Developer/tjs1816-5a24c6b6/build01"
+    ],
+    "exit": 1,
+    "wall_seconds": 0.10527854098472744,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_LOAD: local executable bytes: monerod\n"
+  },
+  {
+    "gate": "p2p",
+    "argv": [
+      "python3",
+      "-B",
+      "~/Developer/tjs1816-5a24c6b6/candidate-run/vanguard/verify-daemon-p2p.py",
+      "~/Developer/tjs1816-5a24c6b6/candidate-run/research/evidence/vanguard-daemon-p2p-tjs1003-2026-09-29/native",
+      "--src",
+      "~/Developer/tjs1816-5a24c6b6/build01"
+    ],
+    "exit": 2,
+    "wall_seconds": 0.03057137504220009,
+    "stdout": "",
+    "stderr": "usage: verify-daemon-p2p.py [-h] out\nverify-daemon-p2p.py: error: unrecognized arguments: --src ~/Developer/tjs1816-5a24c6b6/build01\n"
+  },
+  {
+    "gate": "backlog",
+    "argv": [
+      "python3",
+      "-B",
+      "~/Developer/tjs1816-5a24c6b6/candidate-run/vanguard/verify-daemon-backlog.py",
+      "~/Developer/tjs1816-5a24c6b6/candidate-run/research/evidence/vanguard-daemon-backlog-tjs1346-2026-10-03",
+      "--src",
+      "~/Developer/tjs1816-5a24c6b6/build01"
+    ],
+    "exit": 1,
+    "wall_seconds": 0.14194087497889996,
+    "stdout": "",
+    "stderr": "FAIL_DAEMON_BACKLOG: local executable bytes: monerod\n"
+  }
+]
