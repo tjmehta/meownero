@@ -33,6 +33,7 @@ def main():
         ('early-drain', lambda r: r['cohorts'][0]['full_queue']['rpc_ids'].__setitem__(3, r['generated'][2]['rpc_id'])),
         ('input-reuse', lambda r: r['cohorts'][0]['transactions'][1].update(key_images=r['cohorts'][0]['transactions'][0]['key_images'])),
         ('destination', lambda r: r['cohorts'][0]['transactions'][0].update(destination=r['addresses']['senderA'])),
+        ('amount', lambda r: r['cohorts'][0]['transactions'][0].update(amount=r['cohorts'][0]['transactions'][0]['amount'] + 1)),
         ('native-bytes', lambda r: r['cohorts'][0]['transactions'][0].update(blob='00')),
         ('peer-block', lambda r: r['cohorts'][0]['transactions'][0]['confirmed'][1].update(block_hash='0' * 64)),
         ('credit-duplicate', lambda r: r['cohorts'][0]['recipient_state']['outputs'].append(copy.deepcopy(r['cohorts'][0]['recipient_state']['outputs'][0]))),
@@ -64,7 +65,8 @@ def main():
             raise AssertionError('contradiction accepted: ' + name)
         shutil.rmtree(target)
     for name, control in (('invalid-accepted', 'altered_transaction'), ('conflict-accepted', 'conflicting_spend'),
-                          ('healthy-payment-after-controls-failed', None), ('private-rpc-material', 'private')):
+                          ('healthy-payment-after-controls-failed', None), ('private-rpc-material', 'private'),
+                          ('orphan-block', 'orphan')):
         target = work / name
         shutil.copytree(baseline, target, ignore=shutil.ignore_patterns('private'))
         scenario = json.loads((target / 'run1/public/result.json').read_text())
@@ -72,6 +74,10 @@ def main():
         raw = [json.loads(line) for line in path.read_text().splitlines()]
         if control == 'private':
             raw[scenario['restore']['restore_rpc_id']]['response']['result']['seed'] = 'synthetic refusal marker'
+            ids = []
+        elif control == 'orphan':
+            block = scenario['cohorts'][0]['transactions'][0]['confirmed'][0]['block_rpc_id']
+            raw[block]['response']['result']['block_header']['orphan_status'] = True
             ids = []
         else:
             ids = scenario['controls'][control]['rpc_ids'] if control else [
@@ -132,7 +138,7 @@ def main():
             raise AssertionError('bad resources passed: ' + name)
         shutil.rmtree(target)
     result = {'baseline': 'PASS_SOAK_RECEIPT_RECONCILIATION', 'controls': results,
-              'scope': 'Distinct contradiction families; overlapping mutations are not credited separately.'}
+              'scope': 'Rehashed refusal invocations; overlapping mutations are not distinct coverage claims.'}
     (work / 'result.json').write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps(result, sort_keys=True))
 
