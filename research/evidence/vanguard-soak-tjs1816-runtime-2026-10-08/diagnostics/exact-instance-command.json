@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "StrictHostKeyChecking=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "build-mac",
+    "limactl --version; LIMA_HOME=~/.colima/_lima limactl list --json; lsof -n -U ~/.colima/_lima/colima/ha.sock; ps -p 75180 -o pid,ppid,lstart,comm; shasum -a 256 ~/.colima/default/colima.yaml; git -C <repo> rev-parse HEAD; git -C <repo> status --short"
+  ],
+  "started_utc": "2026-10-08T15:27:44.085696+00:00",
+  "wall_seconds": 1.8273717290721834,
+  "exit": 0
+}

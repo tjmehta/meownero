@@ -1,0 +1,37 @@
+# =============================================================================
+# GITHUB FUNCTIONS
+# =============================================================================
+
+# GitHub repository helpers
+ghd () {
+	userrepo=""
+	if [[ "$1" == *\/* ]]
+	then
+  	userrepo=$1
+  else
+  	userrepo="tjmehta/$1"
+	fi
+	parts=(${(@s:/:)userrepo})
+	user=${parts[@]:0:1}
+  # project=${parts[@]:1:2}
+	userdir="$HOME/Developer/@$user"
+	dir="$HOME/Developer/@$userrepo"
+	if [ -d "$dir" ]; then
+  	### Take action if $DIR exists ###
+  	echo "cd $dir"
+  	cd $dir
+	else
+		### Take action if $DIR DNE ###
+		echo "cd $userdir"
+		cd $userdir
+		echo "gh repo clone $userrepo"
+		gh repo clone $userrepo
+		echo "cd $dir"
+		cd $dir
+	fi
+}
+
+ghc () {
+	ghd $1
+	command cursor . 2>/dev/null || command code . 2>/dev/null || echo "No editor found"
+}

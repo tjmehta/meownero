@@ -1,0 +1,46 @@
+total 0
+drwxr-xr-x@  5 tjmehta  staff  160 Oct  8 08:23 .
+drwxr-xr-x@  8 tjmehta  staff  256 Sep 16 17:59 ..
+drwxr-xr-x@  5 tjmehta  staff  160 Sep 16 17:59 _config
+drwx------@  3 tjmehta  staff   96 Sep 16 17:59 _disks
+drwx------@ 17 tjmehta  staff  544 Oct  1 00:11 colima
+total 2322416
+drwx------@ 17 tjmehta  staff          544 Oct  1 00:11 .
+drwxr-xr-x@  5 tjmehta  staff          160 Oct  8 08:23 ..
+-rw-r--r--@  1 tjmehta  staff     19943424 Sep 16 17:59 cidata.iso
+-r--r--r--@  1 tjmehta  staff         1247 Sep 16 17:59 cloud-config.yaml
+-rw-r--r--@  1 tjmehta  staff         8500 Sep 16 17:59 colima.yaml
+-rw-r--r--@  1 tjmehta  staff  21474836480 Oct  1 00:10 disk
+-rw-r--r--@  1 tjmehta  staff            6 Sep 16 17:59 ha.pid
+srwxr-xr-x@  1 tjmehta  staff            0 Sep 16 17:59 ha.sock
+-rw-r--r--@  1 tjmehta  staff     13517130 Oct  1 00:11 ha.stderr.log
+-rw-r--r--@  1 tjmehta  staff         1385 Sep 16 17:59 ha.stdout.log
+-r--r--r--@  1 tjmehta  staff            5 Sep 16 17:59 lima-version
+-rw-r--r--@  1 tjmehta  staff         4671 Oct  8 08:23 lima.yaml
+-rw-------@  1 tjmehta  staff           61 Sep 16 17:59 serialv.log
+-rw-------@  1 tjmehta  staff          697 Sep 16 17:59 ssh.config
+-rw-------@  1 tjmehta  staff       131072 Sep 16 17:59 vz-efi
+-rw-r--r--@  1 tjmehta  staff           70 Sep 16 17:59 vz-identifier
+-rw-r--r--@  1 tjmehta  staff            6 Sep 16 17:59 vz.pid
+# This SSH config file can be passed to 'ssh -F'.
+# This file is created by Lima, but not used by Lima itself currently.
+# Modifications to this file will be lost on restarting the Lima instance.
+Host colima
+  IdentityFile "~/.colima/_lima/_config/user"
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  NoHostAuthenticationForLocalhost yes
+  PreferredAuthentications publickey
+  Compression no
+  BatchMode yes
+  IdentitiesOnly yes
+  GSSAPIAuthentication no
+  Ciphers "^aes128-gcm@openssh.com,aes256-gcm@openssh.com"
+  User tjmehta
+  ControlMaster auto
+  ControlPath "~/.colima/_lima/colima/ssh.sock"
+  ControlPersist yes
+  Hostname 127.0.0.1
+  Port 60511
+
+1:Include ~/.colima/ssh_config

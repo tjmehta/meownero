@@ -1,0 +1,134 @@
+{
+  "schema": "meownero-vanguard-runtime-diagnosis/1",
+  "issue": "TJS-1816",
+  "run": "300369f6-0d2a-445d-b273-fd7f98c3b455",
+  "disposition": "BLOCKED",
+  "accepted_base": "72e572bd2c6725eb59d5598852d782185e225504",
+  "prior_preparation_commit": "e10dcbe0f93efab52de8ca046c42fcd9a79ad5ed",
+  "startup": {
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "colima start default --save-config=false"
+    ],
+    "utc": "2026-10-08T15:23:35.500031+00:00",
+    "exit": 1,
+    "wall_seconds": 2.0311641809530556
+  },
+  "saved_profile_sha256": "953069eb536626c5b04906c9122d3f35d54e4d3091c50f5bc4adf7cc7f627697",
+  "native_trial_count": 0,
+  "native_payment_count": 0,
+  "heavy_build_count": 0,
+  "task_owned_runtime_started": false,
+  "task_owned_containers": [],
+  "unblock_owner_agent": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+  "unblock_interaction_id": "7c366606-1c35-48c5-ad8b-f41e462627de",
+  "protocol_rows": [
+    {
+      "requirement": "Exact accepted base and owned isolated local checkout",
+      "result": "PASS",
+      "evidence": "Accepted ancestor retained; no unrelated changes touched."
+    },
+    {
+      "requirement": "Protocol frozen and published before execution",
+      "result": "PASS",
+      "evidence": "Revision 1 from prior run remains unchanged and published."
+    },
+    {
+      "requirement": "Supported build-mac transport with host-key checking",
+      "result": "PASS",
+      "evidence": "Fresh SSH command/exit receipts."
+    },
+    {
+      "requirement": "Saved-profile and workload inspection before startup",
+      "result": "PASS",
+      "evidence": "Profile, context, instance metadata, help and process baseline saved."
+    },
+    {
+      "requirement": "Authorized unchanged-settings runtime startup",
+      "result": "FAIL",
+      "evidence": "One attempt exited 1; existing host-agent socket refused connection."
+    },
+    {
+      "requirement": "Reachable Docker API, container inventory and VM capacity",
+      "result": "FAIL",
+      "evidence": "Runtime remains unavailable; operational inventory/capacity NOT_RUN."
+    },
+    {
+      "requirement": "Source, image, toolchain and native binary provenance",
+      "result": "NOT_RUN",
+      "evidence": "Engine unavailable; no owned native build staged."
+    },
+    {
+      "requirement": "Two independent trials, each at least 1,800 measured seconds",
+      "result": "NOT_RUN",
+      "evidence": "Zero trials launched."
+    },
+    {
+      "requirement": "32 exactly-once confirmed payments per trial across both nodes",
+      "result": "NOT_RUN",
+      "evidence": "Zero native payments."
+    },
+    {
+      "requirement": "Persistent daemon and wallet restart",
+      "result": "NOT_RUN",
+      "evidence": "No native children."
+    },
+    {
+      "requirement": "Queued disconnect/reconnect",
+      "result": "NOT_RUN",
+      "evidence": "No native bridge."
+    },
+    {
+      "requirement": "Partition/rejoin and main-chain reorg",
+      "result": "NOT_RUN",
+      "evidence": "No fresh test chain."
+    },
+    {
+      "requirement": "Wallet restore and later confirmed spend",
+      "result": "NOT_RUN",
+      "evidence": "No test wallets."
+    },
+    {
+      "requirement": "Invalid/conflicting rejection followed by healthy payment",
+      "result": "NOT_RUN",
+      "evidence": "No native RPC history."
+    },
+    {
+      "requirement": "Exact tx/block/destination/amount binding; no duplicate credit/spend",
+      "result": "NOT_RUN",
+      "evidence": "No new payment evidence."
+    },
+    {
+      "requirement": "Process identities, resource trend, final peaks, child exits and OOM counters",
+      "result": "NOT_RUN",
+      "evidence": "No owned native process generations or trial cgroups."
+    },
+    {
+      "requirement": "New verifier baseline and adversarial refusals",
+      "result": "NOT_RUN",
+      "evidence": "Soak runner/verifier implementation remains outstanding."
+    },
+    {
+      "requirement": "Existing load/P2P/backlog gates preserved",
+      "result": "PASS",
+      "evidence": "Their source is unchanged; new native/regression runs NOT_RUN."
+    },
+    {
+      "requirement": "Complete executable package and exact-candidate independent review",
+      "result": "NOT_RUN",
+      "evidence": "Runtime diagnosis package only."
+    },
+    {
+      "requirement": "Parent integration and next-step readiness",
+      "result": "NOT_RUN",
+      "evidence": "Requires native trials, independent acceptance and parent verification."
+    }
+  ]
+}

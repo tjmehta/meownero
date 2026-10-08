@@ -1,0 +1,274 @@
+[
+  {
+    "probe": "saved-profile",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "cat ~/.colima/default/colima.yaml; shasum -a 256 ~/.colima/default/colima.yaml"
+    ],
+    "started_utc": "2026-10-08T15:31:11.247757+00:00",
+    "wall_seconds": 1.2917056111618876,
+    "exit": 0
+  },
+  {
+    "probe": "saved-vm",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "ls -la ~/.colima/_lima; ls -la ~/.colima/_lima/colima; sed -n \"1,100p\" ~/.colima/ssh_config; egrep -n \"colima|Include\" ~/.ssh/config"
+    ],
+    "started_utc": "2026-10-08T15:31:12.539570+00:00",
+    "wall_seconds": 1.3250003110151738,
+    "exit": 0
+  },
+  {
+    "probe": "runtime-version",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "colima version; limactl --version; LIMA_HOME=~/.colima/_lima limactl list --json"
+    ],
+    "started_utc": "2026-10-08T15:31:13.864765+00:00",
+    "wall_seconds": 1.3776352608110756,
+    "exit": 0
+  },
+  {
+    "probe": "pid-ownership",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "for f in ~/.colima/_lima/colima/ha.pid ~/.colima/_lima/colima/vz.pid; do echo \"$f\"; cat \"$f\"; pid=$(cat \"$f\"); ps -p \"$pid\" -o pid,ppid,lstart,comm; done; lsof -n -a -U ~/.colima/_lima/colima/ha.sock; echo lsof_exit=$?"
+    ],
+    "started_utc": "2026-10-08T15:31:15.242601+00:00",
+    "wall_seconds": 1.3006957701873034,
+    "exit": 0
+  },
+  {
+    "probe": "startup-help",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "colima start --help; colima stop --help"
+    ],
+    "started_utc": "2026-10-08T15:31:16.543429+00:00",
+    "wall_seconds": 1.3004563769791275,
+    "exit": 0
+  },
+  {
+    "probe": "host",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "hostname; uname -srm; sw_vers; sysctl -n hw.memsize hw.ncpu; uptime"
+    ],
+    "started_utc": "2026-10-08T15:31:17.844069+00:00",
+    "wall_seconds": 1.2218603231012821,
+    "exit": 0
+  },
+  {
+    "probe": "capacity",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "vm_stat; df -k ~/Developer"
+    ],
+    "started_utc": "2026-10-08T15:31:19.066071+00:00",
+    "wall_seconds": 1.0892064119689167,
+    "exit": 0
+  },
+  {
+    "probe": "contexts",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker context ls"
+    ],
+    "started_utc": "2026-10-08T15:31:20.155465+00:00",
+    "wall_seconds": 1.0604035300202668,
+    "exit": 0
+  },
+  {
+    "probe": "colima-status",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "colima status"
+    ],
+    "started_utc": "2026-10-08T15:31:21.216009+00:00",
+    "wall_seconds": 1.3142921251710504,
+    "exit": 1
+  },
+  {
+    "probe": "docker-colima",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context colima version"
+    ],
+    "started_utc": "2026-10-08T15:31:22.530510+00:00",
+    "wall_seconds": 1.3275381790008396,
+    "exit": 1
+  },
+  {
+    "probe": "docker-desktop",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context desktop-linux version"
+    ],
+    "started_utc": "2026-10-08T15:31:23.858209+00:00",
+    "wall_seconds": 1.3016295342240483,
+    "exit": 1
+  },
+  {
+    "probe": "docker-default",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --context default version"
+    ],
+    "started_utc": "2026-10-08T15:31:25.160012+00:00",
+    "wall_seconds": 1.2329425269272178,
+    "exit": 1
+  },
+  {
+    "probe": "docker-legacy-colima",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "docker --host unix://~/.colima/docker.sock version"
+    ],
+    "started_utc": "2026-10-08T15:31:26.393190+00:00",
+    "wall_seconds": 1.1762239939998835,
+    "exit": 1
+  },
+  {
+    "probe": "active-work",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "ps -axo pid,ppid,%cpu,rss,etime,comm | egrep -i \"(docker|colima|lima|qemu|monero|vanguard|cmake|ninja|make$|clang|rustc|cargo)\""
+    ],
+    "started_utc": "2026-10-08T15:31:27.569667+00:00",
+    "wall_seconds": 1.3922977498732507,
+    "exit": 0
+  },
+  {
+    "probe": "remote-source",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "git -C <repo> rev-parse HEAD; git -C <repo> status --short; ls -ld <repo>/vanguard"
+    ],
+    "started_utc": "2026-10-08T15:31:28.962131+00:00",
+    "wall_seconds": 1.2023771649692208,
+    "exit": 1
+  },
+  {
+    "probe": "caches",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "ls -la <repo>/build; ls -la ~/.rustup/toolchains"
+    ],
+    "started_utc": "2026-10-08T15:31:30.164688+00:00",
+    "wall_seconds": 1.19531968398951,
+    "exit": 0
+  }
+]

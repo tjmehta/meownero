@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "StrictHostKeyChecking=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "build-mac",
+    "for f in ~/.colima/_lima/colima/ha.pid ~/.colima/_lima/colima/vz.pid; do echo \"$f\"; cat \"$f\"; pid=$(cat \"$f\"); ps -p \"$pid\" -o pid,ppid,lstart,comm; done; lsof -n ~/.colima/_lima/colima/ha.sock; colima version; command -v limactl; limactl list --json; colima stop --help"
+  ],
+  "utc": "2026-10-08T15:25:02.653321+00:00",
+  "exit": 0,
+  "wall_seconds": 2.1205844399519265
+}

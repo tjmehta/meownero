@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "StrictHostKeyChecking=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "build-mac",
+    "lsof -n -a -U ~/.colima/_lima/colima/ha.sock; echo lsof_exit=$?; ps -p 75180 -o pid,ppid,lstart,comm; colima status; docker --context colima ps -a --no-trunc; shasum -a 256 ~/.colima/default/colima.yaml"
+  ],
+  "started_utc": "2026-10-08T15:28:17.778874+00:00",
+  "wall_seconds": 1.282845445908606,
+  "exit": 0
+}

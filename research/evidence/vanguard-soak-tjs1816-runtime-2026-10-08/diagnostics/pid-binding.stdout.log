@@ -1,0 +1,27 @@
+~/.colima/_lima/colima/ha.pid
+75180
+  PID  PPID STARTED                      COMM
+75180 74219 Thu Oct  8 02:22:27 2026     /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/deviceaccessd
+~/.colima/_lima/colima/vz.pid
+75180
+  PID  PPID STARTED                      COMM
+75180 74219 Thu Oct  8 02:22:27 2026     /Library/Developer/CoreSimulator/Volumes/iOS_23F77/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.5.simruntime/Contents/Resources/RuntimeRoot/usr/libexec/deviceaccessd
+colima version 0.10.3
+git commit: 00f6c297e92a82c04a4ab507db0a61435650d7e8
+/opt/homebrew/bin/limactl
+Stop Colima to free up resources.
+
+The state of the VM is persisted at stop. A start afterwards
+should return it back to its previous state.
+
+Usage:
+  colima stop [profile] [flags]
+
+Flags:
+  -f, --force   stop without graceful shutdown
+  -h, --help    help for stop
+
+Global Flags:
+  -p, --profile string   profile name, for multiple instances (default "default")
+  -v, --verbose          enable verbose log
+      --very-verbose     enable more verbose log

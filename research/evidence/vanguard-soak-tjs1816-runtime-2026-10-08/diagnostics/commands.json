@@ -1,0 +1,53 @@
+[
+  {
+    "probe": "startup-log",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "tail -80 ~/.colima/_lima/colima/ha.stderr.log; tail -50 ~/.colima/_lima/colima/ha.stdout.log"
+    ],
+    "utc": "2026-10-08T15:24:20.421107+00:00",
+    "exit": 0,
+    "wall_seconds": 1.1855371419806033
+  },
+  {
+    "probe": "post-start",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "colima status; docker --context colima version; ps -axo pid,ppid,%cpu,rss,etime,comm | egrep -i \"docker|colima|lima|qemu|monero|vanguard|cmake|ninja|clang|rustc|cargo\"; shasum -a 256 ~/.colima/default/colima.yaml"
+    ],
+    "utc": "2026-10-08T15:24:21.606650+00:00",
+    "exit": 0,
+    "wall_seconds": 1.06582414614968
+  },
+  {
+    "probe": "local-helper",
+    "argv": [
+      "ssh",
+      "-o",
+      "BatchMode=yes",
+      "-o",
+      "StrictHostKeyChecking=yes",
+      "-o",
+      "ConnectTimeout=10",
+      "build-mac",
+      "ls -l ~/.local/bin/ghc /opt/homebrew/bin/ghc; ls -la ~/.colima/_lima/colima; colima list"
+    ],
+    "utc": "2026-10-08T15:24:22.672481+00:00",
+    "exit": 0,
+    "wall_seconds": 1.3001542289275676
+  }
+]
