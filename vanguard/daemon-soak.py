@@ -319,8 +319,13 @@ async def cohort(number, sender, recipient, addresses, inputs, bridge, partition
         rows.append(row)
         p2p.record('payment_queued', cohort=number, txid=row['txid'], pending=pending)
     queued = await snapshot()
+    retry_rpc_id = None
     if partition:
         bridge.rejoin()
+        await wait(p2p.peer_connections, 'reconnected native peers')
+        retried = await rpc(origin, 'relay_tx', {'txids': [r['txid'] for r in rows]})
+        assert retried['status'] == 'OK'
+        retry_rpc_id = retried.rpc_id
         await wait(lambda: converged([r['txid'] for r in rows]), 'queued reconnect')
         for row in rows:
             row['peer_arrival_s'] = time.monotonic()
@@ -352,6 +357,7 @@ async def cohort(number, sender, recipient, addresses, inputs, bridge, partition
            'full_queue': full_queue, 'after': await snapshot(), 'transactions': rows,
            'drain_labels': [g['label'] for g in drains], 'recipient_state': observed,
            'sender_before': sender_before,
+           'reconnect_relay_rpc_id': retry_rpc_id,
            'confirmed_tps': 8 / duration}
     RESULT['cohorts'].append(row)
     p2p.record('cohort_complete', number=number, duration_s=duration, payments=8)

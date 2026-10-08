@@ -260,6 +260,11 @@ def verify(out, src=None):
                     c['full_queue']['rpc_ids'][-1] < generated[c['drain_labels'][0]]['rpc_id'], 'full queue before drain')
             if c['partition']:
                 require(c['isolated_queue']['pools'] == [sorted(queued), []], 'disconnected exact queue')
+                retry = rpc(c['reconnect_relay_rpc_id'], 19081, 'json_rpc', 'relay_tx')
+                require(retry['request']['params']['txids'] == queued and retry['response']['result']['status'] == 'OK' and
+                        c['isolated_queue']['rpc_ids'][-1] < retry['id'] < c['full_queue']['rpc_ids'][0], 'native reconnect retry')
+            else:
+                require(c['reconnect_relay_rpc_id'] is None, 'unexpected retry')
             require(1 <= len(c['drain_labels']) <= 3, 'bounded drain blocks')
             snap(c['after'], True, True)
             wallet(c['recipient_state'], recipient)

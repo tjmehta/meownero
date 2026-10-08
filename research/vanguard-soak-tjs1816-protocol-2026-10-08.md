@@ -1,6 +1,6 @@
 # Longer native payment and recovery protocol
 
-Protocol revision 2 for TJS-1816, frozen on 2026-10-08 before native execution.
+Protocol revision 3 for TJS-1816, frozen on 2026-10-08 before native execution.
 The assigned outcome remains incomplete until both fresh trials, verifier
 controls and independent acceptance finish. The scenario and verifier are now
 implemented; no passing native result is inferred from that implementation.
@@ -35,6 +35,14 @@ The documented Colima recovery moved only the three stale PID/socket entries
 and made one successful unchanged-profile startup retry. The live dockerman
 CI listener is a separate potential runtime consumer. Leave the shared runtime
 running while that consumer remains; clean only exact task-owned containers.
+
+Revision 3 specifies one native `relay_tx` request for the exact eight queued
+transactions after the partitioned cohort reconnects and completes its native
+handshake. The pinned `src/cryptonote_core/tx_pool.cpp` uses a delayed re-relay
+backoff; this bounded phase tests explicit retry through native P2P rather than
+claiming automatic timer recovery. Bind that RPC between the isolated full queue
+and the observed full peer queue. No transactions are injected directly into the
+peer pool, and mining remains paused until both exact queues agree.
 
 ## Environment and containment
 
@@ -97,7 +105,7 @@ may be reused by another valid workload payment.
 | --- | --- |
 | 0 minutes | Cohort 1 from A: queue eight distinct payments with mining paused, observe the exact pool on both nodes, drain and confirm exactly once. |
 | 6 minutes | Gracefully stop, reap and reopen sender B's wallet RPC with the same wallet files. Compare address, outputs and balances. Execute cohort 2 from B. |
-| 12 minutes | Gracefully restart node A with its persistent chain directory and unchanged command. Compare its pre/post chain and reestablish native handshake. Partition the bridge, queue all eight cohort-3 payments at A, require B's pool remains empty, then reconnect, require both exact pools and drain. |
+| 12 minutes | Gracefully restart node A with its persistent chain directory and unchanged command. Compare its pre/post chain and reestablish native handshake. Partition the bridge, queue all eight cohort-3 payments at A, require B's pool remains empty, then reconnect, complete handshake, request native relay of those exact eight txids, require both exact pools and drain. |
 | 18 minutes | Record a common tip with empty pools, partition, generate one empty branch block on A and two on B, require distinct branches, reconnect and require both nodes adopt B's exact longer tip. Verify A's losing block is orphaned and all prior payments remain on the main chain with unchanged wallet credits. |
 | 24 minutes | Unlock received outputs with 12 synchronized empty blocks, restore recipient A from its disposable mnemonic into a fresh wallet, rescan and compare address, outputs, amounts, balances and spent flags. Build two distinct spends of one received key image. Both nodes must reject a malformed transaction encoding and a changed-signature transaction without state change. Confirm the valid restored-wallet spend on both nodes. Both nodes must reject the distinct conflicting spend with the native double-spend indication and unchanged state. Execute cohort 4 from B after those rejections. |
 | 29 minutes | Reconcile all 32 workload payments and the restored spend, both wallets and the main chain. Require empty pools, native peer connections, healthy RPC and live executable identities. Continue heartbeats and sampling until at least 1,800 measured seconds have elapsed, then record final observations and controlled shutdown. |
