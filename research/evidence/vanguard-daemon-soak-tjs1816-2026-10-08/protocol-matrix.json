@@ -151,21 +151,21 @@
   },
   {
     "row": 26,
-    "requirement": "Pre-transfer private-field/credential audit",
+    "requirement": "Public-export database/private-field/credential audit",
     "status": "PASS",
-    "evidence": "Remote native audit before transfer, restore digest audit, and final selected-file credential/private-field audit."
+    "evidence": "Current database-free export PASS; original 60-file export FAIL under F1 and superseded. Exporter allows only 56 text files. Original manifest and excluded hashes retained, not database contents."
   },
   {
     "row": 27,
     "requirement": "Passing fresh two-trial verifier baseline with local executable bytes",
     "status": "PASS",
-    "evidence": "checks/baseline.stdout.log and receipt: exit 0 with --src build01; PASS_SOAK_RECEIPT_RECONCILIATION."
+    "evidence": "Corrected public archive baseline passed with the retained actual ARM executable bytes; checks/receipt.json and baseline.stdout.log."
   },
   {
     "row": 28,
     "requirement": "Rehashed targeted adversarial refusals with no overlapping coverage credit",
     "status": "PASS",
-    "evidence": "checks/refusals-result.json: 28 REFUSED after passing baseline; overlap not distinct coverage."
+    "evidence": "31 rehashed REFUSED invocations after passing baseline: original 28 plus ring-database inclusion, unlisted wallet cache and database renamed as log. Exporter exclusion/refusal also exercised; overlapping checks are not distinct coverage claims."
   },
   {
     "row": 29,
@@ -177,13 +177,13 @@
     "row": 30,
     "requirement": "Legacy P2P receipt baseline and refusal suite",
     "status": "PASS",
-    "evidence": "legacy-candidate-p2p-checks.json: old receipt reconciliation and refusal invocations exit 0; historical regression only."
+    "evidence": "Corrected checker candidate reran historical P2P baseline and refusal suite; both exit 0. checks/legacy-p2p-* logs."
   },
   {
     "row": 31,
     "requirement": "Legacy load/backlog ARM-substitution identity guards",
     "status": "PASS",
-    "evidence": "legacy-arm-substitution.json: load/backlog reject different monerod bytes; not full suite execution."
+    "evidence": "Corrected checker candidate reran load/backlog ARM-substitution guards; both refuse different monerod bytes. Full old x86 suites not credited."
   },
   {
     "row": 32,
@@ -195,13 +195,13 @@
     "row": 33,
     "requirement": "Hashed public raw package and exact candidate for independent reviewer",
     "status": "PASS",
-    "evidence": "Complete 60-file public native archive, nested manifest, hashed checks/report and source bindings; exact final commit/attachment hashes in handoff."
+    "evidence": "Corrected 56-file database-free public archive plus regenerated manifest, hashed current checks/report/source bindings and database-free incremental bundle. Exact final commit/attachment hashes in new handoff; old package superseded."
   },
   {
     "row": 34,
     "requirement": "Independent exact-candidate acceptance",
     "status": "NOT_RUN",
-    "evidence": "Pending existing independent reviewer ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6. Writer cannot accept."
+    "evidence": "F1 remains open until existing reviewer ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6 independently closes it on this same review stage."
   },
   {
     "row": 35,

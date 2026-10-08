@@ -2,6 +2,21 @@
   "baseline": "PASS_SOAK_RECEIPT_RECONCILIATION",
   "controls": [
     {
+      "case": "ring-database-inclusion",
+      "result": "REFUSED",
+      "reason": "non-public evidence directory: run1/.shared-ringdb"
+    },
+    {
+      "case": "unlisted-wallet-cache",
+      "result": "REFUSED",
+      "reason": "non-public evidence file: run2/public/wallet-cache"
+    },
+    {
+      "case": "database-renamed-as-log",
+      "result": "REFUSED",
+      "reason": "binary/database public evidence: /tmp/tjs1816-f1-om772fn3/refusals/database-renamed-as-log/run1/docker.stderr.log"
+    },
+    {
       "case": "duration",
       "result": "REFUSED",
       "reason": "measured duration"
@@ -139,7 +154,7 @@
     {
       "case": "missing-final-peak",
       "result": "REFUSED",
-      "reason": "[Errno 2] No such file or directory: '~/Developer/tjs1816-5a24c6b6/refusals03/missing-final-peak/run1/final.memory'"
+      "reason": "incomplete public evidence set"
     }
   ],
   "scope": "Rehashed refusal invocations; overlapping mutations are not distinct coverage claims."

@@ -1,0 +1,146 @@
+{
+  "baseline": "PASS_SOAK_RECEIPT_RECONCILIATION",
+  "controls": [
+    {
+      "case": "duration",
+      "result": "REFUSED",
+      "reason": "measured duration"
+    },
+    {
+      "case": "payment-count",
+      "result": "REFUSED",
+      "reason": "32 payments"
+    },
+    {
+      "case": "workload-replay",
+      "result": "REFUSED",
+      "reason": "payment destination/amount/input"
+    },
+    {
+      "case": "early-drain",
+      "result": "REFUSED",
+      "reason": "RPC method/port"
+    },
+    {
+      "case": "input-reuse",
+      "result": "REFUSED",
+      "reason": "unique payment/input"
+    },
+    {
+      "case": "destination",
+      "result": "REFUSED",
+      "reason": "payment destination/amount/input"
+    },
+    {
+      "case": "amount",
+      "result": "REFUSED",
+      "reason": "payment destination/amount/input"
+    },
+    {
+      "case": "native-bytes",
+      "result": "REFUSED",
+      "reason": "wallet construction binding"
+    },
+    {
+      "case": "peer-block",
+      "result": "REFUSED",
+      "reason": "exact main-chain block membership"
+    },
+    {
+      "case": "credit-duplicate",
+      "result": "REFUSED",
+      "reason": "wallet RPC binding"
+    },
+    {
+      "case": "wallet-restart",
+      "result": "REFUSED",
+      "reason": "wallet RPC binding"
+    },
+    {
+      "case": "daemon-restart",
+      "result": "REFUSED",
+      "reason": "tip RPC binding"
+    },
+    {
+      "case": "restore-history",
+      "result": "REFUSED",
+      "reason": "wallet RPC binding"
+    },
+    {
+      "case": "later-spend",
+      "result": "REFUSED",
+      "reason": "restored successful spend"
+    },
+    {
+      "case": "rejection-state",
+      "result": "REFUSED",
+      "reason": "tip RPC binding"
+    },
+    {
+      "case": "reorg",
+      "result": "REFUSED",
+      "reason": "controlled longer-chain reorg"
+    },
+    {
+      "case": "final-pool",
+      "result": "REFUSED",
+      "reason": "pool RPC binding"
+    },
+    {
+      "case": "live-binary",
+      "result": "REFUSED",
+      "reason": "live executable generation"
+    },
+    {
+      "case": "child-exit",
+      "result": "REFUSED",
+      "reason": "child exits/start identities"
+    },
+    {
+      "case": "shutdown-metrics",
+      "result": "REFUSED",
+      "reason": "final shutdown resources"
+    },
+    {
+      "case": "invalid-accepted",
+      "result": "REFUSED",
+      "reason": "native invalid/conflict rejection"
+    },
+    {
+      "case": "conflict-accepted",
+      "result": "REFUSED",
+      "reason": "native invalid/conflict rejection"
+    },
+    {
+      "case": "healthy-payment-after-controls-failed",
+      "result": "REFUSED",
+      "reason": "native admission"
+    },
+    {
+      "case": "private-rpc-material",
+      "result": "REFUSED",
+      "reason": "private RPC material"
+    },
+    {
+      "case": "orphan-block",
+      "result": "REFUSED",
+      "reason": "exact main-chain block membership"
+    },
+    {
+      "case": "unrelated-recipient-public-key",
+      "result": "REFUSED",
+      "reason": "recipient CARROT output key/amount/height binding"
+    },
+    {
+      "case": "oom-counter",
+      "result": "REFUSED",
+      "reason": "final container OOM/peak"
+    },
+    {
+      "case": "missing-final-peak",
+      "result": "REFUSED",
+      "reason": "[Errno 2] No such file or directory: '~/Developer/tjs1816-5a24c6b6/refusals03/missing-final-peak/run1/final.memory'"
+    }
+  ],
+  "scope": "Rehashed refusal invocations; overlapping mutations are not distinct coverage claims."
+}

@@ -1,0 +1,108 @@
+{
+  "host": "build-mac",
+  "exporter_sha256": "6dc2d38244e05a7d58e0b8628aee41fa3ac4d7a79e60459ea2003cd18241b0bf",
+  "commands": [
+    {
+      "label": "remote-export-stage",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "build-mac",
+        "python3 -c 'from pathlib import Path; p=Path('\"'\"'~/Developer/tjs1816-5a24c6b6/f1-9d8f02d5'\"'\"'); p.mkdir(mode=0o700, exist_ok=False)'"
+      ],
+      "started_utc": "2026-10-08T18:27:25.540635+00:00",
+      "exit": 0,
+      "wall_seconds": 1.1689974588807672
+    },
+    {
+      "label": "remote-exporter-copy",
+      "argv": [
+        "scp",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "vanguard/soak_public.py",
+        "build-mac:~/Developer/tjs1816-5a24c6b6/f1-9d8f02d5/soak_public.py"
+      ],
+      "started_utc": "2026-10-08T18:27:26.709785+00:00",
+      "exit": 0,
+      "wall_seconds": 1.1554093291051686
+    },
+    {
+      "label": "remote-export",
+      "argv": [
+        "ssh",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "build-mac",
+        "python3 -B ~/Developer/tjs1816-5a24c6b6/f1-9d8f02d5/soak_public.py ~/Developer/tjs1816-5a24c6b6/soak03 --out ~/Developer/tjs1816-5a24c6b6/f1-9d8f02d5/public --archive ~/Developer/tjs1816-5a24c6b6/f1-9d8f02d5/public-native.tar.gz"
+      ],
+      "started_utc": "2026-10-08T18:27:27.865399+00:00",
+      "exit": 0,
+      "wall_seconds": 3.2748325639404356
+    },
+    {
+      "label": "database-free-archive-copy",
+      "argv": [
+        "scp",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "build-mac:~/Developer/tjs1816-5a24c6b6/f1-9d8f02d5/public-native.tar.gz",
+        "/tmp/tjs1816-f1-om772fn3/public-native.tar.gz"
+      ],
+      "started_utc": "2026-10-08T18:27:31.140441+00:00",
+      "exit": 0,
+      "wall_seconds": 2.7001343311276287
+    },
+    {
+      "label": "arm-monerod-copy",
+      "argv": [
+        "scp",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "build-mac:~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/build/vanguard/bin/monerod",
+        "/tmp/tjs1816-f1-om772fn3/build01/monero-fcmp/build/vanguard/bin/monerod"
+      ],
+      "started_utc": "2026-10-08T18:27:33.840948+00:00",
+      "exit": 0,
+      "wall_seconds": 2.4023383429739624
+    },
+    {
+      "label": "arm-monero-wallet-rpc-copy",
+      "argv": [
+        "scp",
+        "-o",
+        "BatchMode=yes",
+        "-o",
+        "StrictHostKeyChecking=yes",
+        "-o",
+        "ConnectTimeout=10",
+        "build-mac:~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/build/vanguard/bin/monero-wallet-rpc",
+        "/tmp/tjs1816-f1-om772fn3/build01/monero-fcmp/build/vanguard/bin/monero-wallet-rpc"
+      ],
+      "started_utc": "2026-10-08T18:27:36.243546+00:00",
+      "exit": 0,
+      "wall_seconds": 2.1816060638520867
+    }
+  ]
+}

@@ -1,39 +1,99 @@
 {
-  "checker_commit": "b6c46cd8526b34822ecdbd62a2c5b84ec3372cec",
+  "checker_commit": "f26a14956dc73b63c821260d48527ce6b50d68e9",
   "native_commit": "978d2d10b0eb48c6143c09ccf494da640804df0a",
   "source_sha256": {
-    "verify-daemon-soak.py": "60b5456396fbd0160c2b11c7b84f4e00ab4b1fa1ef1674ba3f170b3e19114373",
-    "test-daemon-soak-refusals.py": "6327083a56b2babb0717d0b030efeef8de26fba2c8c56189491a70a5c977e291"
+    "vanguard/soak_public.py": "6dc2d38244e05a7d58e0b8628aee41fa3ac4d7a79e60459ea2003cd18241b0bf",
+    "vanguard/verify-daemon-soak.py": "ef2c9c9f186a0e19310c261547e7f3fd32e291acf028cb1e1cdaa831e1405a8a",
+    "vanguard/test-daemon-soak-refusals.py": "067f73e0f10f2c24a518c439d525097fef3547dc0095e8eb643b87130abbb77a"
   },
+  "archive_sha256": "6044bfd703b6821707c77661993f3ef36bd2eae1fe5aa8ceeeec91f35b7fc9bb",
   "commands": [
     {
-      "label": "baseline",
+      "label": "baseline-actual-arm",
       "argv": [
         "python3",
         "-B",
-        "~/Developer/tjs1816-5a24c6b6/candidate-check-v5/vanguard/verify-daemon-soak.py",
-        "~/Developer/tjs1816-5a24c6b6/soak03",
+        "vanguard/verify-daemon-soak.py",
+        "/tmp/tjs1816-f1-om772fn3/published",
         "--src",
-        "~/Developer/tjs1816-5a24c6b6/build01"
+        "/tmp/tjs1816-f1-om772fn3/build01"
       ],
-      "started_utc": "2026-10-08T17:58:18.884945+00:00",
+      "started_utc": "2026-10-08T18:28:32.354610+00:00",
       "exit": 0,
-      "wall_seconds": 0.5617188749602064
+      "expected_exit": 0,
+      "wall_seconds": 2.2332730691414326
     },
     {
-      "label": "refusals",
+      "label": "legacy-p2p-baseline",
       "argv": [
         "python3",
         "-B",
-        "~/Developer/tjs1816-5a24c6b6/candidate-check-v5/vanguard/test-daemon-soak-refusals.py",
-        "~/Developer/tjs1816-5a24c6b6/soak03",
-        "--work",
-        "~/Developer/tjs1816-5a24c6b6/refusals03"
+        "vanguard/verify-daemon-p2p.py",
+        "research/evidence/vanguard-daemon-p2p-tjs996-2026-09-29"
       ],
-      "started_utc": "2026-10-08T17:58:19.446787+00:00",
+      "started_utc": "2026-10-08T18:28:34.587903+00:00",
       "exit": 0,
-      "wall_seconds": 15.298554292065091
+      "expected_exit": 0,
+      "wall_seconds": 0.091382967075333
+    },
+    {
+      "label": "legacy-p2p-refusals",
+      "argv": [
+        "python3",
+        "-B",
+        "vanguard/test-daemon-p2p-refusals.py",
+        "research/evidence/vanguard-daemon-p2p-tjs996-2026-09-29"
+      ],
+      "started_utc": "2026-10-08T18:28:34.679306+00:00",
+      "exit": 0,
+      "expected_exit": 0,
+      "wall_seconds": 0.3217239051591605
+    },
+    {
+      "label": "legacy-load-arm-substitution",
+      "argv": [
+        "python3",
+        "-B",
+        "vanguard/verify-daemon-load.py",
+        "research/evidence/vanguard-daemon-load-tjs1171-2026-10-01",
+        "--src",
+        "/tmp/tjs1816-f1-om772fn3/build01"
+      ],
+      "started_utc": "2026-10-08T18:28:35.001048+00:00",
+      "exit": 1,
+      "expected_exit": 1,
+      "wall_seconds": 0.09573925007134676
+    },
+    {
+      "label": "legacy-backlog-arm-substitution",
+      "argv": [
+        "python3",
+        "-B",
+        "vanguard/verify-daemon-backlog.py",
+        "research/evidence/vanguard-daemon-backlog-tjs1346-2026-10-03",
+        "--src",
+        "/tmp/tjs1816-f1-om772fn3/build01"
+      ],
+      "started_utc": "2026-10-08T18:28:35.096885+00:00",
+      "exit": 1,
+      "expected_exit": 1,
+      "wall_seconds": 0.2992905708961189
     }
   ],
-  "result": "PASS_OFFLINE_BASELINE_AND_28_REFUSAL_INVOCATIONS"
+  "refusal_run": {
+    "label": "refusals",
+    "argv": [
+      "python3",
+      "-B",
+      "vanguard/test-daemon-soak-refusals.py",
+      "/tmp/tjs1816-f1-om772fn3/public",
+      "--work",
+      "/tmp/tjs1816-f1-om772fn3/refusals"
+    ],
+    "exit": 0,
+    "wall_seconds": 67.2401751470752
+  },
+  "refusal_baseline_public_manifest_sha256": "478ef289ae13238b2949446dcd2fe73ad727439b3a111e9e606651439e8d1c80",
+  "refusal_baseline_matches_final_archive": true,
+  "result": "PASS_CORRECTED_BYTE_BASELINE_AND_31_REFUSALS_AND_LEGACY_CHECKS"
 }

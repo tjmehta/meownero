@@ -1,12 +1,16 @@
 {
-  "result": "PASS_SELECTED_PUBLIC_PACKAGE_PRIVACY_AUDIT",
-  "observed_utc": "2026-10-08T18:04:42.114357+00:00",
-  "files_checked": 217,
-  "public_native_files_checked": 60,
-  "private_directories_absent": true,
-  "nonempty_private_rpc_fields_absent": true,
+  "result": "PASS_CORRECTED_DATABASE_FREE_PUBLIC_PACKAGE_AUDIT",
+  "observed_utc": "2026-10-08T18:30:32.798733+00:00",
+  "public_native_files_checked": 56,
+  "archive_members": 57,
+  "exact_allowlisted_regular_text_files": true,
+  "wallet_database_and_private_paths_absent": true,
+  "retained_original_raw_hashes_match": true,
+  "archive_sha256": "6044bfd703b6821707c77661993f3ef36bd2eae1fe5aa8ceeeec91f35b7fc9bb",
   "known_session_credentials_absent": true,
-  "pem_and_jwt_patterns_absent": true,
-  "archive_sha256": "8270d36ca47db7b78495515f99473499d380cdd7102f963e07542b01fc8f3326",
-  "scope": "Audited all task evidence directories, soak source, report and README; no credential or private value is recorded here."
+  "private_key_pem_patterns_absent": true,
+  "rpc_private_fields": "Corrected full verifier passed, including nonempty-private-field and digest checks.",
+  "summary_reproduced_exactly": true,
+  "original_export_result": "FAIL_F1_SUPERSEDED",
+  "scope": "Current selected archive and check/report/source files only. Historical audits are retained without credit for database exclusion."
 }
