@@ -1,0 +1,23 @@
+{
+  "schema": "meownero-vanguard-soak-preparation/1",
+  "issue": "TJS-1816",
+  "run_id": "69185c89-0ac3-49f5-b20b-86a2d77ba778",
+  "accepted_base": "72e572bd2c6725eb59d5598852d782185e225504",
+  "disposition": "BLOCKED",
+  "objective_satisfied": false,
+  "native_trials": 0,
+  "native_payments": 0,
+  "blocker": "No reachable existing build-mac Docker engine; shared runtime startup outside current task scope.",
+  "unblock_owner_agent_id": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+  "protocol_revision_id": "6a5a318e-d821-49b7-98b5-f2f6485ad0e4",
+  "verification": {
+    "raw_manifest": "PASS",
+    "collector_syntax": "PASS",
+    "existing_vanguard_unchanged": "PASS",
+    "docker_runtime_precondition": "FAIL",
+    "native_build": "NOT_RUN",
+    "measured_trials": "NOT_RUN",
+    "new_verifier_and_refusals": "NOT_RUN",
+    "independent_review": "NOT_RUN"
+  }
+}
