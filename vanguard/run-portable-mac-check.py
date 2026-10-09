@@ -28,9 +28,7 @@ def main():
     parser.add_argument('--translated-macos-x86_64', action='store_true')
     args = parser.parse_args()
     tester.require(platform.system() == 'Darwin', 'macOS required')
-    expected_host = 'arm64' if args.target == 'macos-aarch64' or args.translated_macos_x86_64 else 'x86_64'
-    physical_arm = tester.command(['/usr/sbin/sysctl', '-n', 'hw.optional.arm64'])
-    tester.require(physical_arm in ('0', '1') and ('arm64' if physical_arm == '1' else 'x86_64') == expected_host, 'wrong physical/native Mac target')
+    expected_host = 'aarch64' if args.target == 'macos-aarch64' or args.translated_macos_x86_64 else 'x86_64'
     tester.require(not args.translated_macos_x86_64 or args.target == 'macos-x86_64', 'translation requires Intel archive')
     archive, out = tester.regular(args.archive), tester.fresh(args.out)
     tester.require(tester.sha(archive) == args.sha256, 'archive hash mismatch')
@@ -42,6 +40,10 @@ def main():
             tester.require(all(m.isfile() for m in stream.getmembers()), 'archive must contain only regular files')
             stream.extractall(extracted, filter='data')
         package = extracted / ('meownero-vanguard-' + args.target)
+        native_spec = importlib.util.spec_from_file_location('packaged_mac_guard', package / 'tester.py')
+        native = importlib.util.module_from_spec(native_spec)
+        native_spec.loader.exec_module(native)
+        tester.require(native.mac_physical_architecture() == expected_host, 'wrong physical/native Mac target')
         receipt = {'schema': 'meownero-portable-native-mac-check/1', 'archive_sha256': args.sha256,
                    'result': 'FAIL', 'phases': [], 'resident_limit_bytes': 4 * 1024**3,
                    'peak_resident_bytes': 0, 'cleanup': []}
