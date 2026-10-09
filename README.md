@@ -8,13 +8,19 @@ series against pinned Monero sources; the architecture decision remains proposed
 and launch gates remain open. See [PLAN.md](PLAN.md), the
 [milestone checklist](docs/milestones.md), and [node build instructions](chain/README.md).
 
-Start resumed work with the [September 13 recovery index](research/recovery-index-2026-09-13.md).
-It identifies recovered sessions, active workstreams, completed checkpoints and
-remaining failures. Historical test results are not launch-readiness claims.
+Start testing with the [local Vanguard tester guide](docs/vanguard-tester.md).
+It runs a short native FCMP++/CARROT payment, wallet restoration and later spend
+on the verified build-mac setup, using disposable valueless funds. The
+[current evidence and acceptance index](research/current-evidence.md) identifies
+accepted results and remaining gates. The [September 13 recovery index](research/recovery-index-2026-09-13.md)
+preserves earlier recovery context. Historical results are not launch-readiness claims.
 
 Source discussions are under `research/`; original assets are under `assets/`.
 
-## Run testnet v0 end to end
+## Historical selected-policy testnet v0 journey
+
+This separate older journey uses the selected 9 MEOW / 90-second policy lineage.
+It does not prove integration of that policy with the current Vanguard crypto.
 
 One command reproduces the whole isolated testnet v0 witness on one machine:
 the accepted milestone recipes for launch, payment, late-peer sync, cold

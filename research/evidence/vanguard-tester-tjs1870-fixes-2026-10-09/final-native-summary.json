@@ -1,0 +1,248 @@
+{
+  "result": "PASS_WRITER_FINAL_CANDIDATE",
+  "execution_commit": "b92e8c8d55ccbed692c6da6df1a9124bc1a65b55",
+  "wall_seconds": 64.67159587494098,
+  "public_archive_sha256": "5b221a31ded2307d1b754656de6143e112a6c6765c48267fcae63cef48e2557a",
+  "public_archive_bytes": 129988,
+  "gates": {
+    "p2p": {
+      "result": "PASS_NATIVE",
+      "actual_processes": [
+        {
+          "name": "daemon0",
+          "pid": 10,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "daemon1",
+          "pid": 11,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "wallet",
+          "pid": 45,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        }
+      ],
+      "process_exits": [
+        {
+          "name": "daemon0",
+          "returncode": 0
+        },
+        {
+          "name": "daemon1",
+          "returncode": 0
+        },
+        {
+          "name": "wallet",
+          "returncode": 0
+        }
+      ],
+      "metrics": {
+        "build": {
+          "exit": 0,
+          "wall_seconds": 0.27230075001716614,
+          "container_id": "dcbd5ae6e429b2c1527ad7d2f1724a7715d231cf873b22a58ecc76cb94fea156",
+          "container_absent": true,
+          "cleanup_errors": [],
+          "container_final": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-10-09T10:12:01.843213543Z",
+            "FinishedAt": "2026-10-09T10:12:01.925760614Z"
+          }
+        },
+        "run1": {
+          "exit": 0,
+          "wall_seconds": 23.43813087500166,
+          "container_id": "0e07a42b92b21b0679765995ec18b13881d7c386ff5f9d2ec69272d02933d1b8",
+          "container_absent": true,
+          "cleanup_errors": [],
+          "container_final": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-10-09T10:12:02.092707054Z",
+            "FinishedAt": "2026-10-09T10:12:25.333381039Z"
+          }
+        }
+      },
+      "scenario_peak_bytes": 844804096,
+      "memory_events": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0
+      },
+      "transactions": {
+        "txid": "08d56225a08428848620f444dc1137a2179ced53a089cce56ff361b166b36044"
+      }
+    },
+    "restore": {
+      "result": "PASS_NATIVE",
+      "actual_processes": [
+        {
+          "name": "daemon0",
+          "pid": 9,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "daemon1",
+          "pid": 10,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "sender",
+          "pid": 45,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "original",
+          "pid": 47,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "orphan",
+          "pid": 49,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "restored",
+          "pid": 51,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "alternate",
+          "pid": 53,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        }
+      ],
+      "process_exits": [
+        {
+          "name": "daemon0",
+          "returncode": 0
+        },
+        {
+          "name": "daemon1",
+          "returncode": 0
+        },
+        {
+          "name": "sender",
+          "returncode": 0
+        },
+        {
+          "name": "original",
+          "returncode": 0
+        },
+        {
+          "name": "orphan",
+          "returncode": 0
+        },
+        {
+          "name": "restored",
+          "returncode": 0
+        },
+        {
+          "name": "alternate",
+          "returncode": 0
+        }
+      ],
+      "metrics": {
+        "build": {
+          "exit": 0,
+          "wall_seconds": 0.26389145804569125,
+          "container_id": "2016bc5fa25103bd49d50b36fcd3c455e7520978f431822bd634ef2e9af5b616",
+          "container_absent": true,
+          "cleanup_errors": [],
+          "container_final": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-10-09T10:12:25.547600789Z",
+            "FinishedAt": "2026-10-09T10:12:25.62403342Z"
+          }
+        },
+        "run1": {
+          "exit": 0,
+          "wall_seconds": 40.51094624993857,
+          "container_id": "b8e26157d1eb52fb4c25d71478512d8d9e913c2ec597be229b217aedb619217e",
+          "container_absent": true,
+          "cleanup_errors": [],
+          "container_final": {
+            "Status": "exited",
+            "Running": false,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 0,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2026-10-09T10:12:25.803676828Z",
+            "FinishedAt": "2026-10-09T10:13:06.094886103Z"
+          }
+        }
+      },
+      "scenario_peak_bytes": 1088151552,
+      "memory_events": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0
+      },
+      "transactions": {
+        "stable_txid": "a6e0286dc4fb06f6edb58e54245717b3ca72cdf6bf30488f6f3770301d8a21de",
+        "restored_spend_txid": "06aa2308c5d1776eda629b7e78cf07e72d0c91881805fadc1c16bb34e9d626c0"
+      }
+    }
+  },
+  "independent_acceptance": "NOT_RUN",
+  "integration": "NOT_RUN",
+  "parent_verification": "NOT_RUN",
+  "native-cleanup-controls02.json": {
+    "pass": 4,
+    "not_run": 0
+  },
+  "host-controls02.json": {
+    "pass": 16,
+    "not_run": 0
+  },
+  "offline_controls": {
+    "pass": 28,
+    "not_run": 1,
+    "not_run_reason": "real ARM cache observation requires build-mac; covered by host suite"
+  }
+}

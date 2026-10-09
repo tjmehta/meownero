@@ -1,0 +1,12 @@
+[
+  {
+    "attempt": "local preservation script setup",
+    "result": "FAIL_OPERATOR_SETUP",
+    "reason": "used wrong saved symlink schema; corrected comparator; no path changed or native workload started"
+  },
+  {
+    "attempt": "final package setup",
+    "result": "PASS_CLEAN_CANDIDATE_REFUSAL",
+    "reason": "run-owned bytecode from an earlier evidence import made the candidate untracked; package refused before output creation; exact run-owned bytecode removed; no pre-existing files removed"
+  }
+]

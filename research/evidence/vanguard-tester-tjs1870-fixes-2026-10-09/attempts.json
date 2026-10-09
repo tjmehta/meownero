@@ -1,0 +1,20 @@
+[
+  {
+    "attempt": "kit01/journey01",
+    "candidate": "4e55d0c44f690260431f9655850e9b4351095a6b",
+    "result": "PASS_NATIVE_JOURNEY",
+    "wall_seconds": 61.57298283302225,
+    "public_archive_sha256": "900b5da35c1567d3356c7964d94c68f46993f0e7fc887403b08ecbc279c93159",
+    "superseded_reason": "Final capture excludes local wallet labels as well as notes; successful private state cleaned by six exact paths."
+  },
+  {
+    "attempt": "premature export while journey01 was still running",
+    "result": "FAIL",
+    "reason": "Missing EVIDENCE.sha256; output and archive were never created. Corrected export ran after journey completion."
+  },
+  {
+    "attempt": "encoded-json-control export fixture01",
+    "result": "FAIL_TEST_SETUP",
+    "reason": "Raw manifest incorrectly included export.json; generic manifest refusal occurred before intended field check. The copied synthetic fixture is preserved; corrected source02 passed the targeted refusal."
+  }
+]

@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+"""Meaningful admission/export controls. Native proof requires a separate rehearsal."""
+import argparse
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import sys
+from unittest.mock import patch
+
+spec = importlib.util.spec_from_file_location('tester', Path(__file__).with_name('tester.py'))
+tester = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(tester)
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--work', type=Path, required=True)
+    p.add_argument('--public', type=Path)
+    p.add_argument('--src', type=Path, default=Path(tester.PROFILE['cache']))
+    args = p.parse_args()
+    work = tester.fresh(args.work)
+    work.mkdir(mode=0o700)
+    results = []
+
+    def refuse(label, action, expected):
+        try:
+            action()
+        except Exception as error:
+            tester.require(expected in str(error), label + ': wrong refusal ' + str(error))
+            results.append({'control': label, 'result': 'PASS_REFUSAL', 'reason': str(error)})
+        else:
+            raise RuntimeError(label + ': accepted forbidden input')
+
+    with patch.object(tester.platform, 'machine', return_value='unsupported'):
+        refuse('unsupported architecture', tester.supported_host, 'unsupported profile')
+    existing = work / 'existing'
+    existing.mkdir()
+    (existing / 'sentinel').write_text('preserve me\n')
+    refuse('existing output', lambda: tester.fresh(existing), 'existing output')
+    tester.require((existing / 'sentinel').read_text() == 'preserve me\n', 'existing output mutated')
+    bad = work / 'bad-cache'
+    (bad / 'preparation').mkdir(parents=True)
+    (bad / 'preparation/receipt.json').write_text('{}\n')
+    refuse('wrong preparation pin', lambda: tester.cached_inputs(bad), 'preparation pin mismatch')
+    if tester.platform.system() == 'Darwin':
+        tester.supported_host()
+        baseline = tester.cached_inputs(args.src)
+        tester.require(baseline == tester.PROFILE['binary'], 'accepted cache baseline')
+        original = tester.sha
+        binary_path = args.src / 'monero-fcmp/build/vanguard/bin/monerod'
+        # Inject only the hash observation. Accepted cache bytes stay read-only.
+        with patch.object(tester, 'sha', side_effect=lambda path: '0' * 64 if path == binary_path else original(path)):
+            refuse('wrong executable hash', lambda: tester.cached_inputs(args.src), 'binary pin mismatch')
+    else:
+        results.append({'control': 'real cache baseline/wrong executable hash', 'result': 'NOT_RUN', 'reason': 'requires build-mac'})
+    # A distinct process owns the real shared lock while admission must refuse it.
+    lock_script = 'import fcntl,sys; f=open(sys.argv[1],"rb"); fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB); print("HELD",flush=True); sys.stdin.read()'
+    if tester.LOCK.exists():
+        proc = subprocess.Popen([sys.executable, '-c', lock_script, str(tester.LOCK)],
+                                stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
+        try:
+            tester.require(proc.stdout.readline().strip() == 'HELD', 'control lock not acquired')
+            def acquire():
+                with tester.heavy_lock():
+                    pass
+            refuse('busy shared heavy lock', acquire, 'heavy lock busy')
+        finally:
+            proc.stdin.close()
+            proc.wait(timeout=10)
+    else:
+        results.append({'control': 'busy shared heavy lock', 'result': 'NOT_RUN', 'reason': 'shared lock absent'})
+    evil = work / 'allowed.json'
+    evil.write_text(json.dumps({'seed': 'DO_NOT_EXPORT'}))
+    refuse('seed-bearing JSON', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
+    evil.write_text(json.dumps({'authorization': 'DO_NOT_EXPORT'}))
+    refuse('credential-bearing JSON', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
+    evil.write_text(json.dumps({'tx_metadata': 'DO_NOT_EXPORT'}))
+    refuse('private pending transaction metadata', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
+    evil.write_text(json.dumps({'method': 'get_address', 'response': {'result': {
+        'addresses': [{'label': 'SYNTHETIC_DO_NOT_EXPORT'}]}}}) + '\n')
+    refuse('nested local wallet label', lambda: tester.public_bytes(evil,
+           'restore/run1/public/rpc-observations.jsonl'), 'unknown public evidence field')
+    evil.write_bytes(b'\x00wallet database\xff')
+    refuse('database renamed JSON', lambda: tester.public_bytes(evil, 'result.json'), '')
+    refuse('database renamed log', lambda: tester.public_bytes(evil, 'daemon1.log'), 'binary/database')
+    refuse('database renamed frame', lambda: tester.public_bytes(evil, 'frames/malformed-block.bin'), 'non-Levin')
+    fifo = work / 'fifo'
+    import os
+    os.mkfifo(fifo)
+    refuse('FIFO', lambda: tester.public_bytes(fifo, 'result.json'), 'regular file required')
+    link = work / 'symlink'
+    link.symlink_to(evil)
+    refuse('allowed-name symlink', lambda: tester.public_bytes(link, 'result.json'), 'symlink')
+    hard = work / 'hardlink'
+    os.link(evil, hard)
+    refuse('hard link', lambda: tester.public_bytes(hard, 'result.json'), 'hard-linked')
+    hard.unlink()
+    evil.write_text('arbitrary credential text\nFailed to parse block from blob\n')
+    tester.require(tester.public_bytes(evil, 'daemon1.log') == b'Failed to parse block from blob\n', 'raw log payload exported')
+    results.append({'control': 'free-form log payload excluded', 'result': 'PASS'})
+    for suffix, names in tester.COUNTERS.items():
+        counters = ''.join(name + ' 0\n' for name in sorted(names))
+        for label, payload, expected in (
+            ('unknown counter name', counters + 'SYNTHETIC_PRIVATE_TOKEN_DO_NOT_EXPORT 123\n', 'unknown public counter name'),
+            ('duplicate counter name', counters + sorted(names)[0] + ' 0\n', 'duplicate public counter name'),
+            ('missing counter name', counters.split('\n', 1)[1], 'incomplete public counters'),
+            ('nonnumeric counter value', counters.replace(' 0', ' SYNTHETIC_DO_NOT_EXPORT', 1), 'non-counter payload'),
+            ('non-ASCII counter value', counters.replace(' 0', ' \u0661', 1), 'non-counter payload')):
+            evil.write_text(payload)
+            refuse(label + suffix, lambda: tester.public_bytes(evil, 'p2p/build' + suffix), expected)
+    if args.public:
+        import shutil
+        tester.verify(args.public)
+        public_copy = work / 'public-copy'
+        shutil.copytree(args.public, public_copy)
+        extra = public_copy / '.shared-ringdb'
+        extra.mkdir()
+        refuse('extra empty ring directory', lambda: tester.validate_public(public_copy), 'unlisted export directory')
+        extra.rmdir()
+        extra = public_copy / 'wallet.keys'
+        extra.write_text('DO_NOT_EXPORT')
+        refuse('unlisted private file', lambda: tester.validate_public(public_copy), 'unlisted export file')
+        extra.unlink()
+        inputs = public_copy / 'inputs.json'
+        raw = inputs.read_bytes()
+        inputs.unlink(); inputs.symlink_to(args.public.resolve() / 'inputs.json')
+        refuse('public member symlink', lambda: tester.validate_public(public_copy), 'symlink')
+        inputs.unlink(); inputs.write_bytes(raw)
+        for label, name, mutation, expected in (
+            ('rehashed wrong native pin', 'restore/receipt.json',
+             lambda j: j['binary']['monerod'].update(sha256='0' * 64), 'gate pin mismatch'),
+            ('rehashed false receive balance', 'restore/run1/public/result.json',
+             lambda j: j['initial']['balance'].update(balance=1), 'restore, rescan or rollback'),
+            ('rehashed wrong profile', 'preflight.json',
+             lambda j: j['profile'].update(machine='x86_64'), 'unsupported receipt profile')):
+            target = public_copy / name
+            original = target.read_bytes()
+            value = json.loads(original)
+            mutation(value); tester.write(target, value)
+            tester.manifest(public_copy, tester.PUBLIC | {'export.json'}, 'EVIDENCE.sha256')
+            refuse(label, lambda: tester.verify(public_copy), expected)
+            target.write_bytes(original)
+            tester.manifest(public_copy, tester.PUBLIC | {'export.json'}, 'EVIDENCE.sha256')
+        # Export only a known allowlist; an arbitrary unlisted file remains excluded.
+        private_source = work / 'export-source'
+        shutil.copytree(args.public, private_source)
+        (private_source / 'export.json').unlink()
+        tester.manifest(private_source, tester.PUBLIC, 'EVIDENCE.sha256')
+        (private_source / 'seed.txt').write_text('DO_NOT_EXPORT')
+        tester.export(private_source, work / 'export', work / 'export.tar.gz')
+        tester.require(not (work / 'export/seed.txt').exists(), 'unlisted seed exported')
+        results.append({'control': 'unlisted input excluded from export', 'result': 'PASS'})
+        for label, name, mutation in (
+            ('unknown wallet_seed field', 'result.json',
+             lambda j: j.update(wallet_seed='SYNTHETIC_DO_NOT_EXPORT')),
+            ('unknown nested field', 'restore/run1/public/result.json',
+             lambda j: j['initial']['outputs'][0].update(operator_payload='SYNTHETIC_DO_NOT_EXPORT')),
+            ('unknown nested RPC field', 'restore/run1/public/rpc-observations.jsonl',
+             lambda j: j['response'].update(operator_payload='SYNTHETIC_DO_NOT_EXPORT'))):
+            # Test both export and full verification after intentionally rehashing.
+            for source in (private_source, public_copy):
+                target = source / name
+                original = target.read_bytes()
+                if name.endswith('.jsonl'):
+                    rows = [json.loads(row) for row in original.splitlines()]
+                    mutation(rows[0])
+                    target.write_text(''.join(json.dumps(row) + '\n' for row in rows))
+                else:
+                    value = json.loads(original)
+                    mutation(value); tester.write(target, value)
+                tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
+                if source == private_source:
+                    destination = work / ('refused-' + str(len(results)))
+                    archive = destination.with_suffix('.tar.gz')
+                    refuse(label + ' export', lambda: tester.export(source, destination, archive), 'unknown public evidence field')
+                    tester.require(not destination.exists() and not archive.exists(), 'privacy refusal created shareable output')
+                else:
+                    refuse(label + ' verify', lambda: tester.verify(source), 'unknown public evidence field')
+                target.write_bytes(original)
+                tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
+        for name in ('p2p/build.cpu', 'restore/run1/run1.memory-events'):
+            for label, extra, expected in (
+                ('unknown counter name', 'SYNTHETIC_PRIVATE_TOKEN_DO_NOT_EXPORT 123\n', 'unknown public counter name'),
+                ('duplicate counter name', (private_source / name).read_text().splitlines()[0] + '\n',
+                 'duplicate public counter name')):
+                for source in (private_source, public_copy):
+                    target = source / name
+                    original = target.read_bytes()
+                    target.write_bytes(original + extra.encode())
+                    tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
+                    if source == private_source:
+                        destination = work / ('refused-' + str(len(results)))
+                        archive = destination.with_suffix('.tar.gz')
+                        refuse(label + ' ' + name + ' export', lambda: tester.export(source, destination, archive), expected)
+                        tester.require(not destination.exists() and not archive.exists(), 'counter refusal created shareable output')
+                    else:
+                        refuse(label + ' ' + name + ' verify', lambda: tester.verify(source), expected)
+                    target.write_bytes(original)
+                    tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
+    tester.write(work / 'controls.json', results)
+    print('PASS_TESTER_REFUSALS', sum(row['result'].startswith('PASS') for row in results),
+          'NOT_RUN', sum(row['result'] == 'NOT_RUN' for row in results))
+
+
+if __name__ == '__main__':
+    main()

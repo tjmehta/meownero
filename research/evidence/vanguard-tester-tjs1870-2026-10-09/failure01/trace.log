@@ -1,0 +1,20 @@
+{"event": "network_containment", "interfaces": ["lo"], "monotonic_s": 63110.088, "routes": 0, "tcp_listeners_before": "  sl  local_address rem_address   st tx_queue rx_queue tr tm->when retrnsmt   uid  timeout inode                                                     \n"}
+Traceback (most recent call last):
+  File "/harness/tester-native.py", line 74, in <module>
+    main()
+  File "/harness/tester-native.py", line 70, in main
+    asyncio.run(module.main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/harness/daemon-p2p.py", line 331, in main
+    await bridge.start()
+  File "/harness/daemon-p2p.py", line 161, in start
+    os.chmod(self.socket, 0o600)
+OSError: [Errno 22] Invalid argument: '/out/private/p2p.sock'

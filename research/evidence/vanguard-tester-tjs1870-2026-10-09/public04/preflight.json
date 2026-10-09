@@ -1,0 +1,65 @@
+{
+  "result": "PASS_PREFLIGHT",
+  "profile": {
+    "name": "build-mac-colima-arm64",
+    "host": "build-mac",
+    "system": "Darwin",
+    "machine": "arm64",
+    "release": "25.5.0",
+    "docker_context": "colima",
+    "docker_endpoint": "unix://~/.colima/default/docker.sock",
+    "docker_client": "29.2.1",
+    "docker_server": "29.5.2",
+    "image": "sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b",
+    "cache": "~/Developer/tjs1816-5a24c6b6/build01",
+    "preparation_sha256": "7b5e2f0f48625fdf4a281681fd20981e70bda95b2c8e2608ee66abf5c0dac315",
+    "toolchain_sha256": {
+      "rust/bin/rustc": "9e5de0aafb0ef009d842dc38b1f978a4475ed24570d3ee869f6d4cd4d6eae25c",
+      "rust/bin/cargo": "70894666652ee275b8262d6a1ec4f3660bf9b311505d09849488a92b9814002f"
+    },
+    "binary": {
+      "monerod": {
+        "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920",
+        "bytes": 27832112
+      },
+      "monero-wallet-rpc": {
+        "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b",
+        "bytes": 31426016
+      }
+    }
+  },
+  "inputs": {
+    "candidate_commit": "a4e63f940fba56754d28f2bbc3c426ca3f6e90df",
+    "source_sha256": {
+      "README.md": "a0728dda22cac4435ed56c669acb8d26a6ee314b1d2119e710acb76b542944a6",
+      "docs/vanguard-tester.md": "8493ba4b6ec919efa0a72368e0c445a7f2aa7aed6e3aa3c58cbed6610a8072fb",
+      "research/current-evidence.md": "e0e1bed630a683f2755d1f4ebada8cc502d52d9c6c9d99b0f2fac6ff0243d7b7",
+      "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+      "vanguard/tester-profile.json": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+      "vanguard/tester.py": "b8ce96dd7071b7fa340ef0a274e629f58267b8972dc9f5ee4f86ee0af62663f6",
+      "vanguard/tester-native.py": "cfc2682757c465eab12f13e5da4c3f93d4737346b9036230e09abb1503968c09",
+      "vanguard/test-tester-refusals.py": "f40021ab2b8ab2bf299190718b52882500f656e5ad408fe31438d3987f0dfdd5",
+      "vanguard/daemon-p2p.py": "fe7641c269d57092da1dc1f0aa3a2b298ad3b290afb757c25db7b914498c340b",
+      "vanguard/daemon-restore.py": "72a6da329828d4caaacbe1a072444efd37df36c3bf0b38818b5c21aada242883",
+      "vanguard/verify-daemon-p2p.py": "e1b88d38dd81aa3e618c94a066fab0dd2375a7f65e0471c77efd45e83d6ae7be",
+      "vanguard/verify-daemon-restore.py": "d592b9f44af383e6d34586ba0bcb5a7dd3afaff87ca176d01dda2e7d6d6ea3b8"
+    }
+  },
+  "binary": {
+    "monerod": {
+      "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920",
+      "bytes": 27832112
+    },
+    "monero-wallet-rpc": {
+      "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b",
+      "bytes": 31426016
+    }
+  },
+  "available_vm_bytes": 5777305600,
+  "vm_cpus": 4,
+  "vm_memory_bytes": 6197448704,
+  "available_disk_bytes": 81296437248,
+  "toolchain_check": "pinned preparation and installed rustc/cargo hashes; runtime versions checked during run",
+  "lock": "/private/tmp/meownero-swarm-20260912-heavy.lock",
+  "checked_utc": "2026-10-09T09:30:38.297842+00:00"
+}
