@@ -1,0 +1,157 @@
+{
+  "scope": "EMULATED_PACKAGE_RUNTIME_ONLY; not Railway/native capacity or payment acceptance",
+  "commands": [
+    {
+      "label": "image-build",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "build",
+        "--platform=linux/amd64",
+        "--network=none",
+        "--pull=false",
+        "-t",
+        "tjs1856-peer:amd64",
+        "~/Developer/tjs1856-d779915e/upload"
+      ],
+      "exit": 0,
+      "wall_seconds": 5.489727417007089
+    },
+    {
+      "label": "image-inspect",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "image",
+        "inspect",
+        "tjs1856-peer:amd64"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.0423527080565691
+    },
+    {
+      "label": "runtime-files",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "run",
+        "--rm",
+        "--platform=linux/amd64",
+        "--name",
+        "tjs1856-image-files",
+        "--network=none",
+        "--pull=never",
+        "--memory=512m",
+        "--memory-swap=512m",
+        "--cpus=2",
+        "--entrypoint",
+        "/usr/bin/python3.12",
+        "tjs1856-peer:amd64",
+        "-B",
+        "-c",
+        "import hashlib,json,os;from pathlib import Path;print(json.dumps({\"uid\":os.getuid(),\"daemon_sha256\":hashlib.sha256(Path(\"/app/monerod\").read_bytes()).hexdigest(),\"supervisor_sha256\":hashlib.sha256(Path(\"/app/railway-peer.py\").read_bytes()).hexdigest()}))"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.9294222079915926
+    },
+    {
+      "label": "runtime-check",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "run",
+        "--rm",
+        "--platform=linux/amd64",
+        "--name",
+        "tjs1856-image-smoke",
+        "--pull=never",
+        "--network=none",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--cpus=2",
+        "--memory=512m",
+        "--memory-swap=512m",
+        "--pids-limit=64",
+        "--ulimit",
+        "core=0",
+        "-e",
+        "MEOWNERO_CONTROL_TOKEN",
+        "-e",
+        "MEOWNERO_DAEMON=/app/monerod",
+        "-e",
+        "MEOWNERO_SUPERVISOR=/app/railway-peer.py",
+        "-v",
+        "~/Developer/tjs1856-d779915e/image-smoke01:/out",
+        "-v",
+        "~/Developer/tjs1856-d779915e/check-railway-peer.py:/check.py:ro",
+        "--entrypoint",
+        "/usr/bin/python3.12",
+        "tjs1856-peer:amd64",
+        "-B",
+        "/check.py"
+      ],
+      "exit": 0,
+      "wall_seconds": 14.958137499983422
+    }
+  ],
+  "result": "PASS_EMULATED_PACKAGE_RUNTIME_ONLY",
+  "image": {
+    "Id": "sha256:fd9a629e690d9d865a0aad0004970c64505357cdf5ed7755ead39828fa4f022f",
+    "RepoTags": [
+      "tjs1856-peer:amd64"
+    ],
+    "RepoDigests": [
+      "tjs1856-peer@sha256:fd9a629e690d9d865a0aad0004970c64505357cdf5ed7755ead39828fa4f022f"
+    ],
+    "Comment": "buildkit.dockerfile.v0",
+    "Created": "2026-10-08T23:15:04.604155294-07:00",
+    "Config": {
+      "User": "1000:1000",
+      "ExposedPorts": {
+        "19080/tcp": {},
+        "8080/tcp": {}
+      },
+      "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "PYTHONUNBUFFERED=1"
+      ],
+      "Entrypoint": [
+        "/usr/bin/python3.12",
+        "-B",
+        "/app/railway-peer.py"
+      ],
+      "WorkingDir": "/"
+    },
+    "Architecture": "amd64",
+    "Os": "linux",
+    "Size": 90048909,
+    "RootFS": {
+      "Type": "layers",
+      "Layers": [
+        "sha256:23f5fa91ae3043d01437001f688814ea364cb55044fa41786804b896e754cdf4",
+        "sha256:d3174fb3b704c389307d3a7913676df51a58558f89222fe5791f618b33b95697"
+      ]
+    },
+    "Metadata": {
+      "LastTagTime": "2026-10-09T06:15:08.63841175Z"
+    },
+    "Descriptor": {
+      "mediaType": "application/vnd.oci.image.index.v1+json",
+      "digest": "sha256:fd9a629e690d9d865a0aad0004970c64505357cdf5ed7755ead39828fa4f022f",
+      "size": 855
+    },
+    "Identity": {
+      "Build": [
+        {
+          "Ref": "kuri9jz8ktenmeijfi58jxnd7",
+          "CreatedAt": "2026-10-08T23:15:08.639942021-07:00"
+        }
+      ]
+    }
+  },
+  "owned_containers_absent": true
+}

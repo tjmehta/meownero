@@ -1,0 +1,190 @@
+{
+  "buckets": {
+    "edges": []
+  },
+  "deletedAt": null,
+  "environments": {
+    "edges": [
+      {
+        "node": {
+          "canAccess": true,
+          "deletedAt": null,
+          "id": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+          "name": "regtest",
+          "serviceInstances": {
+            "edges": [
+              {
+                "node": {
+                  "activeDeployments": [
+                    {
+                      "createdAt": "2026-10-09T06:50:45.193Z",
+                      "deploymentStopped": false,
+                      "id": "bc094b8d-57a3-444c-b723-082992b50956",
+                      "instances": [
+                        {
+                          "id": "bda3f965-216a-45a6-93b6-2e1f9d49a69d",
+                          "status": "RUNNING"
+                        }
+                      ],
+                      "meta": {
+                        "buildOnly": false,
+                        "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+                        "cliCaller": "codex",
+                        "fileServiceManifest": {},
+                        "imageDigest": "sha256:af1370e4e13abab8f1bdeb239d44fdb0c1b2b9a1712c06489add78cb26faafd7",
+                        "logsV2": true,
+                        "nixpacksProviders": [],
+                        "propertyFileMapping": {},
+                        "reason": "deploy",
+                        "rootDirectory": null,
+                        "runtime": "V2",
+                        "serviceManifest": {
+                          "build": {
+                            "buildCommand": null,
+                            "buildEnvironment": "V3",
+                            "builder": "DOCKERFILE",
+                            "dockerfilePath": "/Dockerfile",
+                            "nixpacksConfigPath": null,
+                            "nixpacksPlan": null,
+                            "watchPatterns": []
+                          },
+                          "deploy": {
+                            "cronSchedule": null,
+                            "drainingSeconds": null,
+                            "healthcheckPath": null,
+                            "healthcheckTimeout": null,
+                            "ipv6EgressEnabled": false,
+                            "limitOverride": null,
+                            "multiRegionConfig": {
+                              "iad": {
+                                "numReplicas": 1
+                              }
+                            },
+                            "numReplicas": 1,
+                            "overlapSeconds": null,
+                            "preDeployCommand": null,
+                            "preDeployTimeoutSeconds": null,
+                            "region": null,
+                            "registryCredentials": null,
+                            "requiredMountPath": null,
+                            "restartPolicyMaxRetries": null,
+                            "restartPolicyType": "NEVER",
+                            "runtime": "V2",
+                            "sleepApplication": false,
+                            "startCommand": null,
+                            "useLegacyStacker": false
+                          }
+                        },
+                        "volumeMounts": []
+                      },
+                      "status": "SUCCESS"
+                    }
+                  ],
+                  "autoInstrumentationEnabled": false,
+                  "cronSchedule": null,
+                  "domains": {
+                    "customDomains": [],
+                    "serviceDomains": []
+                  },
+                  "environmentId": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+                  "id": "b7f12f50-5bf6-47d6-a93a-200bc6a05bbc",
+                  "latestDeployment": {
+                    "canRedeploy": true,
+                    "createdAt": "2026-10-09T06:50:45.193Z",
+                    "deploymentStopped": false,
+                    "id": "bc094b8d-57a3-444c-b723-082992b50956",
+                    "instances": [
+                      {
+                        "id": "bda3f965-216a-45a6-93b6-2e1f9d49a69d",
+                        "status": "RUNNING"
+                      }
+                    ],
+                    "meta": {
+                      "buildOnly": false,
+                      "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+                      "cliCaller": "codex",
+                      "fileServiceManifest": {},
+                      "imageDigest": "sha256:af1370e4e13abab8f1bdeb239d44fdb0c1b2b9a1712c06489add78cb26faafd7",
+                      "logsV2": true,
+                      "nixpacksProviders": [],
+                      "propertyFileMapping": {},
+                      "reason": "deploy",
+                      "rootDirectory": null,
+                      "runtime": "V2",
+                      "serviceManifest": {
+                        "build": {
+                          "buildCommand": null,
+                          "buildEnvironment": "V3",
+                          "builder": "DOCKERFILE",
+                          "dockerfilePath": "/Dockerfile",
+                          "nixpacksConfigPath": null,
+                          "nixpacksPlan": null,
+                          "watchPatterns": []
+                        },
+                        "deploy": {
+                          "cronSchedule": null,
+                          "drainingSeconds": null,
+                          "healthcheckPath": null,
+                          "healthcheckTimeout": null,
+                          "ipv6EgressEnabled": false,
+                          "limitOverride": null,
+                          "multiRegionConfig": {
+                            "iad": {
+                              "numReplicas": 1
+                            }
+                          },
+                          "numReplicas": 1,
+                          "overlapSeconds": null,
+                          "preDeployCommand": null,
+                          "preDeployTimeoutSeconds": null,
+                          "region": null,
+                          "registryCredentials": null,
+                          "requiredMountPath": null,
+                          "restartPolicyMaxRetries": null,
+                          "restartPolicyType": "NEVER",
+                          "runtime": "V2",
+                          "sleepApplication": false,
+                          "startCommand": null,
+                          "useLegacyStacker": false
+                        }
+                      },
+                      "volumeMounts": []
+                    },
+                    "status": "SUCCESS"
+                  },
+                  "nextCronRunAt": null,
+                  "numReplicas": 1,
+                  "serviceId": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+                  "serviceName": "meownero-peer-tjs1856",
+                  "source": null,
+                  "startCommand": null,
+                  "tracingEnabled": false
+                }
+              }
+            ]
+          },
+          "unmergedChangesCount": null,
+          "volumeInstances": {
+            "edges": []
+          }
+        }
+      }
+    ]
+  },
+  "id": "f46a08ef-dcba-431b-8fb0-a3b2c0dd721e",
+  "name": "Meownero Remote Test",
+  "services": {
+    "edges": [
+      {
+        "node": {
+          "id": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+          "name": "meownero-peer-tjs1856"
+        }
+      }
+    ]
+  },
+  "workspace": {
+    "name": "Tejesh “TJ” Mehta's Projects"
+  },
+  "workspaceId": "2b820311-d9b2-4a11-acca-fe0ab337dc38"
+}

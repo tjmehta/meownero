@@ -1,0 +1,223 @@
+{
+  "matches": [
+    {
+      "description": null,
+      "enumValues": [],
+      "fields": [],
+      "inputFields": [
+        {
+          "defaultValue": null,
+          "description": "Instrument the service's processes with eBPF (OBI) while its tracing is on. Reaches running containers within about a minute, no redeploy needed.",
+          "name": "autoInstrumentationEnabled",
+          "namedType": "Boolean",
+          "required": false,
+          "type": "Boolean"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "buildCommand",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "builder",
+          "namedType": "Builder",
+          "required": false,
+          "type": "Builder"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "cronSchedule",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "dockerfilePath",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "drainingSeconds",
+          "namedType": "Int",
+          "required": false,
+          "type": "Int"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "healthcheckPath",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "healthcheckTimeout",
+          "namedType": "Int",
+          "required": false,
+          "type": "Int"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "ipv6EgressEnabled",
+          "namedType": "Boolean",
+          "required": false,
+          "type": "Boolean"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "multiRegionConfig",
+          "namedType": "JSON",
+          "required": false,
+          "type": "JSON"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "nixpacksPlan",
+          "namedType": "JSON",
+          "required": false,
+          "type": "JSON"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "numReplicas",
+          "namedType": "Int",
+          "required": false,
+          "type": "Int"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "overlapSeconds",
+          "namedType": "Int",
+          "required": false,
+          "type": "Int"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "preDeployCommand",
+          "namedType": "String",
+          "required": false,
+          "type": "[String!]"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "preDeployTimeoutSeconds",
+          "namedType": "Int",
+          "required": false,
+          "type": "Int"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "railwayConfigFile",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "region",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "registryCredentials",
+          "namedType": "RegistryCredentialsInput",
+          "required": false,
+          "type": "RegistryCredentialsInput"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "restartPolicyMaxRetries",
+          "namedType": "Int",
+          "required": false,
+          "type": "Int"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "restartPolicyType",
+          "namedType": "RestartPolicyType",
+          "required": false,
+          "type": "RestartPolicyType"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "rootDirectory",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "sleepApplication",
+          "namedType": "Boolean",
+          "required": false,
+          "type": "Boolean"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "source",
+          "namedType": "ServiceSourceInput",
+          "required": false,
+          "type": "ServiceSourceInput"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "startCommand",
+          "namedType": "String",
+          "required": false,
+          "type": "String"
+        },
+        {
+          "defaultValue": null,
+          "description": "Trace requests to the service in this environment. Takes effect at the edge within seconds and in the app on the next deploy.",
+          "name": "tracingEnabled",
+          "namedType": "Boolean",
+          "required": false,
+          "type": "Boolean"
+        },
+        {
+          "defaultValue": null,
+          "description": null,
+          "name": "watchPatterns",
+          "namedType": "String",
+          "required": false,
+          "type": "[String!]"
+        }
+      ],
+      "interfaces": [],
+      "kind": "INPUT_OBJECT",
+      "name": "ServiceInstanceUpdateInput",
+      "possibleTypes": []
+    }
+  ]
+}
