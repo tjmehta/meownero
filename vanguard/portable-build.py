@@ -64,9 +64,10 @@ def main():
     image = tester.PROFILE['image'] if arm else PIN['builder']['image_id']
     preparation = None
     if args.older_builder_receipt:
-        tester.require(not arm and not args.reuse_arm_cache and not args.inspect_built, 'older baseline requires fresh x64 source build')
+        tester.require(not args.reuse_arm_cache and not args.inspect_built, 'older baseline requires fresh source build')
         preparation = tester.read(args.older_builder_receipt)
         tester.require(preparation['result'] == 'PREPARED_OLDER_BUILDER' and preparation['cleanup']['removed'] and preparation['distribution'] == 'Ubuntu 22.04', 'unverified older builder')
+        tester.require(preparation['target'] == args.target, 'older builder target mismatch')
         image = preparation['builder_image']
     docker = ['docker', '--context', 'colima'] if platform.system() == 'Darwin' else ['docker']
     architecture = 'arm64' if arm else 'amd64'
@@ -180,15 +181,16 @@ done
             last = script.index('mkdir -p /out/runtime-libs')
             script = script[:first] + 'cd build/vanguard\n' + script[last:]
         if preparation:
+            depends_host = 'aarch64-unknown-linux-gnu' if arm else 'x86_64-unknown-linux-gnu'
             first = script.index('mkdir -p build/vanguard')
             script = script[:first] + '''cd contrib/depends
-make -j2 HOST=x86_64-unknown-linux-gnu NO_WALLET=1 NO_READLINE=1
+make -j2 HOST=DEPENDS_HOST NO_WALLET=1 NO_READLINE=1 linux_CC=gcc linux_CXX=g++ linux_AR=ar linux_RANLIB=ranlib linux_NM=nm linux_STRIP=strip
 cd ../..
-sed -i 's/SET(STATIC ON)/SET(STATIC OFF)/' contrib/depends/x86_64-unknown-linux-gnu/share/toolchain.cmake
-sha256sum contrib/depends/x86_64-unknown-linux-gnu/share/toolchain.cmake > /out/generated-toolchain.sha256
-''' + script[first:]
+sed -i 's/SET(STATIC ON)/SET(STATIC OFF)/' contrib/depends/DEPENDS_HOST/share/toolchain.cmake
+sha256sum contrib/depends/DEPENDS_HOST/share/toolchain.cmake > /out/generated-toolchain.sha256
+'''.replace('DEPENDS_HOST', depends_host) + script[first:]
             script = script.replace('cmake -DCMAKE_BUILD_TYPE=Release ',
-                'cmake -DCMAKE_TOOLCHAIN_FILE=/src/contrib/depends/x86_64-unknown-linux-gnu/share/toolchain.cmake -DOPENSSL_USE_STATIC_LIBS=ON -DOPENSSL_CRYPTO_LIBRARY=/src/contrib/depends/x86_64-unknown-linux-gnu/lib/libcrypto.a -DOPENSSL_SSL_LIBRARY=/src/contrib/depends/x86_64-unknown-linux-gnu/lib/libssl.a -Dsodium_USE_STATIC_LIBS=ON -DCMAKE_BUILD_TYPE=Release ')
+                ('cmake -DCMAKE_TOOLCHAIN_FILE=/src/contrib/depends/DEPENDS_HOST/share/toolchain.cmake -DOPENSSL_USE_STATIC_LIBS=ON -DOPENSSL_CRYPTO_LIBRARY=/src/contrib/depends/DEPENDS_HOST/lib/libcrypto.a -DOPENSSL_SSL_LIBRARY=/src/contrib/depends/DEPENDS_HOST/lib/libssl.a -Dsodium_USE_STATIC_LIBS=ON -DCMAKE_BUILD_TYPE=Release ').replace('DEPENDS_HOST', depends_host))
             receipt['generated_toolchain_adaptation'] = 'Static pinned Boost/OpenSSL3.5.8/ZeroMQ/Unbound/Sodium closure; dynamic system libc/C++ ABI for the older distro floor.'
         reuse_paths = args.reuse_arm_cache or args.inspect_built
         mount = '/work/monero-fcmp' if reuse_paths else '/src'

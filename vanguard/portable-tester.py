@@ -93,8 +93,6 @@ def preflight(translated_macos_x64=False):
         version = sys.getwindowsversion()
         require(version.major >= 10 and version.build >= 16299, 'Windows 10 version 1709 or later required')
         machine = portable_windows.native_architecture()
-        require(manifest['architecture'] == 'i686' or sys.maxsize > 2**32,
-                '64-bit Windows programs require 64-bit CPython for native module verification')
     elif manifest['system'] == 'Darwin':
         machine = mac_physical_architecture()
     translated = translated_macos_x64 and manifest['system'] == 'Darwin' and machine == 'aarch64' and manifest['architecture'] == 'x86_64'
@@ -104,6 +102,9 @@ def preflight(translated_macos_x64=False):
         machine = 'x86_64'
     require(machine == manifest['architecture'] or
             (WINDOWS and machine == 'x86_64' and manifest['architecture'] == 'i686'), 'wrong architecture')
+    if WINDOWS:
+        require(manifest['architecture'] == 'i686' or sys.maxsize > 2**32,
+                '64-bit Windows programs require 64-bit CPython for native module verification')
     if manifest['system'] == 'Linux':
         libc, version = platform.libc_ver()
         require(libc == 'glibc' and tuple(map(int, version.split('.'))) >=

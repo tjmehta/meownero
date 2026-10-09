@@ -5,6 +5,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import platform
 import shutil
 import signal
 import subprocess
@@ -15,21 +16,35 @@ spec = importlib.util.spec_from_file_location('portable_build', Path(__file__).w
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
 tester = builder.tester
-BASE = 'ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde'
+BASES = {
+    'linux-x86_64': 'ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde',
+    'linux-aarch64': 'ubuntu@sha256:30dfd7fe96f97c5f5ddf388ce8d098aa509644ad68fdef67244fb71b8169ffcb',
+}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--target', choices=BASES, default='linux-x86_64')
     args = parser.parse_args()
     out = tester.fresh(args.out)
+    base = BASES[args.target]
+    architecture = 'amd64' if args.target == 'linux-x86_64' else 'arm64'
+    native = {'x86_64': 'amd64', 'arm64': 'arm64', 'aarch64': 'arm64'}.get(platform.machine())
+    tester.require(native == architecture, 'native builder architecture required')
+    mac = platform.system() == 'Darwin'
+    docker = ['docker', '--context', 'colima'] if mac else ['docker']
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(out.parent).free >= 10 * 1024**3, 'requires ten GiB disk reserve')
-        tester.require(shutil.disk_usage('/var/lib/docker').free >= 10 * 1024**3, 'requires ten GiB Docker disk reserve')
-        available = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))) * 1024
+        docker_free = int(tester.command(['colima', 'ssh', '--', 'df', '-B1', '/var/lib/docker']).splitlines()[-1].split()[3]) if mac else shutil.disk_usage('/var/lib/docker').free
+        tester.require(docker_free >= 10 * 1024**3, 'requires ten GiB Docker disk reserve')
+        memory = tester.command(['colima', 'ssh', '--', 'cat', '/proc/meminfo']) if mac else Path('/proc/meminfo').read_text()
+        available = int(next(line.split()[1] for line in memory.splitlines() if line.startswith('MemAvailable:'))) * 1024
         tester.require(available >= 5 * 1024**3, 'requires five GiB available memory')
+        if mac:
+            tester.require(not tester.command(docker + ['ps', '-q']), 'Docker busy; preserve non-owned work')
         out.mkdir(mode=0o700)
-        receipt = {'schema': 'meownero-older-linux-builder/1', 'base_manifest': BASE,
+        receipt = {'schema': 'meownero-older-linux-builder/1', 'base_manifest': base, 'target': args.target,
                    'distribution': 'Ubuntu 22.04', 'commands': [], 'result': 'INCOMPLETE'}
 
         def save():
@@ -54,9 +69,9 @@ def main():
         name = 'tjs1882-3175-old-builder-' + invocation
         cidfile = out / 'container.id'
         try:
-            run('pull-pinned-base', ['docker', 'pull', BASE], 180)
-            image = tester.command(['docker', 'image', 'inspect', BASE, '--format', '{{.Id}}'])
-            tester.require(tester.command(['docker', 'image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) == 'amd64 linux', 'wrong older builder architecture')
+            run('pull-pinned-base', docker + ['pull', base], 180)
+            image = tester.command(docker + ['image', 'inspect', base, '--format', '{{.Id}}'])
+            tester.require(tester.command(docker + ['image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) == architecture + ' linux', 'wrong older builder architecture')
             receipt['base_image'] = image
             script = """set -e
 test "$(. /etc/os-release; echo "$VERSION_ID")" = 22.04
@@ -69,12 +84,12 @@ gcc --version > /out/compiler.txt
 cmake --version >> /out/compiler.txt
 python3 --version >> /out/compiler.txt
 """
-            run('prepare', ['docker', 'run', '--pull=never', '--name', name, '--cidfile', str(cidfile),
+            run('prepare', docker + ['run', '--pull=never', '--name', name, '--cidfile', str(cidfile),
                            '--label', 'meownero.invocation=' + invocation, '--cpus=2', '--memory=768m',
                            '--memory-swap=768m', '--pids-limit=128', '--security-opt=no-new-privileges',
                            '--ulimit', 'core=0', '-v', str(out) + ':/out', image, 'bash', '-ec', script], 900)
             cid = cidfile.read_text().strip()
-            run('commit-builder', ['docker', 'commit', cid], 120)
+            run('commit-builder', docker + ['commit', cid], 120)
             receipt['builder_image'] = (out / 'commit-builder.log').read_text().strip()
             tester.require(receipt['builder_image'].startswith('sha256:') and len(receipt['builder_image']) == 71, 'missing builder image identity')
             receipt['result'] = 'PREPARED_OLDER_BUILDER'
@@ -85,10 +100,10 @@ python3 --version >> /out/compiler.txt
         finally:
             if cidfile.exists():
                 cid = cidfile.read_text().strip()
-                proof = json.loads(tester.command(['docker', 'inspect', cid]))[0]
+                proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
                 tester.require(proof['Id'] == cid and proof['Name'] == '/' + name and proof['Image'] == receipt['base_image'] and proof['Config']['Labels'].get('meownero.invocation') == invocation, 'older builder ownership proof failed')
-                run('cleanup', ['docker', 'rm', '-f', cid], 30)
-                removed = cid not in tester.command(['docker', 'ps', '-aq', '--no-trunc']).splitlines()
+                run('cleanup', docker + ['rm', '-f', cid], 30)
+                removed = cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines()
                 receipt['cleanup'] = {'id': cid, 'removed': removed}
                 tester.require(removed, 'owned older builder remains')
             save()
