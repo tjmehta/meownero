@@ -36,8 +36,9 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
     """Allow wrapper cleanup before escalating only recorded, verified children."""
     receipt = {'schema': supervision_schema, 'result': 'FAIL',
                'wrapper_reaped': False, 'cleanup': [], 'signals': [],
-               'observer_ruid': os.getuid(), 'observer_euid': os.geteuid(), 'helper_observations': []}
-    known, pending, helper_bindings, states = {}, [], {}, {}
+               'observer_ruid': os.getuid(), 'observer_euid': os.geteuid(), 'helper_observations': [],
+               'unverified_observations': []}
+    known, pending, helper_bindings, states, unverified_zombies = {}, [], {}, {}, set()
     process = None
     began = time.monotonic()
 
@@ -46,6 +47,14 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
         if observation is not None:
             receipt['failure_observation'] = observation
         raise AssertionError(reason)
+
+    def helper_file_binding():
+        path = Path('/bin/ps')
+        info = path.lstat()
+        if not (stat.S_ISREG(info.st_mode) and info.st_uid == 0 and
+                info.st_mode & stat.S_ISUID and not info.st_mode & 0o022):
+            reject('HELPER_SYSTEM_FILE_BINDING_MISMATCH')
+        return (info.st_dev, info.st_ino, info.st_mode, sha(path))
 
     def helper_binding(pid):
         # Darwin ps has its existing setuid bit; never change runner privileges.
@@ -62,24 +71,33 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             reject('HELPER_KERNEL_EXECUTABLE_QUERY_FAILED')
         if buffer.value != b'/bin/ps':
             reject('HELPER_KERNEL_EXECUTABLE_MISMATCH')
-        path = Path('/bin/ps')
-        info = path.lstat()
-        if not (stat.S_ISREG(info.st_mode) and info.st_uid == 0 and
-                info.st_mode & stat.S_ISUID and not info.st_mode & 0o022):
-            reject('HELPER_SYSTEM_FILE_BINDING_MISMATCH')
-        return (info.st_dev, info.st_ino, info.st_mode, sha(path))
+        return helper_file_binding()
 
     def remember_identity(pid, row):
         observation = {'pid': pid, 'ppid': row[0], 'ruid': row[1], 'euid': row[2],
                        'role': 'OWNED_WRAPPER' if pid == process.pid else 'OWNED_DESCENDANT'}
+        # These immutable fields must pass before every role/euid/state branch.
+        # An observed helper cannot escape its binding by dropping privileges.
+        if pid in known and row[1:4] != known[pid][:3]:
+            reject('REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED', observation)
+        if pid in helper_bindings and helper_file_binding() != helper_bindings[pid]:
+            reject('REMEMBERED_HELPER_SYSTEM_FILE_CHANGED', observation)
         if row[1] != os.getuid():
             reject('REAL_UID_MISMATCH', observation)
         if states.get(pid, '').startswith('Z'):
             # A verified helper may become a zombie before its parent reaps it.
             # Keep its original executable identity and wait for actual absence.
-            if pid in known and row[1:4] != known[pid][:3]:
-                reject('ZOMBIE_PROCESS_IDENTITY_CHANGED', observation)
+            if pid not in known:
+                # Never infer an executable or privileged role from a zombie.
+                # Account for its PID until actual absence, but never signal it.
+                known[pid] = row[1:]
+                unverified_zombies.add(pid)
+                observation['role'] = 'UNVERIFIED_OWNED_ZOMBIE'
+                receipt['unverified_observations'].append(observation)
+                reject('UNVERIFIED_FIRST_ZOMBIE', observation)
             return False
+        if pid in unverified_zombies:
+            reject('UNVERIFIED_ZOMBIE_BECAME_LIVE', observation)
         if row[2] != os.geteuid():
             words = shlex.split(row[4])
             arguments = words[1:]
@@ -150,6 +168,8 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                         reject('REMEMBERED_ZOMBIE_IDENTITY_CHANGED')
                     alive.append(pid)
                     continue
+                if pid in unverified_zombies:
+                    reject('UNVERIFIED_ZOMBIE_BECAME_LIVE')
                 if rows[pid][1:] != identity:
                     reject('REMEMBERED_PROCESS_IDENTITY_CHANGED', {'pid': pid, 'ppid': rows[pid][0],
                         'ruid': rows[pid][1], 'euid': rows[pid][2], 'role': 'REMEMBERED_DESCENDANT'})
@@ -234,6 +254,8 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                                 if rows[pid][1:4] != known[pid][:3]:
                                     reject('ZOMBIE_IDENTITY_CHANGED_BEFORE_REAP')
                                 continue  # Already exited; only its parent can reap it.
+                            if pid in unverified_zombies:
+                                reject('UNVERIFIED_ZOMBIE_BECAME_LIVE_BEFORE_SIGNAL')
                             if rows[pid][1:] != known[pid]:
                                 reject('PROCESS_IDENTITY_CHANGED_BEFORE_SIGNAL')
                             if pid in helper_bindings:
