@@ -6,6 +6,8 @@ ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6. F1/F2 remain closed on preserved
 b841d6a95fbfb1b2db05720ba44079cde1125219/v5. No old binaries were rebuilt for
 those findings. All earlier exports, rejected packages and witnesses remain.
 
+Latest native run37995118080 FINISHED FAILURE on both jobs before any journey/control. Both actual public artifact ZIP hashes and exact input/archive/helper PASS were independently read from parent-owned shared run01; native acceptance NONE. Windows console HWND and Mac missing ARM OID assumptions are corrected in exact payload04 at build/tjs1882-3175-native-ci-payload04/. It remains pending parent review-before-workflow-last retry. PUBLICATION SHA7394c74ab4426f72a9116e71f0282a9f585ad913e4cf9c362d6a6bbf4186c353, inputs83c5f2e37b1e7e5a13fa442cb249efbdf9ba32e7f8b16c30d180f4f2097faaa5, workflow7e9100741057b3417275665ff1a470dac8b7bbfa8ec490709ad09789b2d07c77. All25 bindings/both byte-only preparations/YAML and15 guard/API fixtures PASS; actual Apple Silicon detection unchanged. P1/P2 supervision retained. New Intel v8 package03 changes only tester/release, all264 other members/three programs/notice bindings identical. New native journey/ten controls REQUIRED. All prior03/v7/failure bytes preserved. ARM05 is ACTIVE join12402, kit12 exact backport, same lock/gates. Older x64 attempt01 failed actual GCC11/collect2 Boost bootstrap under QEMU; container removed, no old-distro programs claimed. Native i686 fixture-FIRST payload follows correction04; parent byte audit alone does not prove execution.
+
 ## Actual output
 
 Archives below are relative to `/storage/data/meownero-tjs1882-3175`.
@@ -15,8 +17,8 @@ Every listed archive passed its actual member/hash and license audits.
 | --- | --- | --- | --- |
 | Windows x64 | windows-x64-package04/meownero-vanguard-windows-x86_64.zip | 859d4644815b4c990cca093c6d74bb077e6ab74f267236ed84746d5b6cf690d0 | BUILT_UNTESTED, six real package mutation refusals PASS |
 | Windows x86 | windows-x86-package02/meownero-vanguard-windows-i686.zip | 3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745 | BUILT_UNTESTED, actual compiled exception proof and strong DW2 bindings verified |
-| Windows ARM64 | Remote windows-arm-attempt04 FAILED | No programs/archive claimed | Boost/OpenSSL PASS, ZeroMQ ARM counter compile failed; all3 owned containers removed |
-| Intel Mac | mac-intel-package01.tar.gz | dc1c38777b1b475e70376be9a85927e296ad12043688bfcea0e338766b23162e | Rosetta clean-extract journey and ten controls PASS; genuine Intel CPU UNTESTED |
+| Windows ARM64 | Remote windows-arm-attempt05 ACTIVE | No programs/archive claimed | Exact counter backport; source/toolchain/download PASS, contained compile active;04 failure preserved |
+| Intel Mac | mac-intel-package03.tar.gz | 7a3ddef44b58c752dd508bd6d2251266de4a1af3a1d635680854707a8cdb3a09 | New physical guard byte audit PASS;264 other members/3 programs unchanged; fresh native journey/ten controls pending |
 | Mac ARM64 | mac-arm-starter-package01.tar.gz | fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35 | Same three native binaries as v5; new shared-starter journey pending |
 | Linux x64 | linux-x64-starter-package02/meownero-vanguard-x86_64.tar.gz | 7e198fb27bcaff54d87f6fd8793b06e8122b25b1aeee09d2c12001949848143c | Same three binaries as v5; current starter/distro journeys pending |
 | Linux ARM64 | linux-arm-starter-package03/meownero-vanguard-aarch64.tar.gz | 3205120d258b1e4fc73a3742cedd0ede1d20e8917d3a55b100b62c3ac9132c6d | Same three binaries as v5; current starter/distro journeys pending |
@@ -99,7 +101,7 @@ from17,019,625,472 to24,883,245,056bytes; latest after CI staging23,801,507,840b
 Task storage639,730,319,360bytes free. Local memory2,029,376KiB still fails5GiB;
 local heavy work must refuse. Remote memory/disk/heavy-lock gates remain.
 
-## Exact native CI payload03
+## Preserved native CI payload03
 
 Parent authorized finite included-quota CI in5a509f74. Native Windows ARM64/x64
 hostprobe37983423491 ALREADY passed, consumed from4e79f4a8; no repeat hostprobe
@@ -124,7 +126,7 @@ Parent independent03 source review cleared P1/P2/trigger and all25 local hashes.
 Actual PRIVATE browser publication finished:24 inputs independently read back at
 b6cba15f6a7eef50435822ea00e46a13c0acfe57, final workflow read back at
 39186007f9804879340eb11c60f266d91472bf54. One actual bounded native run
-https://github.com/tjmehta/meownero/actions/runs/37995118080 is QUEUED per parent.
+https://github.com/tjmehta/meownero/actions/runs/37995118080 was initially QUEUED per parent, then FAILED on both native bootstraps as recorded above.
 This is concrete parent wake proof; parent-local receipt is not host-shared. Parent
 owns job observation/artifact adoption. Queued publication is not native acceptance.
 Push trigger ONLY tjs1882-native-windows-preflight and ONLY its workflow path;
@@ -144,9 +146,10 @@ client now has an explicit empty canonical Hub auth record and empty helper
 mapping, suppressing auto-detection without keychain/global configuration access.
 Kit12 transferred exactly. Ubuntu22 x64 builder03 ACTUALLY prepared using public
 anonymous image pull and signed apt, immutable imagefc4ac8affffac58bf235636d51c921a90736047453b82a13d74ba4cf709fa24f;
-owned preparation container removed. Actual older x64 build is ACTIVE join90320,
-readonly pinned cache/Rust1.93/fresh five-dependency sources;3600s/2CPU/3GiB/
-network none. Next older ARM builds and real Ubuntu22/Debian12 native journeys.
+owned preparation container removed. Actual older x64 attempt01/join90320 FAILED in GCC11 collect2 during Boost b2
+bootstrap under QEMU; exact container removed. Preserve the failure and inspect
+a bounded task-only compiler/PIE reproducer after current ARM05 releases its lock.
+No older programs/Ubuntu22/Debian12 journeys are claimed.
 Fresh ARM05 applies only the recorded ZeroMQ counter branch after the lock frees.
 Windows i686 now has12 <=8MiB v7 parts, exact whole reassembly and16 installed
 loader readbacks PASS; no send. It needs a future exact native exception/journey/

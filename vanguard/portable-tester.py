@@ -52,9 +52,27 @@ def executable(name):
 
 
 def mac_physical_architecture():
-    arm = subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.optional.arm64'], text=True, timeout=10).strip()
-    require(arm in ('0', '1'), 'could not identify physical Mac architecture')
-    return 'aarch64' if arm == '1' else 'x86_64'
+    require(platform.system() == 'Darwin', 'physical Mac detection requires Darwin')
+
+    def optional_oid(name):
+        result = subprocess.run(['/usr/sbin/sysctl', '-n', name], capture_output=True, text=True, timeout=10)
+        if result.returncode == 0:
+            return result.stdout.strip()
+        require(result.returncode == 1 and not result.stdout.strip() and
+                result.stderr.strip() == "sysctl: unknown oid '" + name + "'", 'failed Mac architecture query: ' + name)
+        return None
+
+    arm = optional_oid('hw.optional.arm64')
+    require(arm in (None, '0', '1'), 'could not identify physical Mac architecture')
+    if arm == '1':
+        # Preserve explicit Apple Silicon / translated Intel archive semantics.
+        return 'aarch64'
+    vendor = subprocess.check_output(['/usr/sbin/sysctl', '-n', 'machdep.cpu.vendor'], text=True, timeout=10).strip()
+    kernel = subprocess.check_output(['/usr/bin/uname', '-m'], text=True, timeout=10).strip()
+    translated = optional_oid('sysctl.proc_translated')
+    require(vendor == 'GenuineIntel' and platform.machine() == 'x86_64' and kernel == 'x86_64' and
+            translated in (None, '0'), 'physical Intel evidence missing, conflicting or translated')
+    return 'x86_64'
 
 
 def require(ok, message):

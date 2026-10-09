@@ -170,14 +170,14 @@ def windows_check(package, out):
     backend = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(backend)
     assert backend.native_architecture() == 'x86_64' and backend.C.sizeof(backend.C.c_void_p) == 8
-    # An owned console permits the real CTRL_BREAK_EVENT fixture in hosted CI.
-    get_console = backend.api(backend.k, 'GetConsoleWindow', backend.W.HWND)
-    allocated = not get_console()
-    if allocated:
-        backend.check(backend.api(backend.k, 'AllocConsole', backend.W.BOOL)())
-    job = backend.Job(seconds=1500)
     receipt = {'schema': 'meownero-native-windows-ci-check/1', 'result': 'FAIL',
                'native_architecture': backend.native_architecture(), 'phases': []}
+    # Console attachment is independent of an HWND, including hosted consoles.
+    console_pids = (backend.W.DWORD * 1)()
+    console_list = backend.api(backend.k, 'GetConsoleProcessList', backend.W.DWORD,
+                               backend.C.POINTER(backend.W.DWORD), backend.W.DWORD)
+    receipt['initial_console_process_count'] = console_list(console_pids, 1)
+    allocated, job = False, None
     began = time.monotonic()
 
     def phase(name, argv):
@@ -227,6 +227,20 @@ def windows_check(package, out):
             assert row['exit'] == 0 and not job.expired, name + ' failed'
 
     try:
+        if not receipt['initial_console_process_count']:
+            # Detach only this CI process; preserve the hosted shell and its pipes.
+            saved = [backend.msvcrt.get_osfhandle(fd) for fd in (0, 1, 2)]
+            file_type = backend.api(backend.k, 'GetFileType', backend.W.DWORD, backend.W.HANDLE)
+            assert all(file_type(handle) in (1, 3) for handle in saved[1:]), 'CI output must be file or pipe before console detach'
+            backend.check(backend.api(backend.k, 'FreeConsole', backend.W.BOOL)())
+            backend.check(backend.api(backend.k, 'AllocConsole', backend.W.BOOL)())
+            allocated = True
+            set_handle = backend.api(backend.k, 'SetStdHandle', backend.W.BOOL, backend.W.DWORD, backend.W.HANDLE)
+            for number, handle in zip((-10, -11, -12), saved):
+                backend.check(set_handle(number & 0xffffffff, handle))
+            assert console_list(console_pids, 1) == 1 and console_pids[0] == os.getpid(), 'new console ownership failed'
+        receipt['console_mode'] = 'OWNED_NEW_CONSOLE' if allocated else 'EXISTING_ATTACHED_CONSOLE'
+        job = backend.Job(seconds=1500)
         phase('preflight', [sys.executable, '-B', package / 'tester.py', 'preflight'])
         phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
         phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
@@ -234,17 +248,23 @@ def windows_check(package, out):
         receipt['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY'
     finally:
         try:
-            job.close()
-            receipt['owned_job'] = job.cleanup
-            assert job.cleanup['active_processes'] == 0
+            if job is not None:
+                job.close()
+                receipt['owned_job'] = job.cleanup
+                assert job.cleanup['active_processes'] == 0
+            else:
+                receipt['owned_job_created'] = False
         except BaseException:
             receipt['result'] = 'FAIL'
             raise
         finally:
             receipt['wall_seconds'] = round(time.monotonic() - began, 3)
-            write(out / 'check-receipt.json', receipt)
             if allocated:
-                backend.api(backend.k, 'FreeConsole', backend.W.BOOL)()
+                receipt['owned_console_freed'] = bool(backend.api(backend.k, 'FreeConsole', backend.W.BOOL)())
+                if not receipt['owned_console_freed']:
+                    receipt['result'] = 'FAIL'
+            write(out / 'check-receipt.json', receipt)
+            assert not allocated or receipt['owned_console_freed'], 'owned console cleanup failed'
 
 
 def main():
@@ -317,7 +337,10 @@ def main():
             windows_check(package, out)
         else:
             assert platform.system() == 'Darwin' and platform.machine() == 'x86_64'
-            assert subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.optional.arm64'], text=True).strip() == '0'
+            native_spec = importlib.util.spec_from_file_location('packaged_mac_guard', package / 'tester.py')
+            native = importlib.util.module_from_spec(native_spec)
+            native_spec.loader.exec_module(native)
+            assert native.mac_physical_architecture() == 'x86_64'
             lock = Path('/tmp/meownero-swarm-20260912-heavy.lock')
             with lock.open('xb') as stream:
                 os.chmod(lock, 0o600)
