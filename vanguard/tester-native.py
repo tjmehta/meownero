@@ -66,6 +66,14 @@ def main():
                           'received_money', 'height', 'version', 'multisig_import_needed',
                           'per_subaddress', 'time_to_unlock', 'blocks_to_unlock'}
                 public_response = {**response, 'result': {k: v for k, v in response['result'].items() if k in fields}}
+                # Notes are local wallet metadata, even when nested in a transfer list.
+                def without_notes(value):
+                    if isinstance(value, dict):
+                        return {k: without_notes(v) for k, v in value.items() if k != 'note'}
+                    if isinstance(value, list):
+                        return [without_notes(v) for v in value]
+                    return value
+                public_response = without_notes(public_response)
             public_request = body
             if method == 'restore_deterministic_wallet':
                 public_request = {**body, 'params': {k: v for k, v in body.get('params', {}).items()

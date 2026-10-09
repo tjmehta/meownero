@@ -137,6 +137,34 @@ def main():
         tester.export(private_source, work / 'export', work / 'export.tar.gz')
         tester.require(not (work / 'export/seed.txt').exists(), 'unlisted seed exported')
         results.append({'control': 'unlisted input excluded from export', 'result': 'PASS'})
+        for label, name, mutation in (
+            ('unknown wallet_seed field', 'result.json',
+             lambda j: j.update(wallet_seed='SYNTHETIC_DO_NOT_EXPORT')),
+            ('unknown nested field', 'restore/run1/public/result.json',
+             lambda j: j['initial']['outputs'][0].update(operator_payload='SYNTHETIC_DO_NOT_EXPORT')),
+            ('unknown nested RPC field', 'restore/run1/public/rpc-observations.jsonl',
+             lambda j: j['response'].update(operator_payload='SYNTHETIC_DO_NOT_EXPORT'))):
+            # Test both export and full verification after intentionally rehashing.
+            for source in (private_source, public_copy):
+                target = source / name
+                original = target.read_bytes()
+                if name.endswith('.jsonl'):
+                    rows = [json.loads(row) for row in original.splitlines()]
+                    mutation(rows[0])
+                    target.write_text(''.join(json.dumps(row) + '\n' for row in rows))
+                else:
+                    value = json.loads(original)
+                    mutation(value); tester.write(target, value)
+                tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
+                if source == private_source:
+                    destination = work / ('refused-' + str(len(results)))
+                    archive = destination.with_suffix('.tar.gz')
+                    refuse(label + ' export', lambda: tester.export(source, destination, archive), 'unknown public evidence field')
+                    tester.require(not destination.exists() and not archive.exists(), 'privacy refusal created shareable output')
+                else:
+                    refuse(label + ' verify', lambda: tester.verify(source), 'unknown public evidence field')
+                target.write_bytes(original)
+                tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
     tester.write(work / 'controls.json', results)
     print('PASS_TESTER_REFUSALS', sum(row['result'].startswith('PASS') for row in results),
           'NOT_RUN', sum(row['result'] == 'NOT_RUN' for row in results))

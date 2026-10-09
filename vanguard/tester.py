@@ -18,6 +18,7 @@ import subprocess
 import sys
 import tarfile
 import time
+import uuid
 
 ROOT = Path(__file__).resolve().parent.parent
 PROFILE = json.loads((ROOT / 'vanguard/tester-profile.json').read_text())
@@ -26,6 +27,7 @@ LOCK = Path('/tmp/meownero-swarm-20260912-heavy.lock').parent.resolve() / 'meown
 INPUTS = ('README.md', 'docs/vanguard-tester.md', 'research/current-evidence.md',
           'vanguard/source-lock.json', 'vanguard/tester-profile.json', 'vanguard/tester.py',
           'vanguard/tester-native.py', 'vanguard/test-tester-refusals.py',
+          'vanguard/tester-public-schema.json', 'vanguard/test-tester-cleanup.py',
           'vanguard/daemon-p2p.py', 'vanguard/daemon-restore.py',
           'vanguard/verify-daemon-p2p.py', 'vanguard/verify-daemon-restore.py')
 COMMON = ('events.jsonl', 'result.json', 'wire.jsonl', 'network-live.json', 'containment.json',
@@ -206,6 +208,67 @@ def manifest(out, names, filename):
     (out / filename).write_text(''.join(f'{sha(out / name)}  {name}\n' for name in sorted(names)))
 
 
+def owned_identity(cidfile, invocation):
+    """A fresh cidfile plus an exact ID/image/invocation-label match proves ownership."""
+    if not cidfile.exists():
+        return None
+    identity = regular(cidfile).read_text().strip()
+    require(len(identity) == 64 and all(c in '0123456789abcdef' for c in identity),
+            'invalid owned container ID')
+    observed = json.loads(command(docker('inspect', identity, '--format',
+        '{{json .Id}}'), timeout=15))
+    label = command(docker('inspect', identity, '--format',
+        '{{index .Config.Labels "meownero.tester.invocation"}}'), timeout=15)
+    image = command(docker('inspect', identity, '--format', '{{.Image}}'), timeout=15)
+    require(observed == identity and label == invocation and image == PROFILE['image'],
+            'container ownership mismatch; no destructive cleanup allowed')
+    return identity
+
+
+def cleanup_container(identity, name, proc):
+    """Attempt each bounded operation independently; never fall back to a name."""
+    row = {'name': name, 'container_id': identity, 'stop_exit': None, 'inspect_exit': None,
+           'remove_exit': None, 'absence_exit': None, 'container_absent': None,
+           'private_state_retained': True, 'errors': []}
+    final_state = None
+
+    def attempt(operation, argv, timeout):
+        try:
+            observed = subprocess.run(argv, capture_output=True, timeout=timeout)
+            row[operation + '_exit'] = observed.returncode
+            if observed.returncode != 0:
+                row['errors'].append({'operation': operation, 'error': 'nonzero_exit'})
+            return observed
+        except Exception as error:
+            row['errors'].append({'operation': operation, 'error': type(error).__name__})
+
+    if identity is not None:
+        attempt('stop', docker('stop', '--time=20', identity), 35)
+        observed = attempt('inspect', docker('inspect', identity, '--format', '{{json .State}}'), 15)
+        if observed is not None and observed.returncode == 0:
+            try:
+                final_state = json.loads(observed.stdout)
+            except (ValueError, UnicodeError):
+                row['errors'].append({'operation': 'inspect', 'error': 'invalid_state'})
+        attempt('remove', docker('rm', '-f', identity), 20)
+        # Listing exact IDs distinguishes actual absence from an inspect transport failure.
+        observed = attempt('absence', docker('ps', '-aq', '--no-trunc', '--filter', 'id=' + identity), 15)
+        if observed is not None and observed.returncode == 0:
+            row['container_absent'] = not observed.stdout.strip()
+    if proc is not None:
+        try:
+            proc.wait(timeout=10)
+        except Exception as error:
+            row['errors'].append({'operation': 'client_wait', 'error': type(error).__name__})
+            # Only our Docker attach client, never other workloads or broad processes.
+            try:
+                proc.kill()
+                proc.wait(timeout=5)
+            except Exception as error:
+                row['errors'].append({'operation': 'client_reap', 'error': type(error).__name__})
+    return row, final_state
+
+
 def run(src, out):
     pre = preflight(src, out)
     out = fresh(out)
@@ -220,6 +283,7 @@ def run(src, out):
         result = {'result': 'FAIL', 'gates': {'p2p': 'NOT_RUN', 'restore': 'NOT_RUN'}, 'whole_deadline_seconds': 2500,
                   'private_state': 'retained in owned mode0700 output; never export recursively'}
         cleanup = []
+        invocation = uuid.uuid4().hex
         began = time.monotonic()
         previous = {}
 
@@ -240,7 +304,7 @@ def run(src, out):
                     'candidate_commit': pre['inputs']['candidate_commit'],
                     'source_sha256': pre['inputs']['source_sha256'], 'upstream_commit': PIN['upstream']['commit'],
                     'builder_image': PROFILE['image'], 'rustc': PIN['builder']['rustc'],
-                    'binary': pre['binary'], 'commands': [], 'metrics': {},
+                    'binary': pre['binary'], 'commands': [], 'attach_commands': [], 'metrics': {},
                     'build_mode': 'read-only cached binary inspection; no compilation'}
                 result['gates'][gate] = 'FAIL_CACHE_INSPECTION'
                 for label in ('build', 'run1'):
@@ -248,7 +312,8 @@ def run(src, out):
                     work.mkdir(exist_ok=True)
                     if label == 'run1':
                         result['gates'][gate] = 'FAIL_NATIVE'
-                    name = f'tjs1870-{os.getpid()}-{gate}-{label}'
+                    name = f'tjs1870-{invocation}-{gate}-{label}'
+                    cidfile = work / 'container.cid'
                     body = ('uname -m; /cache/rust/bin/rustc -V; /cache/rust/bin/cargo -V; '
                             '/src/build/vanguard/bin/monerod --version; /src/build/vanguard/bin/monero-wallet-rpc --version'
                             if label == 'build' else f'timeout --signal=TERM --kill-after=30 1100 python3 -B /harness/tester-native.py {gate}')
@@ -256,7 +321,8 @@ def run(src, out):
                               f"cat /sys/fs/cgroup/memory.events > /out/{label}.memory-events; "
                               f"cat /sys/fs/cgroup/cpu.stat > /out/{label}.cpu' EXIT\n"
                               'mkdir -m700 /out/private-home\n' + body)
-                    argv = docker('run', '--name', name, '--pull=never', '--network=none',
+                    argv = docker('create', '--name', name, '--cidfile', str(cidfile),
+                        '--label', 'meownero.tester.invocation=' + invocation, '--pull=never', '--network=none',
                         '--cap-drop=ALL', '--security-opt=no-new-privileges', '--cpus=2', '--memory=4g',
                         '--memory-swap=4g', '--pids-limit=256', '--ulimit', 'core=0',
                         f'--tmpfs=/run/vanguard:rw,noexec,nosuid,nodev,size=1m,mode=0700,uid={os.getuid()},gid={os.getgid()}',
@@ -266,13 +332,23 @@ def run(src, out):
                         '-e', 'HOME=/out/private-home', '-w', '/out', PROFILE['image'], 'bash', '-euc', script)
                     receipt['commands'].append(argv)
                     proc = None
+                    identity = None
                     code = 125
                     started = time.monotonic()
                     try:
+                        collision = command(docker('ps', '-aq', '--no-trunc', '--filter', 'name=^/' + name + '$'))
+                        require(not collision, 'container name collision refused; existing state preserved')
+                        # Docker creates the cidfile in this fresh owned directory. A failed
+                        # create/name conflict never authorizes cleanup of a container by name.
+                        command(argv, timeout=30)
+                        identity = owned_identity(cidfile, invocation)
+                        require(identity is not None, 'owned container identity unavailable')
                         with (work / f'{label}.docker.log').open('wb') as log:
-                            proc = subprocess.Popen(argv, stdout=log, stderr=subprocess.STDOUT)
+                            attach = docker('start', '-a', identity)
+                            receipt['attach_commands'].append(attach)
+                            proc = subprocess.Popen(attach, stdout=log, stderr=subprocess.STDOUT)
                             for _ in range(100):
-                                observed = subprocess.run(docker('inspect', name, '--format',
+                                observed = subprocess.run(docker('inspect', identity, '--format',
                                     '{{json .Id}}\n{{json .Image}}\n{{json .State}}\n{{json .HostConfig}}\n{{json .Mounts}}'),
                                     capture_output=True, timeout=10)
                                 if observed.returncode == 0:
@@ -290,24 +366,24 @@ def run(src, out):
                                 raise RuntimeError('native gate deadline exceeded')
                     finally:
                         signal.setitimer(signal.ITIMER_REAL, 0)
-                        # Inspect final OOM/exit state before removing the exact owned container.
-                        stopped = subprocess.run(docker('stop', '--time=20', name), capture_output=True, timeout=35)
-                        final = subprocess.run(docker('inspect', name, '--format', '{{json .State}}'),
-                                               capture_output=True, timeout=15)
-                        if final.returncode == 0:
-                            (work / 'container-final.json').write_bytes(final.stdout)
-                        removed = subprocess.run(docker('rm', '-f', name), capture_output=True, timeout=20)
-                        absent = subprocess.run(docker('inspect', name), capture_output=True, timeout=15).returncode == 1
-                        if proc and proc.poll() is None:
-                            proc.wait(timeout=10)
-                        row = {'name': name, 'stop_exit': stopped.returncode, 'remove_exit': removed.returncode,
-                               'container_absent': absent, 'private_state_retained': True}
+                        ownership_errors = []
+                        if identity is None and cidfile.exists():
+                            try:
+                                identity = owned_identity(cidfile, invocation)
+                            except Exception as error:
+                                ownership_errors.append({'operation': 'ownership', 'error': type(error).__name__})
+                        row, final_state = cleanup_container(identity, name, proc)
+                        row['errors'] = ownership_errors + row['errors']
                         cleanup.append(row)
+                        if final_state is not None:
+                            write(work / 'container-final.json', final_state)
                         receipt['metrics'][label] = {'exit': code, 'wall_seconds': time.monotonic() - started,
-                            'container_absent': absent, 'container_final': json.loads(final.stdout) if final.returncode == 0 else None}
+                            'container_id': identity, 'container_absent': row['container_absent'],
+                            'cleanup_errors': row['errors'], 'container_final': final_state}
                         write(stage / 'receipt.json', receipt)
                         signal.setitimer(signal.ITIMER_REAL, max(0.001, 2500 - (time.monotonic() - began)))
-                    require(code == 0 and absent and removed.returncode == 0, 'gate failed; keep output and inspect private logs')
+                    require(code == 0 and row['container_absent'] is True and row['remove_exit'] == 0 and
+                            not row['errors'], 'gate failed; keep output and inspect private logs')
                     counts = dict(line.split() for line in (work / f'{label}.memory-events').read_text().splitlines())
                     require(not int(counts['oom']) and not int(counts['oom_kill']), 'container OOM')
                     if label == 'build':
@@ -360,6 +436,31 @@ def private_fields(value):
             private_fields(item)
 
 
+def public_fields(value, name):
+    """Validate frozen field/type shapes, including JSON encoded inside native RPC."""
+    schema = read(ROOT / 'vanguard/tester-public-schema.json')
+    key = name + '#' + str(value.get('method')) if name.endswith('/rpc-observations.jsonl') else name
+    require(key in schema['roots'], 'unknown public evidence schema')
+
+    def check(item, node_id):
+        node = schema['nodes'][node_id]
+        kind = ('object' if isinstance(item, dict) else 'array' if isinstance(item, list) else
+                'boolean' if isinstance(item, bool) else 'number' if isinstance(item, (int, float)) else
+                'null' if item is None else 'string')
+        require(kind in node['types'], 'non-public evidence type refused')
+        if kind == 'object':
+            require(set(item) <= set(node['fields']), 'unknown public evidence field refused')
+            for field, child in item.items():
+                check(child, node['fields'][field])
+        elif kind == 'array':
+            require(not item or node['items'] is not None, 'unknown public evidence array payload refused')
+            for child in item:
+                check(child, node['items'])
+        elif kind == 'string' and 'json' in node:
+            check(json.loads(item), node['json'])
+    check(value, schema['roots'][key])
+
+
 def public_bytes(path, name):
     raw = regular(path).read_bytes()
     require(len(raw) <= 32 * 1024**2, 'oversized export member')
@@ -369,10 +470,14 @@ def public_bytes(path, name):
         require(len(raw) >= 33 and int.from_bytes(raw[:8], 'little') == 0x0101010101012101 and
                 int.from_bytes(raw[8:16], 'little') == len(raw) - 33, 'non-Levin bytes refused')
     elif name.endswith('.json'):
-        private_fields(json.loads(raw))
+        value = json.loads(raw)
+        private_fields(value)
+        public_fields(value, name)
     elif name.endswith('.jsonl'):
         for line in raw.splitlines():
-            private_fields(json.loads(line))
+            value = json.loads(line)
+            private_fields(value)
+            public_fields(value, name)
     elif name.endswith('.log'):
         # No free-form log payload crosses this boundary. Preserve parser counts and raw digest.
         text = raw.decode('utf-8')
@@ -440,7 +545,7 @@ def validate_public(out):
     require(set(entries) == PUBLIC | {'export.json'}, 'export manifest set mismatch')
     for name in PUBLIC:
         require(public_bytes(out / name, name) == (out / name).read_bytes(), 'noncanonical public payload')
-    private_fields(read(out / 'export.json'))
+    public_bytes(out / 'export.json', 'export.json')
 
 
 def verify_rpc(work, gate):
@@ -492,7 +597,11 @@ def verify(out):
     require(read(out / 'result.json')['read_only_inputs_unchanged'], 'input preservation check absent')
     require(read(out / 'preflight.json')['profile'] == PROFILE, 'unsupported receipt profile')
     cleanup = read(out / 'cleanup.json')
-    require(len(cleanup) == 4 and all(row['container_absent'] and row['remove_exit'] == 0 for row in cleanup),
+    identities = [row['container_id'] for row in cleanup]
+    require(len(cleanup) == 4 and len(set(identities)) == 4 and
+            all(len(identity) == 64 and all(c in '0123456789abcdef' for c in identity) for identity in identities) and
+            all(row['container_absent'] is True and row['remove_exit'] == 0 and
+                row['absence_exit'] == 0 and not row['errors'] for row in cleanup),
             'owned cleanup incomplete')
     # Legacy reconcilers are called unchanged. The ARM adapter changes only the explicit
     # executable baseline in its private module instance, after checking the fixed profile.
@@ -505,8 +614,20 @@ def verify(out):
             receipt = read(stage / 'receipt.json')
             require(receipt['binary'] == PROFILE['binary'] and receipt['source_sha256'] == inputs['source_sha256'] and
                     receipt['candidate_commit'] == commit and receipt['builder_image'] == PROFILE['image'], 'gate pin mismatch')
+            require(set(receipt['metrics']) == {'build', 'run1'} and len(receipt['commands']) == 2 and
+                    len(receipt['attach_commands']) == 2, 'native lifecycle receipt incomplete')
+            for number, label in enumerate(('build', 'run1')):
+                identity = receipt['metrics'][label]['container_id']
+                owned = [row for row in cleanup if row['container_id'] == identity]
+                create = receipt['commands'][number]
+                require(len(owned) == 1 and create[:4] == docker('create') and
+                        '--cidfile' in create and '--label' in create and '--name' in create and
+                        create[create.index('--name') + 1] == owned[0]['name'] and
+                        receipt['attach_commands'][number] == docker('start', '-a', identity),
+                        'owned container lifecycle binding mismatch')
             for label, metric in receipt['metrics'].items():
                 require(metric['exit'] == 0 and metric['container_absent'] and metric['container_final'] and
+                        not metric['cleanup_errors'] and metric['container_id'] in identities and
                         not metric['container_final']['OOMKilled'] and metric['container_final']['ExitCode'] == 0,
                         'native exit/OOM/cleanup mismatch')
                 peak = int((stage / ('' if label == 'build' else label) / f'{label}.memory').read_text())

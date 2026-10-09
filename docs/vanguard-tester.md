@@ -66,6 +66,13 @@ a 1,100-second container deadline, a bounded host wait, 2 CPUs, 4 GiB RAM,
 the accepted container tmpfs approach because Colima shared folders cannot chmod
 that socket. The workload has a 2,500-second
 host workload budget, enforced by a timer as well as bounded subprocess waits.
+Every invocation uses fresh random container names and a cidfile inside its fresh
+output. Before cleanup, the actual ID, pinned image and invocation label must
+match. A stopped-container name collision refuses the run and preserves that
+container. Cleanup uses the proven ID and independently bounds stop, inspection,
+removal and the final ID listing. A timeout in one step still attempts the later
+steps and records the error; any cleanup error fails the run. An unavailable
+ownership proof leaves the container untouched and records cleanup as unknown.
 Exact-container cleanup has separate bounded waits after a deadline or signal.
 Typical measured timing belongs in the rehearsal report; no
 30-minute soak or Railway run is part of this invocation.
@@ -82,7 +89,8 @@ metadata are excluded even when a wallet could return them. The cache and packag
 are rehashed after the workload. Every private output remains mode 0700 and unshared.
 
 On success, run exits 0 and `result.json` says `PASS_NATIVE_JOURNEY`. On failure,
-it exits nonzero, keeps the failed attempt and removes only its named container.
+it exits nonzero, keeps the failed attempt and attempts removal only by its proven
+owned container ID.
 Never rerun into that output or delete another operator's output. Failed or
 incomplete output cannot be exported as a passing journey. Private wallet,
 chain and ring databases remain in the owned directory for diagnosis until its
@@ -98,6 +106,20 @@ python3 -B vanguard/tester.py verify /owned/public01
 python3 -B vanguard/test-tester-refusals.py --public /owned/public01 --work /owned/controls01
 ```
 
+On the same idle supported build-mac setup, the reviewer also runs the native cleanup
+controls from the package root:
+
+```sh
+python3 -B vanguard/test-tester-cleanup.py --work ~/Developer/tjs1870-owned/cleanup-controls01
+```
+
+These create their own stopped fixtures and short cached-inspection containers.
+They check collision preservation, refusal of a foreign invocation label, and
+removal after injected stop/inspection transport timeouts. Each operation has a
+deadline and uses the shared lock. No daemon or wallet scenario runs in these
+fault controls. Failed control outputs stay private; only `controls.json` is a
+shareable summary. The script removes only the exact IDs it created.
+
 The ARM adapter checks fixed independently accepted ARM binaries and then calls
 the existing P2P and restore reconcilers. Their historical x86 CLI pins and all
 scenario assertions remain unchanged. The legacy receipt field `build` records
@@ -106,8 +128,15 @@ a cached inspection stage, explicitly labeled `build_mode`; it is not a new buil
 Only named JSON receipts, native observations, counters and captured Levin
 refusal frames are exported. Daemon parser logs are projected to recognized
 parser markers only, with the original raw digest recorded. Free-form logs and
-all unlisted files are excluded. Symlinks, hard links, nonregular files, changed
-manifests, secret-bearing JSON and renamed database content are refused. Never
+all unlisted files are excluded. JSON passes the pinned
+[public field/type schema](../vanguard/tester-public-schema.json), including
+nested objects, arrays and JSON encoded inside native RPC responses. Unknown
+fields are refused before any shareable export is created. Wallet notes are
+excluded at capture. The schema is frozen from source-pinned writer and
+independent reviewer receipts; it never learns fields from the input being
+exported. New legitimate upstream fields require an explicit schema review.
+Symlinks, hard links, nonregular files, changed manifests, secret-bearing JSON
+and renamed database content are refused. Never
 archive the original output recursively. Even these public receipts link
 disposable local transaction/output identities; they are evidence for this test,
 not an anonymity claim.
