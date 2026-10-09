@@ -7,5 +7,47 @@
   "connections_search_http_status": 401,
   "connections_search_response": "Runtime tools token is missing, invalid, or expired",
   "provider_mutations": [],
-  "checked_utc": "2026-10-09T05:26:21.106129+00:00"
+  "checked_utc": "2026-10-09T05:26:21.106129+00:00",
+  "handoff_adopted": {
+    "source_comment_ids": [
+      "06276ddb-ceda-42b3-96f4-811e162ea928",
+      "8f4986a9-ab3b-421c-9582-9b3465a4ec1c"
+    ],
+    "adoption_comment_id": "1bf4172e-0570-45b1-89f3-4ffda666be1f",
+    "checked_utc": "2026-10-09T05:59:27.025667+00:00",
+    "cli_sha256": "47869b61196e463670bbe870f2c8c5053a09ddbe5dffc0833396c2355857d747",
+    "secured_route_available": true,
+    "supported_cli_status": {
+      "project_id": "f46a08ef-dcba-431b-8fb0-a3b2c0dd721e",
+      "workspace_id": "2b820311-d9b2-4a11-acca-fe0ab337dc38",
+      "environment": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+      "service_instance": {
+        "activeDeployments": [],
+        "autoInstrumentationEnabled": false,
+        "cronSchedule": null,
+        "domains": {
+          "customDomains": [],
+          "serviceDomains": []
+        },
+        "environmentId": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+        "id": "b7f12f50-5bf6-47d6-a93a-200bc6a05bbc",
+        "latestDeployment": null,
+        "nextCronRunAt": null,
+        "numReplicas": null,
+        "serviceId": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+        "serviceName": "meownero-peer-tjs1856",
+        "source": null,
+        "startCommand": null,
+        "tracingEnabled": false
+      },
+      "volumes": {
+        "edges": []
+      }
+    },
+    "free_credit": {
+      "amount_usd": 5.0,
+      "provenance": "parent browser attestation at 2026-10-09T05:00:18Z; CLI project token does not establish billing access"
+    },
+    "capacity_conflict": "parent observed service UI 2 CPU/1GB, account copy 0.5GB; actual runtime cgroup limit required"
+  }
 }

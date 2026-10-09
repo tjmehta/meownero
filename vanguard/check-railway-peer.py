@@ -17,10 +17,10 @@ def main():
     token = secrets.token_hex(32)
     env = {**os.environ, 'MEOWNERO_CONTROL_TOKEN': token,
            'MEOWNERO_PEER_DATA': '/out/peer-data',
-           'MEOWNERO_DAEMON': '/src/build/vanguard/bin/monerod'}
+           'MEOWNERO_DAEMON': os.environ.get('MEOWNERO_DAEMON', '/src/build/vanguard/bin/monerod')}
     rows = []
     with (out / 'supervisor.log').open('wb') as stream:
-        proc = subprocess.Popen(['python3', '-B', '/harness/railway-peer.py'],
+        proc = subprocess.Popen(['python3', '-B', os.environ.get('MEOWNERO_SUPERVISOR', '/harness/railway-peer.py')],
                                 env=env, stdout=stream, stderr=subprocess.STDOUT)
 
     def call(route, body=None, auth=True):
@@ -79,7 +79,7 @@ def main():
         result = {'result': 'PASS_PREPARATION_ONLY', 'scope': 'offline genesis and authenticated control',
                   'before_tip': tip, 'after_tip': after_tip, 'before': before, 'restart': restart,
                   'after': after, 'final': final, 'refusals': rows, 'supervisor_exit': proc.returncode,
-                  'supervisor_sha256': hashlib.sha256(Path('/harness/railway-peer.py').read_bytes()).hexdigest()}
+                  'supervisor_sha256': hashlib.sha256(Path(os.environ.get('MEOWNERO_SUPERVISOR', '/harness/railway-peer.py')).read_bytes()).hexdigest()}
         (out / 'result.json').write_text(json.dumps(result, indent=2) + '\n')
         print(result['result'], 'peak bytes', final['memory.peak'], flush=True)
     finally:
