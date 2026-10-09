@@ -230,7 +230,14 @@ def main():
                             'gcc-mingw-w64-' + apt_arch + '-posix-runtime', 'g++-mingw-w64-' + apt_arch + '-posix',
                             'mingw-w64-' + apt_arch + '-dev', 'mingw-w64-common', 'gcc-mingw-w64-base']
             apt_options = '-o Dir::State::lists=/out/apt-lists -o Dir::Cache=/out/apt-cache'
-            preparation += 'mkdir -p /out/apt-lists/partial /out/apt-cache\napt-get ' + apt_options + ' -o Acquire::Retries=1 -o Acquire::http::Timeout=30 update\ncd /out/downloads\napt-get ' + apt_options + ' download ' + ' '.join(packages) + '\nfor pkg in *.deb; do dpkg-deb -x "$pkg" /out/toolchain; done\n'
+            unpack = 'dpkg-deb -x "$pkg" /out/toolchain'
+            if mac and not apt_arch:
+                # The informational curl changelog symlink fails on this
+                # existing shared filesystem. Executables and license texts
+                # still come intact from the same signed package.
+                unpack = 'dpkg-deb --fsys-tarfile "$pkg" | tar --exclude=./usr/share/doc/curl/changelog.Debian.gz -xf - -C /out/toolchain'
+                receipt['toolchain_unpack'] = {'excluded_documentation_symlink': './usr/share/doc/curl/changelog.Debian.gz', 'executables_and_license_texts_unchanged': True}
+            preparation += 'mkdir -p /out/apt-lists/partial /out/apt-cache\napt-get ' + apt_options + ' -o Acquire::Retries=1 -o Acquire::http::Timeout=30 update\ncd /out/downloads\napt-get ' + apt_options + ' download ' + ' '.join(packages) + '\nfor pkg in *.deb; do ' + unpack + '; done\n'
             preparation += 'apt-cache ' + apt_options + ' policy ' + ' '.join(packages) + ' > /out/toolchain-packages.txt\nsha256sum *.deb > /out/toolchain-SHA256SUMS\n'
             if not apt_arch:
                 llvm = preflight['llvm_mingw_option']
