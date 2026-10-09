@@ -209,3 +209,48 @@ GitHub runner against existing5GiB/10GiB gates and stage a finite exact
 source-lock/helper/patch input payload to avoid the known oldQEMU GCC11
 collect2 crash. Parent owns browser-only allowlisted publication. No source
 broad push, main/default write, paid/settings change or local ARM05 interruption.
+
+
+## Actual native run02 and separate Linux payload06
+
+Actual run37998310375 at27dc6377256e4a6a54549b302567e7f6b45d8c80 finished:
+Windowsx64 SUCCESS with exactv7 archive859d4644 and all3 program/release hashes,
+full real journey/payments/restore/CLI and ten controls, Job activeprocesses0.
+PublicZIP b9d5b1fb259a9e980305d0d2f05c3b717f645d2b9b00e52bda82290309470573
+was hash/membership/receipt verified; exact receipts are source-controlled.
+Submit this exact Windows candidate/witness to ORIGINAL ec85048c stage; it is
+not yet accepted and must not be rerun alongside Intel correction.
+Intelv8 physical native guard/preflight PASS, then outer supervision AssertionError
+while wrapper live, forwarded SIGTERM, all7known PIDs removed and ownlockremoved.
+Its publicZIP12aa9f4296280e4694a77b8ce2b92f6ff584aaede84202ac88e96d07793a6105
+is verified/preserved. Original failure reason was not recorded. Concrete Mac
+metadata shows /bin/ps root-owned mode4755, effectiveUID0/realUID501; oldobserver
+compares effective psUID to real os.getuid. Diagnose exact observer branch,
+retain ancestry/start/kernel-executable binding, narrow privileged-helper role
+and public scalar/static failure diagnostics; do not infer resident/packagefault.
+No archive change is indicated by this outer failure. Separate Intel-only fix
+payload next, preserving successful Windows and immutable04/05. Parent05
+source review cleared with receipt023a0cf105100a2843de8d3486a0a85cff16c5213e0958bc83486f7762d132e8;
+its publication is proceeding19inputs-first/workflow-last.
+
+Shared build/tjs1882-3175-native-linux-ci-payload06 stages18 exact helper/license/
+input/workflow files,17input-readback then separate .github/workflows/tjs1882-native-linux.yml
+last on SAMEprivate taskbranch. PUBLICATION8da909e7a91943e2e21ca5a5e4e5ef0bb49bbc42118b765c7082c3026ebcc054;
+inputs84055a9676e39e0185c474e317b9a60b81432e451e94d3aa343f0bc14ebab998;
+workflowac9a2b8019842617db045dd910ee7a7a56ca8d62de1aef6e9ff1219a2acc31cd;
+Linuxhelpere991e0fcf4759e99d32e2a3d024a296ef4d8178bfa34718cd6bbd003133d782a.
+One standardPRIVATEubuntu-22.04x64 job120minute cap/controller115min and180s
+owned cleanup; parent checks >=120included Linux minutes before publication.
+Actual GitHub/Linux/X64/Ubuntu22/glibc2.35/Dockerx64/5GiB available memory/10GiB
+disk gates remain. Public locked source/submodule/Cargo/Rust1.93 hashes and
+existing native builder/export/static five-dependency closure/package/licenses/
+runtime guards are reused. Official Rust archiveb9d9f01a..., compiler d32249a7...,
+Cargo9548937d...; installer components/ldconfig flags checked against primary
+Rust installer. Compile offline2CPU/3GiB/256PID/3600s; actual ELFfloor<=2.35;
+Ubuntu native journey/10controls mandatory. Debian12/olderARM/otherdistros UNTESTED.
+All18 SHA/size, validate-only, YAML1.2 separatetrigger/pins/SHA/outputallowlist
+and actual small owned process success/SIGTERM deadline/reaping fixtures PASS;
+actual native runner qualification/build/archive/journey UNTESTED. Only public
+JSON plus exactnewarchive/SHA256SUMS upload, no logs/sourcecache/walletstate.
+No source/crypto patch/mainwrite/paid/settings/Colima/primary modification.
+ARM05 session12402 still live under existing lock and limits; all7 goal OPEN.

@@ -28,9 +28,11 @@ def write(path, value):
     path.write_text(json.dumps(value, indent=2) + '\n')
 
 
-def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
+def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
+              supervision_schema='meownero-native-mac-ci-supervision/1',
+              failure_label='native Intel archive check'):
     """Allow wrapper cleanup before escalating only recorded, verified children."""
-    receipt = {'schema': 'meownero-native-mac-ci-supervision/1', 'result': 'FAIL',
+    receipt = {'schema': supervision_schema, 'result': 'FAIL',
                'wrapper_reaped': False, 'cleanup': [], 'signals': []}
     known, pending = {}, []
     process = None
@@ -95,7 +97,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
                     process.wait(timeout=0.25)
                 except subprocess.TimeoutExpired:
                     pass
-            assert process.returncode == 0 and not pending, 'native Intel archive check failed'
+            assert process.returncode == 0 and not pending, failure_label + ' failed'
             receipt['result'] = 'PASS_WRAPPER_AND_OWNED_CLEANUP'
     except BaseException as error:
         receipt['failure_type'] = type(error).__name__
