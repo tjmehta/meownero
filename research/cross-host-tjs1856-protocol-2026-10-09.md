@@ -1,6 +1,6 @@
 # Finite native Railway and build-mac protocol
 
-Revision 1, prepared 2026-10-09 before any cross-host native trial. Starting
+Revision 2, prepared 2026-10-09 before any cross-host native trial. Starting
 candidate is `c6620342328f313e1e9bdfb79570d5245e669090`. This is one accelerated,
 valueless FCMP++/CARROT regtest witness. Accepted local tests and launch gates
 remain unchanged. Source pins are those in `vanguard/source-lock.json`.
@@ -34,10 +34,13 @@ native Railway execution. No global toolchain or runtime configuration changes.
 Railway project is `f46a08ef-dcba-431b-8fb0-a3b2c0dd721e`, workspace
 `2b820311-d9b2-4a11-acca-fe0ab337dc38`, regtest environment
 `4e5d9d89-594e-464c-a9de-b854ec33e30a`. The reported account limit is 2 vCPU
-and 0.5 GB RAM per service, with a 30-day/$5 free-credit limit. Before deployment
-record the parent's exact service/auth handoff, available credit, provider
-limit, runtime architecture, uploaded file hashes and built/deployed image
-identity. No limit or free-credit PASS follows from generic documentation.
+and 0.5 GB RAM per service, with a 30-day/$5 free-credit limit. The parent's
+05:00:18Z handoff observed a conflicting service UI limit of 2 CPU/1 GB and
+$5.00 remaining credit. The handoff was adopted and supported CLI status
+verified exact empty service `884ba31d-a288-4f69-9dbb-9e1332501d87`. The private
+project credential stays outside all uploads and evidence. Before funding,
+record actual runtime memory.max/architecture, uploaded file hashes and
+built/deployed image identity, and available-credit provenance. No limit or free-credit PASS follows from generic documentation.
 
 ## Transport and exposure
 
