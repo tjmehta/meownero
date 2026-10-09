@@ -131,3 +131,10 @@ a BUSY result is not evidence of chain loss. Preserve attempt01 and allow one
 fresh attempt02, each at most90 blocks/900 post-funding seconds, at most180
 generated blocks across these two native attempts. Control binds fixed8080,
 independent of the provider PORT hint19080 witnessed on Railway.
+
+Provider HTTP edge routing can briefly return 404 Application not found between
+successful authenticated requests. Preserve every failed preflight. Read-only
+RPC and state requests may retry HTTP404/502/503 for at most30 seconds, logging
+each failure. Restart and stop requests are issued once. These retries remain
+inside existing phase and whole-run deadlines. Require successful authenticated
+state and get_info after negative-access checks before any funding.

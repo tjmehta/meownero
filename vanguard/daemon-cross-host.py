@@ -11,6 +11,7 @@ import socket
 import subprocess
 import time
 import urllib.request
+import urllib.error
 
 spec = importlib.util.spec_from_file_location('p2p', Path(__file__).with_name('daemon-p2p.py'))
 p2p = importlib.util.module_from_spec(spec)
@@ -39,8 +40,19 @@ async def call(target, path, body):
         def remote():
             req = urllib.request.Request(URL + '/rpc', json.dumps({'path': path, 'body': body}).encode(),
                 {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN})
-            with urllib.request.urlopen(req, timeout=40) as response:
-                return json.load(response)
+            deadline = time.monotonic() + 30
+            while True:
+                try:
+                    with urllib.request.urlopen(req, timeout=40) as response:
+                        return json.load(response)
+                except urllib.error.HTTPError as err:
+                    if err.code not in (404, 502, 503) or time.monotonic() >= deadline:
+                        raise
+                    with (PUBLIC / 'edge-read-retries.jsonl').open('a') as stream:
+                        stream.write(json.dumps({'route': 'rpc', 'status': err.code,
+                            'body': err.read(2048).decode(errors='replace'),
+                            'observed_s': time.monotonic()}) + '\n')
+                    time.sleep(1)
         value = await asyncio.to_thread(remote)
     else:
         ports = {'build-mac': 19081, 'sender': 19090, 'recipient': 19190}
@@ -64,8 +76,19 @@ async def control(path):
     def request():
         req = urllib.request.Request(URL + '/' + path, b'{}',
             {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + TOKEN})
-        with urllib.request.urlopen(req, timeout=45) as reply:
-            return json.load(reply)
+        deadline = time.monotonic() + 30
+        while True:
+            try:
+                with urllib.request.urlopen(req, timeout=45) as reply:
+                    return json.load(reply)
+            except urllib.error.HTTPError as err:
+                if path != 'state' or err.code not in (404, 502, 503) or time.monotonic() >= deadline:
+                    raise
+                with (PUBLIC / 'edge-read-retries.jsonl').open('a') as stream:
+                    stream.write(json.dumps({'route': path, 'status': err.code,
+                        'body': err.read(2048).decode(errors='replace'),
+                        'observed_s': time.monotonic()}) + '\n')
+                time.sleep(1)
     value = await asyncio.to_thread(request)
     with (PUBLIC / 'control.jsonl').open('a') as stream:
         stream.write(json.dumps({'path': path, 'response': value, 'observed_s': time.monotonic()}) + '\n')
