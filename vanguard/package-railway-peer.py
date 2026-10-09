@@ -44,8 +44,11 @@ def main():
     root = args.stage.resolve()
     out = args.out.resolve()
     assert not out.exists(), 'fresh upload package required'
-    receipt = json.loads((root / 'amd64/preparation/receipt.json').read_text())
-    assert receipt['result'] == 'PASS_EMULATED_BUILD'
+    receipt_path = root / 'amd64/preparation/daemon-resume.json'
+    if not receipt_path.exists():
+        receipt_path = root / 'amd64/preparation/receipt.json'
+    receipt = json.loads(receipt_path.read_text())
+    assert receipt['result'] in {'PASS_EMULATED_BUILD', 'PASS_EMULATED_DAEMON_BUILD'}
     binary = root / 'amd64/monero-fcmp/build/vanguard/bin/monerod'
     data = binary.read_bytes()
     assert data[:4] == b'\x7fELF' and int.from_bytes(data[18:20], 'little') == 62, 'AMD64 ELF required'

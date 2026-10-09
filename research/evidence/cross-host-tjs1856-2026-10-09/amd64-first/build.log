@@ -1,0 +1,439 @@
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+rustc 1.93.0 (254b59607 2026-01-19)
+x86_64
+-- CMake version 3.28.3
+-- Using ccache: /usr/bin/ccache
+-- Building without build tag
+-- Building for a 64-bit system
+-- Building internal libraries as static
+-- Stack trace on exception disabled
+-- Using OpenSSL include dir at /usr/include
+-- Using 64-bit LMDB from source tree
+-- Setting CXX flag -maes
+-- Setting C flag -maes
+-- Build architecture: x86_64
+-- Using HIDAPI include dir at /usr/include/hidapi
+-- Trezor: support disabled by USE_DEVICE_TREZOR
+-- Building on x86_64 for default
+-- AES support enabled
+-- Performing Test _Werror__Wbidi_chars=any_c
+-- Performing Test _Werror__Wbidi_chars=any_c - Success
+-- Performing Test _Werror__Wbidi_chars=any_cxx
+-- Performing Test _Werror__Wbidi_chars=any_cxx - Success
+-- Performing Test _Werror__fcf_protection=full_c
+-- Performing Test _Werror__fcf_protection=full_c - Success
+-- Performing Test _Werror__fcf_protection=full_cxx
+-- Performing Test _Werror__fcf_protection=full_cxx - Success
+-- Performing Test _Werror__Werror=switch_c
+-- Performing Test _Werror__Werror=switch_c - Success
+-- Performing Test _Werror__Werror=switch_cxx
+-- Performing Test _Werror__Werror=switch_cxx - Success
+-- Performing Test _Werror__Werror=return_type_c
+-- Performing Test _Werror__Werror=return_type_c - Success
+-- Performing Test _Werror__Werror=return_type_cxx
+-- Performing Test _Werror__Werror=return_type_cxx - Success
+-- Performing Test _Werror__Wformat__Werror=format_security_c
+-- Performing Test _Werror__Wformat__Werror=format_security_c - Success
+-- Performing Test _Werror__Wformat__Werror=format_security_cxx
+-- Performing Test _Werror__Wformat__Werror=format_security_cxx - Success
+-- Using C security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wformat -Wformat -Wformat-security -Wbidi-chars=any -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type -Wformat -Werror=format-security
+-- Using C++ security hardening flags:  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wformat -Wformat -Wformat-security -Wbidi-chars=any -fstack-protector -fstack-protector-strong -fcf-protection=full -fstack-clash-protection -Werror=switch -Werror=return-type -Wformat -Werror=format-security
+-- Using linker security hardening flags:  -pie -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack
+-- Found Boost Version: 1.83.0
+-- Boost components: filesystem;thread;chrono;serialization;program_options
+-- Found readline library at: /usr
+-- Found Git: /usr/bin/git
+-- You are currently on commit e151643c5
+-- You are ahead of or behind a tagged release
+-- Wallet crypto is using amd64-64-24k backend
+-- Using Rust target x86_64-unknown-linux-gnu
+-- Trezor: support disabled
+-- Not building tests
+-- Not building debug utilities
+-- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+-- Configuring done (18.2s)
+-- Generating done (1.6s)
+-- Build files have been written to: /src/build/vanguard
+[  1%] Built target obj_device
+[  2%] Built target easylogging
+[ 12%] Built target randomx
+[ 21%] Built target obj_epee
+[ 21%] Built target epee
+[ 21%] Built target genversion
+[ 21%] Built target obj_version
+[ 21%] Built target version
+[ 31%] Built target obj_cncrypto
+[ 31%] Built target cncrypto
+[ 37%] Built target obj_common
+[ 37%] Built target common
+[ 48%] Built target monero-crypto-amd64-64-24k
+[ 50%] Built target wallet-crypto
+[ 51%] Building fcmp++ rust lib
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.107
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling libc v0.2.189
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling generic-array v0.14.9
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling quote v1.0.47
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling unicode-ident v1.0.24
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling radium v0.7.0
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling rustversion v1.0.23
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling syn v2.0.119
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling semver v1.0.28
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling rustc_version v0.4.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling curve25519-dalek v4.1.3
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling subtle v2.6.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling typenum v1.20.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling zeroize_derive v1.5.0
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling curve25519-dalek-derive v0.1.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling cfg-if v1.0.4
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling crypto-common v0.1.6
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling block-buffer v0.10.4
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling tap v1.0.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling wyz v0.5.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling getrandom v0.2.17
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling digest v0.10.7
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling funty v2.0.0
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling bitvec v1.1.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling rand_core v0.6.4
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling zeroize v1.9.0
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling foldhash v0.2.0
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling hashbrown v0.16.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling ff v0.13.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling spin v0.10.1
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling std-shims v0.1.5
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling group v0.13.0
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling cpufeatures v0.2.17
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling flexible-transcript v0.3.4
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling ciphersuite v0.4.2
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling sha2 v0.10.9
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling crypto-bigint v0.5.5 (https://github.com/kayabaNerve/crypto-bigint?branch=c-repr#78352771)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling dalek-ff-group v0.4.6
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling blake2 v0.10.6
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling multiexp v0.5.2
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling generalized-bulletproofs v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling dalek-ff-group v0.5.0
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling keccak v0.1.6
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling sha3 v0.10.9
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling ec-divisors v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling generalized-bulletproofs-circuit-abstraction v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling generic-array v1.4.5
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling generalized-bulletproofs-ec-gadgets v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling monero-primitives v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling monero-io v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling monero-ed25519 v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling helioselene v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling full-chain-membership-proofs v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling monero-fcmp-plus-plus-generators v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling monero-fcmp-plus-plus v0.1.0 (https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+   Compiling fcmp_pp_rust v0.0.0 (/src/src/fcmp_pp/fcmp_pp_rust)
+<jemalloc>: MADV_DONTNEED does not work (memset will be used instead)
+<jemalloc>: (This is the expected behaviour if you are running under QEMU)
+    Finished `release` profile [optimized] target(s) in 42m 04s
+Finished copying fcmp++ rust targets
+[ 51%] Built target fcmp_pp_rust
+[ 54%] Built target obj_fcmp_pp
+[ 54%] Built target fcmp_pp
+[ 55%] Built target obj_ringct_basic
+[ 55%] Built target ringct_basic
+[ 57%] Built target obj_cryptonote_format_utils_basic
+[ 57%] Built target cryptonote_format_utils_basic
+[ 57%] Built target device
+[ 58%] Built target lmdb
+[ 61%] Built target mx25519_static
+[ 61%] Building CXX object contrib/epee/src/CMakeFiles/obj_epee_readline.dir/readline_buffer.cpp.o
+[ 61%] Built target obj_epee_readline
+[ 61%] Linking CXX static library libepee_readline.a
+[ 61%] Built target epee_readline
+[ 62%] Built target wire
+[ 62%] Building CXX object contrib/epee/src/wire/json/CMakeFiles/wire-json.dir/write.cpp.o
+[ 64%] Linking CXX static library libwire-json.a
+[ 64%] Built target wire-json
+[ 68%] Built target obj_carrot_core
+[ 68%] Built target carrot_core
+[ 74%] Built target obj_carrot_impl
+[ 74%] Built target obj_checkpoints
+[ 75%] Built target checkpoints
+[ 78%] Built target obj_cryptonote_basic
+[ 78%] Built target cryptonote_basic
+[ 78%] Built target carrot_impl
+[ 78%] Built target obj_ringct
+[ 78%] Built target ringct
+[ 80%] Built target obj_cryptonote_core
+[ 80%] Built target obj_hardforks
+[ 80%] Built target hardforks
+[ 80%] Built target obj_blockchain_db
+[ 80%] Built target blockchain_db
+[ 81%] Built target cryptonote_core
+[ 84%] Built target obj_net
+[ 84%] Built target net
+[ 85%] Built target obj_rpc_base
+[ 85%] Built target rpc_base
+[ 87%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o
+[ 87%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/rpc_version_str.cpp.o
+[ 87%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/instantiations.cpp.o
+[ 87%] Built target obj_rpc
+[ 88%] Built target obj_p2p
+[ 88%] Built target p2p
+[ 90%] Built target obj_cryptonote_protocol
+[ 90%] Built target cryptonote_protocol
+[ 91%] Linking CXX static library librpc.a
+[ 91%] Built target rpc
+[ 91%] Building CXX object src/rpc/CMakeFiles/obj_rpc_pub.dir/zmq_pub.cpp.o
+[ 91%] Built target obj_rpc_pub
+[ 91%] Built target obj_serialization
+[ 91%] Built target serialization
+[ 91%] Linking CXX static library librpc_pub.a
+[ 91%] Built target rpc_pub
+[ 91%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/message.cpp.o
+[ 91%] Building CXX object src/rpc/CMakeFiles/obj_daemon_messages.dir/daemon_messages.cpp.o
+[ 91%] Built target obj_daemon_messages
+[ 91%] Linking CXX static library libdaemon_messages.a
+[ 91%] Built target daemon_messages
+[ 91%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/daemon_handler.cpp.o
+[ 91%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_restricted_methods.cpp.o
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_pub.cpp.o
+[ 92%] Building CXX object src/rpc/CMakeFiles/obj_daemon_rpc_server.dir/zmq_server.cpp.o
+[ 92%] Built target obj_daemon_rpc_server
+[ 92%] Linking CXX static library libdaemon_rpc_server.a
+[ 92%] Built target daemon_rpc_server
+[ 92%] Building CXX object src/daemonizer/CMakeFiles/obj_daemonizer.dir/posix_fork.cpp.o
+[ 92%] Built target obj_daemonizer
+[ 94%] Linking CXX static library libdaemonizer.a
+[ 94%] Built target daemonizer
+[ 94%] Generating generated_testnet_blocks.c
+[ 95%] Generating generated_checkpoints.c
+[ 95%] Generating generated_stagenet_blocks.c
+[ 95%] Building CXX object src/blocks/CMakeFiles/obj_blocks.dir/blocks.cpp.o
+[ 97%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_checkpoints.c.o
+[ 97%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_testnet_blocks.c.o
+[ 97%] Building C object src/blocks/CMakeFiles/obj_blocks.dir/generated_stagenet_blocks.c.o
+[ 97%] Built target obj_blocks
+[ 97%] Linking CXX static library libblocks.a
+[ 97%] Built target blocks
+[ 97%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_parser_executor.cpp.o
+[ 98%] Building CXX object src/daemon/CMakeFiles/daemon.dir/command_server.cpp.o
+[ 98%] Building CXX object src/daemon/CMakeFiles/daemon.dir/daemon.cpp.o
+[ 98%] Building CXX object src/daemon/CMakeFiles/daemon.dir/executor.cpp.o
+[ 98%] Building CXX object src/daemon/CMakeFiles/daemon.dir/main.cpp.o
+[100%] Building CXX object src/daemon/CMakeFiles/daemon.dir/rpc_command_executor.cpp.o
+make[3]: *** [src/daemon/CMakeFiles/daemon.dir/build.make:146: src/daemon/CMakeFiles/daemon.dir/rpc_command_executor.cpp.o] Terminated
+make[2]: *** [CMakeFiles/Makefile2:3742: src/daemon/CMakeFiles/daemon.dir/all] Terminated
+make[1]: *** [CMakeFiles/Makefile2:3749: src/daemon/CMakeFiles/daemon.dir/rule] Terminated
+make: *** [Makefile:1271: daemon] Terminated
