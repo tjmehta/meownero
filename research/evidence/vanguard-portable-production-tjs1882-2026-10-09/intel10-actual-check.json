@@ -1,0 +1,28 @@
+{
+  "schema": "meownero-portable-native-mac-check/1",
+  "archive_sha256": "7a3ddef44b58c752dd508bd6d2251266de4a1af3a1d635680854707a8cdb3a09",
+  "result": "FAIL",
+  "phases": [
+    {
+      "name": "preflight",
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.13/bin/python",
+        "-B",
+        "/Users/runner/work/_temp/tjs1882-native/native-check/extract/meownero-vanguard-macos-x86_64/tester.py",
+        "preflight"
+      ],
+      "reaped": true,
+      "pid": 4061
+    }
+  ],
+  "resident_limit_bytes": 4294967296,
+  "peak_resident_bytes": 23408640,
+  "cleanup": [
+    {
+      "pid": 4061,
+      "removed": true
+    }
+  ],
+  "execution_substrate": "NATIVE",
+  "wall_seconds": 1.196
+}

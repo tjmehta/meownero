@@ -1,0 +1,113 @@
+{
+  "schema": "meownero-owned-darwin-normal-preflight-observer/1",
+  "actual_Intel10_failure_identity": "UNKNOWN",
+  "cases": [
+    {
+      "case": "original10",
+      "supervisor_sha256": "73b6b26bc4cd67d02b1ca209a77f43893925201aeb97598871a717b4de262d4c",
+      "supervision": {
+        "schema": "meownero-native-mac-ci-supervision/1",
+        "result": "PASS_WRAPPER_AND_OWNED_CLEANUP",
+        "wrapper_reaped": true,
+        "cleanup": [
+          {
+            "pid": 60386,
+            "removed": true
+          },
+          {
+            "pid": 60412,
+            "removed": true
+          },
+          {
+            "pid": 60552,
+            "removed": true
+          },
+          {
+            "pid": 60689,
+            "removed": true
+          },
+          {
+            "pid": 60693,
+            "removed": true
+          }
+        ],
+        "signals": [],
+        "observer_ruid": 501,
+        "observer_euid": 501,
+        "helper_observations": [],
+        "unverified_observations": [],
+        "wrapper_pid": 60386,
+        "wall_seconds": 2.249,
+        "cancellation_signals": []
+      }
+    },
+    {
+      "case": "corrected11",
+      "supervisor_sha256": "fe09654d358b6999b7d28db74fbaeb80b674b3cddde83ec4a4f382aaa45bb830",
+      "supervision": {
+        "schema": "meownero-native-mac-ci-supervision/1",
+        "result": "FAIL",
+        "wrapper_reaped": true,
+        "cleanup": [
+          {
+            "pid": 60737,
+            "removed": true
+          },
+          {
+            "pid": 60739,
+            "removed": true
+          },
+          {
+            "pid": 60755,
+            "removed": true
+          }
+        ],
+        "signals": [],
+        "observer_ruid": 501,
+        "observer_euid": 501,
+        "helper_observations": [],
+        "unverified_observations": [
+          {
+            "pid": 60756,
+            "ppid": 60737,
+            "ruid": 501,
+            "euid": 0,
+            "role": "OWNED_DESCENDANT",
+            "state_class": "LIVE",
+            "argv_role": "PS_EXIT_DISPLAY",
+            "direct_wrapper_parent": true,
+            "previously_bound_helper": false,
+            "kernel_file_role": "ALREADY_ABSENT"
+          }
+        ],
+        "wrapper_pid": 60737,
+        "failure_stage": "OBSERVE_OWNED_DESCENDANTS",
+        "failure_reason": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+        "failure_observation": {
+          "pid": 60756,
+          "ppid": 60737,
+          "ruid": 501,
+          "euid": 0,
+          "role": "OWNED_DESCENDANT",
+          "state_class": "LIVE",
+          "argv_role": "PS_EXIT_DISPLAY",
+          "direct_wrapper_parent": true,
+          "previously_bound_helper": false,
+          "kernel_file_role": "ALREADY_ABSENT"
+        },
+        "failure_type": "AssertionError",
+        "wrapper_exit_before_cleanup": null,
+        "forwarded_sigterm": true,
+        "rejected_observation_cleanup": [
+          {
+            "pid": 60756,
+            "removed": true,
+            "proof": "ACTUAL_PID_ABSENCE"
+          }
+        ],
+        "wall_seconds": 0.774,
+        "cancellation_signals": []
+      }
+    }
+  ]
+}

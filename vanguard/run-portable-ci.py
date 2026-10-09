@@ -39,13 +39,16 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                'observer_ruid': os.getuid(), 'observer_euid': os.geteuid(), 'helper_observations': [],
                'unverified_observations': []}
     known, pending, helper_bindings, states, unverified_zombies = {}, [], {}, {}, set()
+    rejected_live = {}
     process = None
     began = time.monotonic()
 
     def reject(reason, observation=None):
-        receipt['failure_reason'] = reason
+        receipt.setdefault('failure_reason', reason)
         if observation is not None:
-            receipt['failure_observation'] = observation
+            receipt.setdefault('failure_observation', observation)
+            if observation['pid'] in rejected_live and observation not in receipt['unverified_observations']:
+                receipt['unverified_observations'].append(observation)
         raise AssertionError(reason)
 
     def helper_file_binding():
@@ -76,6 +79,11 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
     def remember_identity(pid, row):
         observation = {'pid': pid, 'ppid': row[0], 'ruid': row[1], 'euid': row[2],
                        'role': 'OWNED_WRAPPER' if pid == process.pid else 'OWNED_DESCENDANT'}
+        # Account for every first observation before validation can reject it.
+        # Quarantined identities are never authority for a cleanup signal.
+        if pid not in known and pid not in rejected_live:
+            rejected_live[pid] = row[1:]
+        observation['state_class'] = 'ZOMBIE' if states.get(pid, '').startswith('Z') else 'LIVE'
         # These immutable fields must pass before every role/euid/state branch.
         # An observed helper cannot escape its binding by dropping privileges.
         if pid in known and row[1:4] != known[pid][:3]:
@@ -84,6 +92,13 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             reject('REMEMBERED_HELPER_SYSTEM_FILE_CHANGED', observation)
         if row[1] != os.getuid():
             reject('REAL_UID_MISMATCH', observation)
+        if pid not in known and (states.get(pid, '').startswith('Z') or row[4] == '(ps)') and pid_absent(pid, {}):
+            # A snapshot may precede reaping while inspection follows it. Prove
+            # numeric PID absence independently; infer no executable or role.
+            observation['role'] = 'ALREADY_ABSENT_UNVERIFIED_SNAPSHOT'
+            observation['argv_role'] = 'PS_EXIT_DISPLAY' if row[4] == '(ps)' else 'UNVERIFIED_ZOMBIE'
+            receipt['unverified_observations'].append(observation)
+            return False
         if states.get(pid, '').startswith('Z'):
             # A verified helper may become a zombie before its parent reaps it.
             # Keep its original executable identity and wait for actual absence.
@@ -99,7 +114,10 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
         if pid in unverified_zombies:
             reject('UNVERIFIED_ZOMBIE_BECAME_LIVE', observation)
         if row[2] != os.geteuid():
-            words = shlex.split(row[4])
+            try:
+                words = shlex.split(row[4])
+            except ValueError:
+                words = []
             arguments = words[1:]
             ps_arguments = arguments == ['-axo', 'pid=,ppid=,rss='] or (
                 len(arguments) in (2, 4) and arguments[0] == '-p' and arguments[1].isdigit() and
@@ -109,8 +127,32 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             # unchanged real/effective UID and start identity; bind it again below.
             exit_display = (pid in helper_bindings and row[4] == '(ps)' and
                             row[1:4] == known[pid][:3])
+            observation['argv_role'] = ('EXACT_PS_OBSERVER' if words and words[0] in ('ps', '/bin/ps') and ps_arguments
+                                        else 'PS_EXIT_DISPLAY' if row[4] == '(ps)' else 'NOT_ALLOWLISTED')
+            observation['direct_wrapper_parent'] = row[0] == process.pid
+            observation['previously_bound_helper'] = pid in helper_bindings
             if not (platform.system() == 'Darwin' and row[2] == 0 and row[0] == process.pid and
                     ((words and words[0] in ('ps', '/bin/ps') and ps_arguments) or exit_display)):
+                # Query only the already descendant-bound UID501/root candidate,
+                # for static diagnostics; this never authorizes it or a signal.
+                if platform.system() == 'Darwin' and row[2] == 0 and row[0] == process.pid:
+                    original_reason = receipt.get('failure_reason')
+                    try:
+                        diagnostic_binding = helper_binding(pid)
+                        observation['kernel_file_role'] = ('ROOT_SUID_SYSTEM_PS' if diagnostic_binding else 'ALREADY_ABSENT')
+                        if diagnostic_binding is None and row[4] == '(ps)':
+                            # The live ps text snapshot can race argv destruction
+                            # and reaping. This proves absence, not helper authority.
+                            # Preserve accounting; never register or signal it.
+                            observation['role'] = 'ALREADY_ABSENT_UNVERIFIED_PS_EXIT_DISPLAY'
+                            receipt['unverified_observations'].append(observation)
+                            return False
+                    except AssertionError:
+                        observation['kernel_file_role'] = 'NOT_VERIFIED_SYSTEM_PS'
+                    if original_reason is None:
+                        receipt.pop('failure_reason', None)
+                    else:
+                        receipt['failure_reason'] = original_reason
                 reject('EFFECTIVE_UID_NOT_ALLOWLISTED', observation)
             receipt['failure_observation'] = observation
             binding = helper_binding(pid)
@@ -126,6 +168,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 receipt['helper_observations'].append(observation)
             receipt.pop('failure_observation', None)
         known[pid] = row[1:]
+        rejected_live.pop(pid, None)
         return True
 
     def snapshot():
@@ -158,10 +201,25 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 remember_identity(pid, row)
         return rows
 
+    def pid_absent(pid, rows):
+        if pid in rows:
+            return False
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            return True
+        except PermissionError:
+            return False
+        return False
+
     def remaining():
         rows = remember()
         alive = []
         for pid, identity in known.items():
+            if pid in rejected_live or pid in unverified_zombies:
+                if not pid_absent(pid, rows):
+                    alive.append(pid)
+                continue
             if pid in rows:
                 if states.get(pid, '').startswith('Z'):
                     if rows[pid][1:4] != identity[:3]:
@@ -179,6 +237,9 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                         continue
                     if binding != helper_bindings[pid]:
                         reject('REMEMBERED_HELPER_EXECUTABLE_CHANGED')
+                alive.append(pid)
+        for pid in rejected_live.keys() - known.keys():
+            if not pid_absent(pid, rows):
                 alive.append(pid)
         return alive
 
@@ -247,6 +308,8 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                         break
                     receipt['result'] = 'FAIL'
                     for pid in alive:
+                        if pid in rejected_live or pid in unverified_zombies:
+                            continue  # Wait for absence; never signal an unverified PID.
                         # Re-read identity immediately before each individual signal.
                         rows = snapshot()
                         if pid in rows:
@@ -277,6 +340,9 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 receipt['wrapper_reaped'] = True
                 alive = remaining()
                 receipt['cleanup'] = [{'pid': pid, 'removed': pid not in alive} for pid in sorted(known)]
+                receipt['rejected_observation_cleanup'] = [{'pid': pid, 'removed': pid not in alive,
+                    'proof': 'ACTUAL_PID_ABSENCE' if pid not in alive else 'PRESENT_UNVERIFIED_NEVER_SIGNALLED'}
+                    for pid in sorted(rejected_live)]
                 assert not alive, 'known owned Mac descendants remain'
                 if 'failure_type' not in receipt:
                     assert receipt['result'] == 'PASS_WRAPPER_AND_OWNED_CLEANUP', 'native Mac supervision failed'
@@ -512,6 +578,7 @@ def main():
             finally:
                 supervision = json.loads((public / 'supervision.json').read_text())
                 assert supervision['wrapper_reaped'] and all(p['removed'] for p in supervision['cleanup'])
+                assert all(p['removed'] for p in supervision.get('rejected_observation_cleanup', [])), 'unverified observation remains; preserve lock'
                 assert 'cleanup_failure_type' not in supervision, 'preserve lock until owned cleanup is verified'
                 assert not lock.is_symlink() and lock.stat().st_uid == os.getuid() and lock.stat().st_ino == lock_identity
                 lock.unlink()

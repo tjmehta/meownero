@@ -1,0 +1,79 @@
+{
+  "schema": "meownero-native-windows-ci-check/1",
+  "result": "FAIL",
+  "native_architecture": "x86_64",
+  "phases": [
+    {
+      "name": "exception-probe",
+      "argv": [
+        "D:\\a\\_temp\\tjs1882-native\\binding-extract\\meownero-vanguard-windows-i686\\bin\\i686-exception-probe.exe"
+      ],
+      "reaped": true,
+      "pid": 7860,
+      "exit": 0
+    },
+    {
+      "name": "preflight",
+      "argv": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.13.15\\x64\\python.exe",
+        "-B",
+        "D:\\a\\_temp\\tjs1882-native\\binding-extract\\meownero-vanguard-windows-i686\\tester.py",
+        "preflight"
+      ],
+      "reaped": true,
+      "pid": 880,
+      "exit": 0
+    },
+    {
+      "name": "journey",
+      "argv": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.13.15\\x64\\python.exe",
+        "-B",
+        "D:\\a\\_temp\\tjs1882-native\\binding-extract\\meownero-vanguard-windows-i686\\tester.py",
+        "run",
+        "--out",
+        "D:\\a\\_temp\\tjs1882-native\\journey"
+      ],
+      "reaped": true,
+      "pid": 6384,
+      "exit": 1
+    }
+  ],
+  "package_architecture": "i686",
+  "execution_substrate": "NATIVE_WINDOWS_WOW64",
+  "windows_32bit_os_execution": "UNTESTED",
+  "initial_console_process_count": 5,
+  "console_mode": "EXISTING_ATTACHED_CONSOLE",
+  "native_exception_probe": {
+    "result": "PASS_NATIVE_I686_EXCEPTION_PROBE",
+    "sha256": "ee8ddee3410083de55c03870fc6411f1f14433292f83edff09372e10125167fd",
+    "source_sha256": "3e533f6bb05ac3529e2a2cb09d8967ecf3f6b8480d30b1be5171dac276fe5ae1",
+    "exit": 0,
+    "reaped": true,
+    "deadline_seconds": 60,
+    "exact_success_line": true,
+    "newline": "CRLF",
+    "cleanup_count_asserted_by_bound_fixture": 1
+  },
+  "owned_job": {
+    "active_processes": 0,
+    "total_processes": 15,
+    "peak_committed_bytes": 22798336,
+    "memory_limit_bytes": 4294967296,
+    "children": [
+      {
+        "pid": 7860,
+        "exit": 0
+      },
+      {
+        "pid": 880,
+        "exit": 0
+      },
+      {
+        "pid": 6384,
+        "exit": 1
+      }
+    ]
+  },
+  "wall_seconds": 3.47
+}
