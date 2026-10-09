@@ -467,7 +467,12 @@ def windows_check(package, out, row):
                 'exact_success_line': True, 'newline': 'CRLF' if marker.endswith(b'\r\n') else 'LF',
                 'cleanup_count_asserted_by_bound_fixture': 1}
         phase('preflight', [sys.executable, '-B', package / 'tester.py', 'preflight'])
-        phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
+        if row['architecture'] == 'i686':
+            phase('journey', [sys.executable, '-B', ROOT / 'vanguard/run-portable-journey-diagnostic.py',
+                '--tester', package / 'tester.py', '--tester-sha256', row['package_helpers']['tester.py'],
+                '--diagnostic', out / 'journey-diagnostic.json', '--out', out / 'journey'])
+        else:
+            phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
         phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
                            '--package', package, '--out', out / 'controls'])
         receipt['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY'
@@ -617,7 +622,8 @@ def main():
         # These are the same explicit public receipts, including honest failure
         # and owned-cleanup evidence. Private phase logs are never exported.
         if check_root is not None:
-            for source, name in [('journey/result.json', 'journey.json'),
+            for source, name in [('journey-diagnostic.json', 'journey-diagnostic.json'),
+                                 ('journey/result.json', 'journey.json'),
                                  ('controls/controls.json', 'controls.json'),
                                  ('check-receipt.json', 'check.json')]:
                 path = check_root / source
