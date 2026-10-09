@@ -29,6 +29,16 @@ def main():
     original_start, original_request = p2p.start, p2p.request
     processes = []
     rpc_lock = threading.Lock()
+    # Colima shared folders cannot chmod Unix sockets. Reuse the accepted soak's
+    # container-private tmpfs socket location; native Levin/scenario logic is unchanged.
+    original_bridge = p2p.Bridge
+
+    class ContainerBridge(original_bridge):
+        def __init__(self):
+            super().__init__()
+            self.socket = Path('/run/vanguard/p2p.sock')
+
+    p2p.Bridge = ContainerBridge
 
     def start(name, argv):
         original_start(name, argv)

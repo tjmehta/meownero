@@ -55,7 +55,7 @@ def main():
     else:
         results.append({'control': 'real cache baseline/wrong executable hash', 'result': 'NOT_RUN', 'reason': 'requires build-mac'})
     # A distinct process owns the real shared lock while admission must refuse it.
-    lock_script = 'import fcntl,sys; f=open(sys.argv[1],"rb"); fcntl.flock(f,fcntl.LOCK_EX); print("HELD",flush=True); sys.stdin.read()'
+    lock_script = 'import fcntl,sys; f=open(sys.argv[1],"rb"); fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB); print("HELD",flush=True); sys.stdin.read()'
     if tester.LOCK.exists():
         proc = subprocess.Popen([sys.executable, '-c', lock_script, str(tester.LOCK)],
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)

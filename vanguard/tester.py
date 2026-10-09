@@ -216,7 +216,7 @@ def run(src, out):
         out.mkdir(mode=0o700)
         write(out / 'preflight.json', pre)
         write(out / 'inputs.json', pre['inputs'])
-        result = {'result': 'FAIL', 'gates': {}, 'whole_deadline_seconds': 2500,
+        result = {'result': 'FAIL', 'gates': {'p2p': 'NOT_RUN', 'restore': 'NOT_RUN'}, 'whole_deadline_seconds': 2500,
                   'private_state': 'retained in owned mode0700 output; never export recursively'}
         cleanup = []
         began = time.monotonic()
@@ -238,10 +238,12 @@ def run(src, out):
                     'builder_image': PROFILE['image'], 'rustc': PIN['builder']['rustc'],
                     'binary': pre['binary'], 'commands': [], 'metrics': {},
                     'build_mode': 'read-only cached binary inspection; no compilation'}
-                result['gates'][gate] = 'NOT_RUN'
+                result['gates'][gate] = 'FAIL_CACHE_INSPECTION'
                 for label in ('build', 'run1'):
                     work = stage if label == 'build' else stage / label
                     work.mkdir(exist_ok=True)
+                    if label == 'run1':
+                        result['gates'][gate] = 'FAIL_NATIVE'
                     name = f'tjs1870-{os.getpid()}-{gate}-{label}'
                     body = ('uname -m; /cache/rust/bin/rustc -V; /cache/rust/bin/cargo -V; '
                             '/src/build/vanguard/bin/monerod --version; /src/build/vanguard/bin/monero-wallet-rpc --version'
@@ -253,6 +255,7 @@ def run(src, out):
                     argv = docker('run', '--name', name, '--pull=never', '--network=none',
                         '--cap-drop=ALL', '--security-opt=no-new-privileges', '--cpus=2', '--memory=4g',
                         '--memory-swap=4g', '--pids-limit=256', '--ulimit', 'core=0',
+                        f'--tmpfs=/run/vanguard:rw,noexec,nosuid,nodev,size=1m,mode=0700,uid={os.getuid()},gid={os.getgid()}',
                         '-u', f'{os.getuid()}:{os.getgid()}',
                         '-v', f'{src}:/cache:ro', '-v', f'{src / "monero-fcmp"}:/src:ro',
                         '-v', f'{ROOT / "vanguard"}:/harness:ro', '-v', f'{work}:/out',

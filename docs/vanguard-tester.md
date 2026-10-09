@@ -62,7 +62,9 @@ Run rechecks idle Docker after taking that lock and keeps it across both gates.
 It first inspects cached native binaries, then runs the unchanged native P2P
 scenario once and the unchanged funded restore scenario once. Each scenario has
 a 1,100-second container deadline, a bounded host wait, 2 CPUs, 4 GiB RAM,
-256 PIDs, no capabilities and no outside network. The workload has a 2,500-second
+256 PIDs, no capabilities and no outside network. Its private Unix socket uses
+the accepted container tmpfs approach because Colima shared folders cannot chmod
+that socket. The workload has a 2,500-second
 host budget. Typical measured timing belongs in the rehearsal report; no
 30-minute soak or Railway run is part of this invocation.
 
