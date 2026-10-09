@@ -44,8 +44,9 @@ def main():
         while True:
             try:
                 tip = call('rpc', {'path': 'json_rpc', 'body': {
-                    'jsonrpc': '2.0', 'id': '0', 'method': 'get_last_block_header'}})
-                assert 'result' in tip
+                    'jsonrpc': '2.0', 'id': '0', 'method': 'get_info'}})
+                assert tip.get('result', {}).get('status') == 'OK'
+                assert tip['result'].get('top_block_hash') and tip['result']['height'] >= 1
                 break
             except (OSError, AssertionError):
                 assert proc.poll() is None and time.monotonic() < end
@@ -56,13 +57,16 @@ def main():
         denied('rpc', {'path': 'json_rpc', 'body': {'method': 'generateblocks'}}, True, 403)
         denied('rpc', {'path': 'send_raw_transaction', 'body': {}}, True, 403)
         restart = call('restart')
-        assert restart['reopened_tip']['result']['block_header']['hash'] == tip['result']['block_header']['hash']
+        assert restart['reopened_info']['result']['top_block_hash'] == tip['result']['top_block_hash']
+        assert restart['reopened_info']['result']['height'] == tip['result']['height']
         assert 'exit' not in restart['before']['generations'][-1], 'before snapshot changed after stopping'
         while True:
             try:
                 after_tip = call('rpc', {'path': 'json_rpc', 'body': {
-                    'jsonrpc': '2.0', 'id': '0', 'method': 'get_last_block_header'}})
-                assert after_tip['result']['block_header']['hash'] == tip['result']['block_header']['hash']
+                    'jsonrpc': '2.0', 'id': '0', 'method': 'get_info'}})
+                assert after_tip['result']['status'] == 'OK'
+                assert after_tip['result']['top_block_hash'] == tip['result']['top_block_hash']
+                assert after_tip['result']['height'] == tip['result']['height']
                 break
             except (OSError, KeyError):
                 assert proc.poll() is None and time.monotonic() < end
