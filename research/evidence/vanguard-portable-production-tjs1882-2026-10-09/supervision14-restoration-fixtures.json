@@ -1,0 +1,61 @@
+{
+  "schema": "meownero-supervision14-caller-handler-first-observation-fixtures/1",
+  "result": "PASS_OLD_LOSS_REPRODUCED_NEW_CALLER_SIGNAL_AND_FIRST_OBSERVATION_RESTORED",
+  "cases": [
+    {
+      "case": "original-Intel11",
+      "source_sha256": "b0363fbd074d4a8ba43d7da7554a32ac404f62b06b17371211accf56cf05825b",
+      "actual_owned_worker_reaped": true,
+      "original_mask_restored": true,
+      "caller_handlers_restored": true,
+      "actual_final_receipt_signals_delivered_to_caller": [],
+      "honest_cleanup_cancellation_failure": false
+    },
+    {
+      "case": "corrected-Intel14",
+      "source_sha256": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974",
+      "actual_owned_worker_reaped": true,
+      "original_mask_restored": true,
+      "caller_handlers_restored": true,
+      "actual_final_receipt_signals_delivered_to_caller": [
+        2,
+        15
+      ],
+      "honest_cleanup_cancellation_failure": true
+    },
+    {
+      "case": "original-LinuxARM13",
+      "source_sha256": "0dab781ac041990c38ae5a7802d3a5b897ef451fc1b4a86ef0917eec328f53f1",
+      "actual_owned_worker_reaped": true,
+      "original_mask_restored": true,
+      "caller_handlers_restored": true,
+      "actual_final_receipt_signals_delivered_to_caller": [],
+      "honest_cleanup_cancellation_failure": false
+    },
+    {
+      "case": "corrected-LinuxARM15",
+      "source_sha256": "3859b2684f5c5d70877616bc95ed25d25b5f0ff2f2712382aaf0ed6d12071105",
+      "actual_owned_worker_reaped": true,
+      "original_mask_restored": true,
+      "caller_handlers_restored": true,
+      "actual_final_receipt_signals_delivered_to_caller": [
+        2,
+        15
+      ],
+      "honest_cleanup_cancellation_failure": true
+    },
+    {
+      "case": "original-Intel11-later-approved-helper",
+      "first_failure_observation_preserved": false,
+      "original_reason_preserved": true,
+      "source_sha256": "b0363fbd074d4a8ba43d7da7554a32ac404f62b06b17371211accf56cf05825b"
+    },
+    {
+      "case": "corrected-Intel14-later-approved-helper",
+      "first_failure_observation_preserved": true,
+      "original_reason_preserved": true,
+      "source_sha256": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974"
+    }
+  ],
+  "native_archive_journeys": "UNTESTED_BY_FIXTURES"
+}

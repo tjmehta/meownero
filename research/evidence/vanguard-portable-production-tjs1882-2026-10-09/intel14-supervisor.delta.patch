@@ -1,0 +1,171 @@
+--- a/vanguard/run-portable-ci.py
++++ b/vanguard/run-portable-ci.py
+@@ -81,9 +81,20 @@
+                        'role': 'OWNED_WRAPPER' if pid == process.pid else 'OWNED_DESCENDANT'}
+         # Account for every first observation before validation can reject it.
+         # Quarantined identities are never authority for a cleanup signal.
+-        if pid not in known and pid not in rejected_live:
+-            rejected_live[pid] = row[1:]
++        first_candidate = pid not in known and pid not in rejected_live
++        if first_candidate:
++            rejected_live[pid] = row
+         observation['state_class'] = 'ZOMBIE' if states.get(pid, '').startswith('Z') else 'LIVE'
++        if not first_candidate and pid in rejected_live:
++            # A previous unverified observation is never ownership authority.
++            # Preserve its initial ancestry/UID/start even across PID reuse or
++            # privilege changes; only independently proven absence resolves it.
++            observation['role'] = 'PERMANENTLY_QUARANTINED_OBSERVATION'
++            observation['identity_state'] = ('INITIAL_IDENTITY_UNCHANGED' if row[:4] == rejected_live[pid][:4]
++                                             else 'INITIAL_ANCESTRY_UID_OR_START_CHANGED')
++            if observation not in receipt['unverified_observations']:
++                receipt['unverified_observations'].append(observation)
++            return False
+         # These immutable fields must pass before every role/euid/state branch.
+         # An observed helper cannot escape its binding by dropping privileges.
+         if pid in known and row[1:4] != known[pid][:3]:
+@@ -154,10 +165,13 @@
+                     else:
+                         receipt['failure_reason'] = original_reason
+                 reject('EFFECTIVE_UID_NOT_ALLOWLISTED', observation)
+-            receipt['failure_observation'] = observation
++            temporary_observation = 'failure_reason' not in receipt
++            if temporary_observation:
++                receipt['failure_observation'] = observation
+             binding = helper_binding(pid)
+             if binding is None:
+-                receipt.pop('failure_observation', None)
++                if temporary_observation:
++                    receipt.pop('failure_observation', None)
+                 return False
+             if pid in helper_bindings and (binding != helper_bindings[pid] or row[1:4] != known[pid][:3]):
+                 reject('REMEMBERED_HELPER_IDENTITY_CHANGED', observation)
+@@ -166,7 +180,8 @@
+             observation['executable_sha256'] = binding[3]
+             if len(receipt['helper_observations']) < 64 and observation not in receipt['helper_observations']:
+                 receipt['helper_observations'].append(observation)
+-            receipt.pop('failure_observation', None)
++            if temporary_observation:
++                receipt.pop('failure_observation', None)
+         known[pid] = row[1:]
+         rejected_live.pop(pid, None)
+         return True
+@@ -357,12 +372,28 @@
+             receipt['wrapper_reaped'] = process is not None and process.poll() is not None
+             raise
+         finally:
+-            receipt['wall_seconds'] = round(time.monotonic() - began, 3)
+-            receipt['cancellation_signals'] = pending
+-            signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+-            write(public / 'supervision.json', receipt)
+-            for sig, handler in handlers.items():
+-                signal.signal(sig, handler)
++            try:
++                receipt['wall_seconds'] = round(time.monotonic() - began, 3)
++                receipt['cancellation_signals'] = pending
++                deferred = signal.sigpending() & set(handlers)
++                if deferred:
++                    receipt['result'] = 'FAIL'
++                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
++                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
++                write(public / 'supervision.json', receipt)
++                deferred = signal.sigpending() & set(handlers)
++                if deferred:
++                    receipt['result'] = 'FAIL'
++                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
++                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
++                    write(public / 'supervision.json', receipt)
++            finally:
++                try:
++                    for number, handler in handlers.items():
++                        signal.signal(number, handler)
++                finally:
++                    signal.pthread_sigmask(signal.SIG_SETMASK, mask)
++
+ 
+ 
+ def windows_check(package, out, row):
+@@ -576,13 +607,23 @@
+                     '--archive', archive, '--sha256', row['archive_sha256'], '--target', 'macos-x86_64',
+                     '--out', check_root], out, public)
+             finally:
+-                supervision = json.loads((public / 'supervision.json').read_text())
+-                assert supervision['wrapper_reaped'] and all(p['removed'] for p in supervision['cleanup'])
+-                assert all(p['removed'] for p in supervision.get('rejected_observation_cleanup', [])), 'unverified observation remains; preserve lock'
+-                assert 'cleanup_failure_type' not in supervision, 'preserve lock until owned cleanup is verified'
+-                assert not lock.is_symlink() and lock.stat().st_uid == os.getuid() and lock.stat().st_ino == lock_identity
+-                lock.unlink()
+-                proof['owned_lock_removed'] = True
++                lock_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
++                lock_handlers = {number: signal.getsignal(number) for number in (signal.SIGTERM, signal.SIGINT)}
++                try:
++                    supervision = json.loads((public / 'supervision.json').read_text())
++                    assert supervision['wrapper_reaped'] and all(p['removed'] for p in supervision['cleanup'])
++                    assert all(p['removed'] for p in supervision.get('rejected_observation_cleanup', [])), 'unverified observation remains; preserve lock'
++                    assert 'cleanup_failure_type' not in supervision, 'preserve lock until owned cleanup is verified'
++                    assert not lock.is_symlink() and lock.stat().st_uid == os.getuid() and lock.stat().st_ino == lock_identity
++                    lock.unlink()
++                    proof['owned_lock_removed'] = True
++                finally:
++                    try:
++                        for number, handler in lock_handlers.items():
++                            signal.signal(number, handler)
++                    finally:
++                        signal.pthread_sigmask(signal.SIG_SETMASK, lock_mask)
++
+         journey = json.loads((check_root / 'journey/result.json').read_text())
+         controls = json.loads((check_root / 'controls/controls.json').read_text())
+         check = json.loads((check_root / 'check-receipt.json').read_text())
+@@ -616,16 +657,44 @@
+     finally:
+         # These are the same explicit public receipts, including honest failure
+         # and owned-cleanup evidence. Private phase logs are never exported.
+-        if check_root is not None:
+-            for source, name in [('journey/result.json', 'journey.json'),
+-                                 ('controls/controls.json', 'controls.json'),
+-                                 ('check-receipt.json', 'check.json')]:
+-                path = check_root / source
+-                if path.is_file() and not path.is_symlink():
+-                    write(public / name, json.loads(path.read_text()))
+-        write(public / 'ci-receipt.json', proof)
+-        print(proof['result'])
++        receipt_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT}) if os.name == 'posix' else None
++        receipt_handlers = {number: signal.getsignal(number) for number in (signal.SIGTERM, signal.SIGINT)} if os.name == 'posix' else {}
++        try:
++            # These are the same explicit public receipts, including honest failure
++            # and owned-cleanup evidence. Private phase logs are never exported.
++            if check_root is not None:
++                for source, name in [('journey/result.json', 'journey.json'),
++                                     ('controls/controls.json', 'controls.json'),
++                                     ('check-receipt.json', 'check.json')]:
++                    path = check_root / source
++                    if path.is_file() and not path.is_symlink():
++                        write(public / name, json.loads(path.read_text()))
++            deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
++            if deferred:
++                proof['result'] = 'FAIL'
++                proof['failure_reason'] = 'CANCELLATION_DURING_PUBLIC_RECEIPTS'
++            write(public / 'ci-receipt.json', proof)
++            deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
++            if deferred:
++                proof['result'] = 'FAIL'
++                proof['failure_reason'] = 'CANCELLATION_DURING_PUBLIC_RECEIPTS'
++                write(public / 'ci-receipt.json', proof)
++            print(proof['result'])
++        finally:
++            try:
++                for number, handler in receipt_handlers.items():
++                    signal.signal(number, handler)
++            finally:
++                if receipt_mask is not None:
++                    signal.pthread_sigmask(signal.SIG_SETMASK, receipt_mask)
++
+ 
+ 
+ if __name__ == '__main__':
++    if os.name == 'posix':
++        def cancelled(number, frame):
++            raise RuntimeError('native CI cancelled; preserve owned cleanup receipts')
++        signal.signal(signal.SIGTERM, cancelled)
++        signal.signal(signal.SIGINT, cancelled)
+     main()
++
