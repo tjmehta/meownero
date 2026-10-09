@@ -242,7 +242,19 @@ def main():
             if not apt_arch:
                 llvm = preflight['llvm_mingw_option']
                 download(llvm['url'], llvm['github_asset_digest'].split(':')[1], 'llvm.tar.xz')
-                preparation += 'mkdir /out/llvm\ntar -xJf /out/downloads/llvm.tar.xz --strip-components=1 -C /out/llvm\n'
+                if mac:
+                    # Native extraction preserves the distribution's relative
+                    # header symlinks; translated GNU tar failed on this share.
+                    with tarfile.open(downloads / 'llvm.tar.xz') as archive:
+                        members = archive.getmembers()
+                        roots = {Path(member.name).parts[0] for member in members}
+                        tester.require(len(roots) == 1, 'ambiguous LLVM archive root')
+                        archive.extractall(downloads, filter='data')
+                    (downloads / roots.pop()).rename(out / 'llvm')
+                    receipt['llvm_unpack'] = {'method': 'native Python tarfile data filter', 'archive_sha256': tester.sha(downloads / 'llvm.tar.xz'), 'distribution_symlinks_preserved': True}
+                    save()
+                else:
+                    preparation += 'mkdir /out/llvm\ntar -xJf /out/downloads/llvm.tar.xz --strip-components=1 -C /out/llvm\n'
             preparation += 'tar -xJf /out/downloads/rust-std.tar.xz -C /out/downloads\nsh /out/downloads/rust-std-1.93.0-' + rust_target + '/install.sh --prefix=/out/rust --disable-ldconfig\n'
             contained('toolchain', preparation, network=True, timeout=600)
             receipt['rustc_sha256'] = tester.sha(out / 'rust/bin/rustc')
