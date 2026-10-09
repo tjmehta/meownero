@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "python3",
+    "-B",
+    "vanguard/test-portable-licenses.py",
+    "--build",
+    "build/tjs1882-linux64-attempt02",
+    "--package",
+    "build/tjs1882-cd53-linux-x64-package01/meownero-vanguard-x86_64"
+  ],
+  "exit": 0,
+  "stdout": "PASS_REFUSAL both-source-trees\nPASS_REFUSAL registry-source-tree\nPASS_REFUSAL git-source-tree\nPASS_REFUSAL one-registry-crate\nPASS_REFUSAL one-git-crate\nPASS_LICENSE_CONTROLS: four native controls, two missing notice trees, one missing dual-license text, five real packager Rust-cache refusals\n",
+  "source_sha256": {
+    "vanguard/portable_licenses.py": "ad59473c1f974a24957fdeb8e09303540385f61e87d33e15df873c84ce097b92",
+    "vanguard/test-portable-licenses.py": "448907845ad77c2af8beb00a3ae4eabdf9e4d641d578c6e05b2d4d197ec080bb",
+    "vanguard/package-portable.py": "005a5c532e14e08c155476777c9cfe0a871719cf48ccd5f96da43ae115fbacb3"
+  },
+  "controls": 12,
+  "result": "PASS_LICENSE_CONTROLS",
+  "arm_full_fixture_attempt": "Notice-only ARM import lacks depends recipe boost.mk, so full helper cannot run on that fixture. Actual ARM packager and its complete 79-crate coverage pass; negative controls use the full x64 source build."
+}

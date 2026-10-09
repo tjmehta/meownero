@@ -1,0 +1,50 @@
+{
+  "macos-aarch64": {
+    "archive_sha256": "12c257e6f9be0aa054bffc48ff6e4f93fb04e14dcb9d453f9f02060a93b5ab66",
+    "exit": 0,
+    "stdout": "PASS_PREFLIGHT\n",
+    "stderr": "",
+    "substrate": "native Darwin ARM64",
+    "clean_extract": true
+  },
+  "linux-aarch64": {
+    "archive_sha256": "20e0d0f36d2ab80587b55a801a431e94b66a6913b1c5aac22f73b0b04a75d57c",
+    "argv": [
+      "docker",
+      "--context",
+      "colima",
+      "run",
+      "--pull=never",
+      "--name",
+      "tjs1882-cd53-1413b17045314cebbf9967898b60be52-preflight",
+      "--label",
+      "meownero.invocation=1413b17045314cebbf9967898b60be52",
+      "--network=none",
+      "--read-only",
+      "--tmpfs",
+      "/tmp:rw,size=64m,mode=1777",
+      "--tmpfs",
+      "/package:rw,exec,size=512m,mode=1777",
+      "--memory=768m",
+      "--memory-swap=768m",
+      "--cpus=1",
+      "--pids-limit=64",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "-v",
+      "~/Developer/tjs1882-a6abe690/cd53-linux-arm-candidate.tar.gz:/archive.tar.gz:ro",
+      "--user",
+      "1000:1000",
+      "--entrypoint",
+      "sh",
+      "sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b",
+      "-ec",
+      "tar -xzf /archive.tar.gz -C /package; cd /package/meownero-vanguard-aarch64; python3 -B tester.py preflight"
+    ],
+    "substrate": "native Linux ARM64 under Colima on Apple Silicon",
+    "cleanup": true,
+    "exit": 0,
+    "stdout": "PASS_PREFLIGHT\n",
+    "stderr": ""
+  }
+}

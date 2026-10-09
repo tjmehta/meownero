@@ -71,6 +71,68 @@ def retain_depends(build):
     return components
 
 
+def rust_coverage(build, package):
+    """Require every locked external crate, including build/target-only inputs.
+
+    This deliberately covers a superset of the linked crates. Cache discovery
+    supplies locations, never the required set, so an absent cache cannot pass.
+    """
+    pin = json.loads((ROOT / 'vanguard/source-lock.json').read_text())
+    lock_path = build / 'monero-fcmp' / pin['rust']['cargo_lock_path']
+    assert sha(lock_path) == pin['rust']['cargo_lock_sha256'], 'Cargo.lock pin mismatch'
+    lock = tomllib.loads(lock_path.read_text())
+    local = [p for p in lock['package'] if 'source' not in p]
+    assert [(p['name'], p['version']) for p in local] == [('fcmp_pp_rust', '0.0.0')], \
+        'unmapped local Rust package'
+    required = {(p['name'], p['version'], p['source']): p
+                for p in lock['package'] if 'source' in p}
+    assert required, 'empty required Rust coverage'
+    found = {}
+    for kind, relative, prefix in [('registry', 'registry/src', 'rust-registry'),
+                                   ('git', 'git/checkouts', 'rust-git')]:
+        tree = build / 'cargo-home' / relative
+        exported = package / 'licenses' / prefix
+        assert tree.is_dir() and not tree.is_symlink(), 'missing Rust source tree: ' + relative
+        assert exported.is_dir() and not exported.is_symlink(), 'missing Rust notice tree: ' + prefix
+        for cargo in sorted(tree.rglob('Cargo.toml')):
+            if any(p in {'.git', 'target'} for p in cargo.relative_to(tree).parts):
+                continue
+            metadata = tomllib.loads(cargo.read_text()).get('package', {})
+            for key in required:
+                if key[:2] != (metadata.get('name'), metadata.get('version')):
+                    continue
+                source = key[2]
+                if kind == 'registry':
+                    assert source == 'registry+https://github.com/rust-lang/crates.io-index', \
+                        'unsupported Rust registry: ' + source
+                else:
+                    assert source.startswith('git+') and '#' in source, 'Rust source kind mismatch'
+                    revision = source.rsplit('#', 1)[1]
+                    assert re.fullmatch(r'[0-9a-f]{40}', revision), 'unresolved Rust git revision'
+                    assert cargo.relative_to(tree).parts[1] == revision[:7], 'Rust git revision mismatch'
+                assert key not in found, 'ambiguous Rust crate: ' + str(key)
+                originals = sorted(p for p in cargo.parent.iterdir() if p.is_file() and
+                    p.name.upper().startswith(('LICENSE', 'COPYING', 'COPYRIGHT')))
+                assert originals, 'Rust crate notices missing: ' + key[0] + '@' + key[1]
+                texts = {}
+                for original in originals:
+                    retained = exported / original.relative_to(tree)
+                    digest = sha(original)
+                    assert sha(retained) == digest, 'Rust notice content mismatch: ' + str(retained)
+                    texts[str(retained.relative_to(package))] = digest
+                row = {'component': 'Rust crate ' + key[0], 'version': key[1], 'source': source,
+                       'libraries': [], 'texts': texts, 'cargo_toml_sha256': sha(cargo)}
+                if 'checksum' in required[key]:
+                    row['locked_source_archive_sha256'] = required[key]['checksum']
+                found[key] = row
+    missing = sorted(set(required) - set(found))
+    assert not missing, 'required Rust crate missing: ' + str(missing)
+    summary = {'policy': 'all external Cargo.lock packages, including build and target-only crates',
+               'cargo_lock_sha256': sha(lock_path), 'required_count': len(required),
+               'covered_count': len(found), 'local_wrapper': 'fcmp_pp_rust 0.0.0 covered by upstream LICENSE'}
+    return summary, [found[key] for key in sorted(required)]
+
+
 def coverage(build, package, mac, bundled):
     source = build / 'monero-fcmp'
     licenses = package / 'licenses'
@@ -177,20 +239,7 @@ def coverage(build, package, mac, bundled):
             texts = [text] + [licenses / 'system' / ('COPYING-common-' + name) for name in sorted(referenced)]
             add(pkg, installed[pkg], 'Ubuntu package inventory at builder ' + str(json.loads((build / 'build-receipt.json').read_text())['builder_image']), texts, names)
 
-    # Retain crate name/version/source mappings for the Cargo.lock dependencies.
-    lock = tomllib.loads((source / pin['rust']['cargo_lock_path']).read_text())
-    locked = {(p['name'], p['version']): p for p in lock['package']}
-    for tree, prefix in [(build / 'cargo-home/registry/src', 'rust-registry'),
-                         (build / 'cargo-home/git/checkouts', 'rust-git')]:
-        for cargo in sorted(tree.rglob('Cargo.toml')):
-            if any(p in {'.git', 'target'} for p in cargo.relative_to(tree).parts):
-                continue
-            metadata = tomllib.loads(cargo.read_text()).get('package', {})
-            key = metadata.get('name'), metadata.get('version')
-            if key not in locked:
-                continue
-            texts = [p for p in (licenses / prefix / cargo.parent.relative_to(tree)).glob('*')
-                     if p.is_file() and p.name.upper().startswith(('LICENSE', 'COPYING', 'COPYRIGHT'))]
-            add('Rust crate ' + key[0], key[1], locked[key].get('source', origin), texts)
+    rust, crates = rust_coverage(build, package)
+    components.extend(crates)
     return {'schema': 'meownero-license-coverage/1', 'result': 'PASS_LINKED_DEPENDENCY_COVERAGE',
-            'link_commands': link_files, 'components': components}
+            'link_commands': link_files, 'rust_coverage': rust, 'components': components}
