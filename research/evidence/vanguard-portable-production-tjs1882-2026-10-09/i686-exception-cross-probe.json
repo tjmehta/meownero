@@ -1,0 +1,82 @@
+{
+  "schema": "meownero-i686-exception-cross-probe/1",
+  "result": "BUILT_UNTESTED_EXCEPTION_PROBE",
+  "target": "windows-i686",
+  "native_execution": "UNTESTED",
+  "compiler_execution_substrate": "PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64",
+  "input_manifest_sha256": "501786a4af73721e581c6ab5fd33406c51bbbfa0db41d8d18a4a9b4939d978cb",
+  "inputs_archive_sha256": "41667fde86c2edf459322f82837c6e4dff2125a3154bb5007e6ae1018191a90c",
+  "rust_archive_sha256": "101557633036c9e40b07bf220448165d656b8453bf7083d8b5a00ac45e7cfa80",
+  "source_sha256": "3e533f6bb05ac3529e2a2cb09d8967ecf3f6b8480d30b1be5171dac276fe5ae1",
+  "script_sha256": "8e01ccf86bea3116a96709c77a784a6895f002c6467caeec7cf2e966c652bf57",
+  "builder_transfer": {
+    "archive_sha256": "01a5bd95b757995fb4d1f2212cb44805c8173217e94d58e3fb6d2ee6a4630ca2",
+    "source_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+    "loaded_image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+    "identical_rootfs_diff_ids": [
+      "sha256:98effb2dfe85d4c431f97d90482075f19e5fc3a57c2dd423d8bdfd4813620043",
+      "sha256:86a33f8cf62a81334e440800978517c03a0775a12c432972d62cae1da17ba06d",
+      "sha256:c733178cf9fcc69c90a88cd732790081ee5f10a0a4683d78a08ee91482ef2b1a"
+    ],
+    "runtime_config_identical": true
+  },
+  "argv": [
+    "docker",
+    "--context",
+    "colima",
+    "run",
+    "--platform=linux/amd64",
+    "--pull=never",
+    "--name",
+    "tjs1882-3175-i686-eh-b5328a109634486faf178646b9d6e703",
+    "--cidfile",
+    "~/Developer/tjs1882-3175/i686-exception-probe01/container.id",
+    "--label",
+    "meownero.invocation=b5328a109634486faf178646b9d6e703",
+    "--network=none",
+    "--cpus=2",
+    "--memory=3g",
+    "--memory-swap=3g",
+    "--pids-limit=64",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--ulimit",
+    "core=0",
+    "-u",
+    "501:20",
+    "-v",
+    "~/Developer/tjs1882-3175/i686-exception-probe01:/out",
+    "-e",
+    "PATH=/out/toolchain/usr/bin:/usr/bin:/bin",
+    "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+    "bash",
+    "-ec",
+    "trap 'cat /sys/fs/cgroup/memory.peak > /out/probe.memory; cat /sys/fs/cgroup/memory.events > /out/probe.memory-events' EXIT\ncd /out\ni686-w64-mingw32-g++-posix --version > /out/compiler.txt\ni686-w64-mingw32-g++-posix -dumpmachine >> /out/compiler.txt\ni686-w64-mingw32-g++-posix -std=c++17 -O0 -static -I/out i686-exception-probe.cpp libfcmp_pp_rust.a -lws2_32 -luserenv -lntdll -lbcrypt -ladvapi32 -lsynchronization -Wl,-Map,/out/i686-exception-probe.map -o /out/i686-exception-probe.exe\ni686-w64-mingw32-nm --defined-only /out/i686-exception-probe.exe > /out/i686-exception-probe.symbols\ni686-w64-mingw32-objdump -d /out/i686-exception-probe.exe > /out/i686-exception-probe.disassembly\n"
+  ],
+  "cleanup": {
+    "id": "608db92ca98784c43e807994a7807c0af6c2ad34b3765c91c4e55fc8f8137eb5",
+    "removed": true
+  },
+  "process_group": 51923,
+  "exit": 0,
+  "memory_peak_bytes": 138145792,
+  "memory_events": {
+    "low": "0",
+    "high": "0",
+    "max": "0",
+    "oom": "0",
+    "oom_kill": "0",
+    "oom_group_kill": "0"
+  },
+  "files": {
+    "i686-exception-probe.exe": "ee8ddee3410083de55c03870fc6411f1f14433292f83edff09372e10125167fd",
+    "i686-exception-probe.cpp": "3e533f6bb05ac3529e2a2cb09d8967ecf3f6b8480d30b1be5171dac276fe5ae1",
+    "i686-exception-probe.map": "980033768620d0a88673de0590bfb746b362b0bf60e20bb82b2b0c0ab79e5ae4",
+    "i686-exception-probe.symbols": "cd3dbeace839948f4cd2b009a9de4e7110fed430e0a3975f34b06d94ab95684a",
+    "i686-exception-probe.disassembly": "7f1541d82f5e8216be5ca19bc80d7344cb03183d95e06f7e4bc17ff632c4c914",
+    "compiler.txt": "3d401c50ae0103ab81ed851c3d09d0e41f5ef71a659f40f9e46d19e45a63663c"
+  },
+  "strong_dwarf2_runtime_binding": true,
+  "reaped": true,
+  "wall_seconds": 4.298286332981661
+}

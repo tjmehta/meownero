@@ -300,6 +300,20 @@ def main():
                 # The pinned 3.5.8 cryptographic implementation is unchanged.
                 config.write_text('my %targets = (\n    "mingwarm64" => {\n        inherit_from => [ "mingw-common" ],\n        cflags => "",\n        sys_id => "MINGWARM64",\n        bn_ops => add("SIXTY_FOUR_BIT"),\n        asm_arch => "aarch64",\n        uplink_arch => "armv8",\n        perlasm_scheme => "win64",\n        shared_rcflag => "",\n        multilib => "-arm64",\n    },\n);\n')
                 receipt['patches'].append({'file': str(config.relative_to(source)), 'sha256': tester.sha(config), 'reference': 'https://raw.githubusercontent.com/openssl/openssl/e9344b082ffa78cb1d68f6446c1b6417c4244a00/Configurations/10-main.conf'})
+                # Exact non-crypto ARM64 MinGW counter compatibility backport.
+                # Keep ZeroMQ4.3.5 and every dependency archive pin unchanged.
+                adapt('contrib/depends/packages/zeromq.mk',
+                      '$(package)_sha256_hash=6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43',
+                      '$(package)_sha256_hash=6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43\n$(package)_patches=windows-arm-counter.patch')
+                adapt('contrib/depends/packages/zeromq.mk',
+                      '  cp -f $(BASEDIR)/config.guess $(BASEDIR)/config.sub config',
+                      '  cp -f $(BASEDIR)/config.guess $(BASEDIR)/config.sub config && \\\n  patch -p1 < $($(package)_patch_dir)/windows-arm-counter.patch')
+                counter = source / 'contrib/depends/patches/zeromq/windows-arm-counter.patch'
+                counter.parent.mkdir(parents=True, exist_ok=True)
+                counter.write_text('--- a/src/clock.cpp\n+++ b/src/clock.cpp\n@@ -225,2 +225,6 @@\n     return _ReadStatusReg (pmccntr_el0);\n+#elif (defined(_WIN32) && defined(__GNUC__) && defined(__aarch64__))\n+    uint64_t val;\n+    __asm__ volatile("mrs %0, pmccntr_el0" : "=r"(val));\n+    return val;\n #elif (defined __GNUC__ && (defined __i386__ || defined __x86_64__))\n')
+                receipt['patches'].append({'file': str(counter.relative_to(source)), 'sha256': tester.sha(counter),
+                    'reference': 'https://github.com/zeromq/libzmq/commit/b71434140e8ed40b1840a5704370bfc8dfdbf627',
+                    'scope': 'Exact upstream ARM64 Windows GNU counter branch only; no version/crypto/consensus change.'})
                 options += ['boost_toolset_mingw32=clang']
                 options += ['mingw32_' + upper + '=/out/llvm/bin/llvm-' + lower for upper, lower in [('AR', 'ar'), ('RANLIB', 'ranlib'), ('NM', 'nm'), ('STRIP', 'strip')]]
                 options += ['host_WINDRES=/out/llvm/bin/' + host + '-windres']

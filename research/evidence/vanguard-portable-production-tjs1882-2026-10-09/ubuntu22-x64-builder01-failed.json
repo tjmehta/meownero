@@ -1,0 +1,24 @@
+{
+  "schema": "meownero-older-linux-builder/1",
+  "result": "FAILED_ATTEMPT",
+  "target": "linux-x86_64",
+  "base_manifest": "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde",
+  "compiler_execution_substrate": "PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64",
+  "distribution": "Ubuntu 22.04",
+  "commands": [
+    {
+      "label": "pull-pinned-base",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "pull",
+        "--platform=linux/amd64",
+        "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.23551570903509855
+    }
+  ],
+  "failure": "pull-pinned-base failed; preserve diagnostics"
+}

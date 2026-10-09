@@ -227,6 +227,10 @@ sha256sum contrib/depends/DEPENDS_HOST/share/toolchain.cmake > /out/generated-to
                 'bytes': (source / 'build/vanguard/bin' / name).stat().st_size}
                 for name in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')}
             receipt['result'] = 'BUILT_VERSION_EXECUTED_JOURNEY_UNTESTED'
+        except BaseException as error:
+            receipt['result'] = 'FAILED_ATTEMPT'
+            receipt['failure'] = str(error)
+            raise
         finally:
             try:
                 if cidfile.exists():

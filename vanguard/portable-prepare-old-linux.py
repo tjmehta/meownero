@@ -8,6 +8,7 @@ from pathlib import Path
 import platform
 import shutil
 import signal
+import stat
 import subprocess
 import time
 import uuid
@@ -76,7 +77,21 @@ def main():
         name = 'tjs1882-3175-old-builder-' + invocation
         cidfile = out / 'container.id'
         try:
-            run('pull-pinned-base', docker + ['pull', '--platform=linux/' + architecture, base], 180)
+            # Public image pulls must not consult an account/keychain helper.
+            # Keep the existing local daemon and context unchanged.
+            endpoint = tester.command(['docker', 'context', 'inspect', 'colima' if mac else 'default',
+                                       '--format', '{{.Endpoints.docker.Host}}'])
+            tester.require(endpoint.startswith('unix://') and
+                           stat.S_ISSOCK(Path(endpoint[7:]).stat().st_mode), 'existing local Docker socket required')
+            client = out / 'anonymous-docker-client'
+            client.mkdir(mode=0o700)
+            (client / 'config.json').write_text(
+                '{"auths":{"https://index.docker.io/v1/":{}},'
+                '"credHelpers":{"https://index.docker.io/v1/":""}}\n')
+            (client / 'config.json').chmod(0o600)
+            receipt['registry_access'] = 'Anonymous official public image, explicit empty Hub record and no helper in task-owned client'
+            run('pull-pinned-base', ['docker', '--config', str(client), '--host', endpoint,
+                'pull', '--platform=linux/' + architecture, base], 180)
             image = tester.command(docker + ['image', 'inspect', base, '--format', '{{.Id}}'])
             tester.require(tester.command(docker + ['image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) == architecture + ' linux', 'wrong older builder architecture')
             receipt['base_image'] = image
