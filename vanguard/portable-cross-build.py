@@ -10,6 +10,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import platform
 import shutil
 import signal
 import subprocess
@@ -47,14 +48,26 @@ def main():
     tester.require(tester.sha(args.preflight) == 'f3f25c38fea7a53e20b8e113ef823d382ecd8b40ba2057352d8219a4cb60a205', 'unverified route preflight')
     host, rust_target, apt_arch = TARGETS[args.target]
     image = PIN['builder']['image_id']
+    mac = platform.system() == 'Darwin'
+    tester.require((mac and platform.machine() == 'arm64') or
+                   (platform.system() == 'Linux' and platform.machine() == 'x86_64'), 'unsupported compiler host')
+    docker = ['docker', '--context', 'colima'] if mac else ['docker']
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(out.parent).free >= 10 * 1024**3, 'requires ten GiB disk reserve')
-        available = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))) * 1024
+        memory = tester.command(['colima', 'ssh', '--', 'cat', '/proc/meminfo']) if mac else Path('/proc/meminfo').read_text()
+        available = int(next(line.split()[1] for line in memory.splitlines() if line.startswith('MemAvailable:'))) * 1024
         tester.require(available >= 5 * 1024**3, 'requires five GiB available memory')
-        tester.require(tester.command(['docker', 'image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) == 'amd64 linux', 'wrong builder architecture')
+        docker_free = int(tester.command(['colima', 'ssh', '--', 'df', '-B1', '/var/lib/docker']).splitlines()[-1].split()[3]) if mac else shutil.disk_usage('/var/lib/docker').free
+        tester.require(docker_free >= 10 * 1024**3, 'requires ten GiB Docker disk reserve')
+        tester.require(tester.command(docker + ['image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) == 'amd64 linux', 'wrong builder architecture')
+        if mac:
+            tester.require(not tester.command(docker + ['ps', '-q']), 'Docker busy; preserve other workloads')
+            emulation = tester.command(['colima', 'ssh', '--', 'cat', '/proc/sys/fs/binfmt_misc/qemu-x86_64'])
+            tester.require(emulation.startswith('enabled\n') and 'flags: POCF' in emulation, 'already-enabled x64 container translation required')
         out.mkdir(mode=0o700)
         receipt = {'schema': 'meownero-windows-cross-build/1', 'source_lock': PIN, 'target': args.target,
-                   'builder_image': image, 'commands': [], 'containers': [], 'patches': [], 'result': 'INCOMPLETE'}
+                   'builder_image': image, 'compiler_execution_substrate': 'PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64' if mac else 'NATIVE_AMD64_LINUX',
+                   'commands': [], 'containers': [], 'patches': [], 'result': 'INCOMPLETE'}
 
         def save():
             tester.write(out / 'build-receipt.json', receipt)
@@ -98,7 +111,7 @@ def main():
             row = {'label': label, 'invocation': invocation, 'removed': False}
             receipt['containers'].append(row)
             save()
-            argv = ['docker', 'run', '--pull=never', '--name', name, '--cidfile', str(cidfile),
+            argv = docker + ['run', '--platform=linux/amd64', '--pull=never', '--name', name, '--cidfile', str(cidfile),
                     '--label', 'meownero.invocation=' + invocation,
                     '--network=' + ('bridge' if network else 'none'), '--cpus=2', '--memory=3g',
                     '--memory-swap=3g', '--pids-limit=256', '--cap-drop=ALL',
@@ -112,11 +125,11 @@ def main():
             finally:
                 if cidfile.exists():
                     cid = cidfile.read_text().strip()
-                    observed = json.loads(tester.command(['docker', 'inspect', cid]))[0]
+                    observed = json.loads(tester.command(docker + ['inspect', cid]))[0]
                     tester.require(observed['Id'] == cid and observed['Name'] == '/' + name and observed['Image'] == image and observed['Config']['Labels'].get('meownero.invocation') == invocation, 'owned container proof failed')
                     row['id'] = cid
-                    run(label + '-cleanup', ['docker', 'rm', '-f', cid], 30)
-                    tester.require(cid not in tester.command(['docker', 'ps', '-aq', '--no-trunc']).splitlines(), 'owned container remains')
+                    run(label + '-cleanup', docker + ['rm', '-f', cid], 30)
+                    tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(), 'owned container remains')
                     row['removed'] = True
                     save()
 
@@ -170,7 +183,6 @@ def main():
                 return
             builder.export_sources(args.cache.resolve(), out / 'monero-fcmp', out, run)
             shutil.copytree(args.cache / 'cargo-home', out / 'cargo-home')
-            tester.require(tester.command([str(args.rust / 'bin/rustc'), '-V']) == PIN['builder']['rustc'], 'Rust pin mismatch')
             shutil.copytree(args.rust, out / 'rust', symlinks=False)
             rust_archive = preflight['rust_std_artifacts'][rust_target]
             downloads = out / 'downloads'
@@ -185,7 +197,7 @@ def main():
                 save()
 
             download(rust_archive['url'], rust_archive['published_sha256'], 'rust-std.tar.xz')
-            preparation = 'mkdir -p /out/downloads /out/toolchain\n'
+            preparation = 'test "$(rustc -V)" = "' + PIN['builder']['rustc'] + '"\nmkdir -p /out/downloads /out/toolchain\n'
             packages = ['curl']
             if apt_arch:
                 packages += ['binutils-mingw-w64-' + apt_arch, 'gcc-mingw-w64-' + apt_arch + '-posix',
