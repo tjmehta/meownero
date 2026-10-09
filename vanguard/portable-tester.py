@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import signal
 import shutil
 import socket
@@ -24,11 +25,16 @@ PROGRAMS = ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')
 COIN = 10**12
 
 
+class JourneyInterrupted(Exception):
+    """Fatal cancellation or deadline, distinct from retryable RPC timeouts."""
+
+
 def child_environment():
     env = dict(os.environ)
-    for name in ('LD_PRELOAD', 'LD_AUDIT'):
+    for name in ('LD_PRELOAD', 'LD_AUDIT', 'DYLD_INSERT_LIBRARIES', 'DYLD_ROOT_PATH',
+                 'DYLD_FALLBACK_LIBRARY_PATH'):
         env.pop(name, None)
-    env['LD_LIBRARY_PATH'] = str(ROOT / 'lib')
+    env['DYLD_LIBRARY_PATH' if platform.system() == 'Darwin' else 'LD_LIBRARY_PATH'] = str(ROOT / 'lib')
     return env
 
 
@@ -59,12 +65,17 @@ def preflight():
     manifest = json.loads(safe(ROOT / 'release.json').read_text())
     require(manifest['upstream_commit'] == UPSTREAM and manifest['cargo_lock_sha256'] == CARGO_LOCK,
             'wrong source pin')
-    require(manifest['system'] == 'Linux' and platform.system() == 'Linux', 'wrong operating system')
+    require(manifest['system'] in ('Linux', 'Darwin') and platform.system() == manifest['system'],
+            'wrong operating system')
     machine = {'amd64': 'x86_64', 'arm64': 'aarch64'}.get(platform.machine(), platform.machine())
     require(machine == manifest['architecture'], 'wrong architecture')
-    libc, version = platform.libc_ver()
-    require(libc == 'glibc' and tuple(map(int, version.split('.'))) >=
-            tuple(map(int, manifest['minimum_glibc'].split('.'))), 'glibc ABI too old or unsupported')
+    if manifest['system'] == 'Linux':
+        libc, version = platform.libc_ver()
+        require(libc == 'glibc' and tuple(map(int, version.split('.'))) >=
+                tuple(map(int, manifest['minimum_glibc'].split('.'))), 'glibc ABI too old or unsupported')
+    else:
+        require(tuple(map(int, platform.mac_ver()[0].split('.'))) >=
+                tuple(map(int, manifest['minimum_macos'].split('.'))), 'macOS ABI too old')
     expected = set(manifest['files']) | {'release.json'}
     paths = list(ROOT.rglob('*'))
     require(not any(p.is_symlink() for p in paths), 'package symlink refused')
@@ -77,8 +88,13 @@ def preflight():
         binary = ROOT / 'bin' / name
         with binary.open('rb') as stream:
             header = stream.read(20)
-        require(header[:6] == b'\x7fELF\x02\x01' and int.from_bytes(header[18:20], 'little') ==
-                {'x86_64': 62, 'aarch64': 183}[machine], 'wrong binary format or target')
+        if manifest['system'] == 'Linux':
+            valid = header[:6] == b'\x7fELF\x02\x01' and int.from_bytes(header[18:20], 'little') == \
+                {'x86_64': 62, 'aarch64': 183}[machine]
+        else:
+            valid = header[:4] == b'\xcf\xfa\xed\xfe' and int.from_bytes(header[4:8], 'little') == \
+                {'x86_64': 0x1000007, 'aarch64': 0x100000c}[machine] and int.from_bytes(header[12:16], 'little') == 2
+        require(valid, 'wrong binary format or target')
         require(os.access(binary, os.X_OK), 'binary is not executable')
         result = subprocess.run([str(binary), '--version'], capture_output=True, timeout=20, env=child_environment())
         require(result.returncode == 0, 'program startup failed: ' + name)
@@ -87,7 +103,12 @@ def preflight():
 
 @contextmanager
 def lock():
-    path = safe(Path(tempfile.gettempdir()) / ('meownero-vanguard-tester-' + str(os.getuid()) + '.lock'))
+    temp_root = Path(tempfile.gettempdir())
+    if platform.system() == 'Darwin':
+        # macOS reports /var/... while its canonical system temp root is
+        # /private/var/.... Keep the lock leaf and user outputs strict.
+        temp_root = temp_root.resolve(strict=True)
+    path = safe(temp_root / ('meownero-vanguard-tester-' + str(os.getuid()) + '.lock'))
     descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
     try:
         info = os.fstat(descriptor)
@@ -114,13 +135,23 @@ def rpc(port, method, params=None):
     return value['result']
 
 
+def available_memory():
+    if platform.system() == 'Linux':
+        return int(next(row.split()[1] for row in Path('/proc/meminfo').read_text().splitlines()
+                        if row.startswith('MemAvailable:'))) * 1024
+    stats = subprocess.check_output(['/usr/bin/vm_stat'], text=True, timeout=10)
+    page_size = int(re.search(r'page size of (\d+) bytes', stats)[1])
+    pages = re.findall(r'^Pages (?:free|inactive|speculative):\s+(\d+)\.', stats, re.MULTILINE)
+    require(len(pages) == 3, 'could not inspect available native memory')
+    return sum(map(int, pages)) * page_size
+
+
 def run(out):
     out = safe(out)
     require(out.parent.is_dir() and not out.exists(), 'output must be new under an existing parent')
     with lock():
         manifest = preflight()
-        available = int(next(row.split()[1] for row in Path('/proc/meminfo').read_text().splitlines()
-                             if row.startswith('MemAvailable:'))) * 1024
+        available = available_memory()
         require(available >= 5 * 1024**3 and shutil.disk_usage(out.parent).free >= 5 * 1024**3,
                 'requires five GiB available memory and disk')
         out.mkdir(mode=0o700)
@@ -137,7 +168,7 @@ def run(out):
         began = time.monotonic()
 
         def deadline(signum, frame):
-            raise TimeoutError('native journey deadline reached')
+            raise JourneyInterrupted('native journey interrupted or deadline reached')
 
         previous_handler = signal.signal(signal.SIGALRM, deadline)
         previous_term = signal.signal(signal.SIGTERM, deadline)
@@ -167,15 +198,20 @@ def run(out):
                 require(process.poll() is None, 'owned process exited: ' + name)
                 try:
                     rpc(port, 'get_info' if program == 'monerod' else 'get_version')
-                    mapped_executable = Path('/proc/' + str(process.pid) + '/exe')
-                    actual_hash = hashlib.sha256(mapped_executable.read_bytes()).hexdigest()
+                    if manifest['system'] == 'Linux':
+                        mapped_executable = Path('/proc/' + str(process.pid) + '/exe')
+                        actual_hash = hashlib.sha256(mapped_executable.read_bytes()).hexdigest()
+                        paths = [Path(parts[5]) for line in Path('/proc/' + str(process.pid) + '/maps').read_text().splitlines()
+                                 if len(parts := line.split(maxsplit=5)) == 6 and parts[5].startswith('/')]
+                    else:
+                        mapped = subprocess.check_output(['/usr/sbin/lsof', '-a', '-p', str(process.pid),
+                                                          '-d', 'txt', '-Fn'], text=True, timeout=10)
+                        paths = [Path(line[1:]) for line in mapped.splitlines() if line.startswith('n/')]
+                        require(ROOT / 'bin' / program in paths, 'native kernel executable mapping mismatch')
+                        actual_hash = sha(ROOT / 'bin' / program)
                     require(actual_hash == receipt['program_sha256'][program], 'running executable hash mismatch')
                     loaded = {}
-                    for line in Path('/proc/' + str(process.pid) + '/maps').read_text().splitlines():
-                        parts = line.split(maxsplit=5)
-                        if len(parts) != 6 or not parts[5].startswith('/'):
-                            continue
-                        path = Path(parts[5])
+                    for path in paths:
                         if path.name in manifest['bundled_libraries']:
                             require(path.parent == ROOT / 'lib', 'system library substituted for bundled library')
                             loaded[path.name] = sha(path)

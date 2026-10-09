@@ -14,11 +14,14 @@ The final review report must bind the archive's SHA256 and tested environment.
 
 ## Requirements
 
-Use the Linux architecture named in `release.json`, its minimum glibc version,
-Python 3.8 or later, two CPU cores, five GiB available memory and five GiB free
-disk. Read the binary ABI and dependency fields in that same manifest. These
-are Linux ELF programs. macOS, native Windows, WSL and containers are separate
-targets. This package does not install anything or invoke Docker.
+Use the operating system and architecture named in `release.json`, Python 3.8
+or later, two CPU cores, five GiB available memory and five GiB free disk.
+Linux ELF packages require the stated glibc version. Native macOS Mach-O
+packages require the stated macOS version and Apple Silicon. Read the ABI,
+dependency and signing fields in that same manifest. The Mac candidate has an
+ad hoc linker signature and is not Developer ID signed or notarized; download
+approval by macOS remains a separate check. Windows, WSL and containers are
+separate targets. This package does not install anything or invoke Docker.
 
 Check the downloaded archive against the adjacent `SHA256SUMS`, extract it to
 a new directory, and open a terminal in the extracted package. Run:
@@ -54,8 +57,9 @@ for each correction. Delete only an exact disposable output you own when done.
 `bin/monerod --help`, `bin/monero-wallet-cli --help` and
 `bin/monero-wallet-rpc --help` describe the actual shipped programs. The automated
 journey exits its daemons and wallets when finished. To inspect the resulting
-wallet manually, first set `export LD_LIBRARY_PATH="$PWD/lib"` in this terminal
-to use the bundled libraries. Start the daemon with the same `private/chain` directory and
+wallet manually, on Linux first set `export LD_LIBRARY_PATH="$PWD/lib"` in this
+terminal to use the bundled libraries. The native Mac package uses system
+frameworks and bundles its other dependencies statically. Start the daemon with the same `private/chain` directory and
 the regtest/offline options used in `tester.py`. Open
 `private/restored/restored` with the wallet CLI, `--allow-mismatched-daemon-version`
 `--shared-ringdb-dir` pointing at that run's `private/ringdb`, and the local

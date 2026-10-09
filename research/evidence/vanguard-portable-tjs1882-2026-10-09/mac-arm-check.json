@@ -1,0 +1,117 @@
+{
+  "schema": "meownero-portable-native-mac-check/1",
+  "archive_sha256": "2f3f72d696a81cd7bc5694a2ce9b520cff87d973eab6d944fa448fe4cc95079f",
+  "result": "PASS_NATIVE_ARCHIVE_JOURNEY",
+  "phases": [
+    {
+      "name": "preflight",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "~/Developer/tjs1882-a6abe690/mac-arm-runtime03/extract/meownero-vanguard-macos-aarch64/tester.py",
+        "preflight"
+      ],
+      "reaped": true,
+      "pid": 29053,
+      "exit": 0
+    },
+    {
+      "name": "journey",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "~/Developer/tjs1882-a6abe690/mac-arm-runtime03/extract/meownero-vanguard-macos-aarch64/tester.py",
+        "run",
+        "--out",
+        "~/Developer/tjs1882-a6abe690/mac-arm-runtime03/journey"
+      ],
+      "reaped": true,
+      "pid": 29076,
+      "exit": 0
+    },
+    {
+      "name": "controls",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "~/Developer/tjs1882-a6abe690/vanguard/test-portable-refusals.py",
+        "--package",
+        "~/Developer/tjs1882-a6abe690/mac-arm-runtime03/extract/meownero-vanguard-macos-aarch64",
+        "--out",
+        "~/Developer/tjs1882-a6abe690/mac-arm-runtime03/controls"
+      ],
+      "reaped": true,
+      "pid": 30040,
+      "exit": 0
+    }
+  ],
+  "resident_limit_bytes": 4294967296,
+  "peak_resident_bytes": 715866112,
+  "cleanup": [
+    {
+      "pid": 29053,
+      "removed": true
+    },
+    {
+      "pid": 29055,
+      "removed": true
+    },
+    {
+      "pid": 29073,
+      "removed": true
+    },
+    {
+      "pid": 29076,
+      "removed": true
+    },
+    {
+      "pid": 29084,
+      "removed": true
+    },
+    {
+      "pid": 29087,
+      "removed": true
+    },
+    {
+      "pid": 29096,
+      "removed": true
+    },
+    {
+      "pid": 29519,
+      "removed": true
+    },
+    {
+      "pid": 30014,
+      "removed": true
+    },
+    {
+      "pid": 30040,
+      "removed": true
+    },
+    {
+      "pid": 30444,
+      "removed": true
+    },
+    {
+      "pid": 30466,
+      "removed": true
+    },
+    {
+      "pid": 30472,
+      "removed": true
+    },
+    {
+      "pid": 30477,
+      "removed": true
+    },
+    {
+      "pid": 30486,
+      "removed": true
+    },
+    {
+      "pid": 30491,
+      "removed": true
+    }
+  ],
+  "wall_seconds": 18.722
+}

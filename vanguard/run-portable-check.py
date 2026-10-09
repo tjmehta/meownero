@@ -21,17 +21,22 @@ def main():
     parser.add_argument('--archive', type=Path, required=True)
     parser.add_argument('--sha256', required=True)
     parser.add_argument('--target', choices=['linux-x86_64', 'linux-aarch64'], required=True)
+    parser.add_argument('--runtime-image', help='Exact sha256 image ID for a prepared Linux distribution')
     parser.add_argument('--out', type=Path, required=True)
     args = parser.parse_args()
     archive, out = tester.regular(args.archive), tester.fresh(args.out)
     tester.require(tester.sha(archive) == args.sha256, 'archive hash mismatch')
     arm = args.target == 'linux-aarch64'
     arch = 'aarch64' if arm else 'x86_64'
-    image = tester.PROFILE['image'] if arm else tester.PIN['builder']['image_id']
+    image = args.runtime_image or (tester.PROFILE['image'] if arm else tester.PIN['builder']['image_id'])
+    tester.require(image.startswith('sha256:') and len(image) == 71 and
+                   all(c in '0123456789abcdef' for c in image[7:]), 'exact image ID required')
+    host_arch = {'arm64': 'aarch64', 'amd64': 'x86_64'}.get(platform.machine(), platform.machine())
+    tester.require(host_arch == arch, 'native runtime host architecture required')
     docker = ['docker', '--context', 'colima'] if platform.system() == 'Darwin' else ['docker']
     with tester.heavy_lock():
-        tester.require(tester.command(docker + ['image', 'inspect', image, '--format', '{{.Architecture}}']) ==
-                       ('arm64' if arm else 'amd64'), 'wrong runtime image architecture')
+        tester.require(tester.command(docker + ['image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) ==
+                       ('arm64' if arm else 'amd64') + ' linux', 'wrong runtime image architecture or OS')
         if platform.system() == 'Darwin':
             tester.require(not tester.command(docker + ['ps', '-q']), 'Docker busy; preserve other workloads')
         out.mkdir(mode=0o700)
@@ -41,6 +46,7 @@ def main():
 trap 'cat /sys/fs/cgroup/memory.peak > /out/runtime.memory; cat /sys/fs/cgroup/memory.events > /out/runtime.memory-events' EXIT
 uname -smr > /out/environment.txt
 cat /etc/os-release >> /out/environment.txt
+python3 --version >> /out/environment.txt
 mkdir /out/extract
 tar -xzf /artifact.tar.gz -C /out/extract
 cd /out/extract/meownero-vanguard-ARCH
@@ -53,7 +59,7 @@ python3 -B /harness/test-portable-refusals.py --package "$PWD" --out /out/contro
             '--cpus=2', '--memory=2g', '--memory-swap=2g', '--pids-limit=256', '--cap-drop=ALL',
             '--security-opt=no-new-privileges', '--ulimit', 'core=0', '-u', f'{os.getuid()}:{os.getgid()}',
             '-v', f'{archive}:/artifact.tar.gz:ro', '-v', f'{out}:/out', '-v', f'{ROOT / "vanguard"}:/harness:ro',
-            image, 'bash', '-ec', script]
+            '--entrypoint', '/bin/bash', image, '-ec', script]
         receipt = {'schema': 'meownero-portable-check/1', 'archive_sha256': args.sha256, 'target': args.target,
                    'image': image, 'argv': command, 'result': 'FAIL', 'cleanup': {'removed': False}}
         try:

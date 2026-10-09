@@ -15,6 +15,9 @@ import time
 
 
 def main():
+    def cancelled(signum, frame):
+        raise RuntimeError('control harness interrupted; stop its owned tester')
+    signal.signal(signal.SIGTERM, cancelled)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--package', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
@@ -66,21 +69,43 @@ def main():
         result = invoke(package)
         assert result.returncode != 0 and 'tester busy' in result.stderr
     rows.append({'case': 'busy-lock', 'refused': True})
-    journey = out / 'cancelled'
-    with (out / 'cancelled.log').open('wb') as log:
-        child = subprocess.Popen([sys.executable, '-B', str(package / 'tester.py'), 'run', '--out', str(journey)],
-                                 stdout=log, stderr=subprocess.STDOUT)
-        end = time.monotonic() + 60
-        while not (journey / 'private/sender.log').exists() and child.poll() is None and time.monotonic() < end:
-            time.sleep(0.1)
-        assert child.poll() is None and (journey / 'private/sender.log').exists(), 'no live native cancellation fixture'
-        child.send_signal(signal.SIGTERM)
-        assert child.wait(timeout=60) != 0, 'cancelled attempt passed'
-    receipt = json.loads((journey / 'result.json').read_text())
-    assert receipt['result'] == 'FAIL_NATIVE_JOURNEY' and receipt['cleanup'] and all(r['removed'] for r in receipt['cleanup'])
-    for row in receipt['cleanup']:
-        assert not Path('/proc/' + str(row['pid'])).exists(), 'owned process remains'
-    rows.append({'case': 'cancelled-owned-cleanup', 'removed': True, 'process_count': len(receipt['cleanup'])})
+    for name, interruption in [('cancelled', signal.SIGTERM), ('deadline', signal.SIGALRM)]:
+        journey = out / name
+        with (out / (name + '.log')).open('wb') as log:
+            child = None
+            mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+            try:
+                child = subprocess.Popen([sys.executable, '-B', str(package / 'tester.py'), 'run', '--out', str(journey)],
+                    stdout=log, stderr=subprocess.STDOUT,
+                    preexec_fn=lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask))
+                signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+                end = time.monotonic() + 60
+                while not (journey / 'private/sender.log').exists() and child.poll() is None and time.monotonic() < end:
+                    time.sleep(0.1)
+                assert child.poll() is None and (journey / 'private/sender.log').exists(), 'no live native interruption fixture'
+                child.send_signal(interruption)
+                assert child.wait(timeout=60) != 0, 'interrupted attempt passed'
+            finally:
+                signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                if child is not None and child.poll() is None:
+                    child.terminate()
+                    try:
+                        child.wait(timeout=60)
+                    except subprocess.TimeoutExpired:
+                        child.kill()
+                        child.wait(timeout=5)
+                signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+        receipt = json.loads((journey / 'result.json').read_text())
+        assert receipt['result'] == 'FAIL_NATIVE_JOURNEY' and receipt['cleanup'] and all(r['removed'] for r in receipt['cleanup'])
+        for row in receipt['cleanup']:
+            try:
+                os.kill(row['pid'], 0)
+            except ProcessLookupError:
+                pass
+            else:
+                raise AssertionError('owned process remains')
+        rows.append({'case': name + '-owned-cleanup', 'signal': interruption.name,
+                     'removed': True, 'process_count': len(receipt['cleanup'])})
     manifest_hash = hashlib.sha256((package / 'release.json').read_bytes()).hexdigest()
     (out / 'controls.json').write_text(json.dumps({'result': 'PASS_REFUSALS',
         'release_manifest_sha256': manifest_hash, 'cases': rows}, indent=2) + '\n')

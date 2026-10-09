@@ -43,23 +43,55 @@ def main():
             began = time.monotonic()
             def limits():
                 resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
-                resource.setrlimit(resource.RLIMIT_DATA, (4 * 1024**3, 4 * 1024**3))
             try:
                 with (out / (label + '.log')).open('wb') as log:
-                    process = subprocess.Popen(argv, cwd=cwd, stdout=log, stderr=subprocess.STDOUT,
-                                               start_new_session=True, preexec_fn=limits)
+                    mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                    def child_setup():
+                        limits()
+                        signal.pthread_sigmask(signal.SIG_SETMASK, mask)
                     try:
-                        row['exit'] = process.wait(timeout=timeout)
+                        process = subprocess.Popen(argv, cwd=cwd, stdout=log, stderr=subprocess.STDOUT,
+                                                   start_new_session=True, preexec_fn=child_setup)
+                        row['process_group'] = process.pid
+                        row['peak_resident_bytes'] = 0
+                        row['resident_limit_bytes'] = 4 * 1024**3
+                        row['reaped'] = False
+                        save()
+                        signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+                        # Darwin rejects a four-GiB RLIMIT_DATA. Bound the owned
+                        # process group's total resident memory instead.
+                        while True:
+                            rows = subprocess.check_output(['ps', '-axo', 'pgid=,rss='], text=True, timeout=10)
+                            resident = sum(int(fields[1]) * 1024 for line in rows.splitlines()
+                                if len(fields := line.split()) == 2 and int(fields[0]) == process.pid)
+                            row['peak_resident_bytes'] = max(row['peak_resident_bytes'], resident)
+                            tester.require(resident <= row['resident_limit_bytes'], 'owned process memory limit')
+                            remaining = timeout - (time.monotonic() - began)
+                            if remaining <= 0:
+                                raise subprocess.TimeoutExpired(argv, timeout)
+                            try:
+                                row['exit'] = process.wait(timeout=min(1, remaining))
+                                break
+                            except subprocess.TimeoutExpired:
+                                pass
                     except BaseException as error:
-                        os.killpg(process.pid, 15)
-                        try:
-                            process.wait(timeout=10)
-                        except subprocess.TimeoutExpired:
-                            os.killpg(process.pid, 9)
-                            process.wait(timeout=5)
+                        if 'process' in locals():
+                            try:
+                                os.killpg(process.pid, 15)
+                            except ProcessLookupError:
+                                pass
+                            try:
+                                process.wait(timeout=10)
+                            except subprocess.TimeoutExpired:
+                                os.killpg(process.pid, 9)
+                                process.wait(timeout=5)
                         row['exit'] = 124
                         if not isinstance(error, subprocess.TimeoutExpired):
                             raise
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+                        if 'process' in locals():
+                            row['reaped'] = process.poll() is not None
                 tester.require(row['exit'] == 0, label + ' failed; preserved diagnostics')
             finally:
                 row['wall_seconds'] = time.monotonic() - began
@@ -70,10 +102,18 @@ def main():
             source = out / 'monero-fcmp'
             builder.export_sources(args.cache.resolve(), source, out, run)
             run('native-toolchain', ['sh', '-c', 'clang --version; cmake --version; xcrun --show-sdk-path; xcrun --show-sdk-version'])
+            sdk = tester.command(['xcrun', '--show-sdk-path'])
+            cc = tester.command(['xcrun', '-f', 'clang'])
+            cxx = tester.command(['xcrun', '-f', 'clang++'])
+            receipt['sdk'] = sdk
+            receipt['sdk_version'] = tester.command(['xcrun', '--show-sdk-version'])
             # Use the source-pinned downloader/checksum recipes. NO_WALLET only
             # omits hardware-wallet dependencies; simplewallet still builds.
             run('depends', ['make', '-j2', 'HOST=arm64-apple-darwin', 'NO_WALLET=1', 'NO_READLINE=1',
-                            'DOWNLOAD_RETRIES=1', 'DOWNLOAD_CONNECT_TIMEOUT=20'], 2400,
+                            'DOWNLOAD_RETRIES=1', 'DOWNLOAD_CONNECT_TIMEOUT=20',
+                            'darwin_CC=' + cc + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0',
+                            'darwin_CXX=' + cxx + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0 -stdlib=libc++',
+                            'darwin_LDFLAGS=-Wl,-platform_version,macos,11.0,' + receipt['sdk_version']], 2400,
                 source / 'contrib/depends')
             downloads = out / 'downloads'
             downloads.mkdir()
