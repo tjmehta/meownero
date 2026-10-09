@@ -99,6 +99,16 @@ def main():
     evil.write_text('arbitrary credential text\nFailed to parse block from blob\n')
     tester.require(tester.public_bytes(evil, 'daemon1.log') == b'Failed to parse block from blob\n', 'raw log payload exported')
     results.append({'control': 'free-form log payload excluded', 'result': 'PASS'})
+    for suffix, names in tester.COUNTERS.items():
+        counters = ''.join(name + ' 0\n' for name in sorted(names))
+        for label, payload, expected in (
+            ('unknown counter name', counters + 'SYNTHETIC_PRIVATE_TOKEN_DO_NOT_EXPORT 123\n', 'unknown public counter name'),
+            ('duplicate counter name', counters + sorted(names)[0] + ' 0\n', 'duplicate public counter name'),
+            ('missing counter name', counters.split('\n', 1)[1], 'incomplete public counters'),
+            ('nonnumeric counter value', counters.replace(' 0', ' SYNTHETIC_DO_NOT_EXPORT', 1), 'non-counter payload'),
+            ('non-ASCII counter value', counters.replace(' 0', ' \u0661', 1), 'non-counter payload')):
+            evil.write_text(payload)
+            refuse(label + suffix, lambda: tester.public_bytes(evil, 'p2p/build' + suffix), expected)
     if args.public:
         import shutil
         tester.verify(args.public)
@@ -169,6 +179,25 @@ def main():
                     refuse(label + ' verify', lambda: tester.verify(source), 'unknown public evidence field')
                 target.write_bytes(original)
                 tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
+        for name in ('p2p/build.cpu', 'restore/run1/run1.memory-events'):
+            for label, extra, expected in (
+                ('unknown counter name', 'SYNTHETIC_PRIVATE_TOKEN_DO_NOT_EXPORT 123\n', 'unknown public counter name'),
+                ('duplicate counter name', (private_source / name).read_text().splitlines()[0] + '\n',
+                 'duplicate public counter name')):
+                for source in (private_source, public_copy):
+                    target = source / name
+                    original = target.read_bytes()
+                    target.write_bytes(original + extra.encode())
+                    tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
+                    if source == private_source:
+                        destination = work / ('refused-' + str(len(results)))
+                        archive = destination.with_suffix('.tar.gz')
+                        refuse(label + ' ' + name + ' export', lambda: tester.export(source, destination, archive), expected)
+                        tester.require(not destination.exists() and not archive.exists(), 'counter refusal created shareable output')
+                    else:
+                        refuse(label + ' ' + name + ' verify', lambda: tester.verify(source), expected)
+                    target.write_bytes(original)
+                    tester.manifest(source, tester.PUBLIC | ({'export.json'} if source == public_copy else set()), 'EVIDENCE.sha256')
     tester.write(work / 'controls.json', results)
     print('PASS_TESTER_REFUSALS', sum(row['result'].startswith('PASS') for row in results),
           'NOT_RUN', sum(row['result'] == 'NOT_RUN' for row in results))

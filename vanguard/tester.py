@@ -44,6 +44,14 @@ PUBLIC = frozenset(['inputs.json', 'preflight.json', 'result.json', 'cleanup.jso
 DIRS = {str(p) for name in PUBLIC | {'EVIDENCE.sha256', 'export.json'}
         for p in Path(name).parents if str(p) != '.'}
 GIB = 1024**3
+# Frozen from the supported Colima kernel's accepted native receipts. Never
+# derive this allowlist from the file being exported.
+COUNTERS = {
+    '.cpu': frozenset(('usage_usec', 'user_usec', 'system_usec',
+        'core_sched.force_idle_usec', 'nr_periods', 'nr_throttled',
+        'throttled_usec', 'nr_bursts', 'burst_usec')),
+    '.memory-events': frozenset(('low', 'high', 'max', 'oom', 'oom_kill', 'oom_group_kill')),
+}
 
 
 def require(ok, message):
@@ -488,8 +496,18 @@ def public_bytes(path, name):
         if name.endswith('.memory'):
             require(raw.decode().strip().isdigit(), 'non-memory payload refused')
         else:
-            require(all(len(row.split()) == 2 and row.split()[1].isdigit() for row in raw.decode().splitlines()),
+            suffix = Path(name).suffix
+            require(suffix in COUNTERS, 'unknown counter file refused')
+            rows = [row.split() for row in raw.decode().splitlines()]
+            require(all(len(row) == 2 and row[1].isascii() and row[1].isdigit() for row in rows),
                     'non-counter payload refused')
+            names = [row[0] for row in rows]
+            require(set(names) <= COUNTERS[suffix], 'unknown public counter name refused')
+            require(len(names) == len(set(names)), 'duplicate public counter name refused')
+            require(set(names) == COUNTERS[suffix], 'incomplete public counters refused')
+            # Only recognized names, ASCII numeric values and canonical separators
+            # cross the export boundary. Verification requires these same bytes.
+            raw = ''.join(f'{key} {value}\n' for key, value in rows).encode('ascii')
     return raw
 
 

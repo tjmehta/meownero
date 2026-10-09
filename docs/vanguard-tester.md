@@ -128,7 +128,11 @@ a cached inspection stage, explicitly labeled `build_mode`; it is not a new buil
 Only named JSON receipts, native observations, counters and captured Levin
 refusal frames are exported. Daemon parser logs are projected to recognized
 parser markers only, with the original raw digest recorded. Free-form logs and
-all unlisted files are excluded. JSON passes the pinned
+all unlisted files are excluded. CPU and memory-event files must contain exactly
+the counter names recorded on the supported kernel, each once, with ASCII numeric
+values. Unknown, duplicate or missing names refuse export and verification, even
+after rehashing. Counter separators are projected to plain spaces and newlines.
+JSON passes the pinned
 [public field/type schema](../vanguard/tester-public-schema.json), including
 nested objects, arrays and JSON encoded inside native RPC responses. Unknown
 fields are refused before any shareable export is created. Wallet notes and labels are
