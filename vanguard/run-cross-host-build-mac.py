@@ -14,7 +14,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parent
-STAGE = ROOT.parent
+STAGE = ROOT
 BUILD = Path('~/Developer/tjs1816-5a24c6b6/build01')
 IMAGE = 'sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b'
 
