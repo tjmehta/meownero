@@ -120,6 +120,14 @@ def main():
                             'darwin_LDFLAGS=-Wl,-platform_version,macos,11.0,' + receipt['sdk_version']], 2400,
                 source / 'contrib/depends')
             receipt['dependency_licenses'] = portable_licenses.retain_depends(out)
+            toolchain = source / ('contrib/depends/' + host + '/share/toolchain.cmake')
+            original = toolchain.read_text()
+            placeholder = 'SET(CMAKE_OSX_SYSROOT "' + str(source / ('contrib/depends/' + host + '/native/SDK')) + '/")'
+            tester.require(original.count(placeholder) == 1, 'generated SDK selector differs from pinned recipe')
+            before = tester.sha(toolchain)
+            toolchain.write_text(original.replace(placeholder, 'SET(CMAKE_OSX_SYSROOT "' + sdk + '")'))
+            receipt['generated_toolchain'] = {'before_sha256': before, 'sha256': tester.sha(toolchain),
+                'adaptation': 'Select the actual Xcode SDK instead of an absent cross-SDK cache; source recipe unchanged.'}
             save()
             downloads = out / 'downloads'
             downloads.mkdir()
