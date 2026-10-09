@@ -1,0 +1,61 @@
+name: TJS-1882 native Windows runner preflight
+on:
+  push:
+    branches: [tjs1882-native-windows-preflight]
+    paths: [.github/workflows/tjs1882-native-windows-preflight.yml]
+permissions: {}
+concurrency:
+  group: tjs1882-native-windows-preflight
+  cancel-in-progress: false
+jobs:
+  native-host:
+    name: Native ${{ matrix.arch }} host
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - runner: windows-11-arm
+            arch: Arm64
+          - runner: windows-2025
+            arch: X64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 5
+    steps:
+      - name: Verify native host architecture and installed tools
+        shell: pwsh
+        env:
+          EXPECTED_ARCH: ${{ matrix.arch }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $osArch = [System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture.ToString()
+          $processArch = [System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture.ToString()
+          if ($osArch -ne $env:EXPECTED_ARCH -or $processArch -ne $env:EXPECTED_ARCH) {
+            throw "Architecture mismatch: OS=$osArch process=$processArch expected=$env:EXPECTED_ARCH"
+          }
+          $os = Get-CimInstance Win32_OperatingSystem
+          $cpu = Get-CimInstance Win32_Processor | Select-Object -First 1
+          [ordered]@{
+            evidence_kind = 'NATIVE_HOST_PREFLIGHT_ONLY_NOT_PROJECT_TEST'
+            runner_label = '${{ matrix.runner }}'
+            os_architecture = $osArch
+            process_architecture = $processArch
+            os_caption = $os.Caption
+            os_version = $os.Version
+            processor = $cpu.Name
+            total_memory_bytes = [long]$os.TotalVisibleMemorySize * 1024
+            free_disk_bytes = (Get-PSDrive C).Free
+          } | ConvertTo-Json
+          foreach ($tool in @('rustc','rustup','clang','cmake','ninja','python','git')) {
+            $command = Get-Command $tool -ErrorAction SilentlyContinue
+            if ($command) {
+              Write-Output "TOOL $tool PATH=$($command.Source)"
+              & $command.Source --version
+              if ($LASTEXITCODE -ne 0) { throw "$tool version probe failed" }
+            } else {
+              Write-Output "TOOL $tool MISSING"
+            }
+          }
+          $rustup = Get-Command rustup -ErrorAction SilentlyContinue
+          if ($rustup) { & $rustup.Source target list --installed }
+          Write-Output 'No project source, binary, wallet, daemon, key, or deployment was created or executed.'
