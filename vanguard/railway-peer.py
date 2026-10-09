@@ -25,7 +25,7 @@ STOP = threading.Event()
 
 
 def metrics():
-    result = {'architecture': platform.machine(), 'generations': [row.copy() for row in GENERATIONS]}
+    result = {'architecture': platform.machine(), 'control_port': 8080, 'provider_port_hint': os.environ.get('PORT'), 'generations': [row.copy() for row in GENERATIONS]}
     for filename in ('memory.current', 'memory.peak', 'memory.max', 'memory.events', 'cpu.stat'):
         p = Path('/sys/fs/cgroup') / filename
         if p.exists():
@@ -157,7 +157,7 @@ def main():
     os.umask(0o077)
     for sig in (signal.SIGTERM, signal.SIGINT):
         signal.signal(sig, lambda *_: STOP.set())
-    server = BoundedServer(('0.0.0.0', int(os.environ.get('PORT', '8080'))), Control)
+    server = BoundedServer(('0.0.0.0', 8080), Control)
     server.timeout = 0.5
     started = time.monotonic()
     start()
