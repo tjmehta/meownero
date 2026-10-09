@@ -1,0 +1,90 @@
+[
+  {
+    "control": "pre-existing stopped container collision",
+    "result": "PASS_REFUSAL",
+    "fixture_id": "e56f749a520914b4d060381ac93d8759969333a84ff381c70ab2b59d138a584d",
+    "fixture_unchanged": true,
+    "run_exit": 1,
+    "cleanup": [
+      {
+        "name": "tjs1870-e2e5c355f0c549b193ac69a92aeeb9d7-p2p-build",
+        "container_id": null,
+        "stop_exit": null,
+        "inspect_exit": null,
+        "remove_exit": null,
+        "absence_exit": null,
+        "container_absent": null,
+        "private_state_retained": true,
+        "errors": []
+      }
+    ]
+  },
+  {
+    "control": "foreign invocation label",
+    "result": "PASS_REFUSAL",
+    "fixture_id": "53730d944daae727d95879356668d998efe0026f628fee1a1c01840764586654",
+    "fixture_unchanged": true
+  },
+  {
+    "control": "stop transport timeout injection",
+    "result": "PASS_REFUSAL",
+    "injected": [
+      {
+        "operation": "stop",
+        "timeout_seconds": 35
+      }
+    ],
+    "run_error": "gate failed; keep output and inspect private logs",
+    "cleanup": [
+      {
+        "name": "tjs1870-b30d71467eb64c07b7bd94a0770a6c23-p2p-build",
+        "container_id": "5b4a7de82281a9a15a4f4417c99ab981b2a44de7517d6a3def73ba6ef86005ec",
+        "stop_exit": null,
+        "inspect_exit": 0,
+        "remove_exit": 0,
+        "absence_exit": 0,
+        "container_absent": true,
+        "private_state_retained": true,
+        "errors": [
+          {
+            "operation": "stop",
+            "error": "TimeoutExpired"
+          }
+        ]
+      }
+    ],
+    "fault_output": "~/Developer/tjs1870-fixes-2c4c4836/cleanup-controls01/stop-timeout",
+    "removal_attempted": true
+  },
+  {
+    "control": "inspect transport timeout injection",
+    "result": "PASS_REFUSAL",
+    "injected": [
+      {
+        "operation": "inspect",
+        "timeout_seconds": 15
+      }
+    ],
+    "run_error": "gate failed; keep output and inspect private logs",
+    "cleanup": [
+      {
+        "name": "tjs1870-70bfe953d6a04ead80db415c497c1dab-p2p-build",
+        "container_id": "b92da98b13d0a96f98bb011252d94de8a30a51856c9606b0f34a4233a6524954",
+        "stop_exit": 0,
+        "inspect_exit": null,
+        "remove_exit": 0,
+        "absence_exit": 0,
+        "container_absent": true,
+        "private_state_retained": true,
+        "errors": [
+          {
+            "operation": "inspect",
+            "error": "TimeoutExpired"
+          }
+        ]
+      }
+    ],
+    "fault_output": "~/Developer/tjs1870-fixes-2c4c4836/cleanup-controls01/inspect-timeout",
+    "removal_attempted": true
+  }
+]

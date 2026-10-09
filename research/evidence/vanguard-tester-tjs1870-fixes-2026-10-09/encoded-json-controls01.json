@@ -1,0 +1,17 @@
+[
+  {
+    "control": "encoded JSON export fixture attempt01",
+    "result": "FAIL_TEST_SETUP",
+    "reason": "Export fixture retained export.json in raw manifest; unsafe/non-allowlisted manifest entry refused before field validation. No output created."
+  },
+  {
+    "control": "unknown field inside encoded transaction JSON verify",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  },
+  {
+    "control": "unknown field inside encoded transaction JSON export",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  }
+]

@@ -1,0 +1,140 @@
+[
+  {
+    "control": "unsupported architecture",
+    "result": "PASS_REFUSAL",
+    "reason": "unsupported profile; only verified build-mac Darwin 25.5.0 arm64 is supported"
+  },
+  {
+    "control": "existing output",
+    "result": "PASS_REFUSAL",
+    "reason": "existing output refused; use a new path and preserve failed attempts"
+  },
+  {
+    "control": "wrong preparation pin",
+    "result": "PASS_REFUSAL",
+    "reason": "preparation pin mismatch"
+  },
+  {
+    "control": "real cache baseline/wrong executable hash",
+    "result": "NOT_RUN",
+    "reason": "requires build-mac"
+  },
+  {
+    "control": "busy shared heavy lock",
+    "result": "PASS_REFUSAL",
+    "reason": "shared heavy lock busy; no workload started"
+  },
+  {
+    "control": "seed-bearing JSON",
+    "result": "PASS_REFUSAL",
+    "reason": "secret-bearing evidence refused"
+  },
+  {
+    "control": "credential-bearing JSON",
+    "result": "PASS_REFUSAL",
+    "reason": "secret-bearing evidence refused"
+  },
+  {
+    "control": "private pending transaction metadata",
+    "result": "PASS_REFUSAL",
+    "reason": "secret-bearing evidence refused"
+  },
+  {
+    "control": "database renamed JSON",
+    "result": "PASS_REFUSAL",
+    "reason": "binary/database evidence refused"
+  },
+  {
+    "control": "database renamed log",
+    "result": "PASS_REFUSAL",
+    "reason": "binary/database evidence refused"
+  },
+  {
+    "control": "database renamed frame",
+    "result": "PASS_REFUSAL",
+    "reason": "non-Levin bytes refused"
+  },
+  {
+    "control": "FIFO",
+    "result": "PASS_REFUSAL",
+    "reason": "regular file required: fifo"
+  },
+  {
+    "control": "allowed-name symlink",
+    "result": "PASS_REFUSAL",
+    "reason": "symlink path refused"
+  },
+  {
+    "control": "hard link",
+    "result": "PASS_REFUSAL",
+    "reason": "hard-linked file refused"
+  },
+  {
+    "control": "free-form log payload excluded",
+    "result": "PASS"
+  },
+  {
+    "control": "extra empty ring directory",
+    "result": "PASS_REFUSAL",
+    "reason": "unlisted export directory"
+  },
+  {
+    "control": "unlisted private file",
+    "result": "PASS_REFUSAL",
+    "reason": "unlisted export file"
+  },
+  {
+    "control": "public member symlink",
+    "result": "PASS_REFUSAL",
+    "reason": "symlink export refused"
+  },
+  {
+    "control": "rehashed wrong native pin",
+    "result": "PASS_REFUSAL",
+    "reason": "gate pin mismatch"
+  },
+  {
+    "control": "rehashed false receive balance",
+    "result": "PASS_REFUSAL",
+    "reason": "restore, rescan or rollback output/balance mismatch"
+  },
+  {
+    "control": "rehashed wrong profile",
+    "result": "PASS_REFUSAL",
+    "reason": "unsupported receipt profile"
+  },
+  {
+    "control": "unlisted input excluded from export",
+    "result": "PASS"
+  },
+  {
+    "control": "unknown wallet_seed field export",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  },
+  {
+    "control": "unknown wallet_seed field verify",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  },
+  {
+    "control": "unknown nested field export",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  },
+  {
+    "control": "unknown nested field verify",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  },
+  {
+    "control": "unknown nested RPC field export",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  },
+  {
+    "control": "unknown nested RPC field verify",
+    "result": "PASS_REFUSAL",
+    "reason": "unknown public evidence field refused"
+  }
+]
