@@ -39,7 +39,9 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--target', choices=TARGETS, required=True)
     parser.add_argument('--preflight', type=Path, required=True)
+    parser.add_argument('--i686-build-cache', type=Path, help='Retained failed, unpatched i686 compilation; verify pinned sources before copying')
     args = parser.parse_args()
+    tester.require(not args.i686_build_cache or args.target == 'windows-i686', 'cache recovery is i686 only')
     out = tester.fresh(args.out)
     preflight = tester.read(args.preflight)
     tester.require(tester.sha(args.preflight) == 'f3f25c38fea7a53e20b8e113ef823d382ecd8b40ba2057352d8219a4cb60a205', 'unverified route preflight')
@@ -119,6 +121,53 @@ def main():
                     save()
 
         try:
+            if args.i686_build_cache:
+                cached = args.i686_build_cache.resolve()
+                prior = tester.read(cached / 'build-receipt.json')
+                tester.require(prior['source_lock'] == PIN and prior['target'] == args.target and
+                               prior['result'] == 'FAILED_ATTEMPT' and not prior['patches'] and
+                               all(c['removed'] for c in prior['containers']), 'unverified failed compilation cache')
+                verified = out / 'verified-sources'
+                builder.export_sources(args.cache.resolve(), verified, out, run)
+                files = [p for p in verified.rglob('*') if p.is_file()]
+                for path in files:
+                    tester.require(tester.sha(path) == tester.sha(cached / 'monero-fcmp' / path.relative_to(verified)), 'cached pinned source changed')
+                tester.require(tester.sha(cached / 'rust/bin/rustc') == prior['rustc_sha256'] and
+                               tester.sha(cached / 'rust/bin/cargo') == prior['cargo_sha256'], 'cached Rust compiler changed')
+                for name, digest in prior['toolchain_packages'].items():
+                    tester.require(tester.sha(cached / 'downloads' / name) == digest, 'cached signed toolchain download changed')
+                tester.require(tester.sha(cached / 'downloads/rust-std.tar.xz') == prior['rust_std_download']['published_sha256'], 'cached target std changed')
+                tester.require(tester.sha(cached / 'monero-fcmp/build/portable/src/fcmp_pp/fcmp_pp_rust/libfcmp_pp_rust.a') == 'a936650965fda87e81acd6e4319fea4a362d606d1251fe2f8ce6a4442382e547', 'cached compiled Rust archive differs from the retained ABI probe')
+                shutil.copytree(cached, out, dirs_exist_ok=True, symlinks=True)
+                shutil.copyfile(cached / 'build-receipt.json', out / 'cached-build-receipt.json')
+                receipt['verified_cached_sources'] = len(files)
+                receipt['cached_build'] = {'receipt_sha256': tester.sha(out / 'cached-build-receipt.json'), 'path': str(cached)}
+                for key in ('rustc_sha256', 'cargo_sha256', 'toolchain_packages', 'rust_target', 'rust_std_download', 'downloads'):
+                    receipt[key] = prior[key]
+                helper = Path(__file__).with_name('portable_i686_unwind.py')
+                shutil.copyfile(helper, out / 'i686-unwind.py')
+                receipt['abi_helper_sha256'] = tester.sha(helper)
+                save()
+                contained('build', 'cd build/portable\nmake -j1 fcmp_pp_rust\npython3 /out/i686-unwind.py\nmake -j1 daemon simplewallet wallet_rpc_server\nfor program in monerod monero-wallet-cli monero-wallet-rpc; do i686-w64-mingw32-nm --defined-only bin/$program.exe > /out/$program.symbols; done\n', timeout=3600)
+                adaptation = tester.read(out / 'i686-unwind-adaptation.json')
+                for program in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc'):
+                    symbols = (out / (program + '.symbols')).read_text()
+                    strong = re.findall(r'^([0-9a-f]+) T __Unwind_Resume$', symbols, re.M)
+                    tester.require(len(strong) == 1, 'missing strong GNU unwind implementation')
+                    mapping = (out / (program + '.map')).read_text()
+                    lines = mapping.splitlines()
+                    matches = [i for i, line in enumerate(lines) if re.search(r'\s_Unwind_Resume$', line)]
+                    tester.require(len(matches) == 1, 'ambiguous unwind link map')
+                    block = next(line for line in reversed(lines[:matches[0]]) if line.startswith(' .text '))
+                    tester.require('libgcc_eh.a(unwind-dw2.o)' in block and int(strong[0], 16) == int(lines[matches[0]].split()[0], 16), 'unwind bound to compatibility stub')
+                fixture = Path(__file__).with_name('i686-exception-probe.cpp')
+                shutil.copyfile(fixture, out / fixture.name)
+                contained('exception-probe', 'cd /out\ni686-w64-mingw32-g++-posix -std=c++17 -O0 -static -Imonero-fcmp/src/fcmp_pp/fcmp_pp_rust /out/i686-exception-probe.cpp monero-fcmp/build/portable/src/fcmp_pp/fcmp_pp_rust/libfcmp_pp_rust.a -lws2_32 -luserenv -lntdll -lbcrypt -ladvapi32 -lsynchronization -Wl,-Map,/out/i686-exception-probe.map -o /out/i686-exception-probe.exe\ni686-w64-mingw32-objdump -d /out/i686-exception-probe.exe > /out/i686-exception-probe.disassembly\n', timeout=180)
+                receipt['exception_probe'] = {'file': 'i686-exception-probe.exe', 'sha256': tester.sha(out / 'i686-exception-probe.exe'), 'source_sha256': tester.sha(fixture), 'native_execution': 'UNTESTED'}
+                receipt['patches'].append({'kind': 'compiled ABI metadata only; pinned source unchanged', 'receipt_sha256': tester.sha(out / 'i686-unwind-adaptation.json'), 'all_other_archive_bytes_unchanged': adaptation['all_other_archive_bytes_unchanged'], 'native_exception_probe': 'UNTESTED'})
+                receipt['binaries'] = {name: {'sha256': tester.sha(out / 'monero-fcmp/build/portable/bin' / (name + '.exe'))} for name in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')}
+                receipt['result'] = 'BUILT_UNTESTED'
+                return
             builder.export_sources(args.cache.resolve(), out / 'monero-fcmp', out, run)
             shutil.copytree(args.cache / 'cargo-home', out / 'cargo-home')
             tester.require(tester.command([str(args.rust / 'bin/rustc'), '-V']) == PIN['builder']['rustc'], 'Rust pin mismatch')

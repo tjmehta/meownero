@@ -1,0 +1,20 @@
+{
+  "result": "BLOCKED_RESOURCE_BEFORE_LAUNCH",
+  "threshold_bytes": 5368709120,
+  "attempts": [
+    {
+      "target": "i686-exception-probe",
+      "observed_available_KiB": 4414704,
+      "container_launched": false
+    },
+    {
+      "target": "windows-aarch64",
+      "observed_available_GiB_rounded": 4.491,
+      "container_launched": false,
+      "output_created": false
+    }
+  ],
+  "gate_preserved": true,
+  "unrelated_processes_stopped": false,
+  "owner_action": "Parent coordinates at least five GiB available capacity on existing Linux writer host; writer resumes the exact retained route. Intel Mac can proceed on existing build-mac writer capability."
+}

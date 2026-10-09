@@ -69,6 +69,14 @@ def main():
         assert sha(source) == receipt['binaries'][name]['sha256'], 'built program hash mismatch'
         shutil.copyfile(source, binary_dir / source.name)
         inspect(binary_dir / source.name)
+    if receipt.get('abi_helper_sha256'):
+        probe = receipt.get('exception_probe')
+        assert probe, 'required i686 exception cross-probe missing'
+        assert receipt['target'] == 'windows-i686' and probe['native_execution'] == 'UNTESTED'
+        assert probe['file'] == 'i686-exception-probe.exe' and sha(build / probe['file']) == probe['sha256'], 'exception probe hash mismatch'
+        assert sha(build / 'i686-exception-probe.cpp') == probe['source_sha256'], 'exception fixture hash mismatch'
+        shutil.copyfile(build / probe['file'], binary_dir / probe['file'])
+        inspect(binary_dir / probe['file'])
     candidates = {}
     for prefix in (build / 'toolchain', build / 'llvm'):
         for path in prefix.rglob('*.dll'):
@@ -103,6 +111,21 @@ def main():
         shutil.copyfile(ROOT / source, package / target)
     shutil.copyfile(build / 'build-receipt.json', package / 'BUILD.json')
     shutil.copyfile(build / 'compiler.txt', package / 'COMPILER.txt')
+    if receipt.get('abi_helper_sha256'):
+        assert receipt['target'] == 'windows-i686', 'unexpected ABI adaptation target'
+        assert sha(build / 'i686-unwind.py') == receipt['abi_helper_sha256'], 'ABI helper hash mismatch'
+        assert sha(build / 'cached-build-receipt.json') == receipt['cached_build']['receipt_sha256'], 'cached provenance hash mismatch'
+        adaptation = json.loads((build / 'i686-unwind-adaptation.json').read_text())
+        assert adaptation['archive_before_sha256'] == 'a936650965fda87e81acd6e4319fea4a362d606d1251fe2f8ce6a4442382e547', 'ABI input differs from the retained exact probe'
+        assert adaptation['all_other_archive_bytes_unchanged'] and adaptation['before'] == 2 and adaptation['after'] == 105
+        assert sha(build / 'monero-fcmp/build/portable/src/fcmp_pp/fcmp_pp_rust/libfcmp_pp_rust.a') == adaptation['archive_after_sha256'], 'adapted Rust archive changed'
+        assert any(p.get('receipt_sha256') == sha(build / 'i686-unwind-adaptation.json') for p in receipt['patches']), 'missing ABI proof binding'
+        evidence = package / 'build-evidence'
+        evidence.mkdir()
+        names = ['i686-unwind.py', 'i686-unwind-adaptation.json', 'cached-build-receipt.json', 'i686-exception-probe.cpp', 'i686-exception-probe.map']
+        names += [program + suffix for program in PROGRAMS for suffix in ('.map', '.symbols')]
+        for name in names:
+            shutil.copyfile(build / name, evidence / name)
     (package / 'launch.cmd').write_text('@echo off\r\ncd /d "%~dp0"\r\npy -3 -B tester.py %*\r\nexit /b %errorlevel%\r\n')
     licenses = package / 'licenses'
     licenses.mkdir()
@@ -164,6 +187,8 @@ def main():
         'build_receipt': {'file': 'BUILD.json', 'sha256': sha(package / 'BUILD.json')},
         'license_coverage': {'file': 'license-coverage.json', 'sha256': sha(package / 'license-coverage.json'), 'result': coverage['result']},
         'files': {str(path.relative_to(package)): sha(path) for path in sorted(package.rglob('*')) if path.is_file()}}
+    if receipt.get('exception_probe'):
+        manifest['native_exception_probe'] = {'file': 'bin/i686-exception-probe.exe', 'native_execution': 'UNTESTED', 'required_for_native_acceptance': True}
     (package / 'release.json').write_text(json.dumps(manifest, indent=2) + '\n')
     archive = out / (package.name + '.zip')
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as stream:

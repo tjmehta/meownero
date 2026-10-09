@@ -1,0 +1,319 @@
+{
+  "schema": "meownero-windows-cross-build/1",
+  "source_lock": {
+    "schema": "meownero-vanguard-source-lock/1",
+    "issue": "TJS-356",
+    "pinned_on": "2026-09-23",
+    "scope": "Isolated, valueless harness. It compiles and executes the upstream FCMP++ and CARROT primitives at the pins below. It is not a node, not a network, and not an audit.",
+    "upstream": {
+      "url": "https://github.com/seraphis-migration/monero.git",
+      "branch": "fcmp++-stage",
+      "commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "commit_date": "2026-09-23T09:13:54-05:00",
+      "commit_subject": "Merge pull request #473 from j-berman/fix-genesis-torsion-check",
+      "license": "BSD-3-Clause (LICENSE: Copyright (c) 2014-2024, The Monero Project)",
+      "rebase_risk": "fcmp++-stage is a moving integration branch. This pin is a commit hash, not a branch name. Evidence records upstream-head.txt and the vector hashes so a later rebase is detectable.",
+      "submodules": {
+        "external/gtest": "52eb8108c5bdec04579160ae17225d66034bd723",
+        "external/mx25519": "420ccc2f5012ee1f8e02c1976e89620e1b0959f6",
+        "external/randomx": "aaafe71322df6602c21a5c72937ac284724ae561",
+        "external/rapidjson": "24b5e7a8b27f42fa16b96fc70aade9106cf7102f",
+        "external/supercop": "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+      },
+      "primitives_used": [
+        "src/fcmp_pp (prove.h: prove_membership, verify_membership, prove_sal, verify_sal, verify)",
+        "src/fcmp_pp/fcmp_pp_rust (FFI staticlib over monero-oxide crates)",
+        "src/carrot_core (account_secrets, destination, payment_proposal, scan)",
+        "src/cryptonote_basic (address base58 encode/decode used by CARROT destinations)",
+        "tests/unit_tests/curve_trees.cpp (upstream test-tree helpers, compiled unchanged)",
+        "tests/data/fcmp_pp_verify_inputs_{1,2,4,8,128}in.bin (upstream fixed FCMP++ verify vectors)"
+      ],
+      "alternatives_rejected": {
+        "v0.19.0.0-beta.2.0 (8ed2f782)": "pins monero-oxide 0e438aed (2026-04-23), which predates the Trail of Bits fix commit 066229801a18bb11679113c93971c4f19fde0cd0 included at 31c26d96",
+        "beta-stressnet-v3 (5288ee13cbea1c584056995baa88b03d43901bc2)": "same monero-oxide pin; stress-net branch, not the integration head",
+        "monero-project/monero master (d02c7c57)": "contains only the early FCMP++ integration phases",
+        "monero-project/monero PR #9436 (head 23b1b35b)": "stale draft"
+      }
+    },
+    "rust": {
+      "cargo_lock_path": "src/fcmp_pp/fcmp_pp_rust/Cargo.lock",
+      "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+      "monero_oxide_url": "https://github.com/monero-oxide/monero-oxide",
+      "monero_oxide_rev": "31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "crypto_bigint_url": "https://github.com/kayabaNerve/crypto-bigint (branch c-repr)",
+      "crypto_bigint_rev": "78352771313f1e9b8e48abe5ce30d50d6bdd291d",
+      "crate_licenses": "MIT (crypto/fcmps, crypto/generalized-bulletproofs, crypto/divisors, crypto/helioselene LICENSE files at 31c26d96)",
+      "fetch": "cargo fetch --locked on the host into the gitignored build/vanguard-src/cargo-home; the container build runs with CARGO_NET_OFFLINE=true and --network=none"
+    },
+    "builder": {
+      "image_id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "image_note": "The accepted testnet v0 builder image, used read-only by image ID with --pull=never. It is not retagged or modified. It carries no Rust, so the host toolchain below is mounted read-only.",
+      "rustc": "rustc 1.93.0 (254b59607 2026-01-19)",
+      "rustc_note": "Upstream CI (.github/workflows/build.yml at the pin) installs toolchain 1.93 via rustup-init 1.29.0"
+    },
+    "public_review_references": {
+      "caveat": "These are third-party reviews of upstream components, cited only as references. None of them is an audit of Meownero, of this harness, or of the pinned integration commit as a whole. Agent review is not external audit.",
+      "items": [
+        {
+          "component": "FCMP++ C++ integration (monero-project/monero)",
+          "reference": "Trail of Bits security review, trailofbits/publications@73e52c96cef59d42201ff5546090b76ca67a8014 reviews/2026-07-magicgrants-monerofcmp++crypto-securityreview.pdf (sha256 4f649fe0e63a8870ae3930ea142eb405345ff07a1b5f3e2ff7741deed6dce540), linked from the description of monero-project/monero PR #10360 'FCMP++: CurveTrees class & implementation of ed25519 outputs -> curve tree leaves function'. The same description links Cypher Stack cypherstack/fcmp-impl-audit@d7de33d08c48a3c249629e47f71ea72c938a3404 FCMP_Code_Implementation_Audit.pdf section 12 (not read for this harness)",
+          "scope_caveat": "Per the PR description, both reviewed an earlier state of that PR. The ToB report covers the crypto integration phases only and lists 6 informational findings: 5 resolved, and #6 (TOB-MAGIC-FCMP-6, the Rust FFI function selene_scalar_from_bytes depends on fragile memory layout) partially resolved."
+        },
+        {
+          "component": "full-chain-membership-proofs, circuit-abstraction, ec-gadgets",
+          "reference": "Veridise audit 2025-06-03 (monero-oxide audits/fcmps/README.md @ 31c26d96); non-interactive gadgets formally verified with Picus",
+          "scope_caveat": "Covers the crates at the audited revision, not this integration."
+        },
+        {
+          "component": "generalized-bulletproofs",
+          "reference": "Cypher Stack security proofs, Goodell review, Cypher Stack audit, then the flaw and fixed protocol, then the zkSecurity re-audit (monero-oxide audits/generalized-bulletproofs/ @ 31c26d96)",
+          "scope_caveat": "Finding 02 (zeroization) is deferred to monero-oxide#200. The Lean proofs are not claimed to correspond to the implementation."
+        },
+        {
+          "component": "ec-divisors",
+          "reference": "Veridise proofs, Cypher Stack reviews, SLVer Bullet equivalence (monero-project/meta#1244), zkSecurity notes on divisor incompleteness (monero-oxide audits/divisors/README.md @ 31c26d96)",
+          "scope_caveat": "The ec-divisors prover library itself is unaudited."
+        },
+        {
+          "component": "helioselene",
+          "reference": "Veridise Security Assessment for the Helios-Selene Curve Cycle, with partial formal verification (monero-oxide audits/helioselene/ @ 31c26d96)",
+          "scope_caveat": "Curve-cycle assessment; implementation coverage is partial."
+        },
+        {
+          "component": "FCMP++ composition",
+          "reference": "Cypher Stack FCMP++ review (cypherstack/fcmp-review; monero-oxide audits/fcmp++/Review.pdf @ 31c26d96)",
+          "scope_caveat": "Protocol composition review, not a code audit of this integration."
+        },
+        {
+          "component": "CARROT",
+          "reference": "Cypher Stack CARROT specification audits 2024-11-22 and 2025-09-10 follow-up (spec scope dbb04d91d40b68b2a8b82b895acf762c864b4cbc)",
+          "scope_caveat": "Specification only. No code audit of carrot_core or carrot_impl was found."
+        }
+      ]
+    }
+  },
+  "target": "windows-i686",
+  "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "commands": [
+    {
+      "label": "archive-upstream",
+      "argv": [
+        "git",
+        "-C",
+        "<repo>/build/vanguard-src/monero-fcmp",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02/source-upstream.tar",
+        "e151643c5269c83bf24a83b2548e2493876026b2"
+      ],
+      "process_group": 1742642,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.16735377395525575
+    },
+    {
+      "label": "archive-external-gtest",
+      "argv": [
+        "git",
+        "-C",
+        "<repo>/build/vanguard-src/monero-fcmp/external/gtest",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02/source-external-gtest.tar",
+        "52eb8108c5bdec04579160ae17225d66034bd723"
+      ],
+      "process_group": 1743088,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.0681646610610187
+    },
+    {
+      "label": "archive-external-mx25519",
+      "argv": [
+        "git",
+        "-C",
+        "<repo>/build/vanguard-src/monero-fcmp/external/mx25519",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02/source-external-mx25519.tar",
+        "420ccc2f5012ee1f8e02c1976e89620e1b0959f6"
+      ],
+      "process_group": 1743209,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.009713975014165044
+    },
+    {
+      "label": "archive-external-randomx",
+      "argv": [
+        "git",
+        "-C",
+        "<repo>/build/vanguard-src/monero-fcmp/external/randomx",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02/source-external-randomx.tar",
+        "aaafe71322df6602c21a5c72937ac284724ae561"
+      ],
+      "process_group": 1743224,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.017557031009346247
+    },
+    {
+      "label": "archive-external-rapidjson",
+      "argv": [
+        "git",
+        "-C",
+        "<repo>/build/vanguard-src/monero-fcmp/external/rapidjson",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02/source-external-rapidjson.tar",
+        "24b5e7a8b27f42fa16b96fc70aade9106cf7102f"
+      ],
+      "process_group": 1743275,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.03424010588787496
+    },
+    {
+      "label": "archive-external-supercop",
+      "argv": [
+        "git",
+        "-C",
+        "<repo>/build/vanguard-src/monero-fcmp/external/supercop",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02/source-external-supercop.tar",
+        "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+      ],
+      "process_group": 1743425,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.03424090682528913
+    },
+    {
+      "label": "build",
+      "argv": [
+        "docker",
+        "run",
+        "--pull=never",
+        "--name",
+        "tjs1882-3175-02549a9a3bb740eb99f5af4545089d51",
+        "--cidfile",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02/02549a9a3bb740eb99f5af4545089d51.container.id",
+        "--label",
+        "meownero.invocation=02549a9a3bb740eb99f5af4545089d51",
+        "--network=none",
+        "--cpus=2",
+        "--memory=3g",
+        "--memory-swap=3g",
+        "--pids-limit=256",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--ulimit",
+        "core=0",
+        "-u",
+        "1000:1000",
+        "-v",
+        "/storage/data/meownero-tjs1882-3175/windows-x86-attempt02:/out",
+        "-w",
+        "/out/monero-fcmp",
+        "-e",
+        "HOME=/tmp",
+        "-e",
+        "CARGO_HOME=/out/cargo-home",
+        "-e",
+        "CARGO_NET_OFFLINE=true",
+        "-e",
+        "CARGO_BUILD_JOBS=1",
+        "-e",
+        "PATH=/out/toolchain/usr/bin:/out/llvm/bin:/out/rust/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+        "bash",
+        "-ec",
+        "trap 'cat /sys/fs/cgroup/memory.peak > /out/build.memory; cat /sys/fs/cgroup/memory.events > /out/build.memory-events' EXIT\ncd build/portable\nmake -j1 fcmp_pp_rust\npython3 /out/i686-unwind.py\nmake -j1 daemon simplewallet wallet_rpc_server\nfor program in monerod monero-wallet-cli monero-wallet-rpc; do i686-w64-mingw32-nm --defined-only bin/$program.exe > /out/$program.symbols; done\n"
+      ],
+      "process_group": 1752534,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 487.30645593092777
+    },
+    {
+      "label": "build-cleanup",
+      "argv": [
+        "docker",
+        "rm",
+        "-f",
+        "568101699a1c66a00e062a5763c0456824eddd304e098e9c2fa0aad3c22b4782"
+      ],
+      "process_group": 1987649,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.06761583290062845
+    }
+  ],
+  "containers": [
+    {
+      "label": "build",
+      "invocation": "02549a9a3bb740eb99f5af4545089d51",
+      "removed": true,
+      "id": "568101699a1c66a00e062a5763c0456824eddd304e098e9c2fa0aad3c22b4782"
+    }
+  ],
+  "patches": [
+    {
+      "kind": "compiled ABI metadata only; pinned source unchanged",
+      "receipt_sha256": "2d6c22681739335362f2e9f4434b4327dbbede248d1d9261a863394f319bc493",
+      "all_other_archive_bytes_unchanged": true,
+      "native_exception_probe": "UNTESTED"
+    }
+  ],
+  "result": "BUILT_UNTESTED",
+  "verified_cached_sources": 2354,
+  "cached_build": {
+    "receipt_sha256": "27fc273a6c47ace770cb183a016141adbd4abce0eab5cc2d2a234aaef7ed035c",
+    "path": "/storage/data/meownero-tjs1882-3175/windows-x86-attempt01"
+  },
+  "rustc_sha256": "d32249a7c3bfcfc67b471460386e46323accae7125e344567a12d5664d99bb57",
+  "cargo_sha256": "9548937d530bf439ff1ba47a3b2bd26eeb9c3aff1961c20c01798613de922578",
+  "toolchain_packages": {
+    "binutils-mingw-w64-i686_2.41.90.20240122-1ubuntu1+11.4_amd64.deb": "5236ef254532c1f4ebddbce898e884fe9cc1ac4803092211ec615cbdeba7aafb",
+    "curl_8.5.0-2ubuntu10.15_amd64.deb": "4358c023e3c1a74bb1e77935807ea2088b137a898167fca278a1767c353ac1c5",
+    "g++-mingw-w64-i686-posix_13.2.0-6ubuntu1+26.1_amd64.deb": "f36713754287947860e847f72b3c150303e653c5fda27d0e5576d10d24662ec4",
+    "gcc-mingw-w64-base_13.2.0-6ubuntu1+26.1_amd64.deb": "a30c07e807e9874ea93909448c5d6d37f9569ebe60ad32de8e490aad198538a3",
+    "gcc-mingw-w64-i686-posix-runtime_13.2.0-6ubuntu1+26.1_amd64.deb": "650bcd76e0c56c713428950aec8823fd517f911eaad80406907379a69d36ad0a",
+    "gcc-mingw-w64-i686-posix_13.2.0-6ubuntu1+26.1_amd64.deb": "8c63daeb59c96044c2a5c26b5a3a2b793237f3e10d3428bb659401122b8e501c",
+    "mingw-w64-common_11.0.1-3build1_all.deb": "4a42fd30fbc3838c58c929d8a4882682fc12408bb7a0e6cafa913c0f0a57c187",
+    "mingw-w64-i686-dev_11.0.1-3build1_all.deb": "903e09f47c0e441f9476a32efc745430a0cc39b1c33a13ea1f1d0414a24b7970"
+  },
+  "rust_target": "i686-pc-windows-gnu",
+  "rust_std_download": {
+    "url": "https://static.rust-lang.org/dist/rust-std-1.93.0-i686-pc-windows-gnu.tar.xz",
+    "published_sha256": "cb613d5d1eb245e8a1f4c0b25f93c2997cd06c1cc3fc202155f2997aebf44d4d"
+  },
+  "downloads": [
+    {
+      "url": "https://static.rust-lang.org/dist/rust-std-1.93.0-i686-pc-windows-gnu.tar.xz",
+      "sha256": "cb613d5d1eb245e8a1f4c0b25f93c2997cd06c1cc3fc202155f2997aebf44d4d",
+      "bytes": 26302156
+    }
+  ],
+  "abi_helper_sha256": "449a9d6b21b7fe3977a3a8d7ce5c02a106d1728b3aaad1c03434b2386d73a2d3",
+  "binaries": {
+    "monerod": {
+      "sha256": "a14a6c6ea6f2f1a544de60670a423ce77f64c38cd545eacbe8fcf440fca7c7e6"
+    },
+    "monero-wallet-cli": {
+      "sha256": "7d5a834028f9bc15df7b6074ef8c91970d1a2ebc7b716fa07534c4b3d81b9825"
+    },
+    "monero-wallet-rpc": {
+      "sha256": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3"
+    }
+  }
+}

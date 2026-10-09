@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exercise real package refusals and cancellation on its native Linux target."""
+"""Exercise actual package refusals and owned cleanup on its runtime target."""
 import argparse
 import os
 if os.name == 'posix':
@@ -92,16 +92,17 @@ def main():
             try:
                 translated = ['--translated-macos-x86_64'] if args.translated_macos_x86_64 else []
                 if windows and name == 'deadline':
-                    translated += ['--deadline-seconds', '90']
+                    translated += ['--deadline-seconds', '5']
                 child = subprocess.Popen([sys.executable, '-B', str(package / 'tester.py'), 'run', '--out', str(journey), *translated],
                     stdout=log, stderr=subprocess.STDOUT,
                     **({'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP} if windows else {'preexec_fn': lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask)}))
                 if not windows:
                     signal.pthread_sigmask(signal.SIG_SETMASK, mask)
                 end = time.monotonic() + 60
-                while not (journey / 'private/sender.log').exists() and child.poll() is None and time.monotonic() < end:
+                fixture = journey / ('private/daemon.log' if windows and name == 'deadline' else 'private/sender.log')
+                while not fixture.exists() and child.poll() is None and time.monotonic() < end:
                     time.sleep(0.1)
-                assert child.poll() is None and (journey / 'private/sender.log').exists(), 'no live native interruption fixture'
+                assert child.poll() is None and fixture.exists(), 'no live native interruption fixture'
                 if interruption is not None:
                     child.send_signal(interruption)
                 assert child.wait(timeout=120 if windows and interruption is None else 60) != 0, 'interrupted attempt passed'
