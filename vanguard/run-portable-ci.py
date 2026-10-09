@@ -165,13 +165,19 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
                 signal.signal(sig, handler)
 
 
-def windows_check(package, out):
+def windows_check(package, out, row):
     spec = importlib.util.spec_from_file_location('ci_windows', package / 'portable_windows.py')
     backend = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(backend)
     assert backend.native_architecture() == 'x86_64' and backend.C.sizeof(backend.C.c_void_p) == 8
     receipt = {'schema': 'meownero-native-windows-ci-check/1', 'result': 'FAIL',
                'native_architecture': backend.native_architecture(), 'phases': []}
+    architecture = json.loads((package / 'release.json').read_text())['architecture']
+    assert architecture in ('i686', 'x86_64')
+    assert architecture == row.get('architecture', 'x86_64'), 'Windows package target mismatch'
+    receipt['package_architecture'] = architecture
+    receipt['execution_substrate'] = 'NATIVE_WINDOWS_WOW64' if architecture == 'i686' else 'NATIVE'
+    receipt['windows_32bit_os_execution'] = 'UNTESTED'
     # Console attachment is independent of an HWND, including hosted consoles.
     console_pids = (backend.W.DWORD * 1)()
     console_list = backend.api(backend.k, 'GetConsoleProcessList', backend.W.DWORD,
@@ -180,7 +186,7 @@ def windows_check(package, out):
     allocated, job = False, None
     began = time.monotonic()
 
-    def phase(name, argv):
+    def phase(name, argv, timeout=1500):
         argv = [str(value) for value in argv]
         row = {'name': name, 'argv': argv, 'reaped': False}
         receipt['phases'].append(row)
@@ -222,9 +228,10 @@ def windows_check(package, out):
                     signal.signal(s, handler)
             if pending:
                 raise RuntimeError('CI cancelled after owned child registration')
-            row['exit'] = child.wait(timeout=max(1, 1500 - (time.monotonic() - began)))
+            row['exit'] = child.wait(timeout=min(timeout, max(1, 1500 - (time.monotonic() - began))))
             row['reaped'] = child.poll() is not None
             assert row['exit'] == 0 and not job.expired, name + ' failed'
+        return row
 
     try:
         if not receipt['initial_console_process_count']:
@@ -241,6 +248,24 @@ def windows_check(package, out):
             assert console_list(console_pids, 1) == 1 and console_pids[0] == os.getpid(), 'new console ownership failed'
         receipt['console_mode'] = 'OWNED_NEW_CONSOLE' if allocated else 'EXISTING_ATTACHED_CONSOLE'
         job = backend.Job(seconds=1500)
+        if architecture == 'i686':
+            probe = row['native_exception_probe']
+            manifest = json.loads((package / 'release.json').read_text())
+            assert manifest['native_exception_probe'] == {
+                'file': probe['file'], 'native_execution': 'UNTESTED', 'required_for_native_acceptance': True}
+            for name, digest in probe['files'].items():
+                assert manifest['files'][name] == digest and sha(package / name) == digest, 'exception fixture binding changed'
+            result = phase('exception-probe', [package / probe['file']], timeout=60)
+            log = out / 'exception-probe.log'
+            assert log.stat().st_size <= 64, 'exception fixture output exceeds exact marker'
+            marker = log.read_bytes()
+            assert marker in (b'PASS_NATIVE_I686_EXCEPTION_PROBE\n', b'PASS_NATIVE_I686_EXCEPTION_PROBE\r\n'), 'exception fixture success marker mismatch'
+            receipt['native_exception_probe'] = {
+                'result': 'PASS_NATIVE_I686_EXCEPTION_PROBE', 'sha256': probe['files'][probe['file']],
+                'source_sha256': probe['files']['build-evidence/i686-exception-probe.cpp'],
+                'exit': result['exit'], 'reaped': result['reaped'], 'deadline_seconds': 60,
+                'exact_success_line': True, 'newline': 'CRLF' if marker.endswith(b'\r\n') else 'LF',
+                'cleanup_count_asserted_by_bound_fixture': 1}
         phase('preflight', [sys.executable, '-B', package / 'tester.py', 'preflight'])
         phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
         phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
@@ -271,7 +296,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--inputs', type=Path, required=True)
     parser.add_argument('--inputs-sha256', required=True)
-    parser.add_argument('--target', choices=['windows-x86_64', 'macos-x86_64'], required=True)
+    parser.add_argument('--target', choices=['windows-i686', 'windows-x86_64', 'macos-x86_64'], required=True)
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--prepare-only', action='store_true', help='Verify bytes only; never execution evidence')
     args = parser.parse_args()
@@ -331,10 +356,10 @@ def main():
             proof['result'] = 'PASS_INPUT_BYTES_ONLY_NATIVE_EXECUTION_UNTESTED'
             return
         assert sys.version_info >= (3, 13)
-        if args.target == 'windows-x86_64':
+        if args.target.startswith('windows-'):
             assert os.name == 'nt' and platform.machine().upper() in ('AMD64', 'X86_64')
             check_root = out
-            windows_check(package, out)
+            windows_check(package, out, row)
         else:
             assert platform.system() == 'Darwin' and platform.machine() == 'x86_64'
             native_spec = importlib.util.spec_from_file_location('packaged_mac_guard', package / 'tester.py')
@@ -361,7 +386,8 @@ def main():
         controls = json.loads((check_root / 'controls/controls.json').read_text())
         check = json.loads((check_root / 'check-receipt.json').read_text())
         assert journey['result'] == 'PASS_NATIVE_JOURNEY' and journey['cleanup'] and all(x['removed'] for x in journey['cleanup'])
-        assert journey['architecture'] == 'x86_64' and journey['upstream_commit'] == inputs['upstream_commit']
+        assert journey['architecture'] == ('i686' if args.target == 'windows-i686' else 'x86_64')
+        assert journey['upstream_commit'] == inputs['upstream_commit']
         assert journey['release_manifest_sha256'] == row['release_manifest_sha256']
         assert journey['program_sha256'] == row['program_sha256']
         assert journey['receive_atomic'] == 5000000000000 and journey['subsequent_spend_atomic'] == 2000000000000
@@ -370,6 +396,16 @@ def main():
         assert controls['result'] == 'PASS_REFUSALS' and len(controls['cases']) == 10
         assert controls['release_manifest_sha256'] == row['release_manifest_sha256']
         assert check['result'] == 'PASS_NATIVE_ARCHIVE_JOURNEY'
+        if args.target == 'windows-i686':
+            assert journey['execution_substrate'] == check['execution_substrate'] == 'NATIVE_WINDOWS_WOW64'
+            assert check['native_architecture'] == 'x86_64' and check['windows_32bit_os_execution'] == 'UNTESTED'
+            assert [p['name'] for p in check['phases']] == ['exception-probe', 'preflight', 'journey', 'controls']
+            assert check['native_exception_probe']['result'] == 'PASS_NATIVE_I686_EXCEPTION_PROBE'
+            assert check['native_exception_probe']['exit'] == 0 and check['native_exception_probe']['reaped']
+            assert check['native_exception_probe']['cleanup_count_asserted_by_bound_fixture'] == 1
+            assert check['owned_job']['active_processes'] == 0
+            proof['execution_substrate'] = 'NATIVE_WINDOWS_WOW64'
+            proof['windows_32bit_os_execution'] = 'UNTESTED'
         for name, value in [('journey.json', journey), ('controls.json', controls), ('check.json', check)]:
             write(public / name, value)
         proof['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
