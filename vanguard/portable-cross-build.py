@@ -126,8 +126,17 @@ def main():
                         signal.pthread_sigmask(signal.SIG_SETMASK, mask)
                 tester.require(row['exit'] == 0, label + ' failed; diagnostics preserved')
             finally:
-                row['wall_seconds'] = time.monotonic() - began
-                save()
+                cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+                try:
+                    row['wall_seconds'] = time.monotonic() - began
+                    save()
+                finally:
+                    try:
+                        for number, handler in cleanup_handlers.items():
+                            signal.signal(number, handler)
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
             print(label, row['exit'], flush=True)
 
         def contained(label, script, network=False, timeout=1800):
@@ -149,15 +158,24 @@ def main():
             try:
                 run(label, argv, timeout)
             finally:
-                if cidfile.exists():
-                    cid = cidfile.read_text().strip()
-                    observed = json.loads(tester.command(docker + ['inspect', cid]))[0]
-                    tester.require(observed['Id'] == cid and observed['Name'] == '/' + name and observed['Image'] == image and observed['Config']['Labels'].get('meownero.invocation') == invocation, 'owned container proof failed')
-                    row['id'] = cid
-                    run(label + '-cleanup', docker + ['rm', '-f', cid], 30)
-                    tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(), 'owned container remains')
-                    row['removed'] = True
-                    save()
+                cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+                try:
+                    if cidfile.exists():
+                        cid = cidfile.read_text().strip()
+                        observed = json.loads(tester.command(docker + ['inspect', cid]))[0]
+                        tester.require(observed['Id'] == cid and observed['Name'] == '/' + name and observed['Image'] == image and observed['Config']['Labels'].get('meownero.invocation') == invocation, 'owned container proof failed')
+                        row['id'] = cid
+                        run(label + '-cleanup', docker + ['rm', '-f', cid], 30)
+                        tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(), 'owned container remains')
+                        row['removed'] = True
+                        save()
+                finally:
+                    try:
+                        for number, handler in cleanup_handlers.items():
+                            signal.signal(number, handler)
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
 
         try:
             if args.i686_build_cache:
@@ -304,16 +322,21 @@ def main():
                 # Keep ZeroMQ4.3.5 and every dependency archive pin unchanged.
                 adapt('contrib/depends/packages/zeromq.mk',
                       '$(package)_sha256_hash=6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43',
-                      '$(package)_sha256_hash=6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43\n$(package)_patches=windows-arm-counter.patch')
+                      '$(package)_sha256_hash=6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43\n$(package)_patches=windows-arm-counter.patch windows-arm-nothrow.patch')
                 adapt('contrib/depends/packages/zeromq.mk',
                       '  cp -f $(BASEDIR)/config.guess $(BASEDIR)/config.sub config',
-                      '  cp -f $(BASEDIR)/config.guess $(BASEDIR)/config.sub config && \\\n  patch -p1 < $($(package)_patch_dir)/windows-arm-counter.patch')
+                      '  cp -f $(BASEDIR)/config.guess $(BASEDIR)/config.sub config && \\\n  patch -p1 < $($(package)_patch_dir)/windows-arm-counter.patch && \\\n  patch -p1 < $($(package)_patch_dir)/windows-arm-nothrow.patch')
                 counter = source / 'contrib/depends/patches/zeromq/windows-arm-counter.patch'
                 counter.parent.mkdir(parents=True, exist_ok=True)
                 counter.write_text('--- a/src/clock.cpp\n+++ b/src/clock.cpp\n@@ -225,2 +225,6 @@\n     return _ReadStatusReg (pmccntr_el0);\n+#elif (defined(_WIN32) && defined(__GNUC__) && defined(__aarch64__))\n+    uint64_t val;\n+    __asm__ volatile("mrs %0, pmccntr_el0" : "=r"(val));\n+    return val;\n #elif (defined __GNUC__ && (defined __i386__ || defined __x86_64__))\n')
                 receipt['patches'].append({'file': str(counter.relative_to(source)), 'sha256': tester.sha(counter),
                     'reference': 'https://github.com/zeromq/libzmq/commit/b71434140e8ed40b1840a5704370bfc8dfdbf627',
                     'scope': 'Exact upstream ARM64 Windows GNU counter branch only; no version/crypto/consensus change.'})
+                nothrow = counter.with_name('windows-arm-nothrow.patch')
+                nothrow.write_text('--- a/src/polling_util.hpp\n+++ b/src/polling_util.hpp\n@@ -6,2 +6,3 @@\n #include <stdlib.h>\n+#include <new>\n #include <vector>\n')
+                receipt['patches'].append({'file': str(nothrow.relative_to(source)), 'sha256': tester.sha(nothrow),
+                    'reference': 'https://github.com/zeromq/libzmq/commit/2e8a6ccb414ca79636392604893c79c3b0d00dc4',
+                    'scope': 'Exact upstream missing C++ <new> declaration include for std::nothrow; no implementation/version/crypto/consensus change.'})
                 options += ['boost_toolset_mingw32=clang']
                 options += ['mingw32_' + upper + '=/out/llvm/bin/llvm-' + lower for upper, lower in [('AR', 'ar'), ('RANLIB', 'ranlib'), ('NM', 'nm'), ('STRIP', 'strip')]]
                 options += ['host_WINDRES=/out/llvm/bin/' + host + '-windres']
@@ -332,7 +355,16 @@ def main():
             receipt['failure'] = str(error)
             raise
         finally:
-            save()
+            cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+            cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+            try:
+                save()
+            finally:
+                try:
+                    for number, handler in cleanup_handlers.items():
+                        signal.signal(number, handler)
+                finally:
+                    signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
 
 
 if __name__ == '__main__':
