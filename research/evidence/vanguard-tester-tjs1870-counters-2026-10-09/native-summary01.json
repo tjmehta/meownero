@@ -1,0 +1,203 @@
+{
+  "result": "PASS_F4_WRITER_REHEARSAL",
+  "execution_commit": "dae4e18258c12fd2f9221a724f81bae16c910340",
+  "native_journey": {
+    "result": "PASS_NATIVE_JOURNEY",
+    "gates": {
+      "p2p": "PASS_NATIVE",
+      "restore": "PASS_NATIVE"
+    },
+    "whole_deadline_seconds": 2500,
+    "private_state": "retained in owned mode0700 output; never export recursively",
+    "read_only_inputs_unchanged": true,
+    "wall_seconds": 63.66960020805709
+  },
+  "archive_sha256": "09d674d1373a78a69509cad277432668e09f3b8467874502e9ce5a40f04286a5",
+  "archive_bytes": 136190,
+  "gates": {
+    "p2p": {
+      "transaction_ids": {
+        "txid": "0e57f499d90c2dfaaccf0cb6a14591da903b9a58801f29ca4d7669a45249272e"
+      },
+      "process_exits": [
+        {
+          "event": "process_exit",
+          "monotonic_s": 68122.394,
+          "name": "daemon0",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68122.395,
+          "name": "daemon1",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68122.396,
+          "name": "wallet",
+          "returncode": 0
+        }
+      ],
+      "process_hashes": [
+        {
+          "name": "daemon0",
+          "pid": 10,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "daemon1",
+          "pid": 11,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "wallet",
+          "pid": 45,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        }
+      ],
+      "container_exits": {
+        "build": 0,
+        "run1": 0
+      },
+      "oom_killed": {
+        "build": false,
+        "run1": false
+      },
+      "peak_memory_bytes": 844427264,
+      "memory_events": {
+        "low": "0",
+        "high": "0",
+        "max": "0",
+        "oom": "0",
+        "oom_kill": "0",
+        "oom_group_kill": "0"
+      }
+    },
+    "restore": {
+      "transaction_ids": {
+        "stable_txid": "4314cb7f22167ab63820fbcd2e6bd5ec40481be4be07204ae97c67eee557299a",
+        "restored_spend_txid": "62de535b70c69a6e6f51a9fcad1edd55b6243c57c02085064db97e61264ed5b8"
+      },
+      "process_exits": [
+        {
+          "event": "process_exit",
+          "monotonic_s": 68162.167,
+          "name": "daemon0",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68162.168,
+          "name": "daemon1",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68162.169,
+          "name": "sender",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68162.17,
+          "name": "original",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68162.171,
+          "name": "orphan",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68162.171,
+          "name": "restored",
+          "returncode": 0
+        },
+        {
+          "event": "process_exit",
+          "monotonic_s": 68162.172,
+          "name": "alternate",
+          "returncode": 0
+        }
+      ],
+      "process_hashes": [
+        {
+          "name": "daemon0",
+          "pid": 10,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "daemon1",
+          "pid": 11,
+          "binary": "monerod",
+          "sha256": "b4becc6efbdc922f0fac93a0730de6f9397c1637a60b95630140e9ace677b920"
+        },
+        {
+          "name": "sender",
+          "pid": 45,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "original",
+          "pid": 47,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "orphan",
+          "pid": 49,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "restored",
+          "pid": 51,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        },
+        {
+          "name": "alternate",
+          "pid": 53,
+          "binary": "monero-wallet-rpc",
+          "sha256": "9ab761894ace8a84e3563619ba978e4d8a2c86ee07d7d38e5a5c8c364c4c450b"
+        }
+      ],
+      "container_exits": {
+        "build": 0,
+        "run1": 0
+      },
+      "oom_killed": {
+        "build": false,
+        "run1": false
+      },
+      "peak_memory_bytes": 1085427712,
+      "memory_events": {
+        "low": "0",
+        "high": "0",
+        "max": "0",
+        "oom": "0",
+        "oom_kill": "0",
+        "oom_group_kill": "0"
+      }
+    }
+  },
+  "host_controls": {
+    "PASS": 26,
+    "NOT_RUN": 0
+  },
+  "offline_controls": {
+    "PASS": 46,
+    "NOT_RUN": 1,
+    "not_run_reason": "real ARM cache requires build-mac; covered by host suite"
+  },
+  "native_legacy_and_tester_verification": "PASS, UNVERIFIED_LIVE_TIPS",
+  "unchanged_F1_F2_native_fault_controls": "NOT_RUN this narrow F4 revision; independently PASS at f391b102, same lifecycle code"
+}
