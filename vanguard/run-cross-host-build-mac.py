@@ -29,7 +29,7 @@ def main():
     config = json.load(sys.stdin)  # Protected SSH stdin; never record credentials.
     assert config['candidate_commit'] and config['environment']['MEOWNERO_REMOTE_CONTROL_URL'].startswith('https://')
     number = config.get('attempt', 1)
-    assert number in (1, 2), 'at most two bounded native attempts'
+    assert number in (1, 2, 3), 'at most three bounded native attempts under protocol revision 5'
     out = STAGE / f'trial{number:02d}'
     assert not out.exists(), 'fresh trial required'
     build = json.loads((BUILD / 'preparation/receipt.json').read_text())

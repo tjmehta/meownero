@@ -108,19 +108,19 @@ class Control(BaseHTTPRequestHandler):
                         try:
                             req = urllib.request.Request('http://127.0.0.1:19081/json_rpc',
                                 json.dumps({'jsonrpc': '2.0', 'id': '0',
-                                            'method': 'get_last_block_header'}).encode(),
+                                            'method': 'get_info'}).encode(),
                                 {'Content-Type': 'application/json'})
                             with urllib.request.urlopen(req, timeout=1) as reply:
                                 reopened = json.load(reply)
                             ready = reopened.get('result', {})
-                            if ready.get('status') == 'OK' and ready.get('block_header', {}).get('hash'):
+                            if ready.get('status') == 'OK' and ready.get('top_block_hash'):
                                 break
                         except OSError:
                             pass
                         if time.monotonic() >= deadline or PROC.poll() is not None:
                             raise TimeoutError('reopened native peer unavailable')
                         time.sleep(0.25)
-                    value = {'before': before, 'after': metrics(), 'reopened_tip': reopened}
+                    value = {'before': before, 'after': metrics(), 'reopened_info': reopened}
                 elif self.path == '/stop':
                     stop()
                     value = metrics()

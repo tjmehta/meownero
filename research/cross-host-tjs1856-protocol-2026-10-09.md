@@ -1,7 +1,7 @@
 # Finite native Railway and build-mac protocol
 
-Revision 4, prepared 2026-10-09 after the first partial native attempt and
-before its bounded retry. The first attempt remains preserved as a failure. Starting
+Revision 5, prepared 2026-10-09 after two partial native attempts and
+before one final corrective attempt. The first attempt remains preserved as a failure. Starting
 candidate is `c6620342328f313e1e9bdfb79570d5245e669090`. This is one accelerated,
 valueless FCMP++/CARROT regtest witness. Accepted local tests and launch gates
 remain unchanged. Source pins are those in `vanguard/source-lock.json`.
@@ -138,3 +138,17 @@ RPC and state requests may retry HTTP404/502/503 for at most30 seconds, logging
 each failure. Restart and stop requests are issued once. These retries remain
 inside existing phase and whole-run deadlines. Require successful authenticated
 state and get_info after negative-access checks before any funding.
+
+Revision5 amendment before native attempt03: attempt02 confirmed three payments
+but failed the reopen gate with HTTP503. Source inspection at the exact upstream
+pin establishes core_rpc_server::on_get_last_block_header calls CHECK_CORE_READY,
+which rejects requests until the P2P protocol is synchronized. With the only
+local counterpart paused, that API cannot prove independent persisted reopening.
+Use on_get_info, which reads m_core.get_blockchain_top without that readiness
+gate: require statusOK, height minus1, top_block_hash and wide_cumulative_difficulty
+matching the saved pre-pause tip. Then resume build-mac and require healthy header
+convergence plus the fourth payment. Preserve attempt01/02 as FAIL. This explicit
+amendment supersedes the previous self-imposed two-attempt limit: one final
+fresh attempt03, at most90 blocks/900 measured seconds; at most270 generated
+blocks across all three native attempts. No further native attempt is authorized
+by this protocol. All original provider, cleanup and exposure limits apply.

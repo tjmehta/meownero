@@ -250,8 +250,10 @@ async def main():
                     p2p.PROCS['daemon0'].send_signal(signal.SIGSTOP)
                     try:
                         restart = await control('restart')
-                        reopened = restart['reopened_tip']['result']['block_header']
-                        assert [reopened['height'], reopened['hash'], reopened['wide_cumulative_difficulty']] == before['tips'][1]
+                        # get_info reads stored chain state without the P2P readiness gate.
+                        reopened = restart['reopened_info']['result']
+                        assert reopened['status'] == 'OK'
+                        assert [reopened['height'] - 1, reopened['top_block_hash'], reopened['wide_cumulative_difficulty']] == before['tips'][1]
                     finally:
                         p2p.PROCS['daemon0'].send_signal(signal.SIGCONT)
                     after = await wait(converge, 'persistent remote restart and native reconnect')
