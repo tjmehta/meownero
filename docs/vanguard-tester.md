@@ -131,7 +131,7 @@ parser markers only, with the original raw digest recorded. Free-form logs and
 all unlisted files are excluded. JSON passes the pinned
 [public field/type schema](../vanguard/tester-public-schema.json), including
 nested objects, arrays and JSON encoded inside native RPC responses. Unknown
-fields are refused before any shareable export is created. Wallet notes are
+fields are refused before any shareable export is created. Wallet notes and labels are
 excluded at capture. The schema is frozen from source-pinned writer and
 independent reviewer receipts; it never learns fields from the input being
 exported. New legitimate upstream fields require an explicit schema review.

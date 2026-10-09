@@ -1,6 +1,6 @@
 {
  "format": "meownero-tester-public-schema/1",
- "provenance": "Frozen public field/type shapes from committed writer public04 and independently reproduced reviewer public01; only new cleanup/input fields added. Local wallet notes excluded. Never learn fields from an export input.",
+ "provenance": "Frozen public field/type shapes from committed writer public04 and independently reproduced reviewer public01; only new cleanup/input fields added. Local wallet notes and labels excluded. Never learn fields from an export input.",
  "roots": {
   "cleanup.json": 6,
   "export.json": 8,
@@ -102,12 +102,12 @@
   {"fields":{"method":2,"path":2,"port":0,"request":42,"response":44},"types":["object"]},
   {"fields":{},"types":["object"]},
   {"fields":{"id":2,"jsonrpc":2,"method":2,"params":46},"types":["object"]},
-  {"fields":{"address":2,"address_index":0,"label":2,"used":1},"types":["object"]},
+  {"fields":{"address":2,"address_index":0,"used":1},"types":["object"]},
   {"items":48,"types":["array"]},
   {"fields":{"address":2,"addresses":49},"types":["object"]},
   {"fields":{"id":2,"jsonrpc":2,"result":50},"types":["object"]},
   {"fields":{"method":2,"path":2,"port":0,"request":47,"response":51},"types":["object"]},
-  {"fields":{"account_index":0,"address":2,"address_index":0,"balance":0,"blocks_to_unlock":0,"label":2,"num_unspent_outputs":0,"time_to_unlock":0,"unlocked_balance":0},"types":["object"]},
+  {"fields":{"account_index":0,"address":2,"address_index":0,"balance":0,"blocks_to_unlock":0,"num_unspent_outputs":0,"time_to_unlock":0,"unlocked_balance":0},"types":["object"]},
   {"items":53,"types":["array"]},
   {"fields":{"balance":0,"blocks_to_unlock":0,"multisig_import_needed":1,"per_subaddress":54,"time_to_unlock":0,"unlocked_balance":0},"types":["object"]},
   {"fields":{"id":2,"jsonrpc":2,"result":55},"types":["object"]},

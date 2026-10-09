@@ -77,6 +77,10 @@ def main():
     refuse('credential-bearing JSON', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
     evil.write_text(json.dumps({'tx_metadata': 'DO_NOT_EXPORT'}))
     refuse('private pending transaction metadata', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
+    evil.write_text(json.dumps({'method': 'get_address', 'response': {'result': {
+        'addresses': [{'label': 'SYNTHETIC_DO_NOT_EXPORT'}]}}}) + '\n')
+    refuse('nested local wallet label', lambda: tester.public_bytes(evil,
+           'restore/run1/public/rpc-observations.jsonl'), 'unknown public evidence field')
     evil.write_bytes(b'\x00wallet database\xff')
     refuse('database renamed JSON', lambda: tester.public_bytes(evil, 'result.json'), '')
     refuse('database renamed log', lambda: tester.public_bytes(evil, 'daemon1.log'), 'binary/database')
