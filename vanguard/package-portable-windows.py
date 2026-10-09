@@ -124,6 +124,26 @@ def main():
         evidence.mkdir()
         names = ['i686-unwind.py', 'i686-unwind-adaptation.json', 'cached-build-receipt.json', 'i686-exception-probe.cpp', 'i686-exception-probe.map']
         names += [program + suffix for program in PROGRAMS for suffix in ('.map', '.symbols')]
+        if probe.get('cross_receipt_sha256'):
+            proof_path = build / 'i686-exception-probe-cross-receipt.json'
+            assert sha(proof_path) == probe['cross_receipt_sha256'], 'exception cross-probe receipt changed'
+            proof = json.loads(proof_path.read_text())
+            assert proof['result'] == 'BUILT_UNTESTED_EXCEPTION_PROBE' and proof['native_execution'] == 'UNTESTED'
+            assert proof['cleanup']['removed'] and proof['reaped'] and proof['strong_dwarf2_runtime_binding']
+            assert proof['rust_archive_sha256'] == adaptation['archive_after_sha256'], 'exception probe used another Rust archive'
+            assert proof['source_sha256'] == probe['source_sha256'] and proof['files'][probe['file']] == probe['sha256']
+            assert sha(build / 'i686-exception-probe-input.json') == proof['input_manifest_sha256'], 'exception input manifest changed'
+            assert sha(build / 'i686-exception-probe-cross.py') == proof['script_sha256'], 'exception build script changed'
+            inputs = json.loads((build / 'i686-exception-probe-input.json').read_text())
+            assert sha(build / 'pre-exception-probe-build-receipt.json') == inputs['source_build_receipt_sha256']
+            assert inputs['files']['libfcmp_pp_rust.a']['sha256'] == adaptation['archive_after_sha256']
+            for name in ('i686-exception-probe.map', 'i686-exception-probe.symbols', 'i686-exception-probe.disassembly'):
+                assert sha(build / name) == proof['files'][name], 'exception evidence changed'
+            assert sha(build / 'i686-exception-probe-compiler.txt') == proof['files']['compiler.txt']
+            names += ['i686-exception-probe-cross-receipt.json', 'i686-exception-probe-input.json',
+                      'i686-exception-probe-cross.py', 'pre-exception-probe-build-receipt.json',
+                      'i686-exception-probe.symbols', 'i686-exception-probe.disassembly',
+                      'i686-exception-probe-compiler.txt']
         for name in names:
             shutil.copyfile(build / name, evidence / name)
     (package / 'launch.cmd').write_text('@echo off\r\ncd /d "%~dp0"\r\npy -3 -B tester.py %*\r\nexit /b %errorlevel%\r\n')

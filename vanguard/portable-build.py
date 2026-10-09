@@ -71,9 +71,17 @@ def main():
         image = preparation['builder_image']
     docker = ['docker', '--context', 'colima'] if platform.system() == 'Darwin' else ['docker']
     architecture = 'arm64' if arm else 'amd64'
+    native = {'x86_64': 'amd64', 'aarch64': 'arm64', 'arm64': 'arm64'}.get(platform.machine())
+    translated = bool(preparation and preparation.get('compiler_execution_substrate') ==
+                      'PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64')
+    tester.require(not translated or (platform.system() == 'Darwin' and native == 'arm64' and
+                   architecture == 'amd64'), 'translated compiler requires the existing ARM64 Mac host')
+    tester.require(native == architecture or translated, 'native compiler architecture required')
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(work.parent).free >= 10 * 1024**3,
                        'requires 10 GiB free disk before build')
+        docker_free = int(tester.command(['colima', 'ssh', '--', 'df', '-B1', '/var/lib/docker']).splitlines()[-1].split()[3]) if platform.system() == 'Darwin' else shutil.disk_usage('/var/lib/docker').free
+        tester.require(docker_free >= 10 * 1024**3, 'requires 10 GiB Docker disk reserve')
         memory = tester.command(['colima', 'ssh', '--', 'cat', '/proc/meminfo']) if platform.system() == 'Darwin' else Path('/proc/meminfo').read_text()
         available = int(next(row.split()[1] for row in memory.splitlines()
                              if row.startswith('MemAvailable:'))) * 1024
@@ -82,6 +90,10 @@ def main():
                        '--format', '{{.Architecture}} {{.Os}}']) == architecture + ' linux', 'wrong builder target')
         if platform.system() == 'Darwin':
             tester.require(not tester.command(docker + ['ps', '-q']), 'Docker busy; preserve non-owned work')
+        if translated:
+            emulation = tester.command(['colima', 'ssh', '--', 'cat', '/proc/sys/fs/binfmt_misc/qemu-x86_64'])
+            tester.require(emulation.startswith('enabled\n') and 'flags: POCF' in emulation,
+                           'already-enabled x64 container translation required')
         recovery = None
         if args.inspect_built:
             prior = tester.read(args.inspect_built / 'build-receipt.json')
