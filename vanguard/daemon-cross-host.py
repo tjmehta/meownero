@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import signal
 import socket
+import subprocess
 import time
 import urllib.request
 
@@ -182,11 +183,11 @@ async def main():
     PUBLIC.mkdir()
     host = os.environ['MEOWNERO_PEER_HOST']
     port = int(os.environ['MEOWNERO_PEER_PORT'])
-    ip = socket.gethostbyname(host)
-    RESULT['transport'] = {'kind': 'native Railway TCP proxy', 'host': host, 'port': port, 'resolved_ipv4': ip}
     sampler = None
     measured_start = None
     try:
+        ip = socket.gethostbyname(host)
+        RESULT['transport'] = {'kind': 'native Railway TCP proxy', 'host': host, 'port': port, 'resolved_ipv4': ip}
         args = [str(p2p.BIN / 'monerod'), '--data-dir', str(PRIVATE / 'daemon0'), '--regtest',
             '--keep-fakechain', '--fixed-difficulty', '1', '--non-interactive', '--no-igd',
             '--allow-local-ip', '--disable-dns-checkpoints', '--check-updates', 'disabled',
@@ -216,61 +217,66 @@ async def main():
         measured_start = time.monotonic()
         RESULT['measured_start_s'] = measured_start
         sampler = asyncio.create_task(sampling())
-        used_images = set()
-        for number in range(1, 5):
-            assert time.monotonic() - measured_start < 900
-            if number == 4:
-                before = await wait(converge, 'pre-restart tips')
-                # Freeze this owned peer so remote reopening cannot be mistaken for a fresh sync.
-                p2p.PROCS['daemon0'].send_signal(signal.SIGSTOP)
-                try:
-                    restart = await control('restart')
-                    reopened = restart['reopened_tip']['result']['block_header']
-                    assert [reopened['height'], reopened['hash'], reopened['wide_cumulative_difficulty']] == before['tips'][1]
-                finally:
-                    p2p.PROCS['daemon0'].send_signal(signal.SIGCONT)
-                after = await wait(converge, 'persistent remote restart and native reconnect')
-                assert before['tips'] == after['tips']
-                assert restart['before']['process']['start_ticks'] != restart['after']['process']['start_ticks']
-                RESULT['recovery'] = {'before': before, 'control': restart, 'after': after}
-            amount = 10**12 + number * 10**10
-            began = time.monotonic()
-            inputs = {row['key_image']: row for row in (await wallet_state('sender'))['outputs'] if not row['spent']}
-            made, ref = await rpc('sender', 'transfer', {'destinations': [{'address': addresses['recipient'], 'amount': amount}],
-                'do_not_relay': True, 'get_tx_hex': True})
-            images = made['spent_key_images']['key_images']
-            assert images and not used_images.intersection(images) and len(images) == len(set(images))
-            assert set(images) <= set(inputs)
-            used_images.update(images)
-            payment = {'txid': made['tx_hash'], 'blob': made['tx_blob'], 'fee': made['fee'],
-                       'amount': amount, 'destination': addresses['recipient'], 'key_images': images,
-                       'construction_rpc_id': ref, 'selected_inputs': [inputs[image] for image in images]}
-            admitted, ref = await call('build-mac', 'send_raw_transaction', {'tx_as_hex': made['tx_blob'], 'do_not_relay': False})
-            assert admitted.get('status') == 'OK'
-            payment['admission_rpc_id'] = ref
-            payment['queued'] = await wait(lambda tx=made['tx_hash']: converge([tx]), 'native remote pool arrival')
-            await rpc('sender', 'refresh')
-            payment['generation'] = await generate(addresses['sender'], 1)
-            await wait(converge, 'payment block sync')
-            payment['binding'] = await binding(payment)
-            received = await wallet_state('recipient')
-            outputs = [row for row in received['outputs'] if row['tx_hash'] == made['tx_hash']]
-            assert len(outputs) == 1 and outputs[0]['amount'] == amount
-            assert outputs[0]['block_height'] == payment['binding'][0]['height']
-            payment['recipient'] = received
-            payment['wall_seconds'] = time.monotonic() - began
-            RESULT['payments'].append(payment)
+        async with asyncio.timeout(900):
+            used_images = set()
+            for number in range(1, 5):
+                assert time.monotonic() - measured_start < 900
+                if number == 4:
+                    before = await wait(converge, 'pre-restart tips')
+                    # Freeze this owned peer so remote reopening cannot be mistaken for a fresh sync.
+                    p2p.PROCS['daemon0'].send_signal(signal.SIGSTOP)
+                    try:
+                        restart = await control('restart')
+                        reopened = restart['reopened_tip']['result']['block_header']
+                        assert [reopened['height'], reopened['hash'], reopened['wide_cumulative_difficulty']] == before['tips'][1]
+                    finally:
+                        p2p.PROCS['daemon0'].send_signal(signal.SIGCONT)
+                    after = await wait(converge, 'persistent remote restart and native reconnect')
+                    assert before['tips'] == after['tips']
+                    assert restart['before']['process']['start_ticks'] != restart['after']['process']['start_ticks']
+                    RESULT['recovery'] = {'before': before, 'control': restart, 'after': after}
+                amount = 10**12 + number * 10**10
+                began = time.monotonic()
+                inputs = {row['key_image']: row for row in (await wallet_state('sender'))['outputs'] if not row['spent']}
+                made, ref = await rpc('sender', 'transfer', {'destinations': [{'address': addresses['recipient'], 'amount': amount}],
+                    'do_not_relay': True, 'get_tx_hex': True})
+                images = made['spent_key_images']['key_images']
+                assert images and not used_images.intersection(images) and len(images) == len(set(images))
+                assert set(images) <= set(inputs)
+                used_images.update(images)
+                payment = {'txid': made['tx_hash'], 'blob': made['tx_blob'], 'fee': made['fee'],
+                           'amount': amount, 'destination': addresses['recipient'], 'key_images': images,
+                           'construction_rpc_id': ref, 'selected_inputs': [inputs[image] for image in images]}
+                admitted, ref = await call('build-mac', 'send_raw_transaction', {'tx_as_hex': made['tx_blob'], 'do_not_relay': False})
+                assert admitted.get('status') == 'OK'
+                payment['admission_rpc_id'] = ref
+                payment['queued'] = await wait(lambda tx=made['tx_hash']: converge([tx]), 'native remote pool arrival')
+                await rpc('sender', 'refresh')
+                payment['generation'] = await generate(addresses['sender'], 1)
+                await wait(converge, 'payment block sync')
+                payment['binding'] = await binding(payment)
+                received = await wallet_state('recipient')
+                outputs = [row for row in received['outputs'] if row['tx_hash'] == made['tx_hash']]
+                assert len(outputs) == 1 and outputs[0]['amount'] == amount
+                assert outputs[0]['block_height'] == payment['binding'][0]['height']
+                payment['recipient'] = received
+                payment['wall_seconds'] = time.monotonic() - began
+                RESULT['payments'].append(payment)
+                await sample()
+            RESULT['final_bindings'] = [await binding(payment) for payment in RESULT['payments']]
+            RESULT['final'] = await wait(converge, 'final empty pools and tip')
+            recipient = await wallet_state('recipient')
+            assert len(recipient['outputs']) == 4
+            assert recipient['balance']['balance'] == sum(payment['amount'] for payment in RESULT['payments'])
+            RESULT['final_recipient'] = recipient
+            RESULT['measured_seconds'] = time.monotonic() - measured_start
+            assert RESULT['measured_seconds'] <= 900
             await sample()
-        RESULT['final_bindings'] = [await binding(payment) for payment in RESULT['payments']]
-        RESULT['final'] = await wait(converge, 'final empty pools and tip')
-        recipient = await wallet_state('recipient')
-        assert len(recipient['outputs']) == 4
-        assert recipient['balance']['balance'] == sum(payment['amount'] for payment in RESULT['payments'])
-        RESULT['final_recipient'] = recipient
-        RESULT['measured_seconds'] = time.monotonic() - measured_start
-        assert RESULT['measured_seconds'] <= 900
-        await sample()
-        RESULT['result'] = 'PASS_WRITER_NATIVE_WITNESS'
+            RESULT['result'] = 'PASS_WRITER_NATIVE_WITNESS'
+    except asyncio.CancelledError:
+        RESULT['result'] = 'FAIL'
+        RESULT['failure'] = 'CancelledError: whole-trial deadline or interruption'
+        raise
     except Exception as err:
         RESULT['result'] = 'FAIL'
         RESULT['failure'] = type(err).__name__ + ': ' + str(err)

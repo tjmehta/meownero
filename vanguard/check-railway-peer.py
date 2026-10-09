@@ -56,6 +56,8 @@ def main():
         denied('rpc', {'path': 'json_rpc', 'body': {'method': 'generateblocks'}}, True, 403)
         denied('rpc', {'path': 'send_raw_transaction', 'body': {}}, True, 403)
         restart = call('restart')
+        assert restart['reopened_tip']['result']['block_header']['hash'] == tip['result']['block_header']['hash']
+        assert 'exit' not in restart['before']['generations'][-1], 'before snapshot changed after stopping'
         while True:
             try:
                 after_tip = call('rpc', {'path': 'json_rpc', 'body': {
