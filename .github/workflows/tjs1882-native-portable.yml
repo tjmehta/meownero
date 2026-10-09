@@ -50,7 +50,7 @@ jobs:
         run: >-
           python -B vanguard/run-portable-ci.py
           --inputs vanguard/ci-inputs.json
-          --inputs-sha256 6ad3f27cceb32df4254652b3f30e8d74fad42342a74426c354188444a8d1e6da
+          --inputs-sha256 83c5f2e37b1e7e5a13fa442cb249efbdf9ba32e7f8b16c30d180f4f2097faaa5
           --target '${{ matrix.target }}'
           --out "$RUNNER_TEMP/tjs1882-native"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
