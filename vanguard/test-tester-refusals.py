@@ -75,8 +75,11 @@ def main():
     refuse('seed-bearing JSON', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
     evil.write_text(json.dumps({'authorization': 'DO_NOT_EXPORT'}))
     refuse('credential-bearing JSON', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
+    evil.write_text(json.dumps({'tx_metadata': 'DO_NOT_EXPORT'}))
+    refuse('private pending transaction metadata', lambda: tester.public_bytes(evil, 'result.json'), 'secret-bearing')
     evil.write_bytes(b'\x00wallet database\xff')
     refuse('database renamed JSON', lambda: tester.public_bytes(evil, 'result.json'), '')
+    refuse('database renamed log', lambda: tester.public_bytes(evil, 'daemon1.log'), 'binary/database')
     refuse('database renamed frame', lambda: tester.public_bytes(evil, 'frames/malformed-block.bin'), 'non-Levin')
     fifo = work / 'fifo'
     import os
@@ -110,6 +113,21 @@ def main():
         inputs.unlink(); inputs.symlink_to(args.public.resolve() / 'inputs.json')
         refuse('public member symlink', lambda: tester.validate_public(public_copy), 'symlink')
         inputs.unlink(); inputs.write_bytes(raw)
+        for label, name, mutation, expected in (
+            ('rehashed wrong native pin', 'restore/receipt.json',
+             lambda j: j['binary']['monerod'].update(sha256='0' * 64), 'gate pin mismatch'),
+            ('rehashed false receive balance', 'restore/run1/public/result.json',
+             lambda j: j['initial']['balance'].update(balance=1), 'restore, rescan or rollback'),
+            ('rehashed wrong profile', 'preflight.json',
+             lambda j: j['profile'].update(machine='x86_64'), 'unsupported receipt profile')):
+            target = public_copy / name
+            original = target.read_bytes()
+            value = json.loads(original)
+            mutation(value); tester.write(target, value)
+            tester.manifest(public_copy, tester.PUBLIC | {'export.json'}, 'EVIDENCE.sha256')
+            refuse(label, lambda: tester.verify(public_copy), expected)
+            target.write_bytes(original)
+            tester.manifest(public_copy, tester.PUBLIC | {'export.json'}, 'EVIDENCE.sha256')
         # Export only a known allowlist; an arbitrary unlisted file remains excluded.
         private_source = work / 'export-source'
         shutil.copytree(args.public, private_source)

@@ -75,7 +75,9 @@ The P2P gate includes native relay, malformed-frame refusals and healthy relay
 after reconnect. Exact native process hashes, RPC observations, transaction and
 block hashes, wallet output identities, process exits, memory/OOM counters and
 owned container removal are saved. Wallet creation and seed RPC are excluded
-from observations. Every private output remains mode 0700 and unshared.
+from observations. Transaction secret keys and private pending-transaction
+metadata are excluded even when a wallet could return them. The cache and package
+are rehashed after the workload. Every private output remains mode 0700 and unshared.
 
 On success, run exits 0 and `result.json` says `PASS_NATIVE_JOURNEY`. On failure,
 it exits nonzero, keeps the failed attempt and removes only its named container.

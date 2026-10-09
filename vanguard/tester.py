@@ -310,6 +310,9 @@ def run(src, out):
                 require(read(stage / 'run1/public/result.json')['result'] == 'PASS', 'scenario did not pass')
                 result['gates'][gate] = 'PASS_NATIVE'
             require(time.monotonic() - began < 2500, 'whole runner deadline exceeded')
+            require(cached_inputs(src) == pre['binary'] and input_manifest() == pre['inputs'],
+                    'cache or package inputs changed during workload')
+            result['read_only_inputs_unchanged'] = True
             result['result'] = 'PASS_NATIVE_JOURNEY'
         finally:
             result['wall_seconds'] = time.monotonic() - began
@@ -343,7 +346,7 @@ def private_fields(value):
     if isinstance(value, dict):
         for key, item in value.items():
             require(key.lower() not in {'seed', 'mnemonic', 'private_key', 'spend_key', 'view_key',
-                'password', 'token', 'credential', 'authorization', 'secret', 'tx_key'}, 'secret-bearing evidence refused')
+                'password', 'token', 'credential', 'authorization', 'secret', 'tx_key', 'tx_metadata'}, 'secret-bearing evidence refused')
             private_fields(item)
     elif isinstance(value, list):
         for item in value:
@@ -353,6 +356,7 @@ def private_fields(value):
 def public_bytes(path, name):
     raw = regular(path).read_bytes()
     require(len(raw) <= 32 * 1024**2, 'oversized export member')
+    require(name.endswith('.bin') or b'\0' not in raw, 'binary/database evidence refused')
     if name.endswith('.bin'):
         import struct
         require(len(raw) >= 33 and int.from_bytes(raw[:8], 'little') == 0x0101010101012101 and
@@ -478,6 +482,7 @@ def verify(out):
         blob = subprocess.check_output(['git', '-C', str(ROOT), 'show', f'{commit}:{name}'])
         require(hashlib.sha256(blob).hexdigest() == digest == sha(ROOT / name), 'exact candidate source mismatch')
     require(read(out / 'result.json')['result'] == 'PASS_NATIVE_JOURNEY', 'journey failed')
+    require(read(out / 'result.json')['read_only_inputs_unchanged'], 'input preservation check absent')
     require(read(out / 'preflight.json')['profile'] == PROFILE, 'unsupported receipt profile')
     cleanup = read(out / 'cleanup.json')
     require(len(cleanup) == 4 and all(row['container_absent'] and row['remove_exit'] == 0 for row in cleanup),

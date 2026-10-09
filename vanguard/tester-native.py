@@ -60,7 +60,7 @@ def main():
             # Keep only public wallet result fields; node responses are native public data.
             public_response = response
             if port not in (19081, 19181) and 'result' in response:
-                fields = {'tx_hash', 'tx_blob', 'tx_metadata', 'amount', 'fee', 'spent_key_images',
+                fields = {'tx_hash', 'tx_blob', 'amount', 'fee', 'spent_key_images',
                           'address', 'addresses', 'balance', 'unlocked_balance', 'transfers',
                           'in', 'out', 'pending', 'pool', 'failed', 'blocks_fetched',
                           'received_money', 'height', 'version', 'multisig_import_needed',
