@@ -14,6 +14,7 @@ import platform
 import shutil
 import signal
 import subprocess
+import tarfile
 import time
 import uuid
 import urllib.request
@@ -41,6 +42,7 @@ def main():
     parser.add_argument('--target', choices=TARGETS, required=True)
     parser.add_argument('--preflight', type=Path, required=True)
     parser.add_argument('--i686-build-cache', type=Path, help='Retained failed, unpatched i686 compilation; verify pinned sources before copying')
+    parser.add_argument('--builder-transfer', type=Path, help='Exact saved pinned image; verify legacy Docker config re-encoding on Colima')
     args = parser.parse_args()
     tester.require(not args.i686_build_cache or args.target == 'windows-i686', 'cache recovery is i686 only')
     out = tester.fresh(args.out)
@@ -52,6 +54,7 @@ def main():
     tester.require((mac and platform.machine() == 'arm64') or
                    (platform.system() == 'Linux' and platform.machine() == 'x86_64'), 'unsupported compiler host')
     docker = ['docker', '--context', 'colima'] if mac else ['docker']
+    transfer = None
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(out.parent).free >= 10 * 1024**3, 'requires ten GiB disk reserve')
         memory = tester.command(['colima', 'ssh', '--', 'cat', '/proc/meminfo']) if mac else Path('/proc/meminfo').read_text()
@@ -59,6 +62,27 @@ def main():
         tester.require(available >= 5 * 1024**3, 'requires five GiB available memory')
         docker_free = int(tester.command(['colima', 'ssh', '--', 'df', '-B1', '/var/lib/docker']).splitlines()[-1].split()[3]) if mac else shutil.disk_usage('/var/lib/docker').free
         tester.require(docker_free >= 10 * 1024**3, 'requires ten GiB Docker disk reserve')
+        if args.builder_transfer:
+            tester.require(mac and tester.sha(args.builder_transfer) == '01a5bd95b757995fb4d1f2212cb44805c8173217e94d58e3fb6d2ee6a4630ca2', 'unverified builder transfer')
+            with tarfile.open(args.builder_transfer) as archive:
+                manifests = json.load(archive.extractfile('manifest.json'))
+                tester.require(len(manifests) == 1, 'ambiguous transferred image')
+                config_bytes = archive.extractfile(manifests[0]['Config']).read()
+            import hashlib
+            tester.require('sha256:' + hashlib.sha256(config_bytes).hexdigest() == image, 'saved image does not match the pinned config')
+            source_config = json.loads(config_bytes)
+            image = 'sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c'
+            observed = json.loads(tester.command(docker + ['image', 'inspect', image]))[0]
+            tester.require(observed['Id'] == image and observed['Config'] == source_config['config'] and
+                           observed['RootFS']['Layers'] == source_config['rootfs']['diff_ids'] and
+                           observed['Created'] == source_config['created'] and observed['Os'] == source_config['os'] and
+                           observed['Architecture'] == source_config['architecture'] and
+                           observed.get('Author', '') == source_config.get('author', '') and
+                           observed.get('DockerVersion', '') == source_config.get('docker_version', ''), 'loaded image content/configuration differs from the pin')
+            transfer = {'source_image': PIN['builder']['image_id'], 'loaded_image': image,
+                        'transfer_archive_sha256': tester.sha(args.builder_transfer),
+                        'identical_rootfs_diff_ids': source_config['rootfs']['diff_ids'],
+                        'runtime_config_identical': True, 'reason': 'Legacy Docker loader re-encoded image metadata; complete filesystem layers and runtime configuration verified identical.'}
         tester.require(tester.command(docker + ['image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) == 'amd64 linux', 'wrong builder architecture')
         if mac:
             tester.require(not tester.command(docker + ['ps', '-q']), 'Docker busy; preserve other workloads')
@@ -68,6 +92,8 @@ def main():
         receipt = {'schema': 'meownero-windows-cross-build/1', 'source_lock': PIN, 'target': args.target,
                    'builder_image': image, 'compiler_execution_substrate': 'PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64' if mac else 'NATIVE_AMD64_LINUX',
                    'commands': [], 'containers': [], 'patches': [], 'result': 'INCOMPLETE'}
+        if transfer:
+            receipt['builder_transfer'] = transfer
 
         def save():
             tester.write(out / 'build-receipt.json', receipt)
