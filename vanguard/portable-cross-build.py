@@ -284,6 +284,11 @@ def main():
                       'if(MINGW)\n  set(RUST_PLATFORM "pc-windows")\n  if(RUST_ARCH STREQUAL "aarch64" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")\n    set(RUST_TOOLCHAIN "-gnullvm")\n  else()\n    set(RUST_TOOLCHAIN "-gnu")\n  endif()')
                 adapt('contrib/depends/packages/boost.mk', '$(package)_config_opts_i686_mingw32=address-model=32',
                       '$(package)_config_opts_i686_mingw32=address-model=32\n$(package)_config_opts_aarch64_mingw32=address-model=64 architecture=arm')
+                adapt('contrib/depends/hosts/mingw32.mk', 'mingw32_ARFLAGS=cr',
+                      'mingw32_ARFLAGS=cr\nmingw32_CPPFLAGS=-DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 -DBOOST_USE_WINAPI_VERSION=0x0A00')
+                adapt('CMakeLists.txt', 'add_definitions(-DWINVER=0x0601 -D_WIN32_WINNT=0x0601)',
+                      'if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")\n      add_definitions(-DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 -DBOOST_USE_WINAPI_VERSION=0x0A00)\n    else()\n      add_definitions(-DWINVER=0x0601 -D_WIN32_WINNT=0x0601)\n    endif()')
+                receipt['windows_api_floor'] = 'Windows 10 across the ARM64 dependency and program closure; matches tester minimum, resolves Boost atomic wait declarations.'
                 adapt('contrib/depends/packages/openssl.mk', '$(package)_config_opts_i686_mingw32=mingw',
                       '$(package)_config_opts_i686_mingw32=mingw\n$(package)_config_opts_aarch64_mingw32=mingwarm64')
                 adapt('contrib/depends/packages/openssl.mk', '$(package)_patches=fix-android.patch',
