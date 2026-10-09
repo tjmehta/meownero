@@ -203,11 +203,20 @@ def main():
                     supervision_schema='meownero-native-linux-ci-owned-supervision/1', failure_label='native Linux ' + name)
                 row['result'] = 'PASS'
             finally:
-                path = supervision_public / 'supervision.json'
-                if path.is_file():
-                    receipt = json.loads(path.read_text())
-                    write(public / (name + '-supervision.json'), receipt)
-                    assert receipt['wrapper_reaped'] and all(p['removed'] for p in receipt['cleanup'])
+                cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+                try:
+                    path = supervision_public / 'supervision.json'
+                    if path.is_file():
+                        receipt = json.loads(path.read_text())
+                        write(public / (name + '-supervision.json'), receipt)
+                        assert receipt['wrapper_reaped'] and all(p['removed'] for p in receipt['cleanup'])
+                finally:
+                    try:
+                        for number, handler in cleanup_handlers.items():
+                            signal.signal(number, handler)
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
             if name == 'build':
                 build = json.loads((out / 'build/build-receipt.json').read_text())
                 assert build['compiler_execution_substrate'] == 'NATIVE' and build['patches'] == []
@@ -244,37 +253,46 @@ def main():
         raise
     finally:
         # Public structured receipts only; no logs, Cargo caches or wallet state.
-        for relative, name in [('fetch-receipt.json', 'fetch.json'), ('builder/preparation.json', 'builder.json'),
-            ('build/build-receipt.json', 'build.json'), ('package/meownero-vanguard-x86_64/release.json', 'release.json'),
-            ('package/meownero-vanguard-x86_64/license-coverage.json', 'license-coverage.json'),
-            ('runtime/journey/result.json', 'journey.json'), ('runtime/controls/controls.json', 'controls.json'),
-            ('runtime/check-receipt.json', 'check.json')]:
-            path = out / relative
-            if path.is_file() and not path.is_symlink():
-                write(public / name, json.loads(path.read_text()))
+        cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+        cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
         try:
-            if lock_identity is not None:
-                # Container wrappers must have removed their exact recorded children.
-                for relative, directory in [('builder/preparation.json', 'builder'),
-                    ('build/build-receipt.json', 'build'), ('runtime/check-receipt.json', 'runtime')]:
-                    path = out / relative
-                    cidfiles = list((out / directory).glob('*.container.id')) + list((out / directory).glob('container.id'))
-                    if cidfiles:
-                        receipt = json.loads(path.read_text())
-                        assert receipt['cleanup']['removed'], 'preserve lock: owned container cleanup unproven'
-                        remaining = subprocess.check_output(['docker', 'ps', '-aq', '--no-trunc'], text=True, timeout=15).splitlines()
-                        assert all(p.read_text().strip() not in remaining for p in cidfiles), 'recorded owned container remains'
-                assert lock.stat().st_ino == lock_identity and lock.stat().st_uid == os.getuid() and not lock.is_symlink()
-                lock.unlink()
-                proof['owned_ephemeral_lock_removed'] = True
-        except BaseException as error:
-            proof['result'] = 'FAIL'
-            proof['cleanup_failure_type'] = type(error).__name__
-            raise
+            for relative, name in [('fetch-receipt.json', 'fetch.json'), ('builder/preparation.json', 'builder.json'),
+                ('build/build-receipt.json', 'build.json'), ('package/meownero-vanguard-x86_64/release.json', 'release.json'),
+                ('package/meownero-vanguard-x86_64/license-coverage.json', 'license-coverage.json'),
+                ('runtime/journey/result.json', 'journey.json'), ('runtime/controls/controls.json', 'controls.json'),
+                ('runtime/check-receipt.json', 'check.json')]:
+                path = out / relative
+                if path.is_file() and not path.is_symlink():
+                    write(public / name, json.loads(path.read_text()))
+            try:
+                if lock_identity is not None:
+                    # Container wrappers must have removed their exact recorded children.
+                    for relative, directory in [('builder/preparation.json', 'builder'),
+                        ('build/build-receipt.json', 'build'), ('runtime/check-receipt.json', 'runtime')]:
+                        path = out / relative
+                        cidfiles = list((out / directory).glob('*.container.id')) + list((out / directory).glob('container.id'))
+                        if cidfiles:
+                            receipt = json.loads(path.read_text())
+                            assert receipt['cleanup']['removed'], 'preserve lock: owned container cleanup unproven'
+                            remaining = subprocess.check_output(['docker', 'ps', '-aq', '--no-trunc'], text=True, timeout=15).splitlines()
+                            assert all(p.read_text().strip() not in remaining for p in cidfiles), 'recorded owned container remains'
+                    assert lock.stat().st_ino == lock_identity and lock.stat().st_uid == os.getuid() and not lock.is_symlink()
+                    lock.unlink()
+                    proof['owned_ephemeral_lock_removed'] = True
+            except BaseException as error:
+                proof['result'] = 'FAIL'
+                proof['cleanup_failure_type'] = type(error).__name__
+                raise
+            finally:
+                proof['wall_seconds'] = round(time.monotonic() - began, 3)
+                write(public / 'ci-receipt.json', proof)
+                print(proof['result'])
         finally:
-            proof['wall_seconds'] = round(time.monotonic() - began, 3)
-            write(public / 'ci-receipt.json', proof)
-            print(proof['result'])
+            try:
+                for number, handler in cleanup_handlers.items():
+                    signal.signal(number, handler)
+            finally:
+                signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
 
 
 if __name__ == '__main__':

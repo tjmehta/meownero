@@ -76,22 +76,31 @@ python3 -B /harness/test-portable-refusals.py --package "$PWD" --out /out/contro
             tester.require(tester.sha(archive) == args.sha256, 'archive changed during journey')
             receipt['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY'
         finally:
+            cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+            cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
             try:
-                if cidfile.exists():
-                    cid = cidfile.read_text().strip()
-                    receipt['cleanup'] = {'id': cid, 'removed': False}
-                    proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
-                    tester.require(proof['Id'] == cid and proof['Name'] == '/' + name and proof['Image'] == image and
-                        proof['Config']['Labels'].get('meownero.invocation') == owner, 'container ownership not proven')
-                    tester.command(docker + ['rm', '-f', cid])
-                    tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(),
-                                   'owned container remains')
-                    receipt['cleanup']['removed'] = True
-            except BaseException:
-                receipt['result'] = 'FAIL'
-                raise
+                try:
+                    if cidfile.exists():
+                        cid = cidfile.read_text().strip()
+                        receipt['cleanup'] = {'id': cid, 'removed': False}
+                        proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
+                        tester.require(proof['Id'] == cid and proof['Name'] == '/' + name and proof['Image'] == image and
+                            proof['Config']['Labels'].get('meownero.invocation') == owner, 'container ownership not proven')
+                        tester.command(docker + ['rm', '-f', cid])
+                        tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(),
+                                       'owned container remains')
+                        receipt['cleanup']['removed'] = True
+                except BaseException:
+                    receipt['result'] = 'FAIL'
+                    raise
+                finally:
+                    tester.write(out / 'check-receipt.json', receipt)
             finally:
-                tester.write(out / 'check-receipt.json', receipt)
+                try:
+                    for number, handler in cleanup_handlers.items():
+                        signal.signal(number, handler)
+                finally:
+                    signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
         print(receipt['result'])
 
 

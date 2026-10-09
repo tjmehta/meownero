@@ -69,8 +69,17 @@ def main():
                     row['exit'] = result.returncode
                 tester.require(row['exit'] == 0, label + ' failed; preserve diagnostics')
             finally:
-                row['wall_seconds'] = time.monotonic() - began
-                save()
+                cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+                try:
+                    row['wall_seconds'] = time.monotonic() - began
+                    save()
+                finally:
+                    try:
+                        for number, handler in cleanup_handlers.items():
+                            signal.signal(number, handler)
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
             print(label, row['exit'], flush=True)
 
         invocation = uuid.uuid4().hex
@@ -120,15 +129,27 @@ python3 --version >> /out/compiler.txt
             receipt['failure'] = str(error)
             raise
         finally:
-            if cidfile.exists():
-                cid = cidfile.read_text().strip()
-                proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
-                tester.require(proof['Id'] == cid and proof['Name'] == '/' + name and proof['Image'] == receipt['base_image'] and proof['Config']['Labels'].get('meownero.invocation') == invocation, 'older builder ownership proof failed')
-                run('cleanup', docker + ['rm', '-f', cid], 30)
-                removed = cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines()
-                receipt['cleanup'] = {'id': cid, 'removed': removed}
-                tester.require(removed, 'owned older builder remains')
-            save()
+            cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+            cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+            try:
+                try:
+                    if cidfile.exists():
+                        cid = cidfile.read_text().strip()
+                        receipt['cleanup'] = {'id': cid, 'removed': False}
+                        proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
+                        tester.require(proof['Id'] == cid and proof['Name'] == '/' + name and proof['Image'] == receipt['base_image'] and proof['Config']['Labels'].get('meownero.invocation') == invocation, 'older builder ownership proof failed')
+                        run('cleanup', docker + ['rm', '-f', cid], 30)
+                        removed = cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines()
+                        receipt['cleanup']['removed'] = removed
+                        tester.require(removed, 'owned older builder remains')
+                finally:
+                    save()
+            finally:
+                try:
+                    for number, handler in cleanup_handlers.items():
+                        signal.signal(number, handler)
+                finally:
+                    signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
 
 
 if __name__ == '__main__':

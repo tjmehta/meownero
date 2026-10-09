@@ -133,8 +133,17 @@ def main():
                 row['exit'] = result.returncode
                 tester.require(result.returncode == 0, label + ' failed; diagnostics preserved')
             finally:
-                row['wall_seconds'] = time.monotonic() - began
-                save()
+                cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+                try:
+                    row['wall_seconds'] = time.monotonic() - began
+                    save()
+                finally:
+                    try:
+                        for number, handler in cleanup_handlers.items():
+                            signal.signal(number, handler)
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
             print(label, row['exit'], flush=True)
 
         source = work / 'monero-fcmp'
@@ -232,24 +241,33 @@ sha256sum contrib/depends/DEPENDS_HOST/share/toolchain.cmake > /out/generated-to
             receipt['failure'] = str(error)
             raise
         finally:
+            cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+            cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
             try:
-                if cidfile.exists():
-                    cid = cidfile.read_text().strip()
-                    receipt['cleanup'] = {'id': cid, 'removed': False, 'ownership': 'unknown'}
+                try:
+                    if cidfile.exists():
+                        cid = cidfile.read_text().strip()
+                        receipt['cleanup'] = {'id': cid, 'removed': False, 'ownership': 'unknown'}
+                        save()
+                        proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
+                        tester.require(proof['Id'] == cid and proof['Name'] == '/' + name and
+                            proof['Image'] == image and
+                            proof['Config']['Labels'].get('meownero.invocation') == invocation,
+                            'container ownership proof failed; preserve container')
+                        receipt['cleanup']['ownership'] = 'proven'
+                        run('cleanup', docker + ['rm', '-f', cid], 30)
+                        tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(),
+                                       'owned container remains')
+                        receipt['cleanup']['removed'] = True
+                finally:
+                    receipt['finished_utc'] = datetime.now(timezone.utc).isoformat()
                     save()
-                    proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
-                    tester.require(proof['Id'] == cid and proof['Name'] == '/' + name and
-                        proof['Image'] == image and
-                        proof['Config']['Labels'].get('meownero.invocation') == invocation,
-                        'container ownership proof failed; preserve container')
-                    receipt['cleanup']['ownership'] = 'proven'
-                    run('cleanup', docker + ['rm', '-f', cid], 30)
-                    tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(),
-                                   'owned container remains')
-                    receipt['cleanup']['removed'] = True
             finally:
-                receipt['finished_utc'] = datetime.now(timezone.utc).isoformat()
-                save()
+                try:
+                    for number, handler in cleanup_handlers.items():
+                        signal.signal(number, handler)
+                finally:
+                    signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
 
 
 if __name__ == '__main__':
