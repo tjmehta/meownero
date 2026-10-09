@@ -1,0 +1,59 @@
+{
+  "schema": "meownero-i68609-control-failure-receipt-fixtures/1",
+  "result": "PASS_FIRST_FAILURE_COMPLETED_SUMMARIES_AND_PRIVACY",
+  "helper_sha256": "f553f0bd09b39e2b3f8d549df16ee36ab698219f6310033f357ac80839a8b14a",
+  "cases": [
+    {
+      "case": "clean-nonzero",
+      "first_failed_case": {
+        "case": "clean-preflight",
+        "phase": "PREFLIGHT",
+        "reason_enum": "CLEAN_PREFLIGHT_FAILED",
+        "failure_type": "AssertionError"
+      },
+      "completed_case_count": 0,
+      "private_output_exported": false,
+      "result": "PASS_SCALAR_FAILURE_RECEIPT_FIXTURE"
+    },
+    {
+      "case": "wrong-target-mismatch",
+      "first_failed_case": {
+        "case": "wrong-target",
+        "phase": "REFUSAL_ASSERTION",
+        "reason_enum": "EXPECTED_REFUSAL_NOT_OBSERVED",
+        "child_exit": 0,
+        "failure_type": "AssertionError"
+      },
+      "completed_case_count": 1,
+      "private_output_exported": false,
+      "result": "PASS_SCALAR_FAILURE_RECEIPT_FIXTURE"
+    },
+    {
+      "case": "symlink-os-error",
+      "first_failed_case": {
+        "case": "symlink-directory",
+        "phase": "MUTATE_PACKAGE",
+        "reason_enum": "PACKAGE_COPY_OR_MUTATION_ERROR",
+        "failure_type": "PermissionError",
+        "errno": 1,
+        "winerror": 1314
+      },
+      "completed_case_count": 4,
+      "private_output_exported": false,
+      "result": "PASS_SCALAR_FAILURE_RECEIPT_FIXTURE"
+    },
+    {
+      "case": "invoke-timeout",
+      "first_failed_case": {
+        "case": "wrong-pin",
+        "phase": "RUN_PREFLIGHT",
+        "reason_enum": "TESTER_INVOCATION_ERROR",
+        "failure_type": "TimeoutExpired"
+      },
+      "completed_case_count": 0,
+      "private_output_exported": false,
+      "result": "PASS_SCALAR_FAILURE_RECEIPT_FIXTURE"
+    }
+  ],
+  "native_controls": "UNTESTED_BY_MOCKED_PREFIX_FIXTURES"
+}
