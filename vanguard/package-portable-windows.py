@@ -189,6 +189,8 @@ def main():
         'files': {str(path.relative_to(package)): sha(path) for path in sorted(package.rglob('*')) if path.is_file()}}
     if receipt.get('exception_probe'):
         manifest['native_exception_probe'] = {'file': 'bin/i686-exception-probe.exe', 'native_execution': 'UNTESTED', 'required_for_native_acceptance': True}
+    if receipt.get('compiler_execution_substrate') == 'PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64':
+        manifest['compiler_execution_substrate'] = receipt['compiler_execution_substrate']
     (package / 'release.json').write_text(json.dumps(manifest, indent=2) + '\n')
     archive = out / (package.name + '.zip')
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as stream:

@@ -26,13 +26,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--target', choices=BASES, default='linux-x86_64')
+    parser.add_argument('--translated-linux-x86_64', action='store_true', help='Cross-produce amd64 on existing Colima QEMU; never native execution evidence')
     args = parser.parse_args()
     out = tester.fresh(args.out)
     base = BASES[args.target]
     architecture = 'amd64' if args.target == 'linux-x86_64' else 'arm64'
     native = {'x86_64': 'amd64', 'arm64': 'arm64', 'aarch64': 'arm64'}.get(platform.machine())
-    tester.require(native == architecture, 'native builder architecture required')
     mac = platform.system() == 'Darwin'
+    translated = args.translated_linux_x86_64
+    tester.require(not translated or (mac and native == 'arm64' and architecture == 'amd64'), 'translation requires the existing ARM64 Mac compiler host and an x64 target')
+    tester.require(native == architecture or translated, 'native builder architecture required')
     docker = ['docker', '--context', 'colima'] if mac else ['docker']
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(out.parent).free >= 10 * 1024**3, 'requires ten GiB disk reserve')
@@ -43,8 +46,12 @@ def main():
         tester.require(available >= 5 * 1024**3, 'requires five GiB available memory')
         if mac:
             tester.require(not tester.command(docker + ['ps', '-q']), 'Docker busy; preserve non-owned work')
+        if translated:
+            emulation = tester.command(['colima', 'ssh', '--', 'cat', '/proc/sys/fs/binfmt_misc/qemu-x86_64'])
+            tester.require(emulation.startswith('enabled\n') and 'flags: POCF' in emulation, 'already-enabled x64 container translation required')
         out.mkdir(mode=0o700)
         receipt = {'schema': 'meownero-older-linux-builder/1', 'base_manifest': base, 'target': args.target,
+                   'compiler_execution_substrate': 'PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64' if translated else 'NATIVE',
                    'distribution': 'Ubuntu 22.04', 'commands': [], 'result': 'INCOMPLETE'}
 
         def save():
@@ -69,7 +76,7 @@ def main():
         name = 'tjs1882-3175-old-builder-' + invocation
         cidfile = out / 'container.id'
         try:
-            run('pull-pinned-base', docker + ['pull', base], 180)
+            run('pull-pinned-base', docker + ['pull', '--platform=linux/' + architecture, base], 180)
             image = tester.command(docker + ['image', 'inspect', base, '--format', '{{.Id}}'])
             tester.require(tester.command(docker + ['image', 'inspect', image, '--format', '{{.Architecture}} {{.Os}}']) == architecture + ' linux', 'wrong older builder architecture')
             receipt['base_image'] = image
@@ -84,7 +91,7 @@ gcc --version > /out/compiler.txt
 cmake --version >> /out/compiler.txt
 python3 --version >> /out/compiler.txt
 """
-            run('prepare', docker + ['run', '--pull=never', '--name', name, '--cidfile', str(cidfile),
+            run('prepare', docker + ['run', '--platform=linux/' + architecture, '--pull=never', '--name', name, '--cidfile', str(cidfile),
                            '--label', 'meownero.invocation=' + invocation, '--cpus=2', '--memory=768m',
                            '--memory-swap=768m', '--pids-limit=128', '--security-opt=no-new-privileges',
                            '--ulimit', 'core=0', '-v', str(out) + ':/out', image, 'bash', '-ec', script], 900)

@@ -100,6 +100,7 @@ def main():
         receipt = {'schema': 'meownero-portable-build/1', 'target': args.target, 'builder_image': image,
                    'source_lock': PIN, 'patches': [], 'commands': [], 'result': 'INCOMPLETE',
                    'started_utc': datetime.now(timezone.utc).isoformat()}
+        receipt['compiler_execution_substrate'] = preparation.get('compiler_execution_substrate', 'NATIVE') if preparation else 'NATIVE'
         if preparation:
             receipt['older_builder_preparation_sha256'] = tester.sha(args.older_builder_receipt)
             receipt['distribution'] = preparation['distribution']
@@ -196,7 +197,7 @@ sha256sum contrib/depends/DEPENDS_HOST/share/toolchain.cmake > /out/generated-to
         mount = '/work/monero-fcmp' if reuse_paths else '/src'
         if reuse_paths:
             script = script.replace('/opt/rust', '/work/rust')
-        argv = docker + ['run', '--pull=never', '--name', name, '--cidfile', str(cidfile),
+        argv = docker + ['run', '--platform=linux/' + architecture, '--pull=never', '--name', name, '--cidfile', str(cidfile),
                 '--label', 'meownero.invocation=' + invocation, '--network=none', '--cpus=2',
                 '--memory=3g', '--memory-swap=3g', '--pids-limit=256', '--cap-drop=ALL',
                 '--security-opt=no-new-privileges', '--ulimit', 'core=0', '-u', f'{os.getuid()}:{os.getgid()}',

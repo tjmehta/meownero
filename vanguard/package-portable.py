@@ -136,6 +136,10 @@ def main():
             'zeromq': 'https://zeromq.org/'},
         'files': {str(p.relative_to(package)): sha(p) for p in sorted(package.rglob('*')) if p.is_file()}}
     manifest['minimum_macos' if mac else 'minimum_glibc'] = minimum
+    if receipt.get('compiler_execution_substrate') == 'PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64':
+        manifest['compiler_execution_substrate'] = receipt['compiler_execution_substrate']
+        manifest['native_version_execution'] = 'UNTESTED'
+        manifest['translated_builder_version_execution'] = 'PASS; genuine native journey remains UNTESTED'
     if mac:
         manifest['sdk_version'] = receipt['sdk_version']
         manifest['program_signing'] = signing_states
