@@ -85,6 +85,7 @@ async def snapshot():
         refs.append(ref)
         value, ref = await rpc(node, 'get_connections')
         peers.append(value.get('connections', []))
+        assert len(peers[-1]) <= 1, 'unexpected additional native peer'
         refs.append(ref)
     return {'tips': tips, 'pools': pools, 'peers': peers, 'rpc_ids': refs}
 
@@ -127,6 +128,7 @@ async def binding(payment):
         assert tx['tx_hash'] == payment['txid'] and tx['in_pool'] is False and tx['block_height'] > 0
         decoded = json.loads(tx['as_json'])
         assert decoded['rct_signatures']['type'] == 7
+        assert int(decoded['rct_signatures']['txnFee']) == payment['fee']
         assert all('carrot_v1' in row['target'] for row in decoded['vout'])
         assert sorted(row['key']['k_image'] for row in decoded['vin']) == sorted(payment['key_images'])
         raw = tx.get('as_hex') or tx.get('pruned_as_hex', '') + tx.get('prunable_as_hex', '')
@@ -194,6 +196,8 @@ async def main():
             '--log-file', str(PRIVATE / 'daemon.log')]
         p2p.start('daemon0', args)
         RESULT['genesis'] = await wait(converge, 'native cross-host genesis handshake')
+        RESULT['runtime_network'] = {node: (await rpc(node, 'get_info'))[0]
+                                     for node in ('build-mac', 'railway')}
         for name, wallet_port in (('sender', 19090), ('recipient', 19190)):
             directory = PRIVATE / name
             directory.mkdir(mode=0o700)
@@ -217,7 +221,14 @@ async def main():
             assert time.monotonic() - measured_start < 900
             if number == 4:
                 before = await wait(converge, 'pre-restart tips')
-                restart = await control('restart')
+                # Freeze this owned peer so remote reopening cannot be mistaken for a fresh sync.
+                p2p.PROCS['daemon0'].send_signal(signal.SIGSTOP)
+                try:
+                    restart = await control('restart')
+                    reopened = restart['reopened_tip']['result']['block_header']
+                    assert [reopened['height'], reopened['hash'], reopened['wide_cumulative_difficulty']] == before['tips'][1]
+                finally:
+                    p2p.PROCS['daemon0'].send_signal(signal.SIGCONT)
                 after = await wait(converge, 'persistent remote restart and native reconnect')
                 assert before['tips'] == after['tips']
                 assert restart['before']['process']['start_ticks'] != restart['after']['process']['start_ticks']

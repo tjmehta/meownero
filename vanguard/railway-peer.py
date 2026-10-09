@@ -25,7 +25,7 @@ STOP = threading.Event()
 
 
 def metrics():
-    result = {'architecture': platform.machine(), 'generations': GENERATIONS.copy()}
+    result = {'architecture': platform.machine(), 'generations': [row.copy() for row in GENERATIONS]}
     for filename in ('memory.current', 'memory.peak', 'memory.max', 'memory.events', 'cpu.stat'):
         p = Path('/sys/fs/cgroup') / filename
         if p.exists():
@@ -103,7 +103,23 @@ class Control(BaseHTTPRequestHandler):
                     before = metrics()
                     stop()
                     start()
-                    value = {'before': before, 'after': metrics()}
+                    deadline = time.monotonic() + 15
+                    while True:
+                        try:
+                            req = urllib.request.Request('http://127.0.0.1:19081/json_rpc',
+                                json.dumps({'jsonrpc': '2.0', 'id': '0',
+                                            'method': 'get_last_block_header'}).encode(),
+                                {'Content-Type': 'application/json'})
+                            with urllib.request.urlopen(req, timeout=1) as reply:
+                                reopened = json.load(reply)
+                            if 'result' in reopened:
+                                break
+                        except OSError:
+                            pass
+                        if time.monotonic() >= deadline or PROC.poll() is not None:
+                            raise TimeoutError('reopened native peer unavailable')
+                        time.sleep(0.25)
+                    value = {'before': before, 'after': metrics(), 'reopened_tip': reopened}
                 elif self.path == '/stop':
                     stop()
                     value = metrics()

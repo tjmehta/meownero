@@ -7,6 +7,27 @@ from pathlib import Path
 import platform
 import shutil
 import subprocess
+import tarfile
+
+
+def runtime_rootfs(source, destination):
+    """Keep the installed Python runtime and shared libraries, excluding build tools."""
+    with tarfile.open(source, 'r:gz') as original, tarfile.open(destination, 'w:gz') as output:
+        for member in original:
+            name = member.name.lstrip('./')
+            keep = name in {'bin', 'lib', 'lib64', 'usr/bin/python3', 'usr/bin/python3.12',
+                            'etc/nsswitch.conf', 'etc/passwd', 'etc/group'}
+            keep |= name.startswith('usr/lib/python3.12/') and '__pycache__' not in name
+            keep |= name.startswith(('usr/lib/x86_64-linux-gnu/', 'usr/lib64/')) and '.so' in Path(name).name
+            keep |= name.startswith('usr/lib/locale/C.utf8/')
+            if keep:
+                output.addfile(member, original.extractfile(member) if member.isfile() else None)
+        for name, mode in [('data', 0o700), ('app', 0o755)]:
+            member = tarfile.TarInfo(name)
+            member.type = tarfile.DIRTYPE
+            member.mode = mode
+            member.uid = member.gid = 1000
+            output.addfile(member)
 
 
 def sha(path):
@@ -32,17 +53,17 @@ def main():
     archive = root / 'builder-rootfs-amd64.tar.gz'
     assert sha(archive) == receipt['rootfs']['rootfs_sha256']
     out.mkdir(mode=0o700)
-    for source, name in ((binary, 'monerod'), (archive, archive.name),
+    runtime_rootfs(archive, out / 'runtime-rootfs-amd64.tar.gz')
+    for source, name in ((binary, 'monerod'),
                          (root / 'railway-peer.py', 'railway-peer.py')):
         shutil.copy2(source, out / name)
     (out / 'Dockerfile').write_text('''FROM scratch
-ADD builder-rootfs-amd64.tar.gz /
+ADD runtime-rootfs-amd64.tar.gz /
 COPY monerod railway-peer.py /app/
-RUN mkdir -p /data && chown -R 1000:1000 /app /data && chmod 700 /data
 USER 1000:1000
 EXPOSE 19080 8080
 ENV PYTHONUNBUFFERED=1
-ENTRYPOINT ["/usr/bin/python3", "-B", "/app/railway-peer.py"]
+ENTRYPOINT ["/usr/bin/python3.12", "-B", "/app/railway-peer.py"]
 ''')
     (out / 'railway.json').write_text(json.dumps({'build': {'builder': 'DOCKERFILE'},
         'deploy': {'restartPolicyType': 'NEVER', 'numReplicas': 1}}, indent=2) + '\n')

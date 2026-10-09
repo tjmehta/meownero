@@ -82,7 +82,10 @@ only on build-mac and wait for both peers before the next payment.
 
 Then gracefully restart only the Railway daemon within its supervisor,
 retaining its chain directory. Bind the pre/post generation identity, saved
-chain tip and disk state, exit code and native reconnect. Confirm the fourth
+chain tip and disk state, exit code and native reconnect. Temporarily pause
+the owned build-mac daemon during remote reopening, then attest the exact saved
+remote tip before resuming build-mac. This distinguishes persistent reopening from
+a fresh sync after losing the database. Confirm the fourth
 distinct payment after recovery. Recheck all four payments, empty pools,
 recipient balances, both healthy peers and matched final tips. Preserve every
 failed or partial attempt without upgrading its result.
