@@ -120,8 +120,13 @@ preserved. Fixtures are not native Intel or Windows package execution evidence.
 Source/evidence commit731c10ec6316931157f25a4a36000a895e80a2fe, parent actionable
 adoption comment568fa486-ff72-4cfc-952d-51116ce81533.
 
-Parent uploads17 parts+seven corrected helpers FIRST, independently reads back
-all24 hashes, and commits final workflow ONLY after corrected03 preflight review.
+Parent independent03 source review cleared P1/P2/trigger and all25 local hashes.
+Actual PRIVATE browser publication finished:24 inputs independently read back at
+b6cba15f6a7eef50435822ea00e46a13c0acfe57, final workflow read back at
+39186007f9804879340eb11c60f266d91472bf54. One actual bounded native run
+https://github.com/tjmehta/meownero/actions/runs/37995118080 is QUEUED per parent.
+This is concrete parent wake proof; parent-local receipt is not host-shared. Parent
+owns job observation/artifact adoption. Queued publication is not native acceptance.
 Push trigger ONLY tjs1882-native-windows-preflight and ONLY its workflow path;
 no default write/manual dispatch. Contents:read, pinned actions, github.sha,
 serial Windows x64/windows-2025 and physical Intel/macos-15-intel,30-minute caps,
@@ -137,11 +142,17 @@ Both older preparations failed before a container because even an empty Docker
 client auto-detected the locked Mac credential helper. Corrected task-owned
 client now has an explicit empty canonical Hub auth record and empty helper
 mapping, suppressing auto-detection without keychain/global configuration access.
-Exact next production: fresh kit12 and Ubuntu22 x64 builder03, then serial pinned
-Rust1.93/five-dependency older x64/ARM builds and real Ubuntu22/Debian12 journeys.
+Kit12 transferred exactly. Ubuntu22 x64 builder03 ACTUALLY prepared using public
+anonymous image pull and signed apt, immutable imagefc4ac8affffac58bf235636d51c921a90736047453b82a13d74ba4cf709fa24f;
+owned preparation container removed. Actual older x64 build is ACTIVE join90320,
+readonly pinned cache/Rust1.93/fresh five-dependency sources;3600s/2CPU/3GiB/
+network none. Next older ARM builds and real Ubuntu22/Debian12 native journeys.
 Fresh ARM05 applies only the recorded ZeroMQ counter branch after the lock frees.
-Windows i686 needs parts and a future exact native exception/journey/control CI
-payload;03 remains two targets. Fresh Linux ARM/Mac ARM starter journeys remain.
+Windows i686 now has12 <=8MiB v7 parts, exact whole reassembly and16 installed
+loader readbacks PASS; no send. It needs a future exact native exception/journey/
+control CI payload;03 remains two targets. Fresh shared build/export03 holds six
+exact archives/checksums/guide/seven-target and older-distro dispositions; preserved
+old exports remain. It is a checkpoint awaiting independent acceptance. Fresh Linux ARM/Mac ARM starter journeys remain.
 Local native x64 waits for5GiB memory. Freeze exact full matrix/new export/candidate
 through existing reviewer; no self-acceptance. The run3175 result.md records exact
 sessions and next commands. No active heavy compile is interrupted or duplicated.
