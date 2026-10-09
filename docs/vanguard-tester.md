@@ -65,7 +65,9 @@ a 1,100-second container deadline, a bounded host wait, 2 CPUs, 4 GiB RAM,
 256 PIDs, no capabilities and no outside network. Its private Unix socket uses
 the accepted container tmpfs approach because Colima shared folders cannot chmod
 that socket. The workload has a 2,500-second
-host budget. Typical measured timing belongs in the rehearsal report; no
+host workload budget, enforced by a timer as well as bounded subprocess waits.
+Exact-container cleanup has separate bounded waits after a deadline or signal.
+Typical measured timing belongs in the rehearsal report; no
 30-minute soak or Railway run is part of this invocation.
 
 The restore gate confirms a 5-unit payment to a new receiver, restores its

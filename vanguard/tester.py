@@ -146,6 +146,7 @@ def cached_inputs(src):
     binaries = {}
     for name, expected in PROFILE['binary'].items():
         path = regular(up / 'build/vanguard/bin' / name)
+        require(path.stat().st_size == expected['bytes'], 'binary size pin mismatch')
         with path.open('rb') as stream:
             header = stream.read(20)
         require(header[:5] == b'\x7fELF\x02' and int.from_bytes(header[18:20], 'little') == 183,
@@ -225,8 +226,11 @@ def run(src, out):
         def interrupted(signum, frame):
             raise RuntimeError('tester interrupted; cleaning only owned container')
 
-        for sig in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM):
+        for sig in (signal.SIGHUP, signal.SIGINT, signal.SIGTERM, signal.SIGALRM):
             previous[sig] = signal.signal(sig, interrupted)
+        # Bound the whole workload, including source rechecks and subprocess setup.
+        # Cleanup has its own bounded stop/inspect/remove calls after this timer fires.
+        signal.setitimer(signal.ITIMER_REAL, 2500)
         try:
             for gate in ('p2p', 'restore'):
                 require(time.monotonic() - began < 2380, 'whole runner deadline')
@@ -285,6 +289,7 @@ def run(src, out):
                                 code = 124
                                 raise RuntimeError('native gate deadline exceeded')
                     finally:
+                        signal.setitimer(signal.ITIMER_REAL, 0)
                         # Inspect final OOM/exit state before removing the exact owned container.
                         stopped = subprocess.run(docker('stop', '--time=20', name), capture_output=True, timeout=35)
                         final = subprocess.run(docker('inspect', name, '--format', '{{json .State}}'),
@@ -301,6 +306,7 @@ def run(src, out):
                         receipt['metrics'][label] = {'exit': code, 'wall_seconds': time.monotonic() - started,
                             'container_absent': absent, 'container_final': json.loads(final.stdout) if final.returncode == 0 else None}
                         write(stage / 'receipt.json', receipt)
+                        signal.setitimer(signal.ITIMER_REAL, max(0.001, 2500 - (time.monotonic() - began)))
                     require(code == 0 and absent and removed.returncode == 0, 'gate failed; keep output and inspect private logs')
                     counts = dict(line.split() for line in (work / f'{label}.memory-events').read_text().splitlines())
                     require(not int(counts['oom']) and not int(counts['oom_kill']), 'container OOM')
@@ -315,6 +321,7 @@ def run(src, out):
             result['read_only_inputs_unchanged'] = True
             result['result'] = 'PASS_NATIVE_JOURNEY'
         finally:
+            signal.setitimer(signal.ITIMER_REAL, 0)
             result['wall_seconds'] = time.monotonic() - began
             write(out / 'result.json', result)
             write(out / 'cleanup.json', cleanup)
