@@ -1,0 +1,9 @@
+{
+  "result": "PASS_THREE_PAYMENTS_FAIL_PREMATURE_BUSY_REOPEN_ATTESTATION",
+  "native_driver_exit": 1,
+  "host_wrapper_exit_incorrectly_zero": true,
+  "payments_confirmed_on_both_peers": 3,
+  "failure": "reopened get_last_block_header status BUSY with empty header was treated as ready",
+  "chain_loss": "NOT_ESTABLISHED",
+  "correction": "wait statusOK/nonempty hash; host wrapper propagates verdict failure; preserve first native attempt and use fresh trial02"
+}

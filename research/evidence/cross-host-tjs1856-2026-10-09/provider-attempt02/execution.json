@@ -1,0 +1,208 @@
+{
+  "result": "FAIL",
+  "started_utc": "2026-10-09T06:33:24.440367+00:00",
+  "operator_cleanup_deadline_utc": "2026-10-09T07:13:24.440375+00:00",
+  "project": "f46a08ef-dcba-431b-8fb0-a3b2c0dd721e",
+  "environment": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+  "service": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+  "free_credit": {
+    "usd": 5.0,
+    "provenance": "parent browser handoff 2026-10-09T05:00:18Z; supported project token usage query lacked billing access"
+  },
+  "cleanup": {
+    "control_stop": "already stopped or unreachable; provider removal required",
+    "control-variable-delete": "{\"deleted\":true,\"key\":\"MEOWNERO_CONTROL_TOKEN\"}\n",
+    "deployment-down": "AssertionError: deployment-down exit 1",
+    "tcp-delete": "{\n  \"deleted\": true,\n  \"id\": \"51c3e9a5-95b0-4c82-8575-788ad7ecdaa6\",\n  \"endpoint\": \"ballast.proxy.rlwy.net:10970\",\n  \"applicationPort\": 19080,\n  \"staged\": false,\n  \"committed\": true\n}\n",
+    "domain-delete": "{\n  \"deleted\": true,\n  \"domain\": {\n    \"createdAt\": \"2026-10-09T06:33:26.384+00:00\",\n    \"domain\": \"meownero-peer-tjs1856-regtest.up.railway.app\",\n    \"id\": \"dd55bb52-d43d-4bc7-bc89-bffbd118ac22\",\n    \"syncStatus\": \"ACTIVE\",\n    \"targetPort\": 8080,\n    \"type\": \"service\",\n    \"updatedAt\": \"2026-10-09T06:33:26.881+00:00\"\n  }\n}\n",
+    "status": {
+      "buckets": {
+        "edges": []
+      },
+      "deletedAt": null,
+      "environments": {
+        "edges": [
+          {
+            "node": {
+              "canAccess": true,
+              "deletedAt": null,
+              "id": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+              "name": "regtest",
+              "serviceInstances": {
+                "edges": [
+                  {
+                    "node": {
+                      "activeDeployments": [
+                        {
+                          "createdAt": "2026-10-09T06:33:28.378Z",
+                          "deploymentStopped": true,
+                          "id": "13989b04-c407-4a97-be06-0b291c54353d",
+                          "instances": [],
+                          "meta": {
+                            "buildOnly": false,
+                            "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+                            "cliCaller": "codex",
+                            "logsV2": true,
+                            "reason": "deploy",
+                            "runtime": "V2",
+                            "serviceManifest": {
+                              "build": {
+                                "buildCommand": null,
+                                "buildEnvironment": "V3",
+                                "builder": "RAILPACK",
+                                "dockerfilePath": null,
+                                "nixpacksConfigPath": null,
+                                "nixpacksPlan": null,
+                                "watchPatterns": []
+                              },
+                              "deploy": {
+                                "cronSchedule": null,
+                                "drainingSeconds": null,
+                                "healthcheckPath": null,
+                                "healthcheckTimeout": null,
+                                "ipv6EgressEnabled": false,
+                                "limitOverride": null,
+                                "multiRegionConfig": {
+                                  "iad": {
+                                    "numReplicas": 1
+                                  }
+                                },
+                                "numReplicas": 1,
+                                "overlapSeconds": null,
+                                "preDeployCommand": null,
+                                "preDeployTimeoutSeconds": null,
+                                "region": null,
+                                "registryCredentials": null,
+                                "requiredMountPath": null,
+                                "restartPolicyMaxRetries": null,
+                                "restartPolicyType": "NEVER",
+                                "runtime": "V2",
+                                "sleepApplication": false,
+                                "startCommand": null,
+                                "useLegacyStacker": false
+                              }
+                            },
+                            "volumeMounts": []
+                          },
+                          "status": "INITIALIZING"
+                        }
+                      ],
+                      "autoInstrumentationEnabled": false,
+                      "cronSchedule": null,
+                      "domains": {
+                        "customDomains": [],
+                        "serviceDomains": []
+                      },
+                      "environmentId": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+                      "id": "b7f12f50-5bf6-47d6-a93a-200bc6a05bbc",
+                      "latestDeployment": {
+                        "canRedeploy": false,
+                        "createdAt": "2026-10-09T06:33:28.378Z",
+                        "deploymentStopped": true,
+                        "id": "13989b04-c407-4a97-be06-0b291c54353d",
+                        "instances": [],
+                        "meta": {
+                          "buildOnly": false,
+                          "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+                          "cliCaller": "codex",
+                          "logsV2": true,
+                          "reason": "deploy",
+                          "runtime": "V2",
+                          "serviceManifest": {
+                            "build": {
+                              "buildCommand": null,
+                              "buildEnvironment": "V3",
+                              "builder": "RAILPACK",
+                              "dockerfilePath": null,
+                              "nixpacksConfigPath": null,
+                              "nixpacksPlan": null,
+                              "watchPatterns": []
+                            },
+                            "deploy": {
+                              "cronSchedule": null,
+                              "drainingSeconds": null,
+                              "healthcheckPath": null,
+                              "healthcheckTimeout": null,
+                              "ipv6EgressEnabled": false,
+                              "limitOverride": null,
+                              "multiRegionConfig": {
+                                "iad": {
+                                  "numReplicas": 1
+                                }
+                              },
+                              "numReplicas": 1,
+                              "overlapSeconds": null,
+                              "preDeployCommand": null,
+                              "preDeployTimeoutSeconds": null,
+                              "region": null,
+                              "registryCredentials": null,
+                              "requiredMountPath": null,
+                              "restartPolicyMaxRetries": null,
+                              "restartPolicyType": "NEVER",
+                              "runtime": "V2",
+                              "sleepApplication": false,
+                              "startCommand": null,
+                              "useLegacyStacker": false
+                            }
+                          },
+                          "volumeMounts": []
+                        },
+                        "status": "INITIALIZING"
+                      },
+                      "nextCronRunAt": null,
+                      "numReplicas": 1,
+                      "serviceId": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+                      "serviceName": "meownero-peer-tjs1856",
+                      "source": null,
+                      "startCommand": null,
+                      "tracingEnabled": false
+                    }
+                  }
+                ]
+              },
+              "unmergedChangesCount": null,
+              "volumeInstances": {
+                "edges": []
+              }
+            }
+          }
+        ]
+      },
+      "id": "f46a08ef-dcba-431b-8fb0-a3b2c0dd721e",
+      "name": "Meownero Remote Test",
+      "services": {
+        "edges": [
+          {
+            "node": {
+              "id": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+              "name": "meownero-peer-tjs1856"
+            }
+          }
+        ]
+      },
+      "workspace": {
+        "name": "Tejesh \u201cTJ\u201d Mehta's Projects"
+      },
+      "workspaceId": "2b820311-d9b2-4a11-acca-fe0ab337dc38"
+    }
+  },
+  "control_secret_set": true,
+  "proxy": {
+    "id": "51c3e9a5-95b0-4c82-8575-788ad7ecdaa6",
+    "domain": "ballast.proxy.rlwy.net",
+    "proxyPort": 10970,
+    "applicationPort": 19080,
+    "endpoint": "ballast.proxy.rlwy.net:10970",
+    "syncStatus": "CREATING",
+    "createdAt": "2026-10-09T06:33:25.862+00:00",
+    "updatedAt": "2026-10-09T06:33:25.862+00:00"
+  },
+  "domain": {
+    "domain": "https://meownero-peer-tjs1856-regtest.up.railway.app"
+  },
+  "upload_started": true,
+  "deployment_id": "13989b04-c407-4a97-be06-0b291c54353d",
+  "failure": "AssertionError: native provider deployment stopped during startup",
+  "wall_seconds": 14.440606654156,
+  "finished_utc": "2026-10-09T06:33:38.880973+00:00"
+}

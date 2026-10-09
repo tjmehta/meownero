@@ -1,0 +1,29 @@
+#0 building with "colima" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 242B done
+#1 DONE 0.0s
+
+#2 [internal] load .dockerignore
+#2 transferring context: 2B done
+#2 DONE 0.0s
+
+#3 [internal] load build context
+#3 transferring context: 98.36MB 0.3s done
+#3 DONE 0.3s
+
+#4 [1/2] ADD runtime-rootfs-amd64.tar.gz /
+#4 DONE 0.6s
+
+#5 [2/2] COPY monerod railway-peer.py /app/
+#5 DONE 0.2s
+
+#6 exporting to image
+#6 exporting layers
+#6 exporting layers 4.0s done
+#6 exporting manifest sha256:4c79c5226c1d82a9543a4e364b2cc6d06bc1a7369c9e14fc323ed67569a14128 done
+#6 exporting config sha256:b459bdae498545b3daec87a0782b84251b27c81e4f582d368b2e7174576b1060 done
+#6 exporting attestation manifest sha256:9a2867c2a192337d052d9747618f542d52cbb836b172686c6db28e848d3fa00a 0.0s done
+#6 exporting manifest list sha256:fd9a629e690d9d865a0aad0004970c64505357cdf5ed7755ead39828fa4f022f done
+#6 naming to docker.io/library/tjs1856-peer:amd64 done
+#6 DONE 4.0s

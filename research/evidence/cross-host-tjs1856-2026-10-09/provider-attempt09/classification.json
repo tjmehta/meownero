@@ -1,0 +1,6 @@
+{
+  "result": "FAIL_NATIVE_RECOVERY_GATE",
+  "native_attempt": 2,
+  "payments_confirmed_on_both_hosts": 3,
+  "explanation": "get_last_block_header checks P2P synchronization readiness. Pausing the only native counterpart prevents that readiness, making this the wrong API to attest persisted reopening. Restart timeout returned HTTP503. Native driver and host runner correctly failed; all owned processes exited0 and OOM0. Use get_info stored tip before handshake in one explicitly amended corrective attempt."
+}

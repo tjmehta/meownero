@@ -1,0 +1,622 @@
+{
+  "result": "FAIL",
+  "started_utc": "2026-10-09T06:46:18.373427+00:00",
+  "operator_cleanup_deadline_utc": "2026-10-09T07:26:18.373437+00:00",
+  "project": "f46a08ef-dcba-431b-8fb0-a3b2c0dd721e",
+  "environment": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+  "service": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+  "free_credit": {
+    "usd": 5.0,
+    "provenance": "parent browser handoff 2026-10-09T05:00:18Z; supported project token usage query lacked billing access"
+  },
+  "cleanup": {
+    "control_stop": "already stopped or unreachable; provider removal required",
+    "control-variable-delete": "{\"deleted\":true,\"key\":\"MEOWNERO_CONTROL_TOKEN\"}\n",
+    "deployment-down": "",
+    "tcp-delete": "{\n  \"deleted\": true,\n  \"id\": \"7f90519b-5b0d-4712-a38b-6f845374e7a8\",\n  \"endpoint\": \"monorail.proxy.rlwy.net:18633\",\n  \"applicationPort\": 19080,\n  \"staged\": false,\n  \"committed\": true\n}\n",
+    "domain-delete": "{\n  \"deleted\": true,\n  \"domain\": {\n    \"createdAt\": \"2026-10-09T06:46:20.263+00:00\",\n    \"domain\": \"meownero-peer-tjs1856-regtest.up.railway.app\",\n    \"id\": \"5513bbd5-9e14-4bac-92f8-4499df5477ad\",\n    \"syncStatus\": \"ACTIVE\",\n    \"targetPort\": 8080,\n    \"type\": \"service\",\n    \"updatedAt\": \"2026-10-09T06:46:20.905+00:00\"\n  }\n}\n",
+    "status": {
+      "buckets": {
+        "edges": []
+      },
+      "deletedAt": null,
+      "environments": {
+        "edges": [
+          {
+            "node": {
+              "canAccess": true,
+              "deletedAt": null,
+              "id": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+              "name": "regtest",
+              "serviceInstances": {
+                "edges": [
+                  {
+                    "node": {
+                      "activeDeployments": [],
+                      "autoInstrumentationEnabled": false,
+                      "cronSchedule": null,
+                      "domains": {
+                        "customDomains": [],
+                        "serviceDomains": []
+                      },
+                      "environmentId": "4e5d9d89-594e-464c-a9de-b854ec33e30a",
+                      "id": "b7f12f50-5bf6-47d6-a93a-200bc6a05bbc",
+                      "latestDeployment": null,
+                      "nextCronRunAt": null,
+                      "numReplicas": 1,
+                      "serviceId": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+                      "serviceName": "meownero-peer-tjs1856",
+                      "source": null,
+                      "startCommand": null,
+                      "tracingEnabled": false
+                    }
+                  }
+                ]
+              },
+              "unmergedChangesCount": null,
+              "volumeInstances": {
+                "edges": []
+              }
+            }
+          }
+        ]
+      },
+      "id": "f46a08ef-dcba-431b-8fb0-a3b2c0dd721e",
+      "name": "Meownero Remote Test",
+      "services": {
+        "edges": [
+          {
+            "node": {
+              "id": "884ba31d-a288-4f69-9dbb-9e1332501d87",
+              "name": "meownero-peer-tjs1856"
+            }
+          }
+        ]
+      },
+      "workspace": {
+        "name": "Tejesh \u201cTJ\u201d Mehta's Projects"
+      },
+      "workspaceId": "2b820311-d9b2-4a11-acca-fe0ab337dc38"
+    }
+  },
+  "control_secret_set": true,
+  "proxy": {
+    "id": "7f90519b-5b0d-4712-a38b-6f845374e7a8",
+    "domain": "monorail.proxy.rlwy.net",
+    "proxyPort": 18633,
+    "applicationPort": 19080,
+    "endpoint": "monorail.proxy.rlwy.net:18633",
+    "syncStatus": "CREATING",
+    "createdAt": "2026-10-09T06:46:19.586+00:00",
+    "updatedAt": "2026-10-09T06:46:19.586+00:00"
+  },
+  "domain": {
+    "domain": "https://meownero-peer-tjs1856-regtest.up.railway.app"
+  },
+  "upload_started": true,
+  "deployment_id": "ff9af389-c0d3-49e1-9e7d-06ee51d07a98",
+  "runtime_preflight": {
+    "architecture": "x86_64",
+    "control_port": 8080,
+    "provider_port_hint": "19080",
+    "generations": [
+      {
+        "pid": 2,
+        "started_s": 550736.152858404,
+        "command": [
+          "/app/monerod",
+          "--data-dir",
+          "/data/chain",
+          "--regtest",
+          "--keep-fakechain",
+          "--fixed-difficulty",
+          "1",
+          "--non-interactive",
+          "--no-igd",
+          "--allow-local-ip",
+          "--disable-dns-checkpoints",
+          "--check-updates",
+          "disabled",
+          "--hide-my-port",
+          "--max-concurrency",
+          "1",
+          "--no-zmq",
+          "--rpc-ssl",
+          "disabled",
+          "--p2p-bind-ip",
+          "0.0.0.0",
+          "--p2p-bind-port",
+          "19080",
+          "--rpc-bind-ip",
+          "127.0.0.1",
+          "--rpc-bind-port",
+          "19081",
+          "--add-exclusive-node",
+          "127.0.0.1:1",
+          "--log-level",
+          "0",
+          "--log-file",
+          "/data/daemon.log"
+        ]
+      }
+    ],
+    "memory.current": "295079936",
+    "memory.peak": "296837120",
+    "memory.max": "999997440",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0",
+    "cpu.stat": "usage_usec 559964\nuser_usec 507593\nsystem_usec 52370\nnice_usec 0\nnr_periods 10\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0",
+    "disk_bytes": 99617,
+    "process": {
+      "pid": 2,
+      "exe_sha256": "a1c98d4fcf69402e4850467984bb39a5c76bb244fe23ed7766110f7f20c386b0",
+      "start_ticks": "55073615",
+      "command": [
+        "/app/monerod",
+        "--data-dir",
+        "/data/chain",
+        "--regtest",
+        "--keep-fakechain",
+        "--fixed-difficulty",
+        "1",
+        "--non-interactive",
+        "--no-igd",
+        "--allow-local-ip",
+        "--disable-dns-checkpoints",
+        "--check-updates",
+        "disabled",
+        "--hide-my-port",
+        "--max-concurrency",
+        "1",
+        "--no-zmq",
+        "--rpc-ssl",
+        "disabled",
+        "--p2p-bind-ip",
+        "0.0.0.0",
+        "--p2p-bind-port",
+        "19080",
+        "--rpc-bind-ip",
+        "127.0.0.1",
+        "--rpc-bind-port",
+        "19081",
+        "--add-exclusive-node",
+        "127.0.0.1:1",
+        "--log-level",
+        "0",
+        "--log-file",
+        "/data/daemon.log"
+      ],
+      "rss_kib": 286384
+    },
+    "monotonic_s": 550739.78975589
+  },
+  "upload_manifest": {
+    "schema": "tjs1856-private-peer-upload/1",
+    "architecture": "linux/amd64",
+    "source_pins": {
+      "schema": "meownero-vanguard-source-lock/1",
+      "issue": "TJS-356",
+      "pinned_on": "2026-09-23",
+      "scope": "Isolated, valueless harness. It compiles and executes the upstream FCMP++ and CARROT primitives at the pins below. It is not a node, not a network, and not an audit.",
+      "upstream": {
+        "url": "https://github.com/seraphis-migration/monero.git",
+        "branch": "fcmp++-stage",
+        "commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+        "commit_date": "2026-09-23T09:13:54-05:00",
+        "commit_subject": "Merge pull request #473 from j-berman/fix-genesis-torsion-check",
+        "license": "BSD-3-Clause (LICENSE: Copyright (c) 2014-2024, The Monero Project)",
+        "rebase_risk": "fcmp++-stage is a moving integration branch. This pin is a commit hash, not a branch name. Evidence records upstream-head.txt and the vector hashes so a later rebase is detectable.",
+        "submodules": {
+          "external/gtest": "52eb8108c5bdec04579160ae17225d66034bd723",
+          "external/mx25519": "420ccc2f5012ee1f8e02c1976e89620e1b0959f6",
+          "external/randomx": "aaafe71322df6602c21a5c72937ac284724ae561",
+          "external/rapidjson": "24b5e7a8b27f42fa16b96fc70aade9106cf7102f",
+          "external/supercop": "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+        },
+        "primitives_used": [
+          "src/fcmp_pp (prove.h: prove_membership, verify_membership, prove_sal, verify_sal, verify)",
+          "src/fcmp_pp/fcmp_pp_rust (FFI staticlib over monero-oxide crates)",
+          "src/carrot_core (account_secrets, destination, payment_proposal, scan)",
+          "src/cryptonote_basic (address base58 encode/decode used by CARROT destinations)",
+          "tests/unit_tests/curve_trees.cpp (upstream test-tree helpers, compiled unchanged)",
+          "tests/data/fcmp_pp_verify_inputs_{1,2,4,8,128}in.bin (upstream fixed FCMP++ verify vectors)"
+        ],
+        "alternatives_rejected": {
+          "v0.19.0.0-beta.2.0 (8ed2f782)": "pins monero-oxide 0e438aed (2026-04-23), which predates the Trail of Bits fix commit 066229801a18bb11679113c93971c4f19fde0cd0 included at 31c26d96",
+          "beta-stressnet-v3 (5288ee13cbea1c584056995baa88b03d43901bc2)": "same monero-oxide pin; stress-net branch, not the integration head",
+          "monero-project/monero master (d02c7c57)": "contains only the early FCMP++ integration phases",
+          "monero-project/monero PR #9436 (head 23b1b35b)": "stale draft"
+        }
+      },
+      "rust": {
+        "cargo_lock_path": "src/fcmp_pp/fcmp_pp_rust/Cargo.lock",
+        "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+        "monero_oxide_url": "https://github.com/monero-oxide/monero-oxide",
+        "monero_oxide_rev": "31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+        "crypto_bigint_url": "https://github.com/kayabaNerve/crypto-bigint (branch c-repr)",
+        "crypto_bigint_rev": "78352771313f1e9b8e48abe5ce30d50d6bdd291d",
+        "crate_licenses": "MIT (crypto/fcmps, crypto/generalized-bulletproofs, crypto/divisors, crypto/helioselene LICENSE files at 31c26d96)",
+        "fetch": "cargo fetch --locked on the host into the gitignored build/vanguard-src/cargo-home; the container build runs with CARGO_NET_OFFLINE=true and --network=none"
+      },
+      "builder": {
+        "image_id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+        "image_note": "The accepted testnet v0 builder image, used read-only by image ID with --pull=never. It is not retagged or modified. It carries no Rust, so the host toolchain below is mounted read-only.",
+        "rustc": "rustc 1.93.0 (254b59607 2026-01-19)",
+        "rustc_note": "Upstream CI (.github/workflows/build.yml at the pin) installs toolchain 1.93 via rustup-init 1.29.0"
+      },
+      "public_review_references": {
+        "caveat": "These are third-party reviews of upstream components, cited only as references. None of them is an audit of Meownero, of this harness, or of the pinned integration commit as a whole. Agent review is not external audit.",
+        "items": [
+          {
+            "component": "FCMP++ C++ integration (monero-project/monero)",
+            "reference": "Trail of Bits security review, trailofbits/publications@73e52c96cef59d42201ff5546090b76ca67a8014 reviews/2026-07-magicgrants-monerofcmp++crypto-securityreview.pdf (sha256 4f649fe0e63a8870ae3930ea142eb405345ff07a1b5f3e2ff7741deed6dce540), linked from the description of monero-project/monero PR #10360 'FCMP++: CurveTrees class & implementation of ed25519 outputs -> curve tree leaves function'. The same description links Cypher Stack cypherstack/fcmp-impl-audit@d7de33d08c48a3c249629e47f71ea72c938a3404 FCMP_Code_Implementation_Audit.pdf section 12 (not read for this harness)",
+            "scope_caveat": "Per the PR description, both reviewed an earlier state of that PR. The ToB report covers the crypto integration phases only and lists 6 informational findings: 5 resolved, and #6 (TOB-MAGIC-FCMP-6, the Rust FFI function selene_scalar_from_bytes depends on fragile memory layout) partially resolved."
+          },
+          {
+            "component": "full-chain-membership-proofs, circuit-abstraction, ec-gadgets",
+            "reference": "Veridise audit 2025-06-03 (monero-oxide audits/fcmps/README.md @ 31c26d96); non-interactive gadgets formally verified with Picus",
+            "scope_caveat": "Covers the crates at the audited revision, not this integration."
+          },
+          {
+            "component": "generalized-bulletproofs",
+            "reference": "Cypher Stack security proofs, Goodell review, Cypher Stack audit, then the flaw and fixed protocol, then the zkSecurity re-audit (monero-oxide audits/generalized-bulletproofs/ @ 31c26d96)",
+            "scope_caveat": "Finding 02 (zeroization) is deferred to monero-oxide#200. The Lean proofs are not claimed to correspond to the implementation."
+          },
+          {
+            "component": "ec-divisors",
+            "reference": "Veridise proofs, Cypher Stack reviews, SLVer Bullet equivalence (monero-project/meta#1244), zkSecurity notes on divisor incompleteness (monero-oxide audits/divisors/README.md @ 31c26d96)",
+            "scope_caveat": "The ec-divisors prover library itself is unaudited."
+          },
+          {
+            "component": "helioselene",
+            "reference": "Veridise Security Assessment for the Helios-Selene Curve Cycle, with partial formal verification (monero-oxide audits/helioselene/ @ 31c26d96)",
+            "scope_caveat": "Curve-cycle assessment; implementation coverage is partial."
+          },
+          {
+            "component": "FCMP++ composition",
+            "reference": "Cypher Stack FCMP++ review (cypherstack/fcmp-review; monero-oxide audits/fcmp++/Review.pdf @ 31c26d96)",
+            "scope_caveat": "Protocol composition review, not a code audit of this integration."
+          },
+          {
+            "component": "CARROT",
+            "reference": "Cypher Stack CARROT specification audits 2024-11-22 and 2025-09-10 follow-up (spec scope dbb04d91d40b68b2a8b82b895acf762c864b4cbc)",
+            "scope_caveat": "Specification only. No code audit of carrot_core or carrot_impl was found."
+          }
+        ]
+      }
+    },
+    "base_rootfs": {
+      "image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "architecture": "linux/amd64",
+      "rootfs_sha256": "f64b818325fd0f54215c679bd92aec787018e2f417e62796d98008e110d4346a",
+      "bytes": 275265607,
+      "export_seconds": 25.752460413845256
+    },
+    "binary": {
+      "sha256": "a1c98d4fcf69402e4850467984bb39a5c76bb244fe23ed7766110f7f20c386b0",
+      "bytes": 29872616
+    },
+    "files": {
+      "Dockerfile": {
+        "sha256": "6a0dc5de96f07a51db393b86bed6a1ce944f6bd756fb2323dedcde46b6e36ecc",
+        "bytes": 203
+      },
+      "monerod": {
+        "sha256": "a1c98d4fcf69402e4850467984bb39a5c76bb244fe23ed7766110f7f20c386b0",
+        "bytes": 29872616
+      },
+      "railway-peer.py": {
+        "sha256": "dddd278281ea784ea3c595c8efc9128e45fba254a53911bb91e3f19b97f5863e",
+        "bytes": 7591
+      },
+      "runtime-rootfs-amd64.tar.gz": {
+        "sha256": "2611486344fc286da36cff12a45c39e6f9111b7da6bea82ec62ba32440cb66f6",
+        "bytes": 68459670
+      }
+    },
+    "exclusions": [
+      "wallet executable/files",
+      "chain databases",
+      "keys",
+      "runtime credentials"
+    ],
+    "runtime_control_token": "provider runtime variable only",
+    "result": "PACKAGED_NOT_DEPLOYED",
+    "revision": "fixed control8080 independent of provider PORT"
+  },
+  "local_package_image": {
+    "scope": "previous preparation image before control listener fix; new native Railway image digest must be independently recorded",
+    "id": "sha256:d02301599a12870d717c86ffa6ffa587d0b7a868933d9a113182611906926b71",
+    "architecture": "amd64",
+    "os": "linux",
+    "rootfs": {
+      "Type": "layers",
+      "Layers": [
+        "sha256:ae94c4364a95fd8ee4c26fab77dc51b6538373fb9bd73b57e4626c7d24c1b43c",
+        "sha256:8ee8de55dd62ee02c7f5c3de2074f2a3881a791c7b1a1a256aecfb4af3bfc696"
+      ]
+    },
+    "repo_digests": [
+      "tjs1856-peer02@sha256:d02301599a12870d717c86ffa6ffa587d0b7a868933d9a113182611906926b71"
+    ]
+  },
+  "runtime_info": {
+    "id": "0",
+    "jsonrpc": "2.0",
+    "result": {
+      "adjusted_time": 1791528425,
+      "alt_blocks_count": 0,
+      "block_size_limit": 1250000,
+      "block_size_median": 625000,
+      "block_weight_limit": 1250000,
+      "block_weight_median": 625000,
+      "busy_syncing": false,
+      "credits": 0,
+      "cumulative_difficulty": 1,
+      "cumulative_difficulty_top64": 0,
+      "database_size": 86016,
+      "difficulty": 1,
+      "difficulty_top64": 0,
+      "free_space": 2681150025728,
+      "grey_peerlist_size": 0,
+      "height": 1,
+      "incoming_connections_count": 0,
+      "mainnet": false,
+      "nettype": "fakechain",
+      "offline": false,
+      "outgoing_connections_count": 0,
+      "restricted": false,
+      "rpc_connections_count": 1,
+      "stagenet": false,
+      "start_time": 1791528421,
+      "status": "OK",
+      "synchronized": false,
+      "target": 120,
+      "target_height": 0,
+      "testnet": false,
+      "top_block_hash": "418015bb9ae982a1975da7d79277c2705727a56894ba0fb246adaabb1f4632e3",
+      "top_hash": "",
+      "tx_count": 0,
+      "tx_pool_size": 0,
+      "update_available": false,
+      "version": "0.18.1.0-e151643c5",
+      "white_peerlist_size": 0,
+      "wide_cumulative_difficulty": "0x1",
+      "wide_difficulty": "0x1"
+    }
+  },
+  "deployment_metadata": [
+    {
+      "id": "ff9af389-c0d3-49e1-9e7d-06ee51d07a98",
+      "status": "SUCCESS",
+      "createdAt": "2026-10-09T06:46:22.865Z",
+      "meta": {
+        "buildOnly": false,
+        "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+        "cliCaller": "codex",
+        "fileServiceManifest": {},
+        "imageDigest": "sha256:af1370e4e13abab8f1bdeb239d44fdb0c1b2b9a1712c06489add78cb26faafd7",
+        "logsV2": true,
+        "nixpacksProviders": [],
+        "propertyFileMapping": {},
+        "reason": "deploy",
+        "rootDirectory": null,
+        "runtime": "V2",
+        "serviceManifest": {
+          "build": {
+            "buildCommand": null,
+            "buildEnvironment": "V3",
+            "builder": "DOCKERFILE",
+            "dockerfilePath": "/Dockerfile",
+            "nixpacksConfigPath": null,
+            "nixpacksPlan": null,
+            "watchPatterns": []
+          },
+          "deploy": {
+            "cronSchedule": null,
+            "drainingSeconds": null,
+            "healthcheckPath": null,
+            "healthcheckTimeout": null,
+            "ipv6EgressEnabled": false,
+            "limitOverride": null,
+            "multiRegionConfig": {
+              "iad": {
+                "numReplicas": 1
+              }
+            },
+            "numReplicas": 1,
+            "overlapSeconds": null,
+            "preDeployCommand": null,
+            "preDeployTimeoutSeconds": null,
+            "region": null,
+            "registryCredentials": null,
+            "requiredMountPath": null,
+            "restartPolicyMaxRetries": null,
+            "restartPolicyType": "NEVER",
+            "runtime": "V2",
+            "sleepApplication": false,
+            "startCommand": null,
+            "useLegacyStacker": false
+          }
+        },
+        "volumeMounts": []
+      }
+    },
+    {
+      "id": "2c171cb6-7bc4-4b93-9cd3-473a771612c3",
+      "status": "REMOVED",
+      "createdAt": "2026-10-09T06:38:45.948Z",
+      "meta": {
+        "buildOnly": false,
+        "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+        "cliCaller": "codex",
+        "duration": 0,
+        "fileServiceManifest": {},
+        "imageDigest": "sha256:e2f23aa4982441dcab78d4e2fe77ae0e4f6b7424e6a40343a07fdfef77c00f80",
+        "logsV2": true,
+        "nixpacksProviders": [],
+        "propertyFileMapping": {},
+        "reason": "deploy",
+        "rootDirectory": null,
+        "runtime": "V2",
+        "serviceManifest": {
+          "build": {
+            "buildCommand": null,
+            "buildEnvironment": "V3",
+            "builder": "DOCKERFILE",
+            "dockerfilePath": "/Dockerfile",
+            "nixpacksConfigPath": null,
+            "nixpacksPlan": null,
+            "watchPatterns": []
+          },
+          "deploy": {
+            "cronSchedule": null,
+            "drainingSeconds": null,
+            "healthcheckPath": null,
+            "healthcheckTimeout": null,
+            "ipv6EgressEnabled": false,
+            "limitOverride": null,
+            "multiRegionConfig": {
+              "iad": {
+                "numReplicas": 1
+              }
+            },
+            "numReplicas": 1,
+            "overlapSeconds": null,
+            "preDeployCommand": null,
+            "preDeployTimeoutSeconds": null,
+            "region": null,
+            "registryCredentials": null,
+            "requiredMountPath": null,
+            "restartPolicyMaxRetries": null,
+            "restartPolicyType": "NEVER",
+            "runtime": "V2",
+            "sleepApplication": false,
+            "startCommand": null,
+            "useLegacyStacker": false
+          }
+        },
+        "volumeMounts": []
+      }
+    },
+    {
+      "id": "13989b04-c407-4a97-be06-0b291c54353d",
+      "status": "REMOVED",
+      "createdAt": "2026-10-09T06:33:28.378Z",
+      "meta": {
+        "buildOnly": false,
+        "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+        "cliCaller": "codex",
+        "fileServiceManifest": {},
+        "imageDigest": "sha256:e2f23aa4982441dcab78d4e2fe77ae0e4f6b7424e6a40343a07fdfef77c00f80",
+        "logsV2": true,
+        "nixpacksProviders": [],
+        "propertyFileMapping": {},
+        "reason": "deploy",
+        "rootDirectory": null,
+        "runtime": "V2",
+        "serviceManifest": {
+          "build": {
+            "buildCommand": null,
+            "buildEnvironment": "V3",
+            "builder": "DOCKERFILE",
+            "dockerfilePath": "/Dockerfile",
+            "nixpacksConfigPath": null,
+            "nixpacksPlan": null,
+            "watchPatterns": []
+          },
+          "deploy": {
+            "cronSchedule": null,
+            "drainingSeconds": null,
+            "healthcheckPath": null,
+            "healthcheckTimeout": null,
+            "ipv6EgressEnabled": false,
+            "limitOverride": null,
+            "multiRegionConfig": {
+              "iad": {
+                "numReplicas": 1
+              }
+            },
+            "numReplicas": 1,
+            "overlapSeconds": null,
+            "preDeployCommand": null,
+            "preDeployTimeoutSeconds": null,
+            "region": null,
+            "registryCredentials": null,
+            "requiredMountPath": null,
+            "restartPolicyMaxRetries": null,
+            "restartPolicyType": "NEVER",
+            "runtime": "V2",
+            "sleepApplication": false,
+            "startCommand": null,
+            "useLegacyStacker": false
+          }
+        },
+        "volumeMounts": []
+      }
+    },
+    {
+      "id": "65ed9b06-be3a-4c89-b574-ce577004c36a",
+      "status": "REMOVED",
+      "createdAt": "2026-10-09T06:18:55.514Z",
+      "meta": {
+        "buildOnly": false,
+        "cliAgentSessionId": "01a11f03-3a61-78b2-8d3b-70fd300d97bf",
+        "cliCaller": "codex",
+        "duration": 0,
+        "fileServiceManifest": {},
+        "imageDigest": "sha256:d9bef25f2b3a2ed18e76da54fc41a8092628f795572101c3844943be2eedfb66",
+        "logsV2": true,
+        "nixpacksProviders": [],
+        "propertyFileMapping": {
+          "build.builder": "$.build.builder",
+          "deploy.numReplicas": "$.deploy.numReplicas",
+          "deploy.restartPolicyType": "$.deploy.restartPolicyType"
+        },
+        "reason": "deploy",
+        "rootDirectory": null,
+        "runtime": "V2",
+        "serviceManifest": {
+          "build": {
+            "buildCommand": null,
+            "buildEnvironment": "V3",
+            "builder": "DOCKERFILE",
+            "dockerfilePath": "/Dockerfile",
+            "nixpacksConfigPath": null,
+            "nixpacksPlan": null,
+            "watchPatterns": []
+          },
+          "deploy": {
+            "cronSchedule": null,
+            "drainingSeconds": null,
+            "healthcheckPath": null,
+            "healthcheckTimeout": null,
+            "ipv6EgressEnabled": false,
+            "limitOverride": null,
+            "multiRegionConfig": {
+              "iad": {
+                "numReplicas": 1
+              }
+            },
+            "numReplicas": 1,
+            "overlapSeconds": null,
+            "preDeployCommand": null,
+            "preDeployTimeoutSeconds": null,
+            "region": null,
+            "registryCredentials": null,
+            "requiredMountPath": null,
+            "restartPolicyMaxRetries": 10,
+            "restartPolicyType": "ON_FAILURE",
+            "runtime": "V2",
+            "sleepApplication": false,
+            "startCommand": null,
+            "useLegacyStacker": false
+          }
+        },
+        "volumeMounts": []
+      }
+    }
+  ],
+  "failure": "AssertionError: ",
+  "wall_seconds": 53.25128607312217,
+  "finished_utc": "2026-10-09T06:47:11.624713+00:00"
+}

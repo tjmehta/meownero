@@ -1,0 +1,9 @@
+{
+  "result": "FAIL_HARNESS_PREMATURE_STARTUP_ABORT",
+  "observed_status": "INITIALIZING",
+  "cause": "deploymentStopped is true before instances start; coordinator incorrectly treated it as native failure",
+  "native_peer": "NOT_RUN; later queued deployment rejected missing control secret after cleanup",
+  "funding": "NOT_RUN",
+  "payments": "NOT_RUN",
+  "correction": "Only treat stopped terminal/SUCCESS deployment as failed; keep bounded wait during INITIALIZING/BUILDING/DEPLOYING"
+}

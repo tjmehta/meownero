@@ -1,0 +1,11 @@
+{
+  "args": [
+    "api",
+    "mutation($service:String!,$environment:String!){serviceInstanceUpdate(serviceId:$service,environmentId:$environment,input:{restartPolicyType:NEVER,restartPolicyMaxRetries:0,numReplicas:1,builder:DOCKERFILE,dockerfilePath:\"/Dockerfile\"})}",
+    "--variables",
+    "{\"service\": \"884ba31d-a288-4f69-9dbb-9e1332501d87\", \"environment\": \"4e5d9d89-594e-464c-a9de-b854ec33e30a\"}",
+    "--compact"
+  ],
+  "exit": 1,
+  "wall_seconds": 0.23672526190057397
+}

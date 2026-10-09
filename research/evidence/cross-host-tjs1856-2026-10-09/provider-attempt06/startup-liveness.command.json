@@ -1,0 +1,11 @@
+{
+  "args": [
+    "api",
+    "query($id:String!){deployment(id:$id){id status deploymentStopped}}",
+    "--variables",
+    "{\"id\": \"f95dddf8-a9f3-4627-ab33-663aa0dc6fb9\"}",
+    "--compact"
+  ],
+  "exit": 0,
+  "wall_seconds": 0.2088029538281262
+}
