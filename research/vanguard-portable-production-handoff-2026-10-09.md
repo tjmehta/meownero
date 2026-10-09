@@ -166,3 +166,46 @@ all1,163 primary entries. This writer did not write the primary checkout or
 change policy/auth/runtime settings, use paid runners or signing credentials,
 contact a public/live coin network, or reopen historical tasks. Needs TJ: None
 for the already authorized production.
+
+
+## Separate i686 native CI payload05
+
+Immutable shared `build/tjs1882-3175-native-ci-payload05` is ready for parent
+preflight review AFTER correction04.20 repository files:12 unchanged exactv7
+i686 parts,7 helpers/inputs,1 narrow branch/path workflow.19 inputs first,
+independent readback, workflow last; one Windows2025x64 job capped30minutes.
+PUBLICATION13a243180db57e01507493aba3969e5f9692f2bb259a6527bd09523014d5e597;
+inputs46e47594c1e42b666d3c4912131fd7aa34be55482b152a7f58fb937e5a4ae868;
+workflowa130c95353f30493495da0e697e125e47a0d6b5aae176d511c4fd728bb6da552;
+CIhelper81c6da7b73e59ea744b99e44fd845558e1bf3f2485be255f54655450f295164b.
+Archive unchanged SHA3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745,
+97,173,058bytes. All20 local hashes/sizes, actual12part reassembly/prepare-only
+bindings/307 member hashes, YAML1.2 one-job/read-only/pins/SHA/publicJSON guards
+and10 mocked success/refusal/timeout/order/cleanup cases PASS; not native proof.
+P2 Mac supervision function is byte-identical to04.
+
+Exact source/compiler/map/disassembly-bound exception fixtureee8ddee3 executes
+FIRST in owned Job with60second wait, existing1500second overall deadline,
+4GiB aggregate cap, suspended registration and final cleanup. Exact single
+PASS_NATIVE_I686_EXCEPTION_PROBE line allows only LF/WindowsCRLF terminator,
+exit0/reaped and source-asserted one Guard cleanup. Any fixture failure stops
+before wallet preflight/journey/ten controls and retains public FAIL/cleanup.
+All usual journey/payment/native/program/release assertions remain. Receipt
+requires NATIVE_WINDOWS_WOW64 with nativeOSx64/Python64 and packagei686; a32bit
+Windows OS remains UNTESTED. Parent byte-only receiptcba8411b... is consumed;
+parent did not repeat original compiled Rust adaptation comparison in that audit.
+Native exception/journey/controls remain UNTESTED until actual05 results and
+original reviewer. Parent owns publication/run/adoption; no self-acceptance.
+
+Parent Macv8 byte-only audit ae5d896a3d54895b157e7106706c6714788e96225809ae8ec4687b8cdc077c0c
+was read and hash-verified from disjoint parent-owned shared directory:266 safe
+TAR/265manifest/264exactunchanged members carry programs/licenses,3 helper
+bindings to424c2f3. Parent04 all25SHA/source review passes and12 changed files
+are being published input-first/workflow-last. Actual corrected native run
+proof has not yet arrived; original failed03 preserved.
+
+Next independent authorized route: qualify standard native ubuntu-22.04 x64
+GitHub runner against existing5GiB/10GiB gates and stage a finite exact
+source-lock/helper/patch input payload to avoid the known oldQEMU GCC11
+collect2 crash. Parent owns browser-only allowlisted publication. No source
+broad push, main/default write, paid/settings change or local ARM05 interruption.
