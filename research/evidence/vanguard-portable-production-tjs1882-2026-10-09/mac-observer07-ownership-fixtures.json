@@ -1,0 +1,78 @@
+{
+  "schema": "meownero-mac-observer07-ownership-fixtures/1",
+  "result": "PASS",
+  "source_sha256": "e1d712358f803c49a96795563e9fa78d439b50328be4ad1757020a153e7dc232",
+  "cases": [
+    {
+      "case": "exact-observer",
+      "observed": "PASS",
+      "expected": "PASS"
+    },
+    {
+      "case": "exact-process-query",
+      "observed": "PASS",
+      "expected": "PASS"
+    },
+    {
+      "case": "exact-command-query",
+      "observed": "PASS",
+      "expected": "PASS"
+    },
+    {
+      "case": "foreign-real-uid",
+      "observed": "REAL_UID_MISMATCH",
+      "expected": "REAL_UID_MISMATCH"
+    },
+    {
+      "case": "other-effective-uid",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED"
+    },
+    {
+      "case": "wrong-parent",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED"
+    },
+    {
+      "case": "wrong-helper",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED"
+    },
+    {
+      "case": "wrong-arguments",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED"
+    },
+    {
+      "case": "unknown-exit-display",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED"
+    },
+    {
+      "case": "known-exit-display",
+      "observed": "PASS",
+      "expected": "PASS"
+    },
+    {
+      "case": "reused-helper-start",
+      "observed": "REMEMBERED_HELPER_IDENTITY_CHANGED",
+      "expected": "REMEMBERED_HELPER_IDENTITY_CHANGED"
+    },
+    {
+      "case": "changed-helper-kernel-file",
+      "observed": "REMEMBERED_HELPER_IDENTITY_CHANGED",
+      "expected": "REMEMBERED_HELPER_IDENTITY_CHANGED"
+    },
+    {
+      "case": "known-zombie",
+      "observed": "PASS",
+      "expected": "PASS"
+    },
+    {
+      "case": "zombie-reused-start",
+      "observed": "ZOMBIE_PROCESS_IDENTITY_CHANGED",
+      "expected": "ZOMBIE_PROCESS_IDENTITY_CHANGED"
+    }
+  ],
+  "native_acceptance": "UNTESTED_BY_FIXTURES"
+}
