@@ -56,6 +56,8 @@ def main():
         text = subprocess.check_output([str(args.objdump), '-p', str(path)], text=True, timeout=30)
         security = re.search(r'Entry 4\s+([0-9a-fA-F]+)\s+([0-9a-fA-F]+)', text)
         assert security and int(security[1], 16) == 0 and int(security[2], 16) == 0, 'unexpected PE signing state'
+        delayed = re.search(r'Entry d\s+([0-9a-fA-F]+)\s+([0-9a-fA-F]+)', text, re.I)
+        assert delayed and int(delayed[1], 16) == 0 and int(delayed[2], 16) == 0, 'unmapped delayed-import dependency'
         imports = set(re.findall(r'DLL Name:\s+(\S+)', text))
         assert imports and not re.search(r'Delay Import.*(?:corrupt|invalid)', text, re.I), 'missing or invalid import inventory'
         audit[path.name] = {'sha256': sha(path), 'machine': machine, 'imports': sorted(imports),
@@ -92,6 +94,11 @@ def main():
             shutil.copyfile(matches[0], binary_dir / name)
             inspect(binary_dir / name)
             bundled.add(name)
+    crt_imports = sorted(name for name in required if name in {'msvcrt.dll', 'ucrtbase.dll'} or name.startswith('api-ms-win-crt-'))
+    if receipt['target'] == 'windows-aarch64':
+        assert crt_imports and 'msvcrt.dll' not in crt_imports, 'ARM64 requires the pinned UCRT closure'
+    else:
+        assert crt_imports == ['msvcrt.dll'], 'GNU target requires the pinned MSVCRT closure'
     for source, target in [('vanguard/portable-tester.py', 'tester.py'), ('vanguard/portable_windows.py', 'portable_windows.py'), ('docs/vanguard-portable-tester.md', 'TESTER.md'), ('vanguard/source-lock.json', 'source-lock.json')]:
         shutil.copyfile(ROOT / source, package / target)
     shutil.copyfile(build / 'build-receipt.json', package / 'BUILD.json')
@@ -150,6 +157,7 @@ def main():
         'submodules': pin['upstream']['submodules'], 'rustc': pin['builder']['rustc'], 'patches': receipt['patches'],
         'signing': 'unsigned; no Authenticode credential used', 'notarization': 'not applicable', 'status': 'BUILT_UNTESTED',
         'c_runtime': 'UCRT' if receipt['target'] == 'windows-aarch64' else 'MSVCRT with static POSIX MinGW runtimes',
+        'c_runtime_imports': crt_imports,
         'compiler_inventory': {'file': 'COMPILER.txt', 'sha256': sha(package / 'COMPILER.txt')},
         'native_version_execution': 'UNTESTED', 'native_journey': 'UNTESTED', 'python_requirement': 'CPython 3.13 or later',
         'bundled_libraries': sorted(bundled), 'required_dynamic_libraries': sorted(required), 'pe_audit': audit,
