@@ -1,6 +1,7 @@
 # Finite native Railway and build-mac protocol
 
-Revision 3, prepared 2026-10-09 before any cross-host native trial. Starting
+Revision 4, prepared 2026-10-09 after the first partial native attempt and
+before its bounded retry. The first attempt remains preserved as a failure. Starting
 candidate is `c6620342328f313e1e9bdfb79570d5245e669090`. This is one accelerated,
 valueless FCMP++/CARROT regtest witness. Accepted local tests and launch gates
 remain unchanged. Source pins are those in `vanguard/source-lock.json`.
@@ -122,3 +123,11 @@ Once a candidate and raw evidence exist, activate one native review stage for
 acceptance. Parent integration and group outcome follow acceptance of the exact
 candidate. This witness does not establish cryptographic soundness, production
 security, selected-policy capacity or public-trial readiness.
+
+The first native attempt confirmed three payments, then rejected a BUSY
+startup RPC result with an empty reopened header. The restart supervisor must
+wait for status OK and a nonempty native block hash before attesting reopening;
+a BUSY result is not evidence of chain loss. Preserve attempt01 and allow one
+fresh attempt02, each at most90 blocks/900 post-funding seconds, at most180
+generated blocks across these two native attempts. Control binds fixed8080,
+independent of the provider PORT hint19080 witnessed on Railway.

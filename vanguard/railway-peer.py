@@ -112,7 +112,8 @@ class Control(BaseHTTPRequestHandler):
                                 {'Content-Type': 'application/json'})
                             with urllib.request.urlopen(req, timeout=1) as reply:
                                 reopened = json.load(reply)
-                            if 'result' in reopened:
+                            ready = reopened.get('result', {})
+                            if ready.get('status') == 'OK' and ready.get('block_header', {}).get('hash'):
                                 break
                         except OSError:
                             pass

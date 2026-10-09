@@ -28,7 +28,9 @@ def main():
     assert subprocess.check_output(['hostname'], text=True).strip().split('.')[0] == 'build-mac'
     config = json.load(sys.stdin)  # Protected SSH stdin; never record credentials.
     assert config['candidate_commit'] and config['environment']['MEOWNERO_REMOTE_CONTROL_URL'].startswith('https://')
-    out = STAGE / 'trial01'
+    number = config.get('attempt', 1)
+    assert number in (1, 2), 'at most two bounded native attempts'
+    out = STAGE / f'trial{number:02d}'
     assert not out.exists(), 'fresh trial required'
     build = json.loads((BUILD / 'preparation/receipt.json').read_text())
     assert build['result'] == 'PASS_BUILD' and build['image'] == IMAGE
@@ -49,7 +51,7 @@ def main():
         assert int(next(line.split()[1] for line in mem.splitlines() if line.startswith('MemAvailable:'))) >= 5 * 1024**2
         assert shutil.disk_usage(STAGE).free >= 5 * 1024**3
         out.mkdir(mode=0o700)
-        name = 'tjs1856-cross-host01'
+        name = f'tjs1856-cross-host{number:02d}'
         script = "trap 'cat /sys/fs/cgroup/memory.peak > /out/final.memory; cat /sys/fs/cgroup/memory.events > /out/final.memory-events; cat /sys/fs/cgroup/cpu.stat > /out/final.cpu' EXIT; timeout --signal=TERM 1580 python3 -B /harness/daemon-cross-host.py"
         args = ['docker', '--context', 'colima', 'run', '--rm', '--name', name, '--pull=never',
                 '--network=bridge', '--cap-drop=ALL', '--security-opt=no-new-privileges', '--cpus=2',
@@ -97,6 +99,8 @@ def main():
             receipt['finished_utc'] = datetime.now(timezone.utc).isoformat()
             (out / 'host-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
         print(receipt['result'], 'owned container removed:', receipt['container_absent'], flush=True)
+        assert receipt['exit'] == 0 and receipt['container_absent'], 'native driver or cleanup failed'
+        assert json.loads((out / 'public/result.json').read_text())['result'] == 'PASS_WRITER_NATIVE_WITNESS', 'native verdict failed'
 
 
 if __name__ == '__main__':
