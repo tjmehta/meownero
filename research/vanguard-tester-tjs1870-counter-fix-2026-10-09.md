@@ -68,7 +68,10 @@ timestamped operator receipt records later exact-path deletion.
 One local preservation-script setup attempt failed because its comparator used
 the wrong saved symlink-field name. The corrected comparator confirms preservation
 of all original paths. No path changed and no native workload started in that
-failed attempt. Its diagnostic remains in `attempts.json`. Earlier failed attempts
+failed attempt. Final packaging also refused run-owned bytecode from an earlier
+evidence import as untracked candidate content, before creating output. Only that
+exact run-owned bytecode was removed, then packaging proceeded from a clean
+candidate. Both diagnostics remain in `attempts.json`. Earlier failed attempts
 and reviewer controls remain preserved.
 
 ## Review handoff
