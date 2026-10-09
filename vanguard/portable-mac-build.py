@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Try the locked upstream native Apple Silicon depends route, with owned writes."""
+"""Build locked Mac targets using explicit Xcode targets and owned writes."""
 import argparse
 import importlib.util
 import json
@@ -26,13 +26,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cache', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--target', choices=['macos-aarch64', 'macos-x86_64'], default='macos-aarch64')
     args = parser.parse_args()
     tester.require(platform.system() == 'Darwin' and platform.machine() == 'arm64', 'native Apple Silicon required')
     out = tester.fresh(args.out)
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(out.parent).free >= 10 * 1024**3, 'requires ten GiB disk reserve')
         out.mkdir(mode=0o700)
-        receipt = {'schema': 'meownero-native-mac-build/1', 'source_lock': PIN,
+        host = 'arm64-apple-darwin' if args.target == 'macos-aarch64' else 'x86_64-apple-darwin'
+        receipt = {'schema': 'meownero-native-mac-build/1', 'source_lock': PIN, 'target': args.target,
+                   'execution_substrate': 'NATIVE_ARM64' if args.target == 'macos-aarch64' else 'CROSS_BUILT_ON_ARM64',
                    'commands': [], 'downloads': [], 'result': 'INCOMPLETE'}
 
         def save():
@@ -110,21 +113,26 @@ def main():
             receipt['sdk_version'] = tester.command(['xcrun', '--show-sdk-version'])
             # Use the source-pinned downloader/checksum recipes. NO_WALLET only
             # omits hardware-wallet dependencies; simplewallet still builds.
-            run('depends', ['make', '-j2', 'HOST=arm64-apple-darwin', 'NO_WALLET=1', 'NO_READLINE=1',
+            run('depends', ['make', '-j2', 'HOST=' + host, 'NO_WALLET=1', 'NO_READLINE=1',
                             'DOWNLOAD_RETRIES=1', 'DOWNLOAD_CONNECT_TIMEOUT=20',
-                            'darwin_CC=' + cc + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0',
-                            'darwin_CXX=' + cxx + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0 -stdlib=libc++',
+                            'darwin_CC=' + cc + ' --target=' + host + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0',
+                            'darwin_CXX=' + cxx + ' --target=' + host + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0 -stdlib=libc++',
                             'darwin_LDFLAGS=-Wl,-platform_version,macos,11.0,' + receipt['sdk_version']], 2400,
                 source / 'contrib/depends')
             receipt['dependency_licenses'] = portable_licenses.retain_depends(out)
             save()
             downloads = out / 'downloads'
             downloads.mkdir()
-            for component in ['rustc', 'cargo', 'rust-std']:
-                filename = component + '-1.93.0-aarch64-apple-darwin.tar.xz'
+            components = [(component, 'aarch64-apple-darwin') for component in ['rustc', 'cargo', 'rust-std']]
+            if args.target == 'macos-x86_64':
+                components.append(('rust-std', 'x86_64-apple-darwin'))
+            for component, rust_host in components:
+                filename = component + '-1.93.0-' + rust_host + '.tar.xz'
                 url = 'https://static.rust-lang.org/dist/' + filename
                 with urllib.request.urlopen(url + '.sha256', timeout=30) as response:
                     expected = response.read().decode().split()[0]
+                if rust_host == 'x86_64-apple-darwin':
+                    tester.require(expected == 'f112d41c8a31794f0f561d37fe77010ed0b405fa70284a2910891869d8c52418', 'Intel std differs from verified preflight')
                 archive = downloads / filename
                 with urllib.request.urlopen(url, timeout=90) as response, archive.open('wb') as stream:
                     shutil.copyfileobj(response, stream)
@@ -134,18 +142,19 @@ def main():
                 with tarfile.open(archive) as stream:
                     stream.extractall(downloads, filter='data')
                 installer = downloads / filename.removesuffix('.tar.xz') / 'install.sh'
-                run('install-' + component, ['sh', str(installer), '--prefix=' + str(out / 'rust'), '--disable-ldconfig'])
+                run('install-' + component + '-' + rust_host, ['sh', str(installer), '--prefix=' + str(out / 'rust'), '--disable-ldconfig'])
             tester.require(tester.command([str(out / 'rust/bin/rustc'), '-V']) == PIN['builder']['rustc'], 'Rust pin mismatch')
             shutil.copytree(args.cache / 'cargo-home', out / 'cargo-home')
             env = dict(os.environ, PATH=str(out / 'rust/bin') + ':' + os.environ['PATH'],
-                       CARGO_HOME=str(out / 'cargo-home'), CARGO_NET_OFFLINE='true', CARGO_BUILD_JOBS='1')
+                       CARGO_HOME=str(out / 'cargo-home'), CARGO_NET_OFFLINE='true', CARGO_BUILD_JOBS='1',
+                       SDKROOT=sdk, MACOSX_DEPLOYMENT_TARGET='11.0')
             os.environ.update(env)
             binary_dir = source / 'build/portable'
             binary_dir.mkdir(parents=True)
             run('configure', ['cmake', '-DCMAKE_BUILD_TYPE=Release', '-DARCH=default', '-DBUILD_TESTS=OFF',
                 '-DUSE_DEVICE_TREZOR=OFF', '-DUSE_READLINE=OFF', '-DMANUAL_SUBMODULES=ON',
                 '-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0', '-DCMAKE_TOOLCHAIN_FILE=' + str(source /
-                'contrib/depends/arm64-apple-darwin/share/toolchain.cmake'), '../..'], 300, binary_dir)
+                ('contrib/depends/' + host + '/share/toolchain.cmake')), '../..'], 300, binary_dir)
             run('build', ['make', '-j1', 'daemon', 'simplewallet', 'wallet_rpc_server'], 2400, binary_dir)
             receipt['binaries'] = {name: tester.sha(binary_dir / 'bin' / name)
                                   for name in ['monerod', 'monero-wallet-cli', 'monero-wallet-rpc']}

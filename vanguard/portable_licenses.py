@@ -133,7 +133,7 @@ def rust_coverage(build, package):
     return summary, [found[key] for key in sorted(required)]
 
 
-def coverage(build, package, mac, bundled):
+def coverage(build, package, mac, bundled, windows=False, depends_static=False):
     source = build / 'monero-fcmp'
     licenses = package / 'licenses'
     components = []
@@ -186,9 +186,27 @@ def coverage(build, package, mac, bundled):
         assert len(matches) == 1, 'missing/ambiguous linker inventory: ' + target
         link = matches[0]
         link_files.append({'target': target, 'sha256': sha(link)})
-        for token in shlex.split(link.read_text()):
+
+        def arguments(text, seen=()):
+            for token in shlex.split(text):
+                if token.startswith('@'):
+                    response = (link.parent.parent.parent / token[1:]).resolve()
+                    assert response.is_relative_to(binary_build.resolve()) and response not in seen, 'unsafe linker response file'
+                    assert response.is_file() and not response.is_symlink(), 'missing linker response file'
+                    link_files.append({'target': target, 'response_file': str(response.relative_to(binary_build)), 'sha256': sha(response)})
+                    yield from arguments(response.read_text(), (*seen, response))
+                else:
+                    yield token
+
+        for token in arguments(link.read_text()):
             if token.startswith('-l'):
-                assert token in {'-lc', '-lm', '-ldl', '-lrt', '-lpthread', '-lstdc++'}, \
+                allowed = {'-lc', '-lm', '-ldl', '-lrt', '-lpthread', '-lstdc++'}
+                if windows:
+                    allowed |= {'-lws2_32', '-lmswsock', '-lwinhttp', '-lcrypt32', '-liphlpapi',
+                                '-lshlwapi', '-ldnsapi', '-lbcrypt', '-ladvapi32', '-luserenv',
+                                '-lkernel32', '-luser32', '-lshell32', '-lole32', '-lversion', '-lrpcrt4', '-lntdll', '-ldbghelp'}
+                    allowed |= {'-lsynchronization', '-lgdi32', '-lwinspool', '-loleaut32', '-luuid', '-lcomdlg32'}
+                assert token in allowed, \
                     'unmapped linker library: ' + token
             if not re.search(r'\.(?:a|so(?:\.\d+)*)$', token):
                 continue
@@ -202,9 +220,13 @@ def coverage(build, package, mac, bundled):
                 assert 'src' in (link.parent / path).resolve().parts or 'contrib' in path.parts or path.name == 'libwallet.a', \
                     'unmapped source library: ' + token
 
-    if mac:
+    if mac or depends_static:
+        dependency_libraries = set()
         for c in retain_depends(build):
             names = [n for n in libraries if n.startswith(DEPENDS[c['component']])]
+            if depends_static:
+                assert all(n.endswith('.a') for n in names), 'older baseline requires the pinned static dependency closure'
+            dependency_libraries.update(names)
             assert names, 'depends component absent from linker inventory'
             for rel, digest in c['texts'].items():
                 p = licenses / 'system' / rel
@@ -215,9 +237,12 @@ def coverage(build, package, mac, bundled):
                 [licenses / 'system' / p for p in c['texts']], names)
             components[-1]['source_archive_sha256'] = c['source_archive_sha256']
             components[-1]['recipe_sha256'] = c['recipe_sha256']
-        assert all(any(n.startswith(prefix) for prefix in DEPENDS.values()) for n in libraries), \
-            'unmapped native depends library'
-    else:
+        if mac:
+            assert all(any(n.startswith(prefix) for prefix in DEPENDS.values()) for n in libraries), \
+                'unmapped native depends library'
+        else:
+            libraries -= dependency_libraries
+    if not mac:
         installed = dict(line.split('=', 1) for line in (build / 'dependencies.txt').read_text().splitlines())
         installed = {k.split(':')[0]: v for k, v in installed.items()}
         by_package = {}

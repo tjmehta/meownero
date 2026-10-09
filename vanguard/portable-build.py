@@ -18,6 +18,7 @@ import subprocess
 import tarfile
 import time
 import uuid
+import portable_licenses
 
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location('tester', ROOT / 'vanguard/tester.py')
@@ -54,11 +55,19 @@ def main():
     parser.add_argument('--target', choices=['linux-x86_64', 'linux-aarch64'], default='linux-x86_64')
     parser.add_argument('--reuse-arm-cache', action='store_true')
     parser.add_argument('--inspect-built', type=Path)
+    parser.add_argument('--older-builder-receipt', type=Path, help='Exact task-owned Ubuntu 22.04 builder preparation receipt')
+    parser.add_argument('--depends-sources', type=Path, help='Read-only cache of checksum-pinned depends source archives')
     args = parser.parse_args()
     work = tester.fresh(args.out)
     cache, rust = args.cache.resolve(), args.rust.resolve()
     arm = args.target == 'linux-aarch64'
     image = tester.PROFILE['image'] if arm else PIN['builder']['image_id']
+    preparation = None
+    if args.older_builder_receipt:
+        tester.require(not arm and not args.reuse_arm_cache and not args.inspect_built, 'older baseline requires fresh x64 source build')
+        preparation = tester.read(args.older_builder_receipt)
+        tester.require(preparation['result'] == 'PREPARED_OLDER_BUILDER' and preparation['cleanup']['removed'] and preparation['distribution'] == 'Ubuntu 22.04', 'unverified older builder')
+        image = preparation['builder_image']
     docker = ['docker', '--context', 'colima'] if platform.system() == 'Darwin' else ['docker']
     architecture = 'arm64' if arm else 'amd64'
     with tester.heavy_lock():
@@ -90,6 +99,9 @@ def main():
         receipt = {'schema': 'meownero-portable-build/1', 'target': args.target, 'builder_image': image,
                    'source_lock': PIN, 'patches': [], 'commands': [], 'result': 'INCOMPLETE',
                    'started_utc': datetime.now(timezone.utc).isoformat()}
+        if preparation:
+            receipt['older_builder_preparation_sha256'] = tester.sha(args.older_builder_receipt)
+            receipt['distribution'] = preparation['distribution']
         if recovery:
             receipt['recovered_attempt_receipt_sha256'] = recovery
 
@@ -123,6 +135,11 @@ def main():
         else:
             export_sources(cache, source, work, run)
             shutil.copytree(cache / 'cargo-home', work / 'cargo-home', symlinks=False)
+            if preparation:
+                tester.require(args.depends_sources and args.depends_sources.is_dir(), 'older baseline needs pinned depends sources')
+                shutil.copytree(args.depends_sources, source / 'contrib/depends/sources')
+                receipt['dependency_licenses'] = portable_licenses.retain_depends(work)
+                receipt['depends_static_dependencies'] = True
         receipt['rustc_sha256'] = tester.sha(rust / 'bin/rustc')
         receipt['cargo_sha256'] = tester.sha(rust / 'bin/cargo')
         name = 'tjs1882-' + uuid.uuid4().hex + '-linux-build'
@@ -162,6 +179,17 @@ done
             first = script.index('mkdir -p build/vanguard')
             last = script.index('mkdir -p /out/runtime-libs')
             script = script[:first] + 'cd build/vanguard\n' + script[last:]
+        if preparation:
+            first = script.index('mkdir -p build/vanguard')
+            script = script[:first] + '''cd contrib/depends
+make -j2 HOST=x86_64-unknown-linux-gnu NO_WALLET=1 NO_READLINE=1
+cd ../..
+sed -i 's/SET(STATIC ON)/SET(STATIC OFF)/' contrib/depends/x86_64-unknown-linux-gnu/share/toolchain.cmake
+sha256sum contrib/depends/x86_64-unknown-linux-gnu/share/toolchain.cmake > /out/generated-toolchain.sha256
+''' + script[first:]
+            script = script.replace('cmake -DCMAKE_BUILD_TYPE=Release ',
+                'cmake -DCMAKE_TOOLCHAIN_FILE=/src/contrib/depends/x86_64-unknown-linux-gnu/share/toolchain.cmake -DOPENSSL_USE_STATIC_LIBS=ON -DOPENSSL_CRYPTO_LIBRARY=/src/contrib/depends/x86_64-unknown-linux-gnu/lib/libcrypto.a -DOPENSSL_SSL_LIBRARY=/src/contrib/depends/x86_64-unknown-linux-gnu/lib/libssl.a -Dsodium_USE_STATIC_LIBS=ON -DCMAKE_BUILD_TYPE=Release ')
+            receipt['generated_toolchain_adaptation'] = 'Static pinned Boost/OpenSSL3.5.8/ZeroMQ/Unbound/Sodium closure; dynamic system libc/C++ ABI for the older distro floor.'
         reuse_paths = args.reuse_arm_cache or args.inspect_built
         mount = '/work/monero-fcmp' if reuse_paths else '/src'
         if reuse_paths:

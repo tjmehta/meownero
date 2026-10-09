@@ -1,0 +1,30 @@
+{
+  "result": "PASS_WINDOWS_CROSS_PACKAGE_CONTROLS",
+  "archive_sha256": "d2a32f3e120ceedfc50cbc78b1841e52a554421abb1b42c6f8c4eeb78ad850d3",
+  "native_execution": "UNTESTED",
+  "controls": [
+    {
+      "case": "actual-zip-file-set-and-byte-hashes",
+      "result": "PASS",
+      "file_count": 289
+    },
+    {
+      "case": "wrong-pe-machine",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "PE architecture mismatch"
+    },
+    {
+      "case": "program-hash-tamper",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "built program hash mismatch"
+    },
+    {
+      "case": "incomplete-build",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "receipt['result'] == 'BUILT_UNTESTED'"
+    }
+  ]
+}

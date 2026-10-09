@@ -15,11 +15,16 @@ The final review report must bind the archive's SHA256 and tested environment.
 ## Requirements
 
 Use the operating system and architecture named in `release.json`, Python 3.8
-or later, two CPU cores, five GiB available memory and five GiB free disk.
+or later on Linux/Mac, two CPU cores, five GiB available memory and five GiB free disk.
+Windows requires CPython 3.13 or later, which protects the private output directory
+with user/admin access. Use 64-bit CPython for x64 and ARM64 programs, and Windows
+10 version 1709 or later. Native Windows
+journeys and download approval remain untested until recorded against exact bytes.
 Linux ELF packages require the stated glibc version. Native macOS Mach-O
-packages require the stated macOS version and Apple Silicon. Read the ABI,
+packages require the stated macOS version and matching CPU. Read the ABI,
 dependency and signing fields in that same manifest. The Mac candidate has an
-ad hoc linker signature and is not Developer ID signed or notarized; download
+ad hoc linker signature or is unsigned, as recorded in its manifest. It is not
+Developer ID signed or notarized; download
 approval by macOS remains a separate check. Windows, WSL and containers are
 separate targets. This package does not install anything or invoke Docker.
 
@@ -31,12 +36,28 @@ a new directory, and open a terminal in the extracted package. Run:
 ./launch.sh run --out ../my-disposable-journey
 ```
 
+On Windows, open Command Prompt in the extracted package and run:
+
+```bat
+launch.cmd preflight
+launch.cmd run --out ..\my-disposable-journey
+```
+
+Windows x86 programs can run on an x64 Windows host through WOW64; the receipt
+records that environment. ARM64 Windows archives require ARM64 hardware.
+For an Intel Mac archive on an Apple Silicon Mac with Rosetta already installed,
+add `--translated-macos-x86_64` to each command. Its receipt is marked
+`ROSETTA_TRANSLATED_MACOS_X86_64` and `PASS_TRANSLATED_JOURNEY`; it does not
+certify an Intel CPU. No starter installs Rosetta or changes system settings.
+
 The output name must be new. Keep output outside the package. The entrypoint
 checks every packaged file, source pins, native binary format and architecture,
 then starts programs only on loopback. It refuses a busy tester lock or existing
 output. The daemon uses offline regtest, fixed difficulty and one worker. An
 attempt has a twenty-minute deadline. It stops only its own child processes,
-keeps diagnostics, and never deletes another run's output.
+keeps diagnostics, and never deletes another run's output. Windows children
+start suspended and enter a private Job Object before execution; its deadline,
+memory limit and final cleanup apply only to that job and its descendants.
 
 The run generates seventy blocks to obtain disposable sender funds. It sends
 five units to a new receiver, confirms the native FCMP++/CARROT transaction,
@@ -55,8 +76,9 @@ for each correction. Delete only an exact disposable output you own when done.
 ## Explore the native CLI
 
 `bin/monerod --help`, `bin/monero-wallet-cli --help` and
-`bin/monero-wallet-rpc --help` describe the actual shipped programs. The automated
-journey exits its daemons and wallets when finished. To inspect the resulting
+`bin/monero-wallet-rpc --help` describe the actual shipped programs.
+Windows program names end in `.exe` and their bundled DLLs sit beside them in `bin/`.
+The automated journey exits its daemons and wallets when finished. To inspect the resulting
 wallet manually, on Linux first set `export LD_LIBRARY_PATH="$PWD/lib"` in this
 terminal to use the bundled libraries. The native Mac package uses system
 frameworks and bundles its other dependencies statically. Start the daemon with the same `private/chain` directory and

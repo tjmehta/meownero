@@ -1,0 +1,42 @@
+{
+  "purpose": "Complete compiler notice symlinks after compilation; compiled programs unchanged",
+  "image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "invocation": "a0bdaa1001824e7e974cd3fc9644b18c",
+  "removed": true,
+  "argv": [
+    "docker",
+    "run",
+    "--pull=never",
+    "--name",
+    "tjs1882-3175-notice-a0bdaa1001824e7e974cd3fc9644b18c",
+    "--cidfile",
+    "/storage/data/meownero-tjs1882-3175/windows-x64-attempt04/notice-completion.container.id",
+    "--label",
+    "meownero.invocation=a0bdaa1001824e7e974cd3fc9644b18c",
+    "--cpus=1",
+    "--memory=256m",
+    "--memory-swap=256m",
+    "--pids-limit=64",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "-u",
+    "1000:1000",
+    "-v",
+    "/storage/data/meownero-tjs1882-3175/windows-x64-attempt04:/out",
+    "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+    "bash",
+    "-ec",
+    "cd /out/downloads\napt-get -o Dir::State::lists=/out/apt-lists -o Dir::Cache=/out/apt-cache download gcc-mingw-w64-base=13.2.0-6ubuntu1+26.1\nmkdir /out/notice-extract\ndpkg-deb -x gcc-mingw-w64-base_*.deb /out/notice-extract\ncp -a /out/notice-extract/usr/share/doc/gcc-mingw-w64-base /out/toolchain/usr/share/doc/\n"
+  ],
+  "exit": 0,
+  "toolchain_package_sha256": {
+    "binutils-mingw-w64-x86-64_2.41.90.20240122-1ubuntu1+11.4_amd64.deb": "28bfabbf64a68813a56360bca056072af9ff71ef4090a4b8a8a085afcda3e4dd",
+    "curl_8.5.0-2ubuntu10.15_amd64.deb": "4358c023e3c1a74bb1e77935807ea2088b137a898167fca278a1767c353ac1c5",
+    "g++-mingw-w64-x86-64-posix_13.2.0-6ubuntu1+26.1_amd64.deb": "52c3613f386e462ae71105d1a0b2a48d866ccb048ad253acff629c5a2291252d",
+    "gcc-mingw-w64-base_13.2.0-6ubuntu1+26.1_amd64.deb": "a30c07e807e9874ea93909448c5d6d37f9569ebe60ad32de8e490aad198538a3",
+    "gcc-mingw-w64-x86-64-posix-runtime_13.2.0-6ubuntu1+26.1_amd64.deb": "aca6b438e0b55b11cedcf1170a1ee26e7979e34192e34f6e6389e560908a5bfc",
+    "gcc-mingw-w64-x86-64-posix_13.2.0-6ubuntu1+26.1_amd64.deb": "0855fa1d4a618550faac3a3e4352aa3226833b28184ad3c3b496a68a22c4eda2",
+    "mingw-w64-common_11.0.1-3build1_all.deb": "4a42fd30fbc3838c58c929d8a4882682fc12408bb7a0e6cafa913c0f0a57c187",
+    "mingw-w64-x86-64-dev_11.0.1-3build1_all.deb": "018480a62907fcca19c6bf2975ae01f5c92c23dee8c3cf7a8355c10bf7d42c6f"
+  }
+}

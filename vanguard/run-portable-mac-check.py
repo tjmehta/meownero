@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Clean-extract and exercise the exact Apple Silicon archive on native macOS."""
+"""Check exact Mac archives with explicit native or Rosetta execution evidence."""
 import argparse
 import importlib.util
 import json
@@ -24,8 +24,14 @@ def main():
     parser.add_argument('--archive', type=Path, required=True)
     parser.add_argument('--sha256', required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--target', choices=['macos-aarch64', 'macos-x86_64'], default='macos-aarch64')
+    parser.add_argument('--translated-macos-x86_64', action='store_true')
     args = parser.parse_args()
-    tester.require(platform.system() == 'Darwin' and platform.machine() == 'arm64', 'native Apple Silicon required')
+    tester.require(platform.system() == 'Darwin', 'macOS required')
+    expected_host = 'arm64' if args.target == 'macos-aarch64' or args.translated_macos_x86_64 else 'x86_64'
+    physical_arm = tester.command(['/usr/sbin/sysctl', '-n', 'hw.optional.arm64'])
+    tester.require(physical_arm in ('0', '1') and ('arm64' if physical_arm == '1' else 'x86_64') == expected_host, 'wrong physical/native Mac target')
+    tester.require(not args.translated_macos_x86_64 or args.target == 'macos-x86_64', 'translation requires Intel archive')
     archive, out = tester.regular(args.archive), tester.fresh(args.out)
     tester.require(tester.sha(archive) == args.sha256, 'archive hash mismatch')
     with tester.heavy_lock():
@@ -35,10 +41,11 @@ def main():
         with tarfile.open(archive) as stream:
             tester.require(all(m.isfile() for m in stream.getmembers()), 'archive must contain only regular files')
             stream.extractall(extracted, filter='data')
-        package = extracted / 'meownero-vanguard-macos-aarch64'
+        package = extracted / ('meownero-vanguard-' + args.target)
         receipt = {'schema': 'meownero-portable-native-mac-check/1', 'archive_sha256': args.sha256,
                    'result': 'FAIL', 'phases': [], 'resident_limit_bytes': 4 * 1024**3,
                    'peak_resident_bytes': 0, 'cleanup': []}
+        receipt['execution_substrate'] = 'ROSETTA_TRANSLATED_MACOS_X86_64' if args.translated_macos_x86_64 else 'NATIVE'
         began, known = time.monotonic(), set()
 
         def save():
@@ -101,15 +108,16 @@ def main():
         try:
             (out / 'environment.txt').write_text('macOS ' + tester.command(['sw_vers', '-productVersion']) + '\n' +
                 tester.command(['uname', '-smr']) + '\n' + sys.version + '\n')
-            phase('preflight', [sys.executable, '-B', str(package / 'tester.py'), 'preflight'])
-            phase('journey', [sys.executable, '-B', str(package / 'tester.py'), 'run', '--out', str(out / 'journey')])
+            translated = ['--translated-macos-x86_64'] if args.translated_macos_x86_64 else []
+            phase('preflight', [sys.executable, '-B', str(package / 'tester.py'), 'preflight', *translated])
+            phase('journey', [sys.executable, '-B', str(package / 'tester.py'), 'run', '--out', str(out / 'journey'), *translated])
             phase('controls', [sys.executable, '-B', str(ROOT / 'vanguard/test-portable-refusals.py'),
-                              '--package', str(package), '--out', str(out / 'controls')])
+                              '--package', str(package), '--out', str(out / 'controls'), *translated])
             journey = tester.read(out / 'journey/result.json')
-            tester.require(journey['result'] == 'PASS_NATIVE_JOURNEY' and all(p['removed'] for p in journey['cleanup']), 'journey cleanup')
+            tester.require(journey['result'] == ('PASS_TRANSLATED_JOURNEY' if args.translated_macos_x86_64 else 'PASS_NATIVE_JOURNEY') and all(p['removed'] for p in journey['cleanup']), 'journey cleanup')
             tester.require(tester.read(out / 'controls/controls.json')['result'] == 'PASS_REFUSALS', 'native controls')
             tester.require(tester.sha(archive) == args.sha256, 'archive changed')
-            receipt['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY'
+            receipt['result'] = 'PASS_TRANSLATED_ARCHIVE_JOURNEY' if args.translated_macos_x86_64 else 'PASS_NATIVE_ARCHIVE_JOURNEY'
         finally:
             signal.signal(signal.SIGTERM, signal.SIG_IGN)
             signal.signal(signal.SIGINT, signal.SIG_IGN)

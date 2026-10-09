@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Allowlist a native Linux or Apple Silicon tester from its locked build receipt."""
+"""Allowlist Linux or Mac testers from their exact locked build receipts."""
 import argparse
 import hashlib
 import json
@@ -36,7 +36,8 @@ def main():
     mac = receipt['schema'] == 'meownero-native-mac-build/1'
     if mac:
         assert receipt['result'] == 'BUILT_JOURNEY_UNTESTED' and all(c.get('reaped') for c in receipt['commands'])
-        arch, release_target = 'aarch64', 'macos-aarch64'
+        release_target = receipt.get('target', 'macos-aarch64')
+        arch = {'macos-aarch64': 'aarch64', 'macos-x86_64': 'x86_64'}[release_target]
     else:
         assert receipt['result'] == 'BUILT_VERSION_EXECUTED_JOURNEY_UNTESTED' and receipt['cleanup']['removed']
         release_target = receipt['target']
@@ -47,13 +48,14 @@ def main():
     package.mkdir()
     (package / 'bin').mkdir()
     links, versions = set(), set()
+    signing_states = {}
     for name in PROGRAMS:
         binary = source / ('build/portable/bin' if mac else 'build/vanguard/bin') / name
         assert binary.is_file() and not binary.is_symlink() and binary.stat().st_nlink == 1
         assert sha(binary) == (receipt['binaries'][name] if mac else receipt['binaries'][name]['sha256']), 'binary pin mismatch'
         data = binary.read_bytes()[:20]
         if mac:
-            assert data[:4] == b'\xcf\xfa\xed\xfe' and int.from_bytes(data[4:8], 'little') == 0x100000c
+            assert data[:4] == b'\xcf\xfa\xed\xfe' and int.from_bytes(data[4:8], 'little') == {'aarch64': 0x100000c, 'x86_64': 0x1000007}[arch]
             assert int.from_bytes(data[12:16], 'little') == 2
             dynamic = subprocess.check_output(['otool', '-L', str(binary)], text=True)
             links.update(line.strip().split(' (')[0] for line in dynamic.splitlines()[1:])
@@ -62,10 +64,16 @@ def main():
             minimum = re.search(r'\bminos\s+(\d+\.\d+(?:\.\d+)?)', version)
             assert minimum, 'missing Mach-O minimum OS'
             versions.add(minimum[1])
-            signed = subprocess.run(['codesign', '-dv', str(binary)], capture_output=True, text=True, check=True)
-            assert 'Signature=adhoc' in signed.stderr, 'unexpected signing identity'
-            subprocess.run(['codesign', '--verify', '--strict', str(binary)], check=True)
-            subprocess.run([str(binary), '--version'], check=True, capture_output=True, timeout=20)
+            signed = subprocess.run(['codesign', '-dv', str(binary)], capture_output=True, text=True)
+            if signed.returncode == 0:
+                assert 'Signature=adhoc' in signed.stderr, 'unexpected signing identity'
+                subprocess.run(['codesign', '--verify', '--strict', str(binary)], check=True)
+                signing_states[name] = 'ad hoc linker signature; no Developer ID'
+            else:
+                assert arch == 'x86_64' and 'not signed at all' in signed.stderr, 'unverified signing state'
+                signing_states[name] = 'unsigned'
+            if arch == 'aarch64':
+                subprocess.run([str(binary), '--version'], check=True, capture_output=True, timeout=20)
         else:
             assert data[:6] == b'\x7fELF\x02\x01' and int.from_bytes(data[18:20], 'little') == {'x86_64': 62, 'aarch64': 183}[arch]
             dynamic = subprocess.check_output(['readelf', '-d', str(binary)], text=True)
@@ -107,7 +115,8 @@ def main():
                 target = licenses / prefix / path.relative_to(tree)
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(path, target)
-    coverage = portable_licenses.coverage(build, package, mac, bundled)
+    coverage = portable_licenses.coverage(build, package, mac, bundled,
+                                         depends_static=receipt.get('depends_static_dependencies', False))
     (package / 'license-coverage.json').write_text(json.dumps(coverage, indent=2) + '\n')
     minimum = max(versions, key=lambda v: tuple(map(int, v.split('.'))))
     manifest = {'schema': 'meownero-portable-release/1', 'target': release_target, 'system': 'Darwin' if mac else 'Linux',
@@ -115,10 +124,10 @@ def main():
         'cargo_lock_sha256': pin['rust']['cargo_lock_sha256'], 'submodules': pin['upstream']['submodules'],
         'patches': receipt.get('patches', []), 'rustc': pin['builder']['rustc'], 'builder_image': receipt.get('builder_image'),
         'required_dynamic_libraries': sorted(links), 'bundled_libraries': sorted(bundled),
-        'cpu_requirement': 'Apple Silicon' if mac else ('ARMv8-A with cryptography extension' if arch == 'aarch64' else 'x86-64'),
+        'cpu_requirement': ('Apple Silicon' if arch == 'aarch64' else 'Intel x86-64 Mac; Rosetta translation is separate evidence') if mac else ('ARMv8-A with cryptography extension' if arch == 'aarch64' else 'x86-64'),
         'minimum_os': ('macOS ' if mac else 'Linux with glibc ') + minimum + ' or later; older versions remain untested',
-        'status': 'BUILT_UNTESTED', 'native_version_execution': 'builder only', 'native_journey': 'UNTESTED',
-        'signing': 'ad hoc linker signature; no Developer ID' if mac else 'unsigned', 'notarization': 'not notarized' if mac else 'not applicable',
+        'status': 'BUILT_UNTESTED', 'native_version_execution': 'UNTESTED' if mac and arch == 'x86_64' else 'builder only', 'native_journey': 'UNTESTED',
+        'signing': 'ad hoc linker signature; no Developer ID' if mac and all(s.startswith('ad hoc') for s in signing_states.values()) else 'unsigned', 'notarization': 'not notarized' if mac else 'not applicable',
         'license_coverage': {'file': 'license-coverage.json', 'sha256': sha(package / 'license-coverage.json'),
                              'result': coverage['result']},
         'dependency_links': {'source': pin['upstream']['url'], 'rust': 'https://www.rust-lang.org/',
@@ -129,6 +138,7 @@ def main():
     manifest['minimum_macos' if mac else 'minimum_glibc'] = minimum
     if mac:
         manifest['sdk_version'] = receipt['sdk_version']
+        manifest['program_signing'] = signing_states
     (package / 'release.json').write_text(json.dumps(manifest, indent=2) + '\n')
     archive = out / (package.name + '.tar.gz')
     with tarfile.open(archive, 'w:gz') as stream:

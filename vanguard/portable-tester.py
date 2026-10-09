@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Run a disposable native Vanguard payment, recovery and subsequent spend."""
 import argparse
+import os
 from contextlib import contextmanager
-import fcntl
+if os.name == 'posix':
+    import fcntl
 import hashlib
 import json
-import os
 from pathlib import Path
 import platform
 import re
@@ -17,6 +18,11 @@ import subprocess
 import tempfile
 import time
 import urllib.request
+import sys
+
+WINDOWS = platform.system() == 'Windows'
+if WINDOWS:
+    import portable_windows
 
 ROOT = Path(__file__).resolve().parent
 UPSTREAM = 'e151643c5269c83bf24a83b2548e2493876026b2'
@@ -34,8 +40,21 @@ def child_environment():
     for name in ('LD_PRELOAD', 'LD_AUDIT', 'DYLD_INSERT_LIBRARIES', 'DYLD_ROOT_PATH',
                  'DYLD_FALLBACK_LIBRARY_PATH'):
         env.pop(name, None)
-    env['DYLD_LIBRARY_PATH' if platform.system() == 'Darwin' else 'LD_LIBRARY_PATH'] = str(ROOT / 'lib')
+    if WINDOWS:
+        env['PATH'] = str(Path(env['SYSTEMROOT']) / 'System32')
+    else:
+        env['DYLD_LIBRARY_PATH' if platform.system() == 'Darwin' else 'LD_LIBRARY_PATH'] = str(ROOT / 'lib')
     return env
+
+
+def executable(name):
+    return ROOT / 'bin' / (name + ('.exe' if WINDOWS else ''))
+
+
+def mac_physical_architecture():
+    arm = subprocess.check_output(['/usr/sbin/sysctl', '-n', 'hw.optional.arm64'], text=True, timeout=10).strip()
+    require(arm in ('0', '1'), 'could not identify physical Mac architecture')
+    return 'aarch64' if arm == '1' else 'x86_64'
 
 
 def require(ok, message):
@@ -45,7 +64,8 @@ def require(ok, message):
 
 def safe(path):
     path = Path(os.path.abspath(path))
-    require(not any(p.is_symlink() for p in (path, *path.parents)), 'symlink path refused')
+    require(not any(p.is_symlink() or (os.path.lexists(p) and getattr(p.lstat(), 'st_file_attributes', 0) & 0x400)
+                    for p in (path, *path.parents)), 'symlink path refused')
     return path
 
 
@@ -60,49 +80,86 @@ def sha(path):
         return digest.hexdigest()
 
 
-def preflight():
+def preflight(translated_macos_x64=False):
     sha(ROOT / 'release.json')
     manifest = json.loads(safe(ROOT / 'release.json').read_text())
     require(manifest['upstream_commit'] == UPSTREAM and manifest['cargo_lock_sha256'] == CARGO_LOCK,
             'wrong source pin')
-    require(manifest['system'] in ('Linux', 'Darwin') and platform.system() == manifest['system'],
+    require(manifest['system'] in ('Linux', 'Darwin', 'Windows') and platform.system() == manifest['system'],
             'wrong operating system')
     machine = {'amd64': 'x86_64', 'arm64': 'aarch64'}.get(platform.machine(), platform.machine())
-    require(machine == manifest['architecture'], 'wrong architecture')
+    if WINDOWS:
+        require(sys.version_info >= (3, 13), 'Windows requires Python 3.13 or later for private directory permissions')
+        version = sys.getwindowsversion()
+        require(version.major >= 10 and version.build >= 16299, 'Windows 10 version 1709 or later required')
+        machine = portable_windows.native_architecture()
+        require(manifest['architecture'] == 'i686' or sys.maxsize > 2**32,
+                '64-bit Windows programs require 64-bit CPython for native module verification')
+    elif manifest['system'] == 'Darwin':
+        machine = mac_physical_architecture()
+    translated = translated_macos_x64 and manifest['system'] == 'Darwin' and machine == 'aarch64' and manifest['architecture'] == 'x86_64'
+    require(not translated_macos_x64 or translated, 'wrong architecture: translation requires an x86_64 Mac archive on Apple Silicon')
+    if translated:
+        subprocess.run(['/usr/sbin/pkgutil', '--pkg-info', 'com.apple.pkg.RosettaUpdateAuto'], check=True, capture_output=True, timeout=10)
+        machine = 'x86_64'
+    require(machine == manifest['architecture'] or
+            (WINDOWS and machine == 'x86_64' and manifest['architecture'] == 'i686'), 'wrong architecture')
     if manifest['system'] == 'Linux':
         libc, version = platform.libc_ver()
         require(libc == 'glibc' and tuple(map(int, version.split('.'))) >=
                 tuple(map(int, manifest['minimum_glibc'].split('.'))), 'glibc ABI too old or unsupported')
-    else:
+    elif manifest['system'] == 'Darwin':
         require(tuple(map(int, platform.mac_ver()[0].split('.'))) >=
                 tuple(map(int, manifest['minimum_macos'].split('.'))), 'macOS ABI too old')
     expected = set(manifest['files']) | {'release.json'}
     paths = list(ROOT.rglob('*'))
-    require(not any(p.is_symlink() for p in paths), 'package symlink refused')
-    actual = {str(p.relative_to(ROOT)) for p in paths if not p.is_dir()}
+    require(not any(p.is_symlink() or getattr(p.lstat(), 'st_file_attributes', 0) & 0x400 for p in paths), 'package symlink refused')
+    actual = {p.relative_to(ROOT).as_posix() for p in paths if not p.is_dir()}
     require(expected == actual, 'package file set mismatch')
     for name, digest in manifest['files'].items():
         require(not Path(name).is_absolute() and '..' not in Path(name).parts, 'invalid package path')
         require(sha(ROOT / name) == digest, 'package hash mismatch: ' + name)
     for name in PROGRAMS:
-        binary = ROOT / 'bin' / name
+        binary = executable(name)
         with binary.open('rb') as stream:
             header = stream.read(20)
         if manifest['system'] == 'Linux':
             valid = header[:6] == b'\x7fELF\x02\x01' and int.from_bytes(header[18:20], 'little') == \
                 {'x86_64': 62, 'aarch64': 183}[machine]
-        else:
+        elif manifest['system'] == 'Darwin':
             valid = header[:4] == b'\xcf\xfa\xed\xfe' and int.from_bytes(header[4:8], 'little') == \
                 {'x86_64': 0x1000007, 'aarch64': 0x100000c}[machine] and int.from_bytes(header[12:16], 'little') == 2
+        else:
+            with binary.open('rb') as stream:
+                stream.seek(60)
+                offset = int.from_bytes(stream.read(4), 'little')
+                stream.seek(offset)
+                pe = stream.read(26)
+            valid = header[:2] == b'MZ' and pe[:4] == b'PE\0\0' and int.from_bytes(pe[4:6], 'little') == \
+                {'i686': 0x14c, 'x86_64': 0x8664, 'aarch64': 0xaa64}[manifest['architecture']] and \
+                int.from_bytes(pe[24:26], 'little') == (0x10b if manifest['architecture'] == 'i686' else 0x20b)
         require(valid, 'wrong binary format or target')
         require(os.access(binary, os.X_OK), 'binary is not executable')
-        result = subprocess.run([str(binary), '--version'], capture_output=True, timeout=20, env=child_environment())
-        require(result.returncode == 0, 'program startup failed: ' + name)
+        if WINDOWS:
+            job = portable_windows.Job(seconds=20)
+            try:
+                with tempfile.TemporaryFile() as stream:
+                    process = job.spawn(binary, ['--version'], stream, child_environment(), ROOT)
+                    require(process.wait(timeout=20) == 0, 'program startup failed: ' + name)
+            finally:
+                job.close()
+        else:
+            result = subprocess.run([str(binary), '--version'], capture_output=True, timeout=20, env=child_environment())
+            require(result.returncode == 0, 'program startup failed: ' + name)
     return manifest
 
 
 @contextmanager
 def lock():
+    if WINDOWS:
+        with portable_windows.lock(safe):
+            yield
+        return
     temp_root = Path(tempfile.gettempdir())
     if platform.system() == 'Darwin':
         # macOS reports /var/... while its canonical system temp root is
@@ -136,6 +193,8 @@ def rpc(port, method, params=None):
 
 
 def available_memory():
+    if WINDOWS:
+        return portable_windows.available_memory()
     if platform.system() == 'Linux':
         return int(next(row.split()[1] for row in Path('/proc/meminfo').read_text().splitlines()
                         if row.startswith('MemAvailable:'))) * 1024
@@ -146,11 +205,11 @@ def available_memory():
     return sum(map(int, pages)) * page_size
 
 
-def run(out):
+def run(out, translated_macos_x64=False, deadline_seconds=1200):
     out = safe(out)
     require(out.parent.is_dir() and not out.exists(), 'output must be new under an existing parent')
     with lock():
-        manifest = preflight()
+        manifest = preflight(translated_macos_x64)
         available = available_memory()
         require(available >= 5 * 1024**3 and shutil.disk_usage(out.parent).free >= 5 * 1024**3,
                 'requires five GiB available memory and disk')
@@ -163,24 +222,33 @@ def run(out):
         receipt = {'schema': 'meownero-portable-journey/1', 'result': 'FAIL_NATIVE_JOURNEY',
                    'upstream_commit': UPSTREAM, 'architecture': manifest['architecture'],
                    'release_manifest_sha256': sha(ROOT / 'release.json'),
-                   'program_sha256': {name: sha(ROOT / 'bin' / name) for name in PROGRAMS},
+                   'program_sha256': {name: sha(executable(name)) for name in PROGRAMS},
                    'cleanup': [], 'payments': [], 'native_processes': []}
+        receipt['execution_substrate'] = 'ROSETTA_TRANSLATED_MACOS_X86_64' if translated_macos_x64 else \
+            ('NATIVE_WINDOWS_WOW64' if WINDOWS and manifest['architecture'] == 'i686' and portable_windows.native_architecture() == 'x86_64' else 'NATIVE')
         began = time.monotonic()
 
         def deadline(signum, frame):
             raise JourneyInterrupted('native journey interrupted or deadline reached')
 
-        previous_handler = signal.signal(signal.SIGALRM, deadline)
+        job = portable_windows.Job(seconds=deadline_seconds) if WINDOWS else None
+        previous_handler = signal.signal(signal.SIGALRM, deadline) if not WINDOWS else None
         previous_term = signal.signal(signal.SIGTERM, deadline)
-        signal.setitimer(signal.ITIMER_REAL, 1200)
+        if not WINDOWS:
+            signal.setitimer(signal.ITIMER_REAL, deadline_seconds)
+        previous_break = signal.signal(signal.SIGBREAK, deadline) if WINDOWS else None
 
         def spawn(name, program, arguments):
             stream = (private / (name + '.log')).open('wb')
             logs.append(stream)
+            if WINDOWS:
+                process = job.spawn(executable(program), arguments, stream, child_environment(), private)
+                processes.append((name, process))
+                return process
             # A cancellation between fork and registration must not orphan a child.
             mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT, signal.SIGALRM})
             try:
-                process = subprocess.Popen([str(ROOT / 'bin' / program), *arguments],
+                process = subprocess.Popen([str(executable(program)), *arguments],
                     stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.STDOUT,
                     start_new_session=True, env=child_environment(), cwd=private,
                     preexec_fn=lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask))
@@ -203,18 +271,23 @@ def run(out):
                         actual_hash = hashlib.sha256(mapped_executable.read_bytes()).hexdigest()
                         paths = [Path(parts[5]) for line in Path('/proc/' + str(process.pid) + '/maps').read_text().splitlines()
                                  if len(parts := line.split(maxsplit=5)) == 6 and parts[5].startswith('/')]
-                    else:
+                    elif manifest['system'] == 'Darwin':
                         mapped = subprocess.check_output(['/usr/sbin/lsof', '-a', '-p', str(process.pid),
                                                           '-d', 'txt', '-Fn'], text=True, timeout=10)
                         paths = [Path(line[1:]) for line in mapped.splitlines() if line.startswith('n/')]
                         require(ROOT / 'bin' / program in paths, 'native kernel executable mapping mismatch')
                         actual_hash = sha(ROOT / 'bin' / program)
+                    else:
+                        mapped_executable, paths = portable_windows.mapped_paths(process)
+                        require(mapped_executable == executable(program), 'native kernel executable mapping mismatch')
+                        actual_hash = sha(mapped_executable)
                     require(actual_hash == receipt['program_sha256'][program], 'running executable hash mismatch')
                     loaded = {}
                     for path in paths:
-                        if path.name in manifest['bundled_libraries']:
-                            require(path.parent == ROOT / 'lib', 'system library substituted for bundled library')
-                            loaded[path.name] = sha(path)
+                        basename = path.name.lower() if WINDOWS else path.name
+                        if basename in manifest['bundled_libraries']:
+                            require(path.parent == ROOT / ('bin' if WINDOWS else 'lib'), 'system library substituted for bundled library')
+                            loaded[basename] = sha(path)
                     receipt['native_processes'].append({'name': name, 'pid': process.pid,
                         'binary_sha256': actual_hash, 'bundled_library_sha256': loaded})
                     return
@@ -319,13 +392,25 @@ def run(out):
             require(cli.returncode == 0 and b'alance:' in (private / 'cli.log').read_bytes(),
                     'native CLI could not open restored wallet')
             receipt['cli_open_restored_wallet'] = True
-            preflight()
-            receipt['result'] = 'PASS_NATIVE_JOURNEY'
+            preflight(translated_macos_x64)
+            require(not WINDOWS or not job.expired, 'owned Windows journey deadline reached')
+            receipt['result'] = 'PASS_TRANSLATED_JOURNEY' if translated_macos_x64 else 'PASS_NATIVE_JOURNEY'
         finally:
-            signal.setitimer(signal.ITIMER_REAL, 0)
-            signal.signal(signal.SIGALRM, previous_handler)
+            if not WINDOWS:
+                signal.setitimer(signal.ITIMER_REAL, 0)
+                signal.signal(signal.SIGALRM, previous_handler)
             signal.signal(signal.SIGTERM, signal.SIG_IGN)
             previous_int = signal.signal(signal.SIGINT, signal.SIG_IGN)
+            if WINDOWS:
+                signal.signal(signal.SIGBREAK, signal.SIG_IGN)
+            if WINDOWS:
+                try:
+                    job.close()
+                    receipt['owned_job_cleanup'] = True
+                    receipt['owned_job'] = job.cleanup
+                except (OSError, RuntimeError, subprocess.TimeoutExpired):
+                    receipt['owned_job_cleanup'] = False
+                    receipt['result'] = 'FAIL_NATIVE_JOURNEY'
             for name, process in reversed(processes):
                 try:
                     if process.poll() is None:
@@ -346,22 +431,27 @@ def run(out):
             (out / 'result.json').write_text(json.dumps(receipt, indent=2) + '\n')
             signal.signal(signal.SIGTERM, previous_term)
             signal.signal(signal.SIGINT, previous_int)
-        require(receipt['result'] == 'PASS_NATIVE_JOURNEY', 'journey or owned cleanup failed')
-        print('PASS_NATIVE_JOURNEY. Share only result.json. Keep private/ unshared.')
+            if WINDOWS:
+                signal.signal(signal.SIGBREAK, previous_break)
+        require(receipt['result'] == ('PASS_TRANSLATED_JOURNEY' if translated_macos_x64 else 'PASS_NATIVE_JOURNEY'), 'journey or owned cleanup failed')
+        print(receipt['result'] + '. Share only result.json. Keep private/ unshared.')
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['preflight', 'run'])
     parser.add_argument('--out', type=Path)
+    parser.add_argument('--translated-macos-x86_64', action='store_true')
+    parser.add_argument('--deadline-seconds', type=int, default=1200)
     args = parser.parse_args()
+    require(1 <= args.deadline_seconds <= 1200, 'deadline must be within 1..1200 seconds')
     if args.action == 'preflight':
         with lock():
-            preflight()
+            preflight(args.translated_macos_x86_64)
         print('PASS_PREFLIGHT')
     else:
         require(args.out is not None, '--out is required')
-        run(args.out)
+        run(args.out, args.translated_macos_x86_64, args.deadline_seconds)
 
 
 if __name__ == '__main__':
