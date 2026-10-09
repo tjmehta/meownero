@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import platform
 import resource
+import portable_licenses
 import shutil
 import signal
 import subprocess
@@ -115,6 +116,8 @@ def main():
                             'darwin_CXX=' + cxx + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0 -stdlib=libc++',
                             'darwin_LDFLAGS=-Wl,-platform_version,macos,11.0,' + receipt['sdk_version']], 2400,
                 source / 'contrib/depends')
+            receipt['dependency_licenses'] = portable_licenses.retain_depends(out)
+            save()
             downloads = out / 'downloads'
             downloads.mkdir()
             for component in ['rustc', 'cargo', 'rust-std']:

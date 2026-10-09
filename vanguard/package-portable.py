@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import tarfile
+import portable_licenses
 
 ROOT = Path(__file__).resolve().parent.parent
 PROGRAMS = ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')
@@ -106,6 +107,8 @@ def main():
                 target = licenses / prefix / path.relative_to(tree)
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(path, target)
+    coverage = portable_licenses.coverage(build, package, mac, bundled)
+    (package / 'license-coverage.json').write_text(json.dumps(coverage, indent=2) + '\n')
     minimum = max(versions, key=lambda v: tuple(map(int, v.split('.'))))
     manifest = {'schema': 'meownero-portable-release/1', 'target': release_target, 'system': 'Darwin' if mac else 'Linux',
         'architecture': arch, 'binary_format': 'Mach-O64 little endian' if mac else 'ELF64 little endian', 'upstream_commit': pin['upstream']['commit'],
@@ -116,6 +119,8 @@ def main():
         'minimum_os': ('macOS ' if mac else 'Linux with glibc ') + minimum + ' or later; older versions remain untested',
         'status': 'BUILT_UNTESTED', 'native_version_execution': 'builder only', 'native_journey': 'UNTESTED',
         'signing': 'ad hoc linker signature; no Developer ID' if mac else 'unsigned', 'notarization': 'not notarized' if mac else 'not applicable',
+        'license_coverage': {'file': 'license-coverage.json', 'sha256': sha(package / 'license-coverage.json'),
+                             'result': coverage['result']},
         'dependency_links': {'source': pin['upstream']['url'], 'rust': 'https://www.rust-lang.org/',
             'boost': 'https://www.boost.org/', 'openssl': 'https://www.openssl.org/',
             'libsodium': 'https://libsodium.org/', 'unbound': 'https://nlnetlabs.nl/projects/unbound/',

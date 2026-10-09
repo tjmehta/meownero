@@ -1,0 +1,1258 @@
+{
+  "schema": "meownero-license-coverage/1",
+  "result": "PASS_LINKED_DEPENDENCY_COVERAGE",
+  "link_commands": [
+    {
+      "target": "daemon",
+      "sha256": "4681ec44783698a10d169369e3063cae20d1e480a4739403fdd1af7c5c10f252"
+    },
+    {
+      "target": "simplewallet",
+      "sha256": "cd3c74436a58fb51a1a664203171c116175af0c718775161785a26979b9ea4d0"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "sha256": "b8834dddbe2cc61661cba457efda4d2e31e9374488fdc9638f4c39f887e7af1c"
+    }
+  ],
+  "components": [
+    {
+      "component": "Monero",
+      "version": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "source": "https://github.com/seraphis-migration/monero.git@e151643c5269c83bf24a83b2548e2493876026b2",
+      "libraries": [],
+      "texts": {
+        "licenses/upstream/LICENSE": "1f99d6b6e1ae17de27147ff2e1e0238fa8c7d5a8accd0f1ac062c89365516abd"
+      }
+    },
+    {
+      "component": "epee",
+      "version": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "source": "https://github.com/seraphis-migration/monero.git@e151643c5269c83bf24a83b2548e2493876026b2",
+      "libraries": [],
+      "texts": {
+        "licenses/upstream/contrib/epee/LICENSE.txt": "2a81658817c1928a0e1cbfdf0c44ffcb007482f65b605c4dc3b595ef377cffc6"
+      }
+    },
+    {
+      "component": "LMDB",
+      "version": "0.9.70",
+      "source": "https://github.com/seraphis-migration/monero.git@e151643c5269c83bf24a83b2548e2493876026b2",
+      "libraries": [
+        "liblmdb.a",
+        "liblmdb.a",
+        "liblmdb.a"
+      ],
+      "texts": {
+        "licenses/upstream/external/db_drivers/liblmdb/LICENSE": "310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569",
+        "licenses/upstream/external/db_drivers/liblmdb/COPYRIGHT": "fae797823b892c4b59913256b4d10b17d71f57d4bc45e46d901b84fd6dfc3d13"
+      }
+    },
+    {
+      "component": "RandomX",
+      "version": "aaafe71322df6602c21a5c72937ac284724ae561",
+      "source": "https://github.com/seraphis-migration/monero.git@e151643c5269c83bf24a83b2548e2493876026b2",
+      "libraries": [
+        "librandomx.a",
+        "librandomx.a",
+        "librandomx.a"
+      ],
+      "texts": {
+        "licenses/upstream/external/randomx/LICENSE": "7d85758a95990168395d0940b2a103b6be0c2eba3995f00cbb59d23a86c2214e"
+      }
+    },
+    {
+      "component": "mx25519",
+      "version": "420ccc2f5012ee1f8e02c1976e89620e1b0959f6",
+      "source": "https://github.com/seraphis-migration/monero.git@e151643c5269c83bf24a83b2548e2493876026b2",
+      "libraries": [
+        "libmx25519.a",
+        "libmx25519.a",
+        "libmx25519.a"
+      ],
+      "texts": {
+        "licenses/upstream/external/mx25519/LICENSE": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118"
+      }
+    },
+    {
+      "component": "RapidJSON",
+      "version": "24b5e7a8b27f42fa16b96fc70aade9106cf7102f",
+      "source": "https://github.com/seraphis-migration/monero.git@e151643c5269c83bf24a83b2548e2493876026b2",
+      "libraries": [],
+      "texts": {
+        "licenses/upstream/external/rapidjson/license.txt": "a140e5d46fe734a1c78f1a3c3ef207871dd75648be71fdda8e309b23ab8b1f32"
+      }
+    },
+    {
+      "component": "Easylogging++",
+      "version": "9.96.7",
+      "source": "https://raw.githubusercontent.com/abumq/easyloggingpp/5181b4039c04697aac7eac0bde44352cd8901567/LICENSE",
+      "libraries": [
+        "libeasylogging.a",
+        "libeasylogging.a",
+        "libeasylogging.a"
+      ],
+      "texts": {
+        "licenses/upstream/external/easylogging++/LICENSE": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+        "licenses/upstream/external/easylogging++/COPYRIGHT-header.txt": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c"
+      }
+    },
+    {
+      "component": "qrcodegen",
+      "version": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "source": "https://github.com/seraphis-migration/monero.git@e151643c5269c83bf24a83b2548e2493876026b2/external/qrcodegen",
+      "libraries": [
+        "libqrcodegen.a"
+      ],
+      "texts": {
+        "licenses/upstream/external/qrcodegen/COPYRIGHT-header.txt": "425594831df5292beb173da24efb5e8ce16949df0d970468de4450b6288820bc"
+      }
+    },
+    {
+      "component": "libboost-atomic1.83.0",
+      "version": "1.83.0-2.1ubuntu3.2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libboost_atomic.so.1.83.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libboost-atomic1.83.0": "87ff229c71d391f951383b2246ba630c849e2024ea42a2ac9113dc9646f1e667",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "component": "libboost-chrono1.83.0t64",
+      "version": "1.83.0-2.1ubuntu3.2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libboost_chrono.so.1.83.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libboost-chrono1.83.0t64": "87ff229c71d391f951383b2246ba630c849e2024ea42a2ac9113dc9646f1e667",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "component": "libboost-filesystem1.83.0",
+      "version": "1.83.0-2.1ubuntu3.2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libboost_filesystem.so.1.83.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libboost-filesystem1.83.0": "87ff229c71d391f951383b2246ba630c849e2024ea42a2ac9113dc9646f1e667",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "component": "libboost-program-options1.83.0",
+      "version": "1.83.0-2.1ubuntu3.2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libboost_program_options.so.1.83.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libboost-program-options1.83.0": "87ff229c71d391f951383b2246ba630c849e2024ea42a2ac9113dc9646f1e667",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "component": "libboost-serialization1.83.0",
+      "version": "1.83.0-2.1ubuntu3.2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libboost_serialization.so.1.83.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libboost-serialization1.83.0": "87ff229c71d391f951383b2246ba630c849e2024ea42a2ac9113dc9646f1e667",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "component": "libboost-thread1.83.0",
+      "version": "1.83.0-2.1ubuntu3.2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libboost_thread.so.1.83.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libboost-thread1.83.0": "87ff229c71d391f951383b2246ba630c849e2024ea42a2ac9113dc9646f1e667",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "component": "libbsd0",
+      "version": "0.12.1-1build1.1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libbsd.so.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libbsd0": "978426553ab7b9cfb4503d98e578a77b8c3142c099100aa9791fd21be5a95f97"
+      }
+    },
+    {
+      "component": "libc6",
+      "version": "2.39-0ubuntu8.8",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libresolv.so.2",
+        "librt.a"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libc6": "d3c95b56fa33e28b57860580f0baf4e4f4de2a268a2b80f1d031a5191bade265",
+        "licenses/system/COPYING-common-GFDL-1.3": "110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "licenses/system/COPYING-common-LGPL-2.1": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551"
+      }
+    },
+    {
+      "component": "libcap2",
+      "version": "1:2.66-5ubuntu2.4",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libcap.so.2"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libcap2": "e60a5642e12e340060e4e519a65b2eb0330be2917854841c644e36268f607d54",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+      }
+    },
+    {
+      "component": "libcom-err2",
+      "version": "1.47.0-2.4~exp1ubuntu4.1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libcom_err.so.2"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libcom-err2": "1ca415a294c0e56958c4f795b3f1f69ea3479bca53d7811f5cdd020a258949db",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "licenses/system/COPYING-common-GPL": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "licenses/system/COPYING-common-LGPL-2": "681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366"
+      }
+    },
+    {
+      "component": "libevent-2.1-7t64",
+      "version": "2.1.12-stable-9ubuntu2.1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libevent-2.1.so.7"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libevent-2.1-7t64": "d32d223a2f96bb222faa1f6d2b4573b512465b2b234f56e040a4d7daab060d69",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "licenses/system/COPYING-common-GPL-3": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      }
+    },
+    {
+      "component": "libgcc-s1",
+      "version": "14.2.0-4ubuntu2~24.04.1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libgcc_s.so.1"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libgcc-s1": "20390f8a6f3b1e4d7cb45dd8652dabb259bbef688cbad839bcdb0b9ba7252f79",
+        "licenses/system/COPYING-common-Artistic": "b7fd9b73ea99602016a326e0b62e6646060d18febdd065ceca8bb482208c3d88",
+        "licenses/system/COPYING-common-GFDL-1.2": "d8e94ae5fdb5433fcae2961aeb1a8cf17174d6f4a0465d24bf37dd8a038bd439",
+        "licenses/system/COPYING-common-GPL": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "licenses/system/COPYING-common-GPL-3": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "licenses/system/COPYING-common-LGPL": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118"
+      }
+    },
+    {
+      "component": "libgssapi-krb5-2",
+      "version": "1.20.1-6ubuntu2.8",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libgssapi_krb5.so.2"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libgssapi-krb5-2": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+      }
+    },
+    {
+      "component": "libhidapi-libusb0",
+      "version": "0.14.0-1build1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libhidapi-libusb.so",
+        "libhidapi-libusb.so.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libhidapi-libusb0": "b6b55a19eaba3cd31be0b97880c5d9337aea4bd7d32aef92c0e1d9d94bd8c8fc",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "licenses/system/COPYING-common-GPL-3": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      }
+    },
+    {
+      "component": "libk5crypto3",
+      "version": "1.20.1-6ubuntu2.8",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libk5crypto.so.3"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libk5crypto3": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+      }
+    },
+    {
+      "component": "libkeyutils1",
+      "version": "1.6.3-3build1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libkeyutils.so.1"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libkeyutils1": "c62fe37d22203046611112bc10a9e03a39a7f73bec1b061e7c615326166d9ff5",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "licenses/system/COPYING-common-LGPL-2": "681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366"
+      }
+    },
+    {
+      "component": "libkrb5-3",
+      "version": "1.20.1-6ubuntu2.8",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libkrb5.so.3"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libkrb5-3": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+      }
+    },
+    {
+      "component": "libkrb5support0",
+      "version": "1.20.1-6ubuntu2.8",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libkrb5support.so.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libkrb5support0": "936728f4181718f42951b881c1e8f1386bf6b2723c4fbc533c374d6f42c71816",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+      }
+    },
+    {
+      "component": "libmd0",
+      "version": "1.1.0-2build1.1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libmd.so.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libmd0": "4365ef6255ad553fce69dd4bc0e093472c5d0e41b8ea493a545cc926ce171aa6"
+      }
+    },
+    {
+      "component": "libnorm1t64",
+      "version": "1.5.9+dfsg-3.1build1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libnorm.so.1"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libnorm1t64": "88c38443da2ea7d228b3d3e4e13138c02b41448e1210ad0e6277516c9ad493ef"
+      }
+    },
+    {
+      "component": "libpgm-5.3-0t64",
+      "version": "5.3.128~dfsg-2.1build1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libpgm-5.3.so.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libpgm-5.3-0t64": "07836d892d92dcef15583e4e01569805498b95769f1c85d79bc996821dace2cf",
+        "licenses/system/COPYING-common-LGPL-2": "681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366",
+        "licenses/system/COPYING-common-LGPL-2.1": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551"
+      }
+    },
+    {
+      "component": "libsodium23",
+      "version": "1.0.18-1ubuntu0.24.04.1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libsodium.so",
+        "libsodium.so.23"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libsodium23": "10d3576a7a0af8afb5601f358c06eb8c24b02192bb71ed4fb9a328a0979ec74b",
+        "licenses/system/COPYING-common-CC0-1.0": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643"
+      }
+    },
+    {
+      "component": "libssl3t64",
+      "version": "3.0.13-0ubuntu3.15",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libcrypto.so",
+        "libcrypto.so.3",
+        "libssl.so",
+        "libssl.so.3"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libssl3t64": "6a7da622fe0637a334d2a8fc470852d2ffb77d9a2b2f930f854e32a41ad6ef35",
+        "licenses/system/COPYING-common-Apache-2.0": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "licenses/system/COPYING-common-Artistic": "b7fd9b73ea99602016a326e0b62e6646060d18febdd065ceca8bb482208c3d88",
+        "licenses/system/COPYING-common-GPL-1": "d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912"
+      }
+    },
+    {
+      "component": "libstdc++6",
+      "version": "14.2.0-4ubuntu2~24.04.1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libstdc++.so.6"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libstdc++6": "20390f8a6f3b1e4d7cb45dd8652dabb259bbef688cbad839bcdb0b9ba7252f79",
+        "licenses/system/COPYING-common-Artistic": "b7fd9b73ea99602016a326e0b62e6646060d18febdd065ceca8bb482208c3d88",
+        "licenses/system/COPYING-common-GFDL-1.2": "d8e94ae5fdb5433fcae2961aeb1a8cf17174d6f4a0465d24bf37dd8a038bd439",
+        "licenses/system/COPYING-common-GPL": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "licenses/system/COPYING-common-GPL-3": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "licenses/system/COPYING-common-LGPL": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118"
+      }
+    },
+    {
+      "component": "libudev1",
+      "version": "255.4-1ubuntu8.17",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libudev.so.1"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libudev1": "a7d06854714a1ca99f6dbd1a1641dde5bcf28635be149f6554449618f8f427f3",
+        "licenses/system/COPYING-common-CC0-1.0": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "licenses/system/COPYING-common-LGPL-2.1": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551"
+      }
+    },
+    {
+      "component": "libunbound8",
+      "version": "1.19.2-1ubuntu3.9",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libunbound.so",
+        "libunbound.so.8"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libunbound8": "fd65f127a23f4a63606866d1745cc69db39f48e12c7f738aa2dd4c618ee0e87b",
+        "licenses/system/COPYING-common-GPL-3": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      }
+    },
+    {
+      "component": "libusb-1.0-0",
+      "version": "2:1.0.27-1",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libusb-1.0.so.0"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libusb-1.0-0": "22184ce520ea729f24fb9ec9ee0849c9c7c6828cb796fe2cd174a480ce806420",
+        "licenses/system/COPYING-common-GPL-2": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+        "licenses/system/COPYING-common-LGPL-2.1": "dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551"
+      }
+    },
+    {
+      "component": "libzmq5",
+      "version": "4.3.5-1build2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libzmq.so",
+        "libzmq.so.5"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-libzmq5": "78a1462a7c5ab0488ddacdde2fc1cdd10815f8139acac01dcab13f03dbef3a17",
+        "licenses/system/COPYING-common-LGPL-2": "681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366",
+        "licenses/system/COPYING-common-MPL-2.0": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85"
+      }
+    },
+    {
+      "component": "zlib1g",
+      "version": "1:1.3.dfsg-3.1ubuntu2.2",
+      "source": "Ubuntu package inventory at builder sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "libraries": [
+        "libz.so"
+      ],
+      "texts": {
+        "licenses/system/COPYRIGHT-zlib1g": "9e5b96d63773a5d177ba264254390f792be07e41748ebd94730981c6cac31cc6"
+      }
+    },
+    {
+      "component": "Rust crate base16ct",
+      "version": "0.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/base16ct-0.2.0/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/base16ct-0.2.0/LICENSE-MIT": "0aa8963e105e8b6e02f634484145d4e5b0f42d0a6dd05c16f8148f033383adef"
+      }
+    },
+    {
+      "component": "Rust crate base64ct",
+      "version": "1.8.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/base64ct-1.8.3/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/base64ct-1.8.3/LICENSE-MIT": "2d1c57bff28344b9e698f51063bc8509799cc4c99a4e0cf2aa3f7e7c3e1f9a9d"
+      }
+    },
+    {
+      "component": "Rust crate bitvec",
+      "version": "1.1.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/bitvec-1.1.1/LICENSE.txt": "411781fd38700f2357a14126d0ab048164ab881f1dcb335c1bb932e232c9a2f5"
+      }
+    },
+    {
+      "component": "Rust crate blake2",
+      "version": "0.10.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/blake2-0.10.6/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/blake2-0.10.6/LICENSE-MIT": "9c768944eb4a0422ca2efc25ea9fb2fb9e7fbd3fdb04e86b87366339cb7466db"
+      }
+    },
+    {
+      "component": "Rust crate block-buffer",
+      "version": "0.10.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/LICENSE-MIT": "d5c22aa3118d240e877ad41c5d9fa232f9c77d757d4aac0c2f943afc0a95e0ef"
+      }
+    },
+    {
+      "component": "Rust crate byteorder",
+      "version": "1.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/byteorder-1.5.0/COPYING": "01c266bced4a434da0051174d6bee16a4c82cf634e2679b6155d40d75012390f",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/byteorder-1.5.0/LICENSE-MIT": "0f96a83840e146e43c0ec96a22ec1f392e0680e6c1226e6f3ba87e0740af850f"
+      }
+    },
+    {
+      "component": "Rust crate cfg-if",
+      "version": "1.0.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/cfg-if-1.0.4/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/cfg-if-1.0.4/LICENSE-MIT": "378f5840b258e2779c39418f3f2d7b2ba96f1c7917dd6be0713f88305dbda397"
+      }
+    },
+    {
+      "component": "Rust crate ciphersuite",
+      "version": "0.4.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/ciphersuite-0.4.2/LICENSE": "adb1a5b8a1fa0a9df7147e818a7e28efac5dee37fef3abc23428aa91ff19fb8e"
+      }
+    },
+    {
+      "component": "Rust crate const-oid",
+      "version": "0.9.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/const-oid-0.9.6/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/const-oid-0.9.6/LICENSE-MIT": "bada9e7ed8dc00d63502053c455d7c8d7575dfb7e8277a2a832531844d900682"
+      }
+    },
+    {
+      "component": "Rust crate cpufeatures",
+      "version": "0.2.17",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/cpufeatures-0.2.17/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/cpufeatures-0.2.17/LICENSE-MIT": "ae9baa7beea910273c2f384c2a6b721fb7bd02bda3436074a1072e4ee689f985"
+      }
+    },
+    {
+      "component": "Rust crate crypto-common",
+      "version": "0.1.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/crypto-common-0.1.6/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/crypto-common-0.1.6/LICENSE-MIT": "3521672491a3479422d5fe1aca6645dd2984090f85da6e5205abfb18fb7a6897"
+      }
+    },
+    {
+      "component": "Rust crate curve25519-dalek",
+      "version": "4.1.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/curve25519-dalek-4.1.3/LICENSE": "cca0bd3c4fcdba74145ef9d49c62337e2c9fbf9368288f11d0547f1b0273219f"
+      }
+    },
+    {
+      "component": "Rust crate curve25519-dalek-derive",
+      "version": "0.1.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/curve25519-dalek-derive-0.1.1/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/curve25519-dalek-derive-0.1.1/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate dalek-ff-group",
+      "version": "0.4.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/dalek-ff-group-0.4.6/LICENSE": "ee5bb025ab8b192a12317a5bc18c934f363d9675a6c6b7d4aa0e872f56c468a8"
+      }
+    },
+    {
+      "component": "Rust crate dalek-ff-group",
+      "version": "0.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/dalek-ff-group-0.5.0/LICENSE": "4039f08067700fd340c67acf0fb8957a9a002c12b6d5000680b8ed59f86c5e52"
+      }
+    },
+    {
+      "component": "Rust crate der",
+      "version": "0.7.10",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/der-0.7.10/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/der-0.7.10/LICENSE-MIT": "ad64fcb9589f162720f3cc5010ad76ca6ad3764e11861f9192c489df176bb71d"
+      }
+    },
+    {
+      "component": "Rust crate digest",
+      "version": "0.10.7",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/LICENSE-MIT": "9e0dfd2dd4173a530e238cb6adb37aa78c34c6bc7444e0e10c1ab5d8881f63ba"
+      }
+    },
+    {
+      "component": "Rust crate ecdsa",
+      "version": "0.16.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/ecdsa-0.16.9/LICENSE-APACHE": "78779d420019e6b4630376af8e86b6b335ee8a2f89ede6e0411e0469a326aaa4",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/ecdsa-0.16.9/LICENSE-MIT": "bdebaf9156a298f8fdab56dd26cb5144673de522d80f4c0d88e0039145f147f9"
+      }
+    },
+    {
+      "component": "Rust crate elliptic-curve",
+      "version": "0.13.8",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/elliptic-curve-0.13.8/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/elliptic-curve-0.13.8/LICENSE-MIT": "d27687b51f2874822c1530976b7e837eac4f308d94bf3dd42047011b7d437b47"
+      }
+    },
+    {
+      "component": "Rust crate ff",
+      "version": "0.13.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/ff-0.13.1/LICENSE-APACHE": "3708458dee7f359ac6c9c5558023ed481be87e5372c43ebd7f2ca7ad23c12026",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/ff-0.13.1/LICENSE-MIT": "8d0c1d1d4b2bebf5b9211f0e883d5a482b7808f3ed31320da14ddee95811f4ef"
+      }
+    },
+    {
+      "component": "Rust crate fiat-crypto",
+      "version": "0.2.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/fiat-crypto-0.2.9/LICENSE-BSD-1": "0c1240e29b4a2c528bcc3ccc38a98b1dba5e3e6b465da910208935f082e2ced6",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/fiat-crypto-0.2.9/LICENSE-APACHE": "9eacbcb81be660840c714a560a9d65ba07913db98dd4baf969f78dd499fdd60f",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/fiat-crypto-0.2.9/LICENSE-MIT": "0034712d5e97a4f5b900a160a5c19d582b740d8e0638b4e44fd07e7b492dcd13",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/fiat-crypto-0.2.9/COPYRIGHT": "6c935d087a2992d0f092665400a2fa99c98db58d96fbe29368f8f48182bed9aa"
+      }
+    },
+    {
+      "component": "Rust crate flexible-transcript",
+      "version": "0.3.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/flexible-transcript-0.3.4/LICENSE": "4039f08067700fd340c67acf0fb8957a9a002c12b6d5000680b8ed59f86c5e52"
+      }
+    },
+    {
+      "component": "Rust crate foldhash",
+      "version": "0.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/foldhash-0.2.0/LICENSE": "b1181a40b2a7b25cf66fd01481713bc1005df082c53ef73e851e55071b102744"
+      }
+    },
+    {
+      "component": "Rust crate funty",
+      "version": "2.0.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/funty-2.0.0/LICENSE.txt": "f790cc576999f5998c766d3d26d7d64dc368e805a98461484f65e8d961ec6d9f"
+      }
+    },
+    {
+      "component": "Rust crate generic-array",
+      "version": "0.14.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.9/LICENSE": "c09aae9d3c77b531f56351a9947bc7446511d6b025b3255312d3e3442a9a7583"
+      }
+    },
+    {
+      "component": "Rust crate generic-array",
+      "version": "1.4.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/generic-array-1.4.5/LICENSE": "c09aae9d3c77b531f56351a9947bc7446511d6b025b3255312d3e3442a9a7583"
+      }
+    },
+    {
+      "component": "Rust crate getrandom",
+      "version": "0.2.17",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/getrandom-0.2.17/LICENSE-APACHE": "aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/getrandom-0.2.17/LICENSE-MIT": "42fa16951ce7f24b5a467a40e5b449a1d41e662f97ca779864f053f39e097737"
+      }
+    },
+    {
+      "component": "Rust crate group",
+      "version": "0.13.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/group-0.13.0/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/group-0.13.0/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/group-0.13.0/COPYRIGHT": "7429802d3e67e3308471b91fbea341e484c4e0a23d0fb230a8636c38184cec79"
+      }
+    },
+    {
+      "component": "Rust crate hashbrown",
+      "version": "0.16.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/hashbrown-0.16.1/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/hashbrown-0.16.1/LICENSE-MIT": "ff8f68cb076caf8cefe7a6430d4ac086ce6af2ca8ce2c4e5a2004d4552ef52a2"
+      }
+    },
+    {
+      "component": "Rust crate k256",
+      "version": "0.13.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/k256-0.13.4/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/k256-0.13.4/LICENSE-MIT": "3b4f73047906835fba5005acdf68f25a460b9ee298dae710f22b435d335a6f7b"
+      }
+    },
+    {
+      "component": "Rust crate keccak",
+      "version": "0.1.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/keccak-0.1.6/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/keccak-0.1.6/LICENSE-MIT": "bdebaf9156a298f8fdab56dd26cb5144673de522d80f4c0d88e0039145f147f9"
+      }
+    },
+    {
+      "component": "Rust crate libc",
+      "version": "0.2.189",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/libc-0.2.189/LICENSE-MIT": "123a331b5dbf04c30097fa43b8f858bc85df671fe776de498d01f3d6b7c1f69e"
+      }
+    },
+    {
+      "component": "Rust crate merlin",
+      "version": "3.0.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/merlin-3.0.0/LICENSE.txt": "a23decac74ff35091240ea623bdad2c867ca5054cd1b9e4a848e4628d0c92689"
+      }
+    },
+    {
+      "component": "Rust crate minimal-ed448",
+      "version": "0.4.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/minimal-ed448-0.4.2/LICENSE": "4039f08067700fd340c67acf0fb8957a9a002c12b6d5000680b8ed59f86c5e52"
+      }
+    },
+    {
+      "component": "Rust crate multiexp",
+      "version": "0.5.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/multiexp-0.5.2/LICENSE": "d0a497b69398b9d9b7c041436678ead24ba9ae151a61320f6c67be53386ba022"
+      }
+    },
+    {
+      "component": "Rust crate once_cell",
+      "version": "1.21.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/once_cell-1.21.4/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/once_cell-1.21.4/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate p256",
+      "version": "0.13.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/p256-0.13.2/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/p256-0.13.2/LICENSE-MIT": "233b95ccbf90dc67e32f3e8995c489f6312d9191ebd141a931c3b684f1e3be6d"
+      }
+    },
+    {
+      "component": "Rust crate pkcs8",
+      "version": "0.10.2",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/pkcs8-0.10.2/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/pkcs8-0.10.2/LICENSE-MIT": "ad64fcb9589f162720f3cc5010ad76ca6ad3764e11861f9192c489df176bb71d"
+      }
+    },
+    {
+      "component": "Rust crate ppv-lite86",
+      "version": "0.2.21",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/ppv-lite86-0.2.21/LICENSE-APACHE": "0218327e7a480793ffdd4eb792379a9709e5c135c7ba267f709d6f6d4d70af0a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/ppv-lite86-0.2.21/LICENSE-MIT": "4cada0bd02ea3692eee6f16400d86c6508bbd3bafb2b65fed0419f36d4f83e8f"
+      }
+    },
+    {
+      "component": "Rust crate primeorder",
+      "version": "0.13.6",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/primeorder-0.13.6/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/primeorder-0.13.6/LICENSE-MIT": "233b95ccbf90dc67e32f3e8995c489f6312d9191ebd141a931c3b684f1e3be6d"
+      }
+    },
+    {
+      "component": "Rust crate proc-macro2",
+      "version": "1.0.107",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/proc-macro2-1.0.107/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/proc-macro2-1.0.107/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate quote",
+      "version": "1.0.47",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/quote-1.0.47/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/quote-1.0.47/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate radium",
+      "version": "0.7.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/radium-0.7.0/LICENSE.txt": "13f4cc9fbc8d4a447b28aa84019c10ad4abf4b5f6919db061bf6690ccc23bc02"
+      }
+    },
+    {
+      "component": "Rust crate rand_chacha",
+      "version": "0.3.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.3.1/LICENSE-APACHE": "aaff376532ea30a0cd5330b9502ad4a4c8bf769c539c87ffe78819d188a18ebf",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.3.1/LICENSE-MIT": "209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rand_chacha-0.3.1/COPYRIGHT": "90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5"
+      }
+    },
+    {
+      "component": "Rust crate rand_core",
+      "version": "0.6.4",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rand_core-0.6.4/LICENSE-APACHE": "6df43f6f4b5d4587f3d8d71e45532c688fd168afa5fe89d571cb32fa09c4ef51",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rand_core-0.6.4/LICENSE-MIT": "209fbbe0ad52d9235e37badf9cadfe4dbdc87203179c0899e738b39ade42177b",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rand_core-0.6.4/COPYRIGHT": "90eb64f0279b0d9432accfa6023ff803bc4965212383697eee27a0f426d5f8d5"
+      }
+    },
+    {
+      "component": "Rust crate rustc_version",
+      "version": "0.4.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rustc_version-0.4.1/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rustc_version-0.4.1/LICENSE-MIT": "c9a75f18b9ab2927829a208fc6aa2cf4e63b8420887ba29cdb265d6619ae82d5"
+      }
+    },
+    {
+      "component": "Rust crate rustversion",
+      "version": "1.0.23",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rustversion-1.0.23/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/rustversion-1.0.23/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate sec1",
+      "version": "0.7.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/sec1-0.7.3/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/sec1-0.7.3/LICENSE-MIT": "4a883ecc3bb1010faed542bf63d53e530fea5e5e12cf676aed588784298ba929"
+      }
+    },
+    {
+      "component": "Rust crate semver",
+      "version": "1.0.28",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/semver-1.0.28/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/semver-1.0.28/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate sha2",
+      "version": "0.10.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/sha2-0.10.9/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/sha2-0.10.9/LICENSE-MIT": "b4eb00df6e2a4d22518fcaa6a2b4646f249b3a3c9814509b22bd2091f1392ff1"
+      }
+    },
+    {
+      "component": "Rust crate sha3",
+      "version": "0.10.9",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/sha3-0.10.9/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/sha3-0.10.9/LICENSE-MIT": "f18f6229547ab07f0b7b3e1f83acad8bb436f5f4c95a8a98b44f876caa00f04e"
+      }
+    },
+    {
+      "component": "Rust crate signature",
+      "version": "2.2.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/signature-2.2.0/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/signature-2.2.0/LICENSE-MIT": "b3470648aff02beb36d7a53240fc9260ed80ed93bd43bace6b67d7ef7336ee33"
+      }
+    },
+    {
+      "component": "Rust crate spin",
+      "version": "0.10.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/spin-0.10.1/LICENSE": "6ac8711fb340c62ce0a4ecd463342d3fa0e8e70de697c863a2e1c0c53006003c"
+      }
+    },
+    {
+      "component": "Rust crate spki",
+      "version": "0.7.3",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/spki-0.7.3/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/spki-0.7.3/LICENSE-MIT": "c995204cc6bad2ed67dd41f7d89bb9f1a9d48e0edd745732b30640d7912089a4"
+      }
+    },
+    {
+      "component": "Rust crate std-shims",
+      "version": "0.1.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/std-shims-0.1.5/LICENSE": "ba72d9bcc9de4a36c02e68dbae63076407302e612f1b2e54e5bcad6973f3c5db"
+      }
+    },
+    {
+      "component": "Rust crate subtle",
+      "version": "2.6.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/subtle-2.6.1/LICENSE": "d1fc1bc0d155df60b2e7705b6b2ae02a05c96f948e1cec6e2fb86360b09f346b"
+      }
+    },
+    {
+      "component": "Rust crate syn",
+      "version": "2.0.119",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/syn-2.0.119/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/syn-2.0.119/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate tap",
+      "version": "1.0.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/tap-1.0.1/LICENSE.txt": "8b4e95f5cf0dc40269c99f7b787203ffe04ded245ca2427422c196efa2b2f42a"
+      }
+    },
+    {
+      "component": "Rust crate typenum",
+      "version": "1.20.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/typenum-1.20.1/LICENSE": "db11fec9946737df39ca3898d9cd8c10ec6f6c3a884a6802b0ad0b81b4e8f23a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/typenum-1.20.1/LICENSE-APACHE": "516b24e051bf5630880ebbd55c40a25ce9552ebaf8970a53e8976eb70e522406",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/typenum-1.20.1/LICENSE-MIT": "a825bd853ab71619a4923d7b4311221427848070ff44d990da39b0b274c1683f"
+      }
+    },
+    {
+      "component": "Rust crate unicode-ident",
+      "version": "1.0.24",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/LICENSE-APACHE": "62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/unicode-ident-1.0.24/LICENSE-UNICODE": "f7db81051789b729fea528a63ec4c938fdcb93d9d61d97dc8cc2e9df6d47f2a1"
+      }
+    },
+    {
+      "component": "Rust crate version_check",
+      "version": "0.9.5",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/version_check-0.9.5/LICENSE-MIT": "b7e650f3fce5c53249d1cdc608b54df156a97edd636cf9d23498d0cfe7aec63e"
+      }
+    },
+    {
+      "component": "Rust crate wasi",
+      "version": "0.11.1+wasi-snapshot-preview1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/wasi-0.11.1+wasi-snapshot-preview1/LICENSE-Apache-2.0_WITH_LLVM-exception": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/wasi-0.11.1+wasi-snapshot-preview1/LICENSE-APACHE": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/wasi-0.11.1+wasi-snapshot-preview1/LICENSE-MIT": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+      }
+    },
+    {
+      "component": "Rust crate wyz",
+      "version": "0.5.1",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/wyz-0.5.1/LICENSE.txt": "411781fd38700f2357a14126d0ab048164ab881f1dcb335c1bb932e232c9a2f5"
+      }
+    },
+    {
+      "component": "Rust crate zerocopy",
+      "version": "0.8.57",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.57/LICENSE-BSD": "83c1763356e822adde0a2cae748d938a73fdc263849ccff6b27776dff213bd32",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.57/LICENSE-APACHE": "9d185ac6703c4b0453974c0d85e9eee43e6941009296bb1f5eb0b54e2329e9f3",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zerocopy-0.8.57/LICENSE-MIT": "1a2f5c12ddc934d58956aa5dbdd3255fe55fd957633ab7d0d39e4f0daa73f7df"
+      }
+    },
+    {
+      "component": "Rust crate zerocopy-derive",
+      "version": "0.8.57",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zerocopy-derive-0.8.57/LICENSE-BSD": "83c1763356e822adde0a2cae748d938a73fdc263849ccff6b27776dff213bd32",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zerocopy-derive-0.8.57/LICENSE-APACHE": "9d185ac6703c4b0453974c0d85e9eee43e6941009296bb1f5eb0b54e2329e9f3",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zerocopy-derive-0.8.57/LICENSE-MIT": "1a2f5c12ddc934d58956aa5dbdd3255fe55fd957633ab7d0d39e4f0daa73f7df"
+      }
+    },
+    {
+      "component": "Rust crate zeroize",
+      "version": "1.9.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/LICENSE-APACHE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/LICENSE-MIT": "8c7516d4b27b1e495be5e38b612298b63de48d05f49cdac94f70f3cd70f8864b"
+      }
+    },
+    {
+      "component": "Rust crate zeroize_derive",
+      "version": "1.5.0",
+      "source": "registry+https://github.com/rust-lang/crates.io-index",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zeroize_derive-1.5.0/LICENSE-APACHE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "licenses/rust-registry/index.crates.io-1949cf8c6b5b557f/zeroize_derive-1.5.0/LICENSE-MIT": "b8c6939380a400f53e11923d50fcc4dd2fa1ba8339fd9d04cda38a0251b6c9b0"
+      }
+    },
+    {
+      "component": "Rust crate crypto-bigint",
+      "version": "0.5.5",
+      "source": "git+https://github.com/kayabaNerve/crypto-bigint?branch=c-repr#78352771313f1e9b8e48abe5ce30d50d6bdd291d",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/crypto-bigint-248bbb13024906bb/7835277/LICENSE-APACHE": "a9040321c3712d8fd0b09cf52b17445de04a23a10165049ae187cd39e5c86be5",
+        "licenses/rust-git/crypto-bigint-248bbb13024906bb/7835277/LICENSE-MIT": "90c503b61dee04e1449c323ec34c229dfb68d7adcb96c7e140ee55f70fce2d8e"
+      }
+    },
+    {
+      "component": "Rust crate ec-divisors",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/crypto/divisors/LICENSE": "ba72d9bcc9de4a36c02e68dbae63076407302e612f1b2e54e5bcad6973f3c5db"
+      }
+    },
+    {
+      "component": "Rust crate full-chain-membership-proofs",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/LICENSE": "7c330e1be19cb097d61d72d6e6a03da8102222b2cb3ff7cd36edae05af5ceefc"
+      }
+    },
+    {
+      "component": "Rust crate generalized-bulletproofs-circuit-abstraction",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/circuit-abstraction/LICENSE": "7c330e1be19cb097d61d72d6e6a03da8102222b2cb3ff7cd36edae05af5ceefc"
+      }
+    },
+    {
+      "component": "Rust crate generalized-bulletproofs-ec-gadgets",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/crypto/fcmps/ec-gadgets/LICENSE": "7c330e1be19cb097d61d72d6e6a03da8102222b2cb3ff7cd36edae05af5ceefc"
+      }
+    },
+    {
+      "component": "Rust crate generalized-bulletproofs",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/crypto/generalized-bulletproofs/LICENSE": "8992ba57de8910017b1b14de7ec8164648e6f67e758ae41004afee0ab3a38955"
+      }
+    },
+    {
+      "component": "Rust crate helioselene",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/crypto/helioselene/LICENSE": "ee5bb025ab8b192a12317a5bc18c934f363d9675a6c6b7d4aa0e872f56c468a8"
+      }
+    },
+    {
+      "component": "Rust crate monero-ed25519",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/monero-oxide/ed25519/LICENSE": "41b1346008f3a37747707f25105e717020167c06c447b6db709406c238af4f87"
+      }
+    },
+    {
+      "component": "Rust crate monero-io",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/monero-oxide/io/LICENSE": "41b1346008f3a37747707f25105e717020167c06c447b6db709406c238af4f87"
+      }
+    },
+    {
+      "component": "Rust crate monero-primitives",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/monero-oxide/primitives/LICENSE": "41b1346008f3a37747707f25105e717020167c06c447b6db709406c238af4f87"
+      }
+    },
+    {
+      "component": "Rust crate monero-fcmp-plus-plus",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/monero-oxide/ringct/fcmp++/LICENSE": "7c330e1be19cb097d61d72d6e6a03da8102222b2cb3ff7cd36edae05af5ceefc"
+      }
+    },
+    {
+      "component": "Rust crate monero-fcmp-plus-plus-generators",
+      "version": "0.1.0",
+      "source": "git+https://github.com/monero-oxide/monero-oxide?rev=31c26d96eaadbba910ffe3613ad8b4cf9c598a93#31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "libraries": [],
+      "texts": {
+        "licenses/rust-git/monero-oxide-3366610e7b6e517d/31c26d9/monero-oxide/ringct/fcmp++/generators/LICENSE": "ae443a2e4a547bb18746d0843492d71e31eadc3f7a6f033af6cb4bb45125c75f"
+      }
+    }
+  ]
+}

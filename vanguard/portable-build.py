@@ -136,6 +136,9 @@ mkdir -p /out/licenses
 for copyright in /usr/share/doc/*/copyright; do
     cp -L "$copyright" "/out/licenses/COPYRIGHT-$(basename "$(dirname "$copyright")")"
 done
+for license in /usr/share/common-licenses/*; do
+    cp -L "$license" "/out/licenses/COPYING-common-$(basename "$license")"
+done
 gcc --version > /out/compiler.txt
 cmake --version >> /out/compiler.txt
 rustc -Vv >> /out/compiler.txt
