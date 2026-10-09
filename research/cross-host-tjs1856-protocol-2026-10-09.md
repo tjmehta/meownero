@@ -1,6 +1,6 @@
 # Finite native Railway and build-mac protocol
 
-Revision 2, prepared 2026-10-09 before any cross-host native trial. Starting
+Revision 3, prepared 2026-10-09 before any cross-host native trial. Starting
 candidate is `c6620342328f313e1e9bdfb79570d5245e669090`. This is one accelerated,
 valueless FCMP++/CARROT regtest witness. Accepted local tests and launch gates
 remain unchanged. Source pins are those in `vanguard/source-lock.json`.
@@ -102,7 +102,12 @@ evidence only. Record local and remote process exits and final measurements.
 ## Deadlines, cleanup and acceptance
 
 The remote supervisor enforces a 1,800-second lifetime from startup. Provider
-restart policy must be NEVER, so expiry cannot cycle indefinitely. The measured
+restart policy must be NEVER, so expiry cannot cycle indefinitely. Verify the
+effective deployed metadata explicitly: the first attempt exposed that
+railway.json is deprecated and was ignored by this provider version. Set the
+exact service policy through the supported CLI API and verify NEVER plus the
+actual provider imageDigest before funding. New upload contexts omit the
+deprecated configuration file. The measured
 trial has a 900-second deadline after funding, 180-second phase deadlines and
 a 1,500-second whole native-run deadline. An operator cleanup deadline must be
 recorded in the frozen run inputs before service startup. Always stop/remove

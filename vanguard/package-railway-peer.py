@@ -68,8 +68,6 @@ EXPOSE 19080 8080
 ENV PYTHONUNBUFFERED=1
 ENTRYPOINT ["/usr/bin/python3.12", "-B", "/app/railway-peer.py"]
 ''')
-    (out / 'railway.json').write_text(json.dumps({'build': {'builder': 'DOCKERFILE'},
-        'deploy': {'restartPolicyType': 'NEVER', 'numReplicas': 1}}, indent=2) + '\n')
     manifest = {'schema': 'tjs1856-private-peer-upload/1', 'architecture': 'linux/amd64',
         'source_pins': receipt['source_pins'], 'base_rootfs': receipt['rootfs'],
         'binary': receipt['binary']['monerod'],

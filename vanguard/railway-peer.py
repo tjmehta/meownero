@@ -167,7 +167,10 @@ def main():
     finally:
         with GUARD:
             stop()
-            print(json.dumps({'event': 'peer_shutdown', 'metrics': metrics()}), flush=True)
+            final = metrics()
+            if PROC and PROC.returncode != 0:
+                final['daemon_failure_stdout_tail'] = (ROOT / 'daemon.stdout').read_text(errors='replace')[-8192:]
+            print(json.dumps({'event': 'peer_shutdown', 'metrics': final}), flush=True)
         server.server_close()
 
 
