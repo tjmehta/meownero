@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 6.12.0 EXACT REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 Test)
 qt_standard_project_setup(REQUIRES 6.12)
 
+# Path-independent objects, so a clean build in another directory matches.
+add_compile_options(-ffile-prefix-map=${CMAKE_SOURCE_DIR}=src -ffile-prefix-map=${CMAKE_BINARY_DIR}=build)
+
 # Shared controller: exact amounts, ledger, session-bound actions and the
 # simulated backend. QML only sees what WalletController exposes.
 qt_add_library(wallet_core STATIC

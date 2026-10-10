@@ -8,3 +8,6 @@ export QTDIR="$MEOWNERO_TOOLCHAIN/qt/6.12.0/gcc_64"
 export CMAKE_PREFIX_PATH="$QTDIR:$MEOWNERO_TOOLCHAIN/sysroot/usr"
 export PATH="$MEOWNERO_TOOLCHAIN/venv/bin:$QTDIR/bin:$PATH"
 export LD_LIBRARY_PATH="$MEOWNERO_TOOLCHAIN/sysroot/usr/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+# Reproducible builds: rcc otherwise embeds each resource file's build-time mtime.
+export QT_RCC_SOURCE_DATE_OVERRIDE=1
+export SOURCE_DATE_EPOCH=1791590400
