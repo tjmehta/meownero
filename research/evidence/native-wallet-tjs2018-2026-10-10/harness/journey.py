@@ -279,6 +279,25 @@ def ancestors(n):
     return roles
 
 
+def background_action_is_inert(app, dialog_title, button="Receive"):
+    """Journey QA finding F1: an AT-SPI action on a background control must do nothing."""
+    route_before = app.focused()[1]["name"]
+    target = next((n for n in walk(app.main_frame()) if n.get_role_name() == "push button" and n.get_name() == button
+                   and not in_dialog(n, dialog_title)), None)
+    if target is None:
+        return False, "background button not found"
+    enabled = target.get_state_set().contains(Atspi.StateType.ENABLED)
+    try:
+        acted = target.get_action_iface().do_action(0)
+    except GLib.Error as exc:
+        acted = "refused: %s" % exc.message
+    pump(0.8)
+    still_open = dialog_title in app.dialogs()
+    after = app.focused()[1]["name"]
+    ok = not enabled and still_open and after == route_before
+    return ok, "enabled=%s action=%s dialog_open=%s focus %r -> %r" % (enabled, acted, still_open, route_before, after)
+
+
 def in_dialog(n, title):
     return any(r == "dialog" and nm == title for r, nm in ancestors(n))
 
@@ -460,6 +479,57 @@ def journey_create_backup_receive_restore():
         f.write(out)
 
 
+# ---------------------------------------------------------------- journey C
+NET_LIGHT = (105, 73, 186)  # Theme.net, light appearance, local regtest
+
+
+def journey_large_exact_amount_fits():
+    """Journey QA finding F2: at 880x600 every exact digit, MEOW and the whole Test coins tag fit."""
+    from PIL import Image
+    app = App("--start", "overview", "--story", "large", size=(880, 600))
+    def balance():
+        return next(n for n in app.raw() if (n.get_name() or "").startswith("Spendable now:"))
+    e = balance().get_component_iface().get_extents(Atspi.CoordType.SCREEN)
+    # A real pointer click toggles "every digit" (no keyboard focus ring in the measured box).
+    xdo("mousemove", str(e.x + 40), str(e.y + e.height // 2), "click", "1")
+    xdo("mousemove", "870", "590")
+    pump(0.8)
+    name = balance().get_name()
+    check("C1 exact large balance shown", "1,919,033.123395269011 MEOW" in name, name)
+    e = balance().get_component_iface().get_extents(Atspi.CoordType.SCREEN)
+    fr = app.main_frame().get_component_iface().get_extents(Atspi.CoordType.SCREEN)
+    shot("c01-large-exact-880x600", "880x600")
+    im = Image.open(os.path.join(OUT, "screens", "c01-large-exact-880x600.png")).convert("RGB")
+    # Locate the tag by strong network-violet pixels (border and letters), then refine its
+    # edges with a looser tint test inside that box, since a border can straddle two
+    # antialiased columns. Subpixel fringes on the digits are outside the box.
+    strong = lambda px: sum(abs(a - b) for a, b in zip(px, NET_LIGHT)) < 60
+    tint = lambda px: px[2] - px[0] >= 20 and px[2] - px[1] >= 20
+    region = [(x, y) for x in range(max(0, e.x - 8), min(im.width, e.x + e.width + 40))
+              for y in range(max(0, e.y), min(im.height, e.y + e.height))]
+    seed = [q for q in region if strong(im.getpixel(q))]
+    if seed:
+        sx0, sx1 = min(q[0] for q in seed) - 3, max(q[0] for q in seed) + 3
+        sy0, sy1 = min(q[1] for q in seed) - 3, max(q[1] for q in seed) + 3
+        pts = [q for q in region if sx0 <= q[0] <= sx1 and sy0 <= q[1] <= sy1 and tint(im.getpixel(q))]
+    else:
+        pts = []
+    xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    col = lambda x: sum(1 for p in pts if p[0] == x)
+    h = y1 - y0 + 1
+    # A border may straddle two columns; rounded corners lose a few pixels.
+    left, right = max(col(x0), col(x0 + 1)), max(col(x1), col(x1 - 1))
+    complete = left >= h - 6 and right >= h - 6
+    inside = x1 < fr.x + fr.width - 1 and x1 <= e.x + e.width
+    check("C2 Test coins tag box is complete inside the window", complete and inside,
+          "tag box x %d-%d y %d-%d; border columns %d/%d of %d px; balance box x %d-%d; window right %d"
+          % (x0, x1, y0, y1, left, right, h, e.x, e.x + e.width, fr.x + fr.width))
+    out = app.quit()
+    with open(os.path.join(OUT, "raw", "journey-c-app.log"), "w") as f:
+        f.write(out)
+
+
 # ---------------------------------------------------------------- journey B
 def fill_send(app, amount):
     app.tab_to("Test wallet B")
@@ -498,6 +568,8 @@ def journey_send_review_unknown_consent():
     check("B5 review dialog opens on its confirm button", f["name"] == "Send 2.5 MEOW" and in_dialog(n, "Review payment"), json.dumps(f))
     check("B6 review shows exact prepared values", any("Total: 2.50006152 MEOW" in x for x in app.names()) and any("Network fee: 0.00006152 MEOW" in x for x in app.names()))
     shot("b06-review")
+    ok, detail = background_action_is_inert(app, "Review payment")
+    check("B6b background Receive is inert to assistive actions behind Review", ok, detail)
     app.audit("review dialog")
     trapped = True
     seen = []
@@ -613,6 +685,8 @@ def journey_send_review_unknown_consent():
         print("DEBUG exposure nodes:", [(m.get_role_name(), m.get_name()[:30]) for m in app.raw() if "untrusted node" in (m.get_name() or "")])
         check("B24 at 880x600 the whole explanation is inside the window, above Connect", False, "nodes not found")
     shot("b24-consent-880x600", "880x600")
+    ok, detail = background_action_is_inert(app, "Connect to someone else's node?")
+    check("B24b background Receive is inert to assistive actions behind consent", ok, detail)
     app.audit("consent dialog")
     key("Escape", wait=0.6)
     _, f = app.focused()
@@ -647,8 +721,9 @@ def journey_send_review_unknown_consent():
 
 
 if __name__ == "__main__":
-    only = os.environ.get("JOURNEY", "AB")
-    for tag, fn in (("A", journey_create_backup_receive_restore), ("B", journey_send_review_unknown_consent)):
+    only = os.environ.get("JOURNEY", "ABC")
+    for tag, fn in (("A", journey_create_backup_receive_restore), ("B", journey_send_review_unknown_consent),
+                    ("C", journey_large_exact_amount_fits)):
         if tag not in only:
             continue
         try:

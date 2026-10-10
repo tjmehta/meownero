@@ -27,7 +27,7 @@ PageBase {
         Layout.topMargin: 4
         Layout.bottomMargin: 6
         Layout.fillWidth: true
-        implicitHeight: amt.implicitHeight
+        implicitHeight: figure.implicitHeight
         focusPolicy: Qt.StrongFocus
         checkable: true
         checked: Wallet.exactDigits
@@ -39,9 +39,18 @@ PageBase {
         Keys.onReturnPressed: clicked()
         Keys.onEnterPressed: clicked()
         background: Rectangle { color: "transparent"; radius: 6; border.width: (bigAmount.activeFocus && bigAmount.focusReason !== Qt.MouseFocusReason) ? 2 : 0; border.color: Theme.net; anchors.margins: -4 }
-        contentItem: Item {
-            implicitHeight: amt.implicitHeight
-            AmountLabel { id: amt; view: page.b.spendable; px: 44; bold: true; tag: true; Accessible.ignored: true }
+        // Digits, unit and the complete Test coins tag always fit: the tag moves to
+        // the next line, and very long exact digits wrap, instead of running off the edge.
+        contentItem: Flow {
+            id: figure
+            width: bigAmount.availableWidth
+            spacing: 8
+            AmountLabel { id: amt; view: page.b.spendable; px: 44; bold: true; maxWidth: figure.width; Accessible.ignored: true }
+            Item {
+                width: bigTag.width
+                height: bigTag.height + amt.height * 0.22
+                NetTag { id: bigTag; y: amt.height * 0.22; fontPx: 11 }
+            }
         }
     }
     Flow {

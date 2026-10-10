@@ -17,7 +17,13 @@ Button {
     topPadding: large ? 11 : 8
     bottomPadding: topPadding
     focusPolicy: Qt.StrongFocus
-    opacity: enabled ? 1 : 0.45
+    // Inert behind a modal is not "unavailable": keep the normal look under the scrim.
+    property bool inBackground: false
+    Component.onCompleted: {
+        for (let p = parent; p; p = p.parent)
+            if (p.objectName === "appContent") { inBackground = true; break }
+    }
+    opacity: enabled || (inBackground && UiState.openDialogs > 0) ? 1 : 0.45
 
     // Checkable buttons are toggles that report pressed, not check boxes (D14).
     Accessible.role: Accessible.Button

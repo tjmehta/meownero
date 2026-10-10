@@ -12,6 +12,8 @@ Row {
     property color color: Theme.fg
     // Inside a definition row that already names the value, stay out of the tree.
     property bool presentational: false
+    // When set, the digits wrap anywhere to stay within this width (minimum window).
+    property real maxWidth: 0
     readonly property bool big: px > 24
     spacing: 0
     Accessible.role: Accessible.StaticText
@@ -20,6 +22,9 @@ Row {
 
     AText {
         id: digits
+        readonly property real room: root.maxWidth - (moreText.visible ? moreText.implicitWidth : 0) - (unitText.visible ? unitText.implicitWidth : 0)
+        width: root.maxWidth > 0 ? Math.max(1, Math.min(implicitWidth, room)) : implicitWidth
+        wrapMode: root.maxWidth > 0 ? Text.WrapAnywhere : Text.NoWrap
         text: root.view.text || ""
         font.pointSize: Theme.pt(root.px)
         font.weight: root.bold ? Font.DemiBold : Font.Normal
@@ -29,6 +34,7 @@ Row {
         Accessible.ignored: true
     }
     AText {
+        id: moreText
         visible: !!root.view.more
         anchors.baseline: digits.baseline
         text: "…"
@@ -38,6 +44,7 @@ Row {
         Accessible.ignored: true
     }
     AText {
+        id: unitText
         visible: root.unit
         anchors.baseline: digits.baseline
         text: root.big ? "  MEOW" : " MEOW"

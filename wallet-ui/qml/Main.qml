@@ -29,8 +29,12 @@ ApplicationWindow {
     palette.dark: Theme.muted
 
     ColumnLayout {
+        // Behind an open modal the whole app is inert: disabled for pointer,
+        // keyboard and assistive-technology actions alike.
+        objectName: "appContent"
         anchors.fill: parent
         spacing: 0
+        enabled: UiState.openDialogs === 0
 
         // The network is always named and can't be dismissed (TJS-1994 #1).
         Rectangle {

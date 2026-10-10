@@ -155,7 +155,7 @@ Item {
                 text: "I've written down all 25 words and the block number."
                 font.pointSize: Theme.pt(12.5)
                 onToggled: Wallet.setAcknowledged(checked)
-                contentItem: AText { leftPadding: ack.indicator.width + 8; text: ack.text; font: ack.font; color: Theme.fg; wrapMode: Text.Wrap; verticalAlignment: Text.AlignVCenter; opacity: ack.enabled ? 1 : 0.45 }
+                contentItem: AText { leftPadding: ack.indicator.width + 8; text: ack.text; font: ack.font; color: Theme.fg; wrapMode: Text.Wrap; verticalAlignment: Text.AlignVCenter; opacity: ack.enabled || UiState.openDialogs > 0 ? 1 : 0.45 }
             }
             Buttons {
                 AppButton { text: "Back"; onClicked: Wallet.navigate("create-1") }

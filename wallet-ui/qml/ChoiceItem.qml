@@ -15,7 +15,13 @@ AbstractButton {
     Layout.bottomMargin: 10
     checkable: radio
     focusPolicy: radio ? (checked ? Qt.StrongFocus : Qt.NoFocus) : Qt.StrongFocus
-    opacity: enabled ? 1 : 0.55
+    // Inert behind a modal is not "unavailable": keep the normal look under the scrim.
+    property bool inBackground: false
+    Component.onCompleted: {
+        for (let p = parent; p; p = p.parent)
+            if (p.objectName === "appContent") { inBackground = true; break }
+    }
+    opacity: enabled || (inBackground && UiState.openDialogs > 0) ? 1 : 0.55
     padding: 14
     implicitHeight: row.implicitHeight + 28
     Accessible.role: radio ? Accessible.RadioButton : Accessible.Button
