@@ -55,9 +55,9 @@
     }
   },
   "source_files": {
-    "vanguard/run-portable-linux-ci.py": "61ea5668b4c1a7ab446d79e00632c637e94a186d77d69e98209400ff7534ad78",
+    "vanguard/run-portable-linux-ci.py": "236a3ff3b9ebec6af77dc46081736abe220ba596f140cb0a7a8321eacb7f7ad7",
     "vanguard/run-portable-ci.py": "3859b2684f5c5d70877616bc95ed25d25b5f0ff2f2712382aaf0ed6d12071105",
-    "vanguard/portable-build.py": "5c14a985f24885d1df50886bfe73251ad56a7596cb7146c5548c36153de95167",
+    "vanguard/portable-build.py": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
     "vanguard/portable-prepare-old-linux.py": "b05132bcbb2ca7601f4d5bdde121cacb6ed7e1403842d70ac20609de72b9d1e6",
     "vanguard/package-portable.py": "01a5e8c40c143b0ec5c1fbc2bc17182615cf5031d9c95b4fd8bc0c1476b24cbb",
     "vanguard/portable_licenses.py": "286d438f35d352a0465d7e7d87a8cbc451e464646e597a100a45715c0e41d9c7",
@@ -77,7 +77,7 @@
   "source_patches": [],
   "generated_toolchain_adaptation": "Existing portable-build.py static pinned five-dependency closure with generated STATIC OFF for system libc/C++ ABI; exact OpenSSL static library paths. No source/crypto/consensus changes.",
   "runner": "ubuntu-22.04-arm",
-  "qualification": "Actual allocated GitHub Linux/ARM64, kernel/processaarch64, Ubuntu22.04/glibc2.35/nativeLinuxARM Docker, all CPU aes/pmull/sha1/sha2 features,5GiB availablemem/10GiB disk; actual host allocation NOTYETQUALIFIED.",
+  "qualification": "Actual allocated GitHub Linux/ARM64, kernel/processaarch64, Ubuntu22.04/glibc2.35/nativeLinuxARM Docker, all CPU aes/pmull/sha1/sha2 features,>=6GiB availablemem/10GiB disk; actual host allocation NOTYETQUALIFIED.",
   "bounds": {
     "job_minutes": 120,
     "controller_seconds": 6900,
@@ -88,7 +88,7 @@
     "package_seconds": 180,
     "native_runtime_seconds": 1500,
     "compile_cpus": 2,
-    "compile_memory_bytes": 3221225472,
+    "compile_memory_bytes": 4294967296,
     "compile_pids": 256,
     "runtime_memory_bytes": 2147483648
   },
@@ -99,5 +99,12 @@
     "https://github.com/actions/setup-python/tree/ece7cb06caefa5fff74198d8649806c4678c61a1"
   ],
   "runner_document_snapshot": "2026-10-09 primary docs privateubuntu-22.04-arm2CPU/8GB/14GB/includedminutes; runner image22.04.5ARM64. Actual native/resource gates take precedence; allocation qualificationUNTESTED.",
-  "replaced_blocker": "Separate authorizednativeARM oldglibcbuild; preserve actualLinux08x64 and localWindowsARM06/Colima lock. No emulation/gatelower/localduplicate."
+  "replaced_blocker": "Separate authorizednativeARM oldglibcbuild; preserve actualLinux08x64 and localWindowsARM06/Colima lock. No emulation/gatelower/localduplicate.",
+  "compile_resource_policy": {
+    "scope": "FRESH_NATIVE_UBUNTU22_ONLY",
+    "target": "linux-aarch64",
+    "container_memory_bytes": 4294967296,
+    "container_memory_swap_bytes": 4294967296,
+    "host_minimum_available_bytes": 6442450944
+  }
 }
