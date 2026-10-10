@@ -62,7 +62,8 @@ for case in ('exact-pins', 'changed-header', 'changed-patch', 'wrong-target', 'w
             assert len(receipt['patches']) == len(invocations) == len(saves) == 1
         cases.append({'case': case, 'refused_before_mutation': refused,
                       'owned_patch_invocations': len(invocations), 'recorded_patch_rows': len(receipt['patches'])})
-prior = subprocess.check_output(['git', 'show', 'HEAD:vanguard/portable-cross-build.py'], cwd=root, text=True)
+prior_commit = '6ad9f26144f2a968c953f554f77d33ff92b459c1'
+prior = subprocess.check_output(['git', 'show', prior_commit + ':vanguard/portable-cross-build.py'], cwd=root, text=True)
 def finalizers(text):
     return [ast.dump(ast.Module(body=n.finalbody, type_ignores=[]), include_attributes=False)
             for n in ast.walk(ast.parse(text)) if isinstance(n, ast.Try) and n.finalbody]
@@ -70,6 +71,7 @@ assert finalizers(prior) == finalizers(helper.read_text())
 proof = {'schema': 'meownero-arm07-allocator-source-guards/1',
          'result': 'PASS_EXACT_PLATFORM_PATCH_AND_FOUR_PRE_MUTATION_REFUSALS',
          'helper_sha256': sha(helper), 'cases': cases, 'all_existing_finalizers_AST_unchanged': True,
+         'preserved_prior_commit': prior_commit,
          'patch_sha256': hashlib.sha256(patch_bytes).hexdigest(), 'native_Windows_ARM_execution': 'UNTESTED'}
 Path(__file__).with_suffix('.json').write_text(json.dumps(proof, indent=2) + '\n')
 print(proof['result'])
