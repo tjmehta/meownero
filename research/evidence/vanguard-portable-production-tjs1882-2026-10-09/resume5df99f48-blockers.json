@@ -1,0 +1,110 @@
+{
+  "schema": "meownero-tjs1882-resume-blocker-evidence/1",
+  "run_id": "5df99f48-e00a-4f17-a3c8-c993db0375b4",
+  "source_base_commit": "cd9299e51b5b4cad391ea184f3f04e11896e5ee6",
+  "quota": {
+    "observed_utc": "2026-10-10T15:55:44.982451+00:00",
+    "source": "Existing authenticated GitHub billing Actions panel",
+    "source_url": "https://github.com/settings/billing",
+    "actions_minutes_used_display": 763.2,
+    "actions_minutes_included_display": 2000,
+    "remaining_minutes_display_derived": 1236.8,
+    "storage_used_GB_display": 0.1,
+    "storage_included_GB_display": 0.5,
+    "storage_precision": "ROUNDED_DISPLAY_NO_EXACT_BYTE_ALLOWANCE",
+    "billable_USD_display": 0,
+    "snapshot_sha256": "e28c37fa914252df423a01813eddd6aa33c056b963a28c8e6938d888858c6d0c",
+    "billing_api_result": "HTTP404_USER_SCOPE_MISSING",
+    "browser_fallback": "PASS",
+    "owned_browser_tab_closed": true,
+    "settings_or_token_changes": false,
+    "must_recheck_before_parent_publication": true
+  },
+  "local_resources": {
+    "observed_utc": "2026-10-10T15:50:58.577689+00:00",
+    "system": "Linux",
+    "architecture": "x86_64",
+    "memory_bytes": {
+      "MemTotal": 67350831104,
+      "MemAvailable": 5359849472
+    },
+    "required_native_linux_available_bytes": 6442450944,
+    "native_linux_memory_gate_pass": false,
+    "storage_free_bytes": 637554130944,
+    "new_workloads_started": 0
+  },
+  "remote_resources": {
+    "observed_utc": "2026-10-10T15:50:30.723085+00:00",
+    "read_only": true,
+    "observations": [
+      {
+        "command": [
+          "docker",
+          "ps",
+          "-a",
+          "--filter",
+          "name=tjs1882",
+          "--format",
+          "json"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "colima",
+          "ssh",
+          "--",
+          "cat",
+          "/proc/meminfo"
+        ],
+        "exit": 0,
+        "stdout": "MemTotal:        6052196 kB\nMemAvailable:    5607568 kB\nSwapTotal:             0 kB\nSwapFree:              0 kB",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "colima",
+          "ssh",
+          "--",
+          "df",
+          "-B1",
+          "/var/lib/docker"
+        ],
+        "exit": 0,
+        "stdout": "Filesystem        1B-blocks       Used   Available Use% Mounted on\n/dev/vdb1      105087164416 6011719680 93690064896   7% /var/lib/docker\n",
+        "stderr": ""
+      },
+      {
+        "command": [
+          "df",
+          "-k",
+          "~/Developer"
+        ],
+        "exit": 0,
+        "stdout": "Filesystem   1024-blocks      Used  Available Capacity iused       ifree %iused  Mounted on\n/dev/disk3s5  1948404040 841595964 1079871928    44% 9651974 10798719280    0%   /System/Volumes/Data\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "requested_disposition": "blocked",
+  "unblock_prerequisite_owner": "parent/TJ",
+  "unblock_descriptor_owner": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+  "unblock_actions": [
+    "Parent supplies failing depends component and exact linker inventory from retained build or a reviewed bounded diagnostic successor. Same writer fixes proven cause; parent publishes reviewed successors after fresh allowance/readback.",
+    "Parent publishes cleared i68630; native WOW64 suite must provide journey/CLI, ten controls and cleanup.",
+    "Parent adopts exact ARM18 source clearance and releases one distinct bounded build to same writer; native Windows ARM acceptance still requires package and actual execution."
+  ],
+  "new_workloads_started": 0,
+  "scoped_checkpoints_accepted": 3,
+  "scoped_checkpoints_total": 7,
+  "full_release": "OPEN",
+  "distribution_dispositions": {
+    "Debian12": "UNAVAILABLE_VERIFIED_PACKAGE_AND_APPLICABLE_ABI_RUNTIME_WITNESS_ABSENT",
+    "Fedora": "UNAVAILABLE_VERIFIED_PACKAGE_AND_APPLICABLE_ABI_RUNTIME_WITNESS_ABSENT",
+    "RHEL-family": "UNAVAILABLE_VERIFIED_PACKAGE_AND_APPLICABLE_ABI_RUNTIME_WITNESS_ABSENT",
+    "Arch": "UNAVAILABLE_VERIFIED_PACKAGE_AND_APPLICABLE_ABI_RUNTIME_WITNESS_ABSENT",
+    "openSUSE": "UNAVAILABLE_VERIFIED_PACKAGE_AND_APPLICABLE_ABI_RUNTIME_WITNESS_ABSENT"
+  }
+}
