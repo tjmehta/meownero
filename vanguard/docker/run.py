@@ -56,9 +56,9 @@ def main():
             '--tmpfs', '/tmp:rw,nosuid,nodev,noexec,size=64m,mode=1777',
             '--mount', f'type=bind,src={out},dst=/output', args.image,
             '--deadline-seconds', str(args.deadline_seconds))
-        proof = owned()
+        inspection = owned()
         receipt['cid'] = cid
-        receipt['policy'] = {k: proof['HostConfig'][k] for k in ('NetworkMode', 'ReadonlyRootfs', 'Memory', 'MemorySwap', 'NanoCpus', 'PidsLimit', 'CapDrop', 'SecurityOpt', 'Tmpfs')}
+        receipt['policy'] = {k: inspection['HostConfig'][k] for k in ('NetworkMode', 'ReadonlyRootfs', 'Memory', 'MemorySwap', 'NanoCpus', 'PidsLimit', 'CapDrop', 'SecurityOpt', 'Tmpfs')}
         assert receipt['policy']['NetworkMode'] == 'none' and receipt['policy']['ReadonlyRootfs']
         save()
         docker('start', cid)
@@ -81,11 +81,11 @@ def main():
             docker('stop', '--time', '90', cid)
         while owned()['State']['Running'] and time.monotonic() - began < args.deadline_seconds + 180:
             time.sleep(2)
-        proof = owned()
-        if proof['State']['Running']:
+        inspection = owned()
+        if inspection['State']['Running']:
             docker('stop', '--time', '90', cid)
-            proof = owned()
-        receipt.update(exit=proof['State']['ExitCode'], oom_killed=proof['State']['OOMKilled'],
+            inspection = owned()
+        receipt.update(exit=inspection['State']['ExitCode'], oom_killed=inspection['State']['OOMKilled'],
                        wall_seconds=time.monotonic() - began)
         public = out / 'result.json'
         assert public.is_file() and not public.is_symlink() and public.stat().st_nlink == 1 and public.stat().st_size < 256 * 1024

@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -11,6 +12,7 @@ import sys
 import tempfile
 from types import SimpleNamespace
 from unittest.mock import patch
+from contextlib import redirect_stdout
 
 import docker_support as support
 import host_capacity as host
@@ -28,6 +30,8 @@ class Engine:
         self.item = None
         self.removals = []
         self.inspections = 0
+        self.starts = []
+        self.public_output = None
 
     def query(self, *argv, timeout=30):
         operation = argv[0]
@@ -36,13 +40,27 @@ class Engine:
         if operation == 'create':
             name = argv[argv.index('--name') + 1]
             label = argv[argv.index('--label') + 1].split('=', 1)[1]
+            mount = argv[argv.index('--mount') + 1]
+            self.public_output = Path(mount.removeprefix('type=bind,src=').removesuffix(',dst=/output'))
             self.item = {'Id': CID, 'Name': '/' + name, 'Image': IMAGE,
                          'Config': {'Labels': {'meownero.invocation': label}},
+                         'HostConfig': {'NetworkMode': 'none', 'ReadonlyRootfs': True,
+                                        'Memory': 2 * host.GIB, 'MemorySwap': 2 * host.GIB,
+                                        'NanoCpus': 2_000_000_000, 'PidsLimit': 256,
+                                        'CapDrop': ['ALL'], 'SecurityOpt': ['no-new-privileges'],
+                                        'Tmpfs': {'/state': 'rw,nosuid,nodev,noexec,size=1g,mode=1777',
+                                                  '/tmp': 'rw,nosuid,nodev,noexec,size=64m,mode=1777'}},
                          'State': {'Running': False, 'ExitCode': 0, 'OOMKilled': False}}
             if self.failure == 'create-interrupt':
                 raise KeyboardInterrupt()
             if self.failure == 'create-timeout':
                 raise subprocess.TimeoutExpired('docker create', 30)
+            return CID
+        if operation == 'start':
+            assert argv == ('start', CID) and self.item['Id'] == CID
+            self.starts.append(CID)
+            # Protocol fixture only. No wallet, process or container runs here.
+            (self.public_output / 'result.json').write_text(json.dumps({'result': 'PASS_NATIVE_JOURNEY', 'fixture': True}) + '\n')
             return CID
         if operation == 'ps':
             if self.failure == 'discover-timeout':
@@ -78,6 +96,22 @@ def main():
         cases.append({'case': name, 'result': 'PASS'})
     with tempfile.TemporaryDirectory(dir=args.out.parent) as temporary:
         root = Path(temporary)
+        engine = Engine()
+        out = root / 'ordinary-create-start'
+        with patch.object(support, 'query', engine.query), patch.object(run, 'query', engine.query), \
+             patch.object(run.os, 'getuid', return_value=1000), \
+             patch.object(sys, 'argv', ['run.py', '--image', IMAGE, '--out', str(out)]), \
+             patch.object(run.shutil, 'disk_usage', return_value=SimpleNamespace(free=10 * host.GIB)), \
+             redirect_stdout(io.StringIO()):
+            run.main()
+        receipt = json.loads((out / 'runtime.json').read_text())
+        assert engine.starts == [CID] and engine.removals == [CID] and engine.item is None
+        assert receipt['cid'] == CID and receipt['result'] == 'PASS_NATIVE_JOURNEY' and receipt['exit'] == 0
+        assert receipt['cleanup']['identity_verified'] and receipt['cleanup']['removed']
+        assert receipt['policy']['NetworkMode'] == 'none' and receipt['policy']['ReadonlyRootfs']
+        assert receipt['public_result_sha256'] == hashlib.sha256((out / 'result.json').read_bytes()).hexdigest()
+        assert {p.name for p in out.iterdir()} == {'runtime.json', 'result.json'}
+        passed('ordinary-successful-create-start-result-and-owned-cleanup')
         for failure in ('create-interrupt', 'create-timeout'):
             engine = Engine(failure)
             out = root / failure
@@ -222,7 +256,7 @@ def main():
     paths = [Path(__file__), *[Path(__file__).with_name(name) for name in ('build.py', 'run.py', 'docker_support.py', 'host_capacity.py', 'Dockerfile', 'inputs.json')]]
     args.out.write_text(json.dumps({'schema': 'meownero-docker-source-hold-fixtures/1', 'result': 'PASS', 'cases': cases,
                                   'source_sha256': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in paths},
-                                  'seams': 'Fake Docker query engine, lost-create responses, bounded query failures, private lock inode, fake completed subprocess and temporary copied context; host capacity scalars.',
+                                  'seams': 'Fake Docker query engine and ordinary-start public protocol result, UID/disk admission, lost-create responses, bounded query failures, private lock inode, fake completed subprocess and temporary copied context; host capacity scalars. Actual run.main/ownership/cleanup/receipt logic executes. No native process, Docker container or image.',
                                   'native_build_or_runtime_acceptance': False}, indent=2) + '\n')
     print('PASS', len(cases), 'source hold controls')
 

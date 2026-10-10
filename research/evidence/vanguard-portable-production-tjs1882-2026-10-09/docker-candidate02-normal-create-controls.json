@@ -1,0 +1,109 @@
+{
+  "schema": "meownero-docker-source-hold-fixtures/1",
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "ordinary-successful-create-start-result-and-owned-cleanup",
+      "result": "PASS"
+    },
+    {
+      "case": "create-interrupt-registered-by-exact-name-and-finalized",
+      "result": "PASS"
+    },
+    {
+      "case": "create-timeout-registered-by-exact-name-and-finalized",
+      "result": "PASS"
+    },
+    {
+      "case": "failed-runtime-inspection-still-finalizes-honest-receipt",
+      "result": "PASS"
+    },
+    {
+      "case": "inspect-transient-honest-bounded-result",
+      "result": "PASS"
+    },
+    {
+      "case": "inspect-timeout-honest-bounded-result",
+      "result": "PASS"
+    },
+    {
+      "case": "discover-timeout-honest-bounded-result",
+      "result": "PASS"
+    },
+    {
+      "case": "remove-timeout-honest-bounded-result",
+      "result": "PASS"
+    },
+    {
+      "case": "identity-mismatch-honest-bounded-result",
+      "result": "PASS"
+    },
+    {
+      "case": "owned-cleanup-honest-bounded-result",
+      "result": "PASS"
+    },
+    {
+      "case": "cleanup-continues-after-independent-resource-failures",
+      "result": "PASS"
+    },
+    {
+      "case": "complete-copied-notices-docs-and-input-binding",
+      "result": "PASS"
+    },
+    {
+      "case": "verification-independent-of-live-source-root",
+      "result": "PASS"
+    },
+    {
+      "case": "changed-frozen-Dockerfile-refused",
+      "result": "PASS"
+    },
+    {
+      "case": "changed-frozen-inputs.json-refused",
+      "result": "PASS"
+    },
+    {
+      "case": "changed-frozen-LICENSE-refused",
+      "result": "PASS"
+    },
+    {
+      "case": "same-kernel-daemon-host-capacity-witness",
+      "result": "PASS"
+    },
+    {
+      "case": "different-daemon-kernel-refused",
+      "result": "PASS"
+    },
+    {
+      "case": "daemon-memory-reserve-refused",
+      "result": "PASS"
+    },
+    {
+      "case": "daemon-data-disk-reserve-refused",
+      "result": "PASS"
+    },
+    {
+      "case": "daemon-architecture-refused",
+      "result": "PASS"
+    },
+    {
+      "case": "remote-context-refused-before-work",
+      "result": "PASS"
+    },
+    {
+      "case": "failed-cleanup-always-writes-terminal-receipt-and-closes-lock",
+      "result": "PASS"
+    }
+  ],
+  "source_sha256": {
+    "test-lifecycle.py": "fbf4c6898a79c5853366313b8bcbae900d0d41e3d2fb16bd1704eeed6f6cd3d2",
+    "build.py": "581d3c9d27864805c0da3eca33fba22fd3f65982c3998a1a165444f77aa1c505",
+    "run.py": "373d7808c42de133f6439dd14c81534c8436d42ff2b9f9c71684d489fa9a77c6",
+    "docker_support.py": "1e604a6027b8c9adf17d2ead18a5337fdbb486c97700dc49a8fcf3dcb1b59622",
+    "host_capacity.py": "c80881df87d7c536752a1e5122fb90b851b6e9743c9bb4411aa81512a463c362",
+    "Dockerfile": "ccb3347fdd48715cca9537bb08a4407793523811cf6fcc705b754269070df830",
+    "inputs.json": "e9666c6ee7e46df0d6b62a7c866ecc1099dc3cd21771d287e4832d09f71c104e"
+  },
+  "seams": "Fake Docker query engine and ordinary-start public protocol result, UID/disk admission, lost-create responses, bounded query failures, private lock inode, fake completed subprocess and temporary copied context; host capacity scalars. Actual run.main/ownership/cleanup/receipt logic executes. No native process, Docker container or image.",
+  "native_build_or_runtime_acceptance": false
+}
