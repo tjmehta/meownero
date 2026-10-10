@@ -1,0 +1,52 @@
+{
+  "schema": "meownero-native-linux23-arm24-resource-fixtures/1",
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "linux-x86_64-below6GiB",
+      "lock_acquired": false,
+      "Docker_or_build_started": false
+    },
+    {
+      "case": "linux-x86_64-exact6GiB",
+      "numeric_public_policy": {
+        "scope": "FRESH_NATIVE_UBUNTU22_ONLY",
+        "container_memory_bytes": 4294967296,
+        "container_memory_swap_bytes": 4294967296,
+        "host_minimum_available_bytes": 6442450944,
+        "measured_available_bytes": 6442450944
+      }
+    },
+    {
+      "case": "linux-aarch64-below6GiB",
+      "lock_acquired": false,
+      "Docker_or_build_started": false
+    },
+    {
+      "case": "linux-aarch64-exact6GiB",
+      "numeric_public_policy": {
+        "scope": "FRESH_NATIVE_UBUNTU22_ONLY",
+        "container_memory_bytes": 4294967296,
+        "container_memory_swap_bytes": 4294967296,
+        "host_minimum_available_bytes": 6442450944,
+        "measured_available_bytes": 6442450944
+      }
+    },
+    {
+      "case": "actual-public-finalizer-cap-host-private-sentinel",
+      "all_public_writes_inspected": [
+        "build.json",
+        "ci-receipt.json"
+      ],
+      "private_receipt_unchanged": true
+    }
+  ],
+  "worker_finalizers_AST_unchanged": true,
+  "prior_default_3GiB_preserved": true,
+  "actual_native_build": "UNTESTED_BY_FIXTURES",
+  "four_GiB_sufficiency": "UNPROVEN",
+  "source_sha256": {
+    "portable-build.py": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+    "run-portable-linux-ci.py": "0869880dc643fc58fa61804ad9ba2fd4f56915a4b7fd549f6c6ab3ce7acc7fc5"
+  }
+}

@@ -1,0 +1,83 @@
+--- a/vanguard/run-portable-ci.py
++++ b/vanguard/run-portable-ci.py
+@@ -81,6 +81,61 @@
+             projected[key] = probe[key]
+         result['native_exception_probe'] = projected
+     return result
++
++def snapshot_output(argv, *, timeout, receipt, context):
++    """Time only the owned observer; discard incomplete output as authority."""
++    began, observer = time.monotonic(), None
++    cost = {'operation': 'OWNED_PROCESS_SNAPSHOT', 'context': context,
++            'timeout_seconds': timeout, 'result': 'FAIL'}
++    try:
++        observer = subprocess.Popen(argv, stdout=subprocess.PIPE, text=True)
++        cost.update(observer_pid=observer.pid, spawn_seconds=round(time.monotonic() - began, 6))
++        waiting = time.monotonic()
++        try:
++            output, _ = observer.communicate(timeout=timeout)
++        except subprocess.TimeoutExpired:
++            cost['result'] = 'TIMEOUT'
++            raise
++        finally:
++            cost['communicate_seconds'] = round(time.monotonic() - waiting, 6)
++        if observer.returncode:
++            raise subprocess.CalledProcessError(observer.returncode, argv)
++        cost.update(result='PASS', output_bytes=len(output.encode()), process_rows=len(output.splitlines()))
++        return output
++    finally:
++        first_error = sys.exc_info()[1]
++        reaping = time.monotonic()
++        try:
++            if observer is not None:
++                if observer.poll() is None:
++                    observer.kill()  # Only our exact Popen child, never an observed PID.
++                try:
++                    observer.communicate(timeout=5)
++                except subprocess.TimeoutExpired:
++                    observer.stdout.close()
++                    observer.wait(timeout=5)
++                cost['observer_reaped'] = observer.poll() is not None
++                cost['numeric_pid_absent'] = False
++                try:
++                    os.kill(observer.pid, 0)
++                except ProcessLookupError:
++                    cost['numeric_pid_absent'] = True
++                except PermissionError:
++                    pass
++                assert cost['observer_reaped'] and cost['numeric_pid_absent'], 'owned observer disappearance unproven'
++        except BaseException:
++            cost['result'] = 'FAIL'
++            receipt.setdefault('cleanup_failure_type', 'OBSERVER_DISAPPEARANCE_UNPROVEN')
++            if first_error is None:
++                raise
++        finally:
++            cost.update(reap_seconds=round(time.monotonic() - reaping, 6),
++                        elapsed_seconds=round(time.monotonic() - began, 6))
++            summary = receipt.setdefault('snapshot_cost', {'calls': 0, 'max_elapsed_seconds': 0, 'recent': []})
++            summary['calls'] += 1
++            summary['max_elapsed_seconds'] = max(summary['max_elapsed_seconds'], cost['elapsed_seconds'])
++            summary['recent'] = (summary['recent'] + [cost])[-8:]
++
+ 
+ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
+               supervision_schema='meownero-native-mac-ci-supervision/1',
+@@ -244,8 +299,8 @@
+         states.clear()
+         snapshot_began = time.monotonic()
+         try:
+-            output = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
+-                                             text=True, timeout=5)
++            output = snapshot_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
++                                     timeout=5, receipt=receipt, context=snapshot_context)
+         except subprocess.TimeoutExpired:
+             # check_output kills/reaps only its own helper before raising.
+             # Preserve the first failed call without exporting argv or stderr.
+@@ -470,6 +525,7 @@
+ 
+ 
+ 
++
+ def windows_check(package, out, row):
+     spec = importlib.util.spec_from_file_location('ci_windows', package / 'portable_windows.py')
+     backend = importlib.util.module_from_spec(spec)

@@ -1,0 +1,24 @@
+{
+  "schema": "meownero-portable-journey/1",
+  "result": "FAIL_NATIVE_JOURNEY",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "architecture": "x86_64",
+  "release_manifest_sha256": "2f191f42b97df242d8a852fb6ec737beb30f53138085971eeb4218f858dacf9f",
+  "program_sha256": {
+    "monerod": "6a724c05d76dc0f14223b67199e90d83985f88c6a745d20e6519bf03ba1c31f4",
+    "monero-wallet-cli": "af64c6a478d33a668385d8603dfec74c9ec74fe0fe5b7b577da7f7e63275c22c",
+    "monero-wallet-rpc": "f62bc8964b43e2df295eefdfb2b49b40e4dc185e4bf43c0353ca133d3c393f2f"
+  },
+  "cleanup": [
+    {
+      "name": "daemon",
+      "pid": 36301,
+      "exit": 0,
+      "removed": true
+    }
+  ],
+  "payments": [],
+  "native_processes": [],
+  "execution_substrate": "NATIVE",
+  "wall_seconds": 8.447
+}

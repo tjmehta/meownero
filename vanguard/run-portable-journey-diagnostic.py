@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import stat
 import sys
+import time
 
 
 def main():
@@ -49,6 +50,7 @@ def main():
             'symlink path refused': 'SYMLINK_PATH_REFUSED', 'unsafe tester lock': 'UNSAFE_LOCK',
             'native journey interrupted or deadline reached': 'JOURNEY_INTERRUPTED',
             'owned Windows journey deadline reached': 'WINDOWS_DEADLINE',
+            'native CLI could not open restored wallet': 'NATIVE_CLI_RESTORED_WALLET_FAILED',
         }
         prefixes = {'package hash mismatch: ': 'PACKAGE_HASH_MISMATCH',
                     'program startup failed: ': 'VERSION_CHILD_FAILED',
@@ -57,6 +59,8 @@ def main():
         # Compare internally; never serialize exception text or traceback.
         message = str(error) if isinstance(error, (RuntimeError, TimeoutError)) or type(error).__name__ == 'JourneyInterrupted' else ''
         reason = reasons.get(message, 'EXCEPTION_UNCLASSIFIED')
+        if type(error).__name__ == 'TimeoutExpired' and receipt['phase'] == 'OPEN_NATIVE_CLI':
+            reason = 'NATIVE_CLI_WAIT_TIMEOUT'
         for prefix, value in prefixes.items():
             if message.startswith(prefix):
                 reason = value
@@ -104,6 +108,15 @@ def main():
                       isinstance(n.finalbody[0], ast.If) and isinstance(n.finalbody[0].test, ast.UnaryOp)]
         assert len(finalizers) == 1
         anchors[finalizers[0].finalbody[0].lineno] = 'OWNED_CLEANUP'
+        cli_checks = [i + 1 for i in range(run.lineno - 1, run.end_lineno)
+                      if lines[i].strip().startswith('require(cli.returncode == 0')]
+        assert len(cli_checks) == 1, 'bound native CLI exit anchor mismatch'
+        cli_starts = [i + 1 for i in range(run.lineno - 1, run.end_lineno)
+                      if lines[i].strip().startswith("cli = spawn('cli',")]
+        assert len(cli_starts) == 1, 'bound native CLI start anchor mismatch'
+        cli_waits = [i + 1 for i in range(run.lineno - 1, run.end_lineno)
+                     if lines[i].strip().startswith('cli.wait(timeout=60)')]
+        assert len(cli_waits) == 1, 'bound native CLI wait anchor mismatch'
         sys.path.insert(0, str(tester.parent))
         spec = importlib.util.spec_from_file_location('bound_portable_journey', tester)
         module = importlib.util.module_from_spec(spec)
@@ -119,11 +132,33 @@ def main():
 
         module.shutil.disk_usage = disk_usage
         seen = set()
+        cli_clock = {}
 
         def trace(frame, event, value):
             if frame.f_code is not module.run.__code__:
                 return None
             if event == 'line':
+                if frame.f_lineno == cli_starts[0]:
+                    cli_clock['started'] = time.time()
+                if frame.f_lineno == cli_waits[0]:
+                    cli = frame.f_locals['cli']
+                    assert any(name == 'cli' and child is cli for name, child in frame.f_locals['processes'])
+                    receipt['native_cli'] = {'pid': cli.pid, 'exit': None, 'exit_class': 'RUNNING',
+                        'stage': 'OPEN_RESTORED_WALLET_BALANCE',
+                        'started_epoch_seconds': cli_clock['started'], 'observed_exit_epoch_seconds': None}
+                    save()
+                if frame.f_lineno == cli_checks[0]:
+                    cli = frame.f_locals.get('cli')
+                    owned = frame.f_locals.get('processes', [])
+                    assert any(name == 'cli' and child is cli for name, child in owned), 'unowned CLI observation'
+                    assert type(cli.pid) is int and type(cli.returncode) is int, 'CLI exit must be observed after wait'
+                    status = cli.returncode
+                    receipt['native_cli'] = {'pid': cli.pid, 'exit': status,
+                        'started_epoch_seconds': cli_clock['started'], 'observed_exit_epoch_seconds': time.time(),
+                        'stage': 'OPEN_RESTORED_WALLET_BALANCE',
+                        'exit_class': 'SUCCESS' if status == 0 else
+                            'ACCESS_VIOLATION_STATUS' if status == 0xC0000005 else 'OTHER_NONZERO_STATUS'}
+                    save()
                 available = frame.f_locals.get('available')
                 if isinstance(available, int):
                     receipt['available_memory_bytes'] = available
@@ -135,6 +170,8 @@ def main():
                     seen.add(phase)
                     save()
             elif event == 'exception':
+                if frame.f_lineno == cli_waits[0] and type(value[1]).__name__ == 'TimeoutExpired':
+                    receipt['native_cli']['exit_class'] = 'WAIT_TIMEOUT'
                 failure(value[1])
             return trace
 

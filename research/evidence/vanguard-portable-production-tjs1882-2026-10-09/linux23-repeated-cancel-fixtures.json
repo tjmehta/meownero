@@ -1,0 +1,213 @@
+{
+  "schema": "meownero-linux23-repeated-cancel-cleanup-fixtures/1",
+  "result": "PASS_OLD_INTERRUPTED_NEW_CLEANUP_PROTECTED_AND_FAIL_CLOSED",
+  "source_sha256": {
+    "portable-prepare-old-linux.py": "b05132bcbb2ca7601f4d5bdde121cacb6ed7e1403842d70ac20609de72b9d1e6",
+    "portable-build.py": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+    "run-portable-check.py": "8d7dafdb20783c8d1be6fd29c77a8b88979465552dc13bf7ca649200acac359d",
+    "run-portable-linux-ci.py": "0869880dc643fc58fa61804ad9ba2fd4f56915a4b7fd549f6c6ab3ce7acc7fc5"
+  },
+  "cases": [
+    {
+      "version": "old06",
+      "source": "portable-prepare-old-linux.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": false,
+      "lock_removed": false,
+      "receipt_written": false
+    },
+    {
+      "version": "old06",
+      "source": "portable-build.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": false,
+      "lock_removed": false,
+      "receipt_written": true
+    },
+    {
+      "version": "old06",
+      "source": "run-portable-check.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": false,
+      "lock_removed": false,
+      "receipt_written": false
+    },
+    {
+      "version": "old06",
+      "source": "run-portable-linux-ci.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": true,
+      "lock_removed": false,
+      "receipt_written": false
+    },
+    {
+      "version": "corrected17",
+      "source": "portable-prepare-old-linux.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": true,
+      "lock_removed": false,
+      "receipt_written": true
+    },
+    {
+      "version": "corrected17",
+      "source": "portable-build.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": true,
+      "lock_removed": false,
+      "receipt_written": true
+    },
+    {
+      "version": "corrected17",
+      "source": "portable-build.py",
+      "ownership_failure_injected": true,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": false,
+      "lock_removed": false,
+      "receipt_written": true
+    },
+    {
+      "version": "corrected17",
+      "source": "run-portable-check.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": true,
+      "lock_removed": false,
+      "receipt_written": true
+    },
+    {
+      "version": "corrected17",
+      "source": "run-portable-linux-ci.py",
+      "ownership_failure_injected": false,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": true,
+      "lock_removed": true,
+      "receipt_written": true
+    },
+    {
+      "version": "corrected17",
+      "source": "run-portable-linux-ci.py",
+      "ownership_failure_injected": true,
+      "actual_signal_sequence": [
+        "SIGTERM",
+        "SIGTERM",
+        "SIGINT",
+        "SIGTERM"
+      ],
+      "actual_finalizer_ast_executed": true,
+      "bounded_Docker_operations": "MOCKED_NO_CONTAINER_OR_BUILD",
+      "worker_reaped": true,
+      "error_type": "RuntimeError",
+      "mask_restored": true,
+      "handlers_restored": true,
+      "container_removed": true,
+      "lock_removed": false,
+      "receipt_written": true
+    }
+  ],
+  "native_build_and_journey": "UNTESTED"
+}

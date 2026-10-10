@@ -1,0 +1,127 @@
+{
+  "schema": "meownero-linux23-build-diagnostic-source-fixtures/1",
+  "result": "PASS_REAL_TINY_COMPILER_FAILURE_STATIC_REASON_RESOURCE_PRIVACY",
+  "source_sha256": {
+    "portable-build.py": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+    "run-portable-linux-ci.py": "0869880dc643fc58fa61804ad9ba2fd4f56915a4b7fd549f6c6ab3ce7acc7fc5"
+  },
+  "cases": [
+    {
+      "case": "actual-owned-compiler-failure",
+      "exit": 1,
+      "bounds": {
+        "seconds": 5,
+        "address_space_bytes": 268435456
+      },
+      "diagnostic": {
+        "phase": "COMPILE",
+        "reason": "COMPILER_ERROR_RECORDED",
+        "peak_memory_bytes": null,
+        "memory_events": {},
+        "cgroup_oom_kill_observed": false
+      }
+    },
+    {
+      "case": "COMPILER_PROCESS_KILLED",
+      "fixture": "STATIC_CLASSIFIER_INPUT_NOT_NATIVE_BUILD",
+      "diagnostic": {
+        "phase": "DEPENDENCIES",
+        "reason": "COMPILER_PROCESS_KILLED",
+        "peak_memory_bytes": 12345678,
+        "memory_events": {
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "cgroup_oom_kill_observed": false
+      }
+    },
+    {
+      "case": "COMPILER_INTERNAL_SEGMENTATION_FAILURE",
+      "fixture": "STATIC_CLASSIFIER_INPUT_NOT_NATIVE_BUILD",
+      "diagnostic": {
+        "phase": "DEPENDENCIES",
+        "reason": "COMPILER_INTERNAL_SEGMENTATION_FAILURE",
+        "peak_memory_bytes": 12345678,
+        "memory_events": {
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "cgroup_oom_kill_observed": false
+      }
+    },
+    {
+      "case": "STD_NOTHROW_DECLARATION_MISSING",
+      "fixture": "STATIC_CLASSIFIER_INPUT_NOT_NATIVE_BUILD",
+      "diagnostic": {
+        "phase": "DEPENDENCIES",
+        "reason": "STD_NOTHROW_DECLARATION_MISSING",
+        "peak_memory_bytes": 12345678,
+        "memory_events": {
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "cgroup_oom_kill_observed": false
+      }
+    },
+    {
+      "case": "POSIX_MEMALIGN_DECLARATION_MISSING",
+      "fixture": "STATIC_CLASSIFIER_INPUT_NOT_NATIVE_BUILD",
+      "diagnostic": {
+        "phase": "DEPENDENCIES",
+        "reason": "POSIX_MEMALIGN_DECLARATION_MISSING",
+        "peak_memory_bytes": 12345678,
+        "memory_events": {
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "cgroup_oom_kill_observed": false
+      }
+    },
+    {
+      "case": "COMPILER_DISK_FULL",
+      "fixture": "STATIC_CLASSIFIER_INPUT_NOT_NATIVE_BUILD",
+      "diagnostic": {
+        "phase": "DEPENDENCIES",
+        "reason": "COMPILER_DISK_FULL",
+        "peak_memory_bytes": 12345678,
+        "memory_events": {
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "cgroup_oom_kill_observed": false
+      }
+    },
+    {
+      "case": "BUILD_FAILURE_UNCLASSIFIED",
+      "fixture": "STATIC_CLASSIFIER_INPUT_NOT_NATIVE_BUILD",
+      "diagnostic": {
+        "phase": "DEPENDENCIES",
+        "reason": "BUILD_FAILURE_UNCLASSIFIED",
+        "peak_memory_bytes": 12345678,
+        "memory_events": {
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "cgroup_oom_kill_observed": false
+      }
+    },
+    {
+      "case": "symlink-refused-oom-fact-not-cause-inference",
+      "diagnostic": {
+        "phase": "DEPENDENCIES",
+        "reason": "BUILD_FAILURE_UNCLASSIFIED",
+        "peak_memory_bytes": 12345678,
+        "memory_events": {
+          "oom_kill": 1
+        },
+        "cgroup_oom_kill_observed": true
+      }
+    },
+    {
+      "case": "public-worker-projection-private-text-exclusion",
+      "result": "PASS"
+    }
+  ],
+  "actual_Linux08_failure_reason": "UNKNOWN",
+  "native_Ubuntu22_or_ARM_production_build": "UNTESTED_BY_FIXTURES"
+}

@@ -1,0 +1,44 @@
+{
+  "wall_seconds": 12.86,
+  "resident_limit_bytes": 4294967296,
+  "peak_resident_bytes": 30351360,
+  "schema": "meownero-portable-native-mac-check/1",
+  "result": "FAIL",
+  "execution_substrate": "NATIVE",
+  "archive_sha256": "7a3ddef44b58c752dd508bd6d2251266de4a1af3a1d635680854707a8cdb3a09",
+  "phases": [
+    {
+      "pid": 36254,
+      "exit": 0,
+      "reaped": true,
+      "name": "preflight"
+    },
+    {
+      "pid": 36273,
+      "reaped": true,
+      "name": "journey"
+    }
+  ],
+  "cleanup": [
+    {
+      "pid": 36254,
+      "removed": true
+    },
+    {
+      "pid": 36266,
+      "removed": true
+    },
+    {
+      "pid": 36273,
+      "removed": true
+    },
+    {
+      "pid": 36290,
+      "removed": true
+    },
+    {
+      "pid": 36301,
+      "removed": true
+    }
+  ]
+}

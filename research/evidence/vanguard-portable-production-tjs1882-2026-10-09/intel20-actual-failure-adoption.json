@@ -1,0 +1,33 @@
+{
+  "schema": "meownero-intel20-actual-timeout-adoption/1",
+  "run": "38010211802",
+  "commit": "72ea03cf314c11db65836c8d4a8b250eb3d982f8",
+  "members": {
+    "supervision": {
+      "sha256": "0a465510159c1f97538df59e4b7226bbe2a98c10a59b5b0381542f574781e32e",
+      "result": "FAIL"
+    },
+    "journey": {
+      "sha256": "26e85c5b0e8ab7e7568ae33d582142810120d14865d662bfcef3319fa19249a3",
+      "result": "FAIL_NATIVE_JOURNEY"
+    },
+    "check": {
+      "sha256": "fed3ad6b4ad956345e0666d4eb3e2b6cf3a8285af19582f31e29c10bc3994d21",
+      "result": "FAIL"
+    },
+    "ci-receipt": {
+      "sha256": "ce87d61c6840477cfaa8a5ffa808af6784add5fc74e434763c7ce5df55a37016",
+      "result": "FAIL"
+    }
+  },
+  "actual_timed_out_call": "OWNED_PROCESS_SNAPSHOT",
+  "context": "LIVE_OBSERVATION",
+  "budget_seconds": 5,
+  "elapsed_seconds": 7.099,
+  "underlying_cause": "UNKNOWN",
+  "prior_Intel14_full_native_journey": "PRESERVED_SEPARATELY_CONTROLS_UNKNOWN",
+  "known_PID_absence_proof": "FRESH_PS_SNAPSHOT_OMISSION",
+  "rejected_PID_absence_proof": "ACTUAL_NUMERIC_PID_ABSENCE",
+  "universal_kernel_absence_claim": false,
+  "native_acceptance": false
+}

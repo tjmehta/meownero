@@ -1,0 +1,51 @@
+{
+  "schema": "meownero-native-ubuntu22-ci-build-and-journey/1",
+  "result": "FAIL",
+  "inputs_sha256": "a854fe71fc54009c7e5ccc939442db6ca2c86042673196d79a8040792c9d689d",
+  "github_sha": "885e8a94394d1272759964e33455a3316caba24c",
+  "github_run_id": "38008740943",
+  "phases": [
+    {
+      "phase": "fetch",
+      "resources": {
+        "available_memory_bytes": 7437283328,
+        "free_disk_bytes": 14512095232,
+        "docker_free_disk_bytes": 14512095232
+      },
+      "result": "PASS"
+    },
+    {
+      "phase": "prepare",
+      "resources": {
+        "available_memory_bytes": 7368462336,
+        "free_disk_bytes": 12858609664,
+        "docker_free_disk_bytes": 12858609664
+      },
+      "result": "PASS"
+    },
+    {
+      "phase": "build",
+      "resources": {
+        "available_memory_bytes": 7333036032,
+        "free_disk_bytes": 11944148992,
+        "docker_free_disk_bytes": 11944148992
+      }
+    }
+  ],
+  "debian12_execution": "UNTESTED",
+  "independent_release_acceptance": "PENDING_ORIGINAL_REVIEWER",
+  "native_runner": {
+    "system": "Linux",
+    "architecture": "x86_64",
+    "os": "Ubuntu22.04",
+    "glibc": "glibc 2.35",
+    "resources": {
+      "available_memory_bytes": 7420915712,
+      "free_disk_bytes": 14512095232,
+      "docker_free_disk_bytes": 14512095232
+    }
+  },
+  "failure_type": "AssertionError",
+  "owned_ephemeral_lock_removed": true,
+  "wall_seconds": 1852.545
+}

@@ -1,0 +1,88 @@
+{
+  "LINUX17": {
+    "run": "38008740943",
+    "commit": "885e8a94394d1272759964e33455a3316caba24c",
+    "members": {
+      "LINUX17-build-supervision.json": {
+        "sha256": "a8de8584c84e8944ef3b7c63df97791f63c2c08d8de87ddeb5fcc7b16d654cb9",
+        "result": "FAIL"
+      },
+      "LINUX17-build.json": {
+        "sha256": "885b48f9a90c95f5b62f2579a77681480807be8bcee43924314387ca35c24272",
+        "result": "FAILED_ATTEMPT"
+      },
+      "LINUX17-builder.json": {
+        "sha256": "a8ffaea8ba04a17acb3ee16db37206388e9034c76deb243029448472815ea007",
+        "result": "PREPARED_OLDER_BUILDER"
+      },
+      "LINUX17-ci-receipt.json": {
+        "sha256": "df4044e76b20d061774e755957e1333652a681bdff60aae310cbbeb418b068f9",
+        "result": "FAIL"
+      },
+      "LINUX17-fetch-supervision.json": {
+        "sha256": "77ba0e56deb2b1eed0cf8247d77bd4d62abd9a177ba5bce65af5671d7d571851",
+        "result": "PASS_WRAPPER_AND_OWNED_CLEANUP"
+      },
+      "LINUX17-fetch.json": {
+        "sha256": "77c5e0769d0d482eadf2f317cc2b313604b826c35bb14aee785b666a45f506dd",
+        "result": "PASS_PUBLIC_LOCKED_INPUTS_NATIVE_COMPILATION_UNTESTED"
+      },
+      "LINUX17-prepare-supervision.json": {
+        "sha256": "b3a75205cdb7027d16657309e57105e1a73febfe997b9c14f45e6970f7555f67",
+        "result": "PASS_WRAPPER_AND_OWNED_CLEANUP"
+      }
+    },
+    "observed_peak_memory_bytes": 3221225472,
+    "cgroup_oom_kill": 1,
+    "container_oom_killed": true,
+    "stage": "COMPILE",
+    "archive_journey_controls": "NOT_REACHED",
+    "original_Linux08_cause": "UNKNOWN",
+    "native_acceptance": false,
+    "zip_sha256": "9de8f7128bc54cdfa6ba1ecfc56fcb9e9954c4cbec4949bee687330575bdf7d1",
+    "all_seven_ZIP_member_bytes_verified": true
+  },
+  "ARM18": {
+    "run": "38009002439",
+    "commit": "4c7e56820e7c7f450e8914dbf11fb09e47aef040",
+    "members": {
+      "ARM18-build-supervision.json": {
+        "sha256": "ddced736b6bbd9fe065d7218affd2e15df9cf047e343f3f7325eedf3e9e50bf1",
+        "result": "FAIL"
+      },
+      "ARM18-build.json": {
+        "sha256": "717f02f788f9f536293692353fb954c31e57096a66d5e18718261452a7c17014",
+        "result": "FAILED_ATTEMPT"
+      },
+      "ARM18-builder.json": {
+        "sha256": "f26cf69cbf29c7a6ecb15451e39de40d4a96ed3f029430cdbe14e5dfc5c66b73",
+        "result": "PREPARED_OLDER_BUILDER"
+      },
+      "ARM18-ci-receipt.json": {
+        "sha256": "41fcd3b8f689870f65beb41aaad03d6ed09b27107b3540af9ebf1f4f04efe9c9",
+        "result": "FAIL"
+      },
+      "ARM18-fetch-supervision.json": {
+        "sha256": "50e525398281dddf0bad52cfdecf3ac6fc6d314ab2b86f93ba30a84a7de9b90d",
+        "result": "PASS_WRAPPER_AND_OWNED_CLEANUP"
+      },
+      "ARM18-fetch.json": {
+        "sha256": "c9a0e9cae0c33d3b8c0761b53ed2b2b65d4a3281ae6d64e331aff3f5ecce4e84",
+        "result": "PASS_PUBLIC_LOCKED_INPUTS_NATIVE_COMPILATION_UNTESTED"
+      },
+      "ARM18-prepare-supervision.json": {
+        "sha256": "ecb79bc27e795df57856ce039b75587e96bb0352415363b84a79f8f7c78bde13",
+        "result": "PASS_WRAPPER_AND_OWNED_CLEANUP"
+      }
+    },
+    "observed_peak_memory_bytes": 3221225472,
+    "cgroup_oom_kill": 1,
+    "container_oom_killed": true,
+    "stage": "COMPILE",
+    "archive_journey_controls": "NOT_REACHED",
+    "original_Linux08_cause": "UNKNOWN",
+    "native_acceptance": false,
+    "zip_sha256": "abd1017bb269f8f165c8ba0bcd30cb3c8121d70bf1fab8528791b990b286e43e",
+    "all_seven_ZIP_member_bytes_verified": true
+  }
+}
