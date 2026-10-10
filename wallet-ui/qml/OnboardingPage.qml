@@ -200,8 +200,8 @@ Item {
                                 background: Rectangle {
                                     radius: 7
                                     color: Theme.surface
-                                    border.width: parent.visualFocus || parent.checked || parent.wrong ? 2 : 1
-                                    border.color: parent.wrong ? Theme.danger : (parent.visualFocus || parent.checked) ? Theme.net : Theme.borderStrong
+                                    border.width: parent.focusRing || parent.checked || parent.wrong ? 2 : 1
+                                    border.color: parent.wrong ? Theme.danger : (parent.focusRing || parent.checked) ? Theme.net : Theme.borderStrong
                                 }
                             }
                         }

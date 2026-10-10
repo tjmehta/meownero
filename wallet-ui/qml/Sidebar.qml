@@ -52,7 +52,7 @@ Rectangle {
                 background: Rectangle {
                     radius: 7
                     color: nav.current || nav.hovered ? Theme.surface2 : "transparent"
-                    border.width: nav.visualFocus ? 2 : 0
+                    border.width: (nav.activeFocus && nav.focusReason !== Qt.MouseFocusReason) ? 2 : 0
                     border.color: Theme.net
                 }
                 contentItem: RowLayout {
@@ -95,8 +95,8 @@ Rectangle {
             background: Rectangle {
                 radius: 8
                 color: chip.hovered ? Theme.surface2 : "transparent"
-                border.width: chip.visualFocus ? 2 : 1
-                border.color: chip.visualFocus ? Theme.net : Theme.border
+                border.width: (chip.activeFocus && chip.focusReason !== Qt.MouseFocusReason) ? 2 : 1
+                border.color: (chip.activeFocus && chip.focusReason !== Qt.MouseFocusReason) ? Theme.net : Theme.border
             }
             contentItem: RowLayout {
                 id: chipRow

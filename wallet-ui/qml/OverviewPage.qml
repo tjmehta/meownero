@@ -38,7 +38,7 @@ PageBase {
         onClicked: Wallet.toggleExact() // focus stays on the balance (N5)
         Keys.onReturnPressed: clicked()
         Keys.onEnterPressed: clicked()
-        background: Rectangle { color: "transparent"; radius: 6; border.width: bigAmount.visualFocus ? 2 : 0; border.color: Theme.net; anchors.margins: -4 }
+        background: Rectangle { color: "transparent"; radius: 6; border.width: (bigAmount.activeFocus && bigAmount.focusReason !== Qt.MouseFocusReason) ? 2 : 0; border.color: Theme.net; anchors.margins: -4 }
         contentItem: Item {
             implicitHeight: amt.implicitHeight
             AmountLabel { id: amt; view: page.b.spendable; px: 44; bold: true; tag: true; Accessible.ignored: true }

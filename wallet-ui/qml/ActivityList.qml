@@ -48,7 +48,7 @@ Rectangle {
                 background: Rectangle {
                     color: row.hovered ? Theme.surface2 : "transparent"
                     radius: row.index === 0 || row.index === root.model.count - 1 ? 9 : 0
-                    border.width: row.visualFocus ? 2 : 0
+                    border.width: (row.activeFocus && row.focusReason !== Qt.MouseFocusReason) ? 2 : 0
                     border.color: Theme.net
                     Rectangle { visible: row.index < root.model.count - 1; anchors.bottom: parent.bottom; width: parent.width; height: 1; color: Theme.border }
                 }

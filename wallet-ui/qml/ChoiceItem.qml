@@ -19,6 +19,8 @@ AbstractButton {
     padding: 14
     implicitHeight: row.implicitHeight + 28
     Accessible.role: radio ? Accessible.RadioButton : Accessible.Button
+    // Any keyboard or programmatic focus (dialog initial focus, focus return) shows the ring.
+    readonly property bool focusRing: activeFocus && focusReason !== Qt.MouseFocusReason
     Accessible.name: title
     Accessible.ignored: !visible
     Accessible.description: subtitle
@@ -47,7 +49,7 @@ AbstractButton {
     background: Rectangle {
         radius: Theme.cardRadius
         color: control.hovered && control.enabled ? Theme.surface2 : Theme.surface
-        border.width: control.visualFocus ? 2 : (control.selectedLook ? 2 : 1)
-        border.color: control.visualFocus || control.selectedLook ? Theme.net : Theme.borderStrong
+        border.width: control.focusRing ? 2 : (control.selectedLook ? 2 : 1)
+        border.color: control.focusRing || control.selectedLook ? Theme.net : Theme.borderStrong
     }
 }

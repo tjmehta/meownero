@@ -21,6 +21,8 @@ Button {
 
     // Checkable buttons are toggles that report pressed, not check boxes (D14).
     Accessible.role: Accessible.Button
+    // Any keyboard or programmatic focus (dialog initial focus, focus return) shows the ring.
+    readonly property bool focusRing: activeFocus && focusReason !== Qt.MouseFocusReason
     Accessible.name: text
     Accessible.ignored: !visible
     Accessible.description: accessibleDescription
@@ -51,8 +53,8 @@ Button {
         color: control.kind === "primary" ? (control.hovered && control.enabled ? Qt.tint(Theme.net, Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, 0.12)) : Theme.net)
              : control.kind === "quiet" ? ((control.checked || (control.hovered && control.enabled)) ? Theme.netSoft : "transparent")
              : (control.hovered && control.enabled ? Theme.surface2 : Theme.surface)
-        border.width: control.visualFocus ? 2 : (control.kind === "default" ? 1 : 0)
-        border.color: control.visualFocus ? Theme.net : Theme.borderStrong
+        border.width: control.focusRing ? 2 : (control.kind === "default" ? 1 : 0)
+        border.color: control.focusRing ? Theme.net : Theme.borderStrong
         scale: control.pressed && !Theme.reducedMotion ? 0.97 : 1
         Behavior on scale { NumberAnimation { duration: Theme.reducedMotion ? 0 : 140; easing.type: Easing.OutQuint } }
     }
