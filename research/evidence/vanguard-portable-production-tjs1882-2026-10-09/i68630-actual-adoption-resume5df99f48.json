@@ -1,0 +1,76 @@
+{
+  "schema": "meownero-i68630-actual-native-adoption/1",
+  "result": "PASS_EXACT_WITNESS_ADOPTION_NOT_FULL_ACCEPTANCE",
+  "run_id": 38066379446,
+  "head_sha": "d9a90cbc1b26a1833930607224cf07cc38eb526a",
+  "parent_comments": [
+    "ee91958b-46f2-486b-b42f-3ad8f005d09a",
+    "ee60a83f-a0bc-4582-8eab-f6e44c0bd150"
+  ],
+  "artifact_zip": {
+    "bytes": 3805,
+    "sha256": "db5c726f1a18591b0f2315040e1e692a4ef6750e3e1c85ceef381673bbd8a709",
+    "all_decoded_local_readbacks": "PASS",
+    "members": {
+      "check.json": {
+        "sha256": "760b779ca41e6004046df2da1c57cd06e4f6701a3285587bcc8b0cd06b21d453",
+        "bytes": 2085
+      },
+      "ci-receipt.json": {
+        "sha256": "1d0c49219fee33aeb381f49970fce579ab0d6b142db5f58a7ceb41cd353d9a11",
+        "bytes": 638
+      },
+      "controls.json": {
+        "sha256": "d742a06d55a79cd00e90e732a18197a8a2e580df4b8d790eb67dd25f4b0794a4",
+        "bytes": 1018
+      },
+      "journey-diagnostic.json": {
+        "sha256": "9158ccbbf75836b19ac7a8c55bc7f744ee1a7610bd3329f8295e670a5054230a",
+        "bytes": 1086
+      },
+      "journey.json": {
+        "sha256": "adc618553f0db37a16dca4894e26cba7a2a7d1ff073e57de8ae3fbd2b0cdfd30",
+        "bytes": 3033
+      }
+    }
+  },
+  "archive_sha256": "3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745",
+  "release_manifest_sha256": "0ddca8155c906bbccc1d80487dd6c37c0e194cdf2e3b67fcf32c3bf0e3b67102",
+  "native_substrate": "NATIVE_WINDOWS_WOW64",
+  "actual_32bit_windows_os": "UNTESTED",
+  "exception_fixture": "PASS",
+  "journey": "PASS",
+  "controls_passed": 8,
+  "first_failed_case": {
+    "case": "cancelled-owned-cleanup",
+    "phase": "WAIT_LIVE_INTERRUPTION_FIXTURE",
+    "reason_enum": "NATIVE_INTERRUPTION_FIXTURE_NOT_LIVE",
+    "failure_type": "AssertionError"
+  },
+  "inner_early_exit_cause": "UNKNOWN_CAPACITY_PLAUSIBLE_NOT_ESTABLISHED",
+  "owned_outer_cleanup": {
+    "active_processes": 0,
+    "total_processes": 54,
+    "peak_committed_bytes": 597921792,
+    "memory_limit_bytes": 4294967296,
+    "children": [
+      {
+        "pid": 6804,
+        "exit": 0
+      },
+      {
+        "pid": 6972,
+        "exit": 0
+      },
+      {
+        "pid": 3792,
+        "exit": 0
+      },
+      {
+        "pid": 2676,
+        "exit": 1
+      }
+    ]
+  },
+  "native_full_acceptance": false
+}

@@ -14,6 +14,32 @@ import sys
 import tempfile
 import time
 import importlib.util
+import stat
+
+
+def interruption_observation(journey, diagnostic, tester_sha256, child_exit, began, project):
+    """Keep early-exit scalars and the existing bound diagnostic projection."""
+    value = {'child_exit': child_exit, 'elapsed_seconds': round(time.monotonic() - began, 6),
+             'output_exists': journey.is_dir(), 'result_exists': (journey / 'result.json').is_file(),
+             'diagnostic_status': 'MISSING', 'diagnostic_phase': 'UNKNOWN', 'diagnostic_reason': 'UNKNOWN'}
+    if not diagnostic.exists():
+        return value
+    try:
+        info = diagnostic.lstat()
+        assert stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_size <= 32 * 1024
+        assert not any(p.is_symlink() or getattr(p.lstat(), 'st_file_attributes', 0) & 0x400
+                       for p in (diagnostic, *diagnostic.parents))
+        bound = project(json.loads(diagnostic.read_text()))
+        assert bound['tester_sha256'] == tester_sha256
+        first = bound.get('first_failure', {})
+        value.update(diagnostic_status='BOUND', diagnostic_phase=first.get('phase', bound['phase']),
+                     diagnostic_reason=first.get('reason', 'UNKNOWN'))
+        for key in ('available_memory_bytes', 'disk_free_bytes_used_by_guard'):
+            if key in bound:
+                value[key] = bound[key]
+    except (OSError, ValueError, AssertionError, KeyError, TypeError, OverflowError):
+        value['diagnostic_status'] = 'INVALID'
+    return value
 
 
 def main():
@@ -71,6 +97,14 @@ def main():
         expect(invoke(package).returncode == 0, 'CLEAN_PREFLIGHT_FAILED')
         refuse('wrong-pin', lambda root: change_manifest(root, 'upstream_commit', '0' * 40), 'wrong source pin')
         arch = json.loads((package / 'release.json').read_text())['architecture']
+        diagnostic_wrapper = None
+        if windows and arch == 'i686':
+            diagnostic_wrapper = Path(__file__).with_name('run-portable-journey-diagnostic.py')
+            assert diagnostic_wrapper.is_file() and not diagnostic_wrapper.is_symlink()
+            spec = importlib.util.spec_from_file_location('bound_control_projection', Path(__file__).with_name('run-portable-ci.py'))
+            projection = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(projection)
+            tester_digest = hashlib.sha256((package / 'tester.py').read_bytes()).hexdigest()
         refuse('wrong-target', lambda root: change_manifest(root, 'architecture',
                'aarch64' if arch != 'aarch64' else 'x86_64'), 'wrong architecture')
         refuse('changed-binary', lambda root: (root / 'bin' / monerod).write_bytes(b'changed'), 'package hash mismatch')
@@ -114,7 +148,13 @@ def main():
                     translated = ['--translated-macos-x86_64'] if args.translated_macos_x86_64 else []
                     if windows and name == 'deadline':
                         translated += ['--deadline-seconds', '5']
-                    child = subprocess.Popen([sys.executable, '-B', str(package / 'tester.py'), 'run', '--out', str(journey), *translated],
+                    argv = [sys.executable, '-B', str(package / 'tester.py'), 'run', '--out', str(journey), *translated]
+                    diagnostic = out / (name + '-journey-diagnostic.json')
+                    if diagnostic_wrapper is not None:
+                        argv = [sys.executable, '-B', str(diagnostic_wrapper), '--tester', str(package / 'tester.py'),
+                                '--tester-sha256', tester_digest, '--diagnostic', str(diagnostic), '--out', str(journey), *translated]
+                    started = time.monotonic()
+                    child = subprocess.Popen(argv,
                         stdout=log, stderr=subprocess.STDOUT,
                         **({'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP} if windows else {'preexec_fn': lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask)}))
                     if not windows:
@@ -124,6 +164,10 @@ def main():
                     while not fixture.exists() and child.poll() is None and time.monotonic() < end:
                         time.sleep(0.1)
                     current['phase'] = 'WAIT_LIVE_INTERRUPTION_FIXTURE'
+                    if diagnostic_wrapper is not None:
+                        current['interruption_fixture'] = interruption_observation(journey, diagnostic, tester_digest,
+                            child.poll(), started, projection.public_diagnostic)
+                        current['interruption_fixture']['fixture_exists'] = fixture.is_file()
                     expect(child.poll() is None and fixture.exists(), 'NATIVE_INTERRUPTION_FIXTURE_NOT_LIVE')
                     if interruption is not None:
                         current.update(phase='DELIVER_INTERRUPTION', reason_enum='INTERRUPTION_SIGNAL_DELIVERY_ERROR')

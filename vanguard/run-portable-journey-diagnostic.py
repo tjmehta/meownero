@@ -18,7 +18,9 @@ def main():
     parser.add_argument('--tester-sha256', required=True)
     parser.add_argument('--diagnostic', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--deadline-seconds', type=int)
     args = parser.parse_args()
+    assert args.deadline_seconds is None or 1 <= args.deadline_seconds <= 1200, 'deadline must be within 1..1200 seconds'
     receipt = {'schema': 'meownero-bound-journey-diagnostic/1', 'result': 'FAIL',
                'tester_sha256': args.tester_sha256, 'phase': 'VERIFY_BOUND_TESTER',
                'completed_phases': [], 'available_memory_bytes': None,
@@ -178,7 +180,10 @@ def main():
         receipt['phase'] = 'CALL_BOUND_JOURNEY'
         save()
         sys.settrace(trace)
-        module.run(args.out)
+        if args.deadline_seconds is None:
+            module.run(args.out)
+        else:
+            module.run(args.out, deadline_seconds=args.deadline_seconds)
         receipt['result'] = 'PASS_BOUND_JOURNEY_CALL'
         receipt['completed_phases'].append('VERIFY_OWNED_CLEANUP')
     except BaseException as error:
