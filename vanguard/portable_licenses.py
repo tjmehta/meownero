@@ -193,6 +193,11 @@ def link_inventory(source, binary_build, depends_root, container_sources=(), win
             elif ('contrib' in normalized.parts and 'depends' in normalized.parts) or ('contrib' in path.parts and 'depends' in path.parts):
                 origins.add((path.name, 'non_pinned_depends'))
                 raise AssertionError('non-pinned depends library origin')
+            elif depends_root and component:
+                # A dependency basename cannot become a project library just
+                # because it sits under src, epee or external build output.
+                origins.add((path.name, 'non_pinned_depends'))
+                raise AssertionError('pinned depends library has non-pinned origin')
             elif normalized.is_relative_to(binary_build / 'external'):
                 assert path.name in external, 'unmapped static dependency: ' + token
                 external_libraries.setdefault(external[path.name], []).append(path.name)

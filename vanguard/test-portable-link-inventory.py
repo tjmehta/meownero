@@ -90,7 +90,22 @@ def main():
         cwd = links[0].parent.parent.parent
         refuse('wrong-depends-host', os.path.relpath(source / 'contrib/depends/wrong-host/lib/libboost_filesystem.a', cwd), 'non-pinned depends')
         refuse('wrong-depends-library-directory', depends / 'lib-other/libboost_filesystem.a', 'non-pinned depends')
-        refuse('non-pinned-contrib', os.path.relpath(source / 'contrib/private/libboost_filesystem.a', cwd), 'unmapped contrib')
+        refuse('non-pinned-contrib', os.path.relpath(source / 'contrib/private/libboost_filesystem.a', cwd), 'non-pinned origin')
+        for folder in ('src', 'contrib/epee'):
+            configure('absolute')
+            path = binary_build / folder / 'libcrypto.a'
+            links[0].write_text(shlex.join(['c++', str(path)]) + ' ' + links[0].read_text())
+            try:
+                inventory()
+            except AssertionError as error:
+                assert 'non-pinned origin' in str(error)
+                trace = error.__traceback__
+                while trace.tb_next:
+                    trace = trace.tb_next
+                assert ('libcrypto.a', 'non_pinned_depends') in trace.tb_frame.f_locals['package_context']['libraries']
+            else:
+                raise AssertionError('project directory disguised pinned dependency')
+            cases.append({'case': folder + '-pinned-basename-before-pinned-arguments', 'result': 'PASS_REFUSAL'})
         refuse('outside-project-src', os.path.relpath(source / 'outside/src/libcommon.a', cwd), 'unmapped source')
         refuse('absolute-untrusted-pinned-basename', '/opt/untrusted/libcrypto.a', 'non-pinned origin')
         configure('absolute')
@@ -217,7 +232,7 @@ def main():
             cases.append({'controller': number, 'case': 'safe-response-file-hash-context', 'result': 'PASS'})
 
             for origin, token in [('non_pinned_depends', source / 'contrib/depends/wrong-host/lib/libcrypto.a'),
-                                  ('system', Path('/opt/untrusted/libcrypto.a'))]:
+                                  ('non_pinned_depends', Path('/opt/untrusted/libcrypto.a'))]:
                 configure('relative')
                 links[0].write_text(shlex.join(['c++', str(token)]))
                 try:
