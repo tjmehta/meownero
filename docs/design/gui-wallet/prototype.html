@@ -214,6 +214,11 @@ button { cursor: pointer; }
 .ribbon .flag { display: inline-flex; align-items: center; gap: 6px; font-weight: 650; color: var(--net); white-space: nowrap; }
 .ribbon .flag svg { width: 14px; height: 14px; }
 .ribbon .say { color: var(--fg); opacity: 0.86; min-width: 0; }
+@media (max-width: 760px) {
+  .ribbon { flex-wrap: wrap; row-gap: 2px; }
+  .ribbon .say { flex: 1 1 100%; order: 3; }
+  .window[data-platform="mac"] .titlebar { justify-content: flex-start; padding-left: 68px; }
+}
 .ribbon .more { margin-left: auto; border: 0; background: none; color: var(--net); font-weight: 600; font-size: 12.5px; padding: 2px 4px; white-space: nowrap; }
 
 /* App layout */
@@ -344,7 +349,8 @@ p { margin: 0 0 10px; }
 .item .s { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .item .a { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
 .item .a .s { font-weight: 400; margin-top: 1px; }
-.status { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; }
+.status { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.status svg { width: 13px; height: 13px; flex: none; }
 .status.pending { color: var(--warn); } .status.unknown { color: var(--warn); } .status.failed { color: var(--danger); } .status.done { color: var(--muted); font-weight: 500; }
 .empty { border: 1px dashed var(--border-strong); border-radius: 10px; padding: 28px; text-align: center; color: var(--muted); }
 .empty .coin { width: 40px; height: 40px; color: var(--faint); margin-bottom: 8px; }
@@ -370,6 +376,8 @@ p { margin: 0 0 10px; }
 .field { margin: 0 0 16px; }
 .field label, .field .label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; }
 .field .hint { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+.err svg { width: 14px; height: 14px; flex: none; }
+.err { font-size: 12.5px; color: var(--danger); margin-top: 8px; display: flex; gap: 6px; align-items: flex-start; }
 .field .err { font-size: 12.5px; color: var(--danger); margin-top: 6px; display: flex; gap: 6px; align-items: flex-start; }
 .field .err svg { width: 14px; height: 14px; flex: none; margin-top: 2px; }
 .input {
@@ -927,6 +935,8 @@ function txStatus(tx) {
 function txTitle(tx) {
   if (tx.type === "mined") return `Mined ${tx.blocks} test block${tx.blocks === 1 ? "" : "s"}`;
   if (tx.type === "in") return "Received";
+  if (tx.status === "unknown") return "Payment result unknown";
+  if (tx.status === "failed") return "Payment not sent";
   return "Sent";
 }
 function txSub(tx) {
@@ -964,7 +974,7 @@ function detailSheet(tx) {
   ].filter(Boolean);
   return `<h2>${txTitle(tx)}</h2>
   ${capsLine(cap("A", "get_transfers fields", "amount, fee, height, txid, confirmations"), tx.status === "unknown" ? cap("C", "unknown relay state", "GUI must not mark this sent or failed until the node or wallet confirms") : "")}
-  ${tx.status === "unknown" ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>We don't know yet whether this payment reached the network.</b>The connection dropped while sending. Don't send it again: if it went through, it will confirm here. The wallet checks again when the node is back.</div></div>` : ""}
+  ${tx.status === "unknown" ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>We don't know yet whether this payment reached the network.</b>The connection dropped while sending. Don't send it again: if it went through, it will confirm here, and if it didn't, it will say “Not sent” and the coins return. The wallet keeps checking with your node.</div></div>` : ""}
   <dl class="dl">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
   <div class="foot">${tx.txid ? `<button class="btn" data-act="copy" data-copy="${tx.txid}">${icon("copy")}Copy ID</button>` : ""}<button class="btn primary" data-act="close">Done</button></div>`;
 }
