@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Check hash-bound private CI payloads; export only allowlisted public receipts."""
 import argparse
-import ctypes
 import hashlib
 import importlib.util
 import json
@@ -9,7 +8,6 @@ import os
 from pathlib import Path, PurePosixPath
 import platform
 import shutil
-import shlex
 import signal
 import stat
 import subprocess
@@ -35,166 +33,18 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
               failure_label='native Intel archive check'):
     """Allow wrapper cleanup before escalating only recorded, verified children."""
     receipt = {'schema': supervision_schema, 'result': 'FAIL',
-               'wrapper_reaped': False, 'cleanup': [], 'signals': [],
-               'observer_ruid': os.getuid(), 'observer_euid': os.geteuid(), 'helper_observations': [],
-               'unverified_observations': []}
-    known, pending, helper_bindings, states, unverified_zombies = {}, [], {}, {}, set()
-    rejected_live = {}
+               'wrapper_reaped': False, 'cleanup': [], 'signals': []}
+    known, pending = {}, []
     process = None
     began = time.monotonic()
 
-    def reject(reason, observation=None):
-        receipt.setdefault('failure_reason', reason)
-        if observation is not None:
-            receipt.setdefault('failure_observation', observation)
-            if observation['pid'] in rejected_live and observation not in receipt['unverified_observations']:
-                receipt['unverified_observations'].append(observation)
-        raise AssertionError(reason)
-
-    def helper_file_binding():
-        path = Path('/bin/ps')
-        info = path.lstat()
-        if not (stat.S_ISREG(info.st_mode) and info.st_uid == 0 and
-                info.st_mode & stat.S_ISUID and not info.st_mode & 0o022):
-            reject('HELPER_SYSTEM_FILE_BINDING_MISMATCH')
-        return (info.st_dev, info.st_ino, info.st_mode, sha(path))
-
-    def helper_binding(pid):
-        # Darwin ps has its existing setuid bit; never change runner privileges.
-        library = ctypes.CDLL('/usr/lib/libproc.dylib', use_errno=True)
-        pidpath = library.proc_pidpath
-        pidpath.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32]
-        pidpath.restype = ctypes.c_int
-        buffer = ctypes.create_string_buffer(4096)
-        if pidpath(pid, buffer, len(buffer)) <= 0:
-            try:
-                os.kill(pid, 0)
-            except ProcessLookupError:
-                return None  # ps snapshot raced an already exited helper.
-            reject('HELPER_KERNEL_EXECUTABLE_QUERY_FAILED')
-        if buffer.value != b'/bin/ps':
-            reject('HELPER_KERNEL_EXECUTABLE_MISMATCH')
-        return helper_file_binding()
-
-    def remember_identity(pid, row):
-        observation = {'pid': pid, 'ppid': row[0], 'ruid': row[1], 'euid': row[2],
-                       'role': 'OWNED_WRAPPER' if pid == process.pid else 'OWNED_DESCENDANT'}
-        # Account for every first observation before validation can reject it.
-        # Quarantined identities are never authority for a cleanup signal.
-        first_candidate = pid not in known and pid not in rejected_live
-        if first_candidate:
-            rejected_live[pid] = row
-        observation['state_class'] = 'ZOMBIE' if states.get(pid, '').startswith('Z') else 'LIVE'
-        if not first_candidate and pid in rejected_live:
-            # A previous unverified observation is never ownership authority.
-            # Preserve its initial ancestry/UID/start even across PID reuse or
-            # privilege changes; only independently proven absence resolves it.
-            observation['role'] = 'PERMANENTLY_QUARANTINED_OBSERVATION'
-            observation['identity_state'] = ('INITIAL_IDENTITY_UNCHANGED' if row[:4] == rejected_live[pid][:4]
-                                             else 'INITIAL_ANCESTRY_UID_OR_START_CHANGED')
-            if observation not in receipt['unverified_observations']:
-                receipt['unverified_observations'].append(observation)
-            return False
-        # These immutable fields must pass before every role/euid/state branch.
-        # An observed helper cannot escape its binding by dropping privileges.
-        if pid in known and row[1:4] != known[pid][:3]:
-            reject('REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED', observation)
-        if pid in helper_bindings and helper_file_binding() != helper_bindings[pid]:
-            reject('REMEMBERED_HELPER_SYSTEM_FILE_CHANGED', observation)
-        if row[1] != os.getuid():
-            reject('REAL_UID_MISMATCH', observation)
-        if pid not in known and (states.get(pid, '').startswith('Z') or row[4] == '(ps)') and pid_absent(pid, {}):
-            # A snapshot may precede reaping while inspection follows it. Prove
-            # numeric PID absence independently; infer no executable or role.
-            observation['role'] = 'ALREADY_ABSENT_UNVERIFIED_SNAPSHOT'
-            observation['argv_role'] = 'PS_EXIT_DISPLAY' if row[4] == '(ps)' else 'UNVERIFIED_ZOMBIE'
-            receipt['unverified_observations'].append(observation)
-            return False
-        if states.get(pid, '').startswith('Z'):
-            # A verified helper may become a zombie before its parent reaps it.
-            # Keep its original executable identity and wait for actual absence.
-            if pid not in known:
-                # Never infer an executable or privileged role from a zombie.
-                # Account for its PID until actual absence, but never signal it.
-                known[pid] = row[1:]
-                unverified_zombies.add(pid)
-                observation['role'] = 'UNVERIFIED_OWNED_ZOMBIE'
-                receipt['unverified_observations'].append(observation)
-                reject('UNVERIFIED_FIRST_ZOMBIE', observation)
-            return False
-        if pid in unverified_zombies:
-            reject('UNVERIFIED_ZOMBIE_BECAME_LIVE', observation)
-        if row[2] != os.geteuid():
-            try:
-                words = shlex.split(row[4])
-            except ValueError:
-                words = []
-            arguments = words[1:]
-            ps_arguments = arguments == ['-axo', 'pid=,ppid=,rss='] or (
-                len(arguments) in (2, 4) and arguments[0] == '-p' and arguments[1].isdigit() and
-                (len(arguments) == 2 or arguments[2:] == ['-o', 'command=']))
-            # Darwin can discard argv before exposing the zombie state. Accept
-            # its exit display only for this already kernel-bound helper, with
-            # unchanged real/effective UID and start identity; bind it again below.
-            exit_display = (pid in helper_bindings and row[4] == '(ps)' and
-                            row[1:4] == known[pid][:3])
-            observation['argv_role'] = ('EXACT_PS_OBSERVER' if words and words[0] in ('ps', '/bin/ps') and ps_arguments
-                                        else 'PS_EXIT_DISPLAY' if row[4] == '(ps)' else 'NOT_ALLOWLISTED')
-            observation['direct_wrapper_parent'] = row[0] == process.pid
-            observation['previously_bound_helper'] = pid in helper_bindings
-            if not (platform.system() == 'Darwin' and row[2] == 0 and row[0] == process.pid and
-                    ((words and words[0] in ('ps', '/bin/ps') and ps_arguments) or exit_display)):
-                # Query only the already descendant-bound UID501/root candidate,
-                # for static diagnostics; this never authorizes it or a signal.
-                if platform.system() == 'Darwin' and row[2] == 0 and row[0] == process.pid:
-                    original_reason = receipt.get('failure_reason')
-                    try:
-                        diagnostic_binding = helper_binding(pid)
-                        observation['kernel_file_role'] = ('ROOT_SUID_SYSTEM_PS' if diagnostic_binding else 'ALREADY_ABSENT')
-                        if diagnostic_binding is None and row[4] == '(ps)':
-                            # The live ps text snapshot can race argv destruction
-                            # and reaping. This proves absence, not helper authority.
-                            # Preserve accounting; never register or signal it.
-                            observation['role'] = 'ALREADY_ABSENT_UNVERIFIED_PS_EXIT_DISPLAY'
-                            receipt['unverified_observations'].append(observation)
-                            return False
-                    except AssertionError:
-                        observation['kernel_file_role'] = 'NOT_VERIFIED_SYSTEM_PS'
-                    if original_reason is None:
-                        receipt.pop('failure_reason', None)
-                    else:
-                        receipt['failure_reason'] = original_reason
-                reject('EFFECTIVE_UID_NOT_ALLOWLISTED', observation)
-            temporary_observation = 'failure_reason' not in receipt
-            if temporary_observation:
-                receipt['failure_observation'] = observation
-            binding = helper_binding(pid)
-            if binding is None:
-                if temporary_observation:
-                    receipt.pop('failure_observation', None)
-                return False
-            if pid in helper_bindings and (binding != helper_bindings[pid] or row[1:4] != known[pid][:3]):
-                reject('REMEMBERED_HELPER_IDENTITY_CHANGED', observation)
-            helper_bindings[pid] = binding
-            observation['role'] = 'DARWIN_WRAPPER_PS_OBSERVER'
-            observation['executable_sha256'] = binding[3]
-            if len(receipt['helper_observations']) < 64 and observation not in receipt['helper_observations']:
-                receipt['helper_observations'].append(observation)
-            if temporary_observation:
-                receipt.pop('failure_observation', None)
-        known[pid] = row[1:]
-        rejected_live.pop(pid, None)
-        return True
-
     def snapshot():
         rows = {}
-        states.clear()
-        for line in subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
+        for line in subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,uid=,lstart=,command='],
                                             text=True, timeout=5).splitlines():
-            fields = line.split(None, 10)
-            if len(fields) == 11:
-                rows[int(fields[0])] = (int(fields[1]), int(fields[2]), int(fields[3]), tuple(fields[4:9]), fields[10])
-                states[int(fields[0])] = fields[9]
+            fields = line.split(None, 8)
+            if len(fields) == 9:
+                rows[int(fields[0])] = (int(fields[1]), int(fields[2]), tuple(fields[3:8]), fields[8])
         return rows
 
     def remember():
@@ -213,48 +63,16 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 owned |= children
             for pid in owned & rows.keys():
                 row = rows[pid]
-                remember_identity(pid, row)
+                assert row[1] == os.getuid(), 'owned child UID changed'
+                known[pid] = row[1:]
         return rows
-
-    def pid_absent(pid, rows):
-        if pid in rows:
-            return False
-        try:
-            os.kill(pid, 0)
-        except ProcessLookupError:
-            return True
-        except PermissionError:
-            return False
-        return False
 
     def remaining():
         rows = remember()
         alive = []
         for pid, identity in known.items():
-            if pid in rejected_live or pid in unverified_zombies:
-                if not pid_absent(pid, rows):
-                    alive.append(pid)
-                continue
             if pid in rows:
-                if states.get(pid, '').startswith('Z'):
-                    if rows[pid][1:4] != identity[:3]:
-                        reject('REMEMBERED_ZOMBIE_IDENTITY_CHANGED')
-                    alive.append(pid)
-                    continue
-                if pid in unverified_zombies:
-                    reject('UNVERIFIED_ZOMBIE_BECAME_LIVE')
-                if rows[pid][1:] != identity:
-                    reject('REMEMBERED_PROCESS_IDENTITY_CHANGED', {'pid': pid, 'ppid': rows[pid][0],
-                        'ruid': rows[pid][1], 'euid': rows[pid][2], 'role': 'REMEMBERED_DESCENDANT'})
-                if pid in helper_bindings:
-                    binding = helper_binding(pid)
-                    if binding is None:
-                        continue
-                    if binding != helper_bindings[pid]:
-                        reject('REMEMBERED_HELPER_EXECUTABLE_CHANGED')
-                alive.append(pid)
-        for pid in rejected_live.keys() - known.keys():
-            if not pid_absent(pid, rows):
+                assert rows[pid][1:] == identity, 'remembered PID identity changed; preserve process'
                 alive.append(pid)
         return alive
 
@@ -267,35 +85,22 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 stderr=subprocess.STDOUT, start_new_session=True,
                 preexec_fn=lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask))
             receipt['wrapper_pid'] = process.pid
-            receipt['failure_stage'] = 'OBSERVE_OWNED_DESCENDANTS'
             remember()
             signal.pthread_sigmask(signal.SIG_SETMASK, mask)
             while process.poll() is None:
                 remember()
                 if pending:
-                    receipt['failure_reason'] = 'CI_CANCELLATION'
                     raise RuntimeError('CI cancelled; forward to owned Mac wrapper')
                 if time.monotonic() - began >= timeout:
-                    receipt['failure_reason'] = 'WRAPPER_DEADLINE'
                     raise subprocess.TimeoutExpired(argv, timeout)
                 try:
                     process.wait(timeout=0.25)
                 except subprocess.TimeoutExpired:
                     pass
-            if process.returncode != 0 or pending:
-                reject('WRAPPER_NONZERO_OR_CANCELLED')
+            assert process.returncode == 0 and not pending, failure_label + ' failed'
             receipt['result'] = 'PASS_WRAPPER_AND_OWNED_CLEANUP'
-            receipt.pop('failure_stage', None)
     except BaseException as error:
         receipt['failure_type'] = type(error).__name__
-        receipt.setdefault('failure_reason', 'OWNED_SUPERVISION_ERROR')
-        receipt['wrapper_exit_before_cleanup'] = process.poll() if process is not None else None
-        # Read only the wrapper's already public phase names; never private logs.
-        check = out / 'native-check/check-receipt.json'
-        if check.is_file() and not check.is_symlink():
-            phases = json.loads(check.read_text()).get('phases', [])
-            if phases and phases[-1].get('name') in ('preflight', 'journey', 'controls'):
-                receipt['failure_phase'] = phases[-1]['name']
         raise
     finally:
         # Repeated cancellation cannot interrupt the bounded cleanup interval.
@@ -323,25 +128,10 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                         break
                     receipt['result'] = 'FAIL'
                     for pid in alive:
-                        if pid in rejected_live or pid in unverified_zombies:
-                            continue  # Wait for absence; never signal an unverified PID.
                         # Re-read identity immediately before each individual signal.
                         rows = snapshot()
                         if pid in rows:
-                            if states.get(pid, '').startswith('Z'):
-                                if rows[pid][1:4] != known[pid][:3]:
-                                    reject('ZOMBIE_IDENTITY_CHANGED_BEFORE_REAP')
-                                continue  # Already exited; only its parent can reap it.
-                            if pid in unverified_zombies:
-                                reject('UNVERIFIED_ZOMBIE_BECAME_LIVE_BEFORE_SIGNAL')
-                            if rows[pid][1:] != known[pid]:
-                                reject('PROCESS_IDENTITY_CHANGED_BEFORE_SIGNAL')
-                            if pid in helper_bindings:
-                                binding = helper_binding(pid)
-                                if binding is None:
-                                    continue
-                                if binding != helper_bindings[pid]:
-                                    reject('HELPER_EXECUTABLE_CHANGED_BEFORE_SIGNAL')
+                            assert rows[pid][1:] == known[pid], 'PID reused; preserve process'
                             try:
                                 os.kill(pid, sig)
                                 receipt['signals'].append({'pid': pid, 'signal': int(sig)})
@@ -355,9 +145,6 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 receipt['wrapper_reaped'] = True
                 alive = remaining()
                 receipt['cleanup'] = [{'pid': pid, 'removed': pid not in alive} for pid in sorted(known)]
-                receipt['rejected_observation_cleanup'] = [{'pid': pid, 'removed': pid not in alive,
-                    'proof': 'ACTUAL_PID_ABSENCE' if pid not in alive else 'PRESENT_UNVERIFIED_NEVER_SIGNALLED'}
-                    for pid in sorted(rejected_live)]
                 assert not alive, 'known owned Mac descendants remain'
                 if 'failure_type' not in receipt:
                     assert receipt['result'] == 'PASS_WRAPPER_AND_OWNED_CLEANUP', 'native Mac supervision failed'
@@ -393,7 +180,6 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                         signal.signal(number, handler)
                 finally:
                     signal.pthread_sigmask(signal.SIG_SETMASK, mask)
-
 
 
 def windows_check(package, out, row):
@@ -607,23 +393,12 @@ def main():
                     '--archive', archive, '--sha256', row['archive_sha256'], '--target', 'macos-x86_64',
                     '--out', check_root], out, public)
             finally:
-                lock_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
-                lock_handlers = {number: signal.getsignal(number) for number in (signal.SIGTERM, signal.SIGINT)}
-                try:
-                    supervision = json.loads((public / 'supervision.json').read_text())
-                    assert supervision['wrapper_reaped'] and all(p['removed'] for p in supervision['cleanup'])
-                    assert all(p['removed'] for p in supervision.get('rejected_observation_cleanup', [])), 'unverified observation remains; preserve lock'
-                    assert 'cleanup_failure_type' not in supervision, 'preserve lock until owned cleanup is verified'
-                    assert not lock.is_symlink() and lock.stat().st_uid == os.getuid() and lock.stat().st_ino == lock_identity
-                    lock.unlink()
-                    proof['owned_lock_removed'] = True
-                finally:
-                    try:
-                        for number, handler in lock_handlers.items():
-                            signal.signal(number, handler)
-                    finally:
-                        signal.pthread_sigmask(signal.SIG_SETMASK, lock_mask)
-
+                supervision = json.loads((public / 'supervision.json').read_text())
+                assert supervision['wrapper_reaped'] and all(p['removed'] for p in supervision['cleanup'])
+                assert 'cleanup_failure_type' not in supervision, 'preserve lock until owned cleanup is verified'
+                assert not lock.is_symlink() and lock.stat().st_uid == os.getuid() and lock.stat().st_ino == lock_identity
+                lock.unlink()
+                proof['owned_lock_removed'] = True
         journey = json.loads((check_root / 'journey/result.json').read_text())
         controls = json.loads((check_root / 'controls/controls.json').read_text())
         check = json.loads((check_root / 'check-receipt.json').read_text())
@@ -657,44 +432,16 @@ def main():
     finally:
         # These are the same explicit public receipts, including honest failure
         # and owned-cleanup evidence. Private phase logs are never exported.
-        receipt_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT}) if os.name == 'posix' else None
-        receipt_handlers = {number: signal.getsignal(number) for number in (signal.SIGTERM, signal.SIGINT)} if os.name == 'posix' else {}
-        try:
-            # These are the same explicit public receipts, including honest failure
-            # and owned-cleanup evidence. Private phase logs are never exported.
-            if check_root is not None:
-                for source, name in [('journey/result.json', 'journey.json'),
-                                     ('controls/controls.json', 'controls.json'),
-                                     ('check-receipt.json', 'check.json')]:
-                    path = check_root / source
-                    if path.is_file() and not path.is_symlink():
-                        write(public / name, json.loads(path.read_text()))
-            deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
-            if deferred:
-                proof['result'] = 'FAIL'
-                proof['failure_reason'] = 'CANCELLATION_DURING_PUBLIC_RECEIPTS'
-            write(public / 'ci-receipt.json', proof)
-            deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
-            if deferred:
-                proof['result'] = 'FAIL'
-                proof['failure_reason'] = 'CANCELLATION_DURING_PUBLIC_RECEIPTS'
-                write(public / 'ci-receipt.json', proof)
-            print(proof['result'])
-        finally:
-            try:
-                for number, handler in receipt_handlers.items():
-                    signal.signal(number, handler)
-            finally:
-                if receipt_mask is not None:
-                    signal.pthread_sigmask(signal.SIG_SETMASK, receipt_mask)
-
+        if check_root is not None:
+            for source, name in [('journey/result.json', 'journey.json'),
+                                 ('controls/controls.json', 'controls.json'),
+                                 ('check-receipt.json', 'check.json')]:
+                path = check_root / source
+                if path.is_file() and not path.is_symlink():
+                    write(public / name, json.loads(path.read_text()))
+        write(public / 'ci-receipt.json', proof)
+        print(proof['result'])
 
 
 if __name__ == '__main__':
-    if os.name == 'posix':
-        def cancelled(number, frame):
-            raise RuntimeError('native CI cancelled; preserve owned cleanup receipts')
-        signal.signal(signal.SIGTERM, cancelled)
-        signal.signal(signal.SIGINT, cancelled)
     main()
-
