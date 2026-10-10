@@ -21,10 +21,16 @@ export type TesterRelease = ReleaseIdentity &
       }>
   );
 
-// Publish only after the actual public ZIP bytes, size and checksum are verified.
+// Hosted ZIP bytes, size and checksum verified before staging this download.
 // The ZIP has one root containing the image, reviewed launcher and notices.
 const testerRelease: TesterRelease = {
-  status: "unpublished",
+  status: "published",
+  bundle: {
+    url: "/downloads/artifacts/meownero-vanguard-linux-x64-docker-96aa5a8.zip",
+    filename: "meownero-vanguard-linux-x64-docker-96aa5a8.zip",
+    bytes: 190475713,
+    sha256: "0b72d59fba8bd01b1ba45e72016c4e5c36176026918c1152c1e75d3e01030978",
+  },
   sourceCommit: "96aa5a836648153db7f2c3ef1e949b35b2f4bdff",
   imageId:
     "sha256:fd7256b13c90935782aedcebd23dcbd8dbe1e16853974ffb6722a116e32a13f9",
