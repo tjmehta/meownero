@@ -1,0 +1,136 @@
+{
+  "observedAt": "2026-10-10T17:42:56.453487+00:00",
+  "specInfo": {
+    "title": "Paperclip API",
+    "version": "1.0.0",
+    "description": "REST API for the Paperclip AI agent management platform"
+  },
+  "specSha256": "e57d73e3a17e61f945d3eb4339ab02c396e2de90a8357b9be793837d82aa388f",
+  "executionEndpointSummary": "Get the current issue execution and permitted recovery actions",
+  "issuePatchProperties": [
+    "projectId",
+    "projectWorkspaceId",
+    "goalId",
+    "parentId",
+    "blockedByIssueIds",
+    "unblockDescriptor",
+    "inheritExecutionWorkspaceFromIssueId",
+    "title",
+    "description",
+    "status",
+    "workMode",
+    "harnessKind",
+    "priority",
+    "reviewPolicy",
+    "assigneeAgentId",
+    "assigneeUserId",
+    "requestDepth",
+    "billingCode",
+    "assigneeAdapterOverrides",
+    "executionPolicy",
+    "executionWorkspaceId",
+    "executionWorkspacePreference",
+    "executionWorkspaceSettings",
+    "labelIds",
+    "watchdogDiscovery",
+    "comment",
+    "commentClientRequestId",
+    "attachmentIds",
+    "onBehalfOfUserId",
+    "reviewInteractionId",
+    "reviewRequest",
+    "reopen",
+    "resume",
+    "interrupt",
+    "deferWakeForGoal",
+    "hiddenAt"
+  ],
+  "recoveryResolveSchema": {
+    "type": "object",
+    "properties": {
+      "executionReconciliation": {
+        "type": "object",
+        "properties": {
+          "runId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "providerStopped": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "actionOutcome": {
+            "type": "string",
+            "enum": [
+              "completed",
+              "not_performed",
+              "mixed"
+            ]
+          },
+          "outcomeEvidence": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 12000
+          }
+        },
+        "required": [
+          "runId",
+          "providerStopped",
+          "actionOutcome",
+          "outcomeEvidence"
+        ],
+        "additionalProperties": false
+      },
+      "actionId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "outcome": {
+        "type": "string",
+        "enum": [
+          "restored",
+          "false_positive",
+          "blocked",
+          "cancelled"
+        ]
+      },
+      "sourceIssueStatus": {
+        "type": "string",
+        "enum": [
+          "todo",
+          "done",
+          "in_review",
+          "blocked"
+        ]
+      },
+      "resolutionNote": {
+        "type": "string",
+        "nullable": true
+      }
+    },
+    "required": [
+      "outcome",
+      "sourceIssueStatus"
+    ],
+    "additionalProperties": false
+  },
+  "taskSessionRead": {
+    "path": "/api/agents/92a7b4f2-787b-4cbb-954e-46831397ab09/task-sessions",
+    "httpStatus": 403
+  },
+  "runtimeSource": {
+    "bridge": "<private-tooling-path>",
+    "bridgeSha256": "895337ee8c53c51e45e6bd093d690c56eae92b100c4584db67f3edb5f51801a9",
+    "activeAttachmentMethod": "Bridge.follow_prior_turn, lines 559-617, requires the recorded resume session and exact ownership",
+    "codexTaskAdoption": "adopt_task_session = None, line 307; occupancy alone cannot adopt a different cached adapter session",
+    "recoveryRoute": "<agent-scratch>",
+    "recoveryRouteCondition": "Requires an active recovery action; none is exposed. Execution reconciliation schema requires providerStopped=true, which is false for the surviving native writer."
+  },
+  "unblockOwner": {
+    "agentId": "13de7aa2-02c2-41b4-b74c-185d843064d2",
+    "name": "agent systems lead"
+  },
+  "unblockAction": "Use the protected runtime owner boundary to restore authenticated TJS-1882 task/run linkage to surviving w1XK:p5 and its recorded session 2df61bd7-5d1a-4b63-a9f0-c999e21fa396, reconcile the failed abc2f1c7 lease only through supported recovery with actual lease-owner liveness proof, and preserve native writer 405325 and its in-flight diagnostic build. Do not claim providerStopped for live 7b1748f7 or remove its lease."
+}
