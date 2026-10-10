@@ -201,14 +201,14 @@ button { cursor: pointer; }
 .window[data-platform="linux"] .gctl span { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-size: 11px; color: var(--muted); }
 .window:not([data-platform="mac"]) .lights, .window:not([data-platform="win"]) .wctl, .window:not([data-platform="linux"]) .gctl { display: none; }
 .window[data-platform="win"] .title { margin-right: auto; }
-.proto-tag { font: 600 10.5px/1 var(--mono); color: var(--muted); border: 1px dashed var(--border-strong); border-radius: 4px; padding: 3px 6px; white-space: nowrap; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* The full approved marker wording always shows; it wraps to two lines rather than dropping words (re-check N8). */
+.proto-tag { font: 600 10.5px/1.2 var(--mono); color: var(--muted); border: 1px dashed var(--border-strong); border-radius: 4px; padding: 2px 6px; max-width: 100%; text-wrap: balance; }
 .window[data-platform="mac"] .proto-tag { justify-self: end; }
 .window[data-platform="linux"] .proto-tag { justify-self: start; order: -1; }
 .window[data-platform="win"] .proto-tag { margin-right: 8px; }
 .window { container-type: inline-size; }
-@container (max-width: 1040px) { .proto-tag .long { display: none; } }
-/* Phone-width review only (not a desktop size): the page caption carries the prototype notice. */
-@container (max-width: 600px) { .proto-tag { display: none; } }
+/* Below the 828 px layout minimum the marker would need three lines or truncate the title; the page caption carries the notice. */
+@container (max-width: 800px) { .proto-tag { display: none; } }
 @container (max-width: 900px) { .ribbon { flex-wrap: wrap; row-gap: 2px; } .ribbon .say { flex: 1 1 100%; order: 3; } }
 
 /* Network ribbon: always present, never dismissible */
@@ -533,14 +533,14 @@ h1[tabindex="-1"]:focus { outline: none; }
       <div class="titlebar" id="titlebar">
         <div class="lights" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="title" id="wintitle"></div>
-        <span class="proto-tag" title="Reviewer marker, not app UI"><span class="long">Interactive prototype · </span>Wallet actions are simulated</span>
+        <span class="proto-tag" title="Reviewer marker, not app UI">Interactive prototype · Wallet actions are simulated</span>
         <div class="wctl" aria-hidden="true"><span>&#8212;</span><span>&#9744;</span><span>&#10005;</span></div>
         <div class="gctl" aria-hidden="true"><span>&#8212;</span><span>&#10005;</span></div>
       </div>
       <div class="ribbon" id="ribbon" role="note"></div>
       <div class="app" id="app"></div>
       <div class="overlay" id="overlay" aria-hidden="true"></div>
-      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <div class="toast" id="toast" aria-hidden="true"></div>
       <div class="sr-only" id="live" aria-live="polite" aria-atomic="true"></div>
     </section>
     <p class="desk-caption">Interactive design prototype for <b>TJS-1992</b>. Mock data only: no node, wallet, real seed or real coin is involved. The dashed capability labels belong to the reviewer overlay, not the app. Use the controls to switch states.</p>
@@ -847,11 +847,20 @@ function blocksToText(n) {
 function announce(msg) { const l = $("#live"); l.textContent = ""; setTimeout(() => { l.textContent = msg; }, 60); }
 function focusHeading() { const h = $("#app h1"); if (h) { h.setAttribute("tabindex", "-1"); h.focus(); } }
 function nettag() { return `<span class="nettag" title="${esc(net().title)}: these coins have no value">Test coins</span>`; }
+// The toast is visual only; #live is the one region that speaks (re-check N9).
 function toast(msg) {
-  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show"); announce(msg);
   clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600);
 }
+// Node-state changes are announced however they happen: reviewer control, Try again, Restart, Connect (re-check N6).
+function setNode(v) { S.node = v; S.nodePick = null; render(false); const t = $("#app .syncchip"); if (t) announce(t.getAttribute("aria-label")); }
 function canTransact() { return ["synced", "remote"].includes(S.node); }
+// What sending and mining wait for, naming the part at fault (re-check N1).
+function waitFor() {
+  return ["engine-down", "auth-failed"].includes(S.node)
+    ? { until: "the wallet engine is running again", needs: "the wallet engine running" }
+    : { until: "your node is connected and synced", needs: "your node connected and synced" };
+}
 
 const I = {
   home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
@@ -914,7 +923,7 @@ function syncChip() {
     "auth-failed": ['<i class="dot bad"></i>', "Engine refused this app", "Sending paused"],
     "node-old": ['<i class="dot bad"></i>', "Incompatible node", "Nothing loaded from this node"],
   }[S.node];
-  return `<button class="syncchip" data-go="node" aria-label="Connection: ${m[1]}. ${m[2]}">${m[0]}<span><b>${m[1]}</b><span class="sub">${esc(m[2])}</span></span></button>`;
+  return `<button class="syncchip" data-go="node" aria-label="Connection: ${m[1].replace(/…$/, "")}. ${m[2]}">${m[0]}<span><b>${m[1]}</b><span class="sub">${esc(m[2])}</span></span></button>`;
 }
 function sidebar() {
   const pending = S.txs.filter((t) => t.height == null && live(t)).length;
@@ -958,7 +967,7 @@ SCREENS.overview = () => {
   ${capsLine(cap("A", "get_balance", "balance and unlocked_balance from wallet-rpc get_balance"), cap("C", "compact display rule", "GUI formatting: ≤4 decimals truncated with an ellipsis, never rounds, never shows nonzero as zero"))}
   <section class="balance" aria-label="Balance">
     <div class="k">Spendable now</div>
-    <button class="amtbtn big" data-act="exact" aria-pressed="${S.exact}" aria-label="Spendable now: ${plain(b.unlocked)} MEOW, test coins. Show every digit">${bigAmount(b.unlocked)}</button>
+    <button class="amtbtn big" id="balance-exact" data-act="exact" aria-pressed="${S.exact}" aria-label="Spendable now: ${plain(b.unlocked)} MEOW, test coins. Show every digit">${bigAmount(b.unlocked)}</button>
     <div class="sub">
       ${b.locked > 0n ? `<span>Unlocking <b>${amtHTML(b.locked)}</b>${b.nextUnlock ? ` · next in ${blocksToText(b.nextUnlock)}` : ""}</span>` : ""}
       <span>Total <b>${amtHTML(b.total)}</b></span>
@@ -970,7 +979,7 @@ SCREENS.overview = () => {
       ${S.net === "regtest" ? `<button class="btn quiet" data-act="mine" ${canTransact() ? "" : "disabled"}>${icon("block")}Get test coins</button>` : ""}
     </div>
     ${b.unlocked > 0n && b.unlocked <= FEE ? `<p class="small muted">Your spendable balance is smaller than a network fee, so it can't be sent yet.</p>` : ""}
-    ${S.net === "regtest" && !canTransact() ? `<p class="small muted">Getting test coins needs your node connected and synced.</p>` : ""}
+    ${S.net === "regtest" && !canTransact() ? `<p class="small muted">Getting test coins needs ${waitFor().needs}.</p>` : ""}
   </section>
   ${b.locked > 0n ? `<p class="small muted">New coins wait before they can be spent: mined coins for ${UNLOCK.mined} blocks, payments and change for ${UNLOCK.in}. ${cap("A", "unlocked_balance · 60/10 blocks", "Coinbase 60 / received 10 from pinned upstream source; kit mines 70 + 12 (TJS-1994 #3)")}</p>` : ""}
   <h2 class="sec">Recent activity</h2>
@@ -1068,7 +1077,7 @@ SCREENS.receive = () => {
       <div class="card">
         <p>Your local regtest only makes blocks when asked. Mining 10 blocks pays their test rewards to this wallet.</p>
         <p class="small muted">Mined coins can be spent after ${UNLOCK.mined} more blocks. This chain uses upstream test rewards, not Meownero's planned 9 MEOW per 90 seconds.</p>
-        ${canTransact() ? "" : `<p class="small muted">Needs your node connected and synced.</p>`}
+        ${canTransact() ? "" : `<p class="small muted">Needs ${waitFor().needs}.</p>`}
         <div class="row"><button class="btn" data-act="mine" ${canTransact() ? "" : "disabled"}>${icon("block")}Mine 10 test blocks</button>${cap("A", "generateblocks", "daemon generateblocks {wallet_address, amount_of_blocks}, regtest only")}</div>
       </div>` : `<h2 class="sec">Get test coins</h2><p class="muted">On the testnet, test coins come from mining. A faucet is not planned yet. ${cap("C", "testnet coin source", "No testnet exists yet")}</p>`}
     </div>
@@ -1091,6 +1100,8 @@ SCREENS.send = () => {
   const s = S.send, b = balances();
   if (s.step === "preparing" || s.step === "sending") return `<div class="ph"><h1>Send</h1></div><div class="card" aria-live="polite"><div class="row"><i class="spin"></i><b>${s.step === "sending" ? "Submitting to your node…" : "Preparing the payment…"}</b></div><p class="small muted" style="margin-top:8px">${s.step === "sending" ? "Keep the wallet open. Don't close it until this finishes." : "Building the private transaction so you can review its exact fee. Nothing is sent yet."}</p></div>`;
   const unknown = S.txs.find((t) => t.status === "unknown");
+  // Say why before the user tries, as Overview does (D11).
+  const belowFee = b.unlocked <= FEE;
   if (s.step === "result") return sendResult();
   const e = s.errs;
   return `<div class="ph"><h1>Send</h1></div>
@@ -1115,7 +1126,7 @@ SCREENS.send = () => {
       <input class="input" id="note" maxlength="80" autocomplete="off" value="${esc(s.note)}" aria-describedby="note-hint">
       <div class="hint" id="note-hint">Saved on this computer only. It isn't sent, and it doesn't come back if you restore from your recovery words.</div>
     </div>
-    <div class="row"><button class="btn primary lg" type="submit" ${canTransact() && !unknown ? "" : "disabled"}>Review payment</button>${canTransact() ? "" : `<span class="small muted">Sending is paused until your node is connected and synced.</span>`}</div>
+    <div class="row"><button class="btn primary lg" type="submit" ${canTransact() && !unknown && !belowFee ? "" : "disabled"}>Review payment</button>${!canTransact() ? `<span class="small muted">Sending is paused until ${waitFor().until}.</span>` : belowFee ? `<span class="small muted">${b.unlocked > 0n ? "Your spendable balance is smaller than a network fee, so it can't be sent yet." : b.locked > 0n ? `Nothing is spendable yet. ${amtHTML(b.locked, { exact: true })} is still unlocking${b.nextUnlock ? `; more is ready in ${blocksToText(b.nextUnlock)}` : ""}.` : "This wallet has no test coins to send yet."}</span>` : ""}</div>
   </form>`;
 };
 function validateSend() {
@@ -1125,7 +1136,10 @@ function validateSend() {
   else if (/[^1-9A-HJ-NP-Za-km-z]/.test(to)) errs.to = "Addresses don't contain 0, O, I or l, spaces or punctuation. Check for a typo.";
   else if (to.length !== 95 && to.length !== 106) errs.to = `This address is incomplete: it has ${to.length} characters, and a full one has 95.`;
   else if (to[0] === "M") errs.to = "That's a Meownero mainnet address. This wallet only sends test coins on the " + n.prose + ". Mainnet doesn't exist yet.";
-  else if (to[0] !== n.prefix) errs.to = S.net === "regtest" ? "That's a Meownero testnet address. This wallet is on the local regtest, so it can't pay it." : "That isn't a Meownero testnet address. It may be a local regtest or Monero address.";
+  else if (to[0] !== n.prefix) errs.to = S.net === "testnet" ? "That isn't a Meownero testnet address. It may be a local regtest or Monero address."
+    // Only a T… address is named as testnet; other prefixes (Monero 8…, 5…, 9…) get the kit-wallet rule (re-check N3).
+    : to[0] === "T" ? "That's a Meownero testnet address. This wallet is on the local regtest, so it can't pay it."
+    : "That isn't one of the test wallets in your Meownero test kit. On the local regtest you can only pay those wallets.";
   else if (S.net === "regtest" && to !== addr("self") && !KIT_WALLETS.some(([k]) => addr(k) === to)) errs.to = "That isn't one of the test wallets in your Meownero test kit. On the local regtest you can only pay those wallets. If you meant one of them, pick it above.";
   else if (!Object.values(ADDR[S.net]).includes(to)) errs.to = "This address has a typo somewhere: its checksum doesn't match. Copy it again from the person you're paying.";
   else if (to === addr("self")) errs.to = "That's this wallet's own address.";
@@ -1186,7 +1200,7 @@ function render(animate = true) {
   if (!key) return;
   if (key === "h1") return focusHeading();
   const el = $("#win").querySelector(key);
-  if (el && !el.disabled) { el.focus(); if (el.setSelectionRange && el.value != null) el.setSelectionRange(el.value.length, el.value.length); }
+  if (el && !el.disabled) { el.focus(); if (el.tagName === "TEXTAREA" || ["text", "password", "search"].includes(el.type)) el.setSelectionRange(el.value.length, el.value.length); }
   else focusHeading();
 }
 // A selector that finds the same control after a re-render: its id, or its data-* attributes.
@@ -1197,7 +1211,13 @@ function focusKey(el) {
   const attrs = [...el.attributes].filter((a) => a.name.startsWith("data-")).map((a) => `[${a.name}="${CSS.escape(a.value)}"]`).join("");
   return attrs ? el.tagName.toLowerCase() + attrs : "h1";
 }
-function go(route) { if (S.route === "create-2" && route !== "create-2" && S.onb) S.onb.revealed = false; S.route = route; if (route === "send" && S.send.step === "result") S.send = freshSend(); closeSheet(false); render(); const m = $("#main"); if (m) m.scrollTop = 0; focusHeading(); }
+function go(route) {
+  if (S.route === "create-2" && route !== "create-2" && S.onb) S.onb.revealed = false;
+  // A payment being prepared is discarded on leaving; the form keeps what was typed (re-check N2).
+  if (route !== "send" && S.send.step === "preparing") { S.send.prep = null; S.send.step = "form"; }
+  S.nodePick = null;
+  S.route = route; if (route === "send" && S.send.step === "result") S.send = freshSend(); closeSheet(false); render(); const m = $("#main"); if (m) m.scrollTop = 0; focusHeading();
+}
 
 let sheetReturn = null;
 const BEHIND = ["#app", "#ribbon", "#titlebar"];
@@ -1243,7 +1263,7 @@ const ACTIONS = {
     tx.status = S.unknownResolves === "notsent" ? "failed" : undefined;
     closeSheet(false); render(false); focusHeading();
     const msg = tx.status === "failed" ? "Not sent: your node never received this payment, and the coins are back in your balance." : "Your node has this payment. It's waiting to confirm.";
-    toast(msg); announce(msg);
+    toast(msg);
   },
   mine() {
     if (!canTransact()) return;
@@ -1252,7 +1272,7 @@ const ACTIONS = {
     S.tip += 10; toast("Mined 10 test blocks"); render(false);
   },
   "dismiss-reorg"() { S.reorg = null; render(false); },
-  retry() { S.node = "connecting"; render(false); setTimeout(() => { S.node = "synced"; render(false); }, 1200); },
+  retry() { setNode("connecting"); setTimeout(() => { if (S.node === "connecting") setNode("synced"); }, 1200); },
   max() {
     const b = balances(), m = b.unlocked - FEE;
     if (m > 0n) { S.send.amount = plain(m); S.send.errs = {}; }
@@ -1272,7 +1292,8 @@ const ACTIONS = {
         S.txs.push({ id, type: "out", amount: s.parsed, fee: FEE, change, height: null, to: Object.keys(ADDR[S.net]).find((k2) => ADDR[S.net][k2] === s.toClean), txid: TXID[3], note: s.note, status: s.outcome === "lost" ? "unknown" : undefined });
         s.txid = id;
       }
-      render(false); focusHeading();
+      // A submission can't be called back, so it finishes even if the user left Send; focus moves only if they're still there.
+      render(false); if (S.route === "send") focusHeading();
       announce({ success: "Sent. Submitted to your node and waiting to confirm.", rejected: "Payment not sent. Your node refused it, and your balance hasn't changed.", lost: "Submission status unknown. Check this payment before trying again." }[s.outcome]);
     }, 1400);
   },
@@ -1287,7 +1308,7 @@ document.addEventListener("click", (ev) => {
   const c = ev.target.closest("[data-c]");
   if (c) { CONTROLS[c.dataset.c]?.(); return; }
   const seg = ev.target.closest("[data-ctl] button");
-  if (seg) { const k = seg.parentElement.dataset.ctl; S[k] = seg.dataset.v; if (k === "net") { S.send = freshSend(); } render(false); }
+  if (seg) { const k = seg.parentElement.dataset.ctl; S[k] = seg.dataset.v; if (k === "net") { S.send = freshSend(); S.nodePick = null; } render(false); }
 });
 document.addEventListener("input", (ev) => {
   const t = ev.target;
@@ -1298,8 +1319,15 @@ document.addEventListener("submit", (ev) => {
     ev.preventDefault();
     if (validateSend()) {
       const trigger = document.activeElement;
+      const prep = S.send.prep = {};
       S.send.step = "preparing"; render(false); focusHeading(); announce("Preparing the payment.");
-      setTimeout(() => { S.send.step = "form"; render(false); openSheet(reviewSheet()); sheetReturn = $("#sendform button[type=submit]") || trigger; }, 700);
+      setTimeout(() => {
+        // Leaving Send discards the prepared payment, as Edit does (re-check N2).
+        if (S.send.prep !== prep) return;
+        S.send.prep = null; S.send.step = "form";
+        if (S.route !== "send") return;
+        render(false); openSheet(reviewSheet()); sheetReturn = $("#sendform button[type=submit]") || trigger;
+      }, 700);
     }
     else { render(false); const bad = document.querySelector('#sendform [aria-invalid="true"]'); if (bad) bad.focus(); }
   }
@@ -1336,10 +1364,18 @@ const CONTROLS = {
 };
 function fill(to, amount) { S.route = "send"; S.send = freshSend(); S.send.to = to; S.send.amount = amount; validateSend(); render(false); }
 function advance(n) {
-  for (const t of S.txs) if (t.height == null && t.status !== "failed") { if (t.status === "unknown") t.status = undefined; t.height = S.tip + 1; }
+  let found = null;
+  for (const t of S.txs) {
+    if (t.height != null || t.status === "failed") continue;
+    // An unknown payment leaves that state only on evidence (re-check N4). It can show up in a block;
+    // a block without it proves nothing, so "Not sent" waits for Check with node.
+    if (t.status === "unknown") { if (S.unknownResolves !== "reached") continue; t.status = undefined; found = t; }
+    t.height = S.tip + 1;
+  }
   S.tip += n; if (S.reorg) S.reorg = null; render(false);
+  if (found) announce(`The payment whose status was unknown is in block ${found.height.toLocaleString("en-US")}, so your node received it. It's confirming now.`);
 }
-$("#c-node").addEventListener("change", (e) => { S.node = e.target.value; render(false); const t = $("#app .syncchip"); if (t) announce(t.getAttribute("aria-label")); });
+$("#c-node").addEventListener("change", (e) => setNode(e.target.value));
 $("#c-story").addEventListener("change", (e) => { const keep = { route: S.route }; S.storyKind = e.target.value; Object.assign(S, story(S.storyKind)); S.reorg = null; S.send = freshSend(); Object.assign(S, keep); render(false); });
 $("#c-route").addEventListener("change", (e) => { const r = e.target.value; if (ROUTE_SETUP[r]) ROUTE_SETUP[r](); go(r.split(":")[0] in SCREENS ? r.split(":")[0] : r); });
 const ROUTE_SETUP = {};
@@ -1533,7 +1569,11 @@ SCREENS.unlock = onb(() => {
 ROUTES.push(["node", "Node and connection", "Wallet"]);
 SCREENS.node = () => {
   const n = net(), remote = S.node === "remote";
-  const st = { synced: "Connected and synced", remote: "Connected and synced", connecting: "Connecting…", "node-sync": "Node catching up", scanning: "Scanning for payments", offline: "Can't reach this node", "wrong-net": "Wrong network" }[S.node];
+  const st = { synced: "Connected and synced", remote: "Connected and synced", connecting: "Connecting…", "node-sync": "Node catching up", scanning: "Scanning for payments", offline: "Can't reach this node", "wrong-net": "Wrong network", "engine-down": "Wallet engine stopped", "auth-failed": "Wallet engine refused this app's credentials", "node-old": "Incompatible node version" }[S.node];
+  // Nothing is read from a node that is unreachable, on another network or on an incompatible version.
+  const unloaded = ["offline", "wrong-net", "node-old"].includes(S.node);
+  // The radios pick; only Connect changes the node, so an arrow key never switches trust (re-check R-A, TJS-1994 #6).
+  const far = (S.nodePick || (remote ? "remote" : "local")) === "remote";
   return `<div class="ph"><h1>Node</h1></div>
   ${conditionBanner()}
   ${capsLine(cap("A", "get_connections · get_last_block_header", "peer count and tip in the kit"), cap("B", "get_info", "height/target_height/nettype; not exercised in the kit"), cap("A", "explicit --trusted-daemon", "only for the user's own node; never inferred from localhost (TJS-1994 #6)"), cap("C", "how the GUI reaches the kit's node", "Open decision: the kit container is network-disabled; see README handoff"))}
@@ -1542,18 +1582,19 @@ SCREENS.node = () => {
       <dt>Status</dt><dd>${st}</dd>
       <dt>Node</dt><dd>${remote ? "node.example-test.org:29081 <span class='muted small'>someone else's node</span>" : `${n.node} <span class="muted small">${esc(n.nodeName)}</span>`}</dd>
       <dt>Network</dt><dd>${S.node === "wrong-net" ? `<span style="color:var(--danger)">${esc(NETS[n.other].name)}</span> · this wallet needs the ${esc(n.prose)}` : esc(n.title)}</dd>
-      <dt>Node height</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.node === "node-sync" ? `${Math.round(S.tip * S.nodePct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}` : S.tip.toLocaleString("en-US")}</dd>
-      <dt>Wallet scanned to</dt><dd class="tnum">${S.node === "scanning" ? Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US") : S.node === "synced" || remote ? S.tip.toLocaleString("en-US") : "Waiting for node"}</dd>
-      <dt>Peers</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.net === "regtest" ? "1 <span class='muted small'>a local regtest may have none</span>" : "8"}</dd>
+      <dt>Node height</dt><dd class="tnum">${unloaded ? "—" : S.node === "node-sync" ? `${Math.round(S.tip * S.nodePct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}` : S.tip.toLocaleString("en-US")}</dd>
+      <dt>Wallet scanned to</dt><dd class="tnum">${S.node === "scanning" ? Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US") : S.node === "synced" || remote ? S.tip.toLocaleString("en-US") : ["engine-down", "auth-failed"].includes(S.node) ? "Waiting for the wallet engine" : "Waiting for node"}</dd>
+      <dt>Peers</dt><dd class="tnum">${unloaded ? "—" : S.net === "regtest" ? "1 <span class='muted small'>a local regtest may have none</span>" : "8"}</dd>
       <dt>Trust</dt><dd>${remote ? "Untrusted, by your choice" : "Trusted, because you chose your own node"}</dd>
     </dl>
   </div>
   <h2 class="sec">Connect through</h2>
   <div role="radiogroup" aria-label="Node choice">
-    <button class="choice" role="radio" aria-checked="${!remote}" tabindex="${remote ? -1 : 0}" data-act="node-local"><span class="ico">${icon("node")}</span><span><b>My own node on this computer</b><span class="s">${S.net === "regtest" ? "The Meownero test kit's node at " + n.node : "Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network."}</span></span>${!remote ? icon("check") : ""}</button>
-    <button class="choice" role="radio" aria-checked="${remote}" tabindex="${remote ? 0 : -1}" data-act="node-remote" ${S.net === "regtest" ? "disabled" : ""}><span class="ico">${icon("node")}</span><span><b>Someone else's node</b><span class="s">${S.net === "regtest" ? "Not available on the local regtest" : "Faster to start, but it can observe your activity"}</span></span>${remote ? icon("check") : ""}</button>
+    <button class="choice" role="radio" aria-checked="${!far}" tabindex="${far ? -1 : 0}" data-act="node-pick" data-v="local"><span class="ico">${icon("node")}</span><span><b>My own node on this computer</b><span class="s">${S.net === "regtest" ? "The Meownero test kit's node at " + n.node : "Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network."}</span></span>${!far ? icon("check") : ""}</button>
+    <button class="choice" role="radio" aria-checked="${far}" tabindex="${far ? 0 : -1}" data-act="node-pick" data-v="remote" ${S.net === "regtest" ? "disabled" : ""}><span class="ico">${icon("node")}</span><span><b>Someone else's node</b><span class="s">${S.net === "regtest" ? "Not available on the local regtest" : "Faster to start, but it can observe your activity"}</span></span>${far ? icon("check") : ""}</button>
   </div>
-  ${remote ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>What someone else's node can observe</b>An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata. ${cap("B", "--untrusted-daemon", "Explicit untrusted mode; current-lineage execution unverified (TJS-1994 #6, #11)")}</div></div>` : ""}
+  ${far !== remote ? `<div class="row" style="margin-bottom:10px"><button class="btn primary" data-act="node-apply">Connect to ${far ? "someone else's node" : "my own node"}</button><button class="btn quiet" data-act="node-cancel">Keep current node</button><span class="small muted">Nothing changes until you connect.</span></div>` : ""}
+  ${far ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>What someone else's node can observe</b>An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata. ${cap("B", "--untrusted-daemon", "Explicit untrusted mode; current-lineage execution unverified (TJS-1994 #6, #11)")}</div></div>` : ""}
   <div class="choice" aria-disabled="true" style="opacity:.6"><span class="ico">${icon("lock")}</span><span><b>Through Tor or I2P</b><span class="s">Not available in this test build</span></span>${cap("C", "Tor/I2P untested", "No Tor/I2P evidence in the project")}</div>`;
 };
 
@@ -1604,8 +1645,9 @@ Object.assign(ACTIONS, {
   },
   "open-new"() { Object.assign(S, story("empty")); S.created = S.tip - 4; S.onb = onbFresh(); go("overview"); },
   "open-restored"() { Object.assign(S, story("normal")); S.onb = onbFresh(); go("overview"); },
-  "node-local"() { S.node = "synced"; render(false); },
-  "node-remote"() { S.node = "remote"; render(false); },
+  "node-pick"(el) { S.nodePick = el.dataset.v; render(false); },
+  "node-apply"() { setNode(S.nodePick === "remote" ? "remote" : "synced"); $('#app [role="radio"][aria-checked="true"]').focus(); },
+  "node-cancel"() { S.nodePick = null; render(false); $('#app [role="radio"][aria-checked="true"]').focus(); },
   "show-seed"() { openSheet(seedPasswordSheet()); },
   na() { toast("Not in this test build yet"); },
 });
@@ -1705,6 +1747,7 @@ Object.assign(ROUTE_SETUP, {
 $("#c-route").replaceWith($("#c-route").cloneNode(true));
 $("#c-route").addEventListener("change", (e) => {
   const r = e.target.value, base = r.split(":")[0];
+  S.nodePick = null;
   if (ROUTE_SETUP[r]) { ROUTE_SETUP[r](); if (S.route !== base) S.route = base; closeIfNotDetail(r); render(false); if (r === "activity:unknown") ACTIONS.detail({ dataset: { id: "u1" } }); }
   else go(r);
   e.target.value = r;

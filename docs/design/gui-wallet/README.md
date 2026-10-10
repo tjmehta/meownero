@@ -1,6 +1,6 @@
 # Meownero desktop wallet: concept and prototype
 
-Design candidate for TJS-1992 (2026-10-10), revision 3. [`prototype.html`](prototype.html)
+Design candidate for TJS-1992 (2026-10-10), revision 4. [`prototype.html`](prototype.html)
 is a self-contained interactive prototype: open it in any current browser. It
 uses mock data only, talks to no node or wallet, and has no remote fonts,
 scripts or tracking. It is not a release and does not describe tested software.
@@ -68,13 +68,13 @@ outgoing, grouped mined blocks), and balance (spendable, unlocking, total).
 
 | Object | States |
 | --- | --- |
-| Outgoing payment | preparing (exact transaction built, nothing sent) → review of the exact fee → submitting → waiting to confirm → *n* of 10 confirmations → confirmed. Change returns after 10 confirmations, so spendable can drop by more than was sent; the Sent result says so. Branches: edit (prepared transaction discarded, prepared and reviewed again); node refuses (nothing sent, balance unchanged); connection drops (**submission status unknown**: never shown as sent or failed, never retried automatically, and new payments are blocked until wallet and node reconcile, which resolves to waiting-to-confirm or **not sent**, with the coins returned) |
+| Outgoing payment | preparing (exact transaction built, nothing sent) → review of the exact fee → submitting → waiting to confirm → *n* of 10 confirmations → confirmed. Change returns after 10 confirmations, so spendable can drop by more than was sent; the Sent result says so. Branches: edit, or leaving Send while it is preparing (prepared transaction discarded; the form keeps what was typed; prepared and reviewed again); node refuses (nothing sent, balance unchanged); connection drops (**submission status unknown**: never shown as sent or failed, never retried automatically, and new payments are blocked until wallet and node reconcile, which resolves to waiting-to-confirm or **not sent**, with the coins returned. It leaves that state only on evidence: found in the pool or a block, or proven absent by checking with the node. A new block without it proves nothing. Every resolution is announced). A submission already under way finishes even if the user leaves Send; its outcome is announced without moving focus |
 | Incoming payment | pending → *n* of 10 → spendable. Mined coins: unlocking for 60 blocks |
 | Chain reorganization | confirmed → pending → confirmed, with a banner explaining the balance change |
 | New wallet | name and password → recovery words (hidden until revealed, hidden again on leaving, no copy) → word check → ready |
 | Restore | words (count, word list and check-word errors) → starting block (future-block error) and new password → scanning → restored, with the note that local notes do not return |
 | Wallet file | locked ↔ unlocked; wrong password error |
-| Node and engine | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending and test-coin mining paused); wrong network or incompatible node version (nothing loaded); wallet engine stopped, or engine refused the app's credentials (sending paused, restart offered); someone else's node (explicitly untrusted, exposure explained; not offered on the local regtest) |
+| Node and engine | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending and test-coin mining paused); wrong network or incompatible node version (nothing loaded); wallet engine stopped, or engine refused the app's credentials (sending paused, restart offered). Every paused reason names the part at fault, node or wallet engine, and the Node screen has its own status text for each state. Someone else's node: explicitly untrusted, exposure explained before connecting, not offered on the local regtest. A node change applies only on an explicit Connect; picking a choice, by click or arrow key, changes nothing until then |
 
 **Amount rule (TJ decision):** amounts are integers of atomic units (12 decimal
 places). Compact display shows at most four decimals, *truncated* and marked
@@ -87,7 +87,7 @@ mark are refused with a message, so `0,5` can never be read as 5 (critique D1).
 The prototype includes a 1-atomic-unit wallet, a 3,153,600.123456789012 balance,
 a 13-decimal input and `PARSER_CASES`, which is checked at load and must be
 ported with the parser. Send is disabled when the spendable balance can't cover a
-network fee, and the app says why.
+network fee, and the app says why on Overview and on the Send page itself.
 
 **Focus and announcements (critique D3, D4, D8, R4):**
 - Dialogs are named by their heading and are modal: the background is inert,
@@ -96,7 +96,8 @@ network fee, and the app says why.
 - Navigation moves focus to the new page heading. In-place actions keep focus on
   the same control.
 - One polite live region announces preparing, submitting, every send outcome,
-  reconciliation results and node-state changes.
+  reconciliation results, copy results and node-state changes, however the
+  change happens. The toast is visual only, so nothing is spoken twice.
 - Field errors are linked to their field, and focus moves to the first invalid
   field (for missing recovery words, the first empty box).
 - Radio choices are one Tab stop moved with the arrow keys. Toggles keep a
@@ -157,7 +158,9 @@ The in-app "About this test build" panel lists only tier A, as what the wallet e
 - **Network**, **Node and sync** (including engine stopped, refused credentials
   and incompatible node), **Wallet contents**, **Chain** (add blocks, reorg),
   **Next send result** and **Unknown payment resolves as** change the live state,
-  so a payment can be followed from review to confirmed or not sent.
+  so a payment can be followed from review to confirmed or not sent. **Unknown
+  payment resolves as** sets what "Check with node" finds, and whether the
+  unknown payment shows up in the next added block.
 - **Platform window**, **Appearance** and **Capability labels** change the
   presentation only.
 
@@ -173,7 +176,7 @@ The numbers below match its constraints.
 | 2 | Show the exact `4…` RPC address; no `M…`/`T…` substitution; no `monero:` links; regtest sends only to session-known disposable wallets | Approved receive warning; **QR removed on regtest**; Send offers the kit's test wallets and refuses any other address on regtest |
 | 3 | Unlock 60/10 blocks from pinned source; no clock-time promises | Unlock copy uses blocks only; the testnet minute estimate was removed |
 | 4–5 | Loopback-only RPC with Digest auth, no `--disable-rpc-login`, no published container RPC ports, Unix-socket RPC unproven | Handoff items 2 and 4 |
-| 6 | Explicit `--trusted-daemon` only for the user's own node; explicit untrusted mode otherwise | The node screen's trust row reflects the user's choice; "Someone else's node" is disabled on regtest |
+| 6 | Explicit `--trusted-daemon` only for the user's own node; explicit untrusted mode otherwise | The node screen's trust row reflects the user's choice; a node change applies only on an explicit Connect (rev 4); "Someone else's node" is disabled on regtest |
 | 7–9 | Password before reveal; no seed copy; hide on leave/lock; capture protection where the OS allows | Reveal is gated by the password and hidden again on leaving; recording warning before reveal; no copy button |
 | 10 | Allowlist diagnostics; no seed or keys in logs or crash reports; no zeroization claims | Handoff item 4 |
 | 11 | Explain observer boundaries without anonymity claims | Approved remote-node and privacy wording in the node screen and the About sheet |
@@ -246,13 +249,13 @@ handled. A fix counts only after an independent re-check.
 | D8 errors weren't linked outside Send | Fixed in rev 3 |
 | D9 ellipsis contrast | Fixed in rev 3 (muted colour) |
 | D10 motion under reduced motion | Fixed in rev 3 |
-| D11 a balance too small for any fee could still start a send | Fixed in rev 3 |
+| D11 a balance too small for any fee could still start a send | Partly fixed in rev 3 (Overview only, per TJS-2002); completed in rev 4 (author-verified) |
 | D12 staged wrong pick wasn't marked | Fixed in rev 3 |
 | D13 "Coming later" testnet promise | Fixed in rev 2: the network is shown, never chosen |
 | D14 radio and toggle semantics | Fixed in rev 2–3: no welcome radios, node radios are one Tab stop with arrow keys, constant toggle label, exact name for the balance |
 | R2 testnet preview could look live | Fixed in rev 2: the ribbon says "Design preview … not live" |
 | R3 change after sending was never shown | Fixed in rev 3: change is modelled and explained on Sent |
-| R4 node changes weren't announced | Fixed in rev 3 |
+| R4 node changes weren't announced | Partly fixed in rev 3 (reviewer control only, per TJS-2002); completed in rev 4 (author-verified) |
 | R5 copy always said "Copied" | Fixed in rev 3 |
 | R6 privacy wording to confirm | Fixed in rev 2–3 with the TJS-1994 approved wording; the own-node line no longer claims nothing leaves the computer |
 | T1 warning colour close to gold | Accepted: hue moved |
@@ -282,6 +285,33 @@ implementation's journey QA:
   refused-payment layout.
 - **Disk full or a failed write** during create or restore: nothing is
   half-written, and the error names the folder.
+
+## Re-check (TJS-2002)
+
+The design critic's independent re-check of `4bd99fd` (`recheck-verdict`
+revision `97566108-ecc2-4b79-8c2a-d37fbe824995`) found that **D1, D2, D3, D4 and
+R1 pass** on observed behaviour: **accept with findings**. It also passed the
+TJS-1996 wording above and the TJS-1994 approved strings. It reported nine new
+minor findings, recommended N1–N3 before the handoff is final, and left the rest
+to the design lead.
+
+Revision 4 handles all of them. These fixes are **author-verified only**; the
+studio lead re-runs the critic's repros before accepting.
+
+| Finding | Disposition in rev 4 |
+| --- | --- |
+| **N1** the Node screen read "undefined" for engine stopped, refused credentials and incompatible node | Fixed: each state has its own status text. The incompatible node shows "—" for height and peers. Send, Overview and Receive name the wallet engine when it is at fault |
+| **N2** leaving Send while a payment was being prepared still opened the review over another page | Fixed: leaving discards the prepared payment, as Edit does, and the form keeps what was typed. The rule is in the contract |
+| **N3** the regtest refusal called any address not starting with `4` a Meownero testnet address | Fixed: only a `T…` address is called testnet. Monero `8…`, `5…` and `9…` addresses get the kit-wallet rule |
+| N4 adding a block resolved an unknown payment whatever the control said | Fixed: with "Reached the node" the next block contains it, and that is announced. With "Not sent", blocks change nothing until "Check with node". The evidence rule is in the contract |
+| N5 activating the large balance moved focus to the header toggle | Fixed: focus stays on the balance |
+| N6 "Try again" and "Restart wallet engine" changed node state silently | Fixed: every node-state change is announced, however it happens |
+| N7 ticking the backup checkbox threw a script error | Fixed: the console stays clean |
+| N8 the marker dropped "Interactive prototype ·" in windows of 1040 px or less, and overlapped the title in windows of 601–700 px | Fixed: the full approved phrase shows in every window wider than 800 px, wrapping to at most two lines, with no overlap or title truncation on any platform or network (measured 808–1112 px). In smaller windows, below the 828 px layout minimum, it is hidden and the page caption carries it |
+| N9 reconciliation was announced by both the toast and the live region | Fixed: the toast is visual only |
+| D11 residual: the Send page reached from the sidebar didn't say why a dust balance can't be sent | Fixed: "Review payment" is disabled with the reason |
+| R4 residual: app-made node changes weren't announced | Fixed with N6 |
+| R-A arrow keys in the node choice switched straight to someone else's node (testnet preview) | Fixed: the radios only pick. Nothing changes until "Connect to someone else's node", and the exposure explanation shows first. This is a new interaction the critic hasn't seen |
 
 ## Implementation handoff
 
@@ -334,5 +364,8 @@ implementation's journey QA:
    signing status and the tested OS and architecture are reported from execution
    evidence only.
 
-Design acceptance needs an independent re-check of the revision-3 fixes and of
-the revision-2 surfaces the critic hadn't seen.
+**Status:** both critique passes are complete: TJS-1999 and TJS-2002, each
+accept with findings. Every finding has a disposition above. The design moves to
+the Meownero Studio Lead for accepted integration. The revision-4 fixes are
+author-verified, and the studio lead re-runs the TJS-2002 repros before
+accepting.
