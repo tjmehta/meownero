@@ -1,0 +1,124 @@
+{
+  "schema": "meownero-original-reviewer-native-mac-readback/1",
+  "action": "READ_ONLY_NO_NATIVE_WORKLOAD",
+  "current_environment": {
+    "macos": "26.5.1",
+    "kernel": "Darwin 25.5.0 arm64",
+    "physical_arm64": "1",
+    "python": "3.14.7"
+  },
+  "retained_environment": "macOS 26.5.1\nDarwin 25.5.0 arm64\n3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]\n",
+  "files": {
+    "check": {
+      "sha256": "329c9b060f1206af42476ee6b888aec4a190740d3aaa0ba64f4e51903691c1be",
+      "bytes": 2605
+    },
+    "journey": {
+      "sha256": "53dc9400d7d98967e58f4f1b7378303004b17a20aca5bb219b201e5be6949a9c",
+      "bytes": 2426
+    },
+    "controls": {
+      "sha256": "013cde3f95e1476220041b676e15d6d9a0b9ddb4db44599021b27fdd86c7d8ce",
+      "bytes": 1017
+    },
+    "supervision": {
+      "sha256": "e02796d61dbf52f7fa2502dc995c7d801c9e7361ce4419dc4035b530222b6545",
+      "bytes": 2340
+    }
+  },
+  "projected_check": {
+    "schema": "meownero-portable-native-mac-check/1",
+    "archive_sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+    "result": "PASS_NATIVE_ARCHIVE_JOURNEY",
+    "phases": [
+      {
+        "name": "preflight",
+        "reaped": true,
+        "pid": 24704,
+        "exit": 0
+      },
+      {
+        "name": "journey",
+        "reaped": true,
+        "pid": 24733,
+        "exit": 0
+      },
+      {
+        "name": "controls",
+        "reaped": true,
+        "pid": 26122,
+        "exit": 0
+      }
+    ],
+    "resident_limit_bytes": 4294967296,
+    "peak_resident_bytes": 714178560,
+    "cleanup": [
+      {
+        "pid": 24704,
+        "removed": true
+      },
+      {
+        "pid": 24710,
+        "removed": true
+      },
+      {
+        "pid": 24730,
+        "removed": true
+      },
+      {
+        "pid": 24733,
+        "removed": true
+      },
+      {
+        "pid": 24742,
+        "removed": true
+      },
+      {
+        "pid": 24746,
+        "removed": true
+      },
+      {
+        "pid": 25173,
+        "removed": true
+      },
+      {
+        "pid": 25182,
+        "removed": true
+      },
+      {
+        "pid": 25693,
+        "removed": true
+      },
+      {
+        "pid": 26122,
+        "removed": true
+      },
+      {
+        "pid": 26172,
+        "removed": true
+      },
+      {
+        "pid": 26179,
+        "removed": true
+      },
+      {
+        "pid": 26324,
+        "removed": true
+      },
+      {
+        "pid": 26353,
+        "removed": true
+      },
+      {
+        "pid": 26388,
+        "removed": true
+      },
+      {
+        "pid": 26390,
+        "removed": true
+      }
+    ],
+    "execution_substrate": "NATIVE",
+    "wall_seconds": 19.061
+  }
+}

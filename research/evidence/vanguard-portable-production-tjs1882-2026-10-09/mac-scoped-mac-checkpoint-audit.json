@@ -1,0 +1,562 @@
+{
+  "schema": "meownero-original-mac-arm-independent-audit/1",
+  "result": "PASS",
+  "reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "run": "dd1deb13-4d62-4896-853e-1aabbd509443",
+  "source_evidence_commit": "1afe36b97752f9b820ae8f7c36da59ac721d5718",
+  "archive_sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+  "archive_bytes": 63060519,
+  "safe_regular_members": 266,
+  "manifest_bindings_verified": 265,
+  "release_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e",
+  "review_packet_sha256": "b2d210d0094f00bb6d6f522200c8603fa80a85dc8aaf3e9cd1a901f5368dd921",
+  "review_packet_members_verified": 16,
+  "runtime_kit_files_verified": {
+    "vanguard/tester.py": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+    "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+    "vanguard/run-portable-mac-check.py": "b72e05335d8d959f5bfa619790409d46c3aa5d74be294de3af4b65d8bcc9b650",
+    "vanguard/run-portable-ci.py": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974",
+    "vanguard/tester-profile.json": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+    "vanguard/test-portable-refusals.py": "f553f0bd09b39e2b3f8d549df16ee36ab698219f6310033f357ac80839a8b14a"
+  },
+  "program_sha256": {
+    "monerod": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+    "monero-wallet-cli": "eea8a6e59a8b6b1439c97d03001736af5cbbdc7610106d4f189ce76c571827d3",
+    "monero-wallet-rpc": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142"
+  },
+  "macho": {
+    "monerod": {
+      "cpu": "ARM64",
+      "filetype": "MH_EXECUTE",
+      "libraries": [
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+        "/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit",
+        "/usr/lib/libc++.1.dylib",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      "build_versions": [
+        {
+          "platform": "macOS",
+          "minimum": "11.0.0",
+          "sdk": "26.5.0"
+        }
+      ],
+      "code_signatures": [
+        {
+          "bytes": 261816,
+          "slots": [
+            {
+              "slot": 0,
+              "magic": "0xfade0c02",
+              "bytes": 261792,
+              "flags": 131074
+            }
+          ]
+        }
+      ],
+      "rpaths": []
+    },
+    "monero-wallet-cli": {
+      "cpu": "ARM64",
+      "filetype": "MH_EXECUTE",
+      "libraries": [
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+        "/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit",
+        "/usr/lib/libc++.1.dylib",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      "build_versions": [
+        {
+          "platform": "macOS",
+          "minimum": "11.0.0",
+          "sdk": "26.5.0"
+        }
+      ],
+      "code_signatures": [
+        {
+          "bytes": 271136,
+          "slots": [
+            {
+              "slot": 0,
+              "magic": "0xfade0c02",
+              "bytes": 271114,
+              "flags": 131074
+            }
+          ]
+        }
+      ],
+      "rpaths": []
+    },
+    "monero-wallet-rpc": {
+      "cpu": "ARM64",
+      "filetype": "MH_EXECUTE",
+      "libraries": [
+        "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+        "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices",
+        "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+        "/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit",
+        "/usr/lib/libc++.1.dylib",
+        "/usr/lib/libSystem.B.dylib"
+      ],
+      "build_versions": [
+        {
+          "platform": "macOS",
+          "minimum": "11.0.0",
+          "sdk": "26.5.0"
+        }
+      ],
+      "code_signatures": [
+        {
+          "bytes": 276160,
+          "slots": [
+            {
+              "slot": 0,
+              "magic": "0xfade0c02",
+              "bytes": 276138,
+              "flags": 131074
+            }
+          ]
+        }
+      ],
+      "rpaths": []
+    }
+  },
+  "v5_archive_sha256": "12c257e6f9be0aa054bffc48ff6e4f93fb04e14dcb9d453f9f02060a93b5ab66",
+  "v5_changed_files": [
+    "TESTER.md",
+    "release.json",
+    "tester.py"
+  ],
+  "v5_notice_and_program_bytes_preserved": true,
+  "previous_independent_audit_sha256": "e4d44a4d81aa5e6f44d3b6da8debd634d477638719f010eb58920f2330c28476",
+  "license_components": 92,
+  "license_text_references_verified": 230,
+  "external_rust_crates": 79,
+  "raw_check_public_projection_verified": true,
+  "native_journey_receipts": {
+    "adoption": {
+      "schema": "meownero-current-macos-arm-native-checkpoint/1",
+      "result": "PASS_CURRENT_ARCHIVE_NATIVE_JOURNEY_TEN_CONTROLS_REVIEW_PENDING",
+      "archive": {
+        "name": "mac-arm-starter-package01.tar.gz",
+        "bytes": 63060519,
+        "sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+        "release_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e",
+        "safe_regular_members": 266,
+        "all_internal_bindings_verified": true
+      },
+      "supervisor_sha256": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974",
+      "wrapper_sha256": "b72e05335d8d959f5bfa619790409d46c3aa5d74be294de3af4b65d8bcc9b650",
+      "execution": "PHYSICAL_APPLE_SILICON_DARWIN_ARM64",
+      "program_sha256": {
+        "monerod": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+        "monero-wallet-cli": "eea8a6e59a8b6b1439c97d03001736af5cbbdc7610106d4f189ce76c571827d3",
+        "monero-wallet-rpc": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142"
+      },
+      "full_journey": "PASS",
+      "ten_controls": "PASS",
+      "receive_atomic": 5000000000000,
+      "subsequent_spend_atomic": 2000000000000,
+      "restored_wallet_and_native_CLI": "PASS",
+      "owned_cleanup": "PASS",
+      "existing_heavy_lock_inode_preserved": true,
+      "translation": false,
+      "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+      "independent_acceptance": "PENDING",
+      "full_release": "OPEN",
+      "public_receipts": {
+        "check": "0779540c0b746d520c0ae5521137eebed0e30629e807797ce8a026268ce2cdcc",
+        "journey": "53dc9400d7d98967e58f4f1b7378303004b17a20aca5bb219b201e5be6949a9c",
+        "controls": "013cde3f95e1476220041b676e15d6d9a0b9ddb4db44599021b27fdd86c7d8ce",
+        "supervision": "e02796d61dbf52f7fa2502dc995c7d801c9e7361ce4419dc4035b530222b6545"
+      },
+      "actual_environment": {
+        "macos": "26.5.1",
+        "kernel": "Darwin25.5.0",
+        "architecture": "arm64",
+        "python": "3.14.7"
+      }
+    },
+    "check": {
+      "wall_seconds": 19.061,
+      "resident_limit_bytes": 4294967296,
+      "peak_resident_bytes": 714178560,
+      "schema": "meownero-portable-native-mac-check/1",
+      "result": "PASS_NATIVE_ARCHIVE_JOURNEY",
+      "execution_substrate": "NATIVE",
+      "archive_sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+      "phases": [
+        {
+          "pid": 24704,
+          "exit": 0,
+          "reaped": true,
+          "name": "preflight"
+        },
+        {
+          "pid": 24733,
+          "exit": 0,
+          "reaped": true,
+          "name": "journey"
+        },
+        {
+          "pid": 26122,
+          "exit": 0,
+          "reaped": true,
+          "name": "controls"
+        }
+      ],
+      "cleanup": [
+        {
+          "pid": 24704,
+          "removed": true
+        },
+        {
+          "pid": 24710,
+          "removed": true
+        },
+        {
+          "pid": 24730,
+          "removed": true
+        },
+        {
+          "pid": 24733,
+          "removed": true
+        },
+        {
+          "pid": 24742,
+          "removed": true
+        },
+        {
+          "pid": 24746,
+          "removed": true
+        },
+        {
+          "pid": 25173,
+          "removed": true
+        },
+        {
+          "pid": 25182,
+          "removed": true
+        },
+        {
+          "pid": 25693,
+          "removed": true
+        },
+        {
+          "pid": 26122,
+          "removed": true
+        },
+        {
+          "pid": 26172,
+          "removed": true
+        },
+        {
+          "pid": 26179,
+          "removed": true
+        },
+        {
+          "pid": 26324,
+          "removed": true
+        },
+        {
+          "pid": 26353,
+          "removed": true
+        },
+        {
+          "pid": 26388,
+          "removed": true
+        },
+        {
+          "pid": 26390,
+          "removed": true
+        }
+      ]
+    },
+    "journey": {
+      "schema": "meownero-portable-journey/1",
+      "result": "PASS_NATIVE_JOURNEY",
+      "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "architecture": "aarch64",
+      "release_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e",
+      "program_sha256": {
+        "monerod": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+        "monero-wallet-cli": "eea8a6e59a8b6b1439c97d03001736af5cbbdc7610106d4f189ce76c571827d3",
+        "monero-wallet-rpc": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142"
+      },
+      "cleanup": [
+        {
+          "name": "cli",
+          "pid": 25693,
+          "exit": 0,
+          "removed": true
+        },
+        {
+          "name": "restored",
+          "pid": 25182,
+          "exit": 0,
+          "removed": true
+        },
+        {
+          "name": "receiver",
+          "pid": 25173,
+          "exit": 0,
+          "removed": true
+        },
+        {
+          "name": "sender",
+          "pid": 24746,
+          "exit": 0,
+          "removed": true
+        },
+        {
+          "name": "daemon",
+          "pid": 24742,
+          "exit": 0,
+          "removed": true
+        }
+      ],
+      "payments": [
+        {
+          "tx_hash": "0e548b98543845efb98d98dd9e7769ba3e3d1d4ea74657ec073dbf8b3bef9e3b",
+          "amount_atomic": 5000000000000,
+          "rct_type": 7,
+          "carrot_outputs": true
+        },
+        {
+          "tx_hash": "595b5176e966dde92ad75e20281da8c09830c773cb791b8100c7efc9216299bc",
+          "amount_atomic": 2000000000000,
+          "rct_type": 7,
+          "carrot_outputs": true
+        }
+      ],
+      "native_processes": [
+        {
+          "name": "daemon",
+          "pid": 24742,
+          "binary_sha256": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+          "bundled_library_sha256": {}
+        },
+        {
+          "name": "sender",
+          "pid": 24746,
+          "binary_sha256": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142",
+          "bundled_library_sha256": {}
+        },
+        {
+          "name": "receiver",
+          "pid": 25173,
+          "binary_sha256": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142",
+          "bundled_library_sha256": {}
+        },
+        {
+          "name": "restored",
+          "pid": 25182,
+          "binary_sha256": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142",
+          "bundled_library_sha256": {}
+        }
+      ],
+      "execution_substrate": "NATIVE",
+      "receive_atomic": 5000000000000,
+      "restore_matches": true,
+      "subsequent_spend_atomic": 2000000000000,
+      "cli_open_restored_wallet": true,
+      "wall_seconds": 13.121
+    },
+    "controls": {
+      "schema": "meownero-portable-controls/2",
+      "result": "PASS_REFUSALS",
+      "release_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e",
+      "cases": [
+        {
+          "case": "wrong-pin",
+          "refused": true
+        },
+        {
+          "case": "wrong-target",
+          "refused": true
+        },
+        {
+          "case": "changed-binary",
+          "refused": true
+        },
+        {
+          "case": "unlisted-private-file",
+          "refused": true
+        },
+        {
+          "case": "symlink-directory",
+          "refused": true
+        },
+        {
+          "case": "hardlink",
+          "refused": true
+        },
+        {
+          "case": "collision-preservation",
+          "refused": true,
+          "sentinel_preserved": true
+        },
+        {
+          "case": "busy-lock",
+          "refused": true
+        },
+        {
+          "case": "cancelled-owned-cleanup",
+          "signal": "SIGTERM",
+          "removed": true,
+          "process_count": 2
+        },
+        {
+          "case": "deadline-owned-cleanup",
+          "signal": "SIGALRM",
+          "removed": true,
+          "process_count": 2
+        }
+      ]
+    },
+    "supervision": {
+      "schema": "meownero-native-mac-ci-supervision/1",
+      "result": "PASS_WRAPPER_AND_OWNED_CLEANUP",
+      "wrapper_reaped": true,
+      "cleanup": [
+        {
+          "pid": 24685,
+          "removed": true
+        },
+        {
+          "pid": 24704,
+          "removed": true
+        },
+        {
+          "pid": 24710,
+          "removed": true
+        },
+        {
+          "pid": 24725,
+          "removed": true
+        },
+        {
+          "pid": 24730,
+          "removed": true
+        },
+        {
+          "pid": 24733,
+          "removed": true
+        },
+        {
+          "pid": 24742,
+          "removed": true
+        },
+        {
+          "pid": 24746,
+          "removed": true
+        },
+        {
+          "pid": 25173,
+          "removed": true
+        },
+        {
+          "pid": 25182,
+          "removed": true
+        },
+        {
+          "pid": 25693,
+          "removed": true
+        },
+        {
+          "pid": 26122,
+          "removed": true
+        },
+        {
+          "pid": 26124,
+          "removed": true
+        },
+        {
+          "pid": 26136,
+          "removed": true
+        },
+        {
+          "pid": 26167,
+          "removed": true
+        },
+        {
+          "pid": 26172,
+          "removed": true
+        },
+        {
+          "pid": 26179,
+          "removed": true
+        },
+        {
+          "pid": 26324,
+          "removed": true
+        },
+        {
+          "pid": 26353,
+          "removed": true
+        }
+      ],
+      "signals": [],
+      "observer_ruid": 501,
+      "observer_euid": 501,
+      "helper_observations": [],
+      "unverified_observations": [
+        {
+          "pid": 25204,
+          "ppid": 24685,
+          "ruid": 501,
+          "euid": 0,
+          "role": "ALREADY_ABSENT_UNVERIFIED_SNAPSHOT",
+          "state_class": "LIVE",
+          "argv_role": "PS_EXIT_DISPLAY"
+        },
+        {
+          "pid": 25242,
+          "ppid": 24685,
+          "ruid": 501,
+          "euid": 0,
+          "role": "ALREADY_ABSENT_UNVERIFIED_SNAPSHOT",
+          "state_class": "LIVE",
+          "argv_role": "PS_EXIT_DISPLAY"
+        },
+        {
+          "pid": 26453,
+          "ppid": 24685,
+          "ruid": 501,
+          "euid": 0,
+          "role": "ALREADY_ABSENT_UNVERIFIED_SNAPSHOT",
+          "state_class": "LIVE",
+          "argv_role": "PS_EXIT_DISPLAY"
+        }
+      ],
+      "wrapper_pid": 24685,
+      "rejected_observation_cleanup": [
+        {
+          "pid": 25204,
+          "removed": true,
+          "proof": "ACTUAL_PID_ABSENCE"
+        },
+        {
+          "pid": 25242,
+          "removed": true,
+          "proof": "ACTUAL_PID_ABSENCE"
+        },
+        {
+          "pid": 26453,
+          "removed": true,
+          "proof": "ACTUAL_PID_ABSENCE"
+        }
+      ],
+      "wall_seconds": 19.627,
+      "cancellation_signals": []
+    }
+  },
+  "parent_export04_archive_verified": true,
+  "independent_native_rerun": "NOT_PERFORMED_THIS_RUN",
+  "independent_rebuild": "NOT_PERFORMED",
+  "full_release": "OPEN"
+}
