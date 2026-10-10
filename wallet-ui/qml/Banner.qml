@@ -19,6 +19,7 @@ Rectangle {
     border.color: Theme.border
     Accessible.role: Accessible.Grouping
     Accessible.name: title
+    Accessible.ignored: !visible
 
     RowLayout {
         id: content
@@ -59,6 +60,7 @@ Rectangle {
                 color: Theme.borderStrong
                 Accessible.role: Accessible.ProgressBar
                 Accessible.name: root.progress + "%"
+                Accessible.ignored: !visible
                 Rectangle { width: parent.width * Math.max(0, root.progress) / 100; height: parent.height; radius: 2; color: Theme.net }
             }
             Flow {

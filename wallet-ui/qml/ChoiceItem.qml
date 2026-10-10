@@ -20,6 +20,7 @@ AbstractButton {
     implicitHeight: row.implicitHeight + 28
     Accessible.role: radio ? Accessible.RadioButton : Accessible.Button
     Accessible.name: title
+    Accessible.ignored: !visible
     Accessible.description: subtitle
     Accessible.checkable: radio
     Accessible.checked: radio && checked

@@ -22,6 +22,7 @@ Button {
     // Checkable buttons are toggles that report pressed, not check boxes (D14).
     Accessible.role: Accessible.Button
     Accessible.name: text
+    Accessible.ignored: !visible
     Accessible.description: accessibleDescription
     Keys.onReturnPressed: if (enabled) clicked()
     Keys.onEnterPressed: if (enabled) clicked()

@@ -183,6 +183,26 @@ class App:
     def dialogs(self):
         return [i["name"] for i in self.nodes() if i["role"] == "dialog" and i["showing"]]
 
+    def hidden_leaks(self):
+        # Named nodes that assistive technology can reach although they are not visible.
+        # Qt also clears VISIBLE for items scrolled outside the window; those are skipped.
+        out = []
+        fr = self.main_frame().get_component_iface().get_extents(Atspi.CoordType.SCREEN)
+        for n in walk(self.main_frame()):
+            try:
+                if n.get_name() and not n.get_state_set().contains(Atspi.StateType.VISIBLE):
+                    e = n.get_component_iface().get_extents(Atspi.CoordType.SCREEN)
+                    if e.y >= fr.y + fr.height or e.y + e.height <= fr.y:
+                        continue
+                    out.append("%s:%s" % (n.get_role_name(), n.get_name()[:40]))
+            except GLib.Error:
+                pass
+        return out
+
+    def audit(self, where):
+        leaks = self.hidden_leaks()
+        check("H hidden content unreachable to AT (" + where + ")", not leaks, json.dumps(leaks[:12]))
+
     def names(self):
         return [i["name"] for i in self.nodes()]
 
@@ -251,6 +271,7 @@ def journey_create_backup_receive_restore():
     app = App("--start", "welcome", "--reviewer-fixtures")
     check("A0 app window mapped", bool(app.win), "%.3f s from launch" % app.mapped)
     names = app.names()
+    app.audit("welcome")
     check("A1 first run exposes no wallet pages", "Wallet sections" not in names and "Spendable now" not in " ".join(names))
     order = []
     for _ in range(5):
@@ -283,6 +304,7 @@ def journey_create_backup_receive_restore():
     names = app.names()
     check("A7 hidden recovery words are absent from the accessibility tree", not any(w in " ".join(names) for w in ("whisker", "verification")) and "Recovery words, hidden" in names)
     shot("a07-words-veiled")
+    app.audit("create-2 veiled")
     app.tab_to("Show words")
     key("Return", wait=0.6)
     names = app.names()
@@ -329,6 +351,7 @@ def journey_create_backup_receive_restore():
     names = app.names()
     check("A14 only the current page exists in the tree", "Overview" in names and "Your address" not in " ".join(names) and "Recovery words" not in names)
     shot("a14-overview-empty")
+    app.audit("overview empty")
     key("ctrl+4", wait=0.6)
     _, f = app.focused()
     check("A15 Ctrl+4 reaches Receive heading", f["name"] == "Receive", json.dumps(f))
@@ -430,6 +453,7 @@ def journey_send_review_unknown_consent():
     check("B0 reduced motion off under the stub portal default", "reduced_motion=0" in rm0, rm0.replace("\n", "; "))
     key("ctrl+3", wait=0.6)
     check("B1 Ctrl+3 reaches Send heading", app.focused()[1]["name"] == "Send")
+    app.audit("send form")
     fill_send(app, "0,5")
     key("Return", wait=0.5)
     _, f = app.focused()
@@ -450,6 +474,7 @@ def journey_send_review_unknown_consent():
     check("B5 review dialog opens on its confirm button", f["name"] == "Send 2.5 MEOW" and in_dialog(n, "Review payment"), json.dumps(f))
     check("B6 review shows exact prepared values", any("Total: 2.50006152 MEOW" in x for x in app.names()) and any("Network fee: 0.00006152 MEOW" in x for x in app.names()))
     shot("b06-review")
+    app.audit("review dialog")
     trapped = True
     seen = []
     for _ in range(6):
@@ -494,6 +519,7 @@ def journey_send_review_unknown_consent():
     check("B14 Sent: heading focused and outcome announced", f["name"] == "Sent" and announced_since(t, "Sent. Submitted to your node"), json.dumps(f))
     check("B15 change explained on Sent", any("spendable dropped by more than you sent" in x for x in app.names()))
     shot("b15-sent")
+    app.audit("sent result")
     # Unknown submission.
     app.press_fixture("Connection drops")
     app.press_fixture("Not sent")
@@ -517,6 +543,7 @@ def journey_send_review_unknown_consent():
     n, f = app.focused()
     check("B19 detail dialog opens", in_dialog(n, "Submission status unknown"), json.dumps(f))
     shot("b19-unknown-detail")
+    app.audit("unknown detail")
     app.tab_to("Check with node")
     t = time.time()
     key("Return", wait=0.3)
@@ -552,6 +579,7 @@ def journey_send_review_unknown_consent():
         print("DEBUG exposure nodes:", [(m.get_role_name(), m.get_name()[:30]) for m in app.raw() if "untrusted node" in (m.get_name() or "")])
         check("B24 at 880x600 the whole explanation is inside the window, above Connect", False, "nodes not found")
     shot("b24-consent-880x600", "880x600")
+    app.audit("consent dialog")
     key("Escape", wait=0.6)
     _, f = app.focused()
     status = next((x for x in app.names() if x.startswith("Status: ")), "")

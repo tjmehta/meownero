@@ -15,6 +15,7 @@ FocusScope {
     activeFocusOnTab: onCopy !== null
     Accessible.role: Accessible.StaticText
     Accessible.name: text
+    Accessible.ignored: !visible
     Accessible.focusable: activeFocusOnTab
     Accessible.description: onCopy !== null ? "Press the copy shortcut to copy" : ""
 

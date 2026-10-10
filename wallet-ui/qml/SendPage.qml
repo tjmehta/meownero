@@ -164,6 +164,7 @@ PageBase {
             padding: 9; leftPadding: 11
             implicitHeight: Math.max(64, contentHeight + 20)
             Accessible.name: "To"
+            Accessible.ignored: !visible
             Accessible.description: page.s.toError !== "" ? page.s.toError : page.s.toHint
             KeyNavigation.priority: KeyNavigation.BeforeItem
             KeyNavigation.tab: amountField
@@ -195,6 +196,7 @@ PageBase {
                 inputMethodHints: Qt.ImhFormattedNumbersOnly | Qt.ImhNoPredictiveText
                 padding: 9; leftPadding: 11; rightPadding: 70
                 Accessible.name: "Amount in MEOW"
+                Accessible.ignored: !visible
                 Accessible.description: page.s.amountError !== "" ? page.s.amountError : "Spendable now: " + page.s.spendableHint + "."
                 onTextEdited: Wallet.setSendField("amount", text)
                 onAccepted: Wallet.requestReview()

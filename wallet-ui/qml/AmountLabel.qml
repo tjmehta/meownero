@@ -14,6 +14,7 @@ Row {
     spacing: 0
     Accessible.role: Accessible.StaticText
     Accessible.name: (view.accessible || "") + (tag ? ", test coins" : "")
+    Accessible.ignored: !visible
 
     AText {
         id: digits

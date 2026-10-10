@@ -16,6 +16,7 @@ Rectangle {
     border.color: Theme.border
     Accessible.role: Accessible.List
     Accessible.name: "Payments"
+    Accessible.ignored: !visible
 
     Column {
         id: col

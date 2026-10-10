@@ -42,6 +42,7 @@ ColumnLayout {
         // Qt drops an explicit name on password fields, so the visible label is also related.
         Accessible.name: root.label
         Accessible.labelledBy: fieldLabel
+        Accessible.ignored: !visible
         Accessible.description: root.error !== "" ? root.error : root.hint
         onTextEdited: root.edited(text)
         onAccepted: root.submitted()

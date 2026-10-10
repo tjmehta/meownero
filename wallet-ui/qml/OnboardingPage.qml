@@ -341,6 +341,7 @@ Item {
                 Layout.fillWidth: true; height: 6; radius: 3; color: Theme.borderStrong
                 Accessible.role: Accessible.ProgressBar
                 Accessible.name: "Scanned " + root.o.scan + "%"
+                Accessible.ignored: !visible
                 Rectangle { width: parent.width * root.o.scan / 100; height: parent.height; radius: 3; color: Theme.net }
             }
             Banner {

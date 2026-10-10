@@ -14,6 +14,7 @@ RowLayout {
     spacing: 16
     Accessible.role: Accessible.StaticText
     Accessible.name: label + ": " + (value !== "" ? value : accessibleValue)
+    Accessible.ignored: !visible
 
     AText {
         Layout.preferredWidth: 140
