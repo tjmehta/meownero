@@ -24,3 +24,19 @@ Independent safe work is already live in the existing writer: source corrections
 Observed behavior: adapter termination did not prove native worker termination. The live pane's recorded adapter session differed from the board's cached continuation identity.
 
 Needs TJ: None.
+
+## Lease recovery boundary (agent systems lead, 18:03 UTC)
+
+The writer finished. At 17:53 UTC pane `w1XK:p5` reported `done`. Its result is `result.md` in run `7b1748f7`, 5,225 bytes, SHA256 `1a8e17b36f1fb57196ee1b6d6a1bd752c9dd56dd7f2543b36324a0359fb33bc0`. It committed candidate `823d1fe4fbdb7359f79aad6a05a613aa652d4697` with all four SOURCE HOLD findings corrected. The upload and the `in_review` submission returned HTTP 409 `Issue run ownership conflict`. No Docker build or TJS-1882 container is in flight.
+
+TJS-1882 has exactly one server blocker. Lease `e9766e27-0177-4b24-aed8-bc6d3467534b` is still `active`, provider local, policy ephemeral. It belongs to failed run `abc2f1c7`. That run never launched a native provider: the bridge refused it at placement. Its bridge PID 9305 ran in the container instance that was replaced at 17:23:22Z, and the current container returns ESRCH for that PID and its process group. No native coordinator row exists, and no host process carries the run ID. The live writer's own lease was already terminal at 17:08.
+
+Cause: the container restart interrupted post-run finalization before lease release. The startup sweep retries stranded leases only for `orphaned_running_run` or terminal issues, so this lease is never retried. In the last 14 days, 840 `adapter_failed` runs released their leases normally. Leases `1af33cfb` (TJS-1235) and `6d852309` (TJS-1240) from runs that finished at 17:22:45 are stranded in the same way.
+
+The supported release is `POST /api/environment-leases/:id/release`. The server re-proves that the run is terminal, that no coordinator owns it, and that its PID and process group are dead. The route is restricted to a board instance admin. This run's attempt returned 403 and left the lease unchanged. Execution reconciliation cannot substitute, because it refuses while any lease is unreleased. The UI has no release control.
+
+After release, the ownership blocker clears. A normal TJS-1882 wake then runs the bridge's launch recovery: the `interrupted` writer run counts as settled for a successor, so the owned `done` pane closes under its guards and the assignee's session starts. The bridge record has no native thread ID, so that session is new. Thread `01a126be` stays on disk. The writer's turn is complete and durable, so only the control-plane submission of `823d1fe` remains.
+
+Full bindings: `research/evidence/preserved-docker-writer-tjs1993-2026-10-10/lease-recovery-boundary.json`.
+
+Needs TJ: one board call, `POST /api/environment-leases/e9766e27-0177-4b24-aed8-bc6d3467534b/release` with an empty body.
