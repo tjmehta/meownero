@@ -1,0 +1,104 @@
+{
+  "schema": "meownero-arm11-private-copy-and-launch/1",
+  "result": "DISTINCT_REVIEWED_KIT17_WORKER_STARTED",
+  "run_id": "32610e37-e6ab-4aea-8fa2-71a39c30a7b9",
+  "review_source": "parent_user_clearance_current_session",
+  "review_sha256": "18ec0d298c0053505f8ffbc6dcfba34bf260db0dcafad2b9c52cb523baa8a5c5",
+  "kit_sha256": "d466b93cb9622c7d291e15cf35dbba0e3e44d331d9bc34cea874c2a5e97b070a",
+  "source_evidence_commit": "63d68528cb59a05415fc8e99b75543dd3f725153",
+  "attempt": "windows-arm-attempt11",
+  "worker_pid": 38316,
+  "worker_uid": 501,
+  "started_utc": "2026-10-10T09:28:49.358994+00:00",
+  "private_copies": [
+    {
+      "path": "vanguard/patches/randomx-aaafe713-windows-arm64-aligned-allocator.patch",
+      "bytes": 746,
+      "sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    },
+    {
+      "path": "vanguard/patches/randomx-aaafe713-windows-arm64-hidden.patch",
+      "bytes": 438,
+      "sha256": "742daffebed9f21f73ced606accecf4bd44d08d2ce25699d45a9c7e2ed349f72",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    },
+    {
+      "path": "vanguard/portable-build.py",
+      "bytes": 19747,
+      "sha256": "5c14a985f24885d1df50886bfe73251ad56a7596cb7146c5548c36153de95167",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    },
+    {
+      "path": "vanguard/portable-cross-build.py",
+      "bytes": 34038,
+      "sha256": "161d06bc0d7a6c9a90627061d84a361ab7bf68ee27c86b9b3f8f3e606ee82c47",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    },
+    {
+      "path": "vanguard/portable_licenses.py",
+      "bytes": 15950,
+      "sha256": "286d438f35d352a0465d7e7d87a8cbc451e464646e597a100a45715c0e41d9c7",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    },
+    {
+      "path": "vanguard/source-lock.json",
+      "bytes": 6950,
+      "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    },
+    {
+      "path": "vanguard/tester-profile.json",
+      "bytes": 989,
+      "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    },
+    {
+      "path": "vanguard/tester.py",
+      "bytes": 38818,
+      "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+      "uid": 501,
+      "links": 1,
+      "mode": "0600",
+      "tar_header_mode": "0600"
+    }
+  ],
+  "all_private_copy_checks_before_import": true,
+  "available_memory_bytes": 5735288832,
+  "host_disk_free_bytes": 964886237184,
+  "docker_disk_free_bytes": 93690064896,
+  "heavy_lock_inode": 219261381,
+  "input_hashes": {
+    "preflight": "f3f25c38fea7a53e20b8e113ef823d382ecd8b40ba2057352d8219a4cb60a205",
+    "transfer": "01a5bd95b757995fb4d1f2212cb44805c8173217e94d58e3fb6d2ee6a4630ca2",
+    "rustc": "d32249a7c3bfcfc67b471460386e46323accae7125e344567a12d5664d99bb57",
+    "cargo": "9548937d530bf439ff1ba47a3b2bd26eeb9c3aff1961c20c01798613de922578"
+  },
+  "memory_and_swap_limit_bytes": 3221225472,
+  "cpu_limit": 2,
+  "pid_limit": 256,
+  "compile_timeout_seconds": 3600,
+  "native_Windows_execution": "UNTESTED",
+  "prior08_preserved": true
+}
