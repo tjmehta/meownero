@@ -1,0 +1,125 @@
+{
+  "schema": "meownero-tjs1882-candidate-review-supplement/1",
+  "run_id": "5f072103-3bc2-4e46-afd1-be3495f0f40d",
+  "source_base_commit": "c6e7ab025cec89e2b1f4cb8221b5dc1b2f760f22",
+  "observed_utc": "2026-10-10T15:32:32.892697+00:00",
+  "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "original_stage": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+  "stage_before_resubmission": "changes_requested",
+  "full_seven_target_release": "OPEN",
+  "formal_stage_acceptance": "NOT_GRANTED",
+  "scoped_checkpoints_accepted": 3,
+  "scoped_checkpoints_total": 7,
+  "session_repair_required": false,
+  "lead_decision_comment": "3bfc81b9-2ff2-44f1-8e47-0976b49caea5",
+  "closed_findings": [
+    "F1",
+    "F2"
+  ],
+  "new_build_or_native_execution": false,
+  "platforms": [
+    {
+      "target": "windows-x86_64",
+      "archive_sha256": "859d4644815b4c990cca093c6d74bb077e6ab74f267236ed84746d5b6cf690d0",
+      "archive_bytes": 71355612,
+      "status": "ACCEPTED_SCOPED_CHECKPOINT",
+      "review_decision_comment": "74d6566c-63f8-4361-bcb9-6640aa42c141",
+      "recorded_native_host": "Windows Server 2025 x64",
+      "remaining": "Other/minimum Windows versions and download handling unverified."
+    },
+    {
+      "target": "windows-i686",
+      "archive_sha256": "3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745",
+      "archive_bytes": 97173058,
+      "status": "BUILT_PARTIAL_NATIVE_EVIDENCE_NOT_ACCEPTED",
+      "review_decision_comment": null,
+      "recorded_native_host": "Windows x64 WOW64 witnesses; full current controls unproven",
+      "remaining": "Parent publishes source-cleared i68630 after fresh quota/readback; actual complete native journey/ten controls and original review remain."
+    },
+    {
+      "target": "macos-x86_64",
+      "archive_sha256": "7a3ddef44b58c752dd508bd6d2251266de4a1af3a1d635680854707a8cdb3a09",
+      "archive_bytes": 64391550,
+      "status": "ACCEPTED_SCOPED_CHECKPOINT",
+      "review_decision_comment": "fda3519a-1333-4eeb-b8d4-cd87fdb7c9a6",
+      "recorded_native_host": "macOS 15.7.9 x86_64",
+      "remaining": "Other/minimum macOS versions, independent rerun/rebuild, signing/notarization and download handling unverified."
+    },
+    {
+      "target": "macos-aarch64",
+      "archive_sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+      "archive_bytes": 63060519,
+      "status": "ACCEPTED_SCOPED_CHECKPOINT",
+      "review_decision_comment": "03ba5237-db67-43de-bd90-060745e520fc",
+      "recorded_native_host": "macOS 26.5.1 arm64",
+      "remaining": "Other/minimum macOS versions, signing/notarization and download handling unverified."
+    },
+    {
+      "target": "linux-x86_64",
+      "archive_sha256": "7e198fb27bcaff54d87f6fd8793b06e8122b25b1aeee09d2c12001949848143c",
+      "archive_bytes": 71545995,
+      "status": "BUILT_CURRENT_STARTER_UNTESTED_NOT_ACCEPTED",
+      "review_decision_comment": null,
+      "recorded_native_host": null,
+      "remaining": "Retained current archive has glibc 2.38 floor. Ubuntu 22.04 attempt27 compile/version passed, packaging failed AssertionError, inner cause UNKNOWN. Parent publishes source-cleared diagnostic31 after fresh quota/readback."
+    },
+    {
+      "target": "linux-aarch64",
+      "archive_sha256": "3205120d258b1e4fc73a3742cedd0ede1d20e8917d3a55b100b62c3ac9132c6d",
+      "archive_bytes": 68569705,
+      "status": "BUILT_CURRENT_STARTER_UNTESTED_NOT_ACCEPTED",
+      "review_decision_comment": null,
+      "recorded_native_host": null,
+      "remaining": "Retained current archive has glibc 2.38 floor. Older ARM attempt28 compile/version passed, packaging failed AssertionError, inner cause UNKNOWN. Parent publishes source-cleared diagnostic32 after fresh quota/readback."
+    },
+    {
+      "target": "windows-aarch64",
+      "archive_sha256": null,
+      "archive_bytes": null,
+      "status": "UNAVAILABLE_BUILD_FAILED_NOT_ACCEPTED",
+      "last_attempt": 11,
+      "last_kit": 17,
+      "actual_failure": "Pinned src/crypto/random.c uses _exit without Windows declaration",
+      "corrected_source_kit": 18,
+      "corrected_kit_sha256": "e4d193223545354d3383e19268c1addc134e647e3c3d1239e06afc579fdeee03",
+      "source_clearance": "PENDING_EXACT_REVIEW",
+      "remaining": "Review exact kit18, then release one distinct build through existing resource/private-copy/lock/ownership gates. Packaging and native validation remain unproven."
+    }
+  ],
+  "corrections": [
+    {
+      "id": "I68629-CANCEL-READY-HANDOFF",
+      "successor": "i68630",
+      "source_clearance_comment": "91c6bbde-ecc7-4d96-b53c-a71147af3a1a",
+      "fresh_fixture_cases": 31,
+      "native_success": "UNPROVEN"
+    },
+    {
+      "id": "LINUX27-ARM28-PACKAGE-DIAGNOSTIC",
+      "successors": [
+        "linux31",
+        "arm32"
+      ],
+      "source_clearance_comment": "6f3eb4f4-c1fd-4665-8cad-637c71d3a468",
+      "fresh_fixture_cases": 18,
+      "inner_native_failure_cause": "UNKNOWN",
+      "proven_package_fix": false
+    },
+    {
+      "id": "ARM11-RANDOM-EXIT-DECLARATION",
+      "successor": "kit18",
+      "fresh_fixture_cases": 4,
+      "source_clearance": "PENDING",
+      "full_build_started": false
+    }
+  ],
+  "delivery": "PARENT_OWNED_PENDING_ACCEPTED_CANDIDATE_INTEGRATION_AND_GROUP_DELIVERY",
+  "CI_publication_owner": "parent/TJ",
+  "fresh_included_quota": "UNVERIFIED",
+  "cleanup": {
+    "ARM11_process_container_absence": "HISTORICAL_RETAINED_EVIDENCE_NOT_FRESH_OBSERVATION",
+    "completed_Mac_scratch": "STANDARD_CLEANUP_DEFERRED_BY_RETAINED_IN_USE_VM_GATE",
+    "new_owned_workloads": 0
+  },
+  "remaining_distribution_coverage": "Ubuntu 22.04/Debian 12 and Fedora/RHEL/Arch/openSUSE coverage remains unverified unless supported by a separately reviewed actual witness."
+}
