@@ -1,0 +1,43 @@
+{
+  "01": {
+    "schema": "meownero-arm07-allocator-compile-fixture/1",
+    "result": "FAIL",
+    "source_commit": "aaafe71322df6602c21a5c72937ac284724ae561",
+    "old_header_sha256": "07588f5d3e01d1ad9ad375b05a232f5c43c9f6a3c264c2960e7306cdbf73c80f",
+    "patch_sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82",
+    "native_Windows_ARM_execution": "UNTESTED",
+    "owned_container_removed": true,
+    "compile_exit": 1,
+    "wall_seconds": 1.839,
+    "existing_lock_inode_preserved": true,
+    "recorded_container_id": "b8ebb3e825fd137d0c485f5b5d0855810e3231f738db9f6ee15127a4cf63c0c2",
+    "independent_exact_container_absence": true,
+    "fixture_source_sha256": "b1fbefac25038e3e32aa175f2f1b694dfd8df6b6239fb12d0ee98eb3af508cba",
+    "failure_reason": "FIXTURE_INCLUDE_ORDER_SELECTED_ORIGINAL_HEADER_IN_BOTH_CASES"
+  },
+  "02": {
+    "schema": "meownero-arm07-allocator-compile-fixture/1",
+    "result": "PASS_OLD_POSIX_REFUSAL_NEW_MATCHED_UCRT_ALLOCATOR_ARM64_OBJECT",
+    "source_commit": "aaafe71322df6602c21a5c72937ac284724ae561",
+    "old_header_sha256": "07588f5d3e01d1ad9ad375b05a232f5c43c9f6a3c264c2960e7306cdbf73c80f",
+    "patch_sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82",
+    "native_Windows_ARM_execution": "UNTESTED",
+    "owned_container_removed": true,
+    "compile_exit": 0,
+    "wall_seconds": 2.081,
+    "patched_header_sha256": "d5abf99da75d0cbaa68d9503d3568079cc1707bc40ede9a949cd2e49dadbd02a",
+    "compiled_object_sha256": "1f595bfe5f14fb1b8ecc3a80d2514514996d0cb80fcf676ac2c855292a4fe025",
+    "compiler_description_sha256": "72c27ee487044a73dd556be5ed58a2d6f86dd05bea5aa8cb607df4f09cfd1432",
+    "original_posix_memalign_failure_reproduced": true,
+    "matching_UCRT_allocator_and_free": true,
+    "object_machine": "COFF_ARM64",
+    "offline": true,
+    "memory_limit_bytes": 268435456,
+    "cpu_limit": 2,
+    "existing_lock_inode_preserved": true,
+    "recorded_container_id": "46bea3a81fb402a2322e3ff2dc07f8cca77534066436f4f151429eeb9cc142dd",
+    "independent_exact_container_absence": true,
+    "fixture_source_sha256": "8a826003de49ac327d9153ccaa9e3b5e594084e78b722f0b0cc57db43d0afaa1",
+    "claim": "CROSS_COMPILE_OBJECT_ONLY_NATIVE_WINDOWS_ARM_UNTESTED"
+  }
+}

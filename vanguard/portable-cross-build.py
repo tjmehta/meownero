@@ -337,6 +337,23 @@ def main():
                 receipt['patches'].append({'file': str(nothrow.relative_to(source)), 'sha256': tester.sha(nothrow),
                     'reference': 'https://github.com/zeromq/libzmq/commit/2e8a6ccb414ca79636392604893c79c3b0d00dc4',
                     'scope': 'Exact upstream missing C++ <new> declaration include for std::nothrow; no implementation/version/crypto/consensus change.'})
+                allocator = source / 'external/randomx/src/intrin_portable.h'
+                allocator_patch = Path(__file__).with_name('patches') / 'randomx-aaafe713-windows-arm64-aligned-allocator.patch'
+                tester.require(args.target == 'windows-aarch64' and
+                    PIN['upstream']['submodules']['external/randomx'] == 'aaafe71322df6602c21a5c72937ac284724ae561' and
+                    tester.sha(allocator) == '07588f5d3e01d1ad9ad375b05a232f5c43c9f6a3c264c2960e7306cdbf73c80f' and
+                    tester.sha(allocator_patch) == '175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82',
+                    'unverified ARM64 platform allocator adaptation')
+                run('randomx-arm64-allocator', ['patch', '-p1', '-F', '0', '-i', str(allocator_patch)],
+                    cwd=source / 'external/randomx')
+                tester.require(tester.sha(allocator) == 'd5abf99da75d0cbaa68d9503d3568079cc1707bc40ede9a949cd2e49dadbd02a',
+                    'ARM64 allocator adaptation output differs')
+                receipt['patches'].append({'file': str(allocator.relative_to(source)),
+                    'before_sha256': '07588f5d3e01d1ad9ad375b05a232f5c43c9f6a3c264c2960e7306cdbf73c80f',
+                    'after_sha256': tester.sha(allocator), 'patch_sha256': tester.sha(allocator_patch),
+                    'reference': 'https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/aligned-malloc',
+                    'scope': 'Windows ARM64 platform allocation only: matching UCRT _aligned_malloc/_aligned_free; POSIX branch, intrinsics, source/version pins and crypto/consensus unchanged.'})
+                save()
                 options += ['boost_toolset_mingw32=clang']
                 options += ['mingw32_' + upper + '=/out/llvm/bin/llvm-' + lower for upper, lower in [('AR', 'ar'), ('RANLIB', 'ranlib'), ('NM', 'nm'), ('STRIP', 'strip')]]
                 options += ['host_WINDRES=/out/llvm/bin/' + host + '-windres']
