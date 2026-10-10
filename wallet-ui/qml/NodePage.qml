@@ -100,7 +100,7 @@ PageBase {
             }
         }
         AppButton { text: "Keep current node"; kind: "quiet"; onClicked: { Wallet.keepCurrentNode(); page.focusChecked() } }
-        Text { height: connectButton.height; verticalAlignment: Text.AlignVCenter; text: "Nothing changes until you connect."; font.pointSize: Theme.pt(12.5); color: Theme.muted }
+        AText { height: connectButton.height; verticalAlignment: Text.AlignVCenter; text: "Nothing changes until you connect."; font.pointSize: Theme.pt(12.5); color: Theme.muted }
     }
     ChoiceItem {
         enabled: false
@@ -114,11 +114,11 @@ PageBase {
         title: "Connect to someone else's node?"
         description: Wallet.remoteExposure
         initialFocus: keepButton
-        // Keep, Escape and clicking outside change nothing.
-        onClosed: if (Wallet.consentOpen) Wallet.keepCurrentNode()
+        // Keep, Escape and clicking outside change nothing; Escape returns focus to Connect.
+        onClosed: if (Wallet.consentOpen) Wallet.dismissConsent()
         contentItem: ColumnLayout {
             spacing: 12
-            Text {
+            AText {
                 objectName: "consentExplanation"
                 Layout.fillWidth: true
                 text: Wallet.remoteExposure
@@ -138,7 +138,11 @@ PageBase {
                 // Initial focus: the reader hears the exposure explanation with the choice that changes nothing.
                 accessibleDescription: Wallet.remoteExposure
                 DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
-                onClicked: consent.close()
+                onClicked: {
+                    consent.closeWithoutRestoring()
+                    Wallet.keepCurrentNode()
+                    page.focusChecked()
+                }
             }
             AppButton {
                 text: "Connect to someone else's node"

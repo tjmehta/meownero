@@ -34,7 +34,7 @@ Rectangle {
         ColumnLayout {
             Layout.fillWidth: true
             spacing: 2
-            Text {
+            AText {
                 Layout.fillWidth: true
                 text: root.title
                 wrapMode: Text.Wrap
@@ -42,7 +42,7 @@ Rectangle {
                 font.weight: Font.DemiBold
                 color: Theme.fg
             }
-            Text {
+            AText {
                 Layout.fillWidth: true
                 visible: text !== ""
                 text: root.body

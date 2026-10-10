@@ -22,17 +22,15 @@ Window {
         Layout.fillWidth: true
         Layout.bottomMargin: 12
         spacing: 4
-        Text { text: parent.label; font.pointSize: 8.5; font.weight: Font.DemiBold; font.capitalization: Font.AllUppercase; color: Theme.muted }
+        AText { text: parent.label; font.pointSize: 8.5; font.weight: Font.DemiBold; font.capitalization: Font.AllUppercase; color: Theme.muted }
         Flow { id: flow; Layout.fillWidth: true; spacing: 6 }
     }
     component Opt: Button {
         property bool on: false
         font.pointSize: 9
         padding: 5
-        checkable: true
-        checked: on
-        Accessible.checkable: true
-        Accessible.checked: on
+        highlighted: on
+        Accessible.description: on ? "Current" : ""
     }
 
     ScrollView {
@@ -42,8 +40,8 @@ Window {
             width: fx.width - 28
             x: 14; y: 12
             spacing: 0
-            Text { Layout.fillWidth: true; Layout.bottomMargin: 4; text: "Reviewer fixtures"; font.pointSize: 13; font.weight: Font.Bold; color: Theme.fg }
-            Text { Layout.fillWidth: true; Layout.bottomMargin: 12; wrapMode: Text.Wrap; font.pointSize: 9; color: Theme.muted
+            AText { Layout.fillWidth: true; Layout.bottomMargin: 4; text: "Reviewer fixtures"; font.pointSize: 13; font.weight: Font.Bold; color: Theme.fg }
+            AText { Layout.fillWidth: true; Layout.bottomMargin: 12; wrapMode: Text.Wrap; font.pointSize: 9; color: Theme.muted
                    text: "Stages simulated states for review and QA. No wallet, node or network exists behind any of these." }
 
             Group { label: "Network the node reports"
@@ -66,9 +64,9 @@ Window {
                 Opt { text: "Large balance"; onClicked: Wallet.fixtureSetStory("large") }
             }
             Group { label: "Chain"
-                Opt { text: "Add 1 block"; checkable: false; onClicked: Wallet.fixtureAddBlocks(1) }
-                Opt { text: "Add 10 blocks"; checkable: false; onClicked: Wallet.fixtureAddBlocks(10) }
-                Opt { text: "Reorganize"; checkable: false; onClicked: Wallet.fixtureReorg() }
+                Opt { text: "Add 1 block"; onClicked: Wallet.fixtureAddBlocks(1) }
+                Opt { text: "Add 10 blocks"; onClicked: Wallet.fixtureAddBlocks(10) }
+                Opt { text: "Reorganize"; onClicked: Wallet.fixtureReorg() }
             }
             Group { label: "Next send result"
                 Opt { text: "Accepted"; on: fx.f.sendOutcome === "accepted"; onClicked: Wallet.fixtureSetSendOutcome("accepted") }
@@ -82,20 +80,20 @@ Window {
             Group { label: "Fill send form"
                 Repeater {
                     model: [["valid", "Valid kit wallet"], ["typo", "Typo"], ["wrongnet", "Other network"], ["mainnet", "Mainnet"], ["short", "Incomplete"], ["13dp", "13 decimals"], ["locked", "Above spendable"]]
-                    Opt { required property var modelData; text: modelData[1]; checkable: false; onClicked: Wallet.fixtureFillSend(modelData[0]) }
+                    Opt { required property var modelData; text: modelData[1]; onClicked: Wallet.fixtureFillSend(modelData[0]) }
                 }
             }
             Group { label: "Fill restore words"
                 Repeater {
                     model: [["sample", "Sample words"], ["badword", "Misspelled"], ["checksum", "Don't add up"], ["count", "Missing words"]]
-                    Opt { required property var modelData; text: modelData[1]; checkable: false; onClicked: Wallet.fixtureFillRestore(modelData[0]) }
+                    Opt { required property var modelData; text: modelData[1]; onClicked: Wallet.fixtureFillRestore(modelData[0]) }
                 }
             }
             Group { label: "Evidence counters"
-                Text { text: "Session " + fx.f.epoch + " · stale replies dropped " + fx.f.staleDropped + " · stale actions refused " + fx.f.staleRefused; font.pointSize: 9; color: Theme.fg; wrapMode: Text.Wrap; width: parent.width }
+                AText { text: "Session " + fx.f.epoch + " · stale replies dropped " + fx.f.staleDropped + " · stale actions refused " + fx.f.staleRefused; font.pointSize: 9; color: Theme.fg; wrapMode: Text.Wrap; width: parent.width }
             }
             Group { label: "Diagnostics (allowlisted fields only)"
-                Opt { text: "Refresh"; checkable: false; onClicked: diag.text = Wallet.diagnostics() }
+                Opt { text: "Refresh"; onClicked: diag.text = Wallet.diagnostics() }
             }
             TextArea { id: diag; Layout.fillWidth: true; readOnly: true; wrapMode: TextEdit.Wrap; font.family: Theme.mono; font.pointSize: 8.5; text: Wallet.diagnostics() }
         }

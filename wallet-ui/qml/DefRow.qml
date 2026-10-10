@@ -15,7 +15,7 @@ RowLayout {
     Accessible.role: Accessible.StaticText
     Accessible.name: label + ": " + (value !== "" ? value : accessibleValue)
 
-    Text {
+    AText {
         Layout.preferredWidth: 140
         Layout.alignment: Qt.AlignTop
         text: root.label
@@ -28,7 +28,7 @@ RowLayout {
         id: valueBox
         Layout.fillWidth: true
         spacing: 4
-        Text {
+        AText {
             visible: root.value !== ""
             Layout.fillWidth: true
             text: root.value

@@ -8,6 +8,7 @@ set -euo pipefail
 BUILD=$(cd "$1" && pwd)
 OUT=$(cd "$2" && pwd)
 NUM=${3:-47}
+JOURNEY=${JOURNEY:-AB}
 HERE=$(cd "$(dirname "$0")" && pwd)
 mkdir -p "$OUT/screens" "$OUT/raw"
 
@@ -30,5 +31,5 @@ inner() {
     kill "$PORTAL" 2>/dev/null || true
 }
 export -f inner
-export NUM BUILD OUT HERE
+export NUM BUILD OUT HERE JOURNEY
 dbus-run-session -- bash -c inner 2>&1 | tee "$OUT/raw/journey-run.log"

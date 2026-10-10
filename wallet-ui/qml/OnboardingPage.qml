@@ -71,7 +71,7 @@ Item {
             Layout.bottomMargin: 6
             font.pointSize: Theme.pt(26)
         }
-        Text {
+        AText {
             visible: step.lead !== ""
             Layout.fillWidth: true
             Layout.bottomMargin: 16
@@ -91,7 +91,7 @@ Item {
             hero: true
             title: "Meownero Wallet"
             lead: "A private wallet for trying Meownero. This build only works with test networks, and test coins have no value."
-            Text { text: "Network"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Layout.topMargin: 2; Layout.bottomMargin: 6 }
+            AText { text: "Network"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Layout.topMargin: 2; Layout.bottomMargin: 6 }
             ChoiceItem {
                 focusPolicy: Qt.NoFocus
                 hoverEnabled: false
@@ -102,12 +102,12 @@ Item {
                 Accessible.role: Accessible.StaticText
                 Accessible.name: "Network: " + Wallet.networkName + ", test coins only. " + Wallet.networkSay
             }
-            Text {
+            AText {
                 Layout.fillWidth: true; Layout.bottomMargin: 18; wrapMode: Text.Wrap
                 text: Wallet.networkKey === "regtest" ? "A shared Meownero testnet and mainnet don't exist yet, so this wallet can't hold real coins." : "Design preview only: this network isn't live."
                 font.pointSize: Theme.pt(12.5); color: Theme.muted
             }
-            Text { text: "Get started"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Layout.bottomMargin: 6 }
+            AText { text: "Get started"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Layout.bottomMargin: 6 }
             ChoiceItem { iconName: "key"; title: "Create a new wallet"; subtitle: "You'll write down 25 recovery words"; onClicked: Wallet.navigate("create-1") }
             ChoiceItem { iconName: "refresh"; title: "Restore from recovery words"; subtitle: "Bring back a wallet you backed up"; onClicked: Wallet.navigate("restore-1") }
             ChoiceItem { iconName: "lock"; title: "Open a wallet file"; subtitle: "A simulated wallet already on this computer"; onClicked: Wallet.navigate("unlock") }
@@ -139,10 +139,10 @@ Item {
             stepNo: 2; stepOf: 4
             title: "Write down your recovery words"
             lead: "These 25 words are the only way to get this wallet back if this computer is lost. Write them on paper, in order, with the block number."
-            Text { visible: !root.o.revealed; Layout.fillWidth: true; Layout.bottomMargin: 10; wrapMode: Text.Wrap; text: "Before you show them, stop any screen recording or sharing."; font.pointSize: Theme.pt(12.5); color: Theme.muted }
+            AText { visible: !root.o.revealed; Layout.fillWidth: true; Layout.bottomMargin: 10; wrapMode: Text.Wrap; text: "Before you show them, stop any screen recording or sharing."; font.pointSize: Theme.pt(12.5); color: Theme.muted }
             WordsGrid { Layout.fillWidth: true; veiled: !root.o.revealed; onRevealRequested: Wallet.revealWords() }
             Banner { Layout.topMargin: 14; Layout.bottomMargin: 10; title: "Also write down: created at block " + root.o.createdAt; body: "Restoring is faster when you know where the wallet starts." }
-            Text {
+            AText {
                 Layout.fillWidth: true; Layout.bottomMargin: 14; wrapMode: Text.Wrap; textFormat: Text.StyledText
                 text: "• Anyone with these words can spend your coins.<br>• Don't screenshot, photograph or paste them into a website or chat.<br>• Meownero will never ask you for them."
                 font.pointSize: Theme.pt(12.5); color: Theme.muted
@@ -155,7 +155,7 @@ Item {
                 text: "I've written down all 25 words and the block number."
                 font.pointSize: Theme.pt(12.5)
                 onToggled: Wallet.setAcknowledged(checked)
-                contentItem: Text { leftPadding: ack.indicator.width + 8; text: ack.text; font: ack.font; color: Theme.fg; wrapMode: Text.Wrap; verticalAlignment: Text.AlignVCenter; opacity: ack.enabled ? 1 : 0.45 }
+                contentItem: AText { leftPadding: ack.indicator.width + 8; text: ack.text; font: ack.font; color: Theme.fg; wrapMode: Text.Wrap; verticalAlignment: Text.AlignVCenter; opacity: ack.enabled ? 1 : 0.45 }
             }
             Buttons {
                 AppButton { text: "Back"; onClicked: Wallet.navigate("create-1") }
@@ -179,7 +179,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.bottomMargin: 14
                     spacing: 6
-                    Text { text: "Word " + q.modelData; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
+                    AText { text: "Word " + q.modelData; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
                     Flow {
                         Layout.fillWidth: true; spacing: 8
                         Accessible.role: Accessible.Grouping
@@ -230,7 +230,7 @@ Item {
                     id: addrCol
                     anchors { left: parent.left; right: parent.right; top: parent.top; margins: 18 }
                     spacing: 6
-                    Text { text: "Your address"; font.pointSize: Theme.pt(12.5); color: Theme.muted }
+                    AText { text: "Your address"; font.pointSize: Theme.pt(12.5); color: Theme.muted }
                     AddressText { Layout.fillWidth: true; text: Wallet.receiveAddress }
                 }
             }
@@ -284,7 +284,7 @@ Item {
                             radius: 7; color: Theme.surface
                             border.width: parent.activeFocus || parent.bad ? 2 : 1
                             border.color: parent.activeFocus ? Theme.net : parent.bad ? Theme.danger : Theme.border
-                            Text { x: 8; anchors.verticalCenter: parent.verticalCenter; text: index + 1; font.family: Theme.mono; font.pointSize: Theme.pt(11); color: Theme.faint }
+                            AText { x: 8; anchors.verticalCenter: parent.verticalCenter; text: index + 1; font.family: Theme.mono; font.pointSize: Theme.pt(11); color: Theme.faint }
                         }
                     }
                 }
@@ -331,7 +331,7 @@ Item {
             readonly property bool done: root.o.scan >= 100
             stepNo: 3; stepOf: 3
             title: done ? "Wallet restored" : "Finding your payments…"
-            Text {
+            AText {
                 Layout.fillWidth: true; Layout.bottomMargin: 10; wrapMode: Text.Wrap
                 text: parent.parent.done ? root.o.restoredSummary : "Scanning block " + root.o.scanBlock + " of " + root.o.chainTip + ". You can leave this open; it continues in the background."
                 font.pointSize: Theme.pt(14); color: Theme.muted

@@ -180,6 +180,9 @@ class App:
                 found = (n, i)
         return found
 
+    def dialogs(self):
+        return [i["name"] for i in self.nodes() if i["role"] == "dialog" and i["showing"]]
+
     def names(self):
         return [i["name"] for i in self.nodes()]
 
@@ -197,7 +200,6 @@ class App:
         # ribbon's static text (not a control) so Qt treats the main window as active.
         xdo("windowfocus", "--sync", self.win)
         xdo("mousemove", "--window", self.win, "420", "14", "click", "1")
-        xdo("mousemove", "1490", "790")
         pump(0.3)
 
     def diagnostics(self):
@@ -304,8 +306,10 @@ def journey_create_backup_receive_restore():
     _, f = app.focused()
     check("A11 word check heading focused", f["name"] == "Check your paper", json.dumps(f))
     # A wrong pick is marked and announced; then the right words.
-    opts = [i["name"] for i in app.nodes() if i["role"] in ("toggle button", "push button")]
-    wrong = next(w for w in opts if w in SAMPLE and w != "lantern")
+    opts = [(i["role"], i["name"]) for i in app.nodes() if i["name"] in SAMPLE]
+    print("DEBUG quiz options", opts)
+    wrong = next(n for r, n in opts if n != "lantern")
+    check("A11b quiz words are buttons, not check boxes", all(r in ("push button", "toggle button") for r, _ in opts), json.dumps(sorted(set(r for r, _ in opts))))
     app.tab_to(wrong)
     t = time.time()
     key("space", wait=0.5)
@@ -314,6 +318,8 @@ def journey_create_backup_receive_restore():
     for w in ("lantern", "marble", "meadow"):
         app.tab_to(w) or app.tab_to(w, back=True)
         key("space", wait=0.3)
+    picked = app.focused()[1]
+    check("A12b a picked word reports its pressed state", picked["name"] == "meadow" and picked["checked"], json.dumps(picked))
     app.tab_to("Finish")
     key("Return", wait=0.6)
     app.tab_to("Open wallet")
@@ -454,11 +460,12 @@ def journey_send_review_unknown_consent():
     check("B7 Tab stays inside the dialog", trapped, json.dumps(seen))
     key("Escape", wait=0.6)
     _, f = app.focused()
-    check("B8 Escape discards review and restores focus", f["name"] == "Review payment" and "Review payment" not in [i["name"] for i in app.nodes() if i["role"] == "dialog"], json.dumps(f))
+    check("B8 Escape discards review and restores focus", f["name"] == "Review payment" and "Review payment" not in app.dialogs(), json.dumps(f))
     # Stale review: node becomes unreachable while the review is open.
     key("Return", wait=1.2)
     app.press_fixture("Node unreachable")
-    dialogs = [i["name"] for i in app.nodes() if i["role"] == "dialog"]
+    shot("b09-node-lost")
+    dialogs = app.dialogs()
     check("B9 node loss closes the open review", "Review payment" not in dialogs, json.dumps(dialogs))
     app.press_fixture("Synced")
     diag = app.diagnostics()
@@ -468,7 +475,9 @@ def journey_send_review_unknown_consent():
     app.tab_to("Review payment")
     key("Return", wait=0.1)
     key("ctrl+1", wait=1.2)
-    dialogs = [i["name"] for i in app.nodes() if i["role"] == "dialog"]
+    shot("b11-left-send")
+    print("DEBUG b11 focused", app.focused()[1])
+    dialogs = app.dialogs()
     check("B11 a late prepare reply cannot open review over another page", not dialogs and app.focused()[1]["name"] == "Overview", json.dumps(dialogs))
     key("ctrl+3", wait=0.5)
     amount = next((n for n in app.raw() if n.get_name() == "Amount in MEOW"), None)
@@ -540,6 +549,7 @@ def journey_send_review_unknown_consent():
               inside and e.y + e.height <= b.y,
               "window %dx%d+%d+%d; explanation %dx%d+%d+%d; connect y=%d" % (frame.width, frame.height, frame.x, frame.y, e.width, e.height, e.x, e.y, b.y))
     else:
+        print("DEBUG exposure nodes:", [(m.get_role_name(), m.get_name()[:30]) for m in app.raw() if "untrusted node" in (m.get_name() or "")])
         check("B24 at 880x600 the whole explanation is inside the window, above Connect", False, "nodes not found")
     shot("b24-consent-880x600", "880x600")
     key("Escape", wait=0.6)
@@ -548,7 +558,7 @@ def journey_send_review_unknown_consent():
     check("B25 Escape changes nothing and returns focus to Connect", f["name"] == "Connect to someone else's node…" and status == "Status: Connected and synced", json.dumps(f))
     key("Return", wait=0.6)
     app.press_fixture("Local regtest")
-    dialogs = [i["name"] for i in app.nodes() if i["role"] == "dialog"]
+    dialogs = app.dialogs()
     status = next((x for x in app.names() if x.startswith("Status: ")), "")
     check("B26 network change closes stale consent and connects nothing", "Connect to someone else's node?" not in dialogs and status == "Status: Connected and synced", json.dumps(dialogs) + " " + status)
     app.press_fixture("Testnet (design preview)")
@@ -575,7 +585,10 @@ def journey_send_review_unknown_consent():
 
 
 if __name__ == "__main__":
-    for fn in (journey_create_backup_receive_restore, journey_send_review_unknown_consent):
+    only = os.environ.get("JOURNEY", "AB")
+    for tag, fn in (("A", journey_create_backup_receive_restore), ("B", journey_send_review_unknown_consent)):
+        if tag not in only:
+            continue
         try:
             fn()
         except Exception as exc:  # keep partial results

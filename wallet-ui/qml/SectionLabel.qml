@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 
-Text {
+AText {
     Layout.fillWidth: true
     Layout.topMargin: 26
     Layout.bottomMargin: 8

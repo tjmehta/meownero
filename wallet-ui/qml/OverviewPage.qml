@@ -21,7 +21,7 @@ PageBase {
     ConditionBanners { Layout.bottomMargin: 18 }
 
     // Spendable balance: priority one, with the network tag beside it.
-    Text { text: "Spendable now"; font.pointSize: Theme.pt(12.5); font.weight: Font.Medium; color: Theme.muted; Accessible.ignored: true }
+    AText { text: "Spendable now"; font.pointSize: Theme.pt(12.5); font.weight: Font.Medium; color: Theme.muted; Accessible.ignored: true }
     AbstractButton {
         id: bigAmount
         Layout.topMargin: 4
@@ -47,20 +47,20 @@ PageBase {
     Flow {
         Layout.fillWidth: true
         spacing: 18
-        Text {
+        AText {
             visible: page.b.hasLocked
             textFormat: Text.StyledText
             text: "Unlocking <b>" + page.b.unlocking.text + (page.b.unlocking.more ? "…" : "") + " MEOW</b>" + (page.b.nextUnlock ? " · next in " + page.b.nextUnlock : "")
             font.pointSize: Theme.pt(13); color: Theme.muted
             Accessible.name: "Unlocking " + page.b.unlocking.accessible + (page.b.nextUnlock ? ", next in " + page.b.nextUnlock : "")
         }
-        Text {
+        AText {
             textFormat: Text.StyledText
             text: "Total <b>" + page.b.total.text + (page.b.total.more ? "…" : "") + " MEOW</b>"
             font.pointSize: Theme.pt(13); color: Theme.muted
             Accessible.name: "Total " + page.b.total.accessible
         }
-        Text { visible: page.b.lastSynced !== ""; text: page.b.lastSynced; font.pointSize: Theme.pt(13); color: Theme.muted }
+        AText { visible: page.b.lastSynced !== ""; text: page.b.lastSynced; font.pointSize: Theme.pt(13); color: Theme.muted }
     }
     Flow {
         Layout.fillWidth: true
@@ -76,19 +76,19 @@ PageBase {
             onClicked: Wallet.mineTestCoins()
         }
     }
-    Text {
+    AText {
         visible: page.b.belowFee
         Layout.fillWidth: true; Layout.topMargin: 8
         text: "Your spendable balance is smaller than a network fee, so it can't be sent yet."
         wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted
     }
-    Text {
+    AText {
         visible: Wallet.networkKey === "regtest" && !Wallet.canTransact
         Layout.fillWidth: true; Layout.topMargin: 8
         text: "Getting test coins needs " + Wallet.node.pausedNeeds + "."
         wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted
     }
-    Text {
+    AText {
         visible: page.b.hasLocked
         Layout.fillWidth: true; Layout.topMargin: 12
         text: "New coins wait before they can be spent: mined coins for 60 blocks, payments and change for 10."
@@ -113,8 +113,8 @@ PageBase {
             width: parent.width - 56
             spacing: 4
             Icon { Layout.alignment: Qt.AlignHCenter; name: "coin"; size: 40; color: Theme.faint }
-            Text { Layout.alignment: Qt.AlignHCenter; text: "No payments yet"; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
-            Text {
+            AText { Layout.alignment: Qt.AlignHCenter; text: "No payments yet"; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
+            AText {
                 Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.Wrap
                 text: Wallet.networkKey === "regtest" ? "Mine some test coins, or pay this wallet from another test wallet in your kit." : "Share your address to receive test coins."
                 font.pointSize: Theme.pt(13.5); color: Theme.muted

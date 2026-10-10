@@ -56,6 +56,7 @@ qt_add_qml_module(meownero-wallet
         qml/SectionLabel.qml
         qml/DetailDialog.qml
         qml/Field.qml
+        qml/AText.qml
         qml/UiState.qml
         qml/PageBase.qml
         qml/ReviewerFixtures.qml

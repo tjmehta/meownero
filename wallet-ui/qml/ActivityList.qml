@@ -62,8 +62,8 @@ Rectangle {
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 1
-                        Text { Layout.fillWidth: true; text: row.title; elide: Text.ElideRight; font.pointSize: Theme.pt(14); font.weight: Font.Medium; color: Theme.fg; Accessible.ignored: true }
-                        Text { Layout.fillWidth: true; text: row.subtitle; elide: Text.ElideRight; font.pointSize: Theme.pt(12.5); color: Theme.muted; Accessible.ignored: true }
+                        AText { Layout.fillWidth: true; text: row.title; elide: Text.ElideRight; font.pointSize: Theme.pt(14); font.weight: Font.Medium; color: Theme.fg; Accessible.ignored: true }
+                        AText { Layout.fillWidth: true; text: row.subtitle; elide: Text.ElideRight; font.pointSize: Theme.pt(12.5); color: Theme.muted; Accessible.ignored: true }
                     }
                     ColumnLayout {
                         spacing: 1
@@ -83,7 +83,7 @@ Rectangle {
                                 size: 13
                                 color: statusLabel.color
                             }
-                            Text {
+                            AText {
                                 id: statusLabel
                                 text: row.statusText
                                 font.pointSize: Theme.pt(12)

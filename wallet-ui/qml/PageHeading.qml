@@ -1,7 +1,7 @@
 import QtQuick
 
 // Page heading. Navigation moves focus here so readers start at the new page.
-Text {
+AText {
     id: root
     property int level: 1
     font.pointSize: Theme.pt(level === 1 ? 20 : 18)

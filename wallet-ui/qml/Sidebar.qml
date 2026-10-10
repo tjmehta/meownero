@@ -27,8 +27,8 @@ Rectangle {
             CoinMark { size: 30 }
             ColumnLayout {
                 spacing: 0
-                Text { text: Wallet.walletName; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; elide: Text.ElideRight; Layout.fillWidth: true }
-                Text { text: Wallet.networkName; font.pointSize: Theme.pt(11.5); color: Theme.muted }
+                AText { text: Wallet.walletName; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; elide: Text.ElideRight; Layout.fillWidth: true }
+                AText { text: Wallet.networkName; font.pointSize: Theme.pt(11.5); color: Theme.muted }
             }
         }
 
@@ -60,7 +60,7 @@ Rectangle {
                     anchors.leftMargin: 10; anchors.rightMargin: 10
                     spacing: 10
                     Icon { name: nav.modelData[2]; size: 16; color: nav.current ? Theme.net : Theme.muted }
-                    Text {
+                    AText {
                         Layout.fillWidth: true
                         text: nav.modelData[1]
                         font.pointSize: Theme.pt(13.5)
@@ -68,7 +68,7 @@ Rectangle {
                         color: Theme.fg
                         Accessible.ignored: true
                     }
-                    Text {
+                    AText {
                         visible: nav.pending > 0
                         text: nav.pending + " pending"
                         font.pointSize: Theme.pt(11)
@@ -112,8 +112,8 @@ Rectangle {
                 ColumnLayout {
                     Layout.fillWidth: true
                     spacing: 0
-                    Text { Layout.fillWidth: true; text: Wallet.node.chipTitle; font.pointSize: Theme.pt(12); font.weight: Font.DemiBold; color: Theme.fg; elide: Text.ElideRight; Accessible.ignored: true }
-                    Text { Layout.fillWidth: true; text: Wallet.node.chipSub; font.pointSize: Theme.pt(11.5); color: Theme.muted; elide: Text.ElideRight; Accessible.ignored: true }
+                    AText { Layout.fillWidth: true; text: Wallet.node.chipTitle; font.pointSize: Theme.pt(12); font.weight: Font.DemiBold; color: Theme.fg; elide: Text.ElideRight; Accessible.ignored: true }
+                    AText { Layout.fillWidth: true; text: Wallet.node.chipSub; font.pointSize: Theme.pt(11.5); color: Theme.muted; elide: Text.ElideRight; Accessible.ignored: true }
                 }
             }
         }

@@ -39,13 +39,13 @@ ColumnLayout {
                         id: cell
                         anchors.fill: parent; anchors.leftMargin: 8; anchors.rightMargin: 8
                         spacing: 6
-                        Text { text: index + 1; font.family: Theme.mono; font.pointSize: Theme.pt(11); color: Theme.faint; Layout.minimumWidth: 18; Accessible.ignored: true }
-                        Text { text: modelData; font.family: Theme.mono; font.pointSize: Theme.pt(12.5); color: Theme.fg; Layout.fillWidth: true; Accessible.ignored: true }
+                        AText { text: index + 1; font.family: Theme.mono; font.pointSize: Theme.pt(11); color: Theme.faint; Layout.minimumWidth: 18; Accessible.ignored: true }
+                        AText { text: modelData; font.family: Theme.mono; font.pointSize: Theme.pt(12.5); color: Theme.fg; Layout.fillWidth: true; Accessible.ignored: true }
                     }
                 }
             }
         }
-        Text {
+        AText {
             anchors.centerIn: parent
             text: "SAMPLE"
             rotation: -6
@@ -62,7 +62,7 @@ ColumnLayout {
             onClicked: root.revealRequested()
         }
     }
-    Text {
+    AText {
         Layout.fillWidth: true
         text: "Simulated: sample words that can't form a valid recovery phrase."
         wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted

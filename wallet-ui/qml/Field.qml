@@ -18,7 +18,7 @@ ColumnLayout {
     Layout.bottomMargin: 16
     spacing: 6
 
-    Text {
+    AText {
         id: fieldLabel
         text: root.label
         font.pointSize: Theme.pt(13.5)

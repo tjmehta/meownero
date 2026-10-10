@@ -36,9 +36,9 @@ PageBase {
             RowLayout {
                 spacing: 10
                 Spinner { size: 14 }
-                Text { text: page.step === "submitting" ? "Submitting to your node…" : "Preparing the payment…"; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
+                AText { text: page.step === "submitting" ? "Submitting to your node…" : "Preparing the payment…"; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
             }
-            Text {
+            AText {
                 Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted
                 text: page.step === "submitting" ? "Keep the wallet open. Don't close it until this finishes." : "Building the private transaction so you can review its exact fee. Nothing is sent yet."
             }
@@ -79,10 +79,10 @@ PageBase {
                     spacing: 4
                     RowLayout {
                         spacing: 8
-                        Text { text: "Submitted " + page.r.amount + " to your node."; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg; wrapMode: Text.Wrap; Layout.fillWidth: true; Accessible.name: text + " Test coins." }
+                        AText { text: "Submitted " + page.r.amount + " to your node."; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg; wrapMode: Text.Wrap; Layout.fillWidth: true; Accessible.name: text + " Test coins." }
                         NetTag {}
                     }
-                    Text {
+                    AText {
                         Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted
                         text: "Waiting for the first confirmation. The recipient can spend it after 10 confirmations."
                               + (page.r.change ? " Your change, " + page.r.change + ", returns to your spendable balance after 10 confirmations, so spendable dropped by more than you sent." : "")
@@ -128,7 +128,7 @@ PageBase {
             Layout.fillWidth: true
             Layout.bottomMargin: 16
             spacing: 6
-            Text { text: "Pay one of your test wallets"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg }
+            AText { text: "Pay one of your test wallets"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg }
             Flow {
                 Layout.fillWidth: true; spacing: 10
                 Repeater {
@@ -147,7 +147,7 @@ PageBase {
             }
         }
 
-        Text { text: "To"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Accessible.ignored: true }
+        AText { text: "To"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Accessible.ignored: true }
         TextArea {
             id: toField
             Layout.fillWidth: true
@@ -177,7 +177,7 @@ PageBase {
         }
         FieldError { error: page.s.toError; hint: page.s.toHint }
 
-        Text { Layout.topMargin: 16; text: "Amount"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Accessible.ignored: true }
+        AText { Layout.topMargin: 16; text: "Amount"; font.pointSize: Theme.pt(13.5); font.weight: Font.DemiBold; color: Theme.fg; Accessible.ignored: true }
         RowLayout {
             Layout.fillWidth: true
             Layout.topMargin: 6
@@ -203,7 +203,7 @@ PageBase {
                     border.width: amountField.activeFocus ? 2 : 1
                     border.color: amountField.activeFocus ? Theme.net : page.s.amountError !== "" ? Theme.danger : Theme.borderStrong
                 }
-                Text {
+                AText {
                     anchors.right: parent.right; anchors.rightMargin: 12; anchors.verticalCenter: parent.verticalCenter
                     text: "MEOW"; font.pointSize: Theme.pt(12.5); font.weight: Font.DemiBold; color: Theme.muted
                     Accessible.ignored: true
@@ -242,7 +242,7 @@ PageBase {
                 accessibleDescription: page.s.disabledReason
                 onClicked: Wallet.requestReview()
             }
-            Text {
+            AText {
                 visible: page.s.disabledReason !== ""
                 width: Math.min(implicitWidth, page.width - reviewButton.width - 10)
                 height: reviewButton.height
@@ -264,21 +264,21 @@ PageBase {
         onClosed: if (Wallet.review.open) Wallet.cancelReview()
         contentItem: ColumnLayout {
             spacing: 10
-            Text { Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted; text: review.description; Accessible.ignored: true }
+            AText { Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted; text: review.description; Accessible.ignored: true }
             DefRow {
                 Layout.topMargin: 6
                 label: "You send"; accessibleValue: (review.v.amount || "") + ", test coins"
-                RowLayout { spacing: 8; Text { text: review.v.amount || ""; font.pointSize: Theme.pt(13.5); color: Theme.fg } NetTag {} }
+                RowLayout { spacing: 8; AText { text: review.v.amount || ""; font.pointSize: Theme.pt(13.5); color: Theme.fg } NetTag {} }
             }
             DefRow { label: "Network fee"; value: review.v.fee || "" }
             DefRow {
                 label: "Total"; accessibleValue: (review.v.total || "") + ", test coins"
-                RowLayout { spacing: 8; Text { text: review.v.total || ""; font.pointSize: Theme.pt(13.5); font.weight: Font.Bold; color: Theme.fg } NetTag {} }
+                RowLayout { spacing: 8; AText { text: review.v.total || ""; font.pointSize: Theme.pt(13.5); font.weight: Font.Bold; color: Theme.fg } NetTag {} }
             }
             DefRow { label: "To"; accessibleValue: review.v.to || ""; AddressText { Layout.fillWidth: true; text: review.v.to || "" } }
             DefRow { label: "Network"; value: review.v.network || "" }
             DefRow { visible: !!review.v.note; label: "Note"; value: (review.v.note || "") + " (this computer only)" }
-            Text {
+            AText {
                 Layout.fillWidth: true; Layout.topMargin: 6; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted
                 text: "This is the exact payment that will be submitted. If you edit anything, it's prepared again and you review it again."
             }

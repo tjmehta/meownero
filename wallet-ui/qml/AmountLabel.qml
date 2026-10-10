@@ -15,7 +15,7 @@ Row {
     Accessible.role: Accessible.StaticText
     Accessible.name: (view.accessible || "") + (tag ? ", test coins" : "")
 
-    Text {
+    AText {
         id: digits
         text: root.view.text || ""
         font.pointSize: Theme.pt(root.px)
@@ -25,7 +25,7 @@ Row {
         color: root.color
         Accessible.ignored: true
     }
-    Text {
+    AText {
         visible: !!root.view.more
         anchors.baseline: digits.baseline
         text: "…"
@@ -34,7 +34,7 @@ Row {
         color: Theme.muted
         Accessible.ignored: true
     }
-    Text {
+    AText {
         visible: root.unit
         anchors.baseline: digits.baseline
         text: root.big ? "  MEOW" : " MEOW"

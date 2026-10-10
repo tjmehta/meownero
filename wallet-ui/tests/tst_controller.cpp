@@ -210,8 +210,16 @@ private slots:
         QCOMPARE(asked.count(), 1);
         QCOMPARE(w->nodeState(), QStringLiteral("synced")); // opening the dialog changes nothing
         const QString t = w->consentToken();
-        // Keep / Escape changes nothing.
+        // Escape closes the dialog only: nothing connects and the pick stays.
+        w->dismissConsent();
+        QCOMPARE(w->nodeState(), QStringLiteral("synced"));
+        QCOMPARE(w->nodePick(), QStringLiteral("remote"));
+        QVERIFY(!w->confirmRemoteNode(t));
+        w->applyNodePick();
+        const QString tKeep = w->consentToken();
+        // Keep current node clears the pick and changes nothing.
         w->keepCurrentNode();
+        QVERIFY(!w->confirmRemoteNode(tKeep));
         QCOMPARE(w->nodeState(), QStringLiteral("synced"));
         QVERIFY(!w->confirmRemoteNode(t));
         // Network change while the dialog is open: stale consent is refused.

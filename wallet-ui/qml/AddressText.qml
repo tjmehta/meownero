@@ -39,7 +39,7 @@ FocusScope {
         spacing: root.grouped ? root.px * 0.45 : 0
         Repeater {
             model: root.grouped ? (root.text.match(/.{1,4}/g) || []) : [root.text]
-            Text {
+            AText {
                 required property string modelData
                 required property int index
                 readonly property int groups: Math.ceil(root.text.length / 4)

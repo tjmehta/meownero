@@ -19,6 +19,8 @@ Button {
     focusPolicy: Qt.StrongFocus
     opacity: enabled ? 1 : 0.45
 
+    // Checkable buttons are toggles that report pressed, not check boxes (D14).
+    Accessible.role: Accessible.Button
     Accessible.name: text
     Accessible.description: accessibleDescription
     Keys.onReturnPressed: if (enabled) clicked()
@@ -33,7 +35,7 @@ Button {
             color: label.color
             anchors.verticalCenter: parent.verticalCenter
         }
-        Text {
+        AText {
             id: label
             text: control.text
             font: control.font

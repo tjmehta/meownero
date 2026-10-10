@@ -26,7 +26,7 @@ PageBase {
             id: card
             anchors { left: parent.left; right: parent.right; top: parent.top; margins: 18 }
             spacing: 6
-            Text { text: "Your address · " + Wallet.networkName + " · test coins only"; font.pointSize: Theme.pt(12.5); color: Theme.muted; wrapMode: Text.Wrap; Layout.fillWidth: true }
+            AText { text: "Your address · " + Wallet.networkName + " · test coins only"; font.pointSize: Theme.pt(12.5); color: Theme.muted; wrapMode: Text.Wrap; Layout.fillWidth: true }
             AddressText { id: addr; Layout.fillWidth: true; text: Wallet.receiveAddress; onCopy: () => Wallet.copyAddress() }
             Flow {
                 Layout.fillWidth: true; Layout.topMargin: 8
@@ -42,7 +42,7 @@ PageBase {
             }
         }
     }
-    Text {
+    AText {
         Layout.fillWidth: true; Layout.topMargin: 12
         text: "When comparing, check the coloured groups at the start and end."
         wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted
@@ -59,13 +59,13 @@ PageBase {
             id: mine
             anchors { left: parent.left; right: parent.right; top: parent.top; margins: 18 }
             spacing: 10
-            Text { Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(14); color: Theme.fg; text: "Your local regtest only makes blocks when asked. Mining 10 blocks pays their test rewards to this wallet." }
-            Text { Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted; text: "Mined coins can be spent after 60 more blocks. This chain uses upstream test rewards, not Meownero's planned 9 MEOW per 90 seconds." }
-            Text { visible: !Wallet.canTransact; Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted; text: "Needs " + Wallet.node.pausedNeeds + "." }
+            AText { Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(14); color: Theme.fg; text: "Your local regtest only makes blocks when asked. Mining 10 blocks pays their test rewards to this wallet." }
+            AText { Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted; text: "Mined coins can be spent after 60 more blocks. This chain uses upstream test rewards, not Meownero's planned 9 MEOW per 90 seconds." }
+            AText { visible: !Wallet.canTransact; Layout.fillWidth: true; wrapMode: Text.Wrap; font.pointSize: Theme.pt(12.5); color: Theme.muted; text: "Needs " + Wallet.node.pausedNeeds + "." }
             AppButton { text: "Mine 10 test blocks"; iconName: "block"; enabled: Wallet.canTransact; onClicked: Wallet.mineTestCoins() }
         }
     }
-    Text {
+    AText {
         visible: !page.regtest
         Layout.fillWidth: true
         text: "On the testnet, test coins come from mining. A faucet is not planned yet."

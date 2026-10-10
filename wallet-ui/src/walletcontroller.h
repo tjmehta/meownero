@@ -149,6 +149,7 @@ public:
     Q_INVOKABLE void applyNodePick();
     Q_INVOKABLE bool confirmRemoteNode(const QString &token);
     Q_INVOKABLE void keepCurrentNode();
+    Q_INVOKABLE void dismissConsent();
 
     Q_INVOKABLE void submitCreateDetails(const QString &name, const QString &password, const QString &repeat);
     Q_INVOKABLE void revealWords();

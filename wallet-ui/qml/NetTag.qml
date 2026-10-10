@@ -10,7 +10,7 @@ Rectangle {
     border.width: 1
     border.color: Theme.net
     Accessible.ignored: true
-    Text {
+    AText {
         id: tag
         anchors.centerIn: parent
         text: "TEST COINS"

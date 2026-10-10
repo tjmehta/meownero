@@ -1075,6 +1075,15 @@ void WalletController::keepCurrentNode()
     }
 }
 
+void WalletController::dismissConsent()
+{
+    // Escape or clicking outside: the dialog closes, nothing connects, the pick stays.
+    if (m_consentToken.isEmpty())
+        return;
+    m_consentToken.clear();
+    emit changed();
+}
+
 // ---------------------------------------------------------------- session
 
 void WalletController::invalidateSession(const QString &why)

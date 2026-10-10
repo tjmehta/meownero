@@ -38,8 +38,8 @@ AbstractButton {
         ColumnLayout {
             Layout.fillWidth: true
             spacing: 2
-            Text { Layout.fillWidth: true; text: control.title; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg; wrapMode: Text.Wrap; Accessible.ignored: true }
-            Text { Layout.fillWidth: true; visible: text !== ""; text: control.subtitle; font.pointSize: Theme.pt(12.5); color: Theme.muted; wrapMode: Text.Wrap; Accessible.ignored: true }
+            AText { Layout.fillWidth: true; text: control.title; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg; wrapMode: Text.Wrap; Accessible.ignored: true }
+            AText { Layout.fillWidth: true; visible: text !== ""; text: control.subtitle; font.pointSize: Theme.pt(12.5); color: Theme.muted; wrapMode: Text.Wrap; Accessible.ignored: true }
         }
         Icon { visible: control.selectedLook; name: "check"; size: 18; color: Theme.net }
     }

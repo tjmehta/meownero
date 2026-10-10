@@ -46,8 +46,8 @@ ApplicationWindow {
                 anchors { left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter; leftMargin: 14; rightMargin: 14 }
                 spacing: 10
                 Icon { name: "flask"; size: 14; color: Theme.net }
-                Text { text: Wallet.networkName + " · Test coins only"; font.pointSize: Theme.pt(12.5); font.weight: Font.DemiBold; color: Theme.net; Accessible.ignored: true }
-                Text {
+                AText { text: Wallet.networkName + " · Test coins only"; font.pointSize: Theme.pt(12.5); font.weight: Font.DemiBold; color: Theme.net; Accessible.ignored: true }
+                AText {
                     Layout.fillWidth: true
                     text: Wallet.networkSay + "  Simulated build · Wallet actions are simulated."
                     wrapMode: Text.Wrap
@@ -99,7 +99,7 @@ ApplicationWindow {
         Accessible.ignored: true
         Behavior on opacity { NumberAnimation { duration: 160 } }
         Behavior on y { enabled: !Theme.reducedMotion; NumberAnimation { duration: 200; easing.type: Easing.OutQuint } }
-        Text { id: toastText; anchors.centerIn: parent; text: toast.message; color: Theme.bg; font.pointSize: Theme.pt(13); font.weight: Font.Medium; Accessible.ignored: true }
+        AText { id: toastText; anchors.centerIn: parent; text: toast.message; color: Theme.bg; font.pointSize: Theme.pt(13); font.weight: Font.Medium; Accessible.ignored: true }
         Timer { id: hideTimer; interval: 1600; onTriggered: toast.opacity = 0 }
     }
 
@@ -137,7 +137,7 @@ ApplicationWindow {
                     "Design preview: this network isn't live. The T… addresses come from a provisional spec and are placeholders, not what the current kit produces.",
                     "This build is simulated: it is not connected to the test kit, a node or any network."
                 ]
-                Text { required property string modelData; required property int index; Layout.fillWidth: true; text: modelData; wrapMode: Text.Wrap; font.pointSize: Theme.pt(index >= 3 ? 12.5 : 14); color: index >= 3 ? Theme.muted : Theme.fg }
+                AText { required property string modelData; required property int index; Layout.fillWidth: true; text: modelData; wrapMode: Text.Wrap; font.pointSize: Theme.pt(index >= 3 ? 12.5 : 14); color: index >= 3 ? Theme.muted : Theme.fg }
             }
         }
         footer: DialogButtonBox {

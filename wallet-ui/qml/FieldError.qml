@@ -12,7 +12,7 @@ RowLayout {
     spacing: 6
     visible: error !== "" || hint !== ""
     Icon { visible: root.error !== ""; name: "alert"; size: 14; color: Theme.danger; Layout.alignment: Qt.AlignTop; Layout.topMargin: 2 }
-    Text {
+    AText {
         Layout.fillWidth: true
         text: root.error !== "" ? root.error : root.hint
         wrapMode: Text.Wrap

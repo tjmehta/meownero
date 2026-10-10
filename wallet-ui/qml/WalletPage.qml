@@ -28,8 +28,8 @@ PageBase {
             ColumnLayout {
                 Layout.fillWidth: true
                 spacing: 2
-                Text { text: "Recovery words"; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
-                Text { Layout.fillWidth: true; wrapMode: Text.Wrap; text: "Show your 25 words and starting block again. Asks for your password first."; font.pointSize: Theme.pt(12.5); color: Theme.muted }
+                AText { text: "Recovery words"; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg }
+                AText { Layout.fillWidth: true; wrapMode: Text.Wrap; text: "Show your 25 words and starting block again. Asks for your password first."; font.pointSize: Theme.pt(12.5); color: Theme.muted }
             }
             AppButton { id: showSeed; text: "Show recovery words"; iconName: "eye"; onClicked: Wallet.requestSeed() }
         }
@@ -39,7 +39,7 @@ PageBase {
         DefRow { label: "Wallet file"; value: "Simulated: no wallet file is written"; valueColor: Theme.muted }
         DefRow {
             label: "Password"; accessibleValue: "Change password, not in this test build"
-            RowLayout { spacing: 8; AppButton { text: "Change password"; enabled: false } Text { text: "Not in this test build"; font.pointSize: Theme.pt(12.5); color: Theme.muted } }
+            RowLayout { spacing: 8; AppButton { text: "Change password"; enabled: false } AText { text: "Not in this test build"; font.pointSize: Theme.pt(12.5); color: Theme.muted } }
         }
         DefRow {
             label: "Lock"; accessibleValue: "Lock wallet now"
@@ -48,7 +48,7 @@ PageBase {
     }
     SectionLabel { text: "About this test build" }
     Card {
-        Text { Layout.fillWidth: true; wrapMode: Text.Wrap; textFormat: Text.StyledText; text: "<b>Meownero Wallet</b> · native build with a simulated wallet engine, no release yet"; font.pointSize: Theme.pt(14); color: Theme.fg }
+        AText { Layout.fillWidth: true; wrapMode: Text.Wrap; textFormat: Text.StyledText; text: "<b>Meownero Wallet</b> · native build with a simulated wallet engine, no release yet"; font.pointSize: Theme.pt(14); color: Theme.fg }
         DefRow { label: "Engine today"; value: "In the current test kit, the wallet engine can create and restore a wallet, receive, send a payment, report balances and incoming history, and mine test coins on the local regtest. This desktop app is connected to none of it: every wallet action here is simulated." }
         DefRow { label: "Designed, not yet tested with the kit"; value: "Wallet password and lock, opening a wallet file, reviewing the exact fee before submitting, address checks, send-max." }
         DefRow { label: "Not yet"; value: "Changing the password, separate addresses per payer, a full payment history, other people's nodes, Tor or I2P, hardware wallets, a shared testnet, mainnet." }
@@ -73,7 +73,7 @@ PageBase {
         onClosed: if (Wallet.seedDialog === "password") Wallet.hideRecoveryWords()
         contentItem: ColumnLayout {
             spacing: 8
-            Text { Layout.fillWidth: true; wrapMode: Text.Wrap; text: seedPassword.description; font.pointSize: Theme.pt(12.5); color: Theme.muted; Accessible.ignored: true }
+            AText { Layout.fillWidth: true; wrapMode: Text.Wrap; text: seedPassword.description; font.pointSize: Theme.pt(12.5); color: Theme.muted; Accessible.ignored: true }
             Field {
                 id: seedField
                 Layout.topMargin: 8
@@ -102,7 +102,7 @@ PageBase {
         onClosed: Wallet.hideRecoveryWords()
         contentItem: ColumnLayout {
             spacing: 10
-            Text { Layout.fillWidth: true; wrapMode: Text.Wrap; text: seedWords.description; font.pointSize: Theme.pt(12.5); color: Theme.muted; Accessible.ignored: true }
+            AText { Layout.fillWidth: true; wrapMode: Text.Wrap; text: seedWords.description; font.pointSize: Theme.pt(12.5); color: Theme.muted; Accessible.ignored: true }
             WordsGrid { Layout.fillWidth: true; veiled: Wallet.seedDialog !== "words"; showReveal: false }
         }
         footer: DialogButtonBox {
