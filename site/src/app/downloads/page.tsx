@@ -72,32 +72,29 @@ export default function Downloads() {
         </p>
 
         {release.status === "published" ? (
-          <div className="mt-6 space-y-6">
-            {[
-              { label: "Docker image archive", artifact: release.imageArchive },
-              { label: "Launcher and source kit", artifact: release.sourceKit },
-            ].map(({ label, artifact }) => (
-              <div key={artifact.filename}>
-                <a href={artifact.url} className={linkStyle} download={artifact.filename}>
-                  Download {label.toLowerCase()}
-                </a>
-                <p className="mt-2 break-all text-sm text-muted-foreground">
-                  {artifact.filename} · {artifact.bytes.toLocaleString("en-US")} bytes
-                </p>
-                <p className="mt-2 text-xs text-muted-foreground">SHA256</p>
-                <code className="mt-1 block break-all font-mono text-sm leading-relaxed">
-                  {artifact.sha256}
-                </code>
-              </div>
-            ))}
+          <div className="mt-6">
+            <a href={release.bundle.url} className={linkStyle} download={release.bundle.filename}>
+              Download tester ZIP
+            </a>
+            <p className="mt-2 break-all text-sm text-muted-foreground">
+              {release.bundle.filename} · {release.bundle.bytes.toLocaleString("en-US")} bytes
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">SHA256</p>
+            <code className="mt-1 block break-all font-mono text-sm leading-relaxed">
+              {release.bundle.sha256}
+            </code>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              One bundle includes the Docker image, launcher, verification guide
+              and license notices.
+            </p>
           </div>
         ) : (
           <div className="mt-6 rounded-lg border border-border bg-background p-4">
             <p className="font-medium">Downloads are not published yet.</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              The local tester has been verified. Download links and setup
-              instructions will appear here when the published files and their
-              checksums are ready.
+              The local tester has been verified. A ZIP download and setup
+              instructions will appear here when the published bundle and its
+              checksum are ready.
             </p>
           </div>
         )}
@@ -106,9 +103,10 @@ export default function Downloads() {
       <section aria-labelledby="requirements-heading" className="mt-10">
         <h2 id="requirements-heading" className="text-xl font-semibold">Before you start</h2>
         <ul className="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-muted-foreground">
-          <li>A local Linux x64 machine, Docker with cgroup v2, and Python 3.11 or newer.</li>
-          <li>Docker client and daemon on the same Linux kernel, using a local Unix socket. Remote Docker, Docker Desktop, ARM, macOS and Windows are not supported by this tester.</li>
-          <li>At least 5 GiB of actually available memory, plus 10 GiB of free space at the output location and at the Docker data location.</li>
+          <li>Tested on Ubuntu 24.04.4 LTS, Linux x64, Docker Engine 29.5.3, cgroup v2 and Python 3.14.7. Python 3.11 or newer is the baseline; other hosts and versions are untested.</li>
+          <li>Docker client and daemon on the same Linux kernel, using a local Unix socket. This tester makes no support claim for remote Docker, Docker Desktop, ARM, macOS or Windows.</li>
+          <li>At least 5 GiB of available host memory and 5 GiB free on the receipt filesystem. Allow extra disk space for the ZIP download, extraction and loaded image.</li>
+          <li>Python, sha256sum and unzip must already be installed.</li>
           <li>Run as a non-root user with Docker access. Use only disposable test wallets, never a personal recovery phrase.</li>
         </ul>
       </section>
@@ -132,35 +130,45 @@ export default function Downloads() {
         <section aria-labelledby="setup-heading" className="mt-10 space-y-6">
           <h2 id="setup-heading" className="text-xl font-semibold">Verify, load, then run</h2>
           <div>
-            <h3 className="font-medium">1. Check both downloads</h3>
+            <h3 className="font-medium">1. Check the ZIP before extraction</h3>
             <p className="mt-2 leading-relaxed text-muted-foreground">
-              Save both files with the names shown above and open a terminal in
-              that folder. Both checksum checks must report OK. Stop if either fails.
+              Save the ZIP with the name shown above in a new folder and open a
+              terminal there. The checksum must report OK. Stop if any check or
+              command below fails.
             </p>
             <Command>{commands.checksum}</Command>
           </div>
           <div>
-            <h3 className="font-medium">2. Load the image and confirm its identity</h3>
+            <h3 className="font-medium">2. Extract and check the bundle contents</h3>
+            <p className="mt-2 leading-relaxed text-muted-foreground">
+              The extracted kit folder must not already exist. Check all included
+              files with SHA256SUMS, then stay in this same terminal at the kit root.
+            </p>
+            <Command>{commands.unpack}</Command>
+          </div>
+          <div>
+            <h3 className="font-medium">3. Load and verify the exact Linux x64 image</h3>
             <Command>{commands.load}</Command>
             <p className="mt-3 leading-relaxed text-muted-foreground">
-              The printed image ID must match the exact image below. Stop if it
-              does not match.
+              Continue only when the checks print &ldquo;Exact image verified:
+              linux/amd64&rdquo;. They require both the full image ID below and
+              the Linux x64 platform to match.
             </p>
           </div>
           <div>
-            <h3 className="font-medium">3. Run the local journey</h3>
+            <h3 className="font-medium">4. Run the local journey</h3>
             <p className="mt-2 leading-relaxed text-muted-foreground">
-              Unpack the launcher and source kit into its own folder. Open a
-              terminal at the kit root, where vanguard/docker/run.py is present.
-              The output folder must not already exist; choose a new name for
-              every run. The launcher uses the existing current folder as its parent.
+              Run as a non-root user from the kit root. This creates a fresh
+              receipts folder and a new journey01 output directory. The output
+              parent must exist and contain no symlinks. Use a fresh output name
+              for every later run.
             </p>
             <Command>{commands.run}</Command>
             <p className="mt-3 leading-relaxed text-muted-foreground">
               Require PASS_NATIVE_JOURNEY in result.json, and confirm in
               runtime.json that cleanup removed the run&apos;s own container.
-              Both files are in your output folder. No public network connection
-              or real coins are needed.
+              Both files are in receipts/journey01. Keep failed receipts for
+              diagnosis. No public network connection or real coins are needed.
             </p>
           </div>
         </section>
