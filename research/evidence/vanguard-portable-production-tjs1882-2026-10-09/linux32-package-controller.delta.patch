@@ -1,9 +1,6 @@
 --- a/vanguard/run-portable-linux-ci.py
 +++ b/vanguard/run-portable-linux-ci.py
-@@ -175,6 +175,25 @@
- 
- 
- 
+@@ -177,0 +178,19 @@
 +def package_failure(error, inputs):
 +    """Record a bound source location, never exception text, argv or paths."""
 +    kinds = {'AssertionError', 'RuntimeError', 'CalledProcessError', 'OSError',
@@ -23,13 +20,7 @@
 +    return value
 +
 +
- def worker(phase, inputs, out):
-     if phase == 'fetch':
-         fetch(inputs, out)
-@@ -197,7 +216,15 @@
-         load('run-portable-check.py').main()
-     else:
-         sys.argv = [scripts[phase], *argv[phase]]
+@@ -200 +219,9 @@
 -        load(scripts[phase]).main()
 +        try:
 +            load(scripts[phase]).main()
@@ -40,6 +31,3 @@
 +                except BaseException:
 +                    error.add_note('PACKAGE_DIAGNOSTIC_EXPORT_FAILED')
 +            raise
- 
- 
- def main():
