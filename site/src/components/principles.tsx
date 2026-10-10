@@ -4,16 +4,16 @@ import { motion, useReducedMotion } from "motion/react";
 
 const principles = [
   {
-    title: "Private by rule",
-    body: "There is no transparent transaction type. Every transfer is shielded, always.",
+    title: "Private payments",
+    body: "Every transaction is shielded. There is no public transaction option.",
   },
   {
     title: "Proof of work",
-    body: "An independent chain with its own consensus and network. Not a token on someone else's.",
+    body: "Miners secure Meownero's own blockchain. It isn't a token on another chain.",
   },
   {
     title: "No premine",
-    body: "Zero insider allocation. Public notice before genesis, then everyone mines.",
+    body: "No coins set aside for insiders. Mining starts after public notice.",
   },
 ];
 
@@ -28,7 +28,7 @@ export function Principles() {
       className="mx-auto w-full max-w-6xl px-6 pt-4 pb-20 md:px-10 md:pt-0 md:pb-28"
     >
       <h2 id="principles" className="sr-only">
-        What Meownero promises
+        How Meownero works
       </h2>
       <ol className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
         {principles.map((p, i) => (

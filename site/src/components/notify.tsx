@@ -118,7 +118,7 @@ export function Notify() {
   if (mode === "done" || stored) {
     return (
       <p className="text-sm text-muted-foreground" role="status">
-        You are on the list. One notification at launch, then it is gone.
+        You&apos;re on the list. We&apos;ll notify you at launch, then delete your signup.
       </p>
     );
   }
@@ -158,7 +158,7 @@ export function Notify() {
           className="absolute -left-[9999px] h-0 w-0 opacity-0"
         />
         <p className="text-xs text-muted-foreground">
-          {error ? `${error}. ` : ""}Email only. One message at launch, then the list is deleted.
+          {error ? `${error}. ` : ""}One email at launch. Then we delete the list.
         </p>
       </form>
     );
@@ -168,7 +168,7 @@ export function Notify() {
     <div className="flex flex-col gap-2">
       <div className="flex flex-wrap items-center gap-3">
         <Button size="lg" className="h-10 px-4" onClick={subscribePush} disabled={mode === "working"}>
-          {mode === "working" ? "One moment" : "Notify me at launch"}
+          {mode === "working" ? "Saving" : "Notify me at launch"}
         </Button>
         <button
           type="button"
@@ -179,7 +179,7 @@ export function Notify() {
         </button>
       </div>
       <p className="text-xs text-muted-foreground">
-        A browser notification. No account, no email, revocable from your browser.
+        One browser notification at launch. Turn it off in your browser settings.
       </p>
     </div>
   );

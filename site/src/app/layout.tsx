@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const title = "Meownero: fair-launch privacy coin, proof of work, no premine";
+const title = "Meownero | Private payments, proof of work";
 const description =
-  "Meownero (MEOW) is an independent proof-of-work cryptocurrency where every transaction is private by rule. Fair launch with public notice, no premine, no presale. Coming soon.";
+  "Meownero is a proof-of-work cryptocurrency in development. Every payment is private. No premine or presale. Try the local Linux tester.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://meownero.com"),

@@ -17,7 +17,7 @@ const jsonLd = {
       url: "https://meownero.com",
       logo: "https://meownero.com/icon-512.png",
       description:
-        "Meownero (MEOW) is an independent proof-of-work cryptocurrency in development where every transaction is private by rule. Fair launch, no premine, no presale.",
+        "Meownero is a proof-of-work cryptocurrency in development. Every payment is private. No premine or presale.",
     },
     {
       "@type": "WebSite",
@@ -31,7 +31,7 @@ const jsonLd = {
       "@type": "WebPage",
       "@id": "https://meownero.com/",
       url: "https://meownero.com",
-      name: "Meownero: fair-launch privacy coin, proof of work, no premine",
+      name: "Meownero | Private payments, proof of work",
       isPartOf: { "@id": "https://meownero.com/#site" },
       about: { "@id": "https://meownero.com/#org" },
       primaryImageOfPage: "https://meownero.com/coin.png",
@@ -54,22 +54,21 @@ export default function Home() {
               className="rise border-gold/40 bg-gold-soft px-3 text-gold"
               style={{ "--i": 0 } as React.CSSProperties}
             >
-              Coming soon
+              In development
             </Badge>
 
             <h1
               className="rise mt-6 max-w-[14ch] text-5xl font-semibold tracking-tighter text-balance md:text-6xl lg:text-7xl"
               style={{ "--i": 1 } as React.CSSProperties}
             >
-              Privacy that is not optional.
+              Every payment is private.
             </h1>
 
             <p
               className="rise mt-6 max-w-[42ch] text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl"
               style={{ "--i": 2 } as React.CSSProperties}
             >
-              Meownero is a proof-of-work coin where every transaction is
-              private by rule. Fair launch. No premine.
+              A proof-of-work coin. No premine, no presale.
             </p>
 
             <div className="rise mt-8" style={{ "--i": 3 } as React.CSSProperties}>
@@ -80,7 +79,7 @@ export default function Home() {
               href="/downloads"
               className="mt-5 rounded-sm text-sm text-gold underline underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
             >
-              Local tester downloads
+              Try the Linux tester
             </Link>
           </div>
 
@@ -94,7 +93,7 @@ export default function Home() {
                 <div className="coin-float size-full">
                   <Image
                     src="/coin.png"
-                    alt="The Meownero coin: a gold coin with a serious cat and the word MEOW."
+                    alt="Gold Meownero coin with a cat and MEOW lettering"
                     width={1024}
                     height={1024}
                     priority
@@ -113,8 +112,7 @@ export default function Home() {
       <footer className="mx-auto w-full max-w-6xl px-6 pb-10 md:px-10">
         <div className="border-t border-border pt-6 text-sm text-muted-foreground">
           <p className="max-w-[60ch] text-pretty">
-            Meownero is in development. Nothing is for sale, there is no token,
-            and there is no presale. Anyone offering MEOW today is not us.
+            MEOW isn&apos;t for sale. Anyone offering it now isn&apos;t us.
           </p>
         </div>
       </footer>

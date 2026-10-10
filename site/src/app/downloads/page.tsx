@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTesterCommands, getTesterRelease } from "@/lib/tester-release";
 
-const title = "Local tester downloads | Meownero";
+const title = "Downloads | Meownero";
 const description =
-  "A disposable Linux x64 Docker tester for Meownero's local, valueless FCMP++/CARROT regtest. No mainnet, public testnet or GUI wallet download.";
+  "Run Meownero's wallet test offline with Docker on Linux x64. Test coins only. The graphical wallet isn't available yet.";
 
 export const metadata: Metadata = {
   title,
@@ -50,15 +50,14 @@ export default function Downloads() {
 
       <header className="mt-12 max-w-2xl">
         <p className="text-sm font-medium tracking-wide text-gold">
-          Test-only · Linux x64 · Docker
+          Linux x64 · Docker
         </p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tighter text-balance md:text-5xl">
-          Try a local wallet journey.
+          Test Meownero locally.
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
-          A disposable, accelerated FCMP++/CARROT regtest with valueless test
-          coins. Everything stays on your own machine. This is not a shared
-          public testnet or mainnet, and it must not be used with real funds.
+          Receive test coins, send a payment and restore a wallet. The test
+          runs offline on your machine, not on a public testnet.
         </p>
       </header>
 
@@ -67,8 +66,10 @@ export default function Downloads() {
           Linux x64 Docker tester
         </h2>
         <p className="mt-3 leading-relaxed text-muted-foreground">
-          Native Linux programs in an Ubuntu container, with a command-line
-          launcher. Not a graphical wallet.
+          Command-line only. The graphical wallet isn&apos;t ready to download.
+        </p>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          Test coins have no value. Never use real funds or your own recovery phrase.
         </p>
 
         {release.status === "published" ? (
@@ -77,106 +78,105 @@ export default function Downloads() {
               Download tester ZIP
             </a>
             <p className="mt-2 break-all text-sm text-muted-foreground">
-              {release.bundle.filename} · {release.bundle.bytes.toLocaleString("en-US")} bytes
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">SHA256</p>
-            <code className="mt-1 block break-all font-mono text-sm leading-relaxed">
-              {release.bundle.sha256}
-            </code>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              One bundle includes the Docker image, launcher, verification guide
-              and license notices.
+              {Math.round(release.bundle.bytes / 1024 / 1024)} MiB · Docker image, launcher and setup guide
             </p>
           </div>
         ) : (
           <div className="mt-6 rounded-lg border border-border bg-background p-4">
-            <p className="font-medium">Downloads are not published yet.</p>
+            <p className="font-medium">The download isn&apos;t ready yet.</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              The local tester has been verified. A ZIP download and setup
-              instructions will appear here when the published bundle and its
-              checksum are ready.
+              The ZIP and setup instructions will appear here once we verify the download.
             </p>
           </div>
         )}
       </section>
 
       <section aria-labelledby="requirements-heading" className="mt-10">
-        <h2 id="requirements-heading" className="text-xl font-semibold">Before you start</h2>
+        <h2 id="requirements-heading" className="text-xl font-semibold">You&apos;ll need</h2>
         <ul className="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-muted-foreground">
-          <li>Tested on Ubuntu 24.04.4 LTS, Linux x64, Docker Engine 29.5.3, cgroup v2 and Python 3.14.7. Python 3.11 or newer is the baseline; other hosts and versions are untested.</li>
-          <li>Docker client and daemon on the same Linux kernel, using a local Unix socket. This tester makes no support claim for remote Docker, Docker Desktop, ARM, macOS or Windows.</li>
-          <li>At least 5 GiB of available host memory and 5 GiB free on the receipt filesystem. Allow extra disk space for the ZIP download, extraction and loaded image.</li>
-          <li>Python, sha256sum and unzip must already be installed.</li>
-          <li>Run as a non-root user with Docker access. Use only disposable test wallets, never a personal recovery phrase.</li>
+          <li>Linux x64 with local Docker Engine, cgroup v2 and a Unix socket. The Docker client and daemon must run on the same kernel.</li>
+          <li>Python 3.11 or newer, sha256sum and unzip.</li>
+          <li>5 GiB of available memory and 5 GiB free for test results. Keep extra disk space for the ZIP, extracted files and Docker image.</li>
         </ul>
-      </section>
-
-      <section aria-labelledby="journey-heading" className="mt-10">
-        <h2 id="journey-heading" className="text-xl font-semibold">What it checks</h2>
         <p className="mt-4 leading-relaxed text-muted-foreground">
-          Receive test coins, make a private payment, recover a test wallet,
-          spend again, and open the recovered wallet in the CLI. A full journey
-          has passed, along with deadline and live-interruption checks that
-          confirmed the tester cleans up its processes and container.
-        </p>
-        <p className="mt-3 leading-relaxed text-muted-foreground">
-          The run is offline. Disposable wallet data is removed when its
-          container is cleaned up; only public test results are kept in your
-          chosen output folder.
+          Use a non-root account with Docker access. Docker Desktop, remote
+          Docker, ARM, macOS and Windows are untested.
         </p>
       </section>
 
       {commands ? (
         <section aria-labelledby="setup-heading" className="mt-10 space-y-6">
-          <h2 id="setup-heading" className="text-xl font-semibold">Verify, load, then run</h2>
+          <h2 id="setup-heading" className="text-xl font-semibold">Run the test</h2>
+          <p className="leading-relaxed text-muted-foreground">
+            Save the ZIP in a new folder and open a terminal there. Keep that
+            terminal open for all four steps. Stop if any command fails.
+          </p>
           <div>
-            <h3 className="font-medium">1. Check the ZIP before extraction</h3>
+            <h3 className="font-medium">1. Check the download</h3>
             <p className="mt-2 leading-relaxed text-muted-foreground">
-              Save the ZIP with the name shown above in a new folder and open a
-              terminal there. The checksum must report OK. Stop if any check or
-              command below fails.
+              Keep the original ZIP filename. The checksum should print OK.
             </p>
             <Command>{commands.checksum}</Command>
           </div>
           <div>
-            <h3 className="font-medium">2. Extract and check the bundle contents</h3>
+            <h3 className="font-medium">2. Unpack it</h3>
             <p className="mt-2 leading-relaxed text-muted-foreground">
-              The extracted kit folder must not already exist. Check all included
-              files with SHA256SUMS, then stay in this same terminal at the kit root.
+              This checks the files inside and moves into the kit folder. It
+              refuses to overwrite an existing folder.
             </p>
             <Command>{commands.unpack}</Command>
           </div>
           <div>
-            <h3 className="font-medium">3. Load and verify the exact Linux x64 image</h3>
+            <h3 className="font-medium">3. Load the Docker image</h3>
             <Command>{commands.load}</Command>
             <p className="mt-3 leading-relaxed text-muted-foreground">
-              Continue only when the checks print &ldquo;Exact image verified:
-              linux/amd64&rdquo;. They require both the full image ID below and
-              the Linux x64 platform to match.
+              Continue only if it prints &quot;Exact image verified: linux/amd64&quot;.
             </p>
           </div>
           <div>
-            <h3 className="font-medium">4. Run the local journey</h3>
+            <h3 className="font-medium">4. Run it</h3>
             <p className="mt-2 leading-relaxed text-muted-foreground">
-              Run as a non-root user from the kit root. This creates a fresh
-              receipts folder and a new journey01 output directory. The output
-              parent must exist and contain no symlinks. Use a fresh output name
-              for every later run.
+              Run this from the kit folder. It creates receipts/journey01 for
+              the results. Use a new output folder for each run, with no symlinks
+              in its parent path.
             </p>
             <Command>{commands.run}</Command>
             <p className="mt-3 leading-relaxed text-muted-foreground">
-              Require PASS_NATIVE_JOURNEY in result.json, and confirm in
-              runtime.json that cleanup removed the run&apos;s own container.
-              Both files are in receipts/journey01. Keep failed receipts for
-              diagnosis. No public network connection or real coins are needed.
+              In receipts/journey01, result.json must say PASS_NATIVE_JOURNEY.
+              Check runtime.json for cleanup.removed set to true.
+              Keep the results if a run fails.
+            </p>
+            <p className="mt-3 leading-relaxed text-muted-foreground">
+              The tester removes its container and disposable wallets when it
+              finishes. Only the test results stay on disk.
             </p>
           </div>
         </section>
       ) : null}
 
-      <section aria-labelledby="identity-heading" className="mt-10 rounded-xl border border-border p-6">
-        <h2 id="identity-heading" className="text-xl font-semibold">Exact tester identity</h2>
+      <details className="mt-10 rounded-xl border border-border p-6">
+        <summary className="cursor-pointer rounded-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+          Build details
+        </summary>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          Tested on Ubuntu 24.04.4 LTS, Docker Engine 29.5.3, cgroup v2 and
+          Python 3.14.7. Other hosts and versions are untested.
+          This is an accelerated FCMP++/CARROT regtest in an Ubuntu container.
+          The wallet test passed, along with timeout and interruption checks.
+        </p>
         <dl className="mt-4 space-y-4 text-sm">
+          {release.status === "published" ? (
+            <>
+              <div>
+                <dt className="text-muted-foreground">ZIP filename</dt>
+                <dd className="mt-1 break-all font-mono leading-relaxed">{release.bundle.filename}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">SHA256</dt>
+                <dd className="mt-1 break-all font-mono leading-relaxed">{release.bundle.sha256}</dd>
+              </div>
+            </>
+          ) : null}
           <div>
             <dt className="text-muted-foreground">Source commit</dt>
             <dd className="mt-1 break-all font-mono leading-relaxed">{release.sourceCommit}</dd>
@@ -186,15 +186,7 @@ export default function Downloads() {
             <dd className="mt-1 break-all font-mono leading-relaxed">{release.imageId}</dd>
           </div>
         </dl>
-      </section>
-
-      <footer className="mt-10 border-t border-border pt-6 text-sm leading-relaxed text-muted-foreground">
-        <p>
-          No graphical wallet is available to download. The current UI is a
-          separate, simulated prototype, not a working wallet. Meownero remains
-          in development; there is no token sale or presale.
-        </p>
-      </footer>
+      </details>
     </main>
   );
 }
