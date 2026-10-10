@@ -86,6 +86,23 @@ def export_sources(cache, source, work, run):
                    'Cargo.lock pin mismatch')
 
 
+def native_compile_resources(target, preparation):
+    """Fixed fresh Ubuntu22 native policy; other build routes keep their caps."""
+    architecture = 'aarch64' if target == 'linux-aarch64' else 'x86_64'
+    tester.require(target in ('linux-x86_64', 'linux-aarch64') and platform.system() == 'Linux' and
+                   platform.machine() == architecture, 'native Ubuntu22 resource policy target mismatch')
+    tester.require(preparation and preparation['target'] == target and preparation['distribution'] == 'Ubuntu 22.04'
+                   and preparation.get('compiler_execution_substrate', 'NATIVE') == 'NATIVE', 'fresh native Ubuntu22 preparation required')
+    release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+    tester.require(release['ID'].strip('"') == 'ubuntu' and release['VERSION_ID'].strip('"') == '22.04', 'Ubuntu22 host required')
+    available = int(next(row.split()[1] for row in Path('/proc/meminfo').read_text().splitlines()
+                         if row.startswith('MemAvailable:'))) * 1024
+    tester.require(available >= 6 * 1024**3, 'requires 6 GiB available memory for native Ubuntu22 compile')
+    return {'scope': 'FRESH_NATIVE_UBUNTU22_ONLY', 'container_memory_bytes': 4 * 1024**3,
+            'container_memory_swap_bytes': 4 * 1024**3, 'host_minimum_available_bytes': 6 * 1024**3,
+            'measured_available_bytes': available}
+
+
 def main():
     os.environ['GIT_OPTIONAL_LOCKS'] = '0'
     parser = argparse.ArgumentParser(description=__doc__)
@@ -97,6 +114,7 @@ def main():
     parser.add_argument('--inspect-built', type=Path)
     parser.add_argument('--older-builder-receipt', type=Path, help='Exact task-owned Ubuntu 22.04 builder preparation receipt')
     parser.add_argument('--depends-sources', type=Path, help='Read-only cache of checksum-pinned depends source archives')
+    parser.add_argument('--native-ubuntu22-memory-policy', action='store_true')
     args = parser.parse_args()
     work = tester.fresh(args.out)
     cache, rust = args.cache.resolve(), args.rust.resolve()
@@ -117,6 +135,10 @@ def main():
     tester.require(not translated or (platform.system() == 'Darwin' and native == 'arm64' and
                    architecture == 'amd64'), 'translated compiler requires the existing ARM64 Mac host')
     tester.require(native == architecture or translated, 'native compiler architecture required')
+    compile_resources = None
+    if args.native_ubuntu22_memory_policy:
+        tester.require(not args.reuse_arm_cache and not args.inspect_built and not translated, 'fresh native resource policy only')
+        compile_resources = native_compile_resources(args.target, preparation)  # Before acquiring the lock.
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(work.parent).free >= 10 * 1024**3,
                        'requires 10 GiB free disk before build')
@@ -125,7 +147,8 @@ def main():
         memory = tester.command(['colima', 'ssh', '--', 'cat', '/proc/meminfo']) if platform.system() == 'Darwin' else Path('/proc/meminfo').read_text()
         available = int(next(row.split()[1] for row in memory.splitlines()
                              if row.startswith('MemAvailable:'))) * 1024
-        tester.require(available >= 5 * 1024**3, 'requires 5 GiB available memory')
+        tester.require(available >= (6 if compile_resources else 5) * 1024**3,
+                       'requires 6 GiB available memory' if compile_resources else 'requires 5 GiB available memory')
         tester.require(tester.command(docker + ['image', 'inspect', image,
                        '--format', '{{.Architecture}} {{.Os}}']) == architecture + ' linux', 'wrong builder target')
         if platform.system() == 'Darwin':
@@ -263,9 +286,14 @@ sha256sum contrib/depends/DEPENDS_HOST/share/toolchain.cmake > /out/generated-to
         mount = '/work/monero-fcmp' if reuse_paths else '/src'
         if reuse_paths:
             script = script.replace('/opt/rust', '/work/rust')
+        if compile_resources:
+            compile_resources = native_compile_resources(args.target, preparation)  # Fresh immediately before compile.
+            receipt['native_compile_resources'] = compile_resources
+            save()
+        container_memory = '4g' if compile_resources else '3g'
         argv = docker + ['run', '--platform=linux/' + architecture, '--pull=never', '--name', name, '--cidfile', str(cidfile),
                 '--label', 'meownero.invocation=' + invocation, '--network=none', '--cpus=2',
-                '--memory=3g', '--memory-swap=3g', '--pids-limit=256', '--cap-drop=ALL',
+                '--memory=' + container_memory, '--memory-swap=' + container_memory, '--pids-limit=256', '--cap-drop=ALL',
                 '--security-opt=no-new-privileges', '--ulimit', 'core=0', '-u', f'{os.getuid()}:{os.getgid()}',
                 '-v', f'{source}:{mount}', '-v', f'{work / "cargo-home"}:/cargo-home',
                 '-v', f'{rust}:/opt/rust:ro', '-v', f'{work}:/out', '-e', 'CARGO_HOME=/cargo-home',

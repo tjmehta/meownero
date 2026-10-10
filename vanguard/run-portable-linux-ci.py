@@ -17,11 +17,6 @@ import time
 
 ROOT = Path(__file__).resolve().parent.parent
 
-TARGETS = {
-    'linux-x86_64': ('x86_64', 'X64', ('x86_64',), 'x86_64-unknown-linux-gnu', 'ubuntu-22.04'),
-    'linux-aarch64': ('aarch64', 'ARM64', ('aarch64', 'arm64'), 'aarch64-unknown-linux-gnu', 'ubuntu-22.04-arm'),
-}
-
 
 def sha(path):
     assert path.is_file() and not path.is_symlink()
@@ -40,14 +35,16 @@ def load(name):
     return module
 
 
-def resources(parent, reserve=10):
+def resources(parent, reserve=10, minimum_available=5 * 1024**3):
     available = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines()
                          if line.startswith('MemAvailable:'))) * 1024
     free = shutil.disk_usage(parent).free
     docker_free = shutil.disk_usage('/var/lib/docker').free
-    assert available >= 5 * 1024**3, 'five GiB available memory gate'
+    assert minimum_available in (5 * 1024**3, 6 * 1024**3)
+    assert available >= minimum_available, 'available memory gate'
     assert min(free, docker_free) >= reserve * 1024**3, 'disk reserve gate'
     return {'available_memory_bytes': available, 'free_disk_bytes': free, 'docker_free_disk_bytes': docker_free}
+
 
 
 def fetch(inputs, out):
@@ -86,21 +83,19 @@ def fetch(inputs, out):
         run(git + ['-C', destination, 'checkout', '--detach', revision])
         assert subprocess.check_output(git + ['-C', destination, 'rev-parse', 'HEAD'], text=True, env=env).strip() == revision
     assert sha(up / pin['rust']['cargo_lock_path']) == pin['rust']['cargo_lock_sha256']
-    triple = TARGETS[inputs['target']][3]
-    assert inputs['rust']['url'] == 'https://static.rust-lang.org/dist/rust-1.93.0-' + triple + '.tar.xz'
-    rust_archive = out / ('rust-1.93.0-' + triple + '.tar.xz')
+    rust_archive = out / 'rust-1.93.0-x86_64-unknown-linux-gnu.tar.xz'
     download(inputs['rust']['url'], rust_archive, inputs['rust']['sha256'])
     extract = out / 'rust-distribution'
     extract.mkdir(mode=0o700)
     with tarfile.open(rust_archive) as stream:
-        components = {'rustc', 'cargo', 'rust-std-' + triple}
+        components = {'rustc', 'cargo', 'rust-std-x86_64-unknown-linux-gnu'}
         members = [m for m in stream.getmembers() if len(Path(m.name).parts) < 3 or
                    Path(m.name).parts[1] in components]
         stream.extractall(extract, members=members, filter='data')
-    distribution = extract / ('rust-1.93.0-' + triple)
+    distribution = extract / 'rust-1.93.0-x86_64-unknown-linux-gnu'
     rust = out / 'rust'
     run(['/bin/sh', distribution / 'install.sh', '--prefix=' + str(rust), '--disable-ldconfig',
-         '--components=rustc,cargo,rust-std-' + triple])
+         '--components=rustc,cargo,rust-std-x86_64-unknown-linux-gnu'])
     assert sha(rust / 'bin/rustc') == inputs['rust']['rustc_sha256']
     assert sha(rust / 'bin/cargo') == inputs['rust']['cargo_sha256']
     assert subprocess.check_output([str(rust / 'bin/rustc'), '-V'], text=True).strip() == pin['builder']['rustc']
@@ -130,6 +125,14 @@ def public_worker_receipt(value):
             'registry_access', 'cleanup', 'binaries')
     result = {key: value[key] for key in keys if key in value}
     result['commands'] = []
+    if 'native_compile_resources' in value:
+        policy = value['native_compile_resources']
+        assert policy['scope'] == 'FRESH_NATIVE_UBUNTU22_ONLY'
+        safe = {'scope': policy['scope']}
+        for key in ('container_memory_bytes', 'container_memory_swap_bytes', 'host_minimum_available_bytes', 'measured_available_bytes'):
+            assert type(policy[key]) is int and policy[key] >= 0
+            safe[key] = policy[key]
+        result['native_compile_resources'] = safe
     for row in value.get('commands', []):
         label = row.get('label')
         allowed = ('archive-upstream', 'archive-external-gtest', 'archive-external-mx25519',
@@ -164,25 +167,26 @@ def public_worker_receipt(value):
     return result
 
 
+
+
 def worker(phase, inputs, out):
     if phase == 'fetch':
         fetch(inputs, out)
         return
     cache = out / 'cache'
-    arch = TARGETS[inputs['target']][0]
     argv = {
-        'prepare': ['--out', str(out / 'builder'), '--target', inputs['target']],
+        'prepare': ['--out', str(out / 'builder'), '--target', 'linux-x86_64'],
         'build': ['--cache', str(cache), '--rust', str(out / 'rust'), '--out', str(out / 'build'),
-                  '--target', inputs['target'], '--older-builder-receipt', str(out / 'builder/preparation.json'),
-                  '--depends-sources', str(cache / 'depends-sources')],
+                  '--target', 'linux-x86_64', '--older-builder-receipt', str(out / 'builder/preparation.json'),
+                  '--depends-sources', str(cache / 'depends-sources'), '--native-ubuntu22-memory-policy'],
         'package': ['--build', str(out / 'build'), '--out', str(out / 'package')],
     }
     scripts = {'prepare': 'portable-prepare-old-linux.py', 'build': 'portable-build.py', 'package': 'package-portable.py'}
     if phase == 'runtime':
-        archive = out / ('package/meownero-vanguard-' + arch + '.tar.gz')
+        archive = out / 'package/meownero-vanguard-x86_64.tar.gz'
         image = json.loads((out / 'builder/preparation.json').read_text())['builder_image']
         sys.argv = ['run-portable-check.py', '--archive', str(archive), '--sha256', sha(archive),
-                    '--target', inputs['target'], '--runtime-image', image, '--out', str(out / 'runtime')]
+                    '--target', 'linux-x86_64', '--runtime-image', image, '--out', str(out / 'runtime')]
         load('run-portable-check.py').main()
     else:
         sys.argv = [scripts[phase], *argv[phase]]
@@ -201,8 +205,8 @@ def main():
     assert sha(args.inputs) == args.inputs_sha256
     inputs = json.loads(args.inputs.read_text())
     assert inputs['schema'] == 'meownero-private-native-linux-build-inputs/1'
-    arch, runner_arch, docker_arches, _, runner = TARGETS[inputs['target']]
-    assert inputs['runner'] == runner
+    policy = {'scope': 'FRESH_NATIVE_UBUNTU22_ONLY', 'target': 'linux-x86_64', 'container_memory_bytes': 4 * 1024**3, 'container_memory_swap_bytes': 4 * 1024**3, 'host_minimum_available_bytes': 6 * 1024**3}
+    assert inputs['compile_resource_policy'] == policy, 'architecture-bound compile resource policy mismatch'
     for name, digest in inputs['source_files'].items():
         assert sha(ROOT / name) == digest, 'CI source input mismatch: ' + name
     out = args.out.absolute()
@@ -215,7 +219,7 @@ def main():
     public = out / 'public'
     public.mkdir(mode=0o700)
     proof = {'schema': 'meownero-native-ubuntu22-ci-build-and-journey/1', 'result': 'FAIL',
-             'target': inputs['target'], 'architecture': arch, 'inputs_sha256': args.inputs_sha256, 'github_sha': os.environ.get('GITHUB_SHA'),
+             'inputs_sha256': args.inputs_sha256, 'github_sha': os.environ.get('GITHUB_SHA'),
              'github_run_id': os.environ.get('GITHUB_RUN_ID'), 'phases': [],
              'debian12_execution': 'UNTESTED', 'independent_release_acceptance': 'PENDING_ORIGINAL_REVIEWER'}
     began, lock_identity = time.monotonic(), None
@@ -225,27 +229,22 @@ def main():
             proof['result'] = 'PASS_ALLOWLIST_ONLY_RUNNER_BUILD_NATIVE_JOURNEY_UNTESTED'
             return
         assert os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_OS') == 'Linux'
-        assert os.environ.get('RUNNER_ARCH') == runner_arch and platform.system() == 'Linux' and platform.machine() == arch
+        assert os.environ.get('RUNNER_ARCH') == 'X64' and platform.system() == 'Linux' and platform.machine() == 'x86_64'
         assert sys.version_info >= (3, 13)
         glibc = subprocess.check_output(['getconf', 'GNU_LIBC_VERSION'], text=True, timeout=10).strip()
         assert glibc == 'glibc 2.35', 'actual native Ubuntu22 libc required'
         release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
         assert release['ID'].strip('"') == 'ubuntu' and release['VERSION_ID'].strip('"') == '22.04'
-        assert subprocess.check_output(['docker', 'info', '--format', '{{.OSType}} {{.Architecture}}'], text=True, timeout=15).strip() in {'linux ' + value for value in docker_arches}
+        assert subprocess.check_output(['docker', 'info', '--format', '{{.OSType}} {{.Architecture}}'], text=True, timeout=15).strip() == 'linux x86_64'
         assert not subprocess.check_output(['docker', 'ps', '-q'], text=True, timeout=15).strip(), 'preserve other workloads'
-        if arch == 'aarch64':
-            features = [set(line.split(':', 1)[1].split()) for line in Path('/proc/cpuinfo').read_text().splitlines()
-                        if line.startswith('Features')]
-            assert features and all({'aes', 'pmull', 'sha1', 'sha2'} <= row for row in features), 'native ARM crypto instructions required'
-
         proof['native_runner'] = {'system': platform.system(), 'architecture': platform.machine(),
-            'os': 'Ubuntu22.04', 'glibc': glibc, 'resources': resources(out.parent)}
+            'os': 'Ubuntu22.04', 'glibc': glibc, 'resources': resources(out.parent, minimum_available=policy['host_minimum_available_bytes'])}
         with lock.open('xb') as stream:
             os.chmod(lock, 0o600)
             lock_identity = lock.stat().st_ino
         supervisor = load('run-portable-ci.py')
         for name, seconds in [('fetch', 900), ('prepare', 1200), ('build', 3600), ('package', 180), ('runtime', 1500)]:
-            row = {'phase': name, 'resources': resources(out.parent, 5 if name == 'runtime' else 10)}
+            row = {'phase': name, 'resources': resources(out.parent, 5 if name == 'runtime' else 10, policy['host_minimum_available_bytes'])}
             proof['phases'].append(row)
             write(public / 'ci-receipt.json', proof)
             private = out / ('supervise-' + name)
@@ -280,17 +279,17 @@ def main():
                 assert build['compiler_execution_substrate'] == 'NATIVE' and build['patches'] == []
                 assert build['cleanup']['removed']
             if name == 'package':
-                release = json.loads((out / ('package/meownero-vanguard-' + arch + '/release.json')).read_text())
+                release = json.loads((out / 'package/meownero-vanguard-x86_64/release.json').read_text())
                 assert tuple(map(int, release['minimum_glibc'].split('.'))) <= (2, 35), 'actual ABI does not support Ubuntu22 baseline'
         runtime = out / 'runtime'
         journey = json.loads((runtime / 'journey/result.json').read_text())
         controls = json.loads((runtime / 'controls/controls.json').read_text())
         check = json.loads((runtime / 'check-receipt.json').read_text())
-        archive = out / ('package/meownero-vanguard-' + arch + '.tar.gz')
+        archive = out / 'package/meownero-vanguard-x86_64.tar.gz'
         assert check['result'] == 'PASS_NATIVE_ARCHIVE_JOURNEY' and check['cleanup']['removed']
         assert journey['result'] == 'PASS_NATIVE_JOURNEY' and journey['execution_substrate'] == 'NATIVE'
-        assert journey['architecture'] == arch and journey['upstream_commit'] == inputs['upstream_commit']
-        assert journey['release_manifest_sha256'] == sha(out / ('package/meownero-vanguard-' + arch + '/release.json'))
+        assert journey['architecture'] == 'x86_64' and journey['upstream_commit'] == inputs['upstream_commit']
+        assert journey['release_manifest_sha256'] == sha(out / 'package/meownero-vanguard-x86_64/release.json')
         assert journey['program_sha256'] == {n: release['files']['bin/' + n] for n in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')}
         assert journey['cleanup'] and all(p['removed'] for p in journey['cleanup'])
         assert journey['receive_atomic'] == 5000000000000 and journey['subsequent_spend_atomic'] == 2000000000000
@@ -315,14 +314,13 @@ def main():
         cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
         try:
             for relative, name in [('fetch-receipt.json', 'fetch.json'), ('builder/preparation.json', 'builder.json'),
-                ('build/build-receipt.json', 'build.json'), ('package/meownero-vanguard-' + arch + '/release.json', 'release.json'),
-                ('package/meownero-vanguard-' + arch + '/license-coverage.json', 'license-coverage.json'),
+                ('build/build-receipt.json', 'build.json'), ('package/meownero-vanguard-x86_64/release.json', 'release.json'),
+                ('package/meownero-vanguard-x86_64/license-coverage.json', 'license-coverage.json'),
                 ('runtime/journey/result.json', 'journey.json'), ('runtime/controls/controls.json', 'controls.json'),
                 ('runtime/check-receipt.json', 'check.json')]:
                 path = out / relative
                 if path.is_file() and not path.is_symlink():
-                    value = json.loads(path.read_text())
-                    write(public / name, public_worker_receipt(value) if name in ('build.json', 'builder.json') else value)
+                    write(public / name, public_worker_receipt(json.loads(path.read_text())) if name in ('build.json', 'builder.json') else json.loads(path.read_text()))
             try:
                 if lock_identity is not None:
                     # Container wrappers must have removed their exact recorded children.
