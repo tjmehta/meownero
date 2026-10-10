@@ -1,9 +1,14 @@
 # Meownero desktop wallet: concept and prototype
 
-Design candidate for TJS-1992 (2026-10-10). [`prototype.html`](prototype.html)
+Design candidate for TJS-1992 (2026-10-10), revision 3. [`prototype.html`](prototype.html)
 is a self-contained interactive prototype: open it in any current browser. It
 uses mock data only, talks to no node or wallet, and has no remote fonts,
 scripts or tracking. It is not a release and does not describe tested software.
+
+The HTML is the **design-review artifact** for layout, states and copy. The
+shipping UI is native: Qt Quick/QML with a C++ controller, per the studio's
+decision in TJS-1996 (see [Native direction](#native-direction-tjs-1996)). No
+WebView shell is proposed, and the prototype's markup is not meant to be ported.
 
 TJ, Meownero WhatsApp, 2026-10-10 10:16 PDT: "Wallet is one that deserves
 binaries bc we want gui let the design team cook it up." The node and test kit
@@ -33,7 +38,9 @@ ever confusing test coins with real money.*
 - **The network chooses the colour.** The single accent is bound to the network
   the node reports: violet for the local regtest chain, teal for a future
   testnet. Coin gold, the brand's money colour, is reserved for a mainnet build
-  that does not exist. A screenshot of a test wallet cannot pass for a real one.
+  that does not exist. Every money figure that matters (the spendable balance,
+  the review step, the Sent result and payment details) also carries a "Test
+  coins" tag, so even a cropped screenshot says test (critique R1).
 - **The network is always named.** A ribbon under the title bar reads "Local
   regtest · Test coins only" (wording approved in TJS-1994). The title bar, the
   sidebar, the receive card, the review step and the first-run screen repeat it,
@@ -61,28 +68,52 @@ outgoing, grouped mined blocks), and balance (spendable, unlocking, total).
 
 | Object | States |
 | --- | --- |
-| Outgoing payment | preparing (exact transaction built, nothing sent) → review of the exact fee → submitting → waiting to confirm → *n* of 10 confirmations → confirmed. Branches: edit (prepared transaction discarded, prepared and reviewed again); node refuses (nothing sent, balance unchanged); connection drops (**submission status unknown**: never shown as sent or failed, never retried automatically, and new payments are blocked until wallet and node reconcile) |
+| Outgoing payment | preparing (exact transaction built, nothing sent) → review of the exact fee → submitting → waiting to confirm → *n* of 10 confirmations → confirmed. Change returns after 10 confirmations, so spendable can drop by more than was sent; the Sent result says so. Branches: edit (prepared transaction discarded, prepared and reviewed again); node refuses (nothing sent, balance unchanged); connection drops (**submission status unknown**: never shown as sent or failed, never retried automatically, and new payments are blocked until wallet and node reconcile, which resolves to waiting-to-confirm or **not sent**, with the coins returned) |
 | Incoming payment | pending → *n* of 10 → spendable. Mined coins: unlocking for 60 blocks |
 | Chain reorganization | confirmed → pending → confirmed, with a banner explaining the balance change |
 | New wallet | name and password → recovery words (hidden until revealed, hidden again on leaving, no copy) → word check → ready |
 | Restore | words (count, word list and check-word errors) → starting block (future-block error) and new password → scanning → restored, with the note that local notes do not return |
 | Wallet file | locked ↔ unlocked; wrong password error |
-| Node | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending paused); wrong network (nothing loaded); someone else's node (explicitly untrusted, exposure explained; not offered on the local regtest) |
+| Node and engine | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending and test-coin mining paused); wrong network or incompatible node version (nothing loaded); wallet engine stopped, or engine refused the app's credentials (sending paused, restart offered); someone else's node (explicitly untrusted, exposure explained; not offered on the local regtest) |
 
 **Amount rule (TJ decision):** amounts are integers of atomic units (12 decimal
 places). Compact display shows at most four decimals, *truncated* and marked
 with "…" when digits are hidden; amounts below 0.0001 show every digit, so
 1 atomic unit reads `0.000000000001`. "Show every digit" and every review and
 detail view show the lossless value. Input with more than 12 decimals is
-refused with a message, never rounded. The prototype includes a 1-atomic-unit
-wallet, a 3,153,600.123456789012 balance and a 13-decimal input to prove this.
+refused with a message, never rounded. Input accepts only digits and the system
+locale's decimal separator. Grouping separators, spaces and the other decimal
+mark are refused with a message, so `0,5` can never be read as 5 (critique D1).
+The prototype includes a 1-atomic-unit wallet, a 3,153,600.123456789012 balance,
+a 13-decimal input and `PARSER_CASES`, which is checked at load and must be
+ported with the parser. Send is disabled when the spendable balance can't cover a
+network fee, and the app says why.
+
+**Focus and announcements (critique D3, D4, D8, R4):**
+- Dialogs are named by their heading and are modal: the background is inert,
+  Tab stays inside, Escape closes, and focus returns to the control that opened
+  them.
+- Navigation moves focus to the new page heading. In-place actions keep focus on
+  the same control.
+- One polite live region announces preparing, submitting, every send outcome,
+  reconciliation results and node-state changes.
+- Field errors are linked to their field, and focus moves to the first invalid
+  field (for missing recovery words, the first empty box).
+- Radio choices are one Tab stop moved with the arrow keys. Toggles keep a
+  constant label and report state as pressed.
+- Copy reports failure instead of always saying "Copied".
 
 **Shared tokens:** warm neutrals from the site (`site/src/app/globals.css`), one
 network accent (`--net`) with soft and on-accent variants per network and
 appearance, separate warning and danger colours, and no success green except the
-connection dot. Fonts are the platform's system font, with monospace for
-addresses and IDs. Radius is 8 px for controls and 12 px for cards. Motion: 180 ms
-ease-out page entry and 200 ms sheets, with no movement under reduced motion.
+connection dot. The warning hue sits at 45°, well away from coin gold at 85°
+(T1). The "…" for hidden digits uses the muted text colour to meet 4.5:1
+contrast (D9). Fonts are the platform's system font, with monospace for
+addresses and IDs. Radius is 8 px for controls and 12 px for cards. Motion:
+180 ms ease-out page entry and 200 ms sheets. Under reduced motion nothing moves:
+the spinner pulses in opacity only, and the toast doesn't slide (D10). Recovery
+word cells fit the longest upstream English word, "verification", and the sample
+words include it (D2).
 
 **Left out on purpose:** fiat values, price tickers or charts; buy, swap or
 exchange buttons; green/red profit-and-loss colouring; "anonymous",
@@ -95,7 +126,14 @@ pure-black backgrounds; and pill-shaped buttons.
 **Platforms:** macOS, Windows and Linux are *packaging targets* with native title
 bars, system fonts and appearance that follows the system (all three window
 styles can be switched in the prototype). No GUI build exists, so none is tested
-or signed.
+or signed. Platform conventions (T2):
+- Dialog button order comes from the platform: primary first on Windows, last on
+  macOS and GNOME. Qt's standard dialog button box does this.
+- Shortcuts: Ctrl/⌘+1–6 for the sections, ⌘, for settings on macOS, Ctrl/⌘+L
+  to lock, Escape to close dialogs, and the standard copy shortcut on a focused
+  address or ID.
+- Minimum window 880 × 600. The prototype's layout holds down to an 828-pixel
+  window.
 
 ## What is real: capability tiers
 
@@ -116,9 +154,10 @@ The in-app "About this test build" panel lists only tier A, as what the wallet e
   failures directly, such as an address typo, a 13-decimal amount, node refusal,
   a dropped connection, wrong network, reorg, misspelled recovery word, check-word
   mismatch and wrong password.
-- **Network**, **Node and sync**, **Wallet contents**, **Chain** (add blocks,
-  reorg) and **Next send result** change the live state, so a payment can be
-  followed from review to confirmed.
+- **Network**, **Node and sync** (including engine stopped, refused credentials
+  and incompatible node), **Wallet contents**, **Chain** (add blocks, reorg),
+  **Next send result** and **Unknown payment resolves as** change the live state,
+  so a payment can be followed from review to confirmed or not sent.
 - **Platform window**, **Appearance** and **Capability labels** change the
   presentation only.
 
@@ -143,7 +182,108 @@ The numbers below match its constraints.
 | 14 | Distinguish prepared, submitting, unknown, in pool, confirmed and unlocked; reconcile before another payment | New preparing step, "Submission status unknown" with send gating and "Check with node" |
 | 15 | Exact fee from the prepared transaction, never rebuilt after approval; banned claims | Review shows the prepared fee (no "estimate"), editing re-prepares; banned words are absent (checked across 128 renders) |
 
-## Implementation handoff (draft; final after the design critique)
+## Native direction (TJS-1996)
+
+The Meownero Studio Lead owns the stack decision and published it as the
+TJS-1996 `architecture-decision`. The board verified revision
+`30797108-8f10-4ca1-b098-927b7880aba4` (SHA-256 `df6a9297…7011f2`). The current
+revision `2360ff83-d6a0-4bc6-808e-ddd782c9c673` adds measurement results and a
+publication note; its recommendation is unchanged.
+
+- **Decision:** Qt Quick/QML 6.12.0, with a shared C++ application controller
+  that drives the unchanged pinned wallet core through a narrow, authenticated
+  loopback RPC. The runner-up is Slint 1.18.1 through its C++ API. Tauri, Wails
+  and Electron are rejected because they are WebView or browser shells.
+- **Status:** this is the studio's recommendation, not an accepted wallet. QML
+  draws its own controls in a native app. It is neither a WebView nor a promise
+  of OS-native widgets.
+- **What exists:** mocked Linux x86_64 (X11) Qt and Slint windows with keyboard
+  and AT-SPI action probes.
+- **What does not exist:** a real wallet connection, an audible screen-reader
+  journey, NVDA or VoiceOver, IME, high-DPI or reduced-motion checks, real
+  create, import or seed reveal, the fee-review relay, a C++ Qt package,
+  macOS or Windows builds, signing or updates.
+
+**Carrying this design into QML:**
+- The tokens become one theme object keyed by the network the node reports.
+- Use the standard Qt Quick Controls with custom styling, and add no custom
+  safety-critical controls.
+- The C++ controller owns atomic integers, `parseAmount` and `fmt` (with
+  `PARSER_CASES`), the session and an allowlist of RPC methods. QML receives
+  display models and actions only: no credentials, no arbitrary RPC, no
+  WebEngine and no remote QML.
+
+**Native acceptance checks beyond this prototype** (TJS-1996 and the studio's
+note on TJS-1992):
+1. Inactive pages are hidden from assistive technology. Qt's tree still
+   included inactive-page nodes in the mock.
+2. Focus, dialog and announcement behaviour as in the experience contract.
+3. Platform shortcuts and dialog button order.
+4. The system reduced-motion setting is honoured.
+5. The review shows exactly the prepared transaction, and the same transaction
+   is relayed.
+6. One real screen-reader journey per target (Orca, NVDA, VoiceOver) through
+   create, back up, receive, send and restore.
+7. IME and high-DPI work.
+
+## Design critique (TJS-1999)
+
+The independent critique of `3fc9e0c` (`review-verdict` revision
+`f998ded8-2a73-4cae-bd36-7195294a8bdd`) found the concept met all seven brief
+items: **accept with findings**. This table records how each finding was
+handled. A fix counts only after an independent re-check.
+
+| Finding | Disposition |
+| --- | --- |
+| **D1** a comma or space silently changed the amount | Fixed in rev 3: separators are refused, the locale decimal rule is in the contract, and `PARSER_CASES` covers `0,5`, `2,5`, `1.000,5`, `1 000`, `1_0` |
+| **D2** long seed words overflowed | Fixed in rev 3: cells fit "verification", the word screens and recovery sheet are wider, and the sample includes "laboratory" and "verification" |
+| **D3** dialogs were unnamed, not modal, and lost focus | Fixed in rev 3: named by heading, background inert, Tab trapped, focus returned |
+| **D4** focus was lost after actions, and outcomes weren't announced | Fixed in rev 3: focus kept or moved to the heading; live region for outcomes |
+| **R1** a cropped money figure had no network marker | Fixed in rev 3: "Test coins" tag on the balance, review, Sent and details |
+| D5 the regtest ribbon contradicted a remote node | Fixed in rev 2: someone else's node is disabled on regtest |
+| D6 "Get test coins" was enabled while offline | Fixed in rev 3: disabled, with the reason given |
+| D7 actions that did nothing; About omitted tier-B features | Fixed in rev 2–3: unbuilt actions are disabled, and About lists "designed, not yet tested with the kit" |
+| D8 errors weren't linked outside Send | Fixed in rev 3 |
+| D9 ellipsis contrast | Fixed in rev 3 (muted colour) |
+| D10 motion under reduced motion | Fixed in rev 3 |
+| D11 a balance too small for any fee could still start a send | Fixed in rev 3 |
+| D12 staged wrong pick wasn't marked | Fixed in rev 3 |
+| D13 "Coming later" testnet promise | Fixed in rev 2: the network is shown, never chosen |
+| D14 radio and toggle semantics | Fixed in rev 2–3: no welcome radios, node radios are one Tab stop with arrow keys, constant toggle label, exact name for the balance |
+| R2 testnet preview could look live | Fixed in rev 2: the ribbon says "Design preview … not live" |
+| R3 change after sending was never shown | Fixed in rev 3: change is modelled and explained on Sent |
+| R4 node changes weren't announced | Fixed in rev 3 |
+| R5 copy always said "Copied" | Fixed in rev 3 |
+| R6 privacy wording to confirm | Fixed in rev 2–3 with the TJS-1994 approved wording; the own-node line no longer claims nothing leaves the computer |
+| T1 warning colour close to gold | Accepted: hue moved |
+| T2 per-platform conventions | Accepted: see Platforms |
+| T3 tiers used for open policy questions | Accepted: those labels were removed in rev 2 |
+| T4 "Works today" could mean the GUI | Accepted: it is now "Engine today" |
+| Coverage: wallet engine down, RPC authentication failure, incompatible node, unknown resolving to not sent | Added in rev 3 |
+
+**Coverage deferred to implementation.** These are not built in the prototype.
+Each is specified here in one line, and design lead reviews it in the
+implementation's journey QA:
+- **Open a wallet file:** a system file chooser. A missing or corrupt file, or
+  one from another network, gets a plain refusal that names the file and
+  network; nothing is modified.
+- **Restore edge cases:**
+  - A restore that finds no payments says so and shows the scanned range.
+  - Quitting mid-scan resumes on the next launch.
+  - A wallet name that already exists is refused, without overwriting.
+- **Re-run the word check later** from Wallet → Backup.
+- **Import by keys or view-only:** out of scope for this test build and absent
+  from the UI.
+- **Payment requests with an amount and integrated addresses:** absent while
+  regtest forbids payment links (TJS-1994 #2). Revisit with a distinct network
+  identity.
+- **Other send failures:** fee above balance, transaction too large, node busy.
+  Each says "Nothing was sent" plus the node's reason, keeping the
+  refused-payment layout.
+- **Disk full or a failed write** during create or restore: nothing is
+  half-written, and the error names the folder.
+
+## Implementation handoff
 
 1. **Drive the proven boundary; do not reimplement it.** The GUI is a native
    shell over the exact `monero-wallet-rpc` and `monerod` methods in tier A.
@@ -160,14 +300,12 @@ The numbers below match its constraints.
      authentication (needs the privacy specialist's acceptance), a mounted Unix
      socket (unproven, #5), or a native node on the host. The implementation
      owner proposes one; the privacy specialist accepts or rejects it.
-3. **Stack: decided in TJS-1996, not here.** TJ (WhatsApp, 2026-10-10 10:22
-   PDT) asked for a native cross-platform UI with shared code, no Electron, and
-   native rendering preferred over a web wrapper. The studio lead owns that
-   decision in TJS-1996. This HTML prototype is a review artifact for layout,
-   states and copy. Its markup is not meant to ship. Whatever stack is chosen
-   must reproduce the experience contract above: network-bound accent, platform
-   title bars and system fonts, appearance that follows the system, keyboard and
-   screen-reader access, and every listed state.
+3. **Stack: Qt Quick/QML 6.12.0 with a C++ controller** (TJS-1996, above),
+   following TJ's direction of 2026-10-10 10:22 PDT: native rendering, shared
+   code, no Electron. The studio lead assigns the single implementation owner.
+   The HTML prototype is the review artifact. The build must reproduce the
+   experience contract, including the network-bound accent, test-coin tags,
+   platform conventions, focus and announcements, and every listed state.
 4. **Boundaries (TJS-1994):**
    - Wallet RPC is bound to explicit loopback with Digest auth and fresh
      credentials kept away from the UI layer.
@@ -182,17 +320,19 @@ The numbers below match its constraints.
      any other payment.
 5. **Amounts:** carry atomic units as strings or 64-bit integers end to end
    (use RPC `wide_*` fields where totals can exceed u64). Never use floating
-   point. Port `parseAmount`/`fmt` semantics and their test cases from the
-   prototype.
+   point. Port `parseAmount` and `fmt` semantics with `PARSER_CASES`, adapting
+   the decimal separator to the system locale and refusing every grouping
+   separator.
 6. **States:** implement every transition in the experience contract,
    especially the unknown-relay branch and the reorg banner, before visual
    polish.
 7. **Acceptance for the build:** on the actual packaged binary per target, a
    tester completes create → back up → get test coins → receive → send → restore
    → spend; the 1-atomic, large-balance and 13-decimal cases behave as above; the
-   network label matches the node's reported network; keyboard-only and screen
-   reader passes; signing status and the tested OS/arch are reported from
-   execution evidence only.
+   network label matches the node's reported network; the native acceptance
+   checks above pass, including one real screen-reader journey per target;
+   signing status and the tested OS and architecture are reported from execution
+   evidence only.
 
-The independent design critique (TJS-1999) reviews candidate `3fc9e0c`. Its
-findings will be mapped onto this revision and resolved here.
+Design acceptance needs an independent re-check of the revision-3 fixes and of
+the revision-2 surfaces the critic hadn't seen.
