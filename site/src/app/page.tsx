@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Principles } from "@/components/principles";
 import { Notify } from "@/components/notify";
@@ -74,6 +75,13 @@ export default function Home() {
             <div className="rise mt-8" style={{ "--i": 3 } as React.CSSProperties}>
               <Notify />
             </div>
+
+            <Link
+              href="/downloads"
+              className="mt-5 rounded-sm text-sm text-gold underline underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+            >
+              Local tester downloads
+            </Link>
           </div>
 
           <div className="order-1 flex justify-center md:order-2 md:justify-end">

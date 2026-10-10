@@ -8,5 +8,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
     },
+    {
+      url: "https://meownero.com/downloads",
+      lastModified: new Date("2026-10-10"),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
   ];
 }
