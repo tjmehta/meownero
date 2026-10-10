@@ -1,0 +1,1556 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meownero Wallet prototype</title>
+<!--
+  Meownero native-desktop wallet: interactive design prototype (TJS-1992).
+  Self-contained: no remote fonts, scripts, images or tracking. Mock data only:
+  the addresses and txids are random strings that cannot pass a checksum, and the
+  recovery words are a sample that cannot form a valid seed. Nothing here talks
+  to a node or a wallet. See README.md beside this file for the concept,
+  capability tiers and the implementation handoff.
+-->
+<style>
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --page: oklch(0.93 0.004 85);
+  --page-fg: oklch(0.25 0.01 70);
+  --page-muted: oklch(0.47 0.01 75);
+  --page-line: oklch(0 0 0 / 0.12);
+  --page-panel: oklch(0.98 0.003 85);
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-page="light"]) {
+    --page: oklch(0.12 0.004 70);
+    --page-fg: oklch(0.92 0.006 85);
+    --page-muted: oklch(0.66 0.01 80);
+    --page-line: oklch(1 0 0 / 0.12);
+    --page-panel: oklch(0.16 0.005 70);
+  }
+}
+:root[data-page="dark"] {
+  --page: oklch(0.12 0.004 70);
+  --page-fg: oklch(0.92 0.006 85);
+  --page-muted: oklch(0.66 0.01 80);
+  --page-line: oklch(1 0 0 / 0.12);
+  --page-panel: oklch(0.16 0.005 70);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--page);
+  color: var(--page-fg);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+/* ---------- Page: desk + reviewer controls (not part of the app) ---------- */
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  align-items: start;
+  max-width: 1460px;
+  margin: 0 auto;
+  padding: 24px;
+}
+@media (max-width: 1180px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 640px) { .stage { padding: 16px; } }
+.desk { min-width: 0; }
+.desk-caption {
+  margin: 12px 4px 0;
+  color: var(--page-muted);
+  font-size: 12.5px;
+  max-width: 80ch;
+}
+.controls {
+  position: sticky;
+  top: 24px;
+  border: 1.5px dashed var(--page-line);
+  border-radius: 10px;
+  padding: 14px 14px 16px;
+  background: var(--page-panel);
+  font-size: 12.5px;
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+}
+@media (max-width: 1180px) { .controls { position: static; max-height: none; } }
+.controls h2 { margin: 0 0 2px; font-size: 13px; font-weight: 650; letter-spacing: 0.01em; }
+.controls .sub { margin: 0 0 12px; color: var(--page-muted); }
+.controls fieldset { border: 0; padding: 0; margin: 0 0 12px; }
+.controls legend, .controls .lbl { display: block; font-weight: 600; margin-bottom: 4px; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--page-muted); }
+.controls select { width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--page-line); background: transparent; }
+.controls select option { background: var(--page-panel); }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button, .controls .btn-c {
+  border: 1px solid var(--page-line);
+  background: transparent;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+.seg button[aria-pressed="true"] { background: var(--page-fg); color: var(--page); border-color: var(--page-fg); }
+.controls .btn-c { width: 100%; text-align: left; margin-top: 4px; }
+.controls .btn-c:active, .seg button:active { transform: scale(0.97); }
+.legend-row { display: flex; gap: 8px; align-items: baseline; margin: 6px 0; }
+.legend-row .cap { flex: none; }
+
+/* ---------- The app window ---------- */
+.window {
+  --radius: 12px;
+  --font: system-ui, sans-serif;
+  position: relative;
+  width: 100%;
+  max-width: 1120px;
+  height: 740px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 13.5px;
+  box-shadow: var(--shadow);
+  isolation: isolate;
+}
+@media (max-width: 760px) { .window { height: 820px; } }
+.window[data-platform="mac"] { --radius: 12px; --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif; }
+.window[data-platform="win"] { --radius: 8px; --font: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
+.window[data-platform="linux"] { --radius: 14px; --font: Cantarell, "Noto Sans", Ubuntu, system-ui, sans-serif; }
+
+.window[data-appearance="dark"] {
+  color-scheme: dark;
+  --bg: oklch(0.175 0.006 70);
+  --side: oklch(0.15 0.006 70);
+  --surface: oklch(0.21 0.007 70);
+  --surface-2: oklch(0.245 0.008 70);
+  --fg: oklch(0.95 0.008 85);
+  --muted: oklch(0.71 0.012 80);
+  --faint: oklch(0.56 0.01 80);
+  --border: oklch(1 0 0 / 0.09);
+  --border-strong: oklch(1 0 0 / 0.17);
+  --warn: oklch(0.8 0.13 62);
+  --warn-soft: oklch(0.8 0.13 62 / 0.13);
+  --danger: oklch(0.72 0.17 25);
+  --danger-soft: oklch(0.72 0.17 25 / 0.14);
+  --ok: oklch(0.77 0.13 152);
+  --chrome: oklch(0.2 0.006 70);
+  --shadow: 0 40px 90px -30px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.09);
+}
+.window[data-appearance="light"] {
+  color-scheme: light;
+  --bg: oklch(0.985 0.003 85);
+  --side: oklch(0.96 0.005 85);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.955 0.005 85);
+  --fg: oklch(0.22 0.01 70);
+  --muted: oklch(0.47 0.012 75);
+  --faint: oklch(0.62 0.01 75);
+  --border: oklch(0 0 0 / 0.09);
+  --border-strong: oklch(0 0 0 / 0.17);
+  --warn: oklch(0.56 0.15 55);
+  --warn-soft: oklch(0.7 0.15 62 / 0.14);
+  --danger: oklch(0.54 0.2 27);
+  --danger-soft: oklch(0.6 0.2 27 / 0.1);
+  --ok: oklch(0.56 0.14 152);
+  --chrome: oklch(0.94 0.005 85);
+  --shadow: 0 40px 90px -35px oklch(0 0 0 / 0.35), 0 0 0 1px oklch(0 0 0 / 0.12);
+}
+/* The accent is bound to the network. Coin gold is reserved for a future
+   mainnet build, so a test wallet never looks like money. */
+.window[data-appearance="dark"][data-net="regtest"] { --net: oklch(0.74 0.13 292); --net-soft: oklch(0.74 0.13 292 / 0.15); --on-net: oklch(0.17 0.03 292); }
+.window[data-appearance="light"][data-net="regtest"] { --net: oklch(0.5 0.17 292); --net-soft: oklch(0.5 0.17 292 / 0.09); --on-net: oklch(0.99 0 0); }
+.window[data-appearance="dark"][data-net="testnet"] { --net: oklch(0.79 0.11 192); --net-soft: oklch(0.79 0.11 192 / 0.14); --on-net: oklch(0.18 0.03 192); }
+.window[data-appearance="light"][data-net="testnet"] { --net: oklch(0.5 0.1 198); --net-soft: oklch(0.5 0.1 198 / 0.09); --on-net: oklch(0.99 0 0); }
+
+.window :focus-visible { outline: 2px solid var(--net); outline-offset: 2px; border-radius: 6px; }
+
+/* Title bars per platform */
+.titlebar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  background: var(--chrome);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+  position: relative;
+}
+.titlebar .title { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.titlebar .title b { color: var(--fg); font-weight: 600; }
+.window[data-platform="mac"] .titlebar { height: 34px; justify-content: center; }
+.window[data-platform="mac"] .lights { position: absolute; left: 12px; display: flex; gap: 8px; }
+.window[data-platform="mac"] .lights i { width: 12px; height: 12px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 0.5px oklch(0 0 0 / 0.25); }
+.lights i:nth-child(1) { background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+.window[data-platform="win"] .titlebar { height: 34px; padding-left: 12px; }
+.window[data-platform="win"] .wctl { margin-left: auto; display: flex; height: 100%; }
+.window[data-platform="win"] .wctl span { width: 46px; display: grid; place-items: center; color: var(--muted); font-size: 12px; }
+.window[data-platform="linux"] .titlebar { height: 44px; justify-content: center; }
+.window[data-platform="linux"] .gctl { position: absolute; right: 10px; display: flex; gap: 8px; }
+.window[data-platform="linux"] .gctl span { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-size: 11px; color: var(--muted); }
+.window:not([data-platform="mac"]) .lights, .window:not([data-platform="win"]) .wctl, .window:not([data-platform="linux"]) .gctl { display: none; }
+.window[data-platform="win"] .title { margin-right: auto; }
+
+/* Network ribbon: always present, never dismissible */
+.ribbon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 30px;
+  padding: 5px 14px;
+  background: var(--net-soft);
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+.ribbon .flag { display: inline-flex; align-items: center; gap: 6px; font-weight: 650; color: var(--net); white-space: nowrap; }
+.ribbon .flag svg { width: 14px; height: 14px; }
+.ribbon .say { color: var(--fg); opacity: 0.86; min-width: 0; }
+.ribbon .more { margin-left: auto; border: 0; background: none; color: var(--net); font-weight: 600; font-size: 12.5px; padding: 2px 4px; white-space: nowrap; }
+
+/* App layout */
+.app { flex: 1; min-height: 0; display: grid; grid-template-columns: 228px minmax(0, 1fr); }
+.app.onb { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 760px) { .app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); } }
+
+.side {
+  background: var(--side);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 14px 10px 12px;
+  gap: 2px;
+  min-height: 0;
+}
+@media (max-width: 760px) {
+  .side { border-right: 0; border-bottom: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; padding: 8px; }
+  .side .who, .side .spacer { display: none; }
+}
+.who { display: flex; align-items: center; gap: 10px; padding: 4px 8px 14px; }
+.who .coin { width: 30px; height: 30px; color: var(--net); flex: none; }
+.who .name { font-weight: 650; font-size: 13.5px; line-height: 1.2; }
+.who .net { font-size: 11.5px; color: var(--muted); }
+.nav {
+  display: flex; align-items: center; gap: 10px;
+  width: 100%;
+  border: 0; background: transparent;
+  padding: 7px 10px;
+  border-radius: 7px;
+  text-align: left;
+  color: var(--fg);
+  font-size: 13.5px;
+}
+@media (max-width: 760px) { .nav { width: auto; } }
+.nav svg { width: 16px; height: 16px; color: var(--muted); flex: none; }
+.nav:hover { background: var(--surface-2); }
+.nav[aria-current="page"] { background: var(--surface-2); font-weight: 600; }
+.nav[aria-current="page"] svg { color: var(--net); }
+.nav .badge { margin-left: auto; font-size: 11px; color: var(--warn); font-weight: 600; }
+.side .spacer { flex: 1; }
+.syncchip {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  color: var(--fg);
+}
+@media (max-width: 760px) { .syncchip { width: auto; } }
+.syncchip .sub { color: var(--muted); display: block; font-size: 11.5px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--ok); }
+.dot.warn { background: var(--warn); } .dot.bad { background: var(--danger); } .dot.idle { background: var(--faint); }
+.spin { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--border-strong); border-top-color: var(--net); flex: none; animation: spin 700ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.main { min-width: 0; min-height: 0; overflow: auto; position: relative; }
+.page { padding: 22px 32px 40px; max-width: 860px; }
+@media (max-width: 760px) { .page { padding: 18px 16px 32px; } }
+.page-enter { animation: page-in 180ms var(--ease-out); }
+@keyframes page-in { from { opacity: 0; transform: translateY(4px); } }
+.ph { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; flex-wrap: wrap; }
+.ph h1 { font-size: 20px; font-weight: 650; letter-spacing: -0.01em; margin: 0; }
+.ph .right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+h2.sec { font-size: 13px; font-weight: 650; margin: 26px 0 8px; color: var(--muted); text-transform: none; }
+p { margin: 0 0 10px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border-radius: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  font-weight: 560;
+  font-size: 13.5px;
+  transition: transform 140ms var(--ease-out), background-color 140ms ease;
+  white-space: nowrap;
+}
+.btn svg { width: 16px; height: 16px; }
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn.primary { background: var(--net); border-color: transparent; color: var(--on-net); }
+.btn.danger { color: var(--danger); }
+.btn.quiet { border-color: transparent; background: transparent; color: var(--net); padding-left: 6px; padding-right: 6px; }
+.btn.lg { padding: 11px 18px; font-size: 14px; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover:not(:disabled) { background: var(--surface-2); }
+  .btn.primary:hover:not(:disabled) { background: color-mix(in oklch, var(--net) 88%, var(--fg)); }
+  .btn.quiet:hover:not(:disabled) { background: var(--net-soft); }
+}
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* Balance */
+.balance { padding: 4px 0 6px; }
+.balance .k { font-size: 12.5px; color: var(--muted); font-weight: 560; }
+.balance .big { font-size: 44px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.1; margin: 4px 0 6px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.balance .big .frac { color: var(--muted); font-weight: 560; }
+.balance .big .unit, .amt .unit { font-size: 0.42em; font-weight: 600; color: var(--muted); margin-left: 6px; letter-spacing: 0.02em; }
+.amt .unit { font-size: 0.86em; margin-left: 4px; }
+.btn .amt .unit { color: inherit; opacity: 0.8; }
+.balance .sub { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; color: var(--muted); }
+.balance .sub b { color: var(--fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+.amtbtn { border: 0; background: none; padding: 0; text-align: left; color: inherit; font: inherit; }
+.amtbtn:hover .more-digits { color: var(--net); }
+.more-digits { color: var(--faint); font-weight: 400; letter-spacing: -0.04em; margin-left: 0.04em; }
+.actions { display: flex; gap: 10px; margin: 18px 0 4px; flex-wrap: wrap; }
+
+/* Activity list */
+.list { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.item {
+  display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 12px; align-items: center;
+  padding: 11px 14px; width: 100%; text-align: left;
+  border: 0; border-bottom: 1px solid var(--border); background: transparent; color: inherit;
+}
+.item:last-child { border-bottom: 0; }
+@media (hover: hover) and (pointer: fine) { .item:hover { background: var(--surface-2); } }
+.ico { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: var(--surface-2); color: var(--muted); }
+.ico svg { width: 16px; height: 16px; }
+.item .t, .item .s { display: block; }
+.item .t { font-weight: 560; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .s { font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item .a { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.item .a .s { font-weight: 400; margin-top: 1px; }
+.status { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; }
+.status.pending { color: var(--warn); } .status.unknown { color: var(--warn); } .status.failed { color: var(--danger); } .status.done { color: var(--muted); font-weight: 500; }
+.empty { border: 1px dashed var(--border-strong); border-radius: 10px; padding: 28px; text-align: center; color: var(--muted); }
+.empty .coin { width: 40px; height: 40px; color: var(--faint); margin-bottom: 8px; }
+.empty b { display: block; color: var(--fg); font-size: 14px; margin-bottom: 4px; }
+
+/* Banners */
+.banner {
+  display: flex; gap: 12px; align-items: flex-start;
+  border-radius: 10px; padding: 12px 14px; margin: 0 0 18px;
+  background: var(--surface-2); border: 1px solid var(--border);
+}
+.banner svg.i { width: 18px; height: 18px; flex: none; margin-top: 1px; color: var(--muted); }
+.banner.warn { background: var(--warn-soft); border-color: transparent; } .banner.warn svg.i { color: var(--warn); }
+.banner.bad { background: var(--danger-soft); border-color: transparent; } .banner.bad svg.i { color: var(--danger); }
+.banner.net { background: var(--net-soft); border-color: transparent; } .banner.net svg.i { color: var(--net); }
+.banner .body { flex: 1; min-width: 0; }
+.banner .body b { display: block; margin-bottom: 2px; }
+.banner .row { margin-top: 8px; }
+.bar { height: 4px; border-radius: 4px; background: var(--border); overflow: hidden; margin-top: 8px; }
+.bar i { display: block; height: 100%; background: var(--net); border-radius: 4px; transition: width 300ms linear; }
+
+/* Forms */
+.field { margin: 0 0 16px; }
+.field label, .field .label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; }
+.field .hint { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+.field .err { font-size: 12.5px; color: var(--danger); margin-top: 6px; display: flex; gap: 6px; align-items: flex-start; }
+.field .err svg { width: 14px; height: 14px; flex: none; margin-top: 2px; }
+.input {
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-size: 14px;
+}
+.input:focus { outline: 2px solid var(--net); outline-offset: -1px; border-color: transparent; }
+.input[aria-invalid="true"] { border-color: var(--danger); }
+textarea.input { resize: vertical; min-height: 64px; font-family: var(--mono); font-size: 13px; line-height: 1.5; }
+.input.mono { font-family: var(--mono); font-size: 13px; }
+.affix { position: relative; }
+.affix .input { padding-right: 112px; }
+.affix .suffix { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; font-size: 12.5px; }
+.affix .suffix .btn { padding: 3px 8px; font-size: 12px; }
+.card { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 18px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 22px; align-items: start; }
+@media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+
+/* Address display: grouped for comparison */
+.addr { font-family: var(--mono); font-size: 13px; line-height: 1.7; word-break: break-all; letter-spacing: 0.02em; }
+.addr span { margin-right: 0.45em; }
+.addr span.key { color: var(--net); font-weight: 650; }
+.qr { width: 100%; max-width: 220px; aspect-ratio: 1; background: #fff; border-radius: 10px; padding: 12px; display: block; }
+
+/* Definition rows */
+.dl { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 10px 16px; margin: 0; }
+.dl dt { color: var(--muted); }
+.dl dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.dl dd.tnum, .dl dd .tnum { font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) { .dl { grid-template-columns: minmax(0, 1fr); gap: 2px; } .dl dd { margin-bottom: 8px; } }
+
+/* Overlay sheet */
+.overlay { position: absolute; inset: 0; display: none; z-index: 20; }
+.overlay.open { display: grid; place-items: center; }
+.scrim { position: absolute; inset: 0; background: oklch(0 0 0 / 0.42); animation: fade 160ms ease-out; }
+.sheet {
+  position: relative; width: min(520px, calc(100% - 32px)); max-height: calc(100% - 48px); overflow: auto;
+  background: var(--bg); border: 1px solid var(--border-strong); border-radius: 14px; padding: 22px;
+  box-shadow: 0 30px 60px -20px oklch(0 0 0 / 0.5);
+  animation: sheet-in 200ms var(--ease-out);
+}
+.sheet h2 { margin: 0 0 6px; font-size: 18px; }
+.sheet .foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap; }
+@keyframes sheet-in { from { opacity: 0; transform: scale(0.97); } }
+@keyframes fade { from { opacity: 0; } }
+
+.toast {
+  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+  background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 560;
+  z-index: 30; opacity: 0; pointer-events: none; transition: opacity 160ms ease, transform 200ms var(--ease-out);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+/* Capability annotations: reviewer overlay, not app UI */
+.cap {
+  display: inline-flex; align-items: center; gap: 5px;
+  font: 600 10.5px/1.2 var(--mono);
+  padding: 2px 6px; border-radius: 4px;
+  border: 1px dashed currentColor;
+  vertical-align: middle;
+  white-space: nowrap;
+  cursor: help;
+}
+.cap[data-t="A"] { color: oklch(0.6 0.14 155); background: oklch(0.7 0.14 155 / 0.12); }
+.cap[data-t="B"] { color: oklch(0.62 0.14 70); background: oklch(0.75 0.14 70 / 0.14); }
+.cap[data-t="C"] { color: oklch(0.6 0.18 345); background: oklch(0.7 0.18 345 / 0.12); }
+.window .cap[data-t="A"] { color: oklch(0.72 0.14 155); }
+.window[data-appearance="light"] .cap[data-t="A"] { color: oklch(0.5 0.14 155); }
+.window .cap[data-t="B"] { color: oklch(0.76 0.14 75); }
+.window[data-appearance="light"] .cap[data-t="B"] { color: oklch(0.52 0.13 65); }
+.window .cap[data-t="C"] { color: oklch(0.74 0.16 345); }
+.window[data-appearance="light"] .cap[data-t="C"] { color: oklch(0.52 0.18 345); }
+.window:not([data-caps="on"]) .cap { display: none; }
+.caps-line { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.window:not([data-caps="on"]) .caps-line { display: none; }
+
+/* Onboarding */
+.onb-wrap { overflow: auto; min-height: 0; display: grid; place-items: start center; padding: 40px 24px; }
+.onb-card { width: min(560px, 100%); }
+.onb-card .coin.hero { width: 56px; height: 56px; color: var(--net); }
+.onb-card h1 { font-size: 26px; letter-spacing: -0.015em; margin: 14px 0 6px; }
+.choice {
+  display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 12px; align-items: center;
+  width: 100%; text-align: left; padding: 14px; border-radius: 12px;
+  border: 1px solid var(--border-strong); background: var(--surface); margin-bottom: 10px; color: inherit;
+  transition: transform 140ms var(--ease-out);
+}
+.choice:active { transform: scale(0.99); }
+.choice[aria-checked="true"] { border-color: var(--net); box-shadow: 0 0 0 1px var(--net) inset; }
+.choice:disabled { opacity: 0.55; cursor: not-allowed; }
+.choice .ico { background: var(--net-soft); color: var(--net); }
+.choice b { display: block; }
+.choice > svg { width: 18px; height: 18px; color: var(--net); justify-self: end; }
+.choice .s { color: var(--muted); font-size: 12.5px; }
+.steps { display: flex; gap: 6px; margin-bottom: 18px; }
+.steps i { height: 4px; flex: 1; border-radius: 4px; background: var(--border-strong); }
+.steps i.on { background: var(--net); }
+
+/* Recovery words */
+.words { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; position: relative; }
+@media (max-width: 640px) { .words { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.word { display: flex; gap: 6px; align-items: baseline; border: 1px solid var(--border); border-radius: 7px; padding: 6px 8px; background: var(--surface); font-family: var(--mono); font-size: 12.5px; min-width: 0; }
+.word i { font-style: normal; color: var(--faint); font-size: 11px; min-width: 1.4em; }
+.word input { border: 0; background: transparent; width: 100%; min-width: 0; padding: 0; font: inherit; outline: none; }
+.word.bad { border-color: var(--danger); }
+.words.veiled .word span { filter: blur(6px); }
+.veil { position: absolute; inset: 0; display: grid; place-items: center; }
+.sample-mark { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; pointer-events: none; font: 800 40px/1 var(--mono); letter-spacing: 0.3em; color: var(--danger); opacity: 0.28; transform: rotate(-6deg); }
+.veil { z-index: 3; }
+.quiz { display: grid; gap: 14px; }
+.quiz .opts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.quiz .opts button { font-family: var(--mono); font-size: 13px; padding: 7px 12px; border-radius: 7px; border: 1px solid var(--border-strong); background: var(--surface); }
+.quiz .opts button[aria-pressed="true"] { border-color: var(--net); box-shadow: 0 0 0 1px var(--net) inset; }
+.quiz .opts button.wrong { border-color: var(--danger); color: var(--danger); }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter, .sheet { animation: fade 160ms ease; }
+  .spin { animation-duration: 1.6s; }
+  .btn:active:not(:disabled), .choice:active { transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="desk">
+    <section class="window" id="win" aria-label="Meownero Wallet (prototype window)">
+      <div class="titlebar" id="titlebar">
+        <div class="lights" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="title" id="wintitle"></div>
+        <div class="wctl" aria-hidden="true"><span>&#8212;</span><span>&#9744;</span><span>&#10005;</span></div>
+        <div class="gctl" aria-hidden="true"><span>&#8212;</span><span>&#10005;</span></div>
+      </div>
+      <div class="ribbon" id="ribbon" role="note"></div>
+      <div class="app" id="app"></div>
+      <div class="overlay" id="overlay" aria-hidden="true"></div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+    <p class="desk-caption">Interactive design prototype for <b>TJS-1992</b>. Mock data only: no node, wallet, real seed or real coin is involved. The dashed capability labels belong to the reviewer overlay, not the app. Use the controls to switch states.</p>
+  </div>
+
+  <aside class="controls" id="controls" aria-label="Prototype controls">
+    <h2>Prototype controls</h2>
+    <p class="sub">Reviewer tools. Not part of the wallet.</p>
+
+    <fieldset>
+      <legend>Jump to screen</legend>
+      <select id="c-route" aria-label="Jump to screen"></select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Network</legend>
+      <div class="seg" data-ctl="net">
+        <button data-v="regtest">Local regtest (current kit)</button>
+        <button data-v="testnet">Testnet (target, not live)</button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Node and sync</legend>
+      <select id="c-node" aria-label="Node and sync state">
+        <option value="synced">Connected, synced</option>
+        <option value="connecting">Connecting</option>
+        <option value="node-sync">Node catching up</option>
+        <option value="scanning">Wallet scanning</option>
+        <option value="offline">Node unreachable</option>
+        <option value="wrong-net">Node on wrong network</option>
+        <option value="remote">Synced via someone else's node</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Wallet contents</legend>
+      <select id="c-story" aria-label="Wallet contents">
+        <option value="normal">Typical test wallet</option>
+        <option value="empty">New, empty</option>
+        <option value="dust">Only 1 atomic unit</option>
+        <option value="large">Large balance (layout check)</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Chain</legend>
+      <button class="btn-c" data-c="advance1">Add 1 block</button>
+      <button class="btn-c" data-c="advance10">Add 10 blocks</button>
+      <button class="btn-c" data-c="reorg">Simulate a reorganization</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Next send result</legend>
+      <div class="seg" data-ctl="sendOutcome">
+        <button data-v="success">Accepted</button>
+        <button data-v="rejected">Node refuses</button>
+        <button data-v="lost">Connection drops</button>
+      </div>
+    </fieldset>
+
+    <fieldset id="c-fill" hidden>
+      <legend>Fill send form</legend>
+      <button class="btn-c" data-c="fill-valid">Valid test address</button>
+      <button class="btn-c" data-c="fill-typo">Address with a typo</button>
+      <button class="btn-c" data-c="fill-wrongnet">Address from the other test network</button>
+      <button class="btn-c" data-c="fill-main">Meownero mainnet address</button>
+      <button class="btn-c" data-c="fill-short">Incomplete address</button>
+      <button class="btn-c" data-c="fill-13dp">Amount with 13 decimals</button>
+      <button class="btn-c" data-c="fill-locked">Amount above spendable</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Platform window</legend>
+      <div class="seg" data-ctl="platform">
+        <button data-v="mac">macOS</button>
+        <button data-v="win">Windows</button>
+        <button data-v="linux">Linux</button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Appearance</legend>
+      <div class="seg" data-ctl="appearance">
+        <button data-v="system">System</button>
+        <button data-v="light">Light</button>
+        <button data-v="dark">Dark</button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Capability labels</legend>
+      <div class="seg" data-ctl="caps">
+        <button data-v="on">Show</button>
+        <button data-v="off">Hide</button>
+      </div>
+      <div class="legend-row"><span class="cap" data-t="A">A</span><span>Works in the accepted Vanguard test kit today (TJS-1870), through the named wallet or node RPC.</span></div>
+      <div class="legend-row"><span class="cap" data-t="B">B</span><span>The RPC exists upstream but is not exercised in the current kit. It needs implementation evidence.</span></div>
+      <div class="legend-row"><span class="cap" data-t="C">C</span><span>Prototype only: GUI behaviour with nothing behind it yet.</span></div>
+    </fieldset>
+
+    <button class="btn-c" data-c="reset">Reset prototype</button>
+  </aside>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   Mock data. Addresses and txids are random strings that cannot
+   pass a checksum. Amounts are atomic units (12 decimal places).
+   ============================================================ */
+const ATOMIC = 10n ** 12n;
+const ADDR = {
+  regtest: {
+    self: "4AKvVKKRpe4mjeLmYeXnU9cRrRZUjLfDhSVtuQfQHpFYrqP5iU1qr1Vtqbok9AiXZUjg1J9A5mZvmF1tJ23XPi4ztMgYjFd",
+    b: "48oicAQMJAXY7wNJ9dYYiBLJkTJKaRFfqJFHFUcmWMgmjQr5sBRJQAdA2biBSFRipb6Kw6KMA7oKhVqQphBgRXM2phFLM9q",
+    c: "47ugjvRPLkivpYA4zNXnTqsaGmvJJVxJ1f6kKP6URWgb4FN5dRr3xvr7m92dX9QDScsCpBHjutJHs3uQzvBgdJ6BVDQaMye",
+  },
+  testnet: {
+    self: "T6hgrwLVHjyRjAL4adoGeJCJPuYhjZa88mucsPBGxyNuKDz6gpCEiZyEMjbf5nDc9ZxRQ28DwsnvoaTR3iwh9zNmNgn8dMy",
+    b: "T6SVHS1pGKv8qeXfx2SEXYZvefFRwcaRLHBVHUevMRF9imt5ysHSmySD4booyZDaZmUC3DVmUPa9sgjt8gT63oT4LJe3yt8",
+    c: "T6t18dykQuQqNpfYaVkXxtbogKztJNFVoJrMMNXBUwU4L3jX9f1gS4gxPfWSruD4XyB85sjCdLxEcjHearTC1PYPBXV7YGV",
+  },
+  mainnet: "M5eJESRaFp7bC6q3PaoiE6XeSdVX4QZzrqENaK5RLBSmwa65RyPcvEz7UgQL3hZy9tgCLCUNT2jqneExhgC9WYWCdP6Z1KS",
+};
+const TXID = ["f344d362f2142dc292936b4ebbc4c45eff81243af547f57af43b7abe103f693e", "75a57f39b00bf9d2cd414edcedf48836c58f13daf23024cef1c1398f42036e54", "772fca6666d1c111260261bdc4bc52dd9443bd8fba94d49d2a364fbf7a3b936d", "109b2de17f8e5346cf33add2c8e8f6978247deec6581c2a162a4e8fe2c2b0c71", "418375dbda2a7a6e7b2da9fa23abc3b5176c1109bdd2214b69b288d593546d8b", "9e9ce957111e2f300943bddf59f7db5716ad632c2b43ebb09da4006c68acdd3c"];
+const NETS = {
+  regtest: {
+    name: "Local test chain", tag: "regtest",
+    say: "Test coins have no value. This chain runs only on this computer and is not Meownero mainnet.",
+    title: "Local test chain (regtest)", prefix: "4", other: "testnet",
+    blockSecs: null, node: "127.0.0.1:18081", nodeName: "Your node in the Meownero test kit (Docker)",
+  },
+  testnet: {
+    name: "Meownero testnet", tag: "testnet",
+    say: "Test coins have no value. This is a shared test network, not Meownero mainnet.",
+    title: "Meownero testnet", prefix: "T", other: "regtest",
+    blockSecs: 90, node: "127.0.0.1:29081", nodeName: "Your Meownero testnet node",
+  },
+};
+const UNLOCK = { mined: 60, in: 10, out: 10 }; // blocks; to be confirmed by the privacy specialist (TJS-1994)
+const FEE = 61520000n; // 0.00006152, example only: fees vary by transaction
+const REWARD = 17592186044415n; // upstream regtest emission, not Meownero's 9 MEOW / 90 s policy
+
+function at(s) { // "12.5" -> atomic BigInt (mock helper; never used on user input)
+  const [i, f = ""] = String(s).split(".");
+  return BigInt(i) * ATOMIC + BigInt((f + "000000000000").slice(0, 12));
+}
+
+function story(kind) {
+  const tip = 1340;
+  if (kind === "empty") return { tip, created: 1336, txs: [] };
+  if (kind === "dust") return { tip, created: 1300, txs: [
+    { id: "d1", type: "in", amount: 1n, height: 1302, txid: TXID[2], note: "" },
+  ] };
+  if (kind === "large") return { tip, created: 1200, txs: [
+    { id: "l1", type: "in", amount: at("3153600.123456789012"), height: 1250, txid: TXID[0], note: "Layout check: a large balance" },
+    { id: "l2", type: "out", amount: at("1234567.000000000001"), fee: FEE, change: at("8.5"), height: 1330, to: "b", txid: TXID[1], note: "" },
+  ] };
+  return { tip, created: 1203, txs: [
+    { id: "m1", type: "mined", blocks: 70, amount: REWARD * 70n, height: 1274, firstHeight: 1205, note: "" },
+    { id: "r1", type: "in", amount: at("5"), height: 1290, txid: TXID[0], note: "From Jonas's test wallet" },
+    { id: "s1", type: "out", amount: at("2.5"), fee: FEE, change: REWARD - at("2.5") - FEE, height: null, to: "b", txid: TXID[1], note: "Lunch test" },
+    { id: "r2", type: "in", amount: 1n, height: 1338, txid: TXID[2], note: "" },
+  ] };
+}
+
+/* ============================================================
+   State
+   ============================================================ */
+const DEFAULTS = {
+  route: "overview", net: "regtest", node: "synced", storyKind: "normal",
+  sendOutcome: "success", platform: "mac", appearance: "system", caps: "on",
+  exact: false, reorg: null, lastKnown: null,
+};
+let S;
+function reset() {
+  S = { ...structuredClone(DEFAULTS), ...story("normal"),
+    send: freshSend(), detail: null, scanPct: 48, nodePct: 62 };
+}
+function freshSend() { return { step: "form", to: "", amount: "", note: "", errs: {}, txid: null }; }
+
+/* ============================================================
+   Amounts: TJ's presentation rule. Display may simplify, but a
+   nonzero amount is never shown as zero and input is never rounded.
+   ============================================================ */
+function parts(a) {
+  const neg = a < 0n; if (neg) a = -a;
+  const i = a / ATOMIC, f = (a % ATOMIC).toString().padStart(12, "0");
+  return { neg, int: i.toLocaleString("en-US"), frac: f };
+}
+// Compact: at most 4 decimals, truncated (not rounded); a trailing "…" marks hidden digits.
+// Exact: every nonzero digit. Trailing zeros are dropped in both modes because that loses nothing.
+// Amounts under 0.0001 show every digit, so 1 atomic unit reads 0.000000000001.
+function fmt(a, { exact = S.exact, sign = false } = {}) {
+  const p = parts(a);
+  let frac = p.frac.replace(/0+$/, ""), more = false;
+  if (exact) { /* trailing zeros carry no value; trimming them is lossless */ }
+  else if (a >= 10n ** 8n || a <= -(10n ** 8n)) {
+    if (frac.length > 4) { more = true; frac = frac.slice(0, 4); }
+  }
+  const s = sign ? (p.neg ? "−" : "+") : (p.neg ? "−" : "");
+  return { s, int: p.int, frac, more };
+}
+function plain(a) { const f = fmt(a, { exact: true }); return f.int.replace(/,/g, "") + (f.frac ? "." + f.frac : ""); }
+function amtHTML(a, opts = {}) {
+  const f = fmt(a, opts);
+  const exactText = parts(a).int + "." + parts(a).frac;
+  return `<span class="amt tnum" title="Exact: ${f.s}${exactText} MEOW">${f.s}${f.int}${f.frac ? "." + f.frac : ""}${f.more ? '<span class="more-digits" aria-label="more digits">…</span>' : ""}${opts.unit === false ? "" : '<span class="unit">MEOW</span>'}</span>`;
+}
+// Parses user input exactly. Returns {ok, atomic} or {ok:false, msg}. Never rounds.
+function parseAmount(raw) {
+  const s = raw.trim().replace(/[\s,_]/g, "");
+  if (!s) return { ok: false, msg: "Enter an amount." };
+  if (!/^\d*\.?\d*$/.test(s) || s === ".") return { ok: false, msg: "Use digits and one decimal point, for example 2.5." };
+  const [i, f = ""] = s.split(".");
+  if (f.length > 12) return { ok: false, msg: `MEOW has 12 decimal places. This amount has ${f.length}. Remove the extra digits; the wallet will not round it for you.` };
+  const a = BigInt(i || "0") * ATOMIC + BigInt((f + "000000000000").slice(0, 12));
+  if (a === 0n) return { ok: false, msg: "Enter an amount above zero." };
+  return { ok: true, atomic: a };
+}
+
+/* ============================================================
+   Balances derived from history, the way get_balance reports
+   total and unlocked amounts.
+   ============================================================ */
+function conf(tx) { return tx.height == null ? 0 : S.tip - tx.height + 1; }
+function live(tx) { return tx.status !== "failed"; }
+function balances() {
+  let total = 0n, locked = 0n, nextUnlock = null;
+  for (const tx of S.txs) {
+    if (!live(tx)) continue;
+    if (tx.type === "out") {
+      total -= tx.amount + tx.fee;
+      const c = conf(tx), need = UNLOCK.out - c;
+      if (tx.status === "unknown" || need > 0) { locked += tx.change; if (need > 0) nextUnlock = Math.min(nextUnlock ?? need, need); }
+    } else {
+      total += tx.amount;
+      const win = UNLOCK[tx.type];
+      if (tx.type === "mined") {
+        // each block's reward unlocks 60 blocks after that block
+        for (let k = 0; k < tx.blocks; k++) {
+          const h = tx.firstHeight + k; const need = win - (S.tip - h + 1);
+          if (need > 0) { locked += tx.amount / BigInt(tx.blocks); nextUnlock = Math.min(nextUnlock ?? need, need); }
+        }
+      } else {
+        const need = win - conf(tx);
+        if (need > 0) { locked += tx.amount; nextUnlock = Math.min(nextUnlock ?? need, need); }
+      }
+    }
+  }
+  return { total, locked, unlocked: total - locked, nextUnlock };
+}
+
+/* ============================================================
+   Small helpers
+   ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const net = () => NETS[S.net];
+const addr = (k) => ADDR[S.net][k];
+function cap(t, text, why) { return `<span class="cap" data-t="${t}" title="${esc(why || text)}">${t} · ${esc(text)}</span>`; }
+function capsLine(...c) { return `<div class="caps-line">${c.join("")}</div>`; }
+function grouped(a) {
+  const g = a.match(/.{1,4}/g) || [];
+  return `<span class="addr" aria-label="${esc(a)}">${g.map((x, i) => `<span class="${i < 2 || i >= g.length - 2 ? "key" : ""}">${x}</span>`).join("")}</span>`;
+}
+function short(a) { return a.slice(0, 6) + "…" + a.slice(-6); }
+function blocksToText(n) {
+  if (n == null) return "";
+  const b = `${n} block${n === 1 ? "" : "s"}`;
+  if (!net().blockSecs) return b;
+  const m = Math.round((n * net().blockSecs) / 60);
+  return `${b} (about ${m < 60 ? m + " min" : Math.round(m / 6) / 10 + " h"})`;
+}
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("show"), 1600);
+}
+function canTransact() { return ["synced", "remote"].includes(S.node); }
+
+const I = {
+  home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  list: '<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
+  up: '<path d="M12 19V5M5 12l7-7 7 7"/>',
+  down: '<path d="M12 5v14M19 12l-7 7-7-7"/>',
+  block: '<path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/>',
+  node: '<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  alert: '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  flask: '<path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/><path d="M7 15h10"/>',
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  refresh: '<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>',
+};
+function icon(n, cls = "") { return `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`; }
+// The app mark: a coin with an unimpressed cat. Outlined in the network colour on test networks.
+function coin(cls = "coin") {
+  return `<svg class="${cls}" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="16" cy="16" r="14.2"/><path d="M9.6 21.8V10.6l4.1 3.3h4.6l4.1-3.3v11.2"/><path d="M12.6 18.1h2M17.4 18.1h2"/><path d="M15.2 20.6h1.6"/></svg>`;
+}
+
+/* ============================================================
+   Shell: title bar, network ribbon, sidebar
+   ============================================================ */
+function renderChrome() {
+  const w = $("#win");
+  w.dataset.platform = S.platform; w.dataset.net = S.net; w.dataset.caps = S.caps;
+  const sys = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  w.dataset.appearance = S.appearance === "system" ? sys : S.appearance;
+  document.documentElement.dataset.page = S.appearance === "system" ? "" : S.appearance;
+  $("#wintitle").innerHTML = `<b>Meownero Wallet</b> — ${esc(net().title)}`;
+  $("#ribbon").innerHTML = `<span class="flag">${icon("flask")}${esc(net().name)}</span><span class="say">${esc(net().say)}</span>
+    ${S.net === "testnet" ? cap("C", "testnet not live; T… prefix from spec", "The Meownero testnet does not exist yet. T… addresses come from docs/spec/network-identity.md, not from the current kit.") : cap("A", "regtest via Vanguard kit", "Current accepted kit (TJS-1870) runs an accelerated local regtest. Its addresses use the upstream 4… prefix.")}
+    <button class="more" data-act="about-net">What does this mean?</button>`;
+  document.querySelectorAll("[data-ctl]").forEach((g) => g.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(S[g.dataset.ctl] === b.dataset.v))));
+  $("#c-node").value = S.node; $("#c-story").value = S.storyKind; $("#c-route").value = S.route;
+  $("#c-fill").hidden = S.route !== "send";
+}
+
+const NAV = [
+  ["overview", "Overview", "home"], ["activity", "Activity", "list"], ["send", "Send", "up"],
+  ["receive", "Receive", "down"], ["node", "Node", "node"], ["wallet", "Wallet", "gear"],
+];
+function syncChip() {
+  const m = {
+    synced: ['<i class="dot"></i>', "Synced", `Block ${S.tip.toLocaleString("en-US")}`],
+    remote: ['<i class="dot warn"></i>', "Synced", "Using someone else's node"],
+    connecting: ['<i class="spin"></i>', "Connecting…", net().node],
+    "node-sync": ['<i class="spin"></i>', "Node catching up", `${S.nodePct}% of blocks`],
+    scanning: ['<i class="spin"></i>', "Scanning for payments", `${S.scanPct}% scanned`],
+    offline: ['<i class="dot bad"></i>', "Node unreachable", "Sending paused"],
+    "wrong-net": ['<i class="dot bad"></i>', "Wrong network", "Nothing loaded from this node"],
+  }[S.node];
+  return `<button class="syncchip" data-go="node" aria-label="Connection: ${m[1]}. ${m[2]}">${m[0]}<span><b>${m[1]}</b><span class="sub">${esc(m[2])}</span></span></button>`;
+}
+function sidebar() {
+  const pending = S.txs.filter((t) => t.height == null && live(t)).length;
+  return `<nav class="side" aria-label="Wallet sections">
+    <div class="who">${coin()}<div><div class="name">Test wallet</div><div class="net">${esc(net().name)}</div></div></div>
+    ${NAV.map(([r, label, ic]) => `<button class="nav" data-go="${r}" ${S.route === r || (r === "wallet" && S.route.startsWith("wallet")) ? 'aria-current="page"' : ""}>${icon(ic)}${label}${r === "activity" && pending ? `<span class="badge">${pending} pending</span>` : ""}</button>`).join("")}
+    <div class="spacer"></div>
+    ${syncChip()}
+  </nav>`;
+}
+
+/* Banners for node and chain conditions (shown on money screens) */
+function conditionBanner() {
+  const n = net();
+  const r = S.reorg ? `<div class="banner warn">${icon("refresh", "i")}<div class="body"><b>The chain reorganized at block ${S.reorg.height.toLocaleString("en-US")}.</b>${S.reorg.count} payment${S.reorg.count === 1 ? "" : "s"} went back to pending, and your balance was updated. This can happen on any proof-of-work chain; nothing needs to be done unless a payment stays pending. ${cap("A", "reorg rollback", "daemon-restore.py reorg gate: wallet balance rolls back and re-confirms after a native two-daemon reorg.")}<div class="row"><button class="btn" data-go="activity">View activity</button><button class="btn quiet" data-act="dismiss-reorg">Dismiss</button></div></div></div>` : "";
+  const c = {
+    connecting: `<div class="banner">${icon("info", "i")}<div class="body"><b>Connecting to your node at ${n.node}…</b>Balances below are from the last time this wallet was open.</div></div>`,
+    "node-sync": `<div class="banner net">${icon("clock", "i")}<div class="body"><b>Your node is catching up with the network.</b>Recent payments may be missing until it finishes (${S.nodePct}%). Sending waits until then. ${cap("A", "get_info", "daemon get_info height/target_height")}<div class="bar"><i style="width:${S.nodePct}%"></i></div></div></div>`,
+    scanning: `<div class="banner net">${icon("clock", "i")}<div class="body"><b>Scanning blocks for your payments.</b>Block ${Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}. Balances may still go up. ${cap("A", "refresh", "wallet refresh / rescan_blockchain")}<div class="bar"><i style="width:${S.scanPct}%"></i></div></div></div>`,
+    offline: `<div class="banner bad">${icon("alert", "i")}<div class="body"><b>Can't reach your node at ${n.node}.</b>Showing balances from when the wallet last synced. Sending is paused until the node is back. If you use the Meownero test kit, check that it is running. ${cap("C", "offline handling", "GUI state; wallet-rpc refresh failure path not yet exercised in the kit")}<div class="row"><button class="btn" data-act="retry">Try again</button><button class="btn quiet" data-go="node">Node settings</button></div></div></div>`,
+    "wrong-net": `<div class="banner bad">${icon("alert", "i")}<div class="body"><b>That node is on a different network.</b>It reports ${NETS[n.other].title}, but this wallet belongs to the ${n.title}. Nothing was loaded from it. Connect to a ${n.tag} node or open a different wallet. ${cap("C", "nettype check", "GUI compares get_info nettype; not exercised in the kit")}<div class="row"><button class="btn" data-go="node">Choose another node</button></div></div></div>`,
+  }[S.node] || "";
+  return r + c;
+}
+
+/* ============================================================
+   Screens
+   ============================================================ */
+const SCREENS = {};
+const ROUTES = []; // [route, label, group]
+
+ROUTES.push(["overview", "Overview", "Wallet"]);
+SCREENS.overview = () => {
+  const b = balances();
+  const recent = sortedTxs().slice(0, 4);
+  return `<div class="ph"><h1>Overview</h1><div class="right"><button class="btn quiet small" data-act="exact" aria-pressed="${S.exact}">${S.exact ? "Shorten amounts" : "Show every digit"}</button></div></div>
+  ${conditionBanner()}
+  ${capsLine(cap("A", "get_balance", "balance and unlocked_balance from wallet-rpc get_balance"), cap("C", "compact display rule", "GUI formatting: ≤4 decimals truncated with an ellipsis, never rounds, never shows nonzero as zero"))}
+  <section class="balance" aria-label="Balance">
+    <div class="k">Spendable now</div>
+    <button class="amtbtn big" data-act="exact" title="Show every digit">${bigAmount(b.unlocked)}</button>
+    <div class="sub">
+      ${b.locked > 0n ? `<span>Unlocking <b>${amtHTML(b.locked)}</b>${b.nextUnlock ? ` · next in ${blocksToText(b.nextUnlock)}` : ""}</span>` : ""}
+      <span>Total <b>${amtHTML(b.total)}</b></span>
+      ${S.node === "offline" || S.node === "connecting" ? `<span>Last synced 2 minutes ago</span>` : ""}
+    </div>
+    <div class="actions">
+      <button class="btn primary lg" data-go="receive">${icon("down")}Receive</button>
+      <button class="btn lg" data-go="send" ${b.unlocked > 0n ? "" : "disabled"}>${icon("up")}Send</button>
+      ${S.net === "regtest" ? `<button class="btn quiet" data-act="mine">${icon("block")}Get test coins</button>` : ""}
+    </div>
+  </section>
+  ${b.locked > 0n ? `<p class="small muted">New coins wait before they can be spent: mined coins for ${UNLOCK.mined} blocks, payments and change for ${UNLOCK.in}. ${cap("B", "unlock windows to confirm", "60/10 are upstream defaults; TJS-1994 to confirm for the kit")}</p>` : ""}
+  <h2 class="sec">Recent activity</h2>
+  ${recent.length ? `<div class="list">${recent.map(txRow).join("")}</div><div class="row" style="margin-top:8px"><button class="btn quiet" data-go="activity">See all activity</button></div>` : emptyActivity()}`;
+};
+function bigAmount(a) {
+  const f = fmt(a);
+  return `${f.int}${f.frac ? `<span class="frac">.${f.frac}</span>` : ""}${f.more ? '<span class="more-digits">…</span>' : ""}<span class="unit">MEOW</span>`;
+}
+function emptyActivity() {
+  return `<div class="empty">${coin()}<b>No payments yet</b>Share your address to receive test coins${S.net === "regtest" ? ", or mine some on your local test chain" : ""}.<div class="row" style="justify-content:center;margin-top:12px"><button class="btn" data-go="receive">Show my address</button>${S.net === "regtest" ? `<button class="btn quiet" data-act="mine">Get test coins</button>` : ""}</div></div>`;
+}
+function sortedTxs() {
+  return [...S.txs].sort((a, b) => (b.height ?? 1e9) - (a.height ?? 1e9));
+}
+function txStatus(tx) {
+  if (tx.status === "failed") return `<span class="status failed">${icon("x")}Not sent</span>`;
+  if (tx.status === "unknown") return `<span class="status unknown">${icon("alert")}Checking…</span>`;
+  const c = conf(tx);
+  if (tx.height == null) return `<span class="status pending">${icon("clock")}Pending</span>`;
+  const need = tx.type === "mined" ? null : UNLOCK[tx.type];
+  if (need && c < need) return `<span class="status pending">${c} of ${need} confirmations</span>`;
+  return `<span class="status done">${c.toLocaleString("en-US")} confirmations</span>`;
+}
+function txTitle(tx) {
+  if (tx.type === "mined") return `Mined ${tx.blocks} test block${tx.blocks === 1 ? "" : "s"}`;
+  if (tx.type === "in") return "Received";
+  return "Sent";
+}
+function txSub(tx) {
+  if (tx.type === "mined") return `Blocks ${tx.firstHeight.toLocaleString("en-US")}–${(tx.firstHeight + tx.blocks - 1).toLocaleString("en-US")}`;
+  if (tx.type === "in") return tx.note ? esc(tx.note) : "Sender not shown";
+  return `To ${short(addr(tx.to))}${tx.note ? " · " + esc(tx.note) : ""}`;
+}
+function txRow(tx) {
+  const ic = tx.type === "mined" ? "block" : tx.type === "in" ? "down" : "up";
+  const a = tx.type === "out" ? -(tx.amount) : tx.amount;
+  return `<button class="item" data-act="detail" data-id="${tx.id}"><span class="ico">${icon(ic)}</span><span><span class="t">${txTitle(tx)}</span><span class="s">${txSub(tx)}</span></span><span class="a">${amtHTML(a, { sign: true, unit: false })}<span class="s">${txStatus(tx)}</span></span></button>`;
+}
+
+ROUTES.push(["activity", "Activity", "Wallet"]);
+SCREENS.activity = () => {
+  const txs = sortedTxs();
+  return `<div class="ph"><h1>Activity</h1><div class="right"><button class="btn quiet small" data-act="exact" aria-pressed="${S.exact}">${S.exact ? "Shorten amounts" : "Show every digit"}</button></div></div>
+  ${conditionBanner()}
+  ${capsLine(cap("A", "get_transfers", "wallet-rpc get_transfers / incoming_transfers"), cap("C", "grouped mined blocks", "GUI groups consecutive block rewards into one row"), cap("C", "local notes", "Notes are stored by the GUI on this computer only"))}
+  ${txs.length ? `<div class="list">${txs.map(txRow).join("")}</div>` : emptyActivity()}
+  <p class="small muted" style="margin-top:12px">Incoming payments don't show who sent them. Notes you add stay on this computer and don't come back when you restore from your recovery words.</p>`;
+};
+
+function detailSheet(tx) {
+  const a = tx.type === "out" ? -(tx.amount) : tx.amount;
+  const rows = [
+    ["Amount", `${amtHTML(a, { exact: true, sign: true })}`],
+    tx.type === "out" ? ["Network fee", amtHTML(tx.fee, { exact: true })] : null,
+    tx.type === "out" ? ["To", grouped(addr(tx.to))] : null,
+    tx.type === "in" ? ["From", `<span class="muted">Not shown. Meownero payments don't reveal the sender's address.</span>`] : null,
+    ["Status", txStatus(tx)],
+    ["Block", tx.height == null ? "Not in a block yet" : tx.type === "mined" ? `${tx.firstHeight.toLocaleString("en-US")}–${(tx.firstHeight + tx.blocks - 1).toLocaleString("en-US")}` : tx.height.toLocaleString("en-US")],
+    tx.txid ? ["Transaction ID", `<span class="addr">${tx.txid}</span>`] : null,
+    ["Note", tx.note ? esc(tx.note) + ' <span class="muted small">(this computer only)</span>' : '<span class="muted">None</span>'],
+  ].filter(Boolean);
+  return `<h2>${txTitle(tx)}</h2>
+  ${capsLine(cap("A", "get_transfers fields", "amount, fee, height, txid, confirmations"), tx.status === "unknown" ? cap("C", "unknown relay state", "GUI must not mark this sent or failed until the node or wallet confirms") : "")}
+  ${tx.status === "unknown" ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>We don't know yet whether this payment reached the network.</b>The connection dropped while sending. Don't send it again: if it went through, it will confirm here. The wallet checks again when the node is back.</div></div>` : ""}
+  <dl class="dl">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
+  <div class="foot">${tx.txid ? `<button class="btn" data-act="copy" data-copy="${tx.txid}">${icon("copy")}Copy ID</button>` : ""}<button class="btn primary" data-act="close">Done</button></div>`;
+}
+
+ROUTES.push(["receive", "Receive", "Wallet"]);
+SCREENS.receive = () => {
+  const a = addr("self");
+  return `<div class="ph"><h1>Receive</h1></div>
+  ${conditionBanner()}
+  ${capsLine(cap("A", "get_address", "primary address from wallet-rpc get_address"), cap("C", "QR rendering", "Standard QR encoder in the GUI; this pattern is not scannable"))}
+  <div class="two">
+    <div>
+      <div class="card">
+        <div class="label muted small" style="margin-bottom:6px">Your ${esc(net().name.toLowerCase())} address</div>
+        ${grouped(a)}
+        <div class="row" style="margin-top:14px">
+          <button class="btn primary" data-act="copy" data-copy="${a}">${icon("copy")}Copy address</button>
+          <button class="btn" data-act="new-sub" title="Not in the current test kit">New address for each payer</button>
+          ${cap("B", "create_address", "Subaddresses exist upstream; not exercised in the Vanguard kit")}
+        </div>
+      </div>
+      <p class="small muted" style="margin-top:12px">When comparing, check the coloured groups at the start and end. Payments to this address don't show the sender, and the sender can't see your balance.</p>
+      ${S.net === "regtest" ? `<p class="small muted"><b style="color:var(--fg)">On the local test chain, addresses look like Monero addresses.</b> Only use this one for test coins, and never give it to someone sending real money. ${cap("B", "confusion risk to confirm", "Vanguard regtest uses the upstream 4… prefix; TJS-1994 to rule on mitigation")}</p>` : ""}
+      ${S.net === "regtest" ? `<h2 class="sec">Get test coins</h2>
+      <div class="card">
+        <p>Your local test chain only makes blocks when asked. Mining 10 blocks pays their test rewards to this wallet.</p>
+        <p class="small muted">Mined coins can be spent after ${UNLOCK.mined} more blocks. This chain uses upstream test rewards, not Meownero's planned 9 MEOW per 90 seconds.</p>
+        <div class="row"><button class="btn" data-act="mine" ${canTransact() ? "" : "disabled"}>${icon("block")}Mine 10 test blocks</button>${cap("A", "generateblocks", "daemon generateblocks {wallet_address, amount_of_blocks}, regtest only")}</div>
+      </div>` : `<h2 class="sec">Get test coins</h2><p class="muted">On the testnet, test coins come from mining. A faucet is not planned yet. ${cap("C", "testnet coin source", "No testnet exists yet")}</p>`}
+    </div>
+    <div>${qrSVG(a)}<p class="small muted" style="margin-top:8px;text-align:center">Prototype pattern, not scannable</p></div>
+  </div>`;
+};
+function qrSVG(text) {
+  // Deterministic pseudo-QR so the layout is realistic without encoding anything.
+  const n = 29; let h = 2166136261; const bits = [];
+  for (let i = 0; i < n * n; i++) { h ^= text.charCodeAt(i % text.length) + i; h = Math.imul(h, 16777619); bits.push((h >>> 13) & 1); }
+  const finder = (x, y) => (x < 8 && y < 8) || (x >= n - 8 && y < 8) || (x < 8 && y >= n - 8);
+  let r = "";
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!finder(x, y) && bits[y * n + x]) r += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  const f = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3"/>`;
+  return `<svg class="qr" viewBox="0 0 ${n} ${n}" role="img" aria-label="QR code for your address (prototype pattern)" fill="#111">${r}${f(0, 0)}${f(n - 7, 0)}${f(0, n - 7)}</svg>`;
+}
+
+ROUTES.push(["send", "Send: form and review", "Wallet"]);
+SCREENS.send = () => {
+  const s = S.send, b = balances();
+  if (s.step === "sending") return `<div class="ph"><h1>Send</h1></div><div class="card" aria-live="polite"><div class="row"><i class="spin"></i><b>${s.phase === 2 ? "Handing it to your node…" : "Building a private transaction…"}</b></div><p class="small muted" style="margin-top:8px">This can take a few seconds. Keep the wallet open.</p></div>`;
+  if (s.step === "result") return sendResult();
+  const e = s.errs;
+  return `<div class="ph"><h1>Send</h1></div>
+  ${conditionBanner()}
+  ${capsLine(cap("A", "transfer (one recipient)", "wallet-rpc transfer, exercised in the Vanguard kit"), cap("B", "validate_address", "upstream RPC; exercised only in the older chain/ lineage"), cap("C", "exact-input rule", "GUI parser: rejects >12 decimals, never rounds"))}
+  <form id="sendform" novalidate>
+    <div class="field">
+      <label for="to">To</label>
+      <textarea class="input mono" id="to" rows="2" spellcheck="false" autocomplete="off" placeholder="Paste a ${esc(net().name.toLowerCase())} address" aria-invalid="${!!e.to}" aria-describedby="to-msg">${esc(s.to)}</textarea>
+      <div id="to-msg">${e.to ? `<div class="err">${icon("alert")}<span>${e.to}</span></div>` : `<div class="hint">${S.net === "regtest" ? "Test chain addresses start with 4." : "Testnet addresses start with T."} Paste rather than type.</div>`}</div>
+    </div>
+    <div class="field">
+      <label for="amount">Amount</label>
+      <div class="affix"><input class="input tnum" id="amount" inputmode="decimal" autocomplete="off" placeholder="0.0" value="${esc(s.amount)}" aria-invalid="${!!e.amount}" aria-describedby="amount-msg">
+        <span class="suffix">MEOW<button type="button" class="btn" data-act="max" title="Send everything spendable, minus the fee">Max</button></span></div>
+      <div id="amount-msg">${e.amount ? `<div class="err">${icon("alert")}<span>${e.amount}</span></div>` : `<div class="hint">Spendable now: ${amtHTML(b.unlocked, { exact: true })}. ${cap("B", "sweep_all for Max", "Max uses sweep_all upstream; not exercised in the kit")}</div>`}</div>
+    </div>
+    <div class="field">
+      <label for="note">Note <span class="muted" style="font-weight:400">(optional)</span></label>
+      <input class="input" id="note" maxlength="80" autocomplete="off" value="${esc(s.note)}" aria-describedby="note-hint">
+      <div class="hint" id="note-hint">Saved on this computer only. It isn't sent, and it doesn't come back if you restore from your recovery words.</div>
+    </div>
+    <div class="row"><button class="btn primary lg" type="submit" ${canTransact() ? "" : "disabled"}>Review payment</button>${canTransact() ? "" : `<span class="small muted">Sending is paused until your node is connected and synced.</span>`}</div>
+  </form>`;
+};
+function validateSend() {
+  const s = S.send, n = net(), b = balances(), errs = {};
+  const to = s.to.trim().replace(/\s+/g, "");
+  if (!to) errs.to = "Enter the address you're paying.";
+  else if (/[^1-9A-HJ-NP-Za-km-z]/.test(to)) errs.to = "Addresses don't contain 0, O, I or l, spaces or punctuation. Check for a typo.";
+  else if (to.length !== 95 && to.length !== 106) errs.to = `This address is incomplete: it has ${to.length} characters, and a full one has 95.`;
+  else if (to[0] === "M") errs.to = "That's a Meownero mainnet address. This wallet only sends test coins on the " + n.title + ". Mainnet doesn't exist yet.";
+  else if (to[0] !== n.prefix) errs.to = S.net === "regtest" ? "That's a Meownero testnet address. This wallet is on the local test chain (regtest), so it can't pay it." : "That isn't a Meownero testnet address. It may be a local test chain or Monero address.";
+  else if (!Object.values(ADDR[S.net]).includes(to)) errs.to = "This address has a typo somewhere: its checksum doesn't match. Copy it again from the person you're paying.";
+  else if (to === addr("self")) errs.to = "That's this wallet's own address.";
+  const p = parseAmount(s.amount);
+  if (!p.ok) errs.amount = p.msg;
+  else if (p.atomic + FEE > b.total) errs.amount = `That's more than this wallet holds. Including the fee, the most you can send is ${amtHTML(b.unlocked - FEE > 0n ? b.unlocked - FEE : 0n, { exact: true })}.`;
+  else if (p.atomic + FEE > b.unlocked) errs.amount = `Only ${amtHTML(b.unlocked, { exact: true })} is spendable now. ${amtHTML(b.locked, { exact: true })} is still unlocking${b.nextUnlock ? `; more is ready in ${blocksToText(b.nextUnlock)}` : ""}.`;
+  s.errs = errs; s.parsed = p.ok ? p.atomic : null; s.toClean = to;
+  return !Object.keys(errs).length;
+}
+function reviewSheet() {
+  const s = S.send;
+  return `<h2>Review payment</h2>
+  <p class="muted small">Check the address against what the recipient gave you. Payments can't be reversed.</p>
+  ${capsLine(cap("B", "fee preview", "Exact fee before relay needs transfer with do_not_relay + relay_tx; not exercised in the kit. Kit shows the fee after sending."))}
+  <dl class="dl" style="margin-top:14px">
+    <dt>You send</dt><dd>${amtHTML(s.parsed, { exact: true })}</dd>
+    <dt>Network fee</dt><dd>${amtHTML(FEE, { exact: true })} <span class="muted small">estimate</span></dd>
+    <dt>Total</dt><dd><b>${amtHTML(s.parsed + FEE, { exact: true })}</b></dd>
+    <dt>To</dt><dd>${grouped(s.toClean)}</dd>
+    <dt>Network</dt><dd>${esc(net().title)} · test coins</dd>
+    ${s.note ? `<dt>Note</dt><dd>${esc(s.note)} <span class="muted small">(this computer only)</span></dd>` : ""}
+  </dl>
+  <div class="foot"><button class="btn" data-act="close">Edit</button><button class="btn primary" data-act="confirm-send">Send ${amtHTML(s.parsed, { exact: true })}</button></div>`;
+}
+function sendResult() {
+  const s = S.send, tx = S.txs.find((t) => t.id === s.txid);
+  if (s.outcome === "rejected") return `<div class="ph"><h1>Send</h1></div>
+    <div class="banner bad">${icon("alert", "i")}<div class="body"><b>Your node refused this payment. Nothing was sent.</b>The node said: “double spend: one of the coins was already spent.” This usually means another copy of this wallet spent it, or a recent payment is still settling. Your balance hasn't changed. ${cap("A", "key-image replay refused", "daemon-restore.py: node refuses a replayed key image")}<div class="row"><button class="btn" data-act="send-again">Back to the form</button><button class="btn quiet" data-go="activity">View activity</button></div></div></div>`;
+  if (s.outcome === "lost") return `<div class="ph"><h1>Send</h1></div>
+    <div class="banner warn">${icon("alert", "i")}<div class="body"><b>The connection dropped while sending.</b>We can't tell yet whether your node received this payment, so don't send it again. It's in Activity as “Checking…”. If it went through, it will confirm there; if not, it will say “Not sent” and the coins return to your balance. ${cap("C", "relay-unknown state", "Never shown as sent or failed until confirmed; TJS-1994 to rule on detection")}<div class="row"><button class="btn" data-act="detail" data-id="${tx.id}">See payment</button><button class="btn quiet" data-go="overview">Overview</button></div></div></div>`;
+  return `<div class="ph"><h1>Sent</h1></div>
+  <div class="card">
+    <div class="row" style="gap:12px"><span class="ico" style="background:var(--net-soft);color:var(--net)">${icon("check")}</span><div><b>${amtHTML(tx.amount, { exact: true })} is on its way.</b><div class="small muted">Waiting for the first confirmation. The recipient can spend it after ${UNLOCK.in} confirmations.</div></div></div>
+    <dl class="dl" style="margin-top:16px">
+      <dt>Fee paid</dt><dd>${amtHTML(tx.fee, { exact: true })}</dd>
+      <dt>To</dt><dd>${grouped(addr(tx.to))}</dd>
+      <dt>Transaction ID</dt><dd><span class="addr">${tx.txid}</span></dd>
+    </dl>
+    <div class="row" style="margin-top:16px"><button class="btn" data-act="copy" data-copy="${tx.txid}">${icon("copy")}Copy ID</button><button class="btn" data-act="send-again">Send another</button><button class="btn quiet" data-go="overview">Done</button></div>
+  </div>`;
+}
+
+/* ============================================================
+   Render + events
+   ============================================================ */
+function render(animate = true) {
+  renderChrome();
+  const app = $("#app");
+  const scr = SCREENS[S.route] || SCREENS.overview;
+  const onb = !!(scr.onboarding);
+  app.className = "app" + (onb ? " onb" : "");
+  const content = scr();
+  const focusId = document.activeElement && document.activeElement.id;
+  app.innerHTML = onb ? `<div class="onb-wrap"><div class="onb-card ${animate ? "page-enter" : ""}">${content}</div></div>`
+    : `${sidebar()}<main class="main" id="main"><div class="page ${animate ? "page-enter" : ""}">${content}</div></main>`;
+  if (focusId && !animate) { const el = document.getElementById(focusId); if (el) { el.focus(); if (el.setSelectionRange && el.value != null) el.setSelectionRange(el.value.length, el.value.length); } }
+}
+function go(route) { S.route = route; if (route === "send" && S.send.step === "result") S.send = freshSend(); closeSheet(); render(); const m = $("#main"); if (m) m.scrollTop = 0; }
+
+function openSheet(html) {
+  const o = $("#overlay");
+  o.innerHTML = `<div class="scrim" data-act="close"></div><div class="sheet" role="dialog" aria-modal="true">${html}</div>`;
+  o.classList.add("open"); o.setAttribute("aria-hidden", "false");
+  const f = o.querySelector(".sheet input, .sheet .btn.primary, .sheet button"); if (f) f.focus();
+}
+function closeSheet() { const o = $("#overlay"); o.classList.remove("open"); o.innerHTML = ""; o.setAttribute("aria-hidden", "true"); }
+
+const ACTIONS = {
+  close: closeSheet,
+  exact() { S.exact = !S.exact; render(false); },
+  "about-net"() { openSheet(aboutNetwork()); },
+  detail(el) { const tx = S.txs.find((t) => t.id === el.dataset.id); if (tx) openSheet(detailSheet(tx)); },
+  copy(el) { navigator.clipboard?.writeText(el.dataset.copy).catch(() => {}); toast("Copied"); },
+  "new-sub"() { toast("Not in this test build yet"); },
+  mine() {
+    if (!canTransact()) return;
+    const first = S.tip + 1;
+    S.txs.push({ id: "m" + first, type: "mined", blocks: 10, amount: REWARD * 10n, firstHeight: first, height: first + 9, note: "" });
+    S.tip += 10; toast("Mined 10 test blocks"); render(false);
+  },
+  "dismiss-reorg"() { S.reorg = null; render(false); },
+  retry() { S.node = "connecting"; render(false); setTimeout(() => { S.node = "synced"; render(false); }, 1200); },
+  max() { const b = balances(); const m = b.unlocked - FEE; S.send.amount = m > 0n ? plain(m) : "0"; S.send.errs = {}; render(false); },
+  "confirm-send"() {
+    closeSheet();
+    const s = S.send; s.step = "sending"; s.phase = 1; render(false);
+    setTimeout(() => { s.phase = 2; render(false); }, 900);
+    setTimeout(() => {
+      s.outcome = S.sendOutcome; s.step = "result";
+      if (s.outcome !== "rejected") {
+        const id = "s" + Date.now();
+        S.txs.push({ id, type: "out", amount: s.parsed, fee: FEE, change: 0n, height: null, to: Object.keys(ADDR[S.net]).find((k) => ADDR[S.net][k] === s.toClean), txid: TXID[3], note: s.note, status: s.outcome === "lost" ? "unknown" : undefined });
+        s.txid = id;
+      }
+      render(false);
+    }, 2000);
+  },
+  "send-again"() { S.send = freshSend(); render(); },
+};
+
+document.addEventListener("click", (ev) => {
+  const go_ = ev.target.closest("[data-go]");
+  if (go_ && $("#win").contains(go_)) { ev.preventDefault(); go(go_.dataset.go); return; }
+  const a = ev.target.closest("[data-act]");
+  if (a && ACTIONS[a.dataset.act]) { ev.preventDefault(); ACTIONS[a.dataset.act](a); return; }
+  const c = ev.target.closest("[data-c]");
+  if (c) { CONTROLS[c.dataset.c]?.(); return; }
+  const seg = ev.target.closest("[data-ctl] button");
+  if (seg) { const k = seg.parentElement.dataset.ctl; S[k] = seg.dataset.v; if (k === "net") { S.send = freshSend(); } render(false); }
+});
+document.addEventListener("input", (ev) => {
+  const t = ev.target;
+  if (t.closest("#sendform")) { S.send[t.id] = t.value; if (S.send.errs[t.id]) { delete S.send.errs[t.id]; } }
+});
+document.addEventListener("submit", (ev) => {
+  if (ev.target.id === "sendform") {
+    ev.preventDefault();
+    if (validateSend()) openSheet(reviewSheet());
+    else { render(false); const bad = document.querySelector('#sendform [aria-invalid="true"]'); if (bad) bad.focus(); }
+  }
+});
+document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && $("#overlay").classList.contains("open")) closeSheet(); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => render(false));
+
+const CONTROLS = {
+  reset() { reset(); render(); },
+  advance1() { advance(1); }, advance10() { advance(10); },
+  reorg() {
+    const cand = S.txs.filter((t) => t.height != null && t.type !== "mined").sort((a, b) => b.height - a.height)[0];
+    if (!cand) { toast("Nothing recent enough to reorganize"); return; }
+    S.reorg = { height: cand.height, count: 1 }; cand.height = null; render(false);
+  },
+  "fill-valid"() { fill(addr("b"), "2.5"); }, "fill-typo"() { fill(addr("b").slice(0, 40) + "Q" + addr("b").slice(41), "2.5"); },
+  "fill-wrongnet"() { fill(ADDR[net().other].b, "2.5"); }, "fill-main"() { fill(ADDR.mainnet, "2.5"); },
+  "fill-short"() { fill(addr("b").slice(0, 70), "2.5"); }, "fill-13dp"() { fill(addr("b"), "0.0000000000015"); },
+  "fill-locked"() { const b = balances(); const over = b.unlocked + (b.locked > 0n ? b.locked / 2n : ATOMIC); fill(addr("b"), plain(over)); },
+};
+function fill(to, amount) { S.route = "send"; S.send = freshSend(); S.send.to = to; S.send.amount = amount; validateSend(); render(false); }
+function advance(n) {
+  for (const t of S.txs) if (t.height == null && t.status !== "failed") { if (t.status === "unknown") t.status = undefined; t.height = S.tip + 1; }
+  S.tip += n; if (S.reorg) S.reorg = null; render(false);
+}
+$("#c-node").addEventListener("change", (e) => { S.node = e.target.value; render(false); });
+$("#c-story").addEventListener("change", (e) => { const keep = { route: S.route }; S.storyKind = e.target.value; Object.assign(S, story(S.storyKind)); S.reorg = null; S.send = freshSend(); Object.assign(S, keep); render(false); });
+$("#c-route").addEventListener("change", (e) => { const r = e.target.value; if (ROUTE_SETUP[r]) ROUTE_SETUP[r](); go(r.split(":")[0] in SCREENS ? r.split(":")[0] : r); });
+const ROUTE_SETUP = {};
+
+function aboutNetwork() {
+  return S.net === "regtest" ? `<h2>About the local test chain</h2>
+  <p>This wallet is connected to a <b>regtest</b> chain that runs only on your computer, inside the Meownero test kit. Its coins have no value and can't be sold or exchanged.</p>
+  <p>It runs the cryptography Meownero plans to use (FCMP++ and CARROT), with fast test settings. It does not yet use Meownero's planned reward of 9 MEOW every 90 seconds, and its addresses use the upstream format that starts with 4.</p>
+  <p class="muted small">A shared Meownero testnet and mainnet don't exist yet. Nothing here launches or joins a public network.</p>
+  ${capsLine(cap("A", "local regtest kit", "TJS-1870 accepted kit; build-mac ARM64 container only"))}
+  <div class="foot"><button class="btn primary" data-act="close">Got it</button></div>`
+  : `<h2>About the Meownero testnet</h2>
+  <p>A shared test network for trying Meownero with other people. Its coins have no value. Testnet addresses start with T.</p>
+  <p class="muted small">Prototype note: this network isn't live. This view shows how the wallet would label it.</p>
+  ${capsLine(cap("C", "testnet not live", "No public testnet exists; identity values from docs/spec/network-identity.md"))}
+  <div class="foot"><button class="btn primary" data-act="close">Got it</button></div>`;
+}
+
+/* boot (screens added below extend ROUTES/SCREENS before this runs) */
+window.addEventListener("DOMContentLoaded", () => {
+  const sel = $("#c-route"); let grp = null, html = "";
+  for (const [r, label, g] of ROUTES) { if (g !== grp) { if (grp) html += "</optgroup>"; html += `<optgroup label="${g}">`; grp = g; } html += `<option value="${r}">${label}</option>`; }
+  sel.innerHTML = html + "</optgroup>";
+  reset(); render();
+});
+</script>
+
+<script>
+"use strict";
+/* ============================================================
+   Slice 2: first run, recovery words, restore, lock, node and
+   wallet settings, plus reviewer shortcuts to error states.
+   ============================================================ */
+// Sample words for layout only. "tabby" is not one of the first 24, so the
+// check word can never match: this list cannot be a valid recovery phrase.
+const SAMPLE = ["whisker", "saucer", "velvet", "lantern", "pebble", "orchard", "mitten", "harbor", "nimbus", "tundra", "ember", "quilt", "marble", "fennel", "cobalt", "sparrow", "thistle", "juniper", "wicker", "bramble", "copper", "meadow", "ripple", "sable", "tabby"];
+const KNOWN = new Set([...SAMPLE, "acorn", "biscuit", "canyon", "dapple", "falcon", "gravel", "hollow", "island", "kettle", "lilac", "mosaic", "nectar", "oyster", "parcel", "quarry", "raven", "saddle", "timber", "umber", "violet", "walnut", "yonder", "zephyr"]);
+const QUIZ = [4, 13, 22]; // 1-based positions
+
+function onbFresh() {
+  return { name: "Test wallet", pw: "", pw2: "", revealed: false, ack: false, picks: {}, wrong: {},
+    words: Array(25).fill(""), height: "", errs: {}, scan: 0, unlockErr: "" };
+}
+const _reset = reset;
+reset = function () { _reset(); S.onb = onbFresh(); };
+
+function steps(n, of) { return `<div class="steps" aria-label="Step ${n} of ${of}">${Array.from({ length: of }, (_, i) => `<i class="${i < n ? "on" : ""}"></i>`).join("")}</div>`; }
+function err(m) { return m ? `<div class="err">${icon("alert")}<span>${m}</span></div>` : ""; }
+function onb(fn) { fn.onboarding = true; return fn; }
+
+/* ---------- Welcome ---------- */
+ROUTES.unshift(["welcome", "Welcome", "First run"]);
+SCREENS.welcome = onb(() => {
+  const other = NETS[net().other];
+  return `${coin("coin hero")}
+  <h1>Meownero Wallet</h1>
+  <p class="muted">A private wallet for trying Meownero. This build only works with test networks, and test coins have no value.</p>
+  ${capsLine(cap("C", "first-run flow", "GUI flow"), cap("C", "network choice", "GUI reads nettype from the node; only test networks are offered"))}
+  <div class="field" style="margin-top:18px"><div class="label">Network</div>
+    <div class="choice" role="radio" aria-checked="true" tabindex="0"><span class="ico">${icon("flask")}</span><span><b>${esc(net().title)}</b><span class="s">${S.net === "regtest" ? "Runs on this computer with the Meownero test kit" : "Shared test network"}</span></span>${icon("check")}</div>
+    <button class="choice" role="radio" aria-checked="false" disabled><span class="ico">${icon("flask")}</span><span><b>${esc(other.title)}</b><span class="s">${S.net === "regtest" ? "Not live yet" : "For local testing with the test kit"}</span></span><span class="small muted">${S.net === "regtest" ? "Coming later" : ""}</span></button>
+    <div class="hint">Meownero mainnet doesn't exist yet, so this wallet can't hold real coins.</div>
+  </div>
+  <div class="field"><div class="label">Get started</div>
+    <button class="choice" data-go="create-1"><span class="ico">${icon("key")}</span><span><b>Create a new wallet</b><span class="s">You'll write down 25 recovery words</span></span>${cap("A", "create_wallet", "wallet-rpc create_wallet")}</button>
+    <button class="choice" data-go="restore-1"><span class="ico">${icon("refresh")}</span><span><b>Restore from recovery words</b><span class="s">Bring back a wallet you backed up</span></span>${cap("A", "restore_deterministic_wallet", "seed + restore height, then rescan")}</button>
+    <button class="choice" data-go="unlock"><span class="ico">${icon("lock")}</span><span><b>Open a wallet file</b><span class="s">A wallet already on this computer</span></span>${cap("B", "open_wallet", "upstream RPC; not exercised in the Vanguard kit")}</button>
+  </div>`;
+});
+
+/* ---------- Create ---------- */
+ROUTES.push(["create-1", "Create: name and password", "First run"]);
+SCREENS["create-1"] = onb(() => {
+  const o = S.onb, e = o.errs;
+  return `${steps(1, 4)}<h1>Name and protect this wallet</h1>
+  <p class="muted">The password locks the wallet file on this computer. It can't recover your wallet. Only your recovery words can do that.</p>
+  ${capsLine(cap("B", "wallet file password", "create_wallet takes a password upstream; the kit used an empty password"))}
+  <form id="onbform" data-next="create-1" novalidate style="margin-top:16px">
+    <div class="field"><label for="o-name">Wallet name</label><input class="input" id="o-name" name="name" value="${esc(o.name)}" autocomplete="off">${err(e.name)}</div>
+    <div class="field"><label for="o-pw">Password</label><input class="input" id="o-pw" name="pw" type="password" value="${esc(o.pw)}" autocomplete="new-password" aria-invalid="${!!e.pw}">${e.pw ? err(e.pw) : '<div class="hint">At least 8 characters.</div>'}</div>
+    <div class="field"><label for="o-pw2">Repeat password</label><input class="input" id="o-pw2" name="pw2" type="password" value="${esc(o.pw2)}" autocomplete="new-password" aria-invalid="${!!e.pw2}">${err(e.pw2)}</div>
+    <div class="row"><button class="btn" type="button" data-go="welcome">Back</button><button class="btn primary" type="submit">Continue</button></div>
+  </form>`;
+});
+ROUTES.push(["create-2", "Create: recovery words", "First run"]);
+SCREENS["create-2"] = onb(() => {
+  const o = S.onb;
+  return `${steps(2, 4)}<h1>Write down your recovery words</h1>
+  <p class="muted">These 25 words are the only way to get this wallet back if this computer is lost. Write them on paper, in order, with the block number.</p>
+  ${capsLine(cap("A", "query_key mnemonic", "wallet-rpc query_key {key_type: mnemonic}"), cap("C", "no copy button", "Clipboard policy pending TJS-1994"))}
+  ${wordsGrid(SAMPLE, !o.revealed)}
+  <div class="banner" style="margin-top:14px">${icon("info", "i")}<div class="body"><b>Also write down: created at block ${(S.tip - 4).toLocaleString("en-US")}</b>Restoring is faster when you know where the wallet starts.</div></div>
+  <ul class="small muted" style="margin:0 0 14px;padding-left:18px">
+    <li>Anyone with these words can spend your coins.</li>
+    <li>Don't screenshot, photograph or paste them into a website or chat.</li>
+    <li>Meownero will never ask you for them.</li>
+  </ul>
+  <label class="row small" style="margin-bottom:16px"><input type="checkbox" id="o-ack" ${o.ack ? "checked" : ""} ${o.revealed ? "" : "disabled"}> I've written down all 25 words and the block number.</label>
+  <div class="row"><button class="btn" data-go="create-1">Back</button><button class="btn primary" data-go="create-3" ${o.ack ? "" : "disabled"}>Continue</button></div>`;
+});
+function wordsGrid(words, veiled) {
+  return `<div class="words ${veiled ? "veiled" : ""}" role="list" aria-label="Recovery words">
+    ${words.map((w, i) => `<div class="word" role="listitem"><i>${i + 1}</i><span>${veiled ? "•••••" : w}</span></div>`).join("")}
+    <div class="sample-mark" aria-hidden="true">SAMPLE</div>
+    ${veiled ? `<div class="veil"><button class="btn primary" data-act="reveal">${icon("eye")}Show words</button></div>` : ""}
+  </div>
+  <p class="small muted" style="margin-top:6px">Prototype: sample words that can't form a valid recovery phrase.</p>`;
+}
+ROUTES.push(["create-3", "Create: check words", "First run"]);
+SCREENS["create-3"] = onb(() => {
+  const o = S.onb;
+  const ok = QUIZ.every((p) => o.picks[p] === SAMPLE[p - 1]);
+  return `${steps(3, 4)}<h1>Check your paper</h1>
+  <p class="muted">Pick the right word for each position. This makes sure your copy is readable.</p>
+  ${capsLine(cap("C", "word check", "GUI-only; no wallet call"))}
+  <div class="quiz" style="margin-top:16px">${QUIZ.map((p) => {
+    const opts = quizOptions(p);
+    return `<div><b>Word ${p}</b><div class="opts" role="group" aria-label="Word ${p}">${opts.map((w) => `<button type="button" data-act="pick" data-p="${p}" data-w="${w}" aria-pressed="${o.picks[p] === w}" class="${o.wrong[p] === w ? "wrong" : ""}">${w}</button>`).join("")}</div>${o.wrong[p] ? err(`That isn't word ${p}. Check your paper. If it's unclear, go back and write it again.`) : ""}</div>`;
+  }).join("")}</div>
+  <div class="row" style="margin-top:20px"><button class="btn" data-go="create-2">Back to words</button><button class="btn primary" data-go="create-4" ${ok ? "" : "disabled"}>Finish</button></div>`;
+});
+function quizOptions(p) {
+  const right = SAMPLE[p - 1], pool = SAMPLE.filter((w) => w !== right);
+  const pick = [pool[(p * 7) % pool.length], pool[(p * 11 + 3) % pool.length], pool[(p * 5 + 9) % pool.length]];
+  const all = [...new Set([right, ...pick])];
+  return all.sort((a, b) => ((a.charCodeAt(1) * p) % 7) - ((b.charCodeAt(1) * p) % 7));
+}
+ROUTES.push(["create-4", "Create: ready", "First run"]);
+SCREENS["create-4"] = onb(() => `${steps(4, 4)}<h1>Your test wallet is ready</h1>
+  <p class="muted">${esc(S.onb.name)} is on the ${esc(net().title)}. It's empty for now.</p>
+  ${capsLine(cap("A", "get_address", "wallet-rpc get_address"))}
+  <div class="card" style="margin:16px 0"><div class="small muted" style="margin-bottom:6px">Your address</div>${grouped(addr("self"))}</div>
+  <div class="row"><button class="btn primary lg" data-act="open-new">Open wallet</button></div>`);
+
+/* ---------- Restore ---------- */
+ROUTES.push(["restore-1", "Restore: enter words", "First run"]);
+SCREENS["restore-1"] = onb(() => {
+  const o = S.onb, e = o.errs;
+  return `${steps(1, 3)}<h1>Enter your recovery words</h1>
+  <p class="muted">Type or paste all 25 words in order. Pasting the whole phrase into the first box fills the rest.</p>
+  ${capsLine(cap("A", "restore_deterministic_wallet", "restore by seed in the kit"), cap("C", "word-by-word checks", "GUI validates words against the seed word list before calling the wallet"))}
+  <form id="onbform" data-next="restore-1" novalidate style="margin-top:14px">
+    <div class="words" role="group" aria-label="Recovery words">${o.words.map((w, i) => `<label class="word ${e.bad && e.bad.includes(i) ? "bad" : ""}"><i>${i + 1}</i><input name="w${i}" value="${esc(w)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Word ${i + 1}" aria-invalid="${!!(e.bad && e.bad.includes(i))}"></label>`).join("")}</div>
+    <div aria-live="polite">${err(e.words)}</div>
+    <div class="row" style="margin-top:16px"><button class="btn" type="button" data-go="welcome">Back</button><button class="btn primary" type="submit">Continue</button></div>
+  </form>`;
+});
+ROUTES.push(["restore-2", "Restore: block and password", "First run"]);
+SCREENS["restore-2"] = onb(() => {
+  const o = S.onb, e = o.errs;
+  return `${steps(2, 3)}<h1>Where should the wallet start?</h1>
+  <p class="muted">If you wrote down a block number, enter it. Otherwise the wallet scans the whole chain, which takes longer.</p>
+  ${capsLine(cap("A", "restore_height", "restore height passed to restore_deterministic_wallet"), cap("B", "wallet file password", "kit used an empty password"))}
+  <form id="onbform" data-next="restore-2" novalidate style="margin-top:14px">
+    <div class="field"><label for="o-height">Created at block <span class="muted" style="font-weight:400">(optional)</span></label><input class="input tnum" id="o-height" name="height" inputmode="numeric" value="${esc(o.height)}" placeholder="for example 1,203" aria-invalid="${!!e.height}">${e.height ? err(e.height) : `<div class="hint">This chain is at block ${S.tip.toLocaleString("en-US")}. A number that's too high can miss payments, so if unsure, leave it empty.</div>`}</div>
+    <div class="field"><label for="o-name">Wallet name</label><input class="input" id="o-name" name="name" value="${esc(o.name)}" autocomplete="off"></div>
+    <div class="field"><label for="o-pw">New password for this computer</label><input class="input" id="o-pw" name="pw" type="password" value="${esc(o.pw)}" autocomplete="new-password" aria-invalid="${!!e.pw}">${e.pw ? err(e.pw) : '<div class="hint">At least 8 characters. It doesn\'t need to match your old password.</div>'}</div>
+    <div class="row"><button class="btn" type="button" data-go="restore-1">Back</button><button class="btn primary" type="submit">Restore wallet</button></div>
+  </form>`;
+});
+ROUTES.push(["restore-3", "Restore: scanning", "First run"]);
+SCREENS["restore-3"] = onb(() => {
+  const o = S.onb, done = o.scan >= 100;
+  return `${steps(3, 3)}<h1>${done ? "Wallet restored" : "Finding your payments…"}</h1>
+  ${capsLine(cap("A", "rescan_blockchain + refresh", "restore then rescan; kit verifies same address, balance and later spend"), cap("A", "notes not restored", "Seed restores on-chain funds, not local notes (tester guide)"))}
+  ${done ? `<p class="muted">Found 4 payments. Spendable balance ${amtHTML(balances().unlocked)}.</p>
+    <div class="banner" style="margin-top:10px">${icon("info", "i")}<div class="body"><b>Some things don't come back from recovery words.</b>Notes you added to payments were stored on your old computer. Your balance, address and payment history are back.</div></div>
+    <div class="row" style="margin-top:16px"><button class="btn primary lg" data-act="open-restored">Open wallet</button></div>`
+  : `<p class="muted">Scanning block ${Math.round((Number(o.height || 0) + (S.tip - Number(o.height || 0)) * o.scan / 100)).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}. You can leave this open; it continues in the background.</p>
+    <div class="bar" style="height:6px"><i style="width:${o.scan}%"></i></div>`}`;
+});
+
+/* ---------- Lock ---------- */
+ROUTES.push(["unlock", "Unlock wallet", "First run"]);
+SCREENS.unlock = onb(() => {
+  const o = S.onb;
+  return `${coin("coin hero")}<h1>Test wallet is locked</h1>
+  <p class="muted">Enter the password for this wallet file.</p>
+  ${capsLine(cap("B", "open_wallet with password", "kit opens wallets with an empty password"))}
+  <form id="onbform" data-next="unlock" novalidate style="margin-top:14px">
+    <div class="field"><label for="o-unlock">Password</label><input class="input" id="o-unlock" name="unlock" type="password" autocomplete="current-password" aria-invalid="${!!o.unlockErr}">${o.unlockErr ? err(o.unlockErr) : '<div class="hint">Prototype: any password works; type “wrong” to see the error.</div>'}</div>
+    <div class="row"><button class="btn primary" type="submit">Unlock</button><button class="btn quiet" type="button" data-go="welcome">Use a different wallet</button></div>
+  </form>`;
+});
+
+/* ---------- Node ---------- */
+ROUTES.push(["node", "Node and connection", "Wallet"]);
+SCREENS.node = () => {
+  const n = net(), remote = S.node === "remote";
+  const st = { synced: "Connected and synced", remote: "Connected and synced", connecting: "Connecting…", "node-sync": "Node catching up", scanning: "Scanning for payments", offline: "Can't reach this node", "wrong-net": "Wrong network" }[S.node];
+  return `<div class="ph"><h1>Node</h1></div>
+  ${conditionBanner()}
+  ${capsLine(cap("A", "get_info · get_connections", "daemon height, sync and peer count"), cap("A", "local trusted daemon", "kit wallet-rpc uses --trusted-daemon on a local node"), cap("B", "untrusted remote node", "transport evidence only in chain/ lineage, 2026-09-18"))}
+  <div class="card">
+    <dl class="dl">
+      <dt>Status</dt><dd>${st}</dd>
+      <dt>Node</dt><dd>${remote ? "node.example-test.org:29081 <span class='muted small'>someone else's node</span>" : `${n.node} <span class="muted small">${esc(n.nodeName)}</span>`}</dd>
+      <dt>Network</dt><dd>${S.node === "wrong-net" ? `<span style="color:var(--danger)">${esc(NETS[n.other].title)}</span> · this wallet needs ${esc(n.title)}` : esc(n.title)}</dd>
+      <dt>Node height</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.node === "node-sync" ? `${Math.round(S.tip * S.nodePct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}` : S.tip.toLocaleString("en-US")}</dd>
+      <dt>Wallet scanned to</dt><dd class="tnum">${S.node === "scanning" ? Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US") : S.node === "synced" || remote ? S.tip.toLocaleString("en-US") : "Waiting for node"}</dd>
+      <dt>Peers</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.net === "regtest" ? "1 <span class='muted small'>a local test chain may have none</span>" : "8"}</dd>
+      <dt>Trust</dt><dd>${remote ? "Treated as untrusted" : "Your own node, trusted"}</dd>
+    </dl>
+  </div>
+  <h2 class="sec">Connect through</h2>
+  <div role="radiogroup" aria-label="Node choice">
+    <button class="choice" role="radio" aria-checked="${!remote}" data-act="node-local"><span class="ico">${icon("node")}</span><span><b>My own node on this computer</b><span class="s">${S.net === "regtest" ? "The Meownero test kit's node at " + n.node : "Recommended: nothing about your wallet leaves this computer"}</span></span>${!remote ? icon("check") : ""}</button>
+    <button class="choice" role="radio" aria-checked="${remote}" data-act="node-remote"><span class="ico">${icon("node")}</span><span><b>Someone else's node</b><span class="s">Faster to start, but it learns things about you</span></span>${remote ? icon("check") : ""}</button>
+  </div>
+  ${remote ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>What someone else's node can see</b>Your IP address, when your wallet checks for payments, and that a transaction came from you when you send it. It can't see your balance, your recovery words or who you paid, and it can't spend your coins. ${cap("B", "wording to confirm", "TJS-1994 to confirm exposure list against wallet-transport evidence")}</div></div>` : ""}
+  <div class="choice" aria-disabled="true" style="opacity:.6"><span class="ico">${icon("lock")}</span><span><b>Through Tor or I2P</b><span class="s">Not available in this test build</span></span>${cap("C", "Tor/I2P untested", "No Tor/I2P evidence in the project")}</div>`;
+};
+
+/* ---------- Wallet settings ---------- */
+ROUTES.push(["wallet", "Wallet, backup and about", "Wallet"]);
+SCREENS.wallet = () => `<div class="ph"><h1>Wallet</h1></div>
+  <h2 class="sec" style="margin-top:0">Backup</h2>
+  <div class="card"><div class="row" style="justify-content:space-between"><div><b>Recovery words</b><div class="small muted">Show your 25 words and starting block again. Asks for your password first.</div></div><button class="btn" data-act="show-seed">${icon("eye")}Show recovery words</button></div>
+  ${capsLine(cap("A", "query_key mnemonic", "kit"), cap("B", "password gate", "GUI re-auth before query_key; password not exercised in kit"))}</div>
+  <h2 class="sec">This computer</h2>
+  <div class="card"><dl class="dl">
+    <dt>Wallet file</dt><dd><span class="addr">~/Meownero/wallets/test-wallet</span> ${cap("C", "file location", "GUI convention")}</dd>
+    <dt>Password</dt><dd><button class="btn" data-act="na">Change password</button> ${cap("B", "change_wallet_password", "upstream RPC; not in kit")}</dd>
+    <dt>Lock</dt><dd><button class="btn" data-go="unlock">${icon("lock")}Lock wallet now</button> ${cap("B", "close_wallet", "used in chain/ lineage only")}</dd>
+  </dl></div>
+  <h2 class="sec">About this test build</h2>
+  <div class="card">
+    <p><b>Meownero Wallet</b> · design prototype, no release yet</p>
+    <dl class="dl small">
+      <dt>Works today</dt><dd>Create and restore a wallet, receive and send test coins to one recipient, balance and history, getting test coins on the local test chain.</dd>
+      <dt>Not yet</dt><dd>Separate addresses per payer, sending to several people at once, Tor or I2P, hardware wallets, mainnet.</dd>
+      <dt>Engine</dt><dd>Meownero's wallet and node programs, pinned to the FCMP++ and CARROT test lineage.</dd>
+      <dt>Computers</dt><dd>Builds for macOS, Windows and Linux are planned. None has been tested or signed yet.</dd>
+    </dl>
+    ${capsLine(cap("A", "kit capabilities only", "Works-today list limited to tier A"), cap("C", "packaging targets", "No native GUI build exists; status from execution evidence only"))}
+  </div>
+  <div class="row" style="margin-top:18px"><button class="btn" data-go="welcome">Create or restore another wallet</button></div>`;
+
+function seedPasswordSheet(errMsg) {
+  return `<h2>Enter your password</h2><p class="muted small">Your recovery words give full control of this wallet.</p>
+  <form id="seedpw" novalidate><div class="field"><label for="sp">Password</label><input class="input" id="sp" type="password" autocomplete="current-password" aria-invalid="${!!errMsg}">${errMsg ? err(errMsg) : '<div class="hint">Prototype: type “wrong” to see the error.</div>'}</div>
+  <div class="foot"><button class="btn" type="button" data-act="close">Cancel</button><button class="btn primary" type="submit">Show words</button></div></form>`;
+}
+function seedSheet() {
+  return `<h2>Recovery words</h2><p class="muted small">Make sure no one can see your screen. Created at block ${(S.created || 1203).toLocaleString("en-US")}.</p>
+  ${wordsGrid(SAMPLE, false)}
+  <div class="foot"><button class="btn primary" data-act="close">Hide words</button></div>`;
+}
+
+/* ---------- Actions ---------- */
+Object.assign(ACTIONS, {
+  reveal() { S.onb.revealed = true; render(false); },
+  pick(el) {
+    const p = Number(el.dataset.p), w = el.dataset.w;
+    if (w === SAMPLE[p - 1]) { S.onb.picks[p] = w; delete S.onb.wrong[p]; } else { S.onb.wrong[p] = w; delete S.onb.picks[p]; }
+    render(false);
+  },
+  "open-new"() { Object.assign(S, story("empty")); S.created = S.tip - 4; S.onb = onbFresh(); go("overview"); },
+  "open-restored"() { Object.assign(S, story("normal")); S.onb = onbFresh(); go("overview"); },
+  "node-local"() { S.node = "synced"; render(false); },
+  "node-remote"() { S.node = "remote"; render(false); },
+  "show-seed"() { openSheet(seedPasswordSheet()); },
+  na() { toast("Not in this test build yet"); },
+});
+document.addEventListener("change", (ev) => { if (ev.target.id === "o-ack") { S.onb.ack = ev.target.checked; render(false); } });
+document.addEventListener("input", (ev) => {
+  const t = ev.target, f = t.closest("#onbform"); if (!f || !t.name) return;
+  if (/^w\d+$/.test(t.name)) {
+    const i = Number(t.name.slice(1)), parts = t.value.trim().split(/\s+/);
+    if (parts.length > 1) { parts.slice(0, 25 - i).forEach((w, k) => (S.onb.words[i + k] = w.toLowerCase())); render(false); return; }
+    S.onb.words[i] = t.value.trim().toLowerCase();
+  } else S.onb[t.name] = t.value;
+});
+document.addEventListener("submit", (ev) => {
+  const f = ev.target;
+  if (f.id === "seedpw") { ev.preventDefault(); const v = $("#sp").value; if (!v || v === "wrong") openSheet(seedPasswordSheet(v ? "That password doesn't open this wallet." : "Enter your password.")); else openSheet(seedSheet()); return; }
+  if (f.id !== "onbform") return;
+  ev.preventDefault();
+  const o = S.onb, e = (o.errs = {});
+  const step = f.dataset.next;
+  if (step === "create-1") {
+    if (!o.name.trim()) e.name = "Give the wallet a name.";
+    if (o.pw.length < 8) e.pw = "Use at least 8 characters.";
+    else if (o.pw !== o.pw2) e.pw2 = "The passwords don't match.";
+    if (!Object.keys(e).length) return go("create-2");
+  } else if (step === "restore-1") {
+    const filled = o.words.filter(Boolean);
+    const bad = o.words.map((w, i) => (w && !KNOWN.has(w) ? i : -1)).filter((i) => i >= 0);
+    if (filled.length !== 25) e.words = `Recovery phrases have 25 words. You've entered ${filled.length}.`;
+    else if (bad.length) { e.bad = bad; e.words = `“${esc(o.words[bad[0]])}” (word ${bad[0] + 1}) isn't a recovery word. Check the spelling against your paper.`; }
+    else if (o.words.join(" ") !== SAMPLE.join(" ")) e.words = "These words don't add up. The last word is a check word, and it doesn't match the others, so one word is probably wrong or out of order.";
+    // Prototype: the sample words stand in for a phrase that passes the check.
+    if (!e.words) return go("restore-2");
+  } else if (step === "restore-2") {
+    const h = o.height.replace(/[,\s]/g, "");
+    if (h && !/^\d+$/.test(h)) e.height = "Enter a block number using digits only.";
+    else if (h && Number(h) > S.tip) e.height = `Block ${Number(h).toLocaleString("en-US")} is in the future. This chain is at block ${S.tip.toLocaleString("en-US")}.`;
+    if (o.pw.length < 8) e.pw = "Use at least 8 characters.";
+    if (!Object.keys(e).length) { o.height = h; o.scan = 0; go("restore-3"); scanTick(); return; }
+  } else if (step === "unlock") {
+    const v = $("#o-unlock").value;
+    if (!v) o.unlockErr = "Enter your password.";
+    else if (v === "wrong") o.unlockErr = "That password doesn't open this wallet file. Passwords are case-sensitive.";
+    else { o.unlockErr = ""; return go("overview"); }
+  }
+  render(false);
+  const firstBad = document.querySelector('#onbform [aria-invalid="true"]'); if (firstBad) firstBad.focus();
+});
+function scanTick() {
+  clearInterval(scanTick.t);
+  scanTick.t = setInterval(() => {
+    if (S.route !== "restore-3") return clearInterval(scanTick.t);
+    S.onb.scan = Math.min(100, S.onb.scan + 7); render(false);
+    if (S.onb.scan >= 100) clearInterval(scanTick.t);
+  }, 160);
+}
+
+/* ---------- Reviewer shortcuts to error states ---------- */
+ROUTES.push(
+  ["send:typo", "Send: address with a typo", "Error states"],
+  ["send:wrongnet", "Send: other network's address", "Error states"],
+  ["send:main", "Send: mainnet address", "Error states"],
+  ["send:13dp", "Send: 13 decimal places", "Error states"],
+  ["send:locked", "Send: more than spendable", "Error states"],
+  ["activity:unknown", "Send: connection dropped (unknown result)", "Error states"],
+  ["send:rejected", "Send: node refuses", "Error states"],
+  ["overview:offline", "Node unreachable", "Error states"],
+  ["node:wrong-net", "Node on the wrong network", "Error states"],
+  ["overview:reorg", "After a chain reorganization", "Error states"],
+  ["overview:dust", "Balance of 1 atomic unit", "Error states"],
+  ["restore-1:badword", "Restore: misspelled word", "Error states"],
+  ["restore-1:checksum", "Restore: words don't add up", "Error states"],
+  ["restore-1:count", "Restore: missing words", "Error states"],
+  ["restore-2:future", "Restore: block in the future", "Error states"],
+  ["unlock:wrong", "Unlock: wrong password", "Error states"],
+  ["create-3:wrong", "Create: wrong word picked", "Error states"],
+);
+function restoreWith(words) { S.onb = onbFresh(); S.onb.words = words; S.route = "restore-1"; render(false); $("#onbform").requestSubmit(); }
+Object.assign(ROUTE_SETUP, {
+  "send:typo"() { CONTROLS["fill-typo"](); }, "send:wrongnet"() { CONTROLS["fill-wrongnet"](); }, "send:main"() { CONTROLS["fill-main"](); },
+  "send:13dp"() { CONTROLS["fill-13dp"](); }, "send:locked"() { CONTROLS["fill-locked"](); },
+  "send:rejected"() { S.send = freshSend(); S.send.step = "result"; S.send.outcome = "rejected"; S.route = "send"; render(false); },
+  "activity:unknown"() { const tx = { id: "u1", type: "out", amount: at("1.25"), fee: FEE, change: 0n, height: null, to: "c", txid: TXID[4], note: "", status: "unknown" }; S.txs = S.txs.filter((t) => t.id !== "u1").concat(tx); S.route = "activity"; },
+  "overview:offline"() { S.node = "offline"; }, "node:wrong-net"() { S.node = "wrong-net"; },
+  "overview:reorg"() { S.node = "synced"; CONTROLS.reorg(); },
+  "overview:dust"() { S.storyKind = "dust"; Object.assign(S, story("dust")); },
+  "restore-1:badword"() { const w = [...SAMPLE]; w[6] = "mittens"; restoreWith(w); },
+  "restore-1:checksum"() { const w = [...SAMPLE]; [w[3], w[4]] = [w[4], w[3]]; restoreWith(w); },
+  "restore-1:count"() { restoreWith(SAMPLE.slice(0, 23).concat(["", ""])); },
+  "restore-2:future"() { S.onb.height = "99999"; S.onb.pw = "correct horse"; S.route = "restore-2"; render(false); $("#onbform").requestSubmit(); },
+  "unlock:wrong"() { S.route = "unlock"; render(false); $("#o-unlock").value = "wrong"; $("#onbform").requestSubmit(); },
+  "create-3:wrong"() { S.onb.wrong = { 4: SAMPLE[0] }; },
+});
+// Error-state jumps keep their staged state: only navigate when setup didn't already render.
+$("#c-route").replaceWith($("#c-route").cloneNode(true));
+$("#c-route").addEventListener("change", (e) => {
+  const r = e.target.value, base = r.split(":")[0];
+  if (ROUTE_SETUP[r]) { ROUTE_SETUP[r](); if (S.route !== base) S.route = base; closeIfNotDetail(r); render(false); if (r === "activity:unknown") ACTIONS.detail({ dataset: { id: "u1" } }); }
+  else go(r);
+  e.target.value = r;
+});
+function closeIfNotDetail(r) { if (r !== "activity:unknown") closeSheet(); }
+</script>
+</body>
+</html>
