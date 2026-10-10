@@ -1,0 +1,152 @@
+{
+  "schema": "meownero-arm11-owned-observation/1",
+  "observed_utc": "2026-10-10T09:32:08.697014+00:00",
+  "run_id": "32610e37-e6ab-4aea-8fa2-71a39c30a7b9",
+  "result": "INCOMPLETE",
+  "worker_pid": 38316,
+  "worker_live": true,
+  "worker_identity_matches": true,
+  "receipt_bytes": 27179,
+  "receipt_sha256": "e9c4984fadac609967cc1c5e9d42cfb65f3def2037c8dbd9305ab423cf9ebec5",
+  "commands": [
+    {
+      "label": "archive-upstream",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.13059104199055582,
+      "process_group": 38571
+    },
+    {
+      "label": "archive-external-gtest",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.040793374995701015,
+      "process_group": 38589
+    },
+    {
+      "label": "archive-external-mx25519",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.020769124967046082,
+      "process_group": 38597
+    },
+    {
+      "label": "archive-external-randomx",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.020704333088360727,
+      "process_group": 38599
+    },
+    {
+      "label": "archive-external-rapidjson",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04067504103295505,
+      "process_group": 38601
+    },
+    {
+      "label": "archive-external-supercop",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.02093204203993082,
+      "process_group": 38603
+    },
+    {
+      "label": "toolchain",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 23.018038665992208,
+      "process_group": 41692
+    },
+    {
+      "label": "toolchain-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04194670799188316,
+      "process_group": 43450
+    },
+    {
+      "label": "randomx-arm64-allocator",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.00847045797854662,
+      "process_group": 43453
+    },
+    {
+      "label": "randomx-arm64-hidden",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.007538459030911326,
+      "process_group": 43454
+    },
+    {
+      "label": "download-depends",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 29.99171795800794,
+      "process_group": 43455
+    },
+    {
+      "label": "download-depends-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.02269695803988725,
+      "process_group": 46224
+    },
+    {
+      "label": "build",
+      "exit": null,
+      "reaped": null,
+      "wall_seconds": null,
+      "process_group": null
+    }
+  ],
+  "containers": [
+    {
+      "phase": "toolchain",
+      "cid": "c9cd70ee31f5ab1eec480a558167dfae3e977b64d2a83a86895925eed3fe5b75",
+      "name": "tjs1882-3175-8a3f680f5b6f4c62989faaf77f906773",
+      "image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+      "invocation": "8a3f680f5b6f4c62989faaf77f906773",
+      "cidfile_uid_singlelink_regular": true,
+      "recorded_removed": true,
+      "fresh_absence": "EXACT_INSPECT_AND_ID_FILTER_PASS"
+    },
+    {
+      "phase": "download-depends",
+      "cid": "2df974dc440033fb8c7355eff78ab6c5f40a1202e90cb812ad2d5631d2e07d83",
+      "name": "tjs1882-3175-50e1de9717c842748e37b92b297a0ac3",
+      "image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+      "invocation": "50e1de9717c842748e37b92b297a0ac3",
+      "cidfile_uid_singlelink_regular": true,
+      "recorded_removed": true,
+      "fresh_absence": "EXACT_INSPECT_AND_ID_FILTER_PASS"
+    },
+    {
+      "phase": "build",
+      "cid": "5154fdeb9d03febf18437c33f6c1b6f77474898b70e31209515c2c4027405160",
+      "name": "tjs1882-3175-c8207ebdeea546b4a8ad09de71ecdc4d",
+      "image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+      "invocation": "c8207ebdeea546b4a8ad09de71ecdc4d",
+      "cidfile_uid_singlelink_regular": true,
+      "recorded_removed": false,
+      "ownership": "CID_NAME_IMAGE_INVOCATION_MATCH",
+      "running": true,
+      "cpu_limit": 2,
+      "memory_limit_bytes": 3221225472,
+      "memory_swap_limit_bytes": 3221225472,
+      "pid_limit": 256,
+      "network_mode": "none",
+      "stats": {
+        "CPUPerc": "100.61%",
+        "MemUsage": "350.2MiB / 3GiB",
+        "MemPerc": "11.40%",
+        "PIDs": "18"
+      }
+    }
+  ],
+  "binaries": {},
+  "signals_sent": 0,
+  "heavy_lock_state": "HELD",
+  "heavy_lock_inode": 219261381
+}
