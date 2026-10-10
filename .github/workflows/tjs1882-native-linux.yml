@@ -46,7 +46,7 @@ jobs:
         run: >-
           python -B vanguard/run-portable-linux-ci.py
           --inputs ci/tjs1882/linux-build-inputs.json
-          --inputs-sha256 a854fe71fc54009c7e5ccc939442db6ca2c86042673196d79a8040792c9d689d
+          --inputs-sha256 7890ed2a77e16d854a5d01b079fc749954a48bdb4f776f2bbea636e665add3a7
           --out "$RUNNER_TEMP/tjs1882-old-linux"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
