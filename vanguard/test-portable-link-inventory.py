@@ -53,22 +53,27 @@ def main():
                     paths = [str(p) if n % 2 else os.path.relpath(p, cwd) for n, p in enumerate(paths)]
                 tokens = [str(p) for p in paths]
                 tokens += ['../common/libcommon.a', '../../contrib/epee/src/libepee.a', '../../external/randomx/librandomx.a']
-                if style == 'response':
+                if style.startswith('response'):
                     response = link.with_name('libraries.rsp')
                     response.write_text(shlex.join([os.path.relpath(p, cwd) for p in paths]))
-                    tokens = ['@' + str(response.relative_to(cwd)), *tokens[len(paths):]]
+                    response_token = str(response.relative_to(cwd))
+                    if style == 'response-absolute':
+                        response_token = str(response)
+                    elif style == 'response-container':
+                        response_token = str(Path('/src') / response.relative_to(source))
+                    tokens = ['@' + response_token, *tokens[len(paths):]]
                 link.write_text(shlex.join(['c++', *tokens]))
 
         def inventory():
             return licenses.link_inventory(source, binary_build, depends, (Path('/src'),))
 
-        for style in ('absolute', 'relative', 'container', 'mixed', 'response'):
+        for style in ('absolute', 'relative', 'container', 'mixed', 'response', 'response-absolute', 'response-container'):
             configure(style)
             commands, names, external, origins = inventory()
             assert names == set(NAMES)
             assert external == {'RandomX': ['librandomx.a'] * 3}
             assert origins == {(n, 'pinned_depends') for n in NAMES}
-            assert len(commands) == (6 if style == 'response' else 3)
+            assert len(commands) == (6 if style.startswith('response') else 3)
             cases.append({'case': style + '-equivalence', 'result': 'PASS'})
 
         def refuse(label, token, expected):
@@ -87,11 +92,30 @@ def main():
         refuse('wrong-depends-library-directory', depends / 'lib-other/libboost_filesystem.a', 'non-pinned depends')
         refuse('non-pinned-contrib', os.path.relpath(source / 'contrib/private/libboost_filesystem.a', cwd), 'unmapped contrib')
         refuse('outside-project-src', os.path.relpath(source / 'outside/src/libcommon.a', cwd), 'unmapped source')
+        refuse('absolute-untrusted-pinned-basename', '/opt/untrusted/libcrypto.a', 'non-pinned origin')
+        configure('absolute')
+        links[0].write_text(links[0].read_text() + ' /opt/untrusted/libcrypto.a')
+        try:
+            inventory()
+        except AssertionError as error:
+            assert 'non-pinned origin' in str(error)
+        else:
+            raise AssertionError('same basename from mixed origins accepted')
+        cases.append({'case': 'mixed-pinned-and-untrusted-basename', 'result': 'PASS_REFUSAL'})
         refuse('response-escape', '@' + os.path.relpath(build / 'PRIVATE_RESPONSE_SENTINEL', cwd), 'unsafe linker response')
+        refuse('response-container-escape', '@/src/build/../../../PRIVATE_RESPONSE_SENTINEL', 'unsafe linker response')
         cycle = links[0].with_name('cycle.rsp')
         token = '@' + str(cycle.relative_to(cwd))
         cycle.write_text(token)
         refuse('response-cycle', token, 'unsafe linker response')
+        target = links[0].with_name('real.rsp')
+        target.write_text('-lpthread')
+        symlink = links[0].with_name('symlink.rsp')
+        symlink.symlink_to(target)
+        refuse('response-file-symlink', '@' + str(symlink.relative_to(cwd)), 'symlink linker response')
+        parent_link = binary_build / 'symlink-parent'
+        parent_link.symlink_to(target.parent, target_is_directory=True)
+        refuse('response-parent-symlink', '@' + str(parent_link / target.name), 'symlink linker response')
 
         # Exercise the real missing-dependency assertion. Retained notice and Rust
         # seams isolate inventory behavior; this is not a native archive test.
@@ -127,6 +151,25 @@ def main():
             assert value['result'] == 'PASS_LINKED_DEPENDENCY_COVERAGE'
             assert {c['component'] for c in value['components']} >= set(licenses.DEPENDS)
             cases.append({'case': style + '-full-missing-component-guard-positive', 'result': 'PASS', 'scope': 'NOTICE_AND_RUST_SEAMS'})
+
+        configure('absolute')
+        with patch.object(licenses, 'retain_depends', return_value=retained):
+            try:
+                licenses.coverage(build, package, False, ['libcrypto.a'], depends_static=True)
+            except AssertionError as error:
+                assert str(error) == 'pinned depends library has mixed/non-pinned origins'
+            else:
+                raise AssertionError('bundled basename replaced pinned provenance')
+        cases.append({'case': 'coverage-mixed-bundled-origin-refusal', 'result': 'PASS_REFUSAL'})
+        configure('absolute', ['libboost_filesystem.so', *NAMES[1:]])
+        with patch.object(licenses, 'retain_depends', return_value=retained):
+            try:
+                licenses.coverage(build, package, False, [], depends_static=True)
+            except AssertionError as error:
+                assert str(error) == 'older baseline requires the pinned static dependency closure'
+            else:
+                raise AssertionError('shared dependency replaced static closure')
+        cases.append({'case': 'static-closure-refusal-retained', 'result': 'PASS_REFUSAL'})
 
         def missing(style='relative'):
             configure(style, NAMES[1:])
@@ -172,6 +215,22 @@ def main():
             assert {row['kind'] for row in commands} == {'link_command', 'response_file'}
             assert 'PRIVATE_PATH_SENTINEL' not in json.dumps(value)
             cases.append({'controller': number, 'case': 'safe-response-file-hash-context', 'result': 'PASS'})
+
+            for origin, token in [('non_pinned_depends', source / 'contrib/depends/wrong-host/lib/libcrypto.a'),
+                                  ('system', Path('/opt/untrusted/libcrypto.a'))]:
+                configure('relative')
+                links[0].write_text(shlex.join(['c++', str(token)]))
+                try:
+                    inventory()
+                except AssertionError as error:
+                    value = ci.package_failure(error, inputs)
+                else:
+                    raise AssertionError('bad pinned origin accepted')
+                assert value['depends_inventory']['component'] == 'openssl'
+                assert value['depends_inventory']['libraries'] == [{'basename': 'libcrypto.a', 'origin': origin}]
+                assert len(value['depends_inventory']['link_commands']) == 1
+                assert 'PRIVATE_' not in json.dumps(value)
+                cases.append({'controller': number, 'case': 'safe-origin-refusal-context-' + origin, 'result': 'PASS'})
 
             # Execute the preserved worker with the real license failure. A
             # secondary diagnostic write error must retain that primary error.

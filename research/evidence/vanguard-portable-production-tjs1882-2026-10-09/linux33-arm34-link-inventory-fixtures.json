@@ -1,12 +1,12 @@
 {
   "schema": "meownero-pinned-linker-inventory-fixtures/1",
   "result": "PASS",
-  "source_sha256": "a3ec22abcd7c26f86a96f806fb206e7731989827926bbff65c1b3d4deaebbb20",
+  "source_sha256": "b4ea8c1c38e217bc4ce025a1ca2860149c5d7a39dab22b69b84055309685438a",
   "controllers": {
-    "33": "065b5881279433b4758ff41c17e9f2a137777622972b71e2613da83fe6eea0d8",
-    "34": "e8b19a613435c48d188f08ded0767ce98e87062284eccf726f7e1f0004424a5b"
+    "33": "216ece126fb745d383975cbacd7f1bcae2f112d12d11848fed3df28d3e5f0d70",
+    "34": "77844913c6833b533f6af36f882134dc6d924d4bc48819a6ed27b509a7a61839"
   },
-  "fixture_source_sha256": "8cc192f715ea38879e40c1d33ce9aab734a85694fca175db52064f9293411e15",
+  "fixture_source_sha256": "a351c44a85b82c8a96e57c7e7024a7f28b7452ff123945e79e213539f64353f5",
   "cases": [
     {
       "case": "absolute-equivalence",
@@ -29,6 +29,14 @@
       "result": "PASS"
     },
     {
+      "case": "response-absolute-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "response-container-equivalence",
+      "result": "PASS"
+    },
+    {
       "case": "wrong-depends-host",
       "result": "PASS_REFUSAL"
     },
@@ -45,11 +53,31 @@
       "result": "PASS_REFUSAL"
     },
     {
+      "case": "absolute-untrusted-pinned-basename",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "mixed-pinned-and-untrusted-basename",
+      "result": "PASS_REFUSAL"
+    },
+    {
       "case": "response-escape",
       "result": "PASS_REFUSAL"
     },
     {
+      "case": "response-container-escape",
+      "result": "PASS_REFUSAL"
+    },
+    {
       "case": "response-cycle",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-file-symlink",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-parent-symlink",
       "result": "PASS_REFUSAL"
     },
     {
@@ -63,6 +91,14 @@
       "scope": "NOTICE_AND_RUST_SEAMS"
     },
     {
+      "case": "coverage-mixed-bundled-origin-refusal",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "static-closure-refusal-retained",
+      "result": "PASS_REFUSAL"
+    },
+    {
       "controller": 33,
       "case": "missing-component-and-safe-source-bound-diagnostic",
       "result": "PASS"
@@ -70,6 +106,16 @@
     {
       "controller": 33,
       "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-origin-refusal-context-system",
       "result": "PASS"
     },
     {
@@ -97,6 +143,16 @@
     {
       "controller": 34,
       "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-origin-refusal-context-system",
       "result": "PASS"
     },
     {

@@ -202,7 +202,7 @@ def package_failure(error, inputs):
                     for row in list(rows)[:64]:
                         if isinstance(row, (list, tuple)) and len(row) == 2:
                             basename, origin = row
-                            if isinstance(basename, str) and isinstance(origin, str) and origin in {'pinned_depends', 'system', 'bundled'}:
+                            if isinstance(basename, str) and isinstance(origin, str) and origin in {'pinned_depends', 'system', 'bundled', 'non_pinned_depends', 'unmapped_contrib', 'unmapped_relative'}:
                                 public['libraries'].append({'basename': basename if re.fullmatch(names, basename) else 'OTHER_LIBRARY',
                                                             'origin': origin})
                 public['libraries'] = sorted(public['libraries'], key=lambda row: (row['basename'], row['origin']))

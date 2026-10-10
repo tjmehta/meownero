@@ -149,12 +149,21 @@ def link_inventory(source, binary_build, depends_root, container_sources=(), win
         cwd = link.parent.parent.parent
         link_files.append({'target': target, 'sha256': sha(link)})
 
+        def input_path(path):
+            if path.is_absolute():
+                for alias in container_sources:
+                    if path.is_relative_to(alias):
+                        return source / path.relative_to(alias)
+            return cwd / path
+
         def arguments(text, seen=()):
             for token in shlex.split(text):
                 if token.startswith('@'):
-                    response = (cwd / token[1:]).resolve()
+                    package_context['component'] = None
+                    candidate = input_path(Path(token[1:]))
+                    response = candidate.resolve()
                     assert response.is_relative_to(binary_build) and response not in seen, 'unsafe linker response file'
-                    assert response.is_file() and not response.is_symlink(), 'missing linker response file'
+                    assert response.is_file() and not any(p.is_symlink() for p in (candidate, *candidate.parents)), 'missing/symlink linker response file'
                     link_files.append({'target': target, 'response_file': str(response.relative_to(binary_build)), 'sha256': sha(response)})
                     yield from arguments(response.read_text(), (*seen, response))
                 else:
@@ -172,17 +181,17 @@ def link_inventory(source, binary_build, depends_root, container_sources=(), win
             if not re.search(r'\.(?:a|so(?:\.\d+)*)$', token):
                 continue
             path = Path(token)
-            normalized = (cwd / path).resolve()
-            if path.is_absolute():
-                for alias in container_sources:
-                    if path.is_relative_to(alias):
-                        normalized = (source / path.relative_to(alias)).resolve()
-                        break
+            normalized = input_path(path).resolve()
+            component = next((name for name, prefix in DEPENDS.items() if path.name.startswith(prefix)), None)
+            package_context['component'] = component
             if depends_root and normalized.is_relative_to(depends_root):
+                if normalized.parent != depends_root / 'lib':
+                    origins.add((path.name, 'non_pinned_depends'))
                 assert normalized.parent == depends_root / 'lib', 'non-pinned depends library origin'
                 libraries.add(path.name)
                 origins.add((path.name, 'pinned_depends'))
             elif ('contrib' in normalized.parts and 'depends' in normalized.parts) or ('contrib' in path.parts and 'depends' in path.parts):
+                origins.add((path.name, 'non_pinned_depends'))
                 raise AssertionError('non-pinned depends library origin')
             elif normalized.is_relative_to(binary_build / 'external'):
                 assert path.name in external, 'unmapped static dependency: ' + token
@@ -190,11 +199,14 @@ def link_inventory(source, binary_build, depends_root, container_sources=(), win
             elif normalized.is_relative_to(binary_build / 'src') or normalized.is_relative_to(binary_build / 'contrib/epee') or normalized == binary_build / 'lib/libwallet.a':
                 pass
             elif 'contrib' in normalized.parts or 'contrib' in path.parts:
+                origins.add((path.name, 'unmapped_contrib'))
                 raise AssertionError('unmapped contrib library origin')
             elif path.is_absolute():
                 libraries.add(path.name)
                 origins.add((path.name, 'system'))
+                assert not (depends_root and component), 'pinned depends library has non-pinned origin'
             else:
+                origins.add((path.name, 'unmapped_relative'))
                 raise AssertionError('unmapped source library: ' + token)
     return link_files, libraries, external_libraries, origins
 
@@ -264,6 +276,7 @@ def coverage(build, package, mac, bundled, windows=False, depends_static=False):
         for c in retain_depends(build):
             names = [n for n in libraries if n.startswith(DEPENDS[c['component']])]
             package_context = {'component': c['component'], 'libraries': sorted(origins), 'link_commands': link_files}
+            assert all({origin for name, origin in origins if name == n} == {'pinned_depends'} for n in names), 'pinned depends library has mixed/non-pinned origins'
             if depends_static:
                 assert all(n.endswith('.a') for n in names), 'older baseline requires the pinned static dependency closure'
             dependency_libraries.update(names)
