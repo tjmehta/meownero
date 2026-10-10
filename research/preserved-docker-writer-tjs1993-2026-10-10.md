@@ -1,5 +1,21 @@
 # TJS-1993 preserved Docker writer handoff
 
+## Current outcome, run bd99c8ae
+
+The stranded lease boundary is resolved. Board user comment `5241496c-8296-49c8-b3a9-98c6694137a5` records the supported guarded release of only `e9766e27` at 18:13:21 UTC. This run did not repeat the release. Fresh authenticated TJS-1882 readback independently confirms `executionBlocker=null`. The earlier admin-call ask and obsolete unblock descriptor are withdrawn. No saved confirmation card exists on this issue to withdraw.
+
+The same native source writer remains preserved at `w1XK:p5`, PID `405325`, thread `01a126be-22c3-7c71-a83e-077777c7e5d1`, state `done`. Its process still identifies original run `7b1748f7` and TJS-1882. It completed the later ordinary-create correction as commit `598296e0a68ccedf32657bee05c8b6beb35f47dd`. Predecessor `823d1fe` is superseded for review. All 21 frozen source hashes independently match the worktree. ZIP readback passes for the 57,728-byte, 25-member corrected packet, SHA256 `5fd3a9158834884c5ce4eb2d25d5476d826f411a53af9e2b3266e1e01925da9f`. The writer and parent report 23 passing source controls; this run did not repeat those tests or claim runtime acceptance.
+
+One normal authenticated handoff was persisted as TJS-1882 comment `edac8355-7baa-421a-ba51-f37d776d9aa3`, with exact body readback. It initially joined a deferred queue behind the live studio-lead run `fbd3c757`. That run uploaded the corrected packet as attachment `6e45c6e6-353b-4ff4-b66c-8e1ebe664900`; fresh attachment metadata matches its bytes and SHA256. Normal original-stage submission then reassigned TJS-1882 and cancelled the studio-lead run with `issue_reassigned`. This is an observed normal lifecycle transition, not a stranded-owner repair.
+
+Fresh TJS-1882 readback records `in_review`, pending original stage `82aa96f6-a7bf-422f-afe7-8d1cb3b2626a`, participant and assignee `ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6`, and active review run `36ee3e02-90cc-4c1f-a7ce-0c98052e5571`. The return assignee remains original writer `92a7b4f2-787b-4cbb-954e-46831397ab09`. The handoff now has an active typed review path, beyond the earlier deferred wake.
+
+Evidence is `research/evidence/preserved-docker-writer-tjs1993-2026-10-10/continuation-bd99c8ae.json`. The public issue API needed longer bounded timeouts; local fallback used the same agent credentials. Direct lease GET remains board-only, and the parent's temporary release receipt was unavailable in this host and container. Lease-release attribution therefore rests on the authenticated user comment; independent current issue and review readbacks establish that the ownership blocker cleared.
+
+Parent retains original source acceptance, bounded actual image, wallet/payment/restore/later-spend/CLI, five-second deadline, live-interruption cleanup and website distribution. Diagnostic attempt03 remains cancelled and unaccepted. Native CI remains paused; accepted 3/7 artifacts and separate GUI work remain preserved. No new build, source writer, process signal, runtime edit, restart, expired credential use or group attachment occurred here. Needs TJ: None.
+
+## Earlier observations
+
 Changed
 
 One normal Herdr prompt continued the existing TJS-1882 writer. It pointed to the already-persisted SOURCE HOLD comment `7f895389-413f-471c-ba09-addec7fe93d4` and its existing source-review receipt. At 17:41:19 UTC on 2026-10-10, the same native session explicitly adopted all four findings with receipt SHA256 `675d81524fbde416a7194e2cdf57846548b8e64b3e805709dfaff5f601268d40`. It began reading the affected Docker code. The current build remains diagnostic under its original bounds. This task added evidence only on its own branch.
