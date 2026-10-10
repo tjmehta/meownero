@@ -1,0 +1,118 @@
+{
+  "schema": "meownero-arm09-arm10-exact-receipt-adoption/1",
+  "adopting_run_id": "32610e37-e6ab-4aea-8fa2-71a39c30a7b9",
+  "historical_executing_run_id": "d67e7482-4ab3-47e5-8ed7-04c04e4cd1e5",
+  "result": "EXACT_TERMINAL_RECEIPTS_AND_FRESH_OWNED_CLEANUP_VERIFIED",
+  "kit16_sha256": "b0336ef43eb927c650f24c34828460b64fd7aa36f982aec12f21fa3b4b3bb8ec",
+  "ARM09": {
+    "receipt_sha256": "8bf504362425e60ef015a0200f0df0f1d85be184c8f62836b055b1f8ebcedfed",
+    "receipt_bytes": 8314,
+    "retained_exact_receipt": "research/evidence/vanguard-portable-production-tjs1882-2026-10-09/arm09-exact-build-receipt.json",
+    "recorded_result": "FAILED_ATTEMPT",
+    "failure_phase": "SOURCE_EXPORT_PREREQUISITE",
+    "failure_class": "GIT_CACHE_PARENT_ARGUMENT_MISMATCH",
+    "recorded_command_count": 0,
+    "recorded_owned_container_count": 0,
+    "compiler_started": false,
+    "cache_parent_correction_preexisted_this_run": true
+  },
+  "ARM10": {
+    "receipt_sha256": "1b92d8bc27f6aaa0654b6e09f3a602050fe08d9f32e7fb9a2eed58bf73dd24ec",
+    "receipt_bytes": 21518,
+    "retained_exact_private_receipt": "build/tjs1882-32610-reconciliation/private/arm10-build-receipt.json",
+    "recorded_result": "FAILED_ATTEMPT",
+    "failure_phase": "RANDOMX_ASSEMBLER_PATCH_HOST_APPLY",
+    "failure_class": "BSD_PATCH_EXACT_ZERO_FUZZ_HUNK_REFUSED",
+    "compiler_started": false,
+    "commands": [
+      {
+        "label": "archive-upstream",
+        "process_group": 7198,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.13300320808775723
+      },
+      {
+        "label": "archive-external-gtest",
+        "process_group": 7234,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.04097858304157853
+      },
+      {
+        "label": "archive-external-mx25519",
+        "process_group": 7240,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.021060375031083822
+      },
+      {
+        "label": "archive-external-randomx",
+        "process_group": 7242,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.021061999956145883
+      },
+      {
+        "label": "archive-external-rapidjson",
+        "process_group": 7249,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.041076584020629525
+      },
+      {
+        "label": "archive-external-supercop",
+        "process_group": 7252,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.020593750057742
+      },
+      {
+        "label": "toolchain",
+        "process_group": 9620,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 22.013469707919285
+      },
+      {
+        "label": "toolchain-cleanup",
+        "process_group": 11861,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.04492704104632139
+      },
+      {
+        "label": "randomx-arm64-allocator",
+        "process_group": 11864,
+        "exit": 0,
+        "reaped": true,
+        "wall_seconds": 0.007718916051089764
+      },
+      {
+        "label": "randomx-arm64-hidden",
+        "process_group": 11865,
+        "exit": 1,
+        "reaped": true,
+        "wall_seconds": 0.005997166037559509
+      }
+    ],
+    "owned_containers": [
+      {
+        "label": "toolchain",
+        "invocation": "41498e98f53444019951ebc96fa1578c",
+        "removed": true,
+        "id": "5252b6e61c163fbceb200297af424e35dfb798d6d09d6557441ec3e6d93cf553"
+      }
+    ],
+    "source_pin": "e151643c5269c83bf24a83b2548e2493876026b2"
+  },
+  "fresh_cleanup_receipt_sha256": "6c0cf209cc766a9703ea0dc5831a9d89d401cadcb14d9472dbaee8a989a5c7e6",
+  "all12_recorded_worker_command_PIDs_fresh_numeric_absent": true,
+  "no_signals_or_cleanup_mutations_needed": true,
+  "heavy_lock_same_inode_nonblocking_claim_released": true,
+  "heavy_lock_inode": 219261381,
+  "build_compile_archive_native_Windows_acceptance": false,
+  "kit17_context_remedy": "ALREADY_FROZEN_REVIEW_REQUIRED_NO_NEW_BUILD",
+  "kit17_sha256": "d466b93cb9622c7d291e15cf35dbba0e3e44d331d9bc34cea874c2a5e97b070a",
+  "prior08_compiler_failure_AND09_prerequisite_AND10_host_patch_failure": "PRESERVED_SEPARATELY"
+}
