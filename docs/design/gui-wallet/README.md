@@ -34,10 +34,11 @@ ever confusing test coins with real money.*
   the node reports: violet for the local regtest chain, teal for a future
   testnet. Coin gold, the brand's money colour, is reserved for a mainnet build
   that does not exist. A screenshot of a test wallet cannot pass for a real one.
-- **The network is always named.** A ribbon under the title bar states the
-  network and that test coins have no value. The title bar, the sidebar, the
-  review step and the first-run screen repeat it, and none of them can be
-  dismissed. The label comes from the node's reported network, not from the
+- **The network is always named.** A ribbon under the title bar reads "Local
+  regtest · Test coins only" (wording approved in TJS-1994). The title bar, the
+  sidebar, the receive card, the review step and the first-run screen repeat it,
+  and none of them can be dismissed. The network is shown, never chosen: there is
+  no mainnet or testnet switch. The label comes from the node's reported network, not from the
   address format: the current kit produces upstream Monero-style `4…`
   addresses (seen in `research/evidence/vanguard-daemon-soak-tjs1816-2026-10-08`),
   while Meownero's testnet identity is `T…` (`docs/spec/network-identity.md`).
@@ -60,13 +61,13 @@ outgoing, grouped mined blocks), and balance (spendable, unlocking, total).
 
 | Object | States |
 | --- | --- |
-| Outgoing payment | building → handing to node → pending → *n* of 10 confirmations → confirmed. Branches: node refuses (nothing sent, balance unchanged); connection drops (**unknown**: never shown as sent or failed, never retried automatically, resolves when the node returns) |
+| Outgoing payment | preparing (exact transaction built, nothing sent) → review of the exact fee → submitting → waiting to confirm → *n* of 10 confirmations → confirmed. Branches: edit (prepared transaction discarded, prepared and reviewed again); node refuses (nothing sent, balance unchanged); connection drops (**submission status unknown**: never shown as sent or failed, never retried automatically, and new payments are blocked until wallet and node reconcile) |
 | Incoming payment | pending → *n* of 10 → spendable. Mined coins: unlocking for 60 blocks |
 | Chain reorganization | confirmed → pending → confirmed, with a banner explaining the balance change |
-| New wallet | name and password → recovery words (hidden until revealed) → word check → ready |
+| New wallet | name and password → recovery words (hidden until revealed, hidden again on leaving, no copy) → word check → ready |
 | Restore | words (count, word list and check-word errors) → starting block (future-block error) and new password → scanning → restored, with the note that local notes do not return |
 | Wallet file | locked ↔ unlocked; wrong password error |
-| Node | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending paused); wrong network (nothing loaded); someone else's node (exposure explained) |
+| Node | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending paused); wrong network (nothing loaded); someone else's node (explicitly untrusted, exposure explained; not offered on the local regtest) |
 
 **Amount rule (TJ decision):** amounts are integers of atomic units (12 decimal
 places). Compact display shows at most four decimals, *truncated* and marked
@@ -103,11 +104,11 @@ feature:
 
 | Tier | Meaning | Features |
 | --- | --- | --- |
-| **A** | Exercised in the accepted Vanguard kit (TJS-1870) through the named RPC | `create_wallet`, `get_address`, `query_key` (mnemonic), `restore_deterministic_wallet` with restore height, `rescan_blockchain`/`refresh`, `get_balance` (total vs unlocked), single-recipient `transfer`, `get_transfers`/`incoming_transfers`, reorg rollback, key-image replay refusal, daemon `get_info`/`get_connections`, regtest `generateblocks` for test coins |
-| **B** | Upstream RPC exists, but it is not exercised in the current kit, or only in the older RingCT `chain/` lineage | wallet password (the kit uses an empty one), `open_wallet`/`close_wallet`, `validate_address`, fee preview (`do_not_relay` + `relay_tx`), subaddresses (`create_address`), Max (`sweep_all`), `change_wallet_password`, untrusted remote node mode, the unlock windows (60 mined / 10 other) as applied to the kit |
-| **C** | Prototype only: GUI behaviour with nothing behind it yet | first-run and network choice, word check, compact amount display, grouped mined blocks, local notes, QR rendering, offline/wrong-network handling, the unknown-relay state, testnet (not live), Tor/I2P (untested), file location |
+| **A** | Backend behaviour exercised in the accepted Vanguard kit (TJS-1870) through the named RPC. Never a completed native integration | `create_wallet`, `get_address`, `query_key` (mnemonic; the reveal UI is C), `restore_deterministic_wallet` with restore height, `rescan_blockchain`/`refresh`, `get_balance` (total vs unlocked; unlock 60 mined / 10 received blocks from pinned source), `transfer` to one or two recipients, `transfer` with `do_not_relay` (exact prepared fee), `incoming_transfers` and `get_transfers {pool:true}`, reorg rollback and same-key-image refusal (scenario-bounded), daemon `get_connections`/`get_last_block_header`, regtest `generateblocks` |
+| **B** | Upstream RPC exists, but it is not exercised in the current kit, or only in the older RingCT `chain/` lineage | daemon `get_info`, full in/out/failed `get_transfers` history, wallet `relay_tx` of the reviewed transaction, wallet password and `change_wallet_password`, `open_wallet`/`close_wallet`, wallet and daemon RPC authentication, `validate_address` (literal only), subaddresses (`create_address`), Max (`sweep_all`), untrusted remote node mode |
+| **C** | Prototype only: GUI behaviour with nothing behind it yet | first run, word check, secure seed reveal, compact amount display, grouped mined blocks, local notes, kit-wallet recipient list, QR (testnet preview only), offline/wrong-network handling, submission-unknown reconciliation, testnet (not live), Tor/I2P (untested), file location |
 
-The in-app "About this test build" panel lists only tier A as "works today".
+The in-app "About this test build" panel lists only tier A, as what the wallet engine does in the current kit; it does not call the desktop app working.
 
 ## Reviewing the prototype
 
@@ -121,36 +122,74 @@ The in-app "About this test build" panel lists only tier A as "works today".
 - **Platform window**, **Appearance** and **Capability labels** change the
   presentation only.
 
-## Implementation handoff (draft; final after privacy and critique review)
+## Privacy and capability constraints (TJS-1994)
+
+The Wallet & Transport Privacy specialist's `privacy-constraints` document
+(TJS-1994, revision `4a98299b-dfa7-4ac8-82f9-c959af5f43eb`) is accepted in full.
+The numbers below match its constraints.
+
+| # | Constraint | Applied in revision 2 |
+| --- | --- | --- |
+| 1 | Label everything as local accelerated regtest; no network switching; no implied cross-platform release | Approved ribbon wording; the welcome screen shows the network and offers no choice; the testnet view is a reviewer-only, labelled design preview; an in-window "Interactive prototype · Wallet actions are simulated" marker |
+| 2 | Show the exact `4…` RPC address; no `M…`/`T…` substitution; no `monero:` links; regtest sends only to session-known disposable wallets | Approved receive warning; **QR removed on regtest**; Send offers the kit's test wallets and refuses any other address on regtest |
+| 3 | Unlock 60/10 blocks from pinned source; no clock-time promises | Unlock copy uses blocks only; the testnet minute estimate was removed |
+| 4–5 | Loopback-only RPC with Digest auth, no `--disable-rpc-login`, no published container RPC ports, Unix-socket RPC unproven | Handoff items 2 and 4 |
+| 6 | Explicit `--trusted-daemon` only for the user's own node; explicit untrusted mode otherwise | The node screen's trust row reflects the user's choice; "Someone else's node" is disabled on regtest |
+| 7–9 | Password before reveal; no seed copy; hide on leave/lock; capture protection where the OS allows | Reveal is gated by the password and hidden again on leaving; recording warning before reveal; no copy button |
+| 10 | Allowlist diagnostics; no seed or keys in logs or crash reports; no zeroization claims | Handoff item 4 |
+| 11 | Explain observer boundaries without anonymity claims | Approved remote-node and privacy wording in the node screen and the About sheet |
+| 12 | Tor/I2P and OpenAlias disabled; literal addresses only | Tor/I2P shown disabled; `validate_address {any_net_type:false, allow_openalias:false}` in the handoff |
+| 13 | A seed restores on-chain funds, not notes, labels or contacts | Approved restore wording; restore-height guidance ("a block before your first payment") |
+| 14 | Distinguish prepared, submitting, unknown, in pool, confirmed and unlocked; reconcile before another payment | New preparing step, "Submission status unknown" with send gating and "Check with node" |
+| 15 | Exact fee from the prepared transaction, never rebuilt after approval; banned claims | Review shows the prepared fee (no "estimate"), editing re-prepares; banned words are absent (checked across 128 renders) |
+
+## Implementation handoff (draft; final after the design critique)
 
 1. **Drive the proven boundary; do not reimplement it.** The GUI is a native
    shell over the exact `monero-wallet-rpc` and `monerod` methods in tier A.
    Wallet and crypto logic stay in those programs. Tier B items need their own
    implementation evidence before they ship enabled; tier C items are GUI work.
-2. **First blocker, owned by implementation:** there are no native per-OS
-   wallet-engine binaries. Today's accepted binaries are ARM64 Linux ELF in a
-   container. The GUI needs `monero-wallet-rpc` (or the wallet library) built
-   natively for each packaging target. It connects to the node in the Docker kit
-   over local RPC.
+2. **First blockers, owned by implementation:**
+   - There are no native per-OS wallet-engine binaries. Today's accepted
+     binaries are ARM64 Linux ELF in a container. The GUI needs
+     `monero-wallet-rpc` (or the wallet library) built natively for each
+     packaging target.
+   - **Open decision: how the native GUI reaches the kit's node.** The kit's
+     container is network-disabled, and TJS-1994 #4 forbids publishing container
+     RPC ports. The options are a loopback-only published port with RPC
+     authentication (needs the privacy specialist's acceptance), a mounted Unix
+     socket (unproven, #5), or a native node on the host. The implementation
+     owner proposes one; the privacy specialist accepts or rejects it.
 3. **Stack (recommendation, the implementation owner decides):** a small native
    shell such as Tauri 2 can launch the wallet engine as a sidecar and reuse this
    prototype's layout directly. Qt/QML follows the upstream Monero GUI precedent
    (PLAN.md v1.x) but needs a heavier toolchain. Electron is not recommended,
    because of its size and attack surface for a wallet.
-4. **Amounts:** carry atomic units as strings or 64-bit integers end to end
+4. **Boundaries (TJS-1994):**
+   - Wallet RPC is bound to explicit loopback with Digest auth and fresh
+     credentials kept away from the UI layer.
+   - Trust flags are always passed explicitly.
+   - Before `query_key`, the GUI checks the wallet password itself, because the
+     RPC doesn't.
+   - Diagnostics are allowlisted, never redacted after the fact.
+   - Addresses go through `validate_address {any_net_type:false, allow_openalias:false}`.
+   - Payments are prepared with `do_not_relay`, reviewed, then the same
+     transaction is relayed.
+   - On a dropped submit, the attempt's identity is kept and reconciled before
+     any other payment.
+5. **Amounts:** carry atomic units as strings or 64-bit integers end to end
    (use RPC `wide_*` fields where totals can exceed u64). Never use floating
    point. Port `parseAmount`/`fmt` semantics and their test cases from the
    prototype.
-5. **States:** implement every transition in the experience contract,
+6. **States:** implement every transition in the experience contract,
    especially the unknown-relay branch and the reorg banner, before visual
    polish.
-6. **Acceptance for the build:** on the actual packaged binary per target, a
+7. **Acceptance for the build:** on the actual packaged binary per target, a
    tester completes create → back up → get test coins → receive → send → restore
    → spend; the 1-atomic, large-balance and 13-decimal cases behave as above; the
    network label matches the node's reported network; keyboard-only and screen
    reader passes; signing status and the tested OS/arch are reported from
    execution evidence only.
 
-Privacy and capability constraints are pending from the Wallet & Transport
-Privacy specialist (TJS-1994). An independent design critique is pending as
-well. Both will be folded into this section.
+The independent design critique (TJS-1999) reviews candidate `3fc9e0c`. Its
+findings will be mapped onto this revision and resolved here.

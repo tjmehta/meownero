@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Meownero Wallet prototype</title>
+<link rel="icon" href="data:,">
 <!--
   Meownero native-desktop wallet: interactive design prototype (TJS-1992).
   Self-contained: no remote fonts, scripts, images or tracking. Mock data only:
@@ -198,6 +199,11 @@ button { cursor: pointer; }
 .window[data-platform="linux"] .gctl span { width: 22px; height: 22px; border-radius: 50%; background: var(--surface-2); display: grid; place-items: center; font-size: 11px; color: var(--muted); }
 .window:not([data-platform="mac"]) .lights, .window:not([data-platform="win"]) .wctl, .window:not([data-platform="linux"]) .gctl { display: none; }
 .window[data-platform="win"] .title { margin-right: auto; }
+.proto-tag { font: 600 10.5px/1 var(--mono); color: var(--muted); border: 1px dashed var(--border-strong); border-radius: 4px; padding: 3px 6px; white-space: nowrap; }
+.window[data-platform="mac"] .proto-tag { position: absolute; right: 12px; }
+.window[data-platform="linux"] .proto-tag { position: absolute; left: 12px; }
+.window[data-platform="win"] .proto-tag { margin-right: 8px; }
+@media (max-width: 1000px) { .proto-tag .long { display: none; } .window[data-platform="mac"] .title, .window[data-platform="linux"] .title { max-width: 45%; } }
 
 /* Network ribbon: always present, never dismissible */
 .ribbon {
@@ -215,6 +221,7 @@ button { cursor: pointer; }
 .ribbon .flag svg { width: 14px; height: 14px; }
 .ribbon .say { color: var(--fg); opacity: 0.86; min-width: 0; }
 @media (max-width: 760px) {
+  .proto-tag { display: none; }
   .ribbon { flex-wrap: wrap; row-gap: 2px; }
   .ribbon .say { flex: 1 1 100%; order: 3; }
   .window[data-platform="mac"] .titlebar { justify-content: flex-start; padding-left: 68px; }
@@ -470,7 +477,7 @@ textarea.input { resize: vertical; min-height: 64px; font-family: var(--mono); f
   transition: transform 140ms var(--ease-out);
 }
 .choice:active { transform: scale(0.99); }
-.choice[aria-checked="true"] { border-color: var(--net); box-shadow: 0 0 0 1px var(--net) inset; }
+.choice[aria-checked="true"], .choice[data-selected] { border-color: var(--net); box-shadow: 0 0 0 1px var(--net) inset; }
 .choice:disabled { opacity: 0.55; cursor: not-allowed; }
 .choice .ico { background: var(--net-soft); color: var(--net); }
 .choice b { display: block; }
@@ -511,6 +518,7 @@ textarea.input { resize: vertical; min-height: 64px; font-family: var(--mono); f
       <div class="titlebar" id="titlebar">
         <div class="lights" aria-hidden="true"><i></i><i></i><i></i></div>
         <div class="title" id="wintitle"></div>
+        <span class="proto-tag" title="Reviewer marker, not app UI"><span class="long">Interactive prototype · </span>Wallet actions are simulated</span>
         <div class="wctl" aria-hidden="true"><span>&#8212;</span><span>&#9744;</span><span>&#10005;</span></div>
         <div class="gctl" aria-hidden="true"><span>&#8212;</span><span>&#10005;</span></div>
       </div>
@@ -645,19 +653,20 @@ const ADDR = {
 const TXID = ["f344d362f2142dc292936b4ebbc4c45eff81243af547f57af43b7abe103f693e", "75a57f39b00bf9d2cd414edcedf48836c58f13daf23024cef1c1398f42036e54", "772fca6666d1c111260261bdc4bc52dd9443bd8fba94d49d2a364fbf7a3b936d", "109b2de17f8e5346cf33add2c8e8f6978247deec6581c2a162a4e8fe2c2b0c71", "418375dbda2a7a6e7b2da9fa23abc3b5176c1109bdd2214b69b288d593546d8b", "9e9ce957111e2f300943bddf59f7db5716ad632c2b43ebb09da4006c68acdd3c"];
 const NETS = {
   regtest: {
-    name: "Local test chain", tag: "regtest",
-    say: "Test coins have no value. This chain runs only on this computer and is not Meownero mainnet.",
-    title: "Local test chain (regtest)", prefix: "4", other: "testnet",
+    name: "Local regtest", tag: "regtest",
+    say: "An isolated, accelerated FCMP++/CARROT test chain. Coins have no value.",
+    title: "Local regtest", prefix: "4", other: "testnet",
     blockSecs: null, node: "127.0.0.1:18081", nodeName: "Your node in the Meownero test kit (Docker)",
   },
   testnet: {
     name: "Meownero testnet", tag: "testnet",
-    say: "Test coins have no value. This is a shared test network, not Meownero mainnet.",
-    title: "Meownero testnet", prefix: "T", other: "regtest",
+    say: "Design preview of a future shared test network. It is not live, and its values are placeholders.",
+    title: "Meownero testnet (preview)", prefix: "T", other: "regtest",
     blockSecs: 90, node: "127.0.0.1:29081", nodeName: "Your Meownero testnet node",
   },
 };
-const UNLOCK = { mined: 60, in: 10, out: 10 }; // blocks; to be confirmed by the privacy specialist (TJS-1994)
+const UNLOCK = { mined: 60, in: 10, out: 10 }; // blocks: pinned upstream cryptonote_config.h:43,48 (TJS-1994 #3)
+const KIT_WALLETS = [["b", "Test wallet B"], ["c", "Test wallet C"]]; // disposable wallets in the same kit session
 const FEE = 61520000n; // 0.00006152, example only: fees vary by transaction
 const REWARD = 17592186044415n; // upstream regtest emission, not Meownero's 9 MEOW / 90 s policy
 
@@ -787,10 +796,8 @@ function grouped(a) {
 function short(a) { return a.slice(0, 6) + "…" + a.slice(-6); }
 function blocksToText(n) {
   if (n == null) return "";
-  const b = `${n} block${n === 1 ? "" : "s"}`;
-  if (!net().blockSecs) return b;
-  const m = Math.round((n * net().blockSecs) / 60);
-  return `${b} (about ${m < 60 ? m + " min" : Math.round(m / 6) / 10 + " h"})`;
+  // Blocks only: unlocking follows chain progress, so no clock-time promise (TJS-1994 #3).
+  return `${n} block${n === 1 ? "" : "s"}`;
 }
 function toast(msg) {
   const t = $("#toast"); t.textContent = msg; t.classList.add("show");
@@ -834,7 +841,7 @@ function renderChrome() {
   w.dataset.appearance = S.appearance === "system" ? sys : S.appearance;
   document.documentElement.dataset.page = S.appearance === "system" ? "" : S.appearance;
   $("#wintitle").innerHTML = `<b>Meownero Wallet</b> — ${esc(net().title)}`;
-  $("#ribbon").innerHTML = `<span class="flag">${icon("flask")}${esc(net().name)}</span><span class="say">${esc(net().say)}</span>
+  $("#ribbon").innerHTML = `<span class="flag">${icon("flask")}${esc(net().name)} · Test coins only</span><span class="say">${esc(net().say)}</span>
     ${S.net === "testnet" ? cap("C", "testnet not live; T… prefix from spec", "The Meownero testnet does not exist yet. T… addresses come from docs/spec/network-identity.md, not from the current kit.") : cap("A", "regtest via Vanguard kit", "Current accepted kit (TJS-1870) runs an accelerated local regtest. Its addresses use the upstream 4… prefix.")}
     <button class="more" data-act="about-net">What does this mean?</button>`;
   document.querySelectorAll("[data-ctl]").forEach((g) => g.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(S[g.dataset.ctl] === b.dataset.v))));
@@ -874,7 +881,7 @@ function conditionBanner() {
   const r = S.reorg ? `<div class="banner warn">${icon("refresh", "i")}<div class="body"><b>The chain reorganized at block ${S.reorg.height.toLocaleString("en-US")}.</b>${S.reorg.count} payment${S.reorg.count === 1 ? "" : "s"} went back to pending, and your balance was updated. This can happen on any proof-of-work chain; nothing needs to be done unless a payment stays pending. ${cap("A", "reorg rollback", "daemon-restore.py reorg gate: wallet balance rolls back and re-confirms after a native two-daemon reorg.")}<div class="row"><button class="btn" data-go="activity">View activity</button><button class="btn quiet" data-act="dismiss-reorg">Dismiss</button></div></div></div>` : "";
   const c = {
     connecting: `<div class="banner">${icon("info", "i")}<div class="body"><b>Connecting to your node at ${n.node}…</b>Balances below are from the last time this wallet was open.</div></div>`,
-    "node-sync": `<div class="banner net">${icon("clock", "i")}<div class="body"><b>Your node is catching up with the network.</b>Recent payments may be missing until it finishes (${S.nodePct}%). Sending waits until then. ${cap("A", "get_info", "daemon get_info height/target_height")}<div class="bar"><i style="width:${S.nodePct}%"></i></div></div></div>`,
+    "node-sync": `<div class="banner net">${icon("clock", "i")}<div class="body"><b>Your node is catching up with the network.</b>Recent payments may be missing until it finishes (${S.nodePct}%). Sending waits until then. ${cap("B", "get_info sync fields", "Kit exercises get_connections and get_last_block_header, not get_info (TJS-1994)")}<div class="bar"><i style="width:${S.nodePct}%"></i></div></div></div>`,
     scanning: `<div class="banner net">${icon("clock", "i")}<div class="body"><b>Scanning blocks for your payments.</b>Block ${Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}. Balances may still go up. ${cap("A", "refresh", "wallet refresh / rescan_blockchain")}<div class="bar"><i style="width:${S.scanPct}%"></i></div></div></div>`,
     offline: `<div class="banner bad">${icon("alert", "i")}<div class="body"><b>Can't reach your node at ${n.node}.</b>Showing balances from when the wallet last synced. Sending is paused until the node is back. If you use the Meownero test kit, check that it is running. ${cap("C", "offline handling", "GUI state; wallet-rpc refresh failure path not yet exercised in the kit")}<div class="row"><button class="btn" data-act="retry">Try again</button><button class="btn quiet" data-go="node">Node settings</button></div></div></div>`,
     "wrong-net": `<div class="banner bad">${icon("alert", "i")}<div class="body"><b>That node is on a different network.</b>It reports ${NETS[n.other].title}, but this wallet belongs to the ${n.title}. Nothing was loaded from it. Connect to a ${n.tag} node or open a different wallet. ${cap("C", "nettype check", "GUI compares get_info nettype; not exercised in the kit")}<div class="row"><button class="btn" data-go="node">Choose another node</button></div></div></div>`,
@@ -909,7 +916,7 @@ SCREENS.overview = () => {
       ${S.net === "regtest" ? `<button class="btn quiet" data-act="mine">${icon("block")}Get test coins</button>` : ""}
     </div>
   </section>
-  ${b.locked > 0n ? `<p class="small muted">New coins wait before they can be spent: mined coins for ${UNLOCK.mined} blocks, payments and change for ${UNLOCK.in}. ${cap("B", "unlock windows to confirm", "60/10 are upstream defaults; TJS-1994 to confirm for the kit")}</p>` : ""}
+  ${b.locked > 0n ? `<p class="small muted">New coins wait before they can be spent: mined coins for ${UNLOCK.mined} blocks, payments and change for ${UNLOCK.in}. ${cap("A", "unlocked_balance · 60/10 blocks", "Coinbase 60 / received 10 from pinned upstream source; kit mines 70 + 12 (TJS-1994 #3)")}</p>` : ""}
   <h2 class="sec">Recent activity</h2>
   ${recent.length ? `<div class="list">${recent.map(txRow).join("")}</div><div class="row" style="margin-top:8px"><button class="btn quiet" data-go="activity">See all activity</button></div>` : emptyActivity()}`;
 };
@@ -918,28 +925,30 @@ function bigAmount(a) {
   return `${f.int}${f.frac ? `<span class="frac">.${f.frac}</span>` : ""}${f.more ? '<span class="more-digits">…</span>' : ""}<span class="unit">MEOW</span>`;
 }
 function emptyActivity() {
-  return `<div class="empty">${coin()}<b>No payments yet</b>Share your address to receive test coins${S.net === "regtest" ? ", or mine some on your local test chain" : ""}.<div class="row" style="justify-content:center;margin-top:12px"><button class="btn" data-go="receive">Show my address</button>${S.net === "regtest" ? `<button class="btn quiet" data-act="mine">Get test coins</button>` : ""}</div></div>`;
+  return `<div class="empty">${coin()}<b>No payments yet</b>${S.net === "regtest" ? "Mine some test coins, or pay this wallet from another test wallet in your kit." : "Share your address to receive test coins."}<div class="row" style="justify-content:center;margin-top:12px"><button class="btn" data-go="receive">Show my address</button>${S.net === "regtest" ? `<button class="btn quiet" data-act="mine">Get test coins</button>` : ""}</div></div>`;
 }
 function sortedTxs() {
   return [...S.txs].sort((a, b) => (b.height ?? 1e9) - (a.height ?? 1e9));
 }
 function txStatus(tx) {
   if (tx.status === "failed") return `<span class="status failed">${icon("x")}Not sent</span>`;
-  if (tx.status === "unknown") return `<span class="status unknown">${icon("alert")}Checking…</span>`;
+  if (tx.status === "unknown") return `<span class="status unknown">${icon("alert")}Status unknown</span>`;
   const c = conf(tx);
-  if (tx.height == null) return `<span class="status pending">${icon("clock")}Pending</span>`;
+  if (tx.height == null) return `<span class="status pending">${icon("clock")}Waiting to confirm</span>`;
   const need = tx.type === "mined" ? null : UNLOCK[tx.type];
   if (need && c < need) return `<span class="status pending">${c} of ${need} confirmations</span>`;
+  if (tx.type === "out") return `<span class="status done">Confirmed</span>`;
   return `<span class="status done">${c.toLocaleString("en-US")} confirmations</span>`;
 }
 function txTitle(tx) {
   if (tx.type === "mined") return `Mined ${tx.blocks} test block${tx.blocks === 1 ? "" : "s"}`;
   if (tx.type === "in") return "Received";
-  if (tx.status === "unknown") return "Payment result unknown";
+  if (tx.status === "unknown") return "Submission status unknown";
   if (tx.status === "failed") return "Payment not sent";
   return "Sent";
 }
 function txSub(tx) {
+  if (tx.type === "out" && tx.status !== "unknown" && KIT_WALLETS.some(([k]) => k === tx.to)) return `To ${esc(KIT_WALLETS.find(([k]) => k === tx.to)[1])}${tx.note ? " · " + esc(tx.note) : ""}`;
   if (tx.type === "mined") return `Blocks ${tx.firstHeight.toLocaleString("en-US")}–${(tx.firstHeight + tx.blocks - 1).toLocaleString("en-US")}`;
   if (tx.type === "in") return tx.note ? esc(tx.note) : "Sender not shown";
   return `To ${short(addr(tx.to))}${tx.note ? " · " + esc(tx.note) : ""}`;
@@ -955,7 +964,7 @@ SCREENS.activity = () => {
   const txs = sortedTxs();
   return `<div class="ph"><h1>Activity</h1><div class="right"><button class="btn quiet small" data-act="exact" aria-pressed="${S.exact}">${S.exact ? "Shorten amounts" : "Show every digit"}</button></div></div>
   ${conditionBanner()}
-  ${capsLine(cap("A", "get_transfers", "wallet-rpc get_transfers / incoming_transfers"), cap("C", "grouped mined blocks", "GUI groups consecutive block rewards into one row"), cap("C", "local notes", "Notes are stored by the GUI on this computer only"))}
+  ${capsLine(cap("A", "incoming + pool history", "incoming_transfers and get_transfers {pool:true} in the kit"), cap("B", "full history", "Full in/out/failed history via get_transfers not exercised in the kit"), cap("C", "grouped mined blocks", "GUI groups consecutive block rewards into one row"), cap("C", "local notes", "Notes are stored by the GUI on this computer only"))}
   ${txs.length ? `<div class="list">${txs.map(txRow).join("")}</div>` : emptyActivity()}
   <p class="small muted" style="margin-top:12px">Incoming payments don't show who sent them. Notes you add stay on this computer and don't come back when you restore from your recovery words.</p>`;
 };
@@ -966,15 +975,15 @@ function detailSheet(tx) {
     ["Amount", `${amtHTML(a, { exact: true, sign: true })}`],
     tx.type === "out" ? ["Network fee", amtHTML(tx.fee, { exact: true })] : null,
     tx.type === "out" ? ["To", grouped(addr(tx.to))] : null,
-    tx.type === "in" ? ["From", `<span class="muted">Not shown. Meownero payments don't reveal the sender's address.</span>`] : null,
+    tx.type === "in" ? ["From", `<span class="muted">Not shown in this wallet</span>`] : null,
     ["Status", txStatus(tx)],
     ["Block", tx.height == null ? "Not in a block yet" : tx.type === "mined" ? `${tx.firstHeight.toLocaleString("en-US")}–${(tx.firstHeight + tx.blocks - 1).toLocaleString("en-US")}` : tx.height.toLocaleString("en-US")],
     tx.txid ? ["Transaction ID", `<span class="addr">${tx.txid}</span>`] : null,
     ["Note", tx.note ? esc(tx.note) + ' <span class="muted small">(this computer only)</span>' : '<span class="muted">None</span>'],
   ].filter(Boolean);
   return `<h2>${txTitle(tx)}</h2>
-  ${capsLine(cap("A", "get_transfers fields", "amount, fee, height, txid, confirmations"), tx.status === "unknown" ? cap("C", "unknown relay state", "GUI must not mark this sent or failed until the node or wallet confirms") : "")}
-  ${tx.status === "unknown" ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>We don't know yet whether this payment reached the network.</b>The connection dropped while sending. Don't send it again: if it went through, it will confirm here, and if it didn't, it will say “Not sent” and the coins return. The wallet keeps checking with your node.</div></div>` : ""}
+  ${capsLine(cap("B", "get_transfers detail", "Full outgoing detail not exercised in the kit"), tx.status === "unknown" ? cap("C", "submission-unknown state", "TJS-1994 #14: never sent/failed without evidence; reconcile before another payment") : "")}
+  ${tx.status === "unknown" ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>Submission status unknown. Check this payment before trying again.</b>The connection dropped while it was being submitted, so the wallet can't yet tell whether your node received it. New payments wait until the wallet and node agree on what happened.<div class="row"><button class="btn" data-act="reconcile" data-id="${tx.id}">${icon("refresh")}Check with node</button></div></div></div>` : ""}
   <dl class="dl">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
   <div class="foot">${tx.txid ? `<button class="btn" data-act="copy" data-copy="${tx.txid}">${icon("copy")}Copy ID</button>` : ""}<button class="btn primary" data-act="close">Done</button></div>`;
 }
@@ -984,28 +993,28 @@ SCREENS.receive = () => {
   const a = addr("self");
   return `<div class="ph"><h1>Receive</h1></div>
   ${conditionBanner()}
-  ${capsLine(cap("A", "get_address", "primary address from wallet-rpc get_address"), cap("C", "QR rendering", "Standard QR encoder in the GUI; this pattern is not scannable"))}
-  <div class="two">
+  ${capsLine(cap("A", "get_address (exact RPC value)", "Shown exactly as returned: 4… upstream prefix on the current kit (TJS-1994 #2)"), S.net === "regtest" ? cap("C", "no QR or payment link on regtest", "A raw 4… QR is ambiguous outside the GUI and could be scanned by a real Monero wallet (TJS-1994 #2)") : cap("C", "QR rendering", "Standard QR encoder in the GUI; this pattern is not scannable"))}
+  ${S.net === "regtest" ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>Test address only. It uses Monero's address format. Do not send real Monero here.</b>On the local regtest, only other test wallets in your Meownero test kit can pay this address.</div></div>` : ""}
+  <div class="${S.net === "regtest" ? "" : "two"}">
     <div>
       <div class="card">
-        <div class="label muted small" style="margin-bottom:6px">Your ${esc(net().name.toLowerCase())} address</div>
+        <div class="label muted small" style="margin-bottom:6px">Your address · ${esc(net().name)} · test coins only</div>
         ${grouped(a)}
         <div class="row" style="margin-top:14px">
           <button class="btn primary" data-act="copy" data-copy="${a}">${icon("copy")}Copy address</button>
-          <button class="btn" data-act="new-sub" title="Not in the current test kit">New address for each payer</button>
+          <button class="btn" disabled title="Not in this test build">New address for each payer</button>
           ${cap("B", "create_address", "Subaddresses exist upstream; not exercised in the Vanguard kit")}
         </div>
       </div>
-      <p class="small muted" style="margin-top:12px">When comparing, check the coloured groups at the start and end. Payments to this address don't show the sender, and the sender can't see your balance.</p>
-      ${S.net === "regtest" ? `<p class="small muted"><b style="color:var(--fg)">On the local test chain, addresses look like Monero addresses.</b> Only use this one for test coins, and never give it to someone sending real money. ${cap("B", "confusion risk to confirm", "Vanguard regtest uses the upstream 4… prefix; TJS-1994 to rule on mitigation")}</p>` : ""}
+      <p class="small muted" style="margin-top:12px">When comparing, check the coloured groups at the start and end.</p>
       ${S.net === "regtest" ? `<h2 class="sec">Get test coins</h2>
       <div class="card">
-        <p>Your local test chain only makes blocks when asked. Mining 10 blocks pays their test rewards to this wallet.</p>
+        <p>Your local regtest only makes blocks when asked. Mining 10 blocks pays their test rewards to this wallet.</p>
         <p class="small muted">Mined coins can be spent after ${UNLOCK.mined} more blocks. This chain uses upstream test rewards, not Meownero's planned 9 MEOW per 90 seconds.</p>
         <div class="row"><button class="btn" data-act="mine" ${canTransact() ? "" : "disabled"}>${icon("block")}Mine 10 test blocks</button>${cap("A", "generateblocks", "daemon generateblocks {wallet_address, amount_of_blocks}, regtest only")}</div>
       </div>` : `<h2 class="sec">Get test coins</h2><p class="muted">On the testnet, test coins come from mining. A faucet is not planned yet. ${cap("C", "testnet coin source", "No testnet exists yet")}</p>`}
     </div>
-    <div>${qrSVG(a)}<p class="small muted" style="margin-top:8px;text-align:center">Prototype pattern, not scannable</p></div>
+    ${S.net === "regtest" ? "" : `<div>${qrSVG(a)}<p class="small muted" style="margin-top:8px;text-align:center">Prototype pattern, not scannable</p></div>`}
   </div>`;
 };
 function qrSVG(text) {
@@ -1022,17 +1031,20 @@ function qrSVG(text) {
 ROUTES.push(["send", "Send: form and review", "Wallet"]);
 SCREENS.send = () => {
   const s = S.send, b = balances();
-  if (s.step === "sending") return `<div class="ph"><h1>Send</h1></div><div class="card" aria-live="polite"><div class="row"><i class="spin"></i><b>${s.phase === 2 ? "Handing it to your node…" : "Building a private transaction…"}</b></div><p class="small muted" style="margin-top:8px">This can take a few seconds. Keep the wallet open.</p></div>`;
+  if (s.step === "preparing" || s.step === "sending") return `<div class="ph"><h1>Send</h1></div><div class="card" aria-live="polite"><div class="row"><i class="spin"></i><b>${s.step === "sending" ? "Submitting to your node…" : "Preparing the payment…"}</b></div><p class="small muted" style="margin-top:8px">${s.step === "sending" ? "Keep the wallet open. Don't close it until this finishes." : "Building the private transaction so you can review its exact fee. Nothing is sent yet."}</p></div>`;
+  const unknown = S.txs.find((t) => t.status === "unknown");
   if (s.step === "result") return sendResult();
   const e = s.errs;
   return `<div class="ph"><h1>Send</h1></div>
   ${conditionBanner()}
-  ${capsLine(cap("A", "transfer (one recipient)", "wallet-rpc transfer, exercised in the Vanguard kit"), cap("B", "validate_address", "upstream RPC; exercised only in the older chain/ lineage"), cap("C", "exact-input rule", "GUI parser: rejects >12 decimals, never rounds"))}
+  ${capsLine(cap("A", "transfer with do_not_relay", "Prepared without relaying, exercised in the kit (TJS-1994)"), cap("B", "wallet relay_tx after review", "Relay of the reviewed prepared tx; not exercised in the kit"), cap("B", "validate_address literal only", "any_net_type:false, allow_openalias:false (TJS-1994 #12)"), S.net === "regtest" ? cap("C", "kit wallets only", "TJS-1994 #2: regtest sends only to disposable wallets known to the kit session") : "", cap("C", "exact-input rule", "GUI parser: rejects >12 decimals, never rounds"))}
+  ${unknown ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>One payment's submission status is unknown.</b>Check it before sending another, so the same payment isn't made twice.<div class="row"><button class="btn" data-act="detail" data-id="${unknown.id}">Check payment</button></div></div></div>` : ""}
   <form id="sendform" novalidate>
+    ${S.net === "regtest" ? `<div class="field"><div class="label">Pay one of your test wallets</div><div class="row">${KIT_WALLETS.map(([k, label]) => `<button type="button" class="btn" data-act="pick-kit" data-k="${k}" aria-pressed="${s.to === addr(k)}">${esc(label)} <span class="muted small">${short(addr(k))}</span></button>`).join("")}</div></div>` : ""}
     <div class="field">
       <label for="to">To</label>
       <textarea class="input mono" id="to" rows="2" spellcheck="false" autocomplete="off" placeholder="Paste a ${esc(net().name.toLowerCase())} address" aria-invalid="${!!e.to}" aria-describedby="to-msg">${esc(s.to)}</textarea>
-      <div id="to-msg">${e.to ? `<div class="err">${icon("alert")}<span>${e.to}</span></div>` : `<div class="hint">${S.net === "regtest" ? "Test chain addresses start with 4." : "Testnet addresses start with T."} Paste rather than type.</div>`}</div>
+      <div id="to-msg">${e.to ? `<div class="err">${icon("alert")}<span>${e.to}</span></div>` : `<div class="hint">${S.net === "regtest" ? "Only wallets in your Meownero test kit can be paid on the local regtest." : "Testnet addresses start with T. Paste rather than type."}</div>`}</div>
     </div>
     <div class="field">
       <label for="amount">Amount</label>
@@ -1045,7 +1057,7 @@ SCREENS.send = () => {
       <input class="input" id="note" maxlength="80" autocomplete="off" value="${esc(s.note)}" aria-describedby="note-hint">
       <div class="hint" id="note-hint">Saved on this computer only. It isn't sent, and it doesn't come back if you restore from your recovery words.</div>
     </div>
-    <div class="row"><button class="btn primary lg" type="submit" ${canTransact() ? "" : "disabled"}>Review payment</button>${canTransact() ? "" : `<span class="small muted">Sending is paused until your node is connected and synced.</span>`}</div>
+    <div class="row"><button class="btn primary lg" type="submit" ${canTransact() && !unknown ? "" : "disabled"}>Review payment</button>${canTransact() ? "" : `<span class="small muted">Sending is paused until your node is connected and synced.</span>`}</div>
   </form>`;
 };
 function validateSend() {
@@ -1055,7 +1067,8 @@ function validateSend() {
   else if (/[^1-9A-HJ-NP-Za-km-z]/.test(to)) errs.to = "Addresses don't contain 0, O, I or l, spaces or punctuation. Check for a typo.";
   else if (to.length !== 95 && to.length !== 106) errs.to = `This address is incomplete: it has ${to.length} characters, and a full one has 95.`;
   else if (to[0] === "M") errs.to = "That's a Meownero mainnet address. This wallet only sends test coins on the " + n.title + ". Mainnet doesn't exist yet.";
-  else if (to[0] !== n.prefix) errs.to = S.net === "regtest" ? "That's a Meownero testnet address. This wallet is on the local test chain (regtest), so it can't pay it." : "That isn't a Meownero testnet address. It may be a local test chain or Monero address.";
+  else if (to[0] !== n.prefix) errs.to = S.net === "regtest" ? "That's a Meownero testnet address. This wallet is on the local regtest, so it can't pay it." : "That isn't a Meownero testnet address. It may be a local regtest or Monero address.";
+  else if (S.net === "regtest" && to !== addr("self") && !KIT_WALLETS.some(([k]) => addr(k) === to)) errs.to = "That isn't one of the test wallets in your Meownero test kit. On the local regtest you can only pay those wallets. If you meant one of them, pick it above.";
   else if (!Object.values(ADDR[S.net]).includes(to)) errs.to = "This address has a typo somewhere: its checksum doesn't match. Copy it again from the person you're paying.";
   else if (to === addr("self")) errs.to = "That's this wallet's own address.";
   const p = parseAmount(s.amount);
@@ -1069,15 +1082,16 @@ function reviewSheet() {
   const s = S.send;
   return `<h2>Review payment</h2>
   <p class="muted small">Check the address against what the recipient gave you. Payments can't be reversed.</p>
-  ${capsLine(cap("B", "fee preview", "Exact fee before relay needs transfer with do_not_relay + relay_tx; not exercised in the kit. Kit shows the fee after sending."))}
+  ${capsLine(cap("A", "exact fee from prepared tx", "transfer do_not_relay returns the fee of the exact transaction (kit)"), cap("B", "relay the same tx", "wallet relay_tx with the prepared metadata; never rebuilt after approval (TJS-1994 #15)"))}
   <dl class="dl" style="margin-top:14px">
     <dt>You send</dt><dd>${amtHTML(s.parsed, { exact: true })}</dd>
-    <dt>Network fee</dt><dd>${amtHTML(FEE, { exact: true })} <span class="muted small">estimate</span></dd>
+    <dt>Network fee</dt><dd>${amtHTML(FEE, { exact: true })}</dd>
     <dt>Total</dt><dd><b>${amtHTML(s.parsed + FEE, { exact: true })}</b></dd>
     <dt>To</dt><dd>${grouped(s.toClean)}</dd>
     <dt>Network</dt><dd>${esc(net().title)} · test coins</dd>
     ${s.note ? `<dt>Note</dt><dd>${esc(s.note)} <span class="muted small">(this computer only)</span></dd>` : ""}
   </dl>
+  <p class="small muted" style="margin-top:12px">This is the exact payment that will be submitted. If you edit anything, it's prepared again and you review it again.</p>
   <div class="foot"><button class="btn" data-act="close">Edit</button><button class="btn primary" data-act="confirm-send">Send ${amtHTML(s.parsed, { exact: true })}</button></div>`;
 }
 function sendResult() {
@@ -1085,10 +1099,10 @@ function sendResult() {
   if (s.outcome === "rejected") return `<div class="ph"><h1>Send</h1></div>
     <div class="banner bad">${icon("alert", "i")}<div class="body"><b>Your node refused this payment. Nothing was sent.</b>The node said: “double spend: one of the coins was already spent.” This usually means another copy of this wallet spent it, or a recent payment is still settling. Your balance hasn't changed. ${cap("A", "key-image replay refused", "daemon-restore.py: node refuses a replayed key image")}<div class="row"><button class="btn" data-act="send-again">Back to the form</button><button class="btn quiet" data-go="activity">View activity</button></div></div></div>`;
   if (s.outcome === "lost") return `<div class="ph"><h1>Send</h1></div>
-    <div class="banner warn">${icon("alert", "i")}<div class="body"><b>The connection dropped while sending.</b>We can't tell yet whether your node received this payment, so don't send it again. It's in Activity as “Checking…”. If it went through, it will confirm there; if not, it will say “Not sent” and the coins return to your balance. ${cap("C", "relay-unknown state", "Never shown as sent or failed until confirmed; TJS-1994 to rule on detection")}<div class="row"><button class="btn" data-act="detail" data-id="${tx.id}">See payment</button><button class="btn quiet" data-go="overview">Overview</button></div></div></div>`;
+    <div class="banner warn">${icon("alert", "i")}<div class="body"><b>Submission status unknown. Check this payment before trying again.</b>The connection dropped while it was being submitted, so the wallet can't yet tell whether your node received it. It's in Activity as “Status unknown”, and new payments wait until it's resolved. ${cap("C", "submission-unknown state", "TJS-1994 #14: keep the attempt's identity, reconcile before another payment; never auto-retry")}<div class="row"><button class="btn" data-act="detail" data-id="${tx.id}">Check payment</button><button class="btn quiet" data-go="overview">Overview</button></div></div></div>`;
   return `<div class="ph"><h1>Sent</h1></div>
   <div class="card">
-    <div class="row" style="gap:12px"><span class="ico" style="background:var(--net-soft);color:var(--net)">${icon("check")}</span><div><b>${amtHTML(tx.amount, { exact: true })} is on its way.</b><div class="small muted">Waiting for the first confirmation. The recipient can spend it after ${UNLOCK.in} confirmations.</div></div></div>
+    <div class="row" style="gap:12px"><span class="ico" style="background:var(--net-soft);color:var(--net)">${icon("check")}</span><div><b>Submitted ${amtHTML(tx.amount, { exact: true })} to your node.</b><div class="small muted">Waiting for the first confirmation. The recipient can spend it after ${UNLOCK.in} confirmations.</div></div></div>
     <dl class="dl" style="margin-top:16px">
       <dt>Fee paid</dt><dd>${amtHTML(tx.fee, { exact: true })}</dd>
       <dt>To</dt><dd>${grouped(addr(tx.to))}</dd>
@@ -1113,7 +1127,7 @@ function render(animate = true) {
     : `${sidebar()}<main class="main" id="main"><div class="page ${animate ? "page-enter" : ""}">${content}</div></main>`;
   if (focusId && !animate) { const el = document.getElementById(focusId); if (el) { el.focus(); if (el.setSelectionRange && el.value != null) el.setSelectionRange(el.value.length, el.value.length); } }
 }
-function go(route) { S.route = route; if (route === "send" && S.send.step === "result") S.send = freshSend(); closeSheet(); render(); const m = $("#main"); if (m) m.scrollTop = 0; }
+function go(route) { if (S.route === "create-2" && route !== "create-2" && S.onb) S.onb.revealed = false; S.route = route; if (route === "send" && S.send.step === "result") S.send = freshSend(); closeSheet(); render(); const m = $("#main"); if (m) m.scrollTop = 0; }
 
 function openSheet(html) {
   const o = $("#overlay");
@@ -1129,7 +1143,8 @@ const ACTIONS = {
   "about-net"() { openSheet(aboutNetwork()); },
   detail(el) { const tx = S.txs.find((t) => t.id === el.dataset.id); if (tx) openSheet(detailSheet(tx)); },
   copy(el) { navigator.clipboard?.writeText(el.dataset.copy).catch(() => {}); toast("Copied"); },
-  "new-sub"() { toast("Not in this test build yet"); },
+  "pick-kit"(el) { S.send.to = addr(el.dataset.k); delete S.send.errs.to; render(false); },
+  reconcile(el) { const tx = S.txs.find((t) => t.id === el.dataset.id); if (!tx) return; tx.status = undefined; closeSheet(); toast("Your node has it: waiting to confirm"); render(false); },
   mine() {
     if (!canTransact()) return;
     const first = S.tip + 1;
@@ -1141,8 +1156,7 @@ const ACTIONS = {
   max() { const b = balances(); const m = b.unlocked - FEE; S.send.amount = m > 0n ? plain(m) : "0"; S.send.errs = {}; render(false); },
   "confirm-send"() {
     closeSheet();
-    const s = S.send; s.step = "sending"; s.phase = 1; render(false);
-    setTimeout(() => { s.phase = 2; render(false); }, 900);
+    const s = S.send; s.step = "sending"; render(false);
     setTimeout(() => {
       s.outcome = S.sendOutcome; s.step = "result";
       if (s.outcome !== "rejected") {
@@ -1151,7 +1165,7 @@ const ACTIONS = {
         s.txid = id;
       }
       render(false);
-    }, 2000);
+    }, 1400);
   },
   "send-again"() { S.send = freshSend(); render(); },
 };
@@ -1173,7 +1187,7 @@ document.addEventListener("input", (ev) => {
 document.addEventListener("submit", (ev) => {
   if (ev.target.id === "sendform") {
     ev.preventDefault();
-    if (validateSend()) openSheet(reviewSheet());
+    if (validateSend()) { S.send.step = "preparing"; render(false); setTimeout(() => { S.send.step = "form"; render(false); openSheet(reviewSheet()); }, 700); }
     else { render(false); const bad = document.querySelector('#sendform [aria-invalid="true"]'); if (bad) bad.focus(); }
   }
 });
@@ -1204,15 +1218,16 @@ $("#c-route").addEventListener("change", (e) => { const r = e.target.value; if (
 const ROUTE_SETUP = {};
 
 function aboutNetwork() {
-  return S.net === "regtest" ? `<h2>About the local test chain</h2>
-  <p>This wallet is connected to a <b>regtest</b> chain that runs only on your computer, inside the Meownero test kit. Its coins have no value and can't be sold or exchanged.</p>
-  <p>It runs the cryptography Meownero plans to use (FCMP++ and CARROT), with fast test settings. It does not yet use Meownero's planned reward of 9 MEOW every 90 seconds, and its addresses use the upstream format that starts with 4.</p>
+  return S.net === "regtest" ? `<h2>About the local regtest</h2>
+  <p>An isolated, accelerated FCMP++/CARROT test chain. Coins have no value. It runs only inside the Meownero test kit on this computer.</p>
+  <p>This local test uses FCMP++ and CARROT for transaction privacy. It does not establish anonymity or Internet privacy.</p>
+  <p>Its addresses use Monero's format (they start with 4), so never send real Monero to them. Meownero's planned reward of 9 MEOW every 90 seconds isn't applied yet.</p>
   <p class="muted small">A shared Meownero testnet and mainnet don't exist yet. Nothing here launches or joins a public network.</p>
   ${capsLine(cap("A", "local regtest kit", "TJS-1870 accepted kit; build-mac ARM64 container only"))}
   <div class="foot"><button class="btn primary" data-act="close">Got it</button></div>`
   : `<h2>About the Meownero testnet</h2>
-  <p>A shared test network for trying Meownero with other people. Its coins have no value. Testnet addresses start with T.</p>
-  <p class="muted small">Prototype note: this network isn't live. This view shows how the wallet would label it.</p>
+  <p>A future shared test network for trying Meownero with other people. Its coins would have no value.</p>
+  <p class="muted small">Design preview: this network isn't live. The T… addresses come from a provisional spec and are placeholders, not what the current kit produces.</p>
   ${capsLine(cap("C", "testnet not live", "No public testnet exists; identity values from docs/spec/network-identity.md"))}
   <div class="foot"><button class="btn primary" data-act="close">Got it</button></div>`;
 }
@@ -1252,15 +1267,13 @@ function onb(fn) { fn.onboarding = true; return fn; }
 /* ---------- Welcome ---------- */
 ROUTES.unshift(["welcome", "Welcome", "First run"]);
 SCREENS.welcome = onb(() => {
-  const other = NETS[net().other];
   return `${coin("coin hero")}
   <h1>Meownero Wallet</h1>
   <p class="muted">A private wallet for trying Meownero. This build only works with test networks, and test coins have no value.</p>
-  ${capsLine(cap("C", "first-run flow", "GUI flow"), cap("C", "network choice", "GUI reads nettype from the node; only test networks are offered"))}
+  ${capsLine(cap("C", "first-run flow", "GUI flow"), cap("C", "network shown, not chosen", "TJS-1994 #1: no mainnet/testnet switching; the label follows the node's network"))}
   <div class="field" style="margin-top:18px"><div class="label">Network</div>
-    <div class="choice" role="radio" aria-checked="true" tabindex="0"><span class="ico">${icon("flask")}</span><span><b>${esc(net().title)}</b><span class="s">${S.net === "regtest" ? "Runs on this computer with the Meownero test kit" : "Shared test network"}</span></span>${icon("check")}</div>
-    <button class="choice" role="radio" aria-checked="false" disabled><span class="ico">${icon("flask")}</span><span><b>${esc(other.title)}</b><span class="s">${S.net === "regtest" ? "Not live yet" : "For local testing with the test kit"}</span></span><span class="small muted">${S.net === "regtest" ? "Coming later" : ""}</span></button>
-    <div class="hint">Meownero mainnet doesn't exist yet, so this wallet can't hold real coins.</div>
+    <div class="choice" data-selected style="cursor:default"><span class="ico">${icon("flask")}</span><span><b>${esc(net().name)} · Test coins only</b><span class="s">${esc(net().say)}</span></span>${icon("check")}</div>
+    <div class="hint">${S.net === "regtest" ? "A shared Meownero testnet and mainnet don't exist yet, so this wallet can't hold real coins." : "Design preview only: this network isn't live."}</div>
   </div>
   <div class="field"><div class="label">Get started</div>
     <button class="choice" data-go="create-1"><span class="ico">${icon("key")}</span><span><b>Create a new wallet</b><span class="s">You'll write down 25 recovery words</span></span>${cap("A", "create_wallet", "wallet-rpc create_wallet")}</button>
@@ -1288,7 +1301,8 @@ SCREENS["create-2"] = onb(() => {
   const o = S.onb;
   return `${steps(2, 4)}<h1>Write down your recovery words</h1>
   <p class="muted">These 25 words are the only way to get this wallet back if this computer is lost. Write them on paper, in order, with the block number.</p>
-  ${capsLine(cap("A", "query_key mnemonic", "wallet-rpc query_key {key_type: mnemonic}"), cap("C", "no copy button", "Clipboard policy pending TJS-1994"))}
+  ${capsLine(cap("A", "query_key mnemonic (backend)", "wallet-rpc query_key {key_type: mnemonic}; returns the seed without checking a password"), cap("C", "secure reveal", "Hidden until shown, re-hidden on leaving, no copy, capture protection where the OS allows (TJS-1994 #7-9)"))}
+  ${o.revealed ? "" : `<p class="small muted">Before you show them, stop any screen recording or sharing.</p>`}
   ${wordsGrid(SAMPLE, !o.revealed)}
   <div class="banner" style="margin-top:14px">${icon("info", "i")}<div class="body"><b>Also write down: created at block ${(S.tip - 4).toLocaleString("en-US")}</b>Restoring is faster when you know where the wallet starts.</div></div>
   <ul class="small muted" style="margin:0 0 14px;padding-left:18px">
@@ -1353,7 +1367,7 @@ SCREENS["restore-2"] = onb(() => {
   <p class="muted">If you wrote down a block number, enter it. Otherwise the wallet scans the whole chain, which takes longer.</p>
   ${capsLine(cap("A", "restore_height", "restore height passed to restore_deterministic_wallet"), cap("B", "wallet file password", "kit used an empty password"))}
   <form id="onbform" data-next="restore-2" novalidate style="margin-top:14px">
-    <div class="field"><label for="o-height">Created at block <span class="muted" style="font-weight:400">(optional)</span></label><input class="input tnum" id="o-height" name="height" inputmode="numeric" value="${esc(o.height)}" placeholder="for example 1,203" aria-invalid="${!!e.height}">${e.height ? err(e.height) : `<div class="hint">This chain is at block ${S.tip.toLocaleString("en-US")}. A number that's too high can miss payments, so if unsure, leave it empty.</div>`}</div>
+    <div class="field"><label for="o-height">Created at block <span class="muted" style="font-weight:400">(optional)</span></label><input class="input tnum" id="o-height" name="height" inputmode="numeric" value="${esc(o.height)}" placeholder="for example 1,203" aria-invalid="${!!e.height}">${e.height ? err(e.height) : `<div class="hint">This chain is at block ${S.tip.toLocaleString("en-US")}. Use a block before your first payment. If unsure, leave it empty to scan from the start.</div>`}</div>
     <div class="field"><label for="o-name">Wallet name</label><input class="input" id="o-name" name="name" value="${esc(o.name)}" autocomplete="off"></div>
     <div class="field"><label for="o-pw">New password for this computer</label><input class="input" id="o-pw" name="pw" type="password" value="${esc(o.pw)}" autocomplete="new-password" aria-invalid="${!!e.pw}">${e.pw ? err(e.pw) : '<div class="hint">At least 8 characters. It doesn\'t need to match your old password.</div>'}</div>
     <div class="row"><button class="btn" type="button" data-go="restore-1">Back</button><button class="btn primary" type="submit">Restore wallet</button></div>
@@ -1363,9 +1377,9 @@ ROUTES.push(["restore-3", "Restore: scanning", "First run"]);
 SCREENS["restore-3"] = onb(() => {
   const o = S.onb, done = o.scan >= 100;
   return `${steps(3, 3)}<h1>${done ? "Wallet restored" : "Finding your payments…"}</h1>
-  ${capsLine(cap("A", "rescan_blockchain + refresh", "restore then rescan; kit verifies same address, balance and later spend"), cap("A", "notes not restored", "Seed restores on-chain funds, not local notes (tester guide)"))}
+  ${capsLine(cap("A", "rescan_blockchain + refresh", "restore then rescan; kit verifies same address, balances, outputs and later spend"), cap("A", "notes not restored", "Seed restores on-chain funds, not local notes (tester guide, TJS-1994 #13)"), cap("B", "outgoing history after restore", "Full outgoing history recovery not verified in the kit"))}
   ${done ? `<p class="muted">Found 4 payments. Spendable balance ${amtHTML(balances().unlocked)}.</p>
-    <div class="banner" style="margin-top:10px">${icon("info", "i")}<div class="body"><b>Some things don't come back from recovery words.</b>Notes you added to payments were stored on your old computer. Your balance, address and payment history are back.</div></div>
+    <div class="banner" style="margin-top:10px">${icon("info", "i")}<div class="body"><b>Your seed recovers on-chain funds and spending access after scanning.</b>It does not recover local notes, labels or contacts. Those stayed with the old wallet file.</div></div>
     <div class="row" style="margin-top:16px"><button class="btn primary lg" data-act="open-restored">Open wallet</button></div>`
   : `<p class="muted">Scanning block ${Math.round((Number(o.height || 0) + (S.tip - Number(o.height || 0)) * o.scan / 100)).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}. You can leave this open; it continues in the background.</p>
     <div class="bar" style="height:6px"><i style="width:${o.scan}%"></i></div>`}`;
@@ -1391,7 +1405,7 @@ SCREENS.node = () => {
   const st = { synced: "Connected and synced", remote: "Connected and synced", connecting: "Connecting…", "node-sync": "Node catching up", scanning: "Scanning for payments", offline: "Can't reach this node", "wrong-net": "Wrong network" }[S.node];
   return `<div class="ph"><h1>Node</h1></div>
   ${conditionBanner()}
-  ${capsLine(cap("A", "get_info · get_connections", "daemon height, sync and peer count"), cap("A", "local trusted daemon", "kit wallet-rpc uses --trusted-daemon on a local node"), cap("B", "untrusted remote node", "transport evidence only in chain/ lineage, 2026-09-18"))}
+  ${capsLine(cap("A", "get_connections · get_last_block_header", "peer count and tip in the kit"), cap("B", "get_info", "height/target_height/nettype; not exercised in the kit"), cap("A", "explicit --trusted-daemon", "only for the user's own node; never inferred from localhost (TJS-1994 #6)"), cap("C", "how the GUI reaches the kit's node", "Open decision: the kit container is network-disabled; see README handoff"))}
   <div class="card">
     <dl class="dl">
       <dt>Status</dt><dd>${st}</dd>
@@ -1399,16 +1413,16 @@ SCREENS.node = () => {
       <dt>Network</dt><dd>${S.node === "wrong-net" ? `<span style="color:var(--danger)">${esc(NETS[n.other].title)}</span> · this wallet needs ${esc(n.title)}` : esc(n.title)}</dd>
       <dt>Node height</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.node === "node-sync" ? `${Math.round(S.tip * S.nodePct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}` : S.tip.toLocaleString("en-US")}</dd>
       <dt>Wallet scanned to</dt><dd class="tnum">${S.node === "scanning" ? Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US") : S.node === "synced" || remote ? S.tip.toLocaleString("en-US") : "Waiting for node"}</dd>
-      <dt>Peers</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.net === "regtest" ? "1 <span class='muted small'>a local test chain may have none</span>" : "8"}</dd>
-      <dt>Trust</dt><dd>${remote ? "Treated as untrusted" : "Your own node, trusted"}</dd>
+      <dt>Peers</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.net === "regtest" ? "1 <span class='muted small'>a local regtest may have none</span>" : "8"}</dd>
+      <dt>Trust</dt><dd>${remote ? "Untrusted, by your choice" : "Trusted, because you chose your own node"}</dd>
     </dl>
   </div>
   <h2 class="sec">Connect through</h2>
   <div role="radiogroup" aria-label="Node choice">
     <button class="choice" role="radio" aria-checked="${!remote}" data-act="node-local"><span class="ico">${icon("node")}</span><span><b>My own node on this computer</b><span class="s">${S.net === "regtest" ? "The Meownero test kit's node at " + n.node : "Recommended: nothing about your wallet leaves this computer"}</span></span>${!remote ? icon("check") : ""}</button>
-    <button class="choice" role="radio" aria-checked="${remote}" data-act="node-remote"><span class="ico">${icon("node")}</span><span><b>Someone else's node</b><span class="s">Faster to start, but it learns things about you</span></span>${remote ? icon("check") : ""}</button>
+    <button class="choice" role="radio" aria-checked="${remote}" data-act="node-remote" ${S.net === "regtest" ? "disabled" : ""}><span class="ico">${icon("node")}</span><span><b>Someone else's node</b><span class="s">${S.net === "regtest" ? "Not available on the local regtest" : "Faster to start, but it can observe your activity"}</span></span>${remote ? icon("check") : ""}</button>
   </div>
-  ${remote ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>What someone else's node can see</b>Your IP address, when your wallet checks for payments, and that a transaction came from you when you send it. It can't see your balance, your recovery words or who you paid, and it can't spend your coins. ${cap("B", "wording to confirm", "TJS-1994 to confirm exposure list against wallet-transport evidence")}</div></div>` : ""}
+  ${remote ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>What someone else's node can observe</b>An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata. ${cap("B", "--untrusted-daemon", "Explicit untrusted mode; current-lineage execution unverified (TJS-1994 #6, #11)")}</div></div>` : ""}
   <div class="choice" aria-disabled="true" style="opacity:.6"><span class="ico">${icon("lock")}</span><span><b>Through Tor or I2P</b><span class="s">Not available in this test build</span></span>${cap("C", "Tor/I2P untested", "No Tor/I2P evidence in the project")}</div>`;
 };
 
@@ -1428,12 +1442,12 @@ SCREENS.wallet = () => `<div class="ph"><h1>Wallet</h1></div>
   <div class="card">
     <p><b>Meownero Wallet</b> · design prototype, no release yet</p>
     <dl class="dl small">
-      <dt>Works today</dt><dd>Create and restore a wallet, receive and send test coins to one recipient, balance and history, getting test coins on the local test chain.</dd>
-      <dt>Not yet</dt><dd>Separate addresses per payer, sending to several people at once, Tor or I2P, hardware wallets, mainnet.</dd>
-      <dt>Engine</dt><dd>Meownero's wallet and node programs, pinned to the FCMP++ and CARROT test lineage.</dd>
+      <dt>Engine today</dt><dd>In the current test kit, the wallet engine can create and restore a wallet, receive, send a payment, report balances and incoming history, and mine test coins on the local regtest. This desktop app itself is a prototype.</dd>
+      <dt>Not yet</dt><dd>Separate addresses per payer, send-max, a full payment history, other people's nodes, Tor or I2P, hardware wallets, a shared testnet, mainnet.</dd>
+      <dt>Engine</dt><dd>Upstream wallet and node programs from the FCMP++/CARROT test branch, pinned for the Vanguard kit. Meownero's own reward schedule isn't applied yet.</dd>
       <dt>Computers</dt><dd>Builds for macOS, Windows and Linux are planned. None has been tested or signed yet.</dd>
     </dl>
-    ${capsLine(cap("A", "kit capabilities only", "Works-today list limited to tier A"), cap("C", "packaging targets", "No native GUI build exists; status from execution evidence only"))}
+    ${capsLine(cap("A", "kit capabilities only", "Engine-today list limited to tier A backend behaviour"), cap("C", "packaging targets", "No native GUI build exists; status from execution evidence only"))}
   </div>
   <div class="row" style="margin-top:18px"><button class="btn" data-go="welcome">Create or restore another wallet</button></div>`;
 
