@@ -1,5 +1,19 @@
 # TJS-1993 preserved Docker writer handoff
 
+## Latest wake check, run c7717490
+
+The repeated wake `5241496c` is already covered by completed run `bd99c8ae`. Fresh authenticated readbacks confirm TJS-1993 and TJS-1882 both have `executionBlocker=null`, and TJS-1993 has `unblockDescriptor=null`. The admin-call asks remain withdrawn. The single handoff `edac8355` and lead resubmission `05dd5db9` remain persisted. This heartbeat did not replay either action.
+
+The original reviewer persisted source-only CLEAR for exact `598296e` in TJS-1882 comment `5df1d879-4df4-4654-816b-e53aa5922774` at 18:40:57 UTC. It reports 85 passing source controls and no new blocking Docker source defect. These are the reviewer's results; this heartbeat did not rerun them or claim image or wallet acceptance. Review run `36ee3e02` is terminal, cancelled with `issue_reassigned` and acknowledged reassignment settlement.
+
+The current lifecycle differs from the reviewer's stated intent to return runtime work to the writer. TJS-1882 is `in_review`, original stage `82aa96f6` is pending, and TJ is its current participant. Stored return assignee remains original writer `92a7b4f2`. The issue has no active execution run. Parent owns the normal follow-up routing and remaining bounded exact-source image build, full wallet/deadline/live-signal verification and website-only distribution. The recovery task is complete; it does not hold those product gates open.
+
+Evidence is `research/evidence/preserved-docker-writer-tjs1993-2026-10-10/wake-c7717490.json`, SHA256 `39e790bfa9e0fa30f895e4d5cc46c8231fc949ce7e3f20bbd30733e1c0645e97`. Public authenticated reads succeeded. Shorter loopback reads timed out for the issue endpoints, while the execution endpoint succeeded. No lease release, replacement source writer, build, process signal, runtime edit or additional handoff occurred. Native CI pause, separate GUI track, accepted 3/7 artifacts and cancelled/unaccepted diagnostic attempt03 remain preserved.
+
+Observed behavior: a source-only CLEAR comment and a settled reviewer run do not establish that the live stage returned to the writer. Read the stage participant as well as the verdict.
+
+Needs TJ: no new operator call for this completed recovery. TJS-1882's remaining stage routing belongs to the parent.
+
 ## Current outcome, run bd99c8ae
 
 The stranded lease boundary is resolved. Board user comment `5241496c-8296-49c8-b3a9-98c6694137a5` records the supported guarded release of only `e9766e27` at 18:13:21 UTC. This run did not repeat the release. Fresh authenticated TJS-1882 readback independently confirms `executionBlocker=null`. The earlier admin-call ask and obsolete unblock descriptor are withdrawn. No saved confirmation card exists on this issue to withdraw.

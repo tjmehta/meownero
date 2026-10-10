@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "observerRunId": "c7717490-eba7-45c2-838a-98f3c4ccf602",
+  "observedAt": "2026-10-10T18:46:38.689667+00:00",
+  "wakeCommentId": "5241496c-8296-49c8-b3a9-98c6694137a5",
+  "scope": "Verify this repeated wake against completed recovery and normal handoff; do not replay completed mutations.",
+  "priorCompletedEvidence": {
+    "path": "continuation-bd99c8ae.json",
+    "sha256": "1f4b8cba5d96574ac68039fd6729b3983a2b77f8ada47c0bba85934a7794049b"
+  },
+  "currentIssueReadback": {
+    "observedAt": "2026-10-10T18:44:35.999111+00:00",
+    "http": 200,
+    "route": "/api/issues/3a0ac555-9f64-47a9-b3c6-06bf8e723e98",
+    "issue": {
+      "id": "3a0ac555-9f64-47a9-b3c6-06bf8e723e98",
+      "identifier": "TJS-1993",
+      "status": "in_progress",
+      "statusVersion": 7,
+      "assigneeAgentId": "ada67281-e9b5-46b1-9916-bd17d7107895",
+      "assigneeUserId": null,
+      "executionRunId": "c7717490-eba7-45c2-838a-98f3c4ccf602",
+      "checkoutRunId": "c7717490-eba7-45c2-838a-98f3c4ccf602",
+      "executionBlocker": null,
+      "unblockDescriptor": null,
+      "updatedAt": "2026-10-10T18:44:05.235Z"
+    }
+  },
+  "dockerIssueReadback": {
+    "observedAt": "2026-10-10T18:44:52.532295+00:00",
+    "http": 200,
+    "route": "/api/issues/e7cb422f-9c00-46f6-b0c3-decce627b08e",
+    "issue": {
+      "id": "e7cb422f-9c00-46f6-b0c3-decce627b08e",
+      "identifier": "TJS-1882",
+      "status": "in_review",
+      "statusVersion": 21,
+      "assigneeAgentId": null,
+      "assigneeUserId": "i8kKA7gZQTYonsrDUOqNkl5cXKExD7O9",
+      "executionRunId": null,
+      "checkoutRunId": null,
+      "executionBlocker": null,
+      "unblockDescriptor": null,
+      "updatedAt": "2026-10-10T18:40:57.917Z"
+    },
+    "stage": {
+      "status": "pending",
+      "currentStageId": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+      "currentParticipant": {
+        "type": "user",
+        "userId": "i8kKA7gZQTYonsrDUOqNkl5cXKExD7O9",
+        "agentId": null
+      },
+      "returnAssignee": {
+        "type": "agent",
+        "userId": null,
+        "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09"
+      },
+      "lastDecisionId": "89d9bc2f-10ab-43f1-a505-14acadfe5d8f",
+      "lastDecisionOutcome": "changes_requested",
+      "changesRequestedCount": 3,
+      "completedStageIds": []
+    }
+  },
+  "reviewRunReadback": {
+    "observedAt": "2026-10-10T18:45:43.448902+00:00",
+    "http": 200,
+    "route": "/api/heartbeat-runs/36ee3e02-90cc-4c1f-a7ce-0c98052e5571",
+    "run": {
+      "id": "36ee3e02-90cc-4c1f-a7ce-0c98052e5571",
+      "agentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+      "status": "cancelled",
+      "startedAt": "2026-10-10T18:30:23.463Z",
+      "finishedAt": "2026-10-10T18:40:28.610Z",
+      "error": "Cancelled before issue reassignment",
+      "errorCode": "issue_reassigned",
+      "resultJson": {
+        "stopReason": "cancelled",
+        "timeoutFired": false,
+        "timeoutSource": "config",
+        "timeoutConfigured": true,
+        "effectiveTimeoutSec": 3600,
+        "executionCancellation": {
+          "state": "acknowledged",
+          "acknowledgedAt": "2026-10-10T18:40:28.610Z"
+        },
+        "conversationContinuation": "continue_conversation_v1",
+        "reassignmentStopConfirmed": true
+      }
+    }
+  },
+  "dockerExecutionReadback": {
+    "observedAt": "2026-10-10T18:45:06.934890+00:00",
+    "http": 200,
+    "route": "/api/issues/e7cb422f-9c00-46f6-b0c3-decce627b08e/execution",
+    "transport": "same-board-loopback",
+    "data": {
+      "runId": "36ee3e02-90cc-4c1f-a7ce-0c98052e5571",
+      "agentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+      "recoveryAction": null,
+      "execution": {
+        "phase": "failed",
+        "label": "Cancelled",
+        "cause": "issue_reassigned",
+        "lastConfirmedActivityAt": "2026-10-10T18:40:29.086Z",
+        "retryAt": null,
+        "attempt": 1,
+        "maxAttempts": 3,
+        "recoveryOwner": null,
+        "nextAction": null,
+        "permittedActions": [
+          "inspect_run"
+        ],
+        "predecessorRunId": null,
+        "successorRunId": null
+      }
+    }
+  },
+  "persistedCommentsReadback": {
+    "observedAt": "2026-10-10T18:45:42.867501+00:00",
+    "http": 200,
+    "route": "/api/issues/e7cb422f-9c00-46f6-b0c3-decce627b08e/comments?limit=10",
+    "selectedComments": [
+      {
+        "id": "edac8355-7baa-421a-ba51-f37d776d9aa3",
+        "authorAgentId": "ada67281-e9b5-46b1-9916-bd17d7107895",
+        "authorUserId": null,
+        "createdByRunId": "bd99c8ae-89fb-4be8-aa48-cf418b9999f6",
+        "createdAt": "2026-10-10T18:27:13.548Z",
+        "body": "Lease recovery is complete; hand off the corrected source for original review.\n\n[@platform engineer](agent://92a7b4f2-787b-4cbb-954e-46831397ab09), use the normal current-run lifecycle to submit exact candidate `598296e0a68ccedf32657bee05c8b6beb35f47dd` through original stage `82aa96f6-a7bf-422f-afe7-8d1cb3b2626a`, reviewer `ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6`. The source work is already finished in the preserved writer. Findings should return there. Do not submit predecessor `823d1fe` or repeat source writing/builds.\n\n- [Parent recovery and correction update](/TJS/issues/TJS-1993#comment-5241496c-8296-49c8-b3a9-98c6694137a5) confirms the supported release at 18:13:21 UTC. Fresh authenticated issue readback independently shows `executionBlocker=null`, unchanged assignee and the original review stage. The obsolete admin-call ask is withdrawn.\n- Independently verified the preserved native writer at `w1XK:p5`, PID `405325`, thread `01a126be-22c3-7c71-a83e-077777c7e5d1`, state `done`; its worktree HEAD is `598296e`. All 21 frozen source bindings and ZIP readback pass. The writer and parent report 23 source controls passing, including ordinary create/start and exact owned cleanup.\n- Exact packet `/storage/data/meownero-tjs1882-docker-candidate02-source/corrected-source-598296e.zip`: 57,728 bytes, 25 members, SHA256 `5fd3a9158834884c5ce4eb2d25d5476d826f411a53af9e2b3266e1e01925da9f`. Binding file is adjacent `source-freeze.json`, SHA256 `2d5d9809a0ba871b7b8d2e016e7218917b2216107ffb12a11abd29d7777d196f`. Upload/adopt this exact packet through the normal review handoff.\n\nSource/image/journey acceptance remains open. After original source clearance, parent retains the bounded actual image, wallet/payment/restore/later-spend/CLI, five-second deadline and genuinely live interruption cleanup gates. Diagnostic attempt03 remains cancelled and unaccepted. Native CI stays paused; accepted 3/7 artifacts and the separate GUI track remain preserved; distribution is website-only with no more group attachments. No expired writer credentials or lease/runtime changes are needed.",
+        "bodySha256": "797ac3952ab2b9f913cc7881b4139de51dc6b1b600cf8c4585f71b82a7b850b8"
+      },
+      {
+        "id": "05dd5db9-954e-49e7-86af-042a6c5f4cb7",
+        "authorAgentId": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+        "authorUserId": null,
+        "createdByRunId": "fbd3c757-d3e3-4cfd-be47-7051c1e94eec",
+        "createdAt": "2026-10-10T18:29:25.236Z",
+        "body": "Resubmitting exact candidate `598296e0a68ccedf32657bee05c8b6beb35f47dd` to the original stage 82aa96f6 (reviewer ec85048c, return writer 92a7b4f2). The writer finished it at 18:12 UTC, but its run 7b1748f7 was orphaned, so its own upload and `in_review` writes returned 409. This lead run made the handoff instead.\n\n- **Packet:** [corrected-source-598296e.zip](/api/attachments/6e45c6e6-353b-4ff4-b66c-8e1ebe664900/content), 57,728 bytes, SHA256 `5fd3a9158834884c5ce4eb2d25d5476d826f411a53af9e2b3266e1e01925da9f`. All 21 `source/` members are byte-equal to `git show 598296e:<path>`. `run.py` is `373d7808\u2026`.\n- **Lead check:** the `run.py` diff only renames the main-scope `proof` locals to `inspection`, so `owned()` calls the imported function again. `test-lifecycle.py` passes 23/23 at this commit, including ordinary create/start. These are fixture seams only: no image, Docker container or runtime.\n- **Review scope (parent d880751e):** a complete audit of the Docker source, receipts, privacy and cleanup. The bounded image build, wallet journey, five-second deadline and live-interruption cleanup follow source clearance.\n- **3c80885c asks:** closed as superseded. TJ asked for Docker at 16:35, and the parent paused new native CI at 16:38. The writer has already adopted the ARM12 cause (`sys/mman.h`). Lead decision, TJ may reverse: the Linux diagnostic, i68630 and ARM successors stay paused until the Docker candidate is accepted.\n- **Preservation:** `vanguard/docker/__pycache__/` was present at 18:16 UTC and is gone now. This run did not remove it. The two untracked evidence JSONs are still in place.\n",
+        "bodySha256": "c4344963ad25b7ebaaf27acf1b92494e027a7cd60d8395804ca68420abb70c91"
+      },
+      {
+        "id": "5df1d879-4df4-4654-816b-e53aa5922774",
+        "authorAgentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+        "authorUserId": null,
+        "createdByRunId": "36ee3e02-90cc-4c1f-a7ce-0c98052e5571",
+        "createdAt": "2026-10-10T18:40:57.824Z",
+        "body": "Source-only CLEAR for exact `598296e0a68ccedf32657bee05c8b6beb35f47dd`; no new blocking Docker source defect. Full-stage release remains OPEN, so this normal `request_changes` decision returns the uncompleted runtime/distribution requirements to stored writer `92a7b4f2` through the original stage `82aa96f6`.\n\n- Original reviewer `ec85048c` is working in run `36ee3e02`, Codex PID `1321399`, pane `w1XK:p7`. This is an actual source audit, not an accepted wake alone.\n- Exact local packet SHA256 `5fd3a9158834884c5ce4eb2d25d5476d826f411a53af9e2b3266e1e01925da9f`: 25 safe regular members, 24 internal bindings and 21 committed source bindings PASS. Authenticated attachment readback timed out.\n- 85/85 source controls PASS: 23 lifecycle, 16 capacity/native reserve, 40 linker/privacy, six independent identity/public-receipt controls. F1-F4 and ordinary successful create/start shadowing are CLEAR at source level. All fixture seams are retained; no image or native journey was run.\n- Pending comments `458e93ea` and `449b3485` are addressed. Separate Docker recipe/entrypoint exists; exact source/Rust/dependency/base/APT pins, complete notices, contained cgroup headroom and historical host reserve remain. The exact recovery audit hash matches. Actual Docker build/runtime acceptance remains absent.\n- Parent owns the bounded exact-source image build and full receive/payment/restore/later-spend/CLI, real five-second deadline/live-interruption cleanup, then website-only distribution. Do not repeat source repair or diagnostic attempt03. Keep accepted 3/7 artifacts, immutable failures and native CI pause; no more group attachments.\n- Product HEAD, tracked status and both pre-existing untracked evidence hashes are unchanged. Reviewer report and JSONs are saved in this run's review directory; API upload/decision recording remains subject to successful readback.\n",
+        "bodySha256": "e89dd0198fe724ec4c6c72a5f2c761f674d853adca64eb043e1d18c123b7c79e"
+      }
+    ]
+  },
+  "interpretation": {
+    "recovery": "Complete. Both issue ownership blockers and this issue obsolete unblock descriptor are null. Prior withdrawal and one handoff remain completed.",
+    "review": "Original reviewer persisted exact 598296e source-only CLEAR and reported 85 passing source controls. This heartbeat did not repeat tests or claim actual image/runtime acceptance.",
+    "liveStage": "Original stage 82aa96f6 is pending with TJ as current participant; original writer 92a7b4f2 remains return assignee. The actual current state is distinguished from the reviewer comment intended return to writer. No runtime owner is currently active in the retrieved issue projection.",
+    "nextOwner": "Parent retains normal follow-up stage routing, bounded exact-source image build, full wallet/deadline/live-signal verification and website-only distribution.",
+    "preserved": "Native CI pause, separate GUI track, accepted 3/7 artifacts, cancelled/unaccepted diagnostic attempt03.",
+    "mutationsThisHeartbeat": "Evidence documentation and own issue completion only. No lease release, new source writer, Docker build, source-review resubmission, runtime change, process signal or extra handoff."
+  }
+}
