@@ -1,0 +1,52 @@
+import QtQuick
+import QtQuick.Controls.Basic
+import QtQuick.Layouts
+
+// A large choice row. As a radio it is one Tab stop in its group; the group
+// moves the choice with the arrow keys (D14). Picking never applies anything.
+AbstractButton {
+    id: control
+    property string title: ""
+    property string subtitle: ""
+    property string iconName: "node"
+    property bool radio: false
+    property bool selectedLook: radio && checked
+    Layout.fillWidth: true
+    Layout.bottomMargin: 10
+    checkable: radio
+    focusPolicy: radio ? (checked ? Qt.StrongFocus : Qt.NoFocus) : Qt.StrongFocus
+    opacity: enabled ? 1 : 0.55
+    padding: 14
+    implicitHeight: row.implicitHeight + 28
+    Accessible.role: radio ? Accessible.RadioButton : Accessible.Button
+    Accessible.name: title
+    Accessible.description: subtitle
+    Accessible.checkable: radio
+    Accessible.checked: radio && checked
+    Keys.onReturnPressed: if (!radio && enabled) clicked()
+    Keys.onEnterPressed: if (!radio && enabled) clicked()
+
+    contentItem: RowLayout {
+        id: row
+        spacing: 12
+        Rectangle {
+            Layout.preferredWidth: 36; Layout.preferredHeight: 36
+            radius: 8
+            color: Theme.netSoft
+            Icon { anchors.centerIn: parent; name: control.iconName; size: 16; color: Theme.net }
+        }
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 2
+            Text { Layout.fillWidth: true; text: control.title; font.pointSize: Theme.pt(14); font.weight: Font.DemiBold; color: Theme.fg; wrapMode: Text.Wrap; Accessible.ignored: true }
+            Text { Layout.fillWidth: true; visible: text !== ""; text: control.subtitle; font.pointSize: Theme.pt(12.5); color: Theme.muted; wrapMode: Text.Wrap; Accessible.ignored: true }
+        }
+        Icon { visible: control.selectedLook; name: "check"; size: 18; color: Theme.net }
+    }
+    background: Rectangle {
+        radius: Theme.cardRadius
+        color: control.hovered && control.enabled ? Theme.surface2 : Theme.surface
+        border.width: control.visualFocus ? 2 : (control.selectedLook ? 2 : 1)
+        border.color: control.visualFocus || control.selectedLook ? Theme.net : Theme.borderStrong
+    }
+}

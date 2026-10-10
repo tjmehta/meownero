@@ -1480,6 +1480,7 @@ QString WalletController::diagnostics() const
           << QStringLiteral("qt=%1").arg(QString::fromLatin1(qVersion()))
           << QStringLiteral("os=%1 %2").arg(QSysInfo::prettyProductName(), QSysInfo::currentCpuArchitecture())
           << QStringLiteral("network=%1").arg(networkKey())
+          << QStringLiteral("reduced_motion=%1").arg(reducedMotion() ? 1 : 0)
           << QStringLiteral("node_state=%1").arg(m_nodeState)
           << QStringLiteral("chain_tip=%1").arg(m_ledger.tip)
           << QStringLiteral("wallet_loaded=%1 locked=%2").arg(m_hasWallet).arg(m_locked)

@@ -37,7 +37,7 @@ QHash<int, QByteArray> ActivityModel::roleNames() const
             {SubtitleRole, "subtitle"},     {AmountTextRole, "amountText"},
             {MoreDigitsRole, "moreDigits"}, {AmountAccessibleRole, "amountAccessible"},
             {StatusTextRole, "statusText"}, {StatusKindRole, "statusKind"},
-            {IconRole, "icon"}};
+            {IconRole, "iconKey"}};
 }
 
 void ActivityModel::refresh()

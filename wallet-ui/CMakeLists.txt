@@ -21,6 +21,7 @@ target_link_libraries(wallet_core PUBLIC Qt6::Core Qt6::Gui Qt6::Qml)
 target_compile_options(wallet_core PRIVATE -Wall -Wextra -Werror=return-type)
 
 qt_add_executable(meownero-wallet src/main.cpp)
+set_source_files_properties(qml/Theme.qml qml/UiState.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 qt_add_qml_module(meownero-wallet
     URI Meownero
     VERSION 1.0
@@ -47,6 +48,16 @@ qt_add_qml_module(meownero-wallet
         qml/WalletPage.qml
         qml/OnboardingPage.qml
         qml/WordsGrid.qml
+        qml/Icon.qml
+        qml/Spinner.qml
+        qml/ActivityList.qml
+        qml/ChoiceItem.qml
+        qml/DefRow.qml
+        qml/SectionLabel.qml
+        qml/DetailDialog.qml
+        qml/Field.qml
+        qml/UiState.qml
+        qml/PageBase.qml
         qml/ReviewerFixtures.qml
 )
 target_link_libraries(meownero-wallet PRIVATE wallet_core Qt6::Quick Qt6::QuickControls2)
