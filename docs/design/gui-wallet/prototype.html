@@ -902,6 +902,7 @@ function renderChrome() {
     ${S.net === "testnet" ? cap("C", "testnet not live; T… prefix from spec", "The Meownero testnet does not exist yet. T… addresses come from docs/spec/network-identity.md, not from the current kit.") : cap("A", "regtest via Vanguard kit", "Current accepted kit (TJS-1870) runs an accelerated local regtest. Its addresses use the upstream 4… prefix.")}
     <button class="more" data-act="about-net">What does this mean?</button>`;
   document.querySelectorAll("[data-ctl]").forEach((g) => g.querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(S[g.dataset.ctl] === b.dataset.v))));
+  $('#c-node option[value="remote"]').disabled = S.net === "regtest";
   $("#c-node").value = S.node; $("#c-story").value = S.storyKind; $("#c-route").value = S.route;
   $("#c-fill").hidden = S.route !== "send";
 }
@@ -1226,6 +1227,7 @@ function openSheet(html, { wide = false } = {}) {
   if (!o.classList.contains("open")) sheetReturn = document.activeElement;
   o.innerHTML = `<div class="scrim" data-act="close"></div><div class="sheet${wide ? " wide" : ""}" role="dialog" aria-modal="true" aria-labelledby="sheet-title">${html}</div>`;
   const h = o.querySelector(".sheet h2"); if (h) h.id = "sheet-title";
+  const d = o.querySelector(".sheet [data-desc]"); if (d) { d.id = "sheet-desc"; o.querySelector(".sheet").setAttribute("aria-describedby", "sheet-desc"); }
   o.classList.add("open"); o.setAttribute("aria-hidden", "false");
   BEHIND.forEach((q) => { $(q).inert = true; });
   const f = o.querySelector(".sheet input, .sheet .btn.primary, .sheet button"); if (f) f.focus();
@@ -1308,7 +1310,12 @@ document.addEventListener("click", (ev) => {
   const c = ev.target.closest("[data-c]");
   if (c) { CONTROLS[c.dataset.c]?.(); return; }
   const seg = ev.target.closest("[data-ctl] button");
-  if (seg) { const k = seg.parentElement.dataset.ctl; S[k] = seg.dataset.v; if (k === "net") { S.send = freshSend(); S.nodePick = null; } render(false); }
+  if (seg) {
+    const k = seg.parentElement.dataset.ctl; S[k] = seg.dataset.v;
+    // The local regtest never uses someone else's node (D5), even when the reviewer switches networks.
+    if (k === "net") { S.send = freshSend(); S.nodePick = null; if (S.net === "regtest" && S.node === "remote") S.node = "synced"; }
+    render(false);
+  }
 });
 document.addEventListener("input", (ev) => {
   const t = ev.target;
@@ -1593,10 +1600,21 @@ SCREENS.node = () => {
     <button class="choice" role="radio" aria-checked="${!far}" tabindex="${far ? -1 : 0}" data-act="node-pick" data-v="local"><span class="ico">${icon("node")}</span><span><b>My own node on this computer</b><span class="s">${S.net === "regtest" ? "The Meownero test kit's node at " + n.node : "Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network."}</span></span>${!far ? icon("check") : ""}</button>
     <button class="choice" role="radio" aria-checked="${far}" tabindex="${far ? 0 : -1}" data-act="node-pick" data-v="remote" ${S.net === "regtest" ? "disabled" : ""}><span class="ico">${icon("node")}</span><span><b>Someone else's node</b><span class="s">${S.net === "regtest" ? "Not available on the local regtest" : "Faster to start, but it can observe your activity"}</span></span>${far ? icon("check") : ""}</button>
   </div>
-  ${far !== remote ? `<div class="row" style="margin-bottom:10px"><button class="btn primary" data-act="node-apply">Connect to ${far ? "someone else's node" : "my own node"}</button><button class="btn quiet" data-act="node-cancel">Keep current node</button><span class="small muted">Nothing changes until you connect.</span></div>` : ""}
-  ${far ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>What someone else's node can observe</b>An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata. ${cap("B", "--untrusted-daemon", "Explicit untrusted mode; current-lineage execution unverified (TJS-1994 #6, #11)")}</div></div>` : ""}
+  ${remote ? `<div class="banner warn">${icon("alert", "i")}<div class="body"><b>What someone else's node can observe</b>${REMOTE_EXPOSURE} ${cap("B", "--untrusted-daemon", "Explicit untrusted mode; current-lineage execution unverified (TJS-1994 #6, #11)")}</div></div>` : ""}
+  ${far !== remote ? `<div class="row" style="margin-bottom:10px"><button class="btn primary" data-act="node-apply">${far ? "Connect to someone else's node…" : "Connect to my own node"}</button><button class="btn quiet" data-act="node-cancel">Keep current node</button><span class="small muted">Nothing changes until you connect.</span></div>` : ""}
   <div class="choice" aria-disabled="true" style="opacity:.6"><span class="ico">${icon("lock")}</span><span><b>Through Tor or I2P</b><span class="s">Not available in this test build</span></span>${cap("C", "Tor/I2P untested", "No Tor/I2P evidence in the project")}</div>`;
 };
+
+// Approved wording (TJS-1994 #11). Shown in full before the user connects, and while connected.
+const REMOTE_EXPOSURE = "An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata.";
+// Connecting to someone else's node asks first, in a dialog, so the explanation is in view whatever the scroll position (studio review R-A).
+function remoteNodeSheet() {
+  return `<h2>Connect to someone else's node?</h2>
+  <p data-desc>${REMOTE_EXPOSURE}</p>
+  <dl class="dl small"><dt>Node</dt><dd>node.example-test.org:29081</dd><dt>Trust</dt><dd>Untrusted, by your choice</dd></dl>
+  ${capsLine(cap("B", "--untrusted-daemon", "Explicit untrusted mode; current-lineage execution unverified (TJS-1994 #6, #11)"))}
+  <div class="foot"><button class="btn" data-act="node-cancel">Keep current node</button><button class="btn primary" data-act="node-confirm">Connect to someone else's node</button></div>`;
+}
 
 /* ---------- Wallet settings ---------- */
 ROUTES.push(["wallet", "Wallet, backup and about", "Wallet"]);
@@ -1645,9 +1663,14 @@ Object.assign(ACTIONS, {
   },
   "open-new"() { Object.assign(S, story("empty")); S.created = S.tip - 4; S.onb = onbFresh(); go("overview"); },
   "open-restored"() { Object.assign(S, story("normal")); S.onb = onbFresh(); go("overview"); },
-  "node-pick"(el) { S.nodePick = el.dataset.v; render(false); },
-  "node-apply"() { setNode(S.nodePick === "remote" ? "remote" : "synced"); $('#app [role="radio"][aria-checked="true"]').focus(); },
-  "node-cancel"() { S.nodePick = null; render(false); $('#app [role="radio"][aria-checked="true"]').focus(); },
+  // Picking adds the Connect row; scroll it into view without moving focus off the choice.
+  "node-pick"(el) { S.nodePick = el.dataset.v; render(false); $('#app [data-act="node-apply"]')?.parentElement.scrollIntoView({ block: "nearest" }); },
+  "node-apply"() {
+    if (S.nodePick === "remote") return openSheet(remoteNodeSheet());
+    setNode("synced"); $('#app [role="radio"][aria-checked="true"]').focus();
+  },
+  "node-confirm"() { closeSheet(false); setNode("remote"); $('#app [role="radio"][aria-checked="true"]').focus(); },
+  "node-cancel"() { closeSheet(false); S.nodePick = null; render(false); $('#app [role="radio"][aria-checked="true"]').focus(); },
   "show-seed"() { openSheet(seedPasswordSheet()); },
   na() { toast("Not in this test build yet"); },
 });

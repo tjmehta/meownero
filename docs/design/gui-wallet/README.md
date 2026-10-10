@@ -1,6 +1,6 @@
 # Meownero desktop wallet: concept and prototype
 
-Design candidate for TJS-1992 (2026-10-10), revision 4. [`prototype.html`](prototype.html)
+Design candidate for TJS-1992 (2026-10-10), revision 5. [`prototype.html`](prototype.html)
 is a self-contained interactive prototype: open it in any current browser. It
 uses mock data only, talks to no node or wallet, and has no remote fonts,
 scripts or tracking. It is not a release and does not describe tested software.
@@ -74,7 +74,7 @@ outgoing, grouped mined blocks), and balance (spendable, unlocking, total).
 | New wallet | name and password → recovery words (hidden until revealed, hidden again on leaving, no copy) → word check → ready |
 | Restore | words (count, word list and check-word errors) → starting block (future-block error) and new password → scanning → restored, with the note that local notes do not return |
 | Wallet file | locked ↔ unlocked; wrong password error |
-| Node and engine | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending and test-coin mining paused); wrong network or incompatible node version (nothing loaded); wallet engine stopped, or engine refused the app's credentials (sending paused, restart offered). Every paused reason names the part at fault, node or wallet engine, and the Node screen has its own status text for each state. Someone else's node: explicitly untrusted, exposure explained before connecting, not offered on the local regtest. A node change applies only on an explicit Connect; picking a choice, by click or arrow key, changes nothing until then |
+| Node and engine | connecting → node catching up → wallet scanning → synced; unreachable (last-known balance, sending and test-coin mining paused); wrong network or incompatible node version (nothing loaded); wallet engine stopped, or engine refused the app's credentials (sending paused, restart offered). Every paused reason names the part at fault, node or wallet engine, and the Node screen has its own status text for each state. Someone else's node: explicitly untrusted and not offered on the local regtest. A node change applies only on an explicit Connect; picking a choice, by click or arrow key, changes nothing until then. "Connect to someone else's node…" opens a confirmation dialog that shows the approved exposure explanation in full, with "Keep current node" (initial focus) and "Connect to someone else's node". Only that last button connects; Keep, Escape and clicking outside change nothing. Going back to your own node is one Connect with no dialog. While connected to someone else's node, the explanation stays on the Node screen above any Connect control |
 
 **Amount rule (TJ decision):** amounts are integers of atomic units (12 decimal
 places). Compact display shows at most four decimals, *truncated* and marked
@@ -92,7 +92,8 @@ network fee, and the app says why on Overview and on the Send page itself.
 **Focus and announcements (critique D3, D4, D8, R4):**
 - Dialogs are named by their heading and are modal: the background is inert,
   Tab stays inside, Escape closes, and focus returns to the control that opened
-  them.
+  them. A dialog that asks for consent is also described by its explanation, and
+  its initial focus is on the choice that changes nothing.
 - Navigation moves focus to the new page heading. In-place actions keep focus on
   the same control.
 - One polite live region announces preparing, submitting, every send outcome,
@@ -134,7 +135,8 @@ or signed. Platform conventions (T2):
   to lock, Escape to close dialogs, and the standard copy shortcut on a focused
   address or ID.
 - Minimum window 880 × 600. The prototype's layout holds down to an 828-pixel
-  window.
+  window. The prototype window is a fixed 740 px tall, so the 600-px height was
+  checked by overriding it in the test harness, not through a prototype control.
 
 ## What is real: capability tiers
 
@@ -176,10 +178,10 @@ The numbers below match its constraints.
 | 2 | Show the exact `4…` RPC address; no `M…`/`T…` substitution; no `monero:` links; regtest sends only to session-known disposable wallets | Approved receive warning; **QR removed on regtest**; Send offers the kit's test wallets and refuses any other address on regtest |
 | 3 | Unlock 60/10 blocks from pinned source; no clock-time promises | Unlock copy uses blocks only; the testnet minute estimate was removed |
 | 4–5 | Loopback-only RPC with Digest auth, no `--disable-rpc-login`, no published container RPC ports, Unix-socket RPC unproven | Handoff items 2 and 4 |
-| 6 | Explicit `--trusted-daemon` only for the user's own node; explicit untrusted mode otherwise | The node screen's trust row reflects the user's choice; a node change applies only on an explicit Connect (rev 4); "Someone else's node" is disabled on regtest |
+| 6 | Explicit `--trusted-daemon` only for the user's own node; explicit untrusted mode otherwise | The node screen's trust row reflects the user's choice; a node change applies only on an explicit Connect (rev 4), and someone else's node only after its confirmation dialog (rev 5); "Someone else's node" is disabled on regtest, and switching the prototype to regtest leaves it (rev 5) |
 | 7–9 | Password before reveal; no seed copy; hide on leave/lock; capture protection where the OS allows | Reveal is gated by the password and hidden again on leaving; recording warning before reveal; no copy button |
 | 10 | Allowlist diagnostics; no seed or keys in logs or crash reports; no zeroization claims | Handoff item 4 |
-| 11 | Explain observer boundaries without anonymity claims | Approved remote-node and privacy wording in the node screen and the About sheet |
+| 11 | Explain observer boundaries without anonymity claims | The approved remote-node sentence, in full, in the confirmation before connecting and on the Node screen while connected; approved privacy wording in the About sheet |
 | 12 | Tor/I2P and OpenAlias disabled; literal addresses only | Tor/I2P shown disabled; `validate_address {any_net_type:false, allow_openalias:false}` in the handoff |
 | 13 | A seed restores on-chain funds, not notes, labels or contacts | Approved restore wording; restore-height guidance ("a block before your first payment") |
 | 14 | Distinguish prepared, submitting, unknown, in pool, confirmed and unlocked; reconcile before another payment | New preparing step, "Submission status unknown" with send gating and "Check with node" |
@@ -228,6 +230,10 @@ note on TJS-1992):
 6. One real screen-reader journey per target (Orca, NVDA, VoiceOver) through
    create, back up, receive, send and restore.
 7. IME and high-DPI work.
+8. Consent text is on screen before the control that acts on it. At the
+   minimum window size, the remote-node explanation is fully visible, measured
+   by geometry rather than by presence in the accessibility tree, before anything
+   can connect.
 
 ## Design critique (TJS-1999)
 
@@ -311,7 +317,39 @@ studio lead re-runs the critic's repros before accepting.
 | N9 reconciliation was announced by both the toast and the live region | Fixed: the toast is visual only |
 | D11 residual: the Send page reached from the sidebar didn't say why a dust balance can't be sent | Fixed: "Review payment" is disabled with the reason |
 | R4 residual: app-made node changes weren't announced | Fixed with N6 |
-| R-A arrow keys in the node choice switched straight to someone else's node (testnet preview) | Fixed: the radios only pick. Nothing changes until "Connect to someone else's node", and the exposure explanation shows first. This is a new interaction the critic hasn't seen |
+| R-A arrow keys in the node choice switched straight to someone else's node (testnet preview) | Fixed: the radios only pick, and nothing changes until an explicit Connect. The studio review found the explanation could be clipped below Connect; rev 5 moves it into a confirmation dialog (see Studio review) |
+
+## Studio review (revision 4)
+
+The Meownero Studio Lead reviewed `fdb081c` (`studio-review` revision
+`82a1bf2f-6427-48b1-99ed-72839206500d`): 40 independent checks passed and one
+failed, so **changes requested**. N1–N9, D1, D3, D11 and the native-direction
+reconciliation passed.
+
+| Finding | Disposition in rev 5 |
+| --- | --- |
+| **R-A disclosure visibility.** At a 1280 × 900 viewport (908 × 740 window), the full exposure explanation sat below "Connect to someone else's node" and was entirely clipped, and a real pointer click connected without it ever being visible | Fixed with the confirmation-dialog option the review offered. "Connect to someone else's node…" now opens a named, modal dialog. The dialog is described by the approved TJS-1994 sentence, shows the node and its untrusted status, and starts focus on "Keep current node". Only its "Connect to someone else's node" button connects; Keep, Escape and clicking outside change nothing, and Escape returns focus to the Connect button. On the Node screen the explanation shows while connected, above any Connect row. Picking a choice now scrolls the whole Connect row into view. Going back to your own node stays one Connect. The reviewer's "Synced via someone else's node" control is disabled on regtest, and switching to regtest leaves someone else's node |
+
+**Author verification on revision 5** (scripted Chromium; real keyboard and
+pointer input; visibility checked geometrically, inside every clipping ancestor,
+the window and the viewport, and not covered):
+- 128 of 128 R-A checks pass. They cover the 1280 × 900 viewport (908 × 740
+  window) and the 880 × 600 minimum window (simulated, see Platforms), on macOS,
+  Windows and Linux window styles, with keyboard and pointer input.
+  - In the dialog, the explanation sits at y 315–373 at 1280 × 900 and y 221–279
+    at 880 × 600, above its Connect button, with no scrolling inside the dialog.
+  - Nothing connects on a pick, on opening the dialog, on Keep, on Escape, or on
+    clicking outside.
+  - The dialog's Connect sets "Untrusted, by your choice" and is announced.
+  - On regtest, someone else's node can't be picked.
+- 31 of 31 earlier repair checks (N1–N9, D11 and R-A) pass after the R-A update.
+- 320 renders are clean: every screen and error state, both networks, light and
+  dark, every node state on five screens, plus the new dialog. None has a script
+  error, "undefined", banned wording, an unnamed dialog or horizontal scroll.
+  Every request stayed on loopback.
+
+These results are author-verified only; the studio lead re-runs the R-A check
+before accepting. No screen reader was used.
 
 ## Implementation handoff
 
@@ -365,7 +403,8 @@ studio lead re-runs the critic's repros before accepting.
    evidence only.
 
 **Status:** both critique passes are complete: TJS-1999 and TJS-2002, each
-accept with findings. Every finding has a disposition above. The design moves to
-the Meownero Studio Lead for accepted integration. The revision-4 fixes are
-author-verified, and the studio lead re-runs the TJS-2002 repros before
-accepting.
+accept with findings. The studio review of revision 4 passed everything except
+the R-A disclosure placement, which revision 5 fixes. Every finding has a
+disposition above. The design returns to the Meownero Studio Lead for accepted
+integration. The revision-5 fix is author-verified, and the studio lead re-runs
+its R-A check before accepting.
