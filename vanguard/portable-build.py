@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import shutil
 import signal
 import subprocess
@@ -25,6 +26,45 @@ spec = importlib.util.spec_from_file_location('tester', ROOT / 'vanguard/tester.
 tester = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(tester)
 PIN = tester.PIN
+
+
+def build_diagnostics(work):
+    """Classify owned compiler evidence without exporting text or paths."""
+    result = {'phase': 'UNKNOWN', 'reason': 'BUILD_FAILURE_UNCLASSIFIED',
+              'peak_memory_bytes': None, 'memory_events': {}}
+    def read(name, limit):
+        path = work / name
+        if not path.is_file() or path.is_symlink() or path.stat().st_nlink != 1:
+            return ''
+        with path.open('rb') as stream:
+            stream.seek(max(0, path.stat().st_size - limit))
+            return stream.read(limit).decode('utf-8', errors='replace')
+    phase = read('build.phase', 128).strip()
+    if phase in ('TOOLCHAIN', 'DEPENDENCIES', 'CONFIGURE', 'COMPILE', 'ABI_INSPECTION'):
+        result['phase'] = phase
+    peak = read('build.memory', 64).strip()
+    if peak.isdigit():
+        result['peak_memory_bytes'] = int(peak)
+    for line in read('build.memory-events', 1024).splitlines():
+        fields = line.split()
+        if len(fields) == 2 and fields[0] in ('low', 'high', 'max', 'oom', 'oom_kill', 'oom_group_kill') and fields[1].isdigit():
+            result['memory_events'][fields[0]] = int(fields[1])
+    text = read('build.log', 1024 * 1024)
+    patterns = [
+        (r'fatal error: Killed signal terminated program', 'COMPILER_PROCESS_KILLED'),
+        (r'internal compiler error:.*(?:Segmentation fault|segmentation fault)', 'COMPILER_INTERNAL_SEGMENTATION_FAILURE'),
+        (r'internal compiler error:', 'COMPILER_INTERNAL_ERROR'),
+        (r"error:.*(?:nothrow.*not a member|no member named 'nothrow')", 'STD_NOTHROW_DECLARATION_MISSING'),
+        (r"error:.*(?:undeclared identifier 'posix_memalign'|posix_memalign.*not declared)", 'POSIX_MEMALIGN_DECLARATION_MISSING'),
+        (r'error:.*No space left on device|fatal error:.*No space left on device', 'COMPILER_DISK_FULL'),
+        (r'(?:fatal )?error:', 'COMPILER_ERROR_RECORDED'),
+    ]
+    for pattern, reason in patterns:
+        if re.search(pattern, text):
+            result['reason'] = reason
+            break
+    result['cgroup_oom_kill_observed'] = result['memory_events'].get('oom_kill', 0) > 0
+    return result
 
 
 def export_sources(cache, source, work, run):
@@ -169,6 +209,7 @@ def main():
         invocation = uuid.uuid4().hex
         cidfile = work / (invocation + '.container.id')
         script = '''set -e
+printf '%s\\n' TOOLCHAIN > /out/build.phase
 test "$(rustc -V)" = 'rustc 1.93.0 (254b59607 2026-01-19)'
 trap 'cat /sys/fs/cgroup/memory.peak > /out/build.memory; cat /sys/fs/cgroup/memory.events > /out/build.memory-events' EXIT
 dpkg-query -W -f='${binary:Package}=${Version}\\n' | sort > /out/dependencies.txt
@@ -184,8 +225,11 @@ cmake --version >> /out/compiler.txt
 rustc -Vv >> /out/compiler.txt
 mkdir -p build/vanguard
 cd build/vanguard
+printf '%s\\n' CONFIGURE > /out/build.phase
 cmake -DCMAKE_BUILD_TYPE=Release -DARCH=default -DBUILD_TESTS=OFF -DUSE_DEVICE_TREZOR=OFF -DBUILD_GUI_DEPS=OFF -DMANUAL_SUBMODULES=ON -DSTATIC=OFF -DUSE_READLINE=OFF ../..
+printf '%s\\n' COMPILE > /out/build.phase
 timeout 3500 make -j1 daemon simplewallet wallet_rpc_server
+printf '%s\\n' ABI_INSPECTION > /out/build.phase
 mkdir -p /out/runtime-libs
 for binary in bin/monerod bin/monero-wallet-cli bin/monero-wallet-rpc; do
     "$binary" --version
@@ -206,6 +250,7 @@ done
             depends_host = 'aarch64-unknown-linux-gnu' if arm else 'x86_64-unknown-linux-gnu'
             first = script.index('mkdir -p build/vanguard')
             script = script[:first] + '''cd contrib/depends
+printf '%s\\n' DEPENDENCIES > /out/build.phase
 make -j2 HOST=DEPENDS_HOST NO_WALLET=1 NO_READLINE=1 linux_CC=gcc linux_CXX=g++ linux_AR=ar linux_RANLIB=ranlib linux_NM=nm linux_STRIP=strip
 cd ../..
 sed -i 's/SET(STATIC ON)/SET(STATIC OFF)/' contrib/depends/DEPENDS_HOST/share/toolchain.cmake
@@ -239,6 +284,8 @@ sha256sum contrib/depends/DEPENDS_HOST/share/toolchain.cmake > /out/generated-to
         except BaseException as error:
             receipt['result'] = 'FAILED_ATTEMPT'
             receipt['failure'] = str(error)
+            receipt['failure_type'] = type(error).__name__
+            receipt['build_diagnostic'] = build_diagnostics(work)
             raise
         finally:
             cleanup_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
@@ -255,6 +302,12 @@ sha256sum contrib/depends/DEPENDS_HOST/share/toolchain.cmake > /out/generated-to
                             proof['Config']['Labels'].get('meownero.invocation') == invocation,
                             'container ownership proof failed; preserve container')
                         receipt['cleanup']['ownership'] = 'proven'
+                        if receipt['result'] == 'FAILED_ATTEMPT':
+                            receipt['build_diagnostic'] = build_diagnostics(work)
+                            state = proof['State']
+                            receipt['build_diagnostic']['owned_container_oom_killed'] = bool(state['OOMKilled'])
+                            receipt['build_diagnostic']['owned_container_exit'] = int(state['ExitCode'])
+                            receipt['build_diagnostic']['owned_container_running_at_inspection'] = bool(state['Running'])
                         run('cleanup', docker + ['rm', '-f', cid], 30)
                         tester.require(cid not in tester.command(docker + ['ps', '-aq', '--no-trunc']).splitlines(),
                                        'owned container remains')

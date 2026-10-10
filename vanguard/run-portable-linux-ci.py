@@ -121,6 +121,49 @@ def fetch(inputs, out):
         'cargo_sha256': sha(rust / 'bin/cargo'), 'depends_sha256': {n: sha(depends / r['file']) for n, r in inputs['depends'].items()}})
 
 
+def public_worker_receipt(value):
+    """Keep fixed build provenance and scalars; omit execution text and paths."""
+    keys = ('schema', 'target', 'builder_image', 'source_lock', 'patches', 'result',
+            'started_utc', 'finished_utc', 'compiler_execution_substrate', 'distribution',
+            'older_builder_preparation_sha256', 'depends_static_dependencies',
+            'rustc_sha256', 'cargo_sha256', 'base_manifest', 'base_image',
+            'registry_access', 'cleanup', 'binaries')
+    result = {key: value[key] for key in keys if key in value}
+    result['commands'] = []
+    for row in value.get('commands', []):
+        label = row.get('label')
+        allowed = ('archive-upstream', 'archive-external-gtest', 'archive-external-mx25519',
+                   'archive-external-randomx', 'archive-external-rapidjson', 'archive-external-supercop',
+                   'build', 'inspect', 'cleanup', 'base', 'prepare', 'commit')
+        safe = {'label': label if label in allowed else 'OTHER_PHASE'}
+        for key in ('exit', 'wall_seconds'):
+            if key in row:
+                assert type(row[key]) in (int, float) or row[key] is None
+                safe[key] = row[key]
+        result['commands'].append(safe)
+    if 'failure_type' in value:
+        kinds = ('RuntimeError', 'AssertionError', 'TimeoutExpired', 'KeyboardInterrupt',
+                 'SystemExit', 'OSError', 'PermissionError', 'FileNotFoundError')
+        result['failure_type'] = value['failure_type'] if value['failure_type'] in kinds else 'OTHER_EXCEPTION'
+    if 'build_diagnostic' in value:
+        diagnostic = value['build_diagnostic']
+        phases = ('UNKNOWN', 'TOOLCHAIN', 'DEPENDENCIES', 'CONFIGURE', 'COMPILE', 'ABI_INSPECTION')
+        reasons = ('BUILD_FAILURE_UNCLASSIFIED', 'COMPILER_PROCESS_KILLED', 'COMPILER_INTERNAL_SEGMENTATION_FAILURE',
+                   'COMPILER_INTERNAL_ERROR', 'STD_NOTHROW_DECLARATION_MISSING', 'POSIX_MEMALIGN_DECLARATION_MISSING',
+                   'COMPILER_DISK_FULL', 'COMPILER_ERROR_RECORDED')
+        safe = {'phase': diagnostic['phase'] if diagnostic.get('phase') in phases else 'UNKNOWN',
+                'reason': diagnostic['reason'] if diagnostic.get('reason') in reasons else 'BUILD_FAILURE_UNCLASSIFIED'}
+        for key in ('peak_memory_bytes', 'cgroup_oom_kill_observed', 'owned_container_oom_killed',
+                    'owned_container_exit', 'owned_container_running_at_inspection'):
+            if key in diagnostic:
+                assert type(diagnostic[key]) in (int, bool) or diagnostic[key] is None
+                safe[key] = diagnostic[key]
+        safe['memory_events'] = {key: count for key, count in diagnostic.get('memory_events', {}).items()
+                                if key in ('low', 'high', 'max', 'oom', 'oom_kill', 'oom_group_kill') and type(count) is int}
+        result['build_diagnostic'] = safe
+    return result
+
+
 def worker(phase, inputs, out):
     if phase == 'fetch':
         fetch(inputs, out)
@@ -278,7 +321,8 @@ def main():
                 ('runtime/check-receipt.json', 'check.json')]:
                 path = out / relative
                 if path.is_file() and not path.is_symlink():
-                    write(public / name, json.loads(path.read_text()))
+                    value = json.loads(path.read_text())
+                    write(public / name, public_worker_receipt(value) if name in ('build.json', 'builder.json') else value)
             try:
                 if lock_identity is not None:
                     # Container wrappers must have removed their exact recorded children.
