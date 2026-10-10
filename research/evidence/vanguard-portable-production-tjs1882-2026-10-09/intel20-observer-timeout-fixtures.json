@@ -1,0 +1,107 @@
+{
+  "schema": "meownero-intel20-owned-observer-timeout-fixtures/1",
+  "result": "PASS_FAIL_CLOSED_STATIC_PROVENANCE_FIRST_ERROR_CLEANUP_AND_CALLER_RESTORATION",
+  "cases": [
+    {
+      "version": "original14",
+      "case": "initial",
+      "source_sha256": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974",
+      "actual_timeout_helpers_reaped_and_absent": 1,
+      "five_second_bound_unchanged": true,
+      "wrapper_reaped": true,
+      "first_context": null,
+      "timeout_events": [],
+      "lock_retained": false,
+      "caller_handlers_and_mask_restored": true,
+      "wall_seconds": 5.236
+    },
+    {
+      "version": "corrected20",
+      "case": "initial",
+      "source_sha256": "6483de6671752cb0342902f7875216f7e30cdac7253d5b2d7eff65c48e03a7d7",
+      "actual_timeout_helpers_reaped_and_absent": 1,
+      "five_second_bound_unchanged": true,
+      "wrapper_reaped": true,
+      "first_context": "INITIAL_OBSERVATION",
+      "timeout_events": [
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "INITIAL_OBSERVATION",
+          "timeout_seconds": 5,
+          "elapsed_seconds": 5.005
+        }
+      ],
+      "lock_retained": false,
+      "caller_handlers_and_mask_restored": true,
+      "wall_seconds": 5.218
+    },
+    {
+      "version": "corrected20",
+      "case": "live",
+      "source_sha256": "6483de6671752cb0342902f7875216f7e30cdac7253d5b2d7eff65c48e03a7d7",
+      "actual_timeout_helpers_reaped_and_absent": 1,
+      "five_second_bound_unchanged": true,
+      "wrapper_reaped": true,
+      "first_context": "LIVE_OBSERVATION",
+      "timeout_events": [
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "LIVE_OBSERVATION",
+          "timeout_seconds": 5,
+          "elapsed_seconds": 5.006
+        }
+      ],
+      "lock_retained": false,
+      "caller_handlers_and_mask_restored": true,
+      "wall_seconds": 5.279
+    },
+    {
+      "version": "corrected20",
+      "case": "cleanup",
+      "source_sha256": "6483de6671752cb0342902f7875216f7e30cdac7253d5b2d7eff65c48e03a7d7",
+      "actual_timeout_helpers_reaped_and_absent": 1,
+      "five_second_bound_unchanged": true,
+      "wrapper_reaped": true,
+      "first_context": "OWNED_CLEANUP",
+      "timeout_events": [
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "OWNED_CLEANUP",
+          "timeout_seconds": 5,
+          "elapsed_seconds": 5.006
+        }
+      ],
+      "lock_retained": true,
+      "caller_handlers_and_mask_restored": true,
+      "wall_seconds": 5.222
+    },
+    {
+      "version": "corrected20",
+      "case": "live-and-cleanup",
+      "source_sha256": "6483de6671752cb0342902f7875216f7e30cdac7253d5b2d7eff65c48e03a7d7",
+      "actual_timeout_helpers_reaped_and_absent": 2,
+      "five_second_bound_unchanged": true,
+      "wrapper_reaped": true,
+      "first_context": "LIVE_OBSERVATION",
+      "timeout_events": [
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "LIVE_OBSERVATION",
+          "timeout_seconds": 5,
+          "elapsed_seconds": 5.006
+        },
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "OWNED_CLEANUP",
+          "timeout_seconds": 5,
+          "elapsed_seconds": 5.006
+        }
+      ],
+      "lock_retained": true,
+      "caller_handlers_and_mask_restored": true,
+      "wall_seconds": 10.195
+    }
+  ],
+  "actual_Intel14_timeout_call": "NOT_RECORDED_SOURCE_CANDIDATE_ONLY",
+  "native_Intel_execution": "UNTESTED_BY_FIXTURE"
+}

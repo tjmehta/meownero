@@ -1,0 +1,134 @@
+--- build/tjs1882-3175-native-ci-payload14/vanguard/run-portable-ci.py
++++ build/tjs1882-3175-intel20-supervisor.py
+@@ -30,6 +30,58 @@
+     path.write_text(json.dumps(value, indent=2) + '\n')
+ 
+ 
++
++def public_check(value):
++    """Project fixed check evidence; execution argv and paths remain private."""
++    enums = {
++        'schema': {'meownero-native-windows-ci-check/1', 'meownero-portable-native-mac-check/1'},
++        'result': {'FAIL', 'PASS_NATIVE_ARCHIVE_JOURNEY', 'PASS_TRANSLATED_ARCHIVE_JOURNEY'},
++        'native_architecture': {'i686', 'x86_64', 'aarch64'},
++        'package_architecture': {'i686', 'x86_64', 'aarch64'},
++        'execution_substrate': {'NATIVE', 'NATIVE_WINDOWS_WOW64', 'ROSETTA_TRANSLATED_MACOS_X86_64'},
++        'windows_32bit_os_execution': {'UNTESTED'},
++        'console_mode': {'OWNED_NEW_CONSOLE', 'EXISTING_ATTACHED_CONSOLE'},
++    }
++    def project(row, keys):
++        result = {}
++        for key in keys:
++            if key in row:
++                assert type(row[key]) in (int, float, bool) or row[key] is None
++                result[key] = row[key]
++        return result
++    result = project(value, ('wall_seconds', 'resident_limit_bytes', 'peak_resident_bytes',
++                            'initial_console_process_count', 'owned_job_created', 'owned_console_freed'))
++    for key, allowed in enums.items():
++        if key in value:
++            assert value[key] in allowed
++            result[key] = value[key]
++    for key in ('archive_sha256',):
++        if key in value:
++            assert len(value[key]) == 64 and set(value[key]) <= set('0123456789abcdef')
++            result[key] = value[key]
++    result['phases'] = []
++    for row in value.get('phases', []):
++        assert row['name'] in ('exception-probe', 'preflight', 'journey', 'controls')
++        phase = project(row, ('pid', 'exit', 'reaped', 'wall_seconds'))
++        phase['name'] = row['name']
++        result['phases'].append(phase)
++    if 'cleanup' in value:
++        result['cleanup'] = [project(row, ('pid', 'removed')) for row in value['cleanup']]
++    if 'owned_job' in value:
++        job = value['owned_job']
++        result['owned_job'] = project(job, ('active_processes', 'total_processes', 'peak_committed_bytes', 'memory_limit_bytes'))
++        result['owned_job']['children'] = [project(row, ('pid', 'exit')) for row in job.get('children', [])]
++    if 'native_exception_probe' in value:
++        probe = value['native_exception_probe']
++        projected = project(probe, ('exit', 'reaped', 'deadline_seconds', 'exact_success_line', 'cleanup_count_asserted_by_bound_fixture'))
++        assert probe['result'] == 'PASS_NATIVE_I686_EXCEPTION_PROBE' and probe['newline'] in ('LF', 'CRLF')
++        projected.update(result=probe['result'], newline=probe['newline'])
++        for key in ('sha256', 'source_sha256'):
++            assert len(probe[key]) == 64 and set(probe[key]) <= set('0123456789abcdef')
++            projected[key] = probe[key]
++        result['native_exception_probe'] = projected
++    return result
++
+ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
+               supervision_schema='meownero-native-mac-ci-supervision/1',
+               failure_label='native Intel archive check'):
+@@ -41,6 +93,7 @@
+     known, pending, helper_bindings, states, unverified_zombies = {}, [], {}, {}, set()
+     rejected_live = {}
+     process = None
++    snapshot_context = 'INITIAL_OBSERVATION'
+     began = time.monotonic()
+ 
+     def reject(reason, observation=None):
+@@ -189,8 +242,27 @@
+     def snapshot():
+         rows = {}
+         states.clear()
+-        for line in subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
+-                                            text=True, timeout=5).splitlines():
++        snapshot_began = time.monotonic()
++        try:
++            output = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
++                                             text=True, timeout=5)
++        except subprocess.TimeoutExpired:
++            # check_output kills/reaps only its own helper before raising.
++            # Preserve the first failed call without exporting argv or stderr.
++            elapsed = round(time.monotonic() - snapshot_began, 3)
++            event = {'operation': 'OWNED_PROCESS_SNAPSHOT', 'context': snapshot_context,
++                     'timeout_seconds': 5, 'elapsed_seconds': elapsed}
++            events = receipt.setdefault('snapshot_timeouts', [])
++            if len(events) < 64:
++                events.append(event)
++            if 'failure_type' not in receipt and 'failure_operation' not in receipt:
++                receipt['failure_operation'] = event['operation']
++                receipt['failure_context'] = snapshot_context
++                receipt['failure_timeout_seconds'] = 5
++                receipt['failure_elapsed_seconds'] = elapsed
++                receipt.setdefault('failure_reason', 'PROCESS_SNAPSHOT_DEADLINE')
++            raise
++        for line in output.splitlines():
+             fields = line.split(None, 10)
+             if len(fields) == 11:
+                 rows[int(fields[0])] = (int(fields[1]), int(fields[2]), int(fields[3]), tuple(fields[4:9]), fields[10])
+@@ -269,6 +341,7 @@
+             receipt['wrapper_pid'] = process.pid
+             receipt['failure_stage'] = 'OBSERVE_OWNED_DESCENDANTS'
+             remember()
++            snapshot_context = 'LIVE_OBSERVATION'
+             signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+             while process.poll() is None:
+                 remember()
+@@ -299,6 +372,7 @@
+         raise
+     finally:
+         # Repeated cancellation cannot interrupt the bounded cleanup interval.
++        snapshot_context = 'OWNED_CLEANUP'
+         signal.pthread_sigmask(signal.SIG_BLOCK, set(handlers))
+         try:
+             if process is not None:
+@@ -649,7 +723,7 @@
+             proof['execution_substrate'] = 'NATIVE_WINDOWS_WOW64'
+             proof['windows_32bit_os_execution'] = 'UNTESTED'
+         for name, value in [('journey.json', journey), ('controls.json', controls), ('check.json', check)]:
+-            write(public / name, value)
++            write(public / name, public_check(value) if name == 'check.json' else value)
+         proof['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
+     except BaseException as error:
+         proof['failure_type'] = type(error).__name__
+@@ -668,7 +742,8 @@
+                                      ('check-receipt.json', 'check.json')]:
+                     path = check_root / source
+                     if path.is_file() and not path.is_symlink():
+-                        write(public / name, json.loads(path.read_text()))
++                        value = json.loads(path.read_text())
++                        write(public / name, public_check(value) if name == 'check.json' else value)
+             deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
+             if deferred:
+                 proof['result'] = 'FAIL'

@@ -93,6 +93,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
     known, pending, helper_bindings, states, unverified_zombies = {}, [], {}, {}, set()
     rejected_live = {}
     process = None
+    snapshot_context = 'INITIAL_OBSERVATION'
     began = time.monotonic()
 
     def reject(reason, observation=None):
@@ -241,8 +242,27 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
     def snapshot():
         rows = {}
         states.clear()
-        for line in subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
-                                            text=True, timeout=5).splitlines():
+        snapshot_began = time.monotonic()
+        try:
+            output = subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
+                                             text=True, timeout=5)
+        except subprocess.TimeoutExpired:
+            # check_output kills/reaps only its own helper before raising.
+            # Preserve the first failed call without exporting argv or stderr.
+            elapsed = round(time.monotonic() - snapshot_began, 3)
+            event = {'operation': 'OWNED_PROCESS_SNAPSHOT', 'context': snapshot_context,
+                     'timeout_seconds': 5, 'elapsed_seconds': elapsed}
+            events = receipt.setdefault('snapshot_timeouts', [])
+            if len(events) < 64:
+                events.append(event)
+            if 'failure_type' not in receipt and 'failure_operation' not in receipt:
+                receipt['failure_operation'] = event['operation']
+                receipt['failure_context'] = snapshot_context
+                receipt['failure_timeout_seconds'] = 5
+                receipt['failure_elapsed_seconds'] = elapsed
+                receipt.setdefault('failure_reason', 'PROCESS_SNAPSHOT_DEADLINE')
+            raise
+        for line in output.splitlines():
             fields = line.split(None, 10)
             if len(fields) == 11:
                 rows[int(fields[0])] = (int(fields[1]), int(fields[2]), int(fields[3]), tuple(fields[4:9]), fields[10])
@@ -321,6 +341,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             receipt['wrapper_pid'] = process.pid
             receipt['failure_stage'] = 'OBSERVE_OWNED_DESCENDANTS'
             remember()
+            snapshot_context = 'LIVE_OBSERVATION'
             signal.pthread_sigmask(signal.SIG_SETMASK, mask)
             while process.poll() is None:
                 remember()
@@ -351,6 +372,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
         raise
     finally:
         # Repeated cancellation cannot interrupt the bounded cleanup interval.
+        snapshot_context = 'OWNED_CLEANUP'
         signal.pthread_sigmask(signal.SIG_BLOCK, set(handlers))
         try:
             if process is not None:
@@ -704,7 +726,7 @@ def main():
             proof['execution_substrate'] = 'NATIVE_WINDOWS_WOW64'
             proof['windows_32bit_os_execution'] = 'UNTESTED'
         for name, value in [('journey.json', journey), ('controls.json', controls), ('check.json', check)]:
-            write(public / name, value)
+            write(public / name, public_check(value) if name == 'check.json' else value)
         proof['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
     except BaseException as error:
         proof['failure_type'] = type(error).__name__
