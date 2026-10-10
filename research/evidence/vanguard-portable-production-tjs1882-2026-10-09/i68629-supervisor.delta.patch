@@ -1,0 +1,100 @@
+--- a/vanguard/run-portable-ci.py
++++ b/vanguard/run-portable-ci.py
+@@ -199,6 +199,80 @@
+     return evidence
+ 
+ 
++def public_capacity(value):
++    assert value['status'] in {'WAITING', 'READY', 'CAPACITY_UNAVAILABLE',
++        'CAPACITY_WINDOW_EXPIRED', 'CANCELLED', 'JOB_DEADLINE'}
++    result = {'status': value['status']}
++    for key in ('window_seconds', 'elapsed_seconds', 'sample_count', 'reserve_bytes'):
++        assert type(value[key]) in (int, float) and math.isfinite(value[key]) and value[key] >= 0
++        result[key] = value[key]
++    assert value['reserve_bytes'] == 5 * 1024**3 and value['window_seconds'] <= 60
++    assert type(value['samples']) is list and len(value['samples']) <= 61
++    result['samples'] = []
++    for sample in value['samples']:
++        row = {}
++        for key in ('elapsed_seconds', 'available_memory_bytes', 'disk_free_bytes'):
++            assert type(sample[key]) in (int, float) and math.isfinite(sample[key]) and sample[key] >= 0
++            row[key] = sample[key]
++        result['samples'].append(row)
++    return result
++
++
++def wait_journey_capacity(backend, out, job, began, receipt):
++    """One bounded admission window; the shipped journey still checks its reserve."""
++    start = time.monotonic()
++    deadline = min(start + 60, began + 1500)
++    evidence = {'status': 'WAITING', 'window_seconds': max(0, deadline - start),
++                'elapsed_seconds': 0, 'sample_count': 0, 'reserve_bytes': 5 * 1024**3,
++                'samples': []}
++    receipt['capacity_admission'] = evidence
++    pending, handlers = [], {}
++    try:
++        for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGBREAK):
++            handlers[sig] = signal.signal(sig, lambda number, frame: pending.append(number))
++        while True:
++            now = time.monotonic()
++            evidence['elapsed_seconds'] = round(now - start, 6)
++            if pending:
++                evidence['status'] = 'CANCELLED'
++                raise RuntimeError('capacity admission cancelled')
++            if job.expired or now >= began + 1500:
++                evidence['status'] = 'JOB_DEADLINE'
++                raise RuntimeError('owned Job budget exhausted during admission')
++            if now >= deadline or evidence['sample_count'] >= 61:
++                evidence['status'] = 'CAPACITY_WINDOW_EXPIRED'
++                raise RuntimeError('capacity admission window exhausted')
++            try:
++                memory = backend.available_memory()
++                disk = shutil.disk_usage((out / 'journey').parent).free
++                assert type(memory) is int and memory >= 0 and type(disk) is int and disk >= 0
++            except (OSError, ValueError, AssertionError):
++                evidence['status'] = 'CAPACITY_UNAVAILABLE'
++                raise RuntimeError('capacity measurement unavailable') from None
++            now = time.monotonic()
++            evidence['elapsed_seconds'] = round(now - start, 6)
++            evidence['sample_count'] += 1
++            evidence['samples'].append({'elapsed_seconds': evidence['elapsed_seconds'],
++                'available_memory_bytes': memory, 'disk_free_bytes': disk})
++            # Recheck cancellation and the same absolute budget after measurement.
++            if pending:
++                evidence['status'] = 'CANCELLED'
++                raise RuntimeError('capacity admission cancelled')
++            if job.expired or now >= began + 1500:
++                evidence['status'] = 'JOB_DEADLINE'
++                raise RuntimeError('owned Job budget exhausted during admission')
++            if now >= deadline:
++                evidence['status'] = 'CAPACITY_WINDOW_EXPIRED'
++                raise RuntimeError('capacity admission window exhausted')
++            if memory >= evidence['reserve_bytes'] and disk >= evidence['reserve_bytes']:
++                evidence['status'] = 'READY'
++                return
++            time.sleep(min(1, deadline - now))
++    finally:
++        for sig, handler in handlers.items():
++            signal.signal(sig, handler)
++
++
+ def public_check(value):
+     """Project fixed check evidence; execution argv and paths remain private."""
+     enums = {
+@@ -250,6 +324,8 @@
+         result['native_exception_probe'] = projected
+     if 'native_cli_event' in value:
+         result['native_cli_event'] = public_cli_event(value['native_cli_event'])
++    if 'capacity_admission' in value:
++        result['capacity_admission'] = public_capacity(value['capacity_admission'])
+     return result
+ 
+ 
+@@ -495,6 +571,7 @@
+                 'cleanup_count_asserted_by_bound_fixture': 1}
+         phase('preflight', [sys.executable, '-B', package / 'tester.py', 'preflight'])
+         if row['architecture'] == 'i686':
++            wait_journey_capacity(backend, out, job, began, receipt)
+             phase('journey', [sys.executable, '-B', ROOT / 'vanguard/run-portable-journey-diagnostic.py',
+                 '--tester', package / 'tester.py', '--tester-sha256', row['package_helpers']['tester.py'],
+                 '--diagnostic', out / 'journey-diagnostic.json', '--out', out / 'journey'])
