@@ -160,11 +160,14 @@ The numbers below match its constraints.
      authentication (needs the privacy specialist's acceptance), a mounted Unix
      socket (unproven, #5), or a native node on the host. The implementation
      owner proposes one; the privacy specialist accepts or rejects it.
-3. **Stack (recommendation, the implementation owner decides):** a small native
-   shell such as Tauri 2 can launch the wallet engine as a sidecar and reuse this
-   prototype's layout directly. Qt/QML follows the upstream Monero GUI precedent
-   (PLAN.md v1.x) but needs a heavier toolchain. Electron is not recommended,
-   because of its size and attack surface for a wallet.
+3. **Stack: decided in TJS-1996, not here.** TJ (WhatsApp, 2026-10-10 10:22
+   PDT) asked for a native cross-platform UI with shared code, no Electron, and
+   native rendering preferred over a web wrapper. The studio lead owns that
+   decision in TJS-1996. This HTML prototype is a review artifact for layout,
+   states and copy. Its markup is not meant to ship. Whatever stack is chosen
+   must reproduce the experience contract above: network-bound accent, platform
+   title bars and system fonts, appearance that follows the system, keyboard and
+   screen-reader access, and every listed state.
 4. **Boundaries (TJS-1994):**
    - Wallet RPC is bound to explicit loopback with Digest auth and fresh
      credentials kept away from the UI layer.
