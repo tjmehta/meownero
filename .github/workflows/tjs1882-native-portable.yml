@@ -1,4 +1,4 @@
-name: TJS-1882 exact i686 WoW64 archive check
+name: TJS-1882 physical Intel observer correction
 on:
   push:
     branches: [tjs1882-native-windows-preflight]
@@ -15,8 +15,8 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - target: windows-i686
-            runner: windows-2025
+          - target: macos-x86_64
+            runner: macos-15-intel
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     steps:
@@ -33,7 +33,6 @@ jobs:
           sparse-checkout: |
             /ci/tjs1882/packages/
             /vanguard/run-portable-ci.py
-            /vanguard/run-portable-journey-diagnostic.py
             /vanguard/ci-inputs.json
             /vanguard/test-portable-refusals.py
             /vanguard/run-portable-mac-check.py
@@ -44,12 +43,12 @@ jobs:
         with:
           python-version: '3.13'
           architecture: x64
-      - name: Exact i686 exception first, WoW64 journey and ten controls
+      - name: Exact archive native journey and ten controls
         shell: bash
         run: >-
           python -B vanguard/run-portable-ci.py
           --inputs vanguard/ci-inputs.json
-          --inputs-sha256 901c8b9c88bf8b5e582822c4e4a89411ecee50ce7a2e5caee825dfa4c5c26aec
+          --inputs-sha256 454e5edff1a2d62bd4a8d702be6106e610e5e9ff78a547894de5d26dd30b3405
           --target '${{ matrix.target }}'
           --out "$RUNNER_TEMP/tjs1882-native"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
