@@ -45,6 +45,13 @@ def main():
     parser.add_argument('--builder-transfer', type=Path, help='Exact saved pinned image; verify legacy Docker config re-encoding on Colima')
     args = parser.parse_args()
     tester.require(not args.i686_build_cache or args.target == 'windows-i686', 'cache recovery is i686 only')
+    for program in ('rustc', 'cargo'):
+        executable = tester.regular(args.rust / 'bin' / program)
+        with executable.open('rb') as stream:
+            header = stream.read(20)
+        tester.require(header[:6] == b'\x7fELF\x02\x01' and
+                       int.from_bytes(header[18:20], 'little') == 62,
+                       'Rust compiler input must be ELF64 amd64 for the pinned compiler container')
     out = tester.fresh(args.out)
     preflight = tester.read(args.preflight)
     tester.require(tester.sha(args.preflight) == 'f3f25c38fea7a53e20b8e113ef823d382ecd8b40ba2057352d8219a4cb60a205', 'unverified route preflight')
