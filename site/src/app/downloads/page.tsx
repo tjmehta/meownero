@@ -157,8 +157,10 @@ export default function Downloads() {
             </p>
             <Command>{commands.run}</Command>
             <p className="mt-3 leading-relaxed text-muted-foreground">
-              Look for PASS_NATIVE_JOURNEY in result.json and runtime.json in
-              your output folder. No public network connection or real coins are needed.
+              Require PASS_NATIVE_JOURNEY in result.json, and confirm in
+              runtime.json that cleanup removed the run&apos;s own container.
+              Both files are in your output folder. No public network connection
+              or real coins are needed.
             </p>
           </div>
         </section>
