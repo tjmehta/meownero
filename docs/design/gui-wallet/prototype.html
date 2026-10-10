@@ -655,13 +655,13 @@ const NETS = {
   regtest: {
     name: "Local regtest", tag: "regtest",
     say: "An isolated, accelerated FCMP++/CARROT test chain. Coins have no value.",
-    title: "Local regtest", prefix: "4", other: "testnet",
+    title: "Local regtest", prose: "local regtest", prefix: "4", other: "testnet",
     blockSecs: null, node: "127.0.0.1:18081", nodeName: "Your node in the Meownero test kit (Docker)",
   },
   testnet: {
     name: "Meownero testnet", tag: "testnet",
     say: "Design preview of a future shared test network. It is not live, and its values are placeholders.",
-    title: "Meownero testnet (preview)", prefix: "T", other: "regtest",
+    title: "Meownero testnet (preview)", prose: "Meownero testnet", prefix: "T", other: "regtest",
     blockSecs: 90, node: "127.0.0.1:29081", nodeName: "Your Meownero testnet node",
   },
 };
@@ -884,7 +884,7 @@ function conditionBanner() {
     "node-sync": `<div class="banner net">${icon("clock", "i")}<div class="body"><b>Your node is catching up with the network.</b>Recent payments may be missing until it finishes (${S.nodePct}%). Sending waits until then. ${cap("B", "get_info sync fields", "Kit exercises get_connections and get_last_block_header, not get_info (TJS-1994)")}<div class="bar"><i style="width:${S.nodePct}%"></i></div></div></div>`,
     scanning: `<div class="banner net">${icon("clock", "i")}<div class="body"><b>Scanning blocks for your payments.</b>Block ${Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}. Balances may still go up. ${cap("A", "refresh", "wallet refresh / rescan_blockchain")}<div class="bar"><i style="width:${S.scanPct}%"></i></div></div></div>`,
     offline: `<div class="banner bad">${icon("alert", "i")}<div class="body"><b>Can't reach your node at ${n.node}.</b>Showing balances from when the wallet last synced. Sending is paused until the node is back. If you use the Meownero test kit, check that it is running. ${cap("C", "offline handling", "GUI state; wallet-rpc refresh failure path not yet exercised in the kit")}<div class="row"><button class="btn" data-act="retry">Try again</button><button class="btn quiet" data-go="node">Node settings</button></div></div></div>`,
-    "wrong-net": `<div class="banner bad">${icon("alert", "i")}<div class="body"><b>That node is on a different network.</b>It reports ${NETS[n.other].title}, but this wallet belongs to the ${n.title}. Nothing was loaded from it. Connect to a ${n.tag} node or open a different wallet. ${cap("C", "nettype check", "GUI compares get_info nettype; not exercised in the kit")}<div class="row"><button class="btn" data-go="node">Choose another node</button></div></div></div>`,
+    "wrong-net": `<div class="banner bad">${icon("alert", "i")}<div class="body"><b>That node is on a different network.</b>It reports the ${NETS[n.other].prose}, but this wallet belongs to the ${n.prose}. Nothing was loaded from it. Connect to a ${n.tag} node or open a different wallet. ${cap("C", "nettype check", "GUI compares get_info nettype; not exercised in the kit")}<div class="row"><button class="btn" data-go="node">Choose another node</button></div></div></div>`,
   }[S.node] || "";
   return r + c;
 }
@@ -1066,7 +1066,7 @@ function validateSend() {
   if (!to) errs.to = "Enter the address you're paying.";
   else if (/[^1-9A-HJ-NP-Za-km-z]/.test(to)) errs.to = "Addresses don't contain 0, O, I or l, spaces or punctuation. Check for a typo.";
   else if (to.length !== 95 && to.length !== 106) errs.to = `This address is incomplete: it has ${to.length} characters, and a full one has 95.`;
-  else if (to[0] === "M") errs.to = "That's a Meownero mainnet address. This wallet only sends test coins on the " + n.title + ". Mainnet doesn't exist yet.";
+  else if (to[0] === "M") errs.to = "That's a Meownero mainnet address. This wallet only sends test coins on the " + n.prose + ". Mainnet doesn't exist yet.";
   else if (to[0] !== n.prefix) errs.to = S.net === "regtest" ? "That's a Meownero testnet address. This wallet is on the local regtest, so it can't pay it." : "That isn't a Meownero testnet address. It may be a local regtest or Monero address.";
   else if (S.net === "regtest" && to !== addr("self") && !KIT_WALLETS.some(([k]) => addr(k) === to)) errs.to = "That isn't one of the test wallets in your Meownero test kit. On the local regtest you can only pay those wallets. If you meant one of them, pick it above.";
   else if (!Object.values(ADDR[S.net]).includes(to)) errs.to = "This address has a typo somewhere: its checksum doesn't match. Copy it again from the person you're paying.";
@@ -1342,7 +1342,7 @@ function quizOptions(p) {
 }
 ROUTES.push(["create-4", "Create: ready", "First run"]);
 SCREENS["create-4"] = onb(() => `${steps(4, 4)}<h1>Your test wallet is ready</h1>
-  <p class="muted">${esc(S.onb.name)} is on the ${esc(net().title)}. It's empty for now.</p>
+  <p class="muted">${esc(S.onb.name)} is on the ${esc(net().prose)}. It's empty for now.</p>
   ${capsLine(cap("A", "get_address", "wallet-rpc get_address"))}
   <div class="card" style="margin:16px 0"><div class="small muted" style="margin-bottom:6px">Your address</div>${grouped(addr("self"))}</div>
   <div class="row"><button class="btn primary lg" data-act="open-new">Open wallet</button></div>`);
@@ -1410,7 +1410,7 @@ SCREENS.node = () => {
     <dl class="dl">
       <dt>Status</dt><dd>${st}</dd>
       <dt>Node</dt><dd>${remote ? "node.example-test.org:29081 <span class='muted small'>someone else's node</span>" : `${n.node} <span class="muted small">${esc(n.nodeName)}</span>`}</dd>
-      <dt>Network</dt><dd>${S.node === "wrong-net" ? `<span style="color:var(--danger)">${esc(NETS[n.other].title)}</span> · this wallet needs ${esc(n.title)}` : esc(n.title)}</dd>
+      <dt>Network</dt><dd>${S.node === "wrong-net" ? `<span style="color:var(--danger)">${esc(NETS[n.other].name)}</span> · this wallet needs the ${esc(n.prose)}` : esc(n.title)}</dd>
       <dt>Node height</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.node === "node-sync" ? `${Math.round(S.tip * S.nodePct / 100).toLocaleString("en-US")} of ${S.tip.toLocaleString("en-US")}` : S.tip.toLocaleString("en-US")}</dd>
       <dt>Wallet scanned to</dt><dd class="tnum">${S.node === "scanning" ? Math.round(S.tip * S.scanPct / 100).toLocaleString("en-US") : S.node === "synced" || remote ? S.tip.toLocaleString("en-US") : "Waiting for node"}</dd>
       <dt>Peers</dt><dd class="tnum">${S.node === "offline" || S.node === "wrong-net" ? "—" : S.net === "regtest" ? "1 <span class='muted small'>a local regtest may have none</span>" : "8"}</dd>
