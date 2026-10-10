@@ -30,6 +30,58 @@ def write(path, value):
     path.write_text(json.dumps(value, indent=2) + '\n')
 
 
+def public_check(value):
+    """Project fixed check evidence; execution argv and paths remain private."""
+    enums = {
+        'schema': {'meownero-native-windows-ci-check/1', 'meownero-portable-native-mac-check/1'},
+        'result': {'FAIL', 'PASS_NATIVE_ARCHIVE_JOURNEY', 'PASS_TRANSLATED_ARCHIVE_JOURNEY'},
+        'native_architecture': {'i686', 'x86_64', 'aarch64'},
+        'package_architecture': {'i686', 'x86_64', 'aarch64'},
+        'execution_substrate': {'NATIVE', 'NATIVE_WINDOWS_WOW64', 'ROSETTA_TRANSLATED_MACOS_X86_64'},
+        'windows_32bit_os_execution': {'UNTESTED'},
+        'console_mode': {'OWNED_NEW_CONSOLE', 'EXISTING_ATTACHED_CONSOLE'},
+    }
+    def project(row, keys):
+        result = {}
+        for key in keys:
+            if key in row:
+                assert type(row[key]) in (int, float, bool) or row[key] is None
+                result[key] = row[key]
+        return result
+    result = project(value, ('wall_seconds', 'resident_limit_bytes', 'peak_resident_bytes',
+                            'initial_console_process_count', 'owned_job_created', 'owned_console_freed'))
+    for key, allowed in enums.items():
+        if key in value:
+            assert value[key] in allowed
+            result[key] = value[key]
+    for key in ('archive_sha256',):
+        if key in value:
+            assert len(value[key]) == 64 and set(value[key]) <= set('0123456789abcdef')
+            result[key] = value[key]
+    result['phases'] = []
+    for row in value.get('phases', []):
+        assert row['name'] in ('exception-probe', 'preflight', 'journey', 'controls')
+        phase = project(row, ('pid', 'exit', 'reaped', 'wall_seconds'))
+        phase['name'] = row['name']
+        result['phases'].append(phase)
+    if 'cleanup' in value:
+        result['cleanup'] = [project(row, ('pid', 'removed')) for row in value['cleanup']]
+    if 'owned_job' in value:
+        job = value['owned_job']
+        result['owned_job'] = project(job, ('active_processes', 'total_processes', 'peak_committed_bytes', 'memory_limit_bytes'))
+        result['owned_job']['children'] = [project(row, ('pid', 'exit')) for row in job.get('children', [])]
+    if 'native_exception_probe' in value:
+        probe = value['native_exception_probe']
+        projected = project(probe, ('exit', 'reaped', 'deadline_seconds', 'exact_success_line', 'cleanup_count_asserted_by_bound_fixture'))
+        assert probe['result'] == 'PASS_NATIVE_I686_EXCEPTION_PROBE' and probe['newline'] in ('LF', 'CRLF')
+        projected.update(result=probe['result'], newline=probe['newline'])
+        for key in ('sha256', 'source_sha256'):
+            assert len(probe[key]) == 64 and set(probe[key]) <= set('0123456789abcdef')
+            projected[key] = probe[key]
+        result['native_exception_probe'] = projected
+    return result
+
+
 def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
               supervision_schema='meownero-native-mac-ci-supervision/1',
               failure_label='native Intel archive check'):
@@ -670,7 +722,8 @@ def main():
                                      ('check-receipt.json', 'check.json')]:
                     path = check_root / source
                     if path.is_file() and not path.is_symlink():
-                        write(public / name, json.loads(path.read_text()))
+                        value = json.loads(path.read_text())
+                        write(public / name, public_check(value) if name == 'check.json' else value)
             deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
             if deferred:
                 proof['result'] = 'FAIL'

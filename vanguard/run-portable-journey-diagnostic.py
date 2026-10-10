@@ -55,7 +55,7 @@ def main():
                     'owned process exited: ': 'JOURNEY_CHILD_EXITED',
                     'startup timeout: ': 'NATIVE_STARTUP_TIMEOUT', 'RPC failed: ': 'RPC_FAILURE'}
         # Compare internally; never serialize exception text or traceback.
-        message = str(error) if isinstance(error, (RuntimeError, TimeoutError)) else ''
+        message = str(error) if isinstance(error, (RuntimeError, TimeoutError)) or type(error).__name__ == 'JourneyInterrupted' else ''
         reason = reasons.get(message, 'EXCEPTION_UNCLASSIFIED')
         for prefix, value in prefixes.items():
             if message.startswith(prefix):
@@ -129,7 +129,7 @@ def main():
                     receipt['available_memory_bytes'] = available
                 phase = anchors.get(frame.f_lineno)
                 if phase and phase not in seen:
-                    if 'first_failure' not in receipt and phase != 'OWNED_CLEANUP':
+                    if 'first_failure' not in receipt:
                         receipt['completed_phases'].append(receipt['phase'])
                     receipt['phase'] = phase
                     seen.add(phase)

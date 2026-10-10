@@ -1,0 +1,90 @@
+{
+  "schema": "meownero-portable-journey/1",
+  "result": "PASS_NATIVE_JOURNEY",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "architecture": "aarch64",
+  "release_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e",
+  "program_sha256": {
+    "monerod": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+    "monero-wallet-cli": "eea8a6e59a8b6b1439c97d03001736af5cbbdc7610106d4f189ce76c571827d3",
+    "monero-wallet-rpc": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142"
+  },
+  "cleanup": [
+    {
+      "name": "cli",
+      "pid": 25693,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "restored",
+      "pid": 25182,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "receiver",
+      "pid": 25173,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "sender",
+      "pid": 24746,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "daemon",
+      "pid": 24742,
+      "exit": 0,
+      "removed": true
+    }
+  ],
+  "payments": [
+    {
+      "tx_hash": "0e548b98543845efb98d98dd9e7769ba3e3d1d4ea74657ec073dbf8b3bef9e3b",
+      "amount_atomic": 5000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    },
+    {
+      "tx_hash": "595b5176e966dde92ad75e20281da8c09830c773cb791b8100c7efc9216299bc",
+      "amount_atomic": 2000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    }
+  ],
+  "native_processes": [
+    {
+      "name": "daemon",
+      "pid": 24742,
+      "binary_sha256": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "sender",
+      "pid": 24746,
+      "binary_sha256": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "receiver",
+      "pid": 25173,
+      "binary_sha256": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "restored",
+      "pid": 25182,
+      "binary_sha256": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142",
+      "bundled_library_sha256": {}
+    }
+  ],
+  "execution_substrate": "NATIVE",
+  "receive_atomic": 5000000000000,
+  "restore_matches": true,
+  "subsequent_spend_atomic": 2000000000000,
+  "cli_open_restored_wallet": true,
+  "wall_seconds": 13.121
+}
