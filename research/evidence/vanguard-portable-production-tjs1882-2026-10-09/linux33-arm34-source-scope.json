@@ -1,0 +1,20 @@
+{
+  "schema": "meownero-linux33-arm34-source-scope/1",
+  "result": "PASS_SOURCE_SCOPE_ONLY",
+  "added_license_function": "link_inventory",
+  "changed_existing_license_functions": [
+    "coverage"
+  ],
+  "unchanged_license_functions": [
+    "retain_depends",
+    "rust_coverage",
+    "sha"
+  ],
+  "controllers": "ONLY_package_failure_CHANGED_ALL_WORKER_MAIN_FINALIZERS_AST_UNCHANGED",
+  "native_acceptance": false,
+  "source_sha256": "a3ec22abcd7c26f86a96f806fb206e7731989827926bbff65c1b3d4deaebbb20",
+  "fixture_sha256": "0c7e24fe56b8649a851e72f9e0e4db8a750c0fbed4994fe3863dbea15be7bbd0",
+  "known_defect": "Relative pinned depends paths were silently treated as project contrib libraries",
+  "actual_31_32_causality": "UNPROVEN_LINK_COMMANDS_NOT_EXPORTED",
+  "guard_preservation": "Missing-component and static dependency assertions retained"
+}

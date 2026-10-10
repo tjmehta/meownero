@@ -1,0 +1,135 @@
+{
+  "result": "PASS_READ_ONLY_RETAINED_WINDOWS_X64_INVENTORY",
+  "helper_sha256": "a3ec22abcd7c26f86a96f806fb206e7731989827926bbff65c1b3d4deaebbb20",
+  "link_commands": [
+    {
+      "target": "daemon",
+      "sha256": "587fcb38dea7fbd86c47894ce2ca8e1646b6b4331aac8edb2fd902a1cddfb4c6"
+    },
+    {
+      "target": "daemon",
+      "response_file": "src/daemon/CMakeFiles/daemon.dir/objects1.rsp",
+      "sha256": "fade8513ad98f3183879ff75c4a5ef630100055aeb1503c984609c21cbf17cb3"
+    },
+    {
+      "target": "daemon",
+      "response_file": "src/daemon/CMakeFiles/daemon.dir/linkLibs.rsp",
+      "sha256": "dcf5eacbddbb13cbfd1e0a9b011527cd8a32eff1bd1d416a753499d8888a9fa6"
+    },
+    {
+      "target": "simplewallet",
+      "sha256": "1dfe820b771ee9375b3d55887c64fa91f2aa7cc2382f65e628e724a29145b606"
+    },
+    {
+      "target": "simplewallet",
+      "response_file": "src/simplewallet/CMakeFiles/simplewallet.dir/objects1.rsp",
+      "sha256": "0d7e0b43804a7846e141127e37d7917ed139a62a2465ee1c706f7765a5b51a35"
+    },
+    {
+      "target": "simplewallet",
+      "response_file": "src/simplewallet/CMakeFiles/simplewallet.dir/linkLibs.rsp",
+      "sha256": "caba77d21b51f772a828200e702c8b6d768a9b11adfa6c063a244314ae04262f"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "sha256": "fe8a15ee6e4661b38890d5542d72ad32099e4439428c65cc2e1a01d6164b4804"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "response_file": "src/wallet/CMakeFiles/wallet_rpc_server.dir/objects1.rsp",
+      "sha256": "d2f5a00c7a8f87b6118c243ba570dbbe2d95231b994892e813ed09d244eef7a9"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "response_file": "src/wallet/CMakeFiles/wallet_rpc_server.dir/linkLibs.rsp",
+      "sha256": "8b2c564dbd6d4c52c65e8daa958e081e529a2818d3534284ef4b823d07d5ac80"
+    }
+  ],
+  "libraries": [
+    "libboost_atomic.a",
+    "libboost_charconv.a",
+    "libboost_chrono.a",
+    "libboost_container.a",
+    "libboost_date_time.a",
+    "libboost_filesystem.a",
+    "libboost_locale.a",
+    "libboost_program_options.a",
+    "libboost_serialization.a",
+    "libboost_thread.a",
+    "libcrypto.a",
+    "libsodium.a",
+    "libssl.a",
+    "libunbound.a",
+    "libzmq.a"
+  ],
+  "external_components": [
+    "Easylogging++",
+    "LMDB",
+    "RandomX",
+    "mx25519",
+    "qrcodegen"
+  ],
+  "origins": [
+    [
+      "libboost_atomic.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_charconv.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_chrono.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_container.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_date_time.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_filesystem.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_locale.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_program_options.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_serialization.a",
+      "pinned_depends"
+    ],
+    [
+      "libboost_thread.a",
+      "pinned_depends"
+    ],
+    [
+      "libcrypto.a",
+      "pinned_depends"
+    ],
+    [
+      "libsodium.a",
+      "pinned_depends"
+    ],
+    [
+      "libssl.a",
+      "pinned_depends"
+    ],
+    [
+      "libunbound.a",
+      "pinned_depends"
+    ],
+    [
+      "libzmq.a",
+      "pinned_depends"
+    ]
+  ],
+  "native_acceptance": false
+}

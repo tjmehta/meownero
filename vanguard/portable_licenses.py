@@ -133,6 +133,72 @@ def rust_coverage(build, package):
     return summary, [found[key] for key in sorted(required)]
 
 
+def link_inventory(source, binary_build, depends_root, container_sources=(), windows=False):
+    """Resolve library and response paths from each actual linker working directory."""
+    source, binary_build = source.resolve(), binary_build.resolve()
+    depends_root = depends_root.resolve() if depends_root else None
+    link_files, libraries, origins = [], set(), set()
+    package_context = {'component': None, 'libraries': origins, 'link_commands': link_files}
+    external_libraries = {}
+    external = {'liblmdb.a': 'LMDB', 'libmx25519.a': 'mx25519', 'librandomx.a': 'RandomX',
+                'libeasylogging.a': 'Easylogging++', 'libqrcodegen.a': 'qrcodegen'}
+    for target in ['daemon', 'simplewallet', 'wallet_rpc_server']:
+        matches = list(binary_build.rglob('CMakeFiles/' + target + '.dir/link.txt'))
+        assert len(matches) == 1, 'missing/ambiguous linker inventory: ' + target
+        link = matches[0]
+        cwd = link.parent.parent.parent
+        link_files.append({'target': target, 'sha256': sha(link)})
+
+        def arguments(text, seen=()):
+            for token in shlex.split(text):
+                if token.startswith('@'):
+                    response = (cwd / token[1:]).resolve()
+                    assert response.is_relative_to(binary_build) and response not in seen, 'unsafe linker response file'
+                    assert response.is_file() and not response.is_symlink(), 'missing linker response file'
+                    link_files.append({'target': target, 'response_file': str(response.relative_to(binary_build)), 'sha256': sha(response)})
+                    yield from arguments(response.read_text(), (*seen, response))
+                else:
+                    yield token
+
+        for token in arguments(link.read_text()):
+            if token.startswith('-l'):
+                allowed = {'-lc', '-lm', '-ldl', '-lrt', '-lpthread', '-lstdc++'}
+                if windows:
+                    allowed |= {'-lws2_32', '-lmswsock', '-lwinhttp', '-lcrypt32', '-liphlpapi',
+                                '-lshlwapi', '-ldnsapi', '-lbcrypt', '-ladvapi32', '-luserenv',
+                                '-lkernel32', '-luser32', '-lshell32', '-lole32', '-lversion', '-lrpcrt4', '-lntdll', '-ldbghelp'}
+                    allowed |= {'-lsynchronization', '-lgdi32', '-lwinspool', '-loleaut32', '-luuid', '-lcomdlg32'}
+                assert token in allowed, 'unmapped linker library: ' + token
+            if not re.search(r'\.(?:a|so(?:\.\d+)*)$', token):
+                continue
+            path = Path(token)
+            normalized = (cwd / path).resolve()
+            if path.is_absolute():
+                for alias in container_sources:
+                    if path.is_relative_to(alias):
+                        normalized = (source / path.relative_to(alias)).resolve()
+                        break
+            if depends_root and normalized.is_relative_to(depends_root):
+                assert normalized.parent == depends_root / 'lib', 'non-pinned depends library origin'
+                libraries.add(path.name)
+                origins.add((path.name, 'pinned_depends'))
+            elif ('contrib' in normalized.parts and 'depends' in normalized.parts) or ('contrib' in path.parts and 'depends' in path.parts):
+                raise AssertionError('non-pinned depends library origin')
+            elif normalized.is_relative_to(binary_build / 'external'):
+                assert path.name in external, 'unmapped static dependency: ' + token
+                external_libraries.setdefault(external[path.name], []).append(path.name)
+            elif normalized.is_relative_to(binary_build / 'src') or normalized.is_relative_to(binary_build / 'contrib/epee') or normalized == binary_build / 'lib/libwallet.a':
+                pass
+            elif 'contrib' in normalized.parts or 'contrib' in path.parts:
+                raise AssertionError('unmapped contrib library origin')
+            elif path.is_absolute():
+                libraries.add(path.name)
+                origins.add((path.name, 'system'))
+            else:
+                raise AssertionError('unmapped source library: ' + token)
+    return link_files, libraries, external_libraries, origins
+
+
 def coverage(build, package, mac, bundled, windows=False, depends_static=False):
     source = build / 'monero-fcmp'
     licenses = package / 'licenses'
@@ -177,53 +243,27 @@ def coverage(build, package, mac, bundled, windows=False, depends_static=False):
     # Inventory the actual three linker commands, including static libraries
     # invisible to otool/readelf. Unknown external libraries stop packaging.
     binary_build = source / ('build/portable' if mac else 'build/vanguard')
-    link_files = []
-    libraries = set(bundled)
-    external = {'liblmdb.a': 'LMDB', 'libmx25519.a': 'mx25519', 'librandomx.a': 'RandomX',
-                'libeasylogging.a': 'Easylogging++', 'libqrcodegen.a': 'qrcodegen'}
-    for target in ['daemon', 'simplewallet', 'wallet_rpc_server']:
-        matches = list(binary_build.rglob('CMakeFiles/' + target + '.dir/link.txt'))
-        assert len(matches) == 1, 'missing/ambiguous linker inventory: ' + target
-        link = matches[0]
-        link_files.append({'target': target, 'sha256': sha(link)})
-
-        def arguments(text, seen=()):
-            for token in shlex.split(text):
-                if token.startswith('@'):
-                    response = (link.parent.parent.parent / token[1:]).resolve()
-                    assert response.is_relative_to(binary_build.resolve()) and response not in seen, 'unsafe linker response file'
-                    assert response.is_file() and not response.is_symlink(), 'missing linker response file'
-                    link_files.append({'target': target, 'response_file': str(response.relative_to(binary_build)), 'sha256': sha(response)})
-                    yield from arguments(response.read_text(), (*seen, response))
-                else:
-                    yield token
-
-        for token in arguments(link.read_text()):
-            if token.startswith('-l'):
-                allowed = {'-lc', '-lm', '-ldl', '-lrt', '-lpthread', '-lstdc++'}
-                if windows:
-                    allowed |= {'-lws2_32', '-lmswsock', '-lwinhttp', '-lcrypt32', '-liphlpapi',
-                                '-lshlwapi', '-ldnsapi', '-lbcrypt', '-ladvapi32', '-luserenv',
-                                '-lkernel32', '-luser32', '-lshell32', '-lole32', '-lversion', '-lrpcrt4', '-lntdll', '-ldbghelp'}
-                    allowed |= {'-lsynchronization', '-lgdi32', '-lwinspool', '-loleaut32', '-luuid', '-lcomdlg32'}
-                assert token in allowed, \
-                    'unmapped linker library: ' + token
-            if not re.search(r'\.(?:a|so(?:\.\d+)*)$', token):
-                continue
-            path = Path(token)
-            if path.is_absolute():
-                libraries.add(path.name)
-            elif 'external' in path.parts:
-                assert path.name in external, 'unmapped static dependency: ' + token
-                next(c for c in components if c['component'] == external[path.name])['libraries'].append(path.name)
-            else:
-                assert 'src' in (link.parent / path).resolve().parts or 'contrib' in path.parts or path.name == 'libwallet.a', \
-                    'unmapped source library: ' + token
+    receipt = json.loads((build / 'build-receipt.json').read_text())
+    depends_root = None
+    if mac or depends_static:
+        target = receipt.get('target', 'macos-aarch64')
+        host = {'linux-x86_64': 'x86_64-unknown-linux-gnu', 'linux-aarch64': 'aarch64-unknown-linux-gnu',
+                'windows-x86_64': 'x86_64-w64-mingw32', 'windows-i686': 'i686-w64-mingw32',
+                'windows-aarch64': 'aarch64-w64-mingw32', 'macos-aarch64': 'arm64-apple-darwin',
+                'macos-x86_64': 'x86_64-apple-darwin'}[target]
+        depends_root = source / 'contrib/depends' / host
+    container_sources = (Path('/out/monero-fcmp'),) if windows else (() if mac else (Path('/src'), Path('/work/monero-fcmp')))
+    link_files, libraries, external_libraries, origins = link_inventory(source, binary_build, depends_root, container_sources, windows)
+    libraries.update(bundled)
+    origins.update((name, 'bundled') for name in bundled)
+    for component, names in external_libraries.items():
+        next(c for c in components if c['component'] == component)['libraries'].extend(names)
 
     if mac or depends_static:
         dependency_libraries = set()
         for c in retain_depends(build):
             names = [n for n in libraries if n.startswith(DEPENDS[c['component']])]
+            package_context = {'component': c['component'], 'libraries': sorted(origins), 'link_commands': link_files}
             if depends_static:
                 assert all(n.endswith('.a') for n in names), 'older baseline requires the pinned static dependency closure'
             dependency_libraries.update(names)
