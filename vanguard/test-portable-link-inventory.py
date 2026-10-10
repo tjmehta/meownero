@@ -52,7 +52,9 @@ def main():
                 elif style == 'mixed':
                     paths = [str(p) if n % 2 else os.path.relpath(p, cwd) for n, p in enumerate(paths)]
                 tokens = [str(p) for p in paths]
-                tokens += ['../common/libcommon.a', '../../contrib/epee/src/libepee.a', '../../external/randomx/librandomx.a']
+                tokens += ['../common/libcommon.a', '../cryptonote_core/libcryptonote_core.a',
+                           '../cryptonote_basic/libcryptonote_basic.a', '../cryptonote_protocol/libcryptonote_protocol.a',
+                           '../../contrib/epee/src/libepee.a', '../../external/randomx/librandomx.a']
                 if style.startswith('response'):
                     response = link.with_name('libraries.rsp')
                     response.write_text(shlex.join([os.path.relpath(p, cwd) for p in paths]))
@@ -108,6 +110,19 @@ def main():
             cases.append({'case': folder + '-pinned-basename-before-pinned-arguments', 'result': 'PASS_REFUSAL'})
         refuse('outside-project-src', os.path.relpath(source / 'outside/src/libcommon.a', cwd), 'unmapped source')
         refuse('absolute-untrusted-pinned-basename', '/opt/untrusted/libcrypto.a', 'non-pinned origin')
+        for basename in (*NAMES, 'libcrypto.so.3', 'libssl.so.3'):
+            for folder in ('src', 'contrib/epee', 'external'):
+                refuse(folder + '-' + basename + '-origin-still-refused',
+                       binary_build / folder / basename, 'non-pinned origin')
+        for basename in ('libcrypto.so.3', 'libssl.so.3'):
+            configure('absolute', [*NAMES, basename])
+            assert (basename, 'pinned_depends') in inventory()[3]
+            cases.append({'case': basename + '-pinned-origin-still-recognized', 'result': 'PASS'})
+        alias = depends / 'lib/libcrypto.a'
+        alias.parent.mkdir(parents=True)
+        alias.symlink_to(binary_build / 'src/cryptonote_core/libcryptonote_core.a')
+        refuse('pinned-openssl-symlink-to-project-still-refused', alias, 'non-pinned depends')
+        alias.unlink()
         configure('absolute')
         links[0].write_text(links[0].read_text() + ' /opt/untrusted/libcrypto.a')
         try:

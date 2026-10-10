@@ -10,6 +10,10 @@ import sys
 
 BUILD = Path('/build')
 SOURCE = BUILD / 'monero-fcmp'
+RECIPE = Path('/recipe')
+
+sys.path.insert(0, str(RECIPE / 'vanguard'))
+import portable_licenses
 
 
 def run(argv, cwd=SOURCE, timeout=3500):
@@ -21,9 +25,61 @@ def sha(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
+def audit_links(binary_build, depends_root):
+    """Fail before program compilation and retain source-bound safe diagnostics."""
+    context = {}
+    receipt = {'schema': 'meownero-docker-link-origin-audit/1',
+               'scope': 'GENERATED_COMMANDS_ONLY_NO_RUNTIME_EVIDENCE',
+               'depends_root': 'SOURCE/' + str(depends_root.relative_to(SOURCE)),
+               'source_sha256': {str(p.relative_to(RECIPE)): sha(p) for p in
+                   (RECIPE / 'vanguard/source-lock.json', RECIPE / 'vanguard/portable_licenses.py',
+                    RECIPE / 'vanguard/docker/compile.py')}, 'result': 'INCOMPLETE'}
+    public_names = r'lib(?:boost_(?:filesystem|program_options|serialization|thread|chrono|atomic|container|date_time|charconv|locale)|ssl|crypto|sodium|unbound|zmq)\.(?:a|so(?:\.\d+)*)'
+    def safe_name(name):
+        return name if re.fullmatch(public_names, name) else 'OTHER_LIBRARY'
+    def save():
+        receipt['link_commands'] = [{'target': row['target'], 'sha256': row['sha256'],
+                                    'kind': 'response_file' if 'response_file' in row else 'link_command'}
+                                   for row in context.get('link_commands', [])]
+        receipt['libraries'] = [{'basename': safe_name(name), 'origin': origin}
+                                for name, origin in sorted(context.get('libraries', []))]
+        (BUILD / 'link-origin-audit.json').write_text(json.dumps(receipt, indent=2) + '\n')
+    try:
+        _, libraries, _, origins = portable_licenses.link_inventory(SOURCE, binary_build, depends_root, diagnostic=context)
+        for key in ('token', 'normalized', 'target'):
+            context.pop(key, None)
+        for component in portable_licenses.DEPENDS:
+            context['component'] = component
+            names = [n for n in libraries if portable_licenses.depends_component(n) == component]
+            assert names, 'depends component absent from linker inventory'
+            assert all({origin for name, origin in origins if name == n} == {'pinned_depends'} for n in names), \
+                'pinned depends library has mixed/non-pinned origins'
+            assert all(n.endswith('.a') for n in names), 'older baseline requires the pinned static dependency closure'
+        receipt['result'] = 'PASS_LINK_ORIGINS'
+    except BaseException as error:
+        receipt.update(result='REFUSED_LINK_ORIGIN', failure_type=type(error).__name__,
+                       component=context.get('component'), target=context.get('target'))
+        normalized = context.get('normalized')
+        if normalized is not None:
+            token = context['token']
+            receipt['basename'] = safe_name(normalized.name)
+            relative = str(normalized.relative_to(SOURCE)) if normalized.is_relative_to(SOURCE) else None
+            if relative and re.fullmatch(r'(?:build/vanguard|contrib/depends)/[a-z0-9_./+-]+', relative) and receipt['basename'] != 'OTHER_LIBRARY':
+                receipt['normalized_path'] = 'SOURCE/' + relative
+                receipt['token'] = token if not Path(token).is_absolute() and re.fullmatch(r'[a-z0-9_./+-]+', token) else receipt['normalized_path']
+            else:
+                receipt['normalized_path_sha256'] = hashlib.sha256(str(normalized).encode()).hexdigest()
+        try:
+            save()
+        except OSError as diagnostic_error:
+            print('link-origin diagnostic export failed:', type(diagnostic_error).__name__, file=sys.stderr)
+        raise
+    save()
+
+
 def main():
     inputs = json.loads((BUILD / 'inputs.json').read_text())
-    pin = json.loads(Path('/recipe/vanguard/source-lock.json').read_text())
+    pin = json.loads((RECIPE / 'vanguard/source-lock.json').read_text())
     assert os.uname().machine == 'x86_64'
     assert Path('/sys/fs/cgroup/memory.max').read_text().strip() == str(3 * 1024**3)
     assert Path('/sys/fs/cgroup/memory.swap.max').read_text().strip() == '0'
@@ -45,6 +101,7 @@ def main():
          '-DOPENSSL_SSL_LIBRARY=' + str(depends / host / 'lib/libssl.a'), '-Dsodium_USE_STATIC_LIBS=ON',
          '-DCMAKE_BUILD_TYPE=Release', '-DARCH=default', '-DBUILD_TESTS=OFF', '-DUSE_DEVICE_TREZOR=OFF',
          '-DBUILD_GUI_DEPS=OFF', '-DMANUAL_SUBMODULES=ON', '-DSTATIC=OFF', '-DUSE_READLINE=OFF'])
+    audit_links(binary_build, depends / host)
     run(['make', '-j1', 'daemon', 'simplewallet', 'wallet_rpc_server'], binary_build)
     libraries = BUILD / 'runtime-libs'
     libraries.mkdir()

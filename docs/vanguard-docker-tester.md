@@ -25,6 +25,11 @@ stages use that copied Dockerfile. It fetches public sources and dependencies in
 new image, verifies the upstream commit, all five submodules, Cargo.lock, Rust
 1.93.0 and dependency archive/recipe checksums, then compiles offline in its own
 2 CPU, 3 GiB memory and swap, 256 PID container with a one-hour deadline.
+Immediately after CMake generation, the builder audits all three linker commands
+for pinned static dependency origins before compiling the programs. It copies
+`link-origin-audit.json` out of the exact owned compiler before cleanup, with
+source and command hashes plus safe origin details for a refusal. Generated
+linker receipts cover source/package checks; runtime verification follows below.
 Package/license assertions remain mandatory. It retains build.json and exact
 logs, removes owned containers and records the final image ID under
 `images.runtime`. Failed attempts remain available for diagnosis. Cleanup queries have bounded

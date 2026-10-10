@@ -1,0 +1,133 @@
+{
+  "schema": "meownero-docker-generated-successor-origin-readback/1",
+  "scope": "EXACT_GENERATED_COMMANDS_NO_PROGRAM_COMPILE_IMAGE_OR_JOURNEY",
+  "predecessor": "598296e0a68ccedf32657bee05c8b6beb35f47dd",
+  "predecessor_source_bindings": 21,
+  "image_recipe_bindings": 20,
+  "uncopied_context_member": "docs/vanguard-docker-tester.md is frozen but not copied by Dockerfile",
+  "diagnostic_sha256": "f5132e385265e3bc89cbd19af18e409db5f4ec1df1549473d7a2f4f808f9865b",
+  "predecessor_failure_reproduced": true,
+  "token": "../cryptonote_core/libcryptonote_core.a",
+  "normalized_path": "/build/monero-fcmp/build/vanguard/src/cryptonote_core/libcryptonote_core.a",
+  "false_component": "openssl",
+  "source_fix_sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+  "result": "PASS_PINNED_STATIC_ORIGINS",
+  "components": {
+    "boost": [
+      "libboost_atomic.a",
+      "libboost_chrono.a",
+      "libboost_container.a",
+      "libboost_date_time.a",
+      "libboost_filesystem.a",
+      "libboost_program_options.a",
+      "libboost_serialization.a",
+      "libboost_thread.a"
+    ],
+    "openssl": [
+      "libcrypto.a",
+      "libssl.a"
+    ],
+    "sodium": [
+      "libsodium.a"
+    ],
+    "unbound": [
+      "libunbound.a"
+    ],
+    "zeromq": [
+      "libzmq.a"
+    ]
+  },
+  "link_commands": [
+    {
+      "target": "daemon",
+      "sha256": "b498b2f822c69e117e9ad54b9af04ddb32f330af77bf225b84cad1f92018d007"
+    },
+    {
+      "target": "simplewallet",
+      "sha256": "4346aad1e1ddb61da05deaaec03fb8b543980ce81558a37c042847120c0a351e"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "sha256": "27a0934b7aeecc76135db1a78bcf40311c637b6c2e9f03cc98e00b91dcc1e8b2"
+    }
+  ],
+  "external": {
+    "LMDB": [
+      "liblmdb.a",
+      "liblmdb.a",
+      "liblmdb.a"
+    ],
+    "mx25519": [
+      "libmx25519.a",
+      "libmx25519.a",
+      "libmx25519.a"
+    ],
+    "RandomX": [
+      "librandomx.a",
+      "librandomx.a",
+      "librandomx.a"
+    ],
+    "Easylogging++": [
+      "libeasylogging.a",
+      "libeasylogging.a",
+      "libeasylogging.a"
+    ],
+    "qrcodegen": [
+      "libqrcodegen.a"
+    ]
+  },
+  "origins": [
+    {
+      "basename": "libboost_atomic.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libboost_chrono.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libboost_container.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libboost_date_time.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libboost_filesystem.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libboost_program_options.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libboost_serialization.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libboost_thread.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libcrypto.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libsodium.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libssl.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libunbound.a",
+      "origin": "pinned_depends"
+    },
+    {
+      "basename": "libzmq.a",
+      "origin": "pinned_depends"
+    }
+  ]
+}

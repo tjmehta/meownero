@@ -59,6 +59,25 @@ def verify_context(context, expected):
     return inputs
 
 
+def retain_link_audit(out, invocation, name, image):
+    """Copy the generated-command receipt before exact compiler cleanup."""
+    row = {'retained': False}
+    try:
+        ids = query('ps', '-aq', '--no-trunc', '--filter', 'name=^/' + name + '$').splitlines()
+        assert len(ids) == 1
+        cid = ids[0]
+        proof(cid, 'meownero.invocation', invocation, name=name, image=image)
+        destination = out / 'link-origin-audit.json'
+        assert not destination.exists() and not destination.is_symlink()
+        query('cp', cid + ':/build/link-origin-audit.json', str(destination))
+        assert destination.is_file() and not destination.is_symlink() and destination.stat().st_nlink == 1
+        assert destination.stat().st_size < 256 * 1024
+        row.update(retained=True, sha256=hashlib.sha256(destination.read_bytes()).hexdigest())
+    except (Exception, KeyboardInterrupt) as error:
+        row['failure_type'] = type(error).__name__
+    return row
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out', type=Path, required=True)
@@ -82,6 +101,7 @@ def main():
     context = out / 'context'
     descriptor = None
     fetched_id = None
+    compile_started = False
     def save():
         save_receipt(out / 'build.json', receipt)
     def run(label, argv, seconds):
@@ -134,6 +154,7 @@ def main():
         receipt['images']['fetched'] = fetched_id
         verify_context(context, receipt['source_sha256'])
         admit(pins['base'], invocation, out, receipt, 'before-compile')
+        compile_started = True
         run('compile', ['docker', 'run', '--name', name, '--label', 'meownero.invocation=' + invocation,
              '--pull=never', '--network=none', '--cpus=2', '--memory=3g', '--memory-swap=3g', '--pids-limit=256',
              '--cap-drop=ALL', '--security-opt=no-new-privileges', '--ulimit', 'core=0', fetched_id,
@@ -153,6 +174,8 @@ def main():
     finally:
         with cleanup_signals():
             try:
+                if compile_started:
+                    receipt['link_origin_audit'] = retain_link_audit(out, invocation, name, fetched_id)
                 receipt['cleanup'] = cleanup_build(invocation, name, fetched_id)
                 if any(not row['removed'] for row in receipt['cleanup']):
                     receipt['result'] = 'UNRESOLVED_BUILD_CLEANUP'

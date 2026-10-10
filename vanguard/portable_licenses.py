@@ -133,12 +133,24 @@ def rust_coverage(build, package):
     return summary, [found[key] for key in sorted(required)]
 
 
-def link_inventory(source, binary_build, depends_root, container_sources=(), windows=False):
+def depends_component(basename):
+    # Boost names extend the underscore prefix. The other dependencies have
+    # complete stems: libcrypto.a is OpenSSL, libcryptonote_core.a is not.
+    for component, prefixes in DEPENDS.items():
+        if isinstance(prefixes, str):
+            prefixes = (prefixes,)
+        if any(basename.startswith(p if p.endswith('_') else p + '.') for p in prefixes):
+            return component
+    return None
+
+
+def link_inventory(source, binary_build, depends_root, container_sources=(), windows=False, diagnostic=None):
     """Resolve library and response paths from each actual linker working directory."""
     source, binary_build = source.resolve(), binary_build.resolve()
     depends_root = depends_root.resolve() if depends_root else None
     link_files, libraries, origins = [], set(), set()
-    package_context = {'component': None, 'libraries': origins, 'link_commands': link_files}
+    package_context = diagnostic if diagnostic is not None else {}
+    package_context.update(component=None, libraries=origins, link_commands=link_files)
     external_libraries = {}
     external = {'liblmdb.a': 'LMDB', 'libmx25519.a': 'mx25519', 'librandomx.a': 'RandomX',
                 'libeasylogging.a': 'Easylogging++', 'libqrcodegen.a': 'qrcodegen'}
@@ -182,8 +194,8 @@ def link_inventory(source, binary_build, depends_root, container_sources=(), win
                 continue
             path = Path(token)
             normalized = input_path(path).resolve()
-            component = next((name for name, prefix in DEPENDS.items() if path.name.startswith(prefix)), None)
-            package_context['component'] = component
+            component = depends_component(path.name)
+            package_context.update(component=component, token=token, normalized=normalized, target=target)
             if depends_root and normalized.is_relative_to(depends_root):
                 if normalized.parent != depends_root / 'lib':
                     origins.add((path.name, 'non_pinned_depends'))
@@ -279,7 +291,7 @@ def coverage(build, package, mac, bundled, windows=False, depends_static=False):
     if mac or depends_static:
         dependency_libraries = set()
         for c in retain_depends(build):
-            names = [n for n in libraries if n.startswith(DEPENDS[c['component']])]
+            names = [n for n in libraries if depends_component(n) == c['component']]
             package_context = {'component': c['component'], 'libraries': sorted(origins), 'link_commands': link_files}
             assert all({origin for name, origin in origins if name == n} == {'pinned_depends'} for n in names), 'pinned depends library has mixed/non-pinned origins'
             if depends_static:
@@ -296,7 +308,7 @@ def coverage(build, package, mac, bundled, windows=False, depends_static=False):
             components[-1]['source_archive_sha256'] = c['source_archive_sha256']
             components[-1]['recipe_sha256'] = c['recipe_sha256']
         if mac:
-            assert all(any(n.startswith(prefix) for prefix in DEPENDS.values()) for n in libraries), \
+            assert all(depends_component(n) for n in libraries), \
                 'unmapped native depends library'
         else:
             libraries -= dependency_libraries
