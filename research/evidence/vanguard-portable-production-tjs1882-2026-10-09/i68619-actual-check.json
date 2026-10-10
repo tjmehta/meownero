@@ -1,0 +1,62 @@
+{
+  "wall_seconds": 191.218,
+  "initial_console_process_count": 5,
+  "schema": "meownero-native-windows-ci-check/1",
+  "result": "FAIL",
+  "native_architecture": "x86_64",
+  "package_architecture": "i686",
+  "execution_substrate": "NATIVE_WINDOWS_WOW64",
+  "windows_32bit_os_execution": "UNTESTED",
+  "console_mode": "EXISTING_ATTACHED_CONSOLE",
+  "phases": [
+    {
+      "pid": 4512,
+      "exit": 0,
+      "reaped": true,
+      "name": "exception-probe"
+    },
+    {
+      "pid": 6976,
+      "exit": 0,
+      "reaped": true,
+      "name": "preflight"
+    },
+    {
+      "pid": 4280,
+      "exit": 1,
+      "reaped": true,
+      "name": "journey"
+    }
+  ],
+  "owned_job": {
+    "active_processes": 0,
+    "total_processes": 25,
+    "peak_committed_bytes": 615325696,
+    "memory_limit_bytes": 4294967296,
+    "children": [
+      {
+        "pid": 4512,
+        "exit": 0
+      },
+      {
+        "pid": 6976,
+        "exit": 0
+      },
+      {
+        "pid": 4280,
+        "exit": 1
+      }
+    ]
+  },
+  "native_exception_probe": {
+    "exit": 0,
+    "reaped": true,
+    "deadline_seconds": 60,
+    "exact_success_line": true,
+    "cleanup_count_asserted_by_bound_fixture": 1,
+    "result": "PASS_NATIVE_I686_EXCEPTION_PROBE",
+    "newline": "CRLF",
+    "sha256": "ee8ddee3410083de55c03870fc6411f1f14433292f83edff09372e10125167fd",
+    "source_sha256": "3e533f6bb05ac3529e2a2cb09d8967ecf3f6b8480d30b1be5171dac276fe5ae1"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "meownero-bound-journey-diagnostic/1",
+  "result": "FAIL",
+  "tester_sha256": "17835eafcb740ba1e65030df01c58505e96742dc33f439d9824977e089460ad0",
+  "phase": "OWNED_CLEANUP",
+  "completed_phases": [
+    "CALL_BOUND_JOURNEY",
+    "OUTPUT_GUARD",
+    "ACQUIRE_TESTER_LOCK",
+    "PREFLIGHT",
+    "CAPACITY_GUARD",
+    "PREPARE_PRIVATE_OUTPUT",
+    "INITIALIZE_OWNED_JOB",
+    "RESERVE_LOOPBACK_PORTS",
+    "START_DAEMON",
+    "START_WALLETS",
+    "CREATE_WALLETS",
+    "FUND_WALLET",
+    "PAYMENT_RECEIVE",
+    "RESTORE_WALLET",
+    "PAYMENT_SPEND"
+  ],
+  "available_memory_bytes": 5957210112,
+  "disk_free_bytes_used_by_guard": 77621604352,
+  "first_failure": {
+    "phase": "OPEN_NATIVE_CLI",
+    "reason": "EXCEPTION_UNCLASSIFIED",
+    "exception_type": "RuntimeError"
+  },
+  "journey_public_receipt_exists": true
+}
