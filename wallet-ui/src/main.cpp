@@ -3,10 +3,39 @@
 #include "activitymodel.h"
 
 #include <QCommandLineParser>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QQmlNetworkAccessManagerFactory>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+
+namespace {
+// The QML engine gets no network: anything but compiled-in qrc: or data: URLs
+// fails before a connection is attempted (trusted, bundled content only).
+class NoNetworkManager : public QNetworkAccessManager
+{
+protected:
+    QNetworkReply *createRequest(Operation op, const QNetworkRequest &request, QIODevice *data) override
+    {
+        const QString scheme = request.url().scheme();
+        if (scheme == QLatin1String("qrc") || scheme == QLatin1String("data"))
+            return QNetworkAccessManager::createRequest(op, request, data);
+        return QNetworkAccessManager::createRequest(op, QNetworkRequest(QUrl()), data);
+    }
+};
+class NoNetworkFactory : public QQmlNetworkAccessManagerFactory
+{
+public:
+    QNetworkAccessManager *create(QObject *parent) override
+    {
+        auto *nam = new NoNetworkManager;
+        nam->setParent(parent);
+        return nam;
+    }
+};
+} // namespace
 
 int main(int argc, char *argv[])
 {
@@ -47,6 +76,8 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("Meownero.Core", 1, 0, "Wallet", &wallet);
 
     QQmlApplicationEngine engine;
+    NoNetworkFactory noNetwork;
+    engine.setNetworkAccessManagerFactory(&noNetwork);
     // Only bundled, compiled-in QML is loaded; no network access is configured.
     engine.setInitialProperties({{QStringLiteral("showFixtures"), cli.isSet(fixtures)}});
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app, [] { QCoreApplication::exit(1); },

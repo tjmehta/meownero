@@ -153,6 +153,7 @@ PageBase {
         TextArea {
             id: toField
             Layout.fillWidth: true
+            textFormat: TextEdit.PlainText
             Layout.topMargin: 6
             text: page.s.to
             placeholderText: page.s.placeholder

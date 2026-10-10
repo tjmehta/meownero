@@ -436,6 +436,11 @@ void WalletController::navigate(const QString &route)
     // A locked or absent wallet keeps every wallet page out of reach, including by shortcut.
     if (shell && (!m_hasWallet || m_locked))
         return;
+    // Leaving for another wallet (welcome, create, restore) waits for a submission in flight.
+    if (!shell && route != QStringLiteral("unlock") && !onboarding() && refuseWalletChange())
+        return;
+    if (!shell && route != QStringLiteral("unlock") && m_route == QStringLiteral("unlock") && refuseWalletChange())
+        return;
     if (m_route == QStringLiteral("create-2") && route != QStringLiteral("create-2"))
         m_wordsRevealed = false;
     if (route == QStringLiteral("create-3") && !m_ack)
@@ -815,8 +820,15 @@ bool WalletController::confirmSend(const QString &reviewToken)
 
 void WalletController::onRelayFinished(quint64 attemptId, SimulatedBackend::SendOutcome outcome, const QString &reason)
 {
-    if (!m_attempt || m_attempt->id != attemptId || m_attempt->walletGeneration != m_walletGeneration) {
+    if (!m_attempt || m_attempt->id != attemptId) {
         ++m_staleDropped;
+        return;
+    }
+    if (m_attempt->walletGeneration != m_walletGeneration) {
+        // Unreachable while wallet changes are refused during a submission; never leave it set.
+        m_attempt.reset();
+        ++m_staleDropped;
+        emit changed();
         return;
     }
     // A submission already under way keeps its identity and finishes even if the user left Send.
@@ -891,6 +903,7 @@ void WalletController::reconcile(const QString &rowId)
         return;
     }
     m_checkRequest = m_nextId++;
+    m_checkEpoch = m_epoch;
     m_checkRowId = rowId;
     emit changed();
     say(QStringLiteral("Checking with your node."));
@@ -900,7 +913,9 @@ void WalletController::reconcile(const QString &rowId)
 void WalletController::onChecked(quint64 requestId, const QString &txid, bool found)
 {
     Tx *tx = m_ledger.find(m_checkRowId);
-    if (requestId == 0 || requestId != m_checkRequest || !tx || tx->status != TxStatus::Unknown || tx->txid != txid) {
+    // Evidence counts only for the session that asked: lock, node or wallet changes drop it.
+    if (requestId == 0 || requestId != m_checkRequest || m_checkEpoch != m_epoch || !tx
+        || tx->status != TxStatus::Unknown || tx->txid != txid) {
         ++m_staleDropped;
         return;
     }
@@ -1091,6 +1106,8 @@ void WalletController::invalidateSession(const QString &why)
     Q_UNUSED(why);
     ++m_epoch;
     m_prepRequest = 0;
+    m_checkRequest = 0; // an outstanding node check no longer applies; Check with node can run again
+    m_checkRowId.clear();
     if (m_sendStep == QStringLiteral("preparing"))
         m_sendStep = QStringLiteral("form");
     if (m_prepared) {
@@ -1160,12 +1177,19 @@ void WalletController::unlock(const QString &password)
     say(m_unlockError);
 }
 
+bool WalletController::refuseWalletChange()
+{
+    // A submission keeps its attempt identity and finishes against its own wallet.
+    if (!m_attempt)
+        return false;
+    say(QStringLiteral("A payment is still being submitted. Wait for it to finish before switching wallets."));
+    return true;
+}
+
 void WalletController::startOver()
 {
-    if (m_attempt) {
-        say(QStringLiteral("A payment is still being submitted. Wait for it to finish before switching wallets."));
+    if (refuseWalletChange())
         return;
-    }
     invalidateSession(QStringLiteral("wallet change"));
     m_locked = true; // the current wallet file stays on this computer, closed
     m_onbName = QStringLiteral("Test wallet");
@@ -1347,7 +1371,7 @@ void WalletController::pickQuizWord(int p, const QString &w)
 
 void WalletController::openNewWallet()
 {
-    if (m_route != QStringLiteral("create-4"))
+    if (m_route != QStringLiteral("create-4") || refuseWalletChange())
         return;
     loadWallet(ledger::Story::Empty, m_onbName.trimmed());
     m_ledger.created = m_ledger.tip - 4;
@@ -1468,7 +1492,7 @@ void WalletController::onScan(quint64 requestId, int percent)
 
 void WalletController::openRestoredWallet()
 {
-    if (m_route != QStringLiteral("restore-3") || m_restoreScan < 100)
+    if (m_route != QStringLiteral("restore-3") || m_restoreScan < 100 || refuseWalletChange())
         return;
     loadWallet(ledger::Story::Normal, m_onbName.trimmed());
     m_ledger.created = m_restoreHeight.toInt();
@@ -1543,7 +1567,7 @@ void WalletController::fixtureSetNodeState(const QString &state)
 
 void WalletController::fixtureSetStory(const QString &story)
 {
-    if (!m_hasWallet)
+    if (!m_hasWallet || refuseWalletChange())
         return;
     const ledger::Story s = story == QStringLiteral("empty") ? ledger::Story::Empty
                             : story == QStringLiteral("dust")  ? ledger::Story::Dust
@@ -1654,7 +1678,7 @@ void WalletController::fixtureFillSend(const QString &kind)
 
 void WalletController::fixtureFillRestore(const QString &kind)
 {
-    if (!m_route.startsWith(QStringLiteral("restore-")) && m_route != QStringLiteral("welcome"))
+    if ((!m_route.startsWith(QStringLiteral("restore-")) && m_route != QStringLiteral("welcome")) || refuseWalletChange())
         return;
     if (m_route != QStringLiteral("restore-1")) {
         m_route = QStringLiteral("restore-1");

@@ -27,6 +27,14 @@ class TstController : public QObject
         QVERIFY(w->review().value(QStringLiteral("open")).toBool());
     }
     QString token() { return w->review().value(QStringLiteral("token")).toString(); }
+    int outgoingAttemptRows()
+    {
+        int n = 0;
+        for (const ledger::Tx &t : w->ledgerState().txs)
+            if (t.type == ledger::TxType::Out && t.attemptId != 0)
+                ++n;
+        return n;
+    }
 
 private slots:
     void init()
@@ -380,6 +388,82 @@ private slots:
         w->fixtureSetNodeState(QStringLiteral("wrong-net"));
         QCOMPARE(w->node().value(QStringLiteral("height")).toString(), QStringLiteral("—"));
         QVERIFY(w->send().value(QStringLiteral("disabledReason")).toString().contains(QStringLiteral("your node")));
+    }
+
+    // Security review TJS-2018 finding 1 (probe p1b): lock while submitting, then try
+    // "Use a different wallet" and a restore. The wallet change waits; the relayed
+    // payment is recorded against its own wallet; sending works afterwards.
+    void walletChangeWaitsForSubmissionInFlight()
+    {
+        backend->relayDelayMs = 300;
+        openReview();
+        QVERIFY(w->confirmSend(token()));
+        w->lock();
+        QSignalSpy said(w, &WalletController::announce);
+        w->navigate(QStringLiteral("welcome")); // unlock page: "Use a different wallet"
+        QCOMPARE(w->route(), QStringLiteral("unlock"));
+        QVERIFY(said.last().first().toString().contains(QStringLiteral("still being submitted")));
+        w->fixtureFillRestore(QStringLiteral("sample"));
+        QCOMPARE(w->route(), QStringLiteral("unlock"));
+        QTRY_COMPARE(outgoingAttemptRows(), 1); // the relayed payment has a row
+        QCOMPARE(backend->relayedRefs().size(), 1);
+        w->navigate(QStringLiteral("welcome")); // now allowed
+        QCOMPARE(w->route(), QStringLiteral("welcome"));
+        w->navigate(QStringLiteral("unlock"));
+        w->unlock(QStringLiteral("simulated"));
+        openReview(QStringLiteral("1"));
+        QVERIFY(w->confirmSend(token())); // sending is not wedged
+        QTRY_COMPARE(backend->relayedRefs().size(), 2);
+    }
+
+    // Finding 1 via the reviewer fixture (probe p1c).
+    void fixtureStoryChangeWaitsForSubmission()
+    {
+        backend->relayDelayMs = 200;
+        openReview();
+        QVERIFY(w->confirmSend(token()));
+        const int rows = w->ledgerState().txs.size();
+        w->fixtureSetStory(QStringLiteral("normal"));
+        QTRY_COMPARE(w->ledgerState().txs.size(), rows + 1); // history was not replaced; the send landed
+        w->sendAnother();
+        openReview(QStringLiteral("1"));
+        QVERIFY(w->confirmSend(token()));
+    }
+
+    // A matched relay reply never leaves the attempt set, even for another wallet generation.
+    void noDroppedReplyLeavesAttemptSet()
+    {
+        backend->relayDelayMs = 100;
+        openReview();
+        QVERIFY(w->confirmSend(token()));
+        QTRY_COMPARE(w->send().value(QStringLiteral("step")).toString(), QStringLiteral("result"));
+        w->navigate(QStringLiteral("wallet"));
+        w->startOver();
+        QCOMPARE(w->route(), QStringLiteral("welcome"));
+    }
+
+    // Review risk R1 (probes p2a, p2b): node-check evidence is bound to the session that asked.
+    void nodeCheckReplyDroppedAfterNodeLossOrLock()
+    {
+        w->fixtureSetSendOutcome(QStringLiteral("drops"));
+        w->fixtureSetUnknownResolves(QStringLiteral("notsent"));
+        backend->checkDelayMs = 150;
+        openReview(QStringLiteral("1"));
+        QVERIFY(w->confirmSend(token()));
+        QTRY_COMPARE(w->sendResult().value(QStringLiteral("kind")).toString(), QStringLiteral("unknown"));
+        const QString row = w->sendResult().value(QStringLiteral("rowId")).toString();
+        w->reconcile(row);
+        w->fixtureSetNodeState(QStringLiteral("offline"));
+        QTest::qWait(300);
+        QVERIFY(w->detail(row).value(QStringLiteral("unknown")).toBool());
+        w->fixtureSetNodeState(QStringLiteral("synced"));
+        w->reconcile(row); // not blocked by the dropped check
+        w->lock();
+        QTest::qWait(300);
+        QVERIFY(w->detail(row).value(QStringLiteral("unknown")).toBool());
+        w->unlock(QStringLiteral("simulated"));
+        w->reconcile(row);
+        QTRY_VERIFY(w->detail(row).value(QStringLiteral("failed")).toBool());
     }
 };
 

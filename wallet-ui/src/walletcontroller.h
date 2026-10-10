@@ -221,6 +221,7 @@ private:
     };
 
     void invalidateSession(const QString &why);
+    bool refuseWalletChange();
     void setNode(const QString &state, bool announceIt = true);
     void setToast(const QString &text);
     void say(const QString &text);
@@ -289,6 +290,7 @@ private:
     QString m_resultTxid;
     quint64 m_checkRequest = 0;
     QString m_checkRowId;
+    quint64 m_checkEpoch = 0;
     quint64 m_mineRequest = 0;
 
     // Onboarding

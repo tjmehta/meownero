@@ -4,7 +4,7 @@ project(MeowneroWallet VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.12.0 EXACT REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 Test)
+find_package(Qt6 6.12.0 EXACT REQUIRED COMPONENTS Core Gui Network Qml Quick QuickControls2 Test)
 qt_standard_project_setup(REQUIRES 6.12)
 
 # Path-independent objects, so a clean build in another directory matches.
@@ -64,7 +64,7 @@ qt_add_qml_module(meownero-wallet
         qml/PageBase.qml
         qml/ReviewerFixtures.qml
 )
-target_link_libraries(meownero-wallet PRIVATE wallet_core Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(meownero-wallet PRIVATE wallet_core Qt6::Network Qt6::Quick Qt6::QuickControls2)
 
 enable_testing()
 foreach(t tst_amount tst_controller)

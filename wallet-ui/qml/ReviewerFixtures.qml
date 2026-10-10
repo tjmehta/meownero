@@ -95,7 +95,7 @@ Window {
             Group { label: "Diagnostics (allowlisted fields only)"
                 Opt { text: "Refresh"; onClicked: diag.text = Wallet.diagnostics() }
             }
-            TextArea { id: diag; Layout.fillWidth: true; readOnly: true; wrapMode: TextEdit.Wrap; font.family: Theme.mono; font.pointSize: 8.5; text: Wallet.diagnostics() }
+            TextArea { id: diag; Layout.fillWidth: true; readOnly: true; textFormat: TextEdit.PlainText; wrapMode: TextEdit.Wrap; font.family: Theme.mono; font.pointSize: 8.5; text: Wallet.diagnostics() }
         }
     }
 }

@@ -11,8 +11,10 @@ real screen-reader journey.
 
 usage: journey.py <app-binary> <evidence-dir> <portal-status-file> <portal-pid>
 """
+import http.server
 import json
 import os
+import threading
 import signal
 import subprocess
 import sys
@@ -52,6 +54,25 @@ def on_event(event):
     data = event.any_data
     ANNOUNCEMENTS.append({"t": round(time.time(), 3), "type": event.type, "text": data if isinstance(data, str) else str(data)})
 
+
+# Loopback listener for the markup-injection check (security review finding 2):
+# a note containing <img src=http://127.0.0.1:18777/...> must never be fetched.
+HTTP_HITS = []
+
+
+class _Hit(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        HTTP_HITS.append(self.path)
+        self.send_response(404)
+        self.end_headers()
+
+    def log_message(self, *args):
+        pass
+
+
+_srv = http.server.HTTPServer(("127.0.0.1", 18777), _Hit)
+threading.Thread(target=_srv.serve_forever, daemon=True).start()
+NOTE = '<img src="http://127.0.0.1:18777/review-note.png">'
 
 listener = Atspi.EventListener.new(on_event)
 listener.register("object:announcement")
@@ -511,9 +532,13 @@ def journey_send_review_unknown_consent():
     amount = next((n for n in app.raw() if n.get_name() == "Amount in MEOW"), None)
     txt = Atspi.Text.get_text(amount, 0, Atspi.Text.get_character_count(amount)) if amount else ""
     check("B12 form keeps what was typed", txt == "2.5", txt)
-    # Confirm the exact payment.
+    # Confirm the exact payment, with a markup-looking note typed into the real Note field.
+    app.tab_to("Note (optional)")
+    typ(NOTE)
     app.tab_to("Review payment")
     key("Return", wait=1.2)
+    check("B12b markup in a note is shown literally in review", any(("Note: " + NOTE) in x for x in app.names()))
+    shot("b12b-review-note-literal")
     t = time.time()
     key("Return", wait=0.3)
     check("B13 submitting announced", announced_since(t, "Submitting the payment to your node."))
@@ -554,6 +579,10 @@ def journey_send_review_unknown_consent():
     check("B20 absence proof resolves to not sent, announced", announced_since(t, "Not sent: your node never received this payment"))
     rb = next((i for i in app.nodes() if i["name"] == "Review payment" and i["role"] == "push button"), None)
     check("B21 sending is available again", rb is not None and rb["enabled"])
+    key("ctrl+2", wait=0.6)
+    check("B21b markup note appears literally in Activity", any(NOTE in x for x in app.names()))
+    check("B21c no remote content was fetched", not HTTP_HITS, json.dumps(HTTP_HITS))
+    shot("b21b-activity-note-literal")
     # Consent at the minimum window size on the testnet design preview.
     xdo("windowsize", app.win, "880", "600")
     pump(0.6)
