@@ -1,0 +1,46 @@
+{
+  "schema": "meownero-arm08-actual-failure-adoption/1",
+  "result": "FAILED_ATTEMPT",
+  "original_receipt_bytes": 26857,
+  "original_receipt_sha256": "0634facb38b36ca1df9de39b3920a025368f241ead1c74130cd4c9276f977bcc",
+  "build": {
+    "label": "build",
+    "exit": 2,
+    "reaped": true,
+    "wall_seconds": 2438.2500808329787
+  },
+  "static_compiler_failure": "RANDOMX_ARM64_COFF_UNKNOWN_HIDDEN_DIRECTIVE",
+  "receipt_failure_type": "BROKEN_PIPE",
+  "receipt_build_container_removed": false,
+  "independent_owned_container_absence": [
+    {
+      "id_file": "5ad760dab0784935bdeb77bc23c0cf7d.container.id",
+      "container_id": "90673dafdbc4799ae05b01e072b00dd7a69feff695b5f7079fcfe18c4e139b09",
+      "inspect_exit": 1,
+      "actual_absence": true,
+      "stderr_sha256": "7759fbdbf3ab70c39e549740fbf760ce8d800ed17feb71a37d046beb250eaa54"
+    },
+    {
+      "id_file": "c27a7bf71f444f978b276cb6bb8581e4.container.id",
+      "container_id": "e457fbc38bf7effec4a614f2ff9c37052eb295d29c0b01ec589fc36dd9d62fc9",
+      "inspect_exit": 1,
+      "actual_absence": true,
+      "stderr_sha256": "522d156139e8e6e7f2cb8548885ecc2e5f99ce1874245eea634fa2948e2a59ec"
+    },
+    {
+      "id_file": "cdff14e3a2ec48eb8a980ff1e29ae5c1.container.id",
+      "container_id": "41a7b0e0cd856b3beb39d7e36fda12bbea3a93c51b3bc7e68925f65a94de0ccb",
+      "inspect_exit": 1,
+      "actual_absence": true,
+      "stderr_sha256": "89e2f8aeb1a516cc733dcabcb7f1dde9b5ee0f4234f0cd11a00eeafb39f16ee9"
+    }
+  ],
+  "memory_peak_bytes": 1544065024,
+  "cgroup_oom": 0,
+  "cgroup_oom_kill": 0,
+  "cgroup_oom_group_kill": 0,
+  "artifact": "NOT_PRODUCED",
+  "runtime": "NOT_REACHED",
+  "cleanup_masking_cause": "SUCCESSFUL_CLEANUP_PROGRESS_WRITE_TO_CLOSED_STDOUT",
+  "no_retry_or_interrupt": true
+}

@@ -1,0 +1,7 @@
+--- a/src/jit_compiler_a64_static.S
++++ b/src/jit_compiler_a64_static.S
+@@ -47,3 +47,3 @@
+-	#ifndef __APPLE__
++	#if !defined(__APPLE__) && !defined(_WIN32)
+ 	.hidden DECL(randomx_program_aarch64_aes_lut_pointers)
+ 	#endif

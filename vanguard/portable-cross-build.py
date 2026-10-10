@@ -144,7 +144,10 @@ def main():
                             signal.signal(number, handler)
                     finally:
                         signal.pthread_sigmask(signal.SIG_SETMASK, cleanup_mask)
-            print(label, row['exit'], flush=True)
+            try:
+                print(label, row['exit'], flush=True)
+            except BrokenPipeError:
+                pass
 
         def contained(label, script, network=False, timeout=1800):
             invocation = uuid.uuid4().hex
@@ -360,6 +363,21 @@ def main():
                     'after_sha256': tester.sha(allocator), 'patch_sha256': tester.sha(allocator_patch),
                     'reference': 'https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/aligned-malloc',
                     'scope': 'Windows ARM64 platform allocation only: matching UCRT _aligned_malloc/_aligned_free; POSIX branch, intrinsics, source/version pins and crypto/consensus unchanged.'})
+                assembly = source / 'external/randomx/src/jit_compiler_a64_static.S'
+                assembly_patch = Path(__file__).with_name('patches') / 'randomx-aaafe713-windows-arm64-hidden.patch'
+                tester.require(args.target == 'windows-aarch64' and
+                    PIN['upstream']['submodules']['external/randomx'] == 'aaafe71322df6602c21a5c72937ac284724ae561' and
+                    tester.sha(assembly) == 'f31e68e4325bb5be41eaeaf63975bf760ff158be80f0ce800e43497e9d9f693f' and
+                    tester.sha(assembly_patch) == '38a62d2102483ad46efefce54a8eaa5e70f6795a2400067db7c3d6a6bca348f5',
+                    'unverified ARM64 assembler adaptation source')
+                run('randomx-arm64-hidden', ['patch', '-p1', '-F', '0', '-i', str(assembly_patch)],
+                    cwd=source / 'external/randomx')
+                tester.require(tester.sha(assembly) == '158033e0e3c552b201581ea1c427c4989abc65a462b05b5c72d9faf34c9438a1',
+                    'ARM64 assembler adaptation output differs')
+                receipt['patches'].append({'file': str(assembly.relative_to(source)),
+                    'before_sha256': 'f31e68e4325bb5be41eaeaf63975bf760ff158be80f0ce800e43497e9d9f693f',
+                    'after_sha256': tester.sha(assembly), 'patch_sha256': tester.sha(assembly_patch),
+                    'scope': 'Windows ARM64 COFF assembler compatibility: exclude ELF .hidden only; instruction bytes and other platform preprocessing unchanged.'})
                 save()
                 options += ['boost_toolset_mingw32=clang']
                 options += ['mingw32_' + upper + '=/out/llvm/bin/llvm-' + lower for upper, lower in [('AR', 'ar'), ('RANLIB', 'ranlib'), ('NM', 'nm'), ('STRIP', 'strip')]]

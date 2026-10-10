@@ -1,0 +1,25 @@
+{
+  "schema": "meownero-arm08-closed-progress-fixture/1",
+  "result": "PASS_OLD_MASKING_REPRODUCED_CORRECTED_PRIMARY_PRESERVED",
+  "contained_finalizer_ast_unchanged": true,
+  "cases": [
+    {
+      "source": "old",
+      "source_sha256": "42e9cbad356c56cd6ed3bc7f911b58dc4fc1de411633663f5506af1294b91fdf",
+      "error_type": "BrokenPipeError",
+      "primary_build_failure_preserved": false,
+      "cleanup_completed_metadata": false,
+      "actual_children_reaped": true,
+      "signal_handlers_and_mask_restored": true
+    },
+    {
+      "source": "corrected",
+      "source_sha256": "505d322a85b5e332680a5b40263c18ef21d4cb8b0191a3e59f81e810ad6bed66",
+      "error_type": "RuntimeError",
+      "primary_build_failure_preserved": true,
+      "cleanup_completed_metadata": true,
+      "actual_children_reaped": true,
+      "signal_handlers_and_mask_restored": true
+    }
+  ]
+}
