@@ -1,0 +1,46 @@
+{
+  "schema": "meownero-arm11-owned-completed-scratch/1",
+  "moved_utc": "2026-10-10T10:23:24.174206+00:00",
+  "only_finished_owned_scratch_moved": true,
+  "saved_local_private_exports": true,
+  "shared_parent_and_source_cache_preserved": true,
+  "mapping": [
+    {
+      "original_path": "~/Developer/tjs1882-3175/windows-arm-attempt11",
+      "retained_path": "~/Developer/tjs1882-32610-arm11-completed/attempt11"
+    },
+    {
+      "original_path": "~/Developer/tjs1882-3175/32610-kit17-private",
+      "retained_path": "~/Developer/tjs1882-32610-arm11-completed/private-kit17"
+    }
+  ],
+  "cleanup_relative_path": "Developer/tjs1882-32610-arm11-completed",
+  "receipt_sha256": "e30cca761b70edd6fe9e28cf199f0fa779f7f176a802bc477b897d47e1df2aed",
+  "cleanup_attempt": {
+    "command": "ios cleanup complete Developer/tjs1882-32610-arm11-completed",
+    "exit_code": 1,
+    "result": "DEFERRED_FOLDER_STILL_IN_USE",
+    "message": "task folder is still in use",
+    "managed_build_caches_pruned": 0,
+    "other_idle_xctest_captures_deleted": 0,
+    "no_force_or_gate_bypass": true
+  },
+  "fresh_read_only_occupancy": {
+    "lsof_exit": 0,
+    "lsof_stderr_present": false,
+    "matching_open_files_per_pid": {
+      "80272": 13898
+    },
+    "matching_command_pids": [],
+    "observed_open_file_holder": {
+      "pid": 80272,
+      "uid": 501,
+      "executable_basename": "com.apple.Virtualization.VirtualMachine"
+    },
+    "private_occupancy_snapshot_bytes": 2264822,
+    "private_occupancy_snapshot_sha256": "dce87b9cc951a616b15f8a60f776401fe486f2195572409691045cec3c652d2a",
+    "signals_sent": 0,
+    "deletions": 0,
+    "cleanup_gates_not_bypassed": true
+  }
+}

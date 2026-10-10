@@ -379,6 +379,19 @@ def main():
                     'after_sha256': tester.sha(assembly), 'patch_sha256': tester.sha(assembly_patch),
                     'scope': 'Windows ARM64 COFF assembler compatibility: exclude ELF .hidden only; instruction bytes and other platform preprocessing unchanged.'})
                 save()
+                random_source = source / 'src/crypto/random.c'
+                tester.require(args.target == 'windows-aarch64' and
+                    PIN['upstream']['commit'] == 'e151643c5269c83bf24a83b2548e2493876026b2' and
+                    tester.sha(random_source) == 'a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6',
+                    'unverified Windows ARM64 random source declaration adaptation')
+                adapt('src/crypto/random.c', '#include <stdio.h>\n',
+                      '#include <stdio.h>\n#include <process.h>\n')
+                tester.require(tester.sha(random_source) == '9574e279b64cc3566c02b6dea77570319482c3056e19c49810442dffdb4ab213',
+                    'Windows ARM64 random source declaration output differs')
+                receipt['patches'][-1].update({
+                    'reference': 'https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/exit-exit-exit',
+                    'scope': 'Windows ARM64 declaration include only: process.h declares existing _exit; random generation, failure path, source pin and other targets unchanged.'})
+                save()
                 options += ['boost_toolset_mingw32=clang']
                 options += ['mingw32_' + upper + '=/out/llvm/bin/llvm-' + lower for upper, lower in [('AR', 'ar'), ('RANLIB', 'ranlib'), ('NM', 'nm'), ('STRIP', 'strip')]]
                 options += ['host_WINDRES=/out/llvm/bin/' + host + '-windres']
