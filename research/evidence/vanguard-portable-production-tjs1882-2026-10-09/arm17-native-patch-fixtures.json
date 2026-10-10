@@ -1,0 +1,26 @@
+{
+  "schema": "meownero-arm17-native-patch-context-fixtures/1",
+  "result": "PASS_OLD_BSD_HUNK_FAILURE_REPRODUCED_NEW_EXACT_POSTIMAGE_AND_REVERSE",
+  "observed_utc": "2026-10-10T02:12:51.991072+00:00",
+  "cases": [
+    {
+      "case": "old",
+      "exit": 1,
+      "source_sha256_after": "f31e68e4325bb5be41eaeaf63975bf760ff158be80f0ce800e43497e9d9f693f",
+      "patch_sha256": "38a62d2102483ad46efefce54a8eaa5e70f6795a2400067db7c3d6a6bca348f5",
+      "actual_patch_tool": "patch 2.0-12u11-Apple",
+      "owned_private_fixture_removed": true
+    },
+    {
+      "case": "new",
+      "exit": 0,
+      "source_sha256_after": "158033e0e3c552b201581ea1c427c4989abc65a462b05b5c72d9faf34c9438a1",
+      "patch_sha256": "742daffebed9f21f73ced606accecf4bd44d08d2ce25699d45a9c7e2ed349f72",
+      "actual_patch_tool": "patch 2.0-12u11-Apple",
+      "owned_private_fixture_removed": true,
+      "reverse_exact_preimage": true
+    }
+  ],
+  "native_Windows_compile": "NOT_EXECUTED",
+  "containers_created": 0
+}

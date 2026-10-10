@@ -368,7 +368,7 @@ def main():
                 tester.require(args.target == 'windows-aarch64' and
                     PIN['upstream']['submodules']['external/randomx'] == 'aaafe71322df6602c21a5c72937ac284724ae561' and
                     tester.sha(assembly) == 'f31e68e4325bb5be41eaeaf63975bf760ff158be80f0ce800e43497e9d9f693f' and
-                    tester.sha(assembly_patch) == '38a62d2102483ad46efefce54a8eaa5e70f6795a2400067db7c3d6a6bca348f5',
+                    tester.sha(assembly_patch) == '742daffebed9f21f73ced606accecf4bd44d08d2ce25699d45a9c7e2ed349f72',
                     'unverified ARM64 assembler adaptation source')
                 run('randomx-arm64-hidden', ['patch', '-p1', '-F', '0', '-i', str(assembly_patch)],
                     cwd=source / 'external/randomx')
