@@ -5,72 +5,115 @@
   "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
   "rust_version": "1.93.0",
   "source_files": {
-    "vanguard/run-portable-ci.py": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974",
-    "vanguard/test-portable-refusals.py": "de67d8ac0daec0146b0002f7bc3f6e420ea1525787f217b28485b06e82e4c40c",
+    "vanguard/run-portable-ci.py": "853518e6ca19e22506f5ad4c57258dd824fe05cd26189bbe9f164239909956a8",
+    "vanguard/test-portable-refusals.py": "f553f0bd09b39e2b3f8d549df16ee36ab698219f6310033f357ac80839a8b14a",
     "vanguard/run-portable-mac-check.py": "65becf8448c890b1c09fe1a05c0582c9ebe38d02d59bbb9a2206dab4caa0f1b7",
     "vanguard/tester.py": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
     "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
-    "vanguard/tester-profile.json": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c"
+    "vanguard/tester-profile.json": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+    "vanguard/run-portable-journey-diagnostic.py": "07cfdd510dc18b23eaa4e2e9aebd0a44b1322a36ad654bf1c805c2cc4ce11848"
   },
   "targets": {
-    "macos-x86_64": {
-      "archive_name": "meownero-vanguard-macos-x86_64.tar.gz",
-      "archive_sha256": "7a3ddef44b58c752dd508bd6d2251266de4a1af3a1d635680854707a8cdb3a09",
-      "archive_bytes": 64391550,
+    "windows-i686": {
+      "archive_name": "meownero-vanguard-windows-i686.zip",
+      "archive_sha256": "3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745",
+      "archive_bytes": 97173058,
       "parts": [
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0001",
-          "sha256": "2317ca10b409e78edcada298e310d5ab760cdc3c0fd34cb695f1e8ad2ae8e5cc",
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0001",
+          "sha256": "7da257a1d44207e368fb65c63e1683ce87be595cf5926162207cf938fb016d6c",
           "bytes": 8388608
         },
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0002",
-          "sha256": "0e2587c4f40d892fd1f0dfbe3471b907bfe37c6475167b4bca6d3d0e743cc520",
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0002",
+          "sha256": "97a7207b58c75d80e1e335f7c3140118b8db40c3215c0d8649f4377edbbdc3cd",
           "bytes": 8388608
         },
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0003",
-          "sha256": "dde352abc943f40be19cd6436c4c6a1d8e847aff750680ccb815801a4cbc8f28",
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0003",
+          "sha256": "b23435c5833a53c81fdf2635597439604e283c2715c1fd695c8d06ffffd6cdd5",
           "bytes": 8388608
         },
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0004",
-          "sha256": "7642c6e76e599950772d36ee84128245e5fd7b8808895118de0c53ad7b98dacb",
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0004",
+          "sha256": "b2c8b8bc53b5c0c90f54f4fdbe4e607bf11a362b87847a0030cb538f769448fe",
           "bytes": 8388608
         },
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0005",
-          "sha256": "115c40cdb1236a084feac7f8cd8e69fd899f348aea667a76457a026adfbf3625",
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0005",
+          "sha256": "d31fcda5802080b2ac076dbb1997b0e1b9b5990e917a0dc794d5396a1dec683b",
           "bytes": 8388608
         },
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0006",
-          "sha256": "1a3a85f2d541470eddd760faefc69e375afb4c6cd16542defbc108a487ea07fe",
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0006",
+          "sha256": "146ef753836ad44ba5698e8c62680c83f5f6d08b23375ffc238302b2c0941597",
           "bytes": 8388608
         },
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0007",
-          "sha256": "8a9dc072ab528e40ae3c5efa4b9c8d83f94e132c86153371ddef2bf7a2a46b95",
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0007",
+          "sha256": "7ca6451f7c8da75b5dd778b984e95e65170a16b74089ff7d23688ae8bd4eb6e6",
           "bytes": 8388608
         },
         {
-          "path": "ci/tjs1882/packages/macos-x86_64/meownero-vanguard-macos-x86_64.tar.gz.part-0008",
-          "sha256": "6ab586d8bc38e6b0b2da18ba78016a5b01435de14cd4c8a1bde1cd11b553a9b4",
-          "bytes": 5671294
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0008",
+          "sha256": "41613df7a60239e3d846091f7f12232708c6ea91a933d5509ed0dc584105fe28",
+          "bytes": 8388608
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0009",
+          "sha256": "48f66e0d6ab3ff273cb65e1900bea800a6fb08f1472903c12b373f6b17963e2a",
+          "bytes": 8388608
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0010",
+          "sha256": "6998cfa4b4fc5e67eb250f43437c53ac174e291b160e9636166d6715c9454bd6",
+          "bytes": 8388608
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0011",
+          "sha256": "e7a751af3019d25795ee20a2e7ec0bca0e4953528f563ed14f8df0b1b900cd44",
+          "bytes": 8388608
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-i686/meownero-vanguard-windows-i686.zip.part-0012",
+          "sha256": "2e3203bd2ffce77c1c6e1ae83955ea238ef977f8bfa8f8d2ae25c7ebd85cb889",
+          "bytes": 4898370
         }
       ],
-      "package_name": "meownero-vanguard-macos-x86_64",
-      "release_manifest_sha256": "2f191f42b97df242d8a852fb6ec737beb30f53138085971eeb4218f858dacf9f",
+      "package_name": "meownero-vanguard-windows-i686",
+      "architecture": "i686",
+      "release_manifest_sha256": "0ddca8155c906bbccc1d80487dd6c37c0e194cdf2e3b67fcf32c3bf0e3b67102",
       "package_helpers": {
-        "tester.py": "b4c9a18753bc0bccbdb65c9b3006790b650b85013a9e11711b5b460e7d332658",
+        "tester.py": "17835eafcb740ba1e65030df01c58505e96742dc33f439d9824977e089460ad0",
         "TESTER.md": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
-        "source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001"
+        "source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+        "portable_windows.py": "38ad44758c9a9469dbf17ef581369ac3abe1fe4ed0045a383f5fe4b6b8e7db6c"
       },
       "program_sha256": {
-        "monerod": "6a724c05d76dc0f14223b67199e90d83985f88c6a745d20e6519bf03ba1c31f4",
-        "monero-wallet-cli": "af64c6a478d33a668385d8603dfec74c9ec74fe0fe5b7b577da7f7e63275c22c",
-        "monero-wallet-rpc": "f62bc8964b43e2df295eefdfb2b49b40e4dc185e4bf43c0353ca133d3c393f2f"
-      }
+        "monerod": "a14a6c6ea6f2f1a544de60670a423ce77f64c38cd545eacbe8fcf440fca7c7e6",
+        "monero-wallet-cli": "7d5a834028f9bc15df7b6074ef8c91970d1a2ebc7b716fa07534c4b3d81b9825",
+        "monero-wallet-rpc": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3"
+      },
+      "native_exception_probe": {
+        "file": "bin/i686-exception-probe.exe",
+        "files": {
+          "bin/i686-exception-probe.exe": "ee8ddee3410083de55c03870fc6411f1f14433292f83edff09372e10125167fd",
+          "build-evidence/i686-exception-probe-compiler.txt": "3d401c50ae0103ab81ed851c3d09d0e41f5ef71a659f40f9e46d19e45a63663c",
+          "build-evidence/i686-exception-probe-cross-receipt.json": "c0fc4444cce0a7e3855571843f44a0b23f6e0171c103fc28b17842e533af789c",
+          "build-evidence/i686-exception-probe-cross.py": "8e01ccf86bea3116a96709c77a784a6895f002c6467caeec7cf2e966c652bf57",
+          "build-evidence/i686-exception-probe-input.json": "501786a4af73721e581c6ab5fd33406c51bbbfa0db41d8d18a4a9b4939d978cb",
+          "build-evidence/i686-exception-probe.cpp": "3e533f6bb05ac3529e2a2cb09d8967ecf3f6b8480d30b1be5171dac276fe5ae1",
+          "build-evidence/i686-exception-probe.disassembly": "7f1541d82f5e8216be5ca19bc80d7344cb03183d95e06f7e4bc17ff632c4c914",
+          "build-evidence/i686-exception-probe.map": "980033768620d0a88673de0590bfb746b362b0bf60e20bb82b2b0c0ab79e5ae4",
+          "build-evidence/i686-exception-probe.symbols": "cd3dbeace839948f4cd2b009a9de4e7110fed430e0a3975f34b06d94ab95684a"
+        },
+        "success_marker": "PASS_NATIVE_I686_EXCEPTION_PROBE",
+        "cleanup_count_asserted_by_bound_fixture": 1,
+        "timeout_seconds": 60
+      },
+      "execution_substrate": "NATIVE_WINDOWS_WOW64_ON_VERIFIED_X64_OS",
+      "windows_32bit_os_execution": "UNTESTED",
+      "parent_byte_audit_receipt_sha256": "cba8411b5d9341e7cec69e46923a0cc9b9296c794fe80cebebf02fe5f5bc7986"
     }
   }
 }

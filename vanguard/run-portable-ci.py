@@ -28,11 +28,62 @@ def write(path, value):
     path.write_text(json.dumps(value, indent=2) + '\n')
 
 
-def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
-              supervision_schema='meownero-native-mac-ci-supervision/1',
-              failure_label='native Intel archive check'):
+def public_check(value):
+    """Project fixed check evidence; execution argv and paths remain private."""
+    enums = {
+        'schema': {'meownero-native-windows-ci-check/1', 'meownero-portable-native-mac-check/1'},
+        'result': {'FAIL', 'PASS_NATIVE_ARCHIVE_JOURNEY', 'PASS_TRANSLATED_ARCHIVE_JOURNEY'},
+        'native_architecture': {'i686', 'x86_64', 'aarch64'},
+        'package_architecture': {'i686', 'x86_64', 'aarch64'},
+        'execution_substrate': {'NATIVE', 'NATIVE_WINDOWS_WOW64', 'ROSETTA_TRANSLATED_MACOS_X86_64'},
+        'windows_32bit_os_execution': {'UNTESTED'},
+        'console_mode': {'OWNED_NEW_CONSOLE', 'EXISTING_ATTACHED_CONSOLE'},
+    }
+    def project(row, keys):
+        result = {}
+        for key in keys:
+            if key in row:
+                assert type(row[key]) in (int, float, bool) or row[key] is None
+                result[key] = row[key]
+        return result
+    result = project(value, ('wall_seconds', 'resident_limit_bytes', 'peak_resident_bytes',
+                            'initial_console_process_count', 'owned_job_created', 'owned_console_freed'))
+    for key, allowed in enums.items():
+        if key in value:
+            assert value[key] in allowed
+            result[key] = value[key]
+    for key in ('archive_sha256',):
+        if key in value:
+            assert len(value[key]) == 64 and set(value[key]) <= set('0123456789abcdef')
+            result[key] = value[key]
+    result['phases'] = []
+    for row in value.get('phases', []):
+        assert row['name'] in ('exception-probe', 'preflight', 'journey', 'controls')
+        phase = project(row, ('pid', 'exit', 'reaped', 'wall_seconds'))
+        phase['name'] = row['name']
+        result['phases'].append(phase)
+    if 'cleanup' in value:
+        result['cleanup'] = [project(row, ('pid', 'removed')) for row in value['cleanup']]
+    if 'owned_job' in value:
+        job = value['owned_job']
+        result['owned_job'] = project(job, ('active_processes', 'total_processes', 'peak_committed_bytes', 'memory_limit_bytes'))
+        result['owned_job']['children'] = [project(row, ('pid', 'exit')) for row in job.get('children', [])]
+    if 'native_exception_probe' in value:
+        probe = value['native_exception_probe']
+        projected = project(probe, ('exit', 'reaped', 'deadline_seconds', 'exact_success_line', 'cleanup_count_asserted_by_bound_fixture'))
+        assert probe['result'] == 'PASS_NATIVE_I686_EXCEPTION_PROBE' and probe['newline'] in ('LF', 'CRLF')
+        projected.update(result=probe['result'], newline=probe['newline'])
+        for key in ('sha256', 'source_sha256'):
+            assert len(probe[key]) == 64 and set(probe[key]) <= set('0123456789abcdef')
+            projected[key] = probe[key]
+        result['native_exception_probe'] = projected
+    return result
+
+
+
+def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
     """Allow wrapper cleanup before escalating only recorded, verified children."""
-    receipt = {'schema': supervision_schema, 'result': 'FAIL',
+    receipt = {'schema': 'meownero-native-mac-ci-supervision/1', 'result': 'FAIL',
                'wrapper_reaped': False, 'cleanup': [], 'signals': []}
     known, pending = {}, []
     process = None
@@ -97,7 +148,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                     process.wait(timeout=0.25)
                 except subprocess.TimeoutExpired:
                     pass
-            assert process.returncode == 0 and not pending, failure_label + ' failed'
+            assert process.returncode == 0 and not pending, 'native Intel archive check failed'
             receipt['result'] = 'PASS_WRAPPER_AND_OWNED_CLEANUP'
     except BaseException as error:
         receipt['failure_type'] = type(error).__name__
@@ -159,27 +210,12 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             receipt['wrapper_reaped'] = process is not None and process.poll() is not None
             raise
         finally:
-            try:
-                receipt['wall_seconds'] = round(time.monotonic() - began, 3)
-                receipt['cancellation_signals'] = pending
-                deferred = signal.sigpending() & set(handlers)
-                if deferred:
-                    receipt['result'] = 'FAIL'
-                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
-                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
-                write(public / 'supervision.json', receipt)
-                deferred = signal.sigpending() & set(handlers)
-                if deferred:
-                    receipt['result'] = 'FAIL'
-                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
-                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
-                    write(public / 'supervision.json', receipt)
-            finally:
-                try:
-                    for number, handler in handlers.items():
-                        signal.signal(number, handler)
-                finally:
-                    signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+            receipt['wall_seconds'] = round(time.monotonic() - began, 3)
+            receipt['cancellation_signals'] = pending
+            signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+            write(public / 'supervision.json', receipt)
+            for sig, handler in handlers.items():
+                signal.signal(sig, handler)
 
 
 def windows_check(package, out, row):
@@ -284,7 +320,12 @@ def windows_check(package, out, row):
                 'exact_success_line': True, 'newline': 'CRLF' if marker.endswith(b'\r\n') else 'LF',
                 'cleanup_count_asserted_by_bound_fixture': 1}
         phase('preflight', [sys.executable, '-B', package / 'tester.py', 'preflight'])
-        phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
+        if row['architecture'] == 'i686':
+            phase('journey', [sys.executable, '-B', ROOT / 'vanguard/run-portable-journey-diagnostic.py',
+                '--tester', package / 'tester.py', '--tester-sha256', row['package_helpers']['tester.py'],
+                '--diagnostic', out / 'journey-diagnostic.json', '--out', out / 'journey'])
+        else:
+            phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
         phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
                            '--package', package, '--out', out / 'controls'])
         receipt['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY'
@@ -424,7 +465,7 @@ def main():
             proof['execution_substrate'] = 'NATIVE_WINDOWS_WOW64'
             proof['windows_32bit_os_execution'] = 'UNTESTED'
         for name, value in [('journey.json', journey), ('controls.json', controls), ('check.json', check)]:
-            write(public / name, value)
+            write(public / name, public_check(value) if name == 'check.json' else value)
         proof['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
     except BaseException as error:
         proof['failure_type'] = type(error).__name__
@@ -433,12 +474,13 @@ def main():
         # These are the same explicit public receipts, including honest failure
         # and owned-cleanup evidence. Private phase logs are never exported.
         if check_root is not None:
-            for source, name in [('journey/result.json', 'journey.json'),
+            for source, name in [('journey-diagnostic.json', 'journey-diagnostic.json'),
+                                 ('journey/result.json', 'journey.json'),
                                  ('controls/controls.json', 'controls.json'),
                                  ('check-receipt.json', 'check.json')]:
                 path = check_root / source
                 if path.is_file() and not path.is_symlink():
-                    write(public / name, json.loads(path.read_text()))
+                    write(public / name, public_check(json.loads(path.read_text())) if name == 'check.json' else json.loads(path.read_text()))
         write(public / 'ci-receipt.json', proof)
         print(proof['result'])
 
