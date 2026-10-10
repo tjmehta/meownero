@@ -167,6 +167,19 @@ def main():
             assert {c['component'] for c in value['components']} >= set(licenses.DEPENDS)
             cases.append({'case': style + '-full-missing-component-guard-positive', 'result': 'PASS', 'scope': 'NOTICE_AND_RUST_SEAMS'})
 
+        for folder in ('src', 'contrib/epee'):
+            configure('absolute')
+            path = binary_build / folder / 'libcrypto.a'
+            links[0].write_text(shlex.join(['c++', str(path)]) + ' ' + links[0].read_text())
+            with patch.object(licenses, 'retain_depends', return_value=retained), patch.object(licenses, 'rust_coverage', return_value=({}, [])):
+                try:
+                    licenses.coverage(build, package, False, [], depends_static=True)
+                except AssertionError as error:
+                    assert str(error) == 'pinned depends library has non-pinned origin'
+                else:
+                    raise AssertionError('coverage credited a project-root dependency')
+            cases.append({'case': folder + '-full-coverage-pinned-basename-refusal', 'result': 'PASS_REFUSAL', 'scope': 'NOTICE_AND_RUST_SEAMS'})
+
         configure('absolute')
         with patch.object(licenses, 'retain_depends', return_value=retained):
             try:

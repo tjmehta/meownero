@@ -1,0 +1,44 @@
+{
+  "schema": "meownero-docker-build-attempt/1",
+  "invocation": "4804d35d144048e3b76be1f7c6004b35",
+  "result": "FAILED_BUILD_ATTEMPT",
+  "commands": [
+    {
+      "label": "fetch",
+      "exit": 0,
+      "wall_seconds": 263.5169941089989
+    },
+    {
+      "label": "compile",
+      "exit": null,
+      "wall_seconds": 1691.2676115420036
+    }
+  ],
+  "cleanup": [
+    {
+      "cid": "d1ba630a12a9917000d059e5cb211c8c38682ae1dfb2e2cd6c3d73a42496e036",
+      "oom_killed": false,
+      "exit": 143,
+      "removed": true
+    }
+  ],
+  "host_available_bytes": 16815628288,
+  "source_sha256": {
+    "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+    "vanguard/portable_licenses.py": "a3bbe381600b7826bbecbc63d0463f435abf7da922feb49ba58f2e8b4c94411a",
+    "vanguard/package-portable.py": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+    "vanguard/portable-tester.py": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+    "vanguard/docker/Dockerfile": "ccb3347fdd48715cca9537bb08a4407793523811cf6fcc705b754269070df830",
+    "vanguard/docker/Dockerfile.dockerignore": "6fcf40c94923a91d5bc75b1c1faebff3a73e1c384469f7d26cf3d04c08708c43",
+    "vanguard/docker/build.py": "d2fc92d1b9f7fde63e2a34090782ffa90cebb5aeb2220206017554b9c95a56cd",
+    "vanguard/docker/compile.py": "63efd9fe7a4b01ddd70ffdc81263840dc47bc55f7f621bde706cebd23bc4eb16",
+    "vanguard/docker/entrypoint.py": "0f89c17df5e957d41f7b68da54a07335188ebaae567b7d9ab73ebdba42a08a48",
+    "vanguard/docker/fetch.py": "d41b96f191124872cd947a31fefc0c77477ad971e8ec9ed3eada9a82006a9a44",
+    "vanguard/docker/inputs.json": "e9666c6ee7e46df0d6b62a7c866ecc1099dc3cd21771d287e4832d09f71c104e",
+    "vanguard/docker/run.py": "e441bab99f00a015ede200bdd321e25300558a9c33e81773274f8aaef49a7c1b"
+  },
+  "images": {
+    "fetched": "sha256:b3dbd36c03f84210d9bc1f970b56dea570c6f1212e71f886e1e7628c09ad6811"
+  },
+  "failure_type": "KeyboardInterrupt"
+}

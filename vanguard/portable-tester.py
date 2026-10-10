@@ -224,14 +224,19 @@ def available_memory():
     return sum(map(int, pages)) * page_size
 
 
-def run(out, translated_macos_x64=False, deadline_seconds=1200):
+def run(out, translated_macos_x64=False, deadline_seconds=1200, *, container_capacity=None):
     out = safe(out)
     require(out.parent.is_dir() and not out.exists(), 'output must be new under an existing parent')
     with lock():
         manifest = preflight(translated_macos_x64)
-        available = available_memory()
-        require(available >= 5 * 1024**3 and shutil.disk_usage(out.parent).free >= 5 * 1024**3,
-                'requires five GiB available memory and disk')
+        if container_capacity is None:
+            available = available_memory()
+            require(available >= 5 * 1024**3 and shutil.disk_usage(out.parent).free >= 5 * 1024**3,
+                    'requires five GiB available memory and disk')
+        else:
+            # Only the separate contained entrypoint supplies this policy. The
+            # native CLI and its historical five-GiB admission stay unchanged.
+            container_capacity(out.parent)
         out.mkdir(mode=0o700)
         private = out / 'private'
         private.mkdir(mode=0o700)

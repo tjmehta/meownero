@@ -1,0 +1,589 @@
+{
+  "schema": "meownero-windows-cross-build/1",
+  "source_lock": {
+    "schema": "meownero-vanguard-source-lock/1",
+    "issue": "TJS-356",
+    "pinned_on": "2026-09-23",
+    "scope": "Isolated, valueless harness. It compiles and executes the upstream FCMP++ and CARROT primitives at the pins below. It is not a node, not a network, and not an audit.",
+    "upstream": {
+      "url": "https://github.com/seraphis-migration/monero.git",
+      "branch": "fcmp++-stage",
+      "commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "commit_date": "2026-09-23T09:13:54-05:00",
+      "commit_subject": "Merge pull request #473 from j-berman/fix-genesis-torsion-check",
+      "license": "BSD-3-Clause (LICENSE: Copyright (c) 2014-2024, The Monero Project)",
+      "rebase_risk": "fcmp++-stage is a moving integration branch. This pin is a commit hash, not a branch name. Evidence records upstream-head.txt and the vector hashes so a later rebase is detectable.",
+      "submodules": {
+        "external/gtest": "52eb8108c5bdec04579160ae17225d66034bd723",
+        "external/mx25519": "420ccc2f5012ee1f8e02c1976e89620e1b0959f6",
+        "external/randomx": "aaafe71322df6602c21a5c72937ac284724ae561",
+        "external/rapidjson": "24b5e7a8b27f42fa16b96fc70aade9106cf7102f",
+        "external/supercop": "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+      },
+      "primitives_used": [
+        "src/fcmp_pp (prove.h: prove_membership, verify_membership, prove_sal, verify_sal, verify)",
+        "src/fcmp_pp/fcmp_pp_rust (FFI staticlib over monero-oxide crates)",
+        "src/carrot_core (account_secrets, destination, payment_proposal, scan)",
+        "src/cryptonote_basic (address base58 encode/decode used by CARROT destinations)",
+        "tests/unit_tests/curve_trees.cpp (upstream test-tree helpers, compiled unchanged)",
+        "tests/data/fcmp_pp_verify_inputs_{1,2,4,8,128}in.bin (upstream fixed FCMP++ verify vectors)"
+      ],
+      "alternatives_rejected": {
+        "v0.19.0.0-beta.2.0 (8ed2f782)": "pins monero-oxide 0e438aed (2026-04-23), which predates the Trail of Bits fix commit 066229801a18bb11679113c93971c4f19fde0cd0 included at 31c26d96",
+        "beta-stressnet-v3 (5288ee13cbea1c584056995baa88b03d43901bc2)": "same monero-oxide pin; stress-net branch, not the integration head",
+        "monero-project/monero master (d02c7c57)": "contains only the early FCMP++ integration phases",
+        "monero-project/monero PR #9436 (head 23b1b35b)": "stale draft"
+      }
+    },
+    "rust": {
+      "cargo_lock_path": "src/fcmp_pp/fcmp_pp_rust/Cargo.lock",
+      "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+      "monero_oxide_url": "https://github.com/monero-oxide/monero-oxide",
+      "monero_oxide_rev": "31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "crypto_bigint_url": "https://github.com/kayabaNerve/crypto-bigint (branch c-repr)",
+      "crypto_bigint_rev": "78352771313f1e9b8e48abe5ce30d50d6bdd291d",
+      "crate_licenses": "MIT (crypto/fcmps, crypto/generalized-bulletproofs, crypto/divisors, crypto/helioselene LICENSE files at 31c26d96)",
+      "fetch": "cargo fetch --locked on the host into the gitignored build/vanguard-src/cargo-home; the container build runs with CARGO_NET_OFFLINE=true and --network=none"
+    },
+    "builder": {
+      "image_id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "image_note": "The accepted testnet v0 builder image, used read-only by image ID with --pull=never. It is not retagged or modified. It carries no Rust, so the host toolchain below is mounted read-only.",
+      "rustc": "rustc 1.93.0 (254b59607 2026-01-19)",
+      "rustc_note": "Upstream CI (.github/workflows/build.yml at the pin) installs toolchain 1.93 via rustup-init 1.29.0"
+    },
+    "public_review_references": {
+      "caveat": "These are third-party reviews of upstream components, cited only as references. None of them is an audit of Meownero, of this harness, or of the pinned integration commit as a whole. Agent review is not external audit.",
+      "items": [
+        {
+          "component": "FCMP++ C++ integration (monero-project/monero)",
+          "reference": "Trail of Bits security review, trailofbits/publications@73e52c96cef59d42201ff5546090b76ca67a8014 reviews/2026-07-magicgrants-monerofcmp++crypto-securityreview.pdf (sha256 4f649fe0e63a8870ae3930ea142eb405345ff07a1b5f3e2ff7741deed6dce540), linked from the description of monero-project/monero PR #10360 'FCMP++: CurveTrees class & implementation of ed25519 outputs -> curve tree leaves function'. The same description links Cypher Stack cypherstack/fcmp-impl-audit@d7de33d08c48a3c249629e47f71ea72c938a3404 FCMP_Code_Implementation_Audit.pdf section 12 (not read for this harness)",
+          "scope_caveat": "Per the PR description, both reviewed an earlier state of that PR. The ToB report covers the crypto integration phases only and lists 6 informational findings: 5 resolved, and #6 (TOB-MAGIC-FCMP-6, the Rust FFI function selene_scalar_from_bytes depends on fragile memory layout) partially resolved."
+        },
+        {
+          "component": "full-chain-membership-proofs, circuit-abstraction, ec-gadgets",
+          "reference": "Veridise audit 2025-06-03 (monero-oxide audits/fcmps/README.md @ 31c26d96); non-interactive gadgets formally verified with Picus",
+          "scope_caveat": "Covers the crates at the audited revision, not this integration."
+        },
+        {
+          "component": "generalized-bulletproofs",
+          "reference": "Cypher Stack security proofs, Goodell review, Cypher Stack audit, then the flaw and fixed protocol, then the zkSecurity re-audit (monero-oxide audits/generalized-bulletproofs/ @ 31c26d96)",
+          "scope_caveat": "Finding 02 (zeroization) is deferred to monero-oxide#200. The Lean proofs are not claimed to correspond to the implementation."
+        },
+        {
+          "component": "ec-divisors",
+          "reference": "Veridise proofs, Cypher Stack reviews, SLVer Bullet equivalence (monero-project/meta#1244), zkSecurity notes on divisor incompleteness (monero-oxide audits/divisors/README.md @ 31c26d96)",
+          "scope_caveat": "The ec-divisors prover library itself is unaudited."
+        },
+        {
+          "component": "helioselene",
+          "reference": "Veridise Security Assessment for the Helios-Selene Curve Cycle, with partial formal verification (monero-oxide audits/helioselene/ @ 31c26d96)",
+          "scope_caveat": "Curve-cycle assessment; implementation coverage is partial."
+        },
+        {
+          "component": "FCMP++ composition",
+          "reference": "Cypher Stack FCMP++ review (cypherstack/fcmp-review; monero-oxide audits/fcmp++/Review.pdf @ 31c26d96)",
+          "scope_caveat": "Protocol composition review, not a code audit of this integration."
+        },
+        {
+          "component": "CARROT",
+          "reference": "Cypher Stack CARROT specification audits 2024-11-22 and 2025-09-10 follow-up (spec scope dbb04d91d40b68b2a8b82b895acf762c864b4cbc)",
+          "scope_caveat": "Specification only. No code audit of carrot_core or carrot_impl was found."
+        }
+      ]
+    }
+  },
+  "target": "windows-aarch64",
+  "builder_image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+  "compiler_execution_substrate": "PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64",
+  "commands": [
+    {
+      "label": "archive-upstream",
+      "argv": [
+        "git",
+        "-C",
+        "~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp",
+        "archive",
+        "--format=tar",
+        "-o",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/source-upstream.tar",
+        "e151643c5269c83bf24a83b2548e2493876026b2"
+      ],
+      "process_group": 4980,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.18495662498753518
+    },
+    {
+      "label": "archive-external-gtest",
+      "argv": [
+        "git",
+        "-C",
+        "~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/gtest",
+        "archive",
+        "--format=tar",
+        "-o",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/source-external-gtest.tar",
+        "52eb8108c5bdec04579160ae17225d66034bd723"
+      ],
+      "process_group": 5388,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.08540995803195983
+    },
+    {
+      "label": "archive-external-mx25519",
+      "argv": [
+        "git",
+        "-C",
+        "~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/mx25519",
+        "archive",
+        "--format=tar",
+        "-o",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/source-external-mx25519.tar",
+        "420ccc2f5012ee1f8e02c1976e89620e1b0959f6"
+      ],
+      "process_group": 5529,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.05166583403479308
+    },
+    {
+      "label": "archive-external-randomx",
+      "argv": [
+        "git",
+        "-C",
+        "~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/randomx",
+        "archive",
+        "--format=tar",
+        "-o",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/source-external-randomx.tar",
+        "aaafe71322df6602c21a5c72937ac284724ae561"
+      ],
+      "process_group": 5597,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04530591703951359
+    },
+    {
+      "label": "archive-external-rapidjson",
+      "argv": [
+        "git",
+        "-C",
+        "~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/rapidjson",
+        "archive",
+        "--format=tar",
+        "-o",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/source-external-rapidjson.tar",
+        "24b5e7a8b27f42fa16b96fc70aade9106cf7102f"
+      ],
+      "process_group": 5660,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.08126050001010299
+    },
+    {
+      "label": "archive-external-supercop",
+      "argv": [
+        "git",
+        "-C",
+        "~/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/supercop",
+        "archive",
+        "--format=tar",
+        "-o",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/source-external-supercop.tar",
+        "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+      ],
+      "process_group": 5753,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.05354187497869134
+    },
+    {
+      "label": "toolchain",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "run",
+        "--platform=linux/amd64",
+        "--pull=never",
+        "--name",
+        "tjs1882-3175-5eed3ccdb16d4004990f41357bfd48d4",
+        "--cidfile",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/5eed3ccdb16d4004990f41357bfd48d4.container.id",
+        "--label",
+        "meownero.invocation=5eed3ccdb16d4004990f41357bfd48d4",
+        "--network=bridge",
+        "--cpus=2",
+        "--memory=3g",
+        "--memory-swap=3g",
+        "--pids-limit=256",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--ulimit",
+        "core=0",
+        "-u",
+        "501:20",
+        "-v",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12:/out",
+        "-w",
+        "/out/monero-fcmp",
+        "-e",
+        "HOME=/tmp",
+        "-e",
+        "CARGO_HOME=/out/cargo-home",
+        "-e",
+        "CARGO_NET_OFFLINE=true",
+        "-e",
+        "CARGO_BUILD_JOBS=1",
+        "-e",
+        "PATH=/out/toolchain/usr/bin:/out/llvm/bin:/out/rust/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+        "bash",
+        "-ec",
+        "trap 'cat /sys/fs/cgroup/memory.peak > /out/toolchain.memory; cat /sys/fs/cgroup/memory.events > /out/toolchain.memory-events' EXIT\ntest \"$(rustc -V)\" = \"rustc 1.93.0 (254b59607 2026-01-19)\"\nmkdir -p /out/downloads /out/toolchain\nmkdir -p /out/apt-lists/partial /out/apt-cache\napt-get -o Dir::State::lists=/out/apt-lists -o Dir::Cache=/out/apt-cache -o Acquire::Retries=1 -o Acquire::http::Timeout=30 update\ncd /out/downloads\napt-get -o Dir::State::lists=/out/apt-lists -o Dir::Cache=/out/apt-cache download curl\nfor pkg in *.deb; do dpkg-deb --fsys-tarfile \"$pkg\" | tar --exclude=./usr/share/doc/curl/changelog.Debian.gz -xf - -C /out/toolchain; done\napt-cache -o Dir::State::lists=/out/apt-lists -o Dir::Cache=/out/apt-cache policy curl > /out/toolchain-packages.txt\nsha256sum *.deb > /out/toolchain-SHA256SUMS\ntar -xJf /out/downloads/rust-std.tar.xz -C /out/downloads\nsh /out/downloads/rust-std-1.93.0-aarch64-pc-windows-gnullvm/install.sh --prefix=/out/rust --disable-ldconfig\n"
+      ],
+      "process_group": 18409,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 53.88250974996481
+    },
+    {
+      "label": "toolchain-cleanup",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "rm",
+        "-f",
+        "1809b06413455ef128017b5b0b0deedfd7f121759d9d0a34f2d72b642491c047"
+      ],
+      "process_group": 35525,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.03947275003883988
+    },
+    {
+      "label": "randomx-arm64-allocator",
+      "argv": [
+        "patch",
+        "-p1",
+        "-F",
+        "0",
+        "-i",
+        "~/Developer/tjs1882-5df99f48-arm12/private-kit18/vanguard/patches/randomx-aaafe713-windows-arm64-aligned-allocator.patch"
+      ],
+      "process_group": 35542,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.0152355000609532
+    },
+    {
+      "label": "randomx-arm64-hidden",
+      "argv": [
+        "patch",
+        "-p1",
+        "-F",
+        "0",
+        "-i",
+        "~/Developer/tjs1882-5df99f48-arm12/private-kit18/vanguard/patches/randomx-aaafe713-windows-arm64-hidden.patch"
+      ],
+      "process_group": 35549,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.008997582946904004
+    },
+    {
+      "label": "download-depends",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "run",
+        "--platform=linux/amd64",
+        "--pull=never",
+        "--name",
+        "tjs1882-3175-a65d3a5fbebb41cf9da2652b73cd94c9",
+        "--cidfile",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/a65d3a5fbebb41cf9da2652b73cd94c9.container.id",
+        "--label",
+        "meownero.invocation=a65d3a5fbebb41cf9da2652b73cd94c9",
+        "--network=bridge",
+        "--cpus=2",
+        "--memory=3g",
+        "--memory-swap=3g",
+        "--pids-limit=256",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--ulimit",
+        "core=0",
+        "-u",
+        "501:20",
+        "-v",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12:/out",
+        "-w",
+        "/out/monero-fcmp",
+        "-e",
+        "HOME=/tmp",
+        "-e",
+        "CARGO_HOME=/out/cargo-home",
+        "-e",
+        "CARGO_NET_OFFLINE=true",
+        "-e",
+        "CARGO_BUILD_JOBS=1",
+        "-e",
+        "PATH=/out/toolchain/usr/bin:/out/llvm/bin:/out/rust/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+        "bash",
+        "-ec",
+        "trap 'cat /sys/fs/cgroup/memory.peak > /out/download-depends.memory; cat /sys/fs/cgroup/memory.events > /out/download-depends.memory-events' EXIT\ncd contrib/depends\nmake -j2 HOST=aarch64-w64-mingw32 NO_WALLET=1 NO_READLINE=1 DOWNLOAD_RETRIES=1 DOWNLOAD_CONNECT_TIMEOUT=20 mingw32_CC=/out/llvm/bin/aarch64-w64-mingw32-clang mingw32_CXX=/out/llvm/bin/aarch64-w64-mingw32-clang++ boost_toolset_mingw32=clang mingw32_AR=/out/llvm/bin/llvm-ar mingw32_RANLIB=/out/llvm/bin/llvm-ranlib mingw32_NM=/out/llvm/bin/llvm-nm mingw32_STRIP=/out/llvm/bin/llvm-strip host_WINDRES=/out/llvm/bin/aarch64-w64-mingw32-windres download-win\n"
+      ],
+      "process_group": 35554,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 41.967286041006446
+    },
+    {
+      "label": "download-depends-cleanup",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "rm",
+        "-f",
+        "23b1bdb2b2a4eeae2f553dbd372dda96d8a7cdc1713ce9225aa22e16d317aac2"
+      ],
+      "process_group": 47288,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.05403691693209112
+    },
+    {
+      "label": "build",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "run",
+        "--platform=linux/amd64",
+        "--pull=never",
+        "--name",
+        "tjs1882-3175-59b090619f59495f89f3d7b8f37fe0f1",
+        "--cidfile",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12/59b090619f59495f89f3d7b8f37fe0f1.container.id",
+        "--label",
+        "meownero.invocation=59b090619f59495f89f3d7b8f37fe0f1",
+        "--network=none",
+        "--cpus=2",
+        "--memory=3g",
+        "--memory-swap=3g",
+        "--pids-limit=256",
+        "--cap-drop=ALL",
+        "--security-opt=no-new-privileges",
+        "--ulimit",
+        "core=0",
+        "-u",
+        "501:20",
+        "-v",
+        "~/Developer/tjs1882-5df99f48-arm12/attempt12:/out",
+        "-w",
+        "/out/monero-fcmp",
+        "-e",
+        "HOME=/tmp",
+        "-e",
+        "CARGO_HOME=/out/cargo-home",
+        "-e",
+        "CARGO_NET_OFFLINE=true",
+        "-e",
+        "CARGO_BUILD_JOBS=1",
+        "-e",
+        "PATH=/out/toolchain/usr/bin:/out/llvm/bin:/out/rust/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+        "bash",
+        "-ec",
+        "trap 'cat /sys/fs/cgroup/memory.peak > /out/build.memory; cat /sys/fs/cgroup/memory.events > /out/build.memory-events' EXIT\n/out/llvm/bin/aarch64-w64-mingw32-clang --version > /out/compiler.txt\n/out/llvm/bin/ld.lld --version >> /out/compiler.txt\nrustc -Vv >> /out/compiler.txt\ntest \"$(rustc -V)\" = \"rustc 1.93.0 (254b59607 2026-01-19)\"\ncd contrib/depends\nmake -j2 HOST=aarch64-w64-mingw32 NO_WALLET=1 NO_READLINE=1 DOWNLOAD_RETRIES=1 DOWNLOAD_CONNECT_TIMEOUT=20 mingw32_CC=/out/llvm/bin/aarch64-w64-mingw32-clang mingw32_CXX=/out/llvm/bin/aarch64-w64-mingw32-clang++ boost_toolset_mingw32=clang mingw32_AR=/out/llvm/bin/llvm-ar mingw32_RANLIB=/out/llvm/bin/llvm-ranlib mingw32_NM=/out/llvm/bin/llvm-nm mingw32_STRIP=/out/llvm/bin/llvm-strip host_WINDRES=/out/llvm/bin/aarch64-w64-mingw32-windres\ncd ../..\nmkdir -p build/portable\ncd build/portable\ncmake -DCMAKE_BUILD_TYPE=Release -DARCH=default -DBUILD_TESTS=OFF -DUSE_DEVICE_TREZOR=OFF -DUSE_READLINE=OFF -DMANUAL_SUBMODULES=ON -DCMAKE_TOOLCHAIN_FILE=/out/monero-fcmp/contrib/depends/aarch64-w64-mingw32/share/toolchain.cmake ../..\nmake -j1 daemon simplewallet wallet_rpc_server\n"
+      ],
+      "process_group": 47317,
+      "exit": 2,
+      "reaped": true,
+      "wall_seconds": 3592.2337368329754
+    },
+    {
+      "label": "build-cleanup",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "rm",
+        "-f",
+        "dc33e1271b8695b63f1ead5dbf6cb625a54217bb244515a5db15ad0918ad8ac9"
+      ],
+      "process_group": 88407,
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04321954201441258
+    }
+  ],
+  "containers": [
+    {
+      "label": "toolchain",
+      "invocation": "5eed3ccdb16d4004990f41357bfd48d4",
+      "removed": true,
+      "id": "1809b06413455ef128017b5b0b0deedfd7f121759d9d0a34f2d72b642491c047"
+    },
+    {
+      "label": "download-depends",
+      "invocation": "a65d3a5fbebb41cf9da2652b73cd94c9",
+      "removed": true,
+      "id": "23b1bdb2b2a4eeae2f553dbd372dda96d8a7cdc1713ce9225aa22e16d317aac2"
+    },
+    {
+      "label": "build",
+      "invocation": "59b090619f59495f89f3d7b8f37fe0f1",
+      "removed": true,
+      "id": "dc33e1271b8695b63f1ead5dbf6cb625a54217bb244515a5db15ad0918ad8ac9"
+    }
+  ],
+  "patches": [
+    {
+      "file": "src/fcmp_pp/fcmp_pp_rust/CMakeLists.txt",
+      "before_sha256": "a45b782f8d0507bd94eb9ce53e615196cf9fbe56fc1b683f7b9e2d9e2152bc7f",
+      "after_sha256": "b4983b54dae36c40b0fdb48dcafa21a08ed084b7238de3e63bbcfe964324d893",
+      "patch_sha256": "afb905c6261d5156a3dc7e14933bd9e27009a4e28bb433b34cb3beb4ce5e6033"
+    },
+    {
+      "file": "contrib/depends/packages/boost.mk",
+      "before_sha256": "fe6b57564c038aa044edb916074d36e5fa52ac7015354ffb29866b7099d15341",
+      "after_sha256": "c51f9e0cb2a4b0b8ffc05a855f2ec17486ffd32450341f8419f19940c529dc47",
+      "patch_sha256": "e47c4edc627c389e1420047d98132f6af287b294beb9f8d2268d251e7b5a4170"
+    },
+    {
+      "file": "contrib/depends/hosts/mingw32.mk",
+      "before_sha256": "8e902a13046639f4e4424b98fcec92e9cbd494578a46a454e602677a2930982e",
+      "after_sha256": "3398dd20cd4b4c1f51a958d49c7c7100463903f386a5689c87c404c512890de8",
+      "patch_sha256": "4d677da25654b354a902fc5db129a4baec6f7fec61ef5a7607ce9148b62e942d"
+    },
+    {
+      "file": "CMakeLists.txt",
+      "before_sha256": "864aa6d8573ee1eded6ec191af67d5e3bc5bcc160ceff85017d0a63c02bb61ea",
+      "after_sha256": "bd65afb9784ee7c21c5da109e032e8c5673df99f4ed47725949c4142a4714ee7",
+      "patch_sha256": "693e57ec9863ca7e1ba6d0d6e6552426567bd973bebe74da056e95662e95c4f2"
+    },
+    {
+      "file": "contrib/depends/packages/openssl.mk",
+      "before_sha256": "56a68cf10b97c777b71ea717f0b0b9c5bae3d4dcf7a607b708069e97c2494c09",
+      "after_sha256": "4beb21ec9ec08908b5674c8c844e45a5dcdd88f1bd0fc30bb61e4c1d336d1d54",
+      "patch_sha256": "4ee121eefacf85cd52af6bc3562e8d074fcc8acedfd85098bf5999864ef22354"
+    },
+    {
+      "file": "contrib/depends/packages/openssl.mk",
+      "before_sha256": "4beb21ec9ec08908b5674c8c844e45a5dcdd88f1bd0fc30bb61e4c1d336d1d54",
+      "after_sha256": "f3265126efa9cc681d1f3db570048dd5f5c04eb1cccf7eee1f6bcd0a24d5d3c7",
+      "patch_sha256": "b089ea68166aa2d33d409af10315891b0a4f0ac13e7ca93e07bd6e1a87b6bd2d"
+    },
+    {
+      "file": "contrib/depends/packages/openssl.mk",
+      "before_sha256": "f3265126efa9cc681d1f3db570048dd5f5c04eb1cccf7eee1f6bcd0a24d5d3c7",
+      "after_sha256": "32482d7fe5e993270521ecd74038db3fc60bc42986950e401f93db8575e06f23",
+      "patch_sha256": "38b5ff108c98df8632f6ac9bfc37810c7e5707b151ad8bbdab18e6b65f882d46"
+    },
+    {
+      "file": "contrib/depends/patches/openssl/99-tjs1882-mingwarm64.conf",
+      "sha256": "976cefc4dfa91bac1d44a0747b408a78231ecdbee42ee98ab3d5c888607a4874",
+      "reference": "https://raw.githubusercontent.com/openssl/openssl/e9344b082ffa78cb1d68f6446c1b6417c4244a00/Configurations/10-main.conf"
+    },
+    {
+      "file": "contrib/depends/packages/zeromq.mk",
+      "before_sha256": "9903f96d13be682904d330a08232854e663f1a42126148bb8ee73dc4f9dd7ebb",
+      "after_sha256": "93424f93bc7d6331d9b71c76144607a2bbac3f304cf238c93753d3178fc2cd70",
+      "patch_sha256": "fc5de7a83438d4f265a925197db40bdfe04ac687e731a6e1965e11ba700a1ba9"
+    },
+    {
+      "file": "contrib/depends/packages/zeromq.mk",
+      "before_sha256": "93424f93bc7d6331d9b71c76144607a2bbac3f304cf238c93753d3178fc2cd70",
+      "after_sha256": "7df0834d31b33b38c340886bd7e53e978d4b1c70e885e2e883b73bdccfac09d5",
+      "patch_sha256": "5e609fa555da5ed3a523a29d978b6d291b81afa19d196ae337128fd7ddccc9e7"
+    },
+    {
+      "file": "contrib/depends/patches/zeromq/windows-arm-counter.patch",
+      "sha256": "bd2b420f2645e23eb102dbe6481226aee48dbba3231b66478aae3f31ec698e85",
+      "reference": "https://github.com/zeromq/libzmq/commit/b71434140e8ed40b1840a5704370bfc8dfdbf627",
+      "scope": "Exact upstream ARM64 Windows GNU counter branch only; no version/crypto/consensus change."
+    },
+    {
+      "file": "contrib/depends/patches/zeromq/windows-arm-nothrow.patch",
+      "sha256": "8358ae38739f704669c297d9599b803c92e24fe4785a9a9f9afecca3d14218e4",
+      "reference": "https://github.com/zeromq/libzmq/commit/2e8a6ccb414ca79636392604893c79c3b0d00dc4",
+      "scope": "Exact upstream missing C++ <new> declaration include for std::nothrow; no implementation/version/crypto/consensus change."
+    },
+    {
+      "file": "external/randomx/src/intrin_portable.h",
+      "before_sha256": "07588f5d3e01d1ad9ad375b05a232f5c43c9f6a3c264c2960e7306cdbf73c80f",
+      "after_sha256": "d5abf99da75d0cbaa68d9503d3568079cc1707bc40ede9a949cd2e49dadbd02a",
+      "patch_sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82",
+      "reference": "https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/aligned-malloc",
+      "scope": "Windows ARM64 platform allocation only: matching UCRT _aligned_malloc/_aligned_free; POSIX branch, intrinsics, source/version pins and crypto/consensus unchanged."
+    },
+    {
+      "file": "external/randomx/src/jit_compiler_a64_static.S",
+      "before_sha256": "f31e68e4325bb5be41eaeaf63975bf760ff158be80f0ce800e43497e9d9f693f",
+      "after_sha256": "158033e0e3c552b201581ea1c427c4989abc65a462b05b5c72d9faf34c9438a1",
+      "patch_sha256": "742daffebed9f21f73ced606accecf4bd44d08d2ce25699d45a9c7e2ed349f72",
+      "scope": "Windows ARM64 COFF assembler compatibility: exclude ELF .hidden only; instruction bytes and other platform preprocessing unchanged."
+    },
+    {
+      "file": "src/crypto/random.c",
+      "before_sha256": "a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6",
+      "after_sha256": "9574e279b64cc3566c02b6dea77570319482c3056e19c49810442dffdb4ab213",
+      "patch_sha256": "0aca1108c62f6c26bddde932d8e322df0a42cb83c3b199b497590597be3cb5f4",
+      "reference": "https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/exit-exit-exit",
+      "scope": "Windows ARM64 declaration include only: process.h declares existing _exit; random generation, failure path, source pin and other targets unchanged."
+    }
+  ],
+  "result": "FAILED_ATTEMPT",
+  "builder_transfer": {
+    "source_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+    "loaded_image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+    "transfer_archive_sha256": "01a5bd95b757995fb4d1f2212cb44805c8173217e94d58e3fb6d2ee6a4630ca2",
+    "identical_rootfs_diff_ids": [
+      "sha256:98effb2dfe85d4c431f97d90482075f19e5fc3a57c2dd423d8bdfd4813620043",
+      "sha256:86a33f8cf62a81334e440800978517c03a0775a12c432972d62cae1da17ba06d",
+      "sha256:c733178cf9fcc69c90a88cd732790081ee5f10a0a4683d78a08ee91482ef2b1a"
+    ],
+    "runtime_config_identical": true,
+    "reason": "Legacy Docker loader re-encoded image metadata; complete filesystem layers and runtime configuration verified identical."
+  },
+  "downloads": [
+    {
+      "url": "https://static.rust-lang.org/dist/rust-std-1.93.0-aarch64-pc-windows-gnullvm.tar.xz",
+      "sha256": "9a270d50eaaacc7cb1925565a8b65ff831686aa1592b7034bb9848d7f2a9738d",
+      "bytes": 25619812
+    },
+    {
+      "url": "https://github.com/mstorsjo/llvm-mingw/releases/download/20261006/llvm-mingw-20261006-ucrt-ubuntu-22.04-x86_64.tar.xz",
+      "sha256": "5f9c6ed95b2d4bdb2869a488c5fd5857fbdabcf288a0aa3eb1da43f6a08d8ab4",
+      "bytes": 84003044
+    }
+  ],
+  "toolchain_unpack": {
+    "excluded_documentation_symlink": "./usr/share/doc/curl/changelog.Debian.gz",
+    "executables_and_license_texts_unchanged": true
+  },
+  "llvm_unpack": {
+    "method": "native Python tarfile data filter",
+    "archive_sha256": "5f9c6ed95b2d4bdb2869a488c5fd5857fbdabcf288a0aa3eb1da43f6a08d8ab4",
+    "distribution_symlinks_preserved": true
+  },
+  "rustc_sha256": "d32249a7c3bfcfc67b471460386e46323accae7125e344567a12d5664d99bb57",
+  "cargo_sha256": "9548937d530bf439ff1ba47a3b2bd26eeb9c3aff1961c20c01798613de922578",
+  "toolchain_packages": {
+    "curl_8.5.0-2ubuntu10.15_amd64.deb": "4358c023e3c1a74bb1e77935807ea2088b137a898167fca278a1767c353ac1c5"
+  },
+  "rust_target": "aarch64-pc-windows-gnullvm",
+  "rust_std_download": {
+    "url": "https://static.rust-lang.org/dist/rust-std-1.93.0-aarch64-pc-windows-gnullvm.tar.xz",
+    "published_sha256": "9a270d50eaaacc7cb1925565a8b65ff831686aa1592b7034bb9848d7f2a9738d"
+  },
+  "windows_api_floor": "Windows 10 across the ARM64 dependency and program closure; matches tester minimum, resolves Boost atomic wait declarations.",
+  "failure": "build failed; diagnostics preserved"
+}

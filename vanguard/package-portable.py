@@ -39,7 +39,11 @@ def main():
         release_target = receipt.get('target', 'macos-aarch64')
         arch = {'macos-aarch64': 'aarch64', 'macos-x86_64': 'x86_64'}[release_target]
     else:
-        assert receipt['result'] == 'BUILT_VERSION_EXECUTED_JOURNEY_UNTESTED' and receipt['cleanup']['removed']
+        assert receipt['result'] == 'BUILT_VERSION_EXECUTED_JOURNEY_UNTESTED'
+        if receipt['schema'] == 'meownero-docker-source-build/1':
+            assert receipt['compiler_execution_substrate'] == 'NATIVE' and receipt['offline_compile'] is True
+        else:
+            assert receipt['cleanup']['removed']
         release_target = receipt['target']
         arch = {'linux-x86_64': 'x86_64', 'linux-aarch64': 'aarch64'}[release_target]
     source = build / 'monero-fcmp'

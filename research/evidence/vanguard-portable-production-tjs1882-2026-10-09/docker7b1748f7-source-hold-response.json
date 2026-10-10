@@ -1,0 +1,82 @@
+{
+  "schema": "meownero-docker-source-hold-response/1",
+  "at": "2026-10-10T17:47:26.186798+00:00",
+  "parent_comment_id": "7f895389-413f-471c-ba09-addec7fe93d4",
+  "parent_review_sha256": "675d81524fbde416a7194e2cdf57846548b8e64b3e805709dfaff5f601268d40",
+  "parent_review_bytes": 28635,
+  "result": "CORRECTED_SOURCE_PENDING_ORIGINAL_STAGE_AND_PARENT_GATE",
+  "scope": "Same sole native writer; source-only corrections. No replacement build, runtime/image/journey acceptance or distribution.",
+  "findings": [
+    {
+      "id": "F1",
+      "correction": "Exact UUID-name recovery after interrupted/timed-out create; full CID/name/label/image proof before stop/remove; signal handler raises into guarded cleanup."
+    },
+    {
+      "id": "F2",
+      "correction": "Bounded two-query recovery, per-resource cleanup continuation and honest unresolved rows; signal-masked final receipts; workload descriptor closes in outer finally."
+    },
+    {
+      "id": "F3",
+      "correction": "Complete copied recipe/tester/notices/documentation binding; copied context Dockerfile passed to both builds; hash/input consistency verification before fetch, compile and runtime image."
+    },
+    {
+      "id": "F4",
+      "correction": "Local Unix endpoint required; owned base probe requires same kernel boot ID, measures actual daemon-host five-GiB memory and ten-GiB Docker-data reserve before fetch and compile; distinct client scalar."
+    }
+  ],
+  "source_sha256": {
+    "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+    "vanguard/portable_licenses.py": "a3bbe381600b7826bbecbc63d0463f435abf7da922feb49ba58f2e8b4c94411a",
+    "vanguard/package-portable.py": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+    "vanguard/portable-tester.py": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+    "vanguard/licenses/easyloggingpp-9.96.7/LICENSE": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+    "vanguard/licenses/easyloggingpp-9.96.7/provenance.json": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+    "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+    "vanguard/docker/entrypoint.py": "0f89c17df5e957d41f7b68da54a07335188ebaae567b7d9ab73ebdba42a08a48",
+    "vanguard/docker/test-capacity.py": "fc8b8e80bce787e93166b28fdf2fcca03beb44ea5e7313d0746078866633faaa",
+    "vanguard/docker/inputs.json": "e9666c6ee7e46df0d6b62a7c866ecc1099dc3cd21771d287e4832d09f71c104e",
+    "vanguard/docker/compile.py": "63efd9fe7a4b01ddd70ffdc81263840dc47bc55f7f621bde706cebd23bc4eb16",
+    "vanguard/docker/Dockerfile.dockerignore": "b1a4628b66b710fb2c699afceafbdaa27fec98c98e34c62bd48e21eba7d236c7",
+    "vanguard/docker/host_capacity.py": "c80881df87d7c536752a1e5122fb90b851b6e9743c9bb4411aa81512a463c362",
+    "vanguard/docker/build.py": "581d3c9d27864805c0da3eca33fba22fd3f65982c3998a1a165444f77aa1c505",
+    "vanguard/docker/fetch.py": "d41b96f191124872cd947a31fefc0c77477ad971e8ec9ed3eada9a82006a9a44",
+    "vanguard/docker/run.py": "980eabc57357289ec1c97ad60bf8afe8999a99166973aafac2b0d06b8ad651a5",
+    "vanguard/docker/docker_support.py": "1e604a6027b8c9adf17d2ead18a5337fdbb486c97700dc49a8fcf3dcb1b59622",
+    "vanguard/docker/test-lifecycle.py": "2c63ad19c9fef32265424c5319a98ed79396dc333889d94aa9156b1511f93552",
+    "vanguard/docker/Dockerfile": "ccb3347fdd48715cca9537bb08a4407793523811cf6fcc705b754269070df830",
+    "docs/vanguard-portable-tester.md": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+    "docs/vanguard-docker-tester.md": "8afb73a2915f1137df33d0b172bb90d37491fac8c139d689bc03ae7606d97bad"
+  },
+  "fixture_counts": {
+    "docker_source_hold": 22,
+    "capacity_and_native_reserve": 16,
+    "linux_inventory_privacy_full_coverage": 40
+  },
+  "fixture_seams": "Declared fake Docker responses/process, private lock, temporary context, mocked proc/cgroup/UID/disk/preflight and notice/Rust seams. No native/runtime acceptance.",
+  "diagnostic_attempt03": {
+    "invocation": "4804d35d144048e3b76be1f7c6004b35",
+    "result": "CANCELLED_DIAGNOSTIC_SOURCE_HOLD",
+    "owner_pid": 986971,
+    "compiler_cid": "d1ba630a12a9917000d059e5cb211c8c38682ae1dfb2e2cd6c3d73a42496e036",
+    "removed": true,
+    "exit": 143,
+    "runtime_image_or_journey": false,
+    "compile_log_bytes": 1458788,
+    "compile_log_sha256": "bf919c81e14a4aaad9cdffe5b296793a9a53a9d83f5be986188c72b32bf2896f",
+    "qualification": "Old attempt used uncorrected source. Fetch resolved and Rust compiled; compilation was stopped through original SIGTERM/cleanup before automatic next image phase. No complete three-target/version/package result."
+  },
+  "preservation": {
+    "native_payload_bindings_verified": 36,
+    "two_preexisting_untracked_hashes_verified": true,
+    "new_native_ci": "PAUSED",
+    "group_attachments": "STOPPED",
+    "accepted_native_archives": "UNCHANGED",
+    "seven_target_release": "OPEN",
+    "gui_scope": "SEPARATE"
+  },
+  "remaining_owners": {
+    "source_image_journey_distribution": "Parent and one original review stage; exact source independent clearance before further image/journey work.",
+    "runtime_linkage": "Parent TJS-1993 supported-linkage diagnosis; run terminalized by recovery despite surviving native writer. No runtime lease/identity repair by writer.",
+    "arm12_scratch": "Same writer when ios cleanup in-use gate clears; no bypass."
+  }
+}
