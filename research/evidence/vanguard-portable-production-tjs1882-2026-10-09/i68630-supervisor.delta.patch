@@ -1,0 +1,19 @@
+--- a/vanguard/run-portable-ci.py
++++ b/vanguard/run-portable-ci.py
+@@ -266,11 +266,15 @@
+                 raise RuntimeError('capacity admission window exhausted')
+             if memory >= evidence['reserve_bytes'] and disk >= evidence['reserve_bytes']:
+                 evidence['status'] = 'READY'
+-                return
++                break
+             time.sleep(min(1, deadline - now))
+     finally:
+         for sig, handler in handlers.items():
+             signal.signal(sig, handler)
++    # Retain admission cancellation until every caller handler is restored.
++    if pending:
++        evidence['status'] = 'CANCELLED'
++        raise RuntimeError('capacity admission cancelled')
+ 
+ 
+ def public_check(value):

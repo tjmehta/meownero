@@ -1,0 +1,324 @@
+{
+  "schema": "meownero-i68630-capacity-fixtures/1",
+  "result": "PASS",
+  "candidate_sha256": "0046f0018df25005a62615d666c7f5c65064d689c26bfa03af8ce916be2e70d9",
+  "held29_sha256": "4c64dadbd026bff174e6e4e8d23c9541c875095ef8a819d21086f6b6673adc5c",
+  "fixture_source_sha256": "d740383d4e197f0f87f9e69e3a96d9901e9cd8c963bea36f35ec84415ae89893",
+  "preserved_base_sha256": "24b5bde679622f199330a28b034a1fc669bb825690c0c9f8521e1fdba0c53ddb",
+  "packaged_tester_sha256": "17835eafcb740ba1e65030df01c58505e96742dc33f439d9824977e089460ad0",
+  "protected_phase_finalizer_event_and_mac_AST": "UNCHANGED",
+  "cases": [
+    {
+      "case": "seam-ready",
+      "source": "held29",
+      "status": "READY",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-ready",
+      "source": "successor30",
+      "status": "CANCELLED",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-before-2",
+      "source": "held29",
+      "status": "READY",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-before-2",
+      "source": "successor30",
+      "status": "CANCELLED",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-before-15",
+      "source": "held29",
+      "status": "READY",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-before-15",
+      "source": "successor30",
+      "status": "CANCELLED",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-before-10",
+      "source": "held29",
+      "status": "READY",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-before-10",
+      "source": "successor30",
+      "status": "CANCELLED",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-after-2",
+      "source": "held29",
+      "status": "READY",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-after-2",
+      "source": "successor30",
+      "status": "CANCELLED",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-after-15",
+      "source": "held29",
+      "status": "READY",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "seam-restore-after-15",
+      "source": "successor30",
+      "status": "CANCELLED",
+      "actual_signal_deliveries": 1,
+      "caller_handler_identities_restored": true,
+      "fixture_scope": "EXACT_ADMISSION_REAL_SIGNAL_AT_READY_OR_RESTORATION"
+    },
+    {
+      "case": "below-memory",
+      "status": "CAPACITY_WINDOW_EXPIRED",
+      "elapsed_seconds": 60.0,
+      "samples": 60,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "below-disk",
+      "status": "CAPACITY_WINDOW_EXPIRED",
+      "elapsed_seconds": 60.0,
+      "samples": 60,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "at-threshold",
+      "status": "READY",
+      "elapsed_seconds": 0.0,
+      "samples": 1,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "above-threshold",
+      "status": "READY",
+      "elapsed_seconds": 0.0,
+      "samples": 1,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "recover-once",
+      "status": "READY",
+      "elapsed_seconds": 1.0,
+      "samples": 2,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "cancel-wait",
+      "status": "CANCELLED",
+      "elapsed_seconds": 1.0,
+      "samples": 1,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "unavailable",
+      "status": "CAPACITY_UNAVAILABLE",
+      "elapsed_seconds": 0.0,
+      "samples": 0,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "job-budget",
+      "status": "JOB_DEADLINE",
+      "elapsed_seconds": 1.0,
+      "samples": 1,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "measurement-overruns-window",
+      "status": "CAPACITY_WINDOW_EXPIRED",
+      "elapsed_seconds": 60.0,
+      "samples": 1,
+      "handlers_restored": true,
+      "static_public_projection": "PASS"
+    },
+    {
+      "case": "wrapper-success",
+      "phases": [
+        "exception-probe",
+        "preflight",
+        "journey",
+        "controls"
+      ],
+      "journey_launches": 1,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-handoff-drop",
+      "phases": [
+        "exception-probe",
+        "preflight",
+        "journey"
+      ],
+      "journey_launches": 1,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-exhaustion",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-cancellation",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-seam-ready",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-seam-restore-before-2",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-seam-restore-before-15",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-seam-restore-before-10",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-seam-restore-after-2",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    },
+    {
+      "case": "wrapper-seam-restore-after-15",
+      "phases": [
+        "exception-probe",
+        "preflight"
+      ],
+      "journey_launches": 0,
+      "controls_gated": true,
+      "owned_job_close_executed": true,
+      "all_public_check_writes": 2,
+      "private_sentinel_exported": false,
+      "handlers_restored": true,
+      "fixture_scope": "EXACT_WRAPPER_CONTROL_FLOW_AND_FINALIZER_WITH_UNCHANGED_PHASE_LAUNCHER_STUB"
+    }
+  ],
+  "native_Windows_capacity_or_CLI_fix_proven": false
+}
