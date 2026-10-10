@@ -1,0 +1,104 @@
+{
+  "observedAt": "2026-10-10T18:03:08.442Z",
+  "observer": {
+    "agentId": "13de7aa2-02c2-41b4-b74c-185d843064d2",
+    "role": "agent systems lead",
+    "runId": "de426344-11fe-40f0-a71f-96fa7c737e95",
+    "mode": "read-only except one supported lease-release attempt (refused)"
+  },
+  "writer": {
+    "pane": "w1XK:p5",
+    "agentStatus": "done",
+    "terminalTitle": "01a126be-22c3-7c71-a83e-077777c7e5d1",
+    "foregroundPid": 405325,
+    "pidState": "alive, idle (Sl+)",
+    "inFlightDockerBuild": "none: no docker build/buildx process, no TJS-1882 container running",
+    "candidateCommit": "823d1fe4fbdb7359f79aad6a05a613aa652d4697",
+    "resultFile": "herdr-runs/7b1748f7-db9e-498d-a199-03321fa7a39e/result.md",
+    "resultBytes": 5225,
+    "resultSha256": "1a8e17b36f1fb57196ee1b6d6a1bd752c9dd56dd7f2543b36324a0359fb33bc0",
+    "resultDisposition": "BLOCKED_REVIEW_HANDOFF: upload and in_review submission returned HTTP 409 Issue run ownership conflict",
+    "reviewPacketSha256": "0b9fbc3a3d1760d2a26cf3da829ccab4b1068e55478eb59ead89439a5f7f2b48"
+  },
+  "soleServerBlocker": {
+    "issue": "TJS-1882 e7cb422f-9c00-46f6-b0c3-decce627b08e",
+    "cause": "execution_owner_active",
+    "source": "services/conversation-continuation.js getConversationOwnershipBlocker: terminal conversation run with process alive OR lease (releasedAt null | pending_cleanup | cleanupStatus failed)",
+    "lease": {
+      "id": "e9766e27-0177-4b24-aed8-bc6d3467534b",
+      "heartbeatRunId": "abc2f1c7-82e9-4e84-aa66-c9eba621a452",
+      "status": "active",
+      "provider": "local",
+      "leasePolicy": "ephemeral",
+      "acquiredAt": "2026-10-10T17:17:36.421Z",
+      "releasedAt": null,
+      "cleanupStatus": null
+    },
+    "leaseRun": {
+      "status": "failed",
+      "errorCode": "adapter_failed",
+      "error": "task already has an occupied Herdr pane; resume its recorded session, do not replay",
+      "processPid": 9305,
+      "processGroupId": 9305,
+      "startedAt": "2026-10-10T17:16:34.959Z",
+      "finishedAt": "2026-10-10T17:20:17.136Z",
+      "lastEvent": "lifecycle retry scheduled 2026-10-10T17:22:36Z (retry run d42620cc)"
+    },
+    "otherCandidatesClear": {
+      "7b1748f7-db9e-498d-a199-03321fa7a39e": "lease 0e87712f status failed, releasedAt 17:08:00, cleanupStatus null; pid 649657 from replaced container namespace",
+      "d42620cc-ca62-40a8-8f9f-c8cb55ebe955": "no pid, no lease"
+    }
+  },
+  "noLiveLeaseOwnerProof": {
+    "containerStartedAt": "2026-10-10T17:23:22.995969548Z",
+    "containerPidMode": "private namespace (PidMode empty); every pre-restart container process ended at restart",
+    "containerProbe": {"pid9305": "ESRCH", "pgid9305": "ESRCH", "/proc/9305": "absent"},
+    "nativeRunFinalizationsRows": 0,
+    "hostProcessesWithRunIdInEnviron": 0,
+    "nativeProviderLaunched": false,
+    "nativeProviderReason": "bridge refused at placement (occupied pane); the live codex in w1XK:p5 carries PAPERCLIP_RUN_ID 7b1748f7, not abc2f1c7"
+  },
+  "strandingCause": {
+    "finding": "Paperclip container restart at 17:23:22Z interrupted post-run finalization; lease release never ran",
+    "sweepGap": "services/recovery/service.js stranded-lease retry selects terminal runs only when errorCode = orphaned_running_run or issue status in (done, cancelled); adapter_failed/succeeded runs on open issues are never retried",
+    "base14Days": "840 adapter_failed runs released leases normally; abc2f1c7 is the only unreleased one",
+    "sameWindowLeases": [
+      {"lease": "1af33cfb-c5b7-46c4-92a5-b7d42b1e777e", "run": "6f3eb0a6-abc3-408b-9fde-c33c70c0d979", "issue": "TJS-1235", "runStatus": "succeeded 17:22:45.943Z", "pid": 4889, "probe": "ESRCH pid and pgid"},
+      {"lease": "6d852309-c1da-4cee-b454-5914eca55221", "run": "85968423-1beb-4951-bebd-2a66d991b885", "issue": "TJS-1240", "runStatus": "succeeded 17:22:45.316Z", "pid": 4869, "probe": "ESRCH pid and pgid"}
+    ]
+  },
+  "supportedRelease": {
+    "route": "POST /api/environment-leases/:leaseId/release (empty body)",
+    "authorization": "routes/environments.js assertCanAccessInstanceEnvironments: board actor with isInstanceAdmin or local_implicit",
+    "serverGuards": "releaseRecoveryRunLeases requireStopped=true: run terminal; no native coordinator owner; pid/pgid not alive; lease local+ephemeral+active; marks failed with recovery_backstop:board_repair and logs environment_lease.recovery_released",
+    "uiControl": "none (ui environments bundle exposes lease GET only)",
+    "agentAttempt": {"at": "2026-10-10T18:03:08.442Z", "http": 403, "body": {"error": "Instance environment management is restricted to board operators"}},
+    "leaseAfterAttempt": "unchanged: active, releasedAt null",
+    "executionReconciliationAlternative": "refused by validateExecutionReconciliation while any lease of the run is unreleased; also requires an active recovery action, none exists"
+  },
+  "afterReleasePrediction": {
+    "ownershipBlocker": "clears: no remaining terminal conversation run on TJS-1882 holds a live pid or active lease",
+    "wakeNeeded": "yes: d42620cc has no successor and TJS-1882 monitor nextCheckAt is null",
+    "bridgeOnNextWake": "placement finds occupied done pane w1XK:p5 -> recover_prior_run(7b1748f7) -> recover_run_pane(successor_run=new run) -> board_settled accepts interrupted (SUCCESSOR_SETTLED_RUN_STATUSES) -> blocking_items, settled codex process and re-check guards -> close pane -> launch the assignee's session",
+    "dryRunReconcile": {"command": "codex_herdr_run.py reconcile --run 7b1748f7 (no --apply)", "action": "keep", "reason": "run not acknowledged by Paperclip (status interrupted)", "note": "sweeper predicate (succeeded only); launch recovery uses the successor predicate"},
+    "pendingTjs1882Items": {"interactions": 0, "approvals": 0},
+    "threadContinuity": "bridge record 2df61bd7 has nativeThreadId null, so the successor launches a new Codex session; thread 01a126be stays on disk. The writer's turn is complete and durable (823d1fe, result.md), so the next step is the control-plane submission, not more source writing"
+  },
+  "sources": {
+    "server/services/conversation-continuation.js": "bf3e2aee87e1f92d9afeeb0a093f93f7e382958dfae1a26523190e24c54c12d5",
+    "server/services/recovery-lease-release.js": "78c06f753b5b60e8eec90cabf5ff642046510567356b557e6a045902239e018f",
+    "server/routes/environments.js": "155f719032de1d769603b7ba6163b022fb0706c0d769ad8cee29c66bafc9f683",
+    "server/services/recovery/service.js": "29d9aa2a754e68bbd4231f972f56905bec3403e3491e48690bf0ade6eb5007d1",
+    "server/services/execution-recovery-resolution.js": "28befeba5a02d8c06dbcd7227c12b0fdec17d7a3992b03b6884d3c1fc3d42eeb",
+    "herdr/codex_herdr_run.py": "895337ee8c53c51e45e6bd093d690c56eae92b100c4584db67f3edb5f51801a9",
+    "herdr/claude_herdr_run.py": "2457be9f666032badbc89941fd24104ef913719ecb40c914216d9375d10082c2",
+    "herdr/placement.py": "74dec2faf2b7814c718112a97797d2c0b31b1a50b46560876c9e0e16df6aaaf3",
+    "serverVersion": "paperclipai 2026.913.0-canary.3-agent-ops.9"
+  },
+  "unblock": {
+    "owner": "board instance admin",
+    "boardAction": "POST /api/environment-leases/e9766e27-0177-4b24-aed8-bc6d3467534b/release with an empty body",
+    "afterRelease": "TJS-1993 assignee re-reads the lease, then posts one TJS-1882 comment that wakes assignee 92a7b4f2 to submit candidate 823d1fe to original stage 82aa96f6 (reviewer ec85048c); the board posts it only if that agent comment is refused. Do not comment on TJS-1882 before release: the wake would be cancelled as execution_reconciliation_required",
+    "sameClassOptional": ["1af33cfb-c5b7-46c4-92a5-b7d42b1e777e", "6d852309-c1da-4cee-b454-5914eca55221"]
+  }
+}

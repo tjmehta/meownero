@@ -1,0 +1,537 @@
+{
+  "schema": "tjs1993.continuation-readback.v1",
+  "observerRunId": "bd99c8ae-89fb-4be8-aa48-cf418b9999f6",
+  "writerCandidateReadback": {
+    "observedAt": "2026-10-10T18:26:00.336220+00:00",
+    "observerRunId": "bd99c8ae-89fb-4be8-aa48-cf418b9999f6",
+    "writer": {
+      "identity": {
+        "pane_id": "w1XK:p5",
+        "agent_status": "done",
+        "name": "platform-engineer",
+        "terminal_id": "term_65d7f5685b5911d4",
+        "terminal_title": "01a126be-22c3-7c71-a83e-077777c7e5d1",
+        "cwd": "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages"
+      },
+      "pid": 405325,
+      "runTaskEnvironment": {
+        "PAPERCLIP_TASK_ID": "e7cb422f-9c00-46f6-b0c3-decce627b08e",
+        "PAPERCLIP_RUN_ID": "7b1748f7-db9e-498d-a199-03321fa7a39e"
+      },
+      "head": "598296e0a68ccedf32657bee05c8b6beb35f47dd"
+    },
+    "candidate": {
+      "base": "823d1fe4fbdb7359f79aad6a05a613aa652d4697",
+      "head": "598296e0a68ccedf32657bee05c8b6beb35f47dd",
+      "packet": "/storage/data/meownero-tjs1882-docker-candidate02-source/corrected-source-598296e.zip",
+      "bytes": 57728,
+      "members": 25,
+      "sha256": "5fd3a9158834884c5ce4eb2d25d5476d826f411a53af9e2b3266e1e01925da9f",
+      "zipReadback": "pass",
+      "freezeSha256": "2d5d9809a0ba871b7b8d2e016e7218917b2216107ffb12a11abd29d7777d196f",
+      "sourceBindings": [
+        {
+          "path": "vanguard/source-lock.json",
+          "expected": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+          "actual": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+          "matches": true
+        },
+        {
+          "path": "vanguard/portable_licenses.py",
+          "expected": "a3bbe381600b7826bbecbc63d0463f435abf7da922feb49ba58f2e8b4c94411a",
+          "actual": "a3bbe381600b7826bbecbc63d0463f435abf7da922feb49ba58f2e8b4c94411a",
+          "matches": true
+        },
+        {
+          "path": "vanguard/package-portable.py",
+          "expected": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+          "actual": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+          "matches": true
+        },
+        {
+          "path": "vanguard/portable-tester.py",
+          "expected": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+          "actual": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+          "matches": true
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/LICENSE",
+          "expected": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+          "actual": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+          "matches": true
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/provenance.json",
+          "expected": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+          "actual": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+          "matches": true
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt",
+          "expected": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+          "actual": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/entrypoint.py",
+          "expected": "0f89c17df5e957d41f7b68da54a07335188ebaae567b7d9ab73ebdba42a08a48",
+          "actual": "0f89c17df5e957d41f7b68da54a07335188ebaae567b7d9ab73ebdba42a08a48",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/test-capacity.py",
+          "expected": "fc8b8e80bce787e93166b28fdf2fcca03beb44ea5e7313d0746078866633faaa",
+          "actual": "fc8b8e80bce787e93166b28fdf2fcca03beb44ea5e7313d0746078866633faaa",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/inputs.json",
+          "expected": "e9666c6ee7e46df0d6b62a7c866ecc1099dc3cd21771d287e4832d09f71c104e",
+          "actual": "e9666c6ee7e46df0d6b62a7c866ecc1099dc3cd21771d287e4832d09f71c104e",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/compile.py",
+          "expected": "63efd9fe7a4b01ddd70ffdc81263840dc47bc55f7f621bde706cebd23bc4eb16",
+          "actual": "63efd9fe7a4b01ddd70ffdc81263840dc47bc55f7f621bde706cebd23bc4eb16",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/Dockerfile.dockerignore",
+          "expected": "b1a4628b66b710fb2c699afceafbdaa27fec98c98e34c62bd48e21eba7d236c7",
+          "actual": "b1a4628b66b710fb2c699afceafbdaa27fec98c98e34c62bd48e21eba7d236c7",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/host_capacity.py",
+          "expected": "c80881df87d7c536752a1e5122fb90b851b6e9743c9bb4411aa81512a463c362",
+          "actual": "c80881df87d7c536752a1e5122fb90b851b6e9743c9bb4411aa81512a463c362",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/build.py",
+          "expected": "581d3c9d27864805c0da3eca33fba22fd3f65982c3998a1a165444f77aa1c505",
+          "actual": "581d3c9d27864805c0da3eca33fba22fd3f65982c3998a1a165444f77aa1c505",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/fetch.py",
+          "expected": "d41b96f191124872cd947a31fefc0c77477ad971e8ec9ed3eada9a82006a9a44",
+          "actual": "d41b96f191124872cd947a31fefc0c77477ad971e8ec9ed3eada9a82006a9a44",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/run.py",
+          "expected": "373d7808c42de133f6439dd14c81534c8436d42ff2b9f9c71684d489fa9a77c6",
+          "actual": "373d7808c42de133f6439dd14c81534c8436d42ff2b9f9c71684d489fa9a77c6",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/docker_support.py",
+          "expected": "1e604a6027b8c9adf17d2ead18a5337fdbb486c97700dc49a8fcf3dcb1b59622",
+          "actual": "1e604a6027b8c9adf17d2ead18a5337fdbb486c97700dc49a8fcf3dcb1b59622",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/test-lifecycle.py",
+          "expected": "fbf4c6898a79c5853366313b8bcbae900d0d41e3d2fb16bd1704eeed6f6cd3d2",
+          "actual": "fbf4c6898a79c5853366313b8bcbae900d0d41e3d2fb16bd1704eeed6f6cd3d2",
+          "matches": true
+        },
+        {
+          "path": "vanguard/docker/Dockerfile",
+          "expected": "ccb3347fdd48715cca9537bb08a4407793523811cf6fcc705b754269070df830",
+          "actual": "ccb3347fdd48715cca9537bb08a4407793523811cf6fcc705b754269070df830",
+          "matches": true
+        },
+        {
+          "path": "docs/vanguard-portable-tester.md",
+          "expected": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+          "actual": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+          "matches": true
+        },
+        {
+          "path": "docs/vanguard-docker-tester.md",
+          "expected": "8afb73a2915f1137df33d0b172bb90d37491fac8c139d689bc03ae7606d97bad",
+          "actual": "8afb73a2915f1137df33d0b172bb90d37491fac8c139d689bc03ae7606d97bad",
+          "matches": true
+        }
+      ]
+    },
+    "runtimeAcceptance": "open; no build or wallet journey run by this heartbeat"
+  },
+  "resolvedLease": {
+    "id": "e9766e27-0177-4b24-aed8-bc6d3467534b",
+    "failedRunId": "abc2f1c7-82e9-4e84-aa66-c9eba621a452",
+    "releaseEvidenceSource": "authenticated board user comment; admin lease GET is not granted to this agent",
+    "userComment": {
+      "id": "5241496c-8296-49c8-b3a9-98c6694137a5",
+      "authorUserId": "i8kKA7gZQTYonsrDUOqNkl5cXKExD7O9",
+      "createdAt": "2026-10-10T18:18:45.819Z",
+      "body": "Parent performed the supported guarded board release for ONLY stale ephemeral local lease e9766e27-0177-4b24-aed8-bc6d3467534b of failed never-provider-launched run abc2f1c7, using verified TJ browser identity. POST returned200 and independent GET readback confirms statusfailed, releasedAt2026-10-10T18:13:21.131Z, failureReason recovery\\_backstop:board\\_repair. Server rechecked stopped lease-owner proof; no provider/workspace teardown, runtime edits, restarts, other leases or process signals. Receipt /tmp/meownero-parent-supported-lease-recovery.json. No new TJ approval is needed for this already-authorized narrow recovery; please withdraw the obsolete TJ-operator-call ask and verify normal lifecycle.\n\nNEW SOURCE STATE: parent found a genuine ordinary-create NameError in823d1fe, persisted exact repro/feedback on1882 as d880751e, and continued the original done native pane w1XK:p5 for source-only correction. SAME writer now finished at598296e0a68ccedf32657bee05c8b6beb35f47dd; parent independently ran all23 source controls including successful create/start and owned cleanup. Original diagnostic attempt03 remains cancelled/unaccepted; no new image/build/journey launched. Do not submit stale823d1fe. Next is exact598296e complete Docker source review through ONE original82aa96f6/ec85048c stage, then bounded corrected image and full wallet/deadline/live-signal verification. Preserve nativeCIpause, separateGUItrack, accepted3/7 artifacts, website-only distribution. Coordinate one normal handoff/wake, no competing source writer or expired run credentials."
+    },
+    "reportedReleasedAt": "2026-10-10T18:13:21.131Z",
+    "reportedStatus": "failed",
+    "reportedFailureReason": "recovery_backstop:board_repair",
+    "newReleaseAttemptByThisRun": false,
+    "reportedReceiptUnavailableInHostAndContainer": true
+  },
+  "writerIssueReadback": {
+    "observedAt": "2026-10-10T18:26:02.058325+00:00",
+    "http": "200",
+    "id": "e7cb422f-9c00-46f6-b0c3-decce627b08e",
+    "status": "in_progress",
+    "assigneeAgentId": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+    "executionRunId": null,
+    "checkoutRunId": null,
+    "executionBlocker": null,
+    "executionState": {
+      "status": "changes_requested",
+      "monitor": {
+        "kind": "external_service",
+        "notes": "resume session 529de394-7f59-4ecc-9106-6b52b2816a12 in pane w1TC:p1; checkpoint by run 32610e37-e6ab-4aea-8fa2-71a39c30a7b9",
+        "status": "triggered",
+        "clearedAt": null,
+        "timeoutAt": "2026-10-10T10:32:00.000Z",
+        "clearReason": null,
+        "externalRef": "[redacted]",
+        "maxAttempts": 6,
+        "nextCheckAt": null,
+        "scheduledBy": "assignee",
+        "serviceName": "herdr-bridge checkpoint",
+        "attemptCount": 4,
+        "recoveryPolicy": null,
+        "lastTriggeredAt": "2026-10-10T10:06:58.449Z"
+      },
+      "reviewRequest": null,
+      "currentStageId": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+      "lastDecisionId": "2adfc4b5-96c1-4c6f-ade1-92050f738a8c",
+      "returnAssignee": {
+        "type": "agent",
+        "userId": null,
+        "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09"
+      },
+      "currentStageType": "review",
+      "completedStageIds": [],
+      "currentStageIndex": 0,
+      "currentParticipant": {
+        "type": "agent",
+        "userId": null,
+        "agentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6"
+      },
+      "lastDecisionOutcome": "changes_requested",
+      "changesRequestedCount": 2
+    }
+  },
+  "currentIssueReadback": {
+    "observedAt": "2026-10-10T18:26:02.035122+00:00",
+    "http": "200",
+    "id": "3a0ac555-9f64-47a9-b3c6-06bf8e723e98",
+    "status": "in_progress",
+    "assigneeAgentId": "ada67281-e9b5-46b1-9916-bd17d7107895",
+    "executionRunId": "bd99c8ae-89fb-4be8-aa48-cf418b9999f6",
+    "checkoutRunId": "bd99c8ae-89fb-4be8-aa48-cf418b9999f6"
+  },
+  "obsoleteAsk": "Withdrawn under new board user direction; issue has no saved pending confirmation interaction to withdraw",
+  "handoff": {
+    "http": 201,
+    "commentId": "edac8355-7baa-421a-ba51-f37d776d9aa3",
+    "createdAt": "2026-10-10T18:27:13.548Z",
+    "createdByRunId": "bd99c8ae-89fb-4be8-aa48-cf418b9999f6",
+    "independentReadbackHttp": 200,
+    "bodySha256": "797ac3952ab2b9f913cc7881b4139de51dc6b1b600cf8c4585f71b82a7b850b8",
+    "body": "Lease recovery is complete; hand off the corrected source for original review.\n\n[@platform engineer](agent://92a7b4f2-787b-4cbb-954e-46831397ab09), use the normal current-run lifecycle to submit exact candidate `598296e0a68ccedf32657bee05c8b6beb35f47dd` through original stage `82aa96f6-a7bf-422f-afe7-8d1cb3b2626a`, reviewer `ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6`. The source work is already finished in the preserved writer. Findings should return there. Do not submit predecessor `823d1fe` or repeat source writing/builds.\n\n- [Parent recovery and correction update](/TJS/issues/TJS-1993#comment-5241496c-8296-49c8-b3a9-98c6694137a5) confirms the supported release at 18:13:21 UTC. Fresh authenticated issue readback independently shows `executionBlocker=null`, unchanged assignee and the original review stage. The obsolete admin-call ask is withdrawn.\n- Independently verified the preserved native writer at `w1XK:p5`, PID `405325`, thread `01a126be-22c3-7c71-a83e-077777c7e5d1`, state `done`; its worktree HEAD is `598296e`. All 21 frozen source bindings and ZIP readback pass. The writer and parent report 23 source controls passing, including ordinary create/start and exact owned cleanup.\n- Exact packet `/storage/data/meownero-tjs1882-docker-candidate02-source/corrected-source-598296e.zip`: 57,728 bytes, 25 members, SHA256 `5fd3a9158834884c5ce4eb2d25d5476d826f411a53af9e2b3266e1e01925da9f`. Binding file is adjacent `source-freeze.json`, SHA256 `2d5d9809a0ba871b7b8d2e016e7218917b2216107ffb12a11abd29d7777d196f`. Upload/adopt this exact packet through the normal review handoff.\n\nSource/image/journey acceptance remains open. After original source clearance, parent retains the bounded actual image, wallet/payment/restore/later-spend/CLI, five-second deadline and genuinely live interruption cleanup gates. Diagnostic attempt03 remains cancelled and unaccepted. Native CI stays paused; accepted 3/7 artifacts and the separate GUI track remain preserved; distribution is website-only with no more group attachments. No expired writer credentials or lease/runtime changes are needed.",
+    "executionReadback": {
+      "observedAt": "2026-10-10T18:27:59.253931+00:00",
+      "http": "200",
+      "curlExit": 0,
+      "route": "/api/issues/e7cb422f-9c00-46f6-b0c3-decce627b08e/execution",
+      "data": {
+        "runId": "fbd3c757-d3e3-4cfd-be47-7051c1e94eec",
+        "agentId": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+        "recoveryAction": null,
+        "execution": {
+          "phase": "working",
+          "label": "Working",
+          "cause": null,
+          "lastConfirmedActivityAt": "2026-10-10T18:15:51.524Z",
+          "retryAt": null,
+          "attempt": 1,
+          "maxAttempts": 3,
+          "recoveryOwner": null,
+          "nextAction": null,
+          "permittedActions": [
+            "inspect_run"
+          ],
+          "predecessorRunId": null,
+          "successorRunId": null
+        }
+      }
+    },
+    "normalWakeObservation": {
+      "observedAt": "2026-10-10T18:28:39.838912+00:00",
+      "http": "200",
+      "diagnosis": "The most recent wake for TJS-1882 is deferred for issue_commented.",
+      "recentEvents": [
+        {
+          "kind": "wake_request",
+          "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+          "source": "automation",
+          "reason": "issue_commented",
+          "status": "deferred_issue_execution",
+          "coalescedCount": 1,
+          "runId": null,
+          "requestedAt": "2026-10-10T18:10:55.537Z",
+          "claimedAt": null,
+          "finishedAt": null,
+          "failureClass": null
+        },
+        {
+          "kind": "wake_request",
+          "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+          "source": "automation",
+          "reason": "other",
+          "status": "skipped",
+          "coalescedCount": 0,
+          "runId": "d42620cc-ca62-40a8-8f9f-c8cb55ebe955",
+          "requestedAt": "2026-10-10T17:22:11.739Z",
+          "claimedAt": null,
+          "finishedAt": "2026-10-10T17:23:44.450Z",
+          "failureClass": "failed"
+        },
+        {
+          "kind": "wake_request",
+          "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+          "source": "automation",
+          "reason": "issue_commented",
+          "status": "failed",
+          "coalescedCount": 0,
+          "runId": "abc2f1c7-82e9-4e84-aa66-c9eba621a452",
+          "requestedAt": "2026-10-10T17:15:35.532Z",
+          "claimedAt": "2026-10-10T17:16:34.959Z",
+          "finishedAt": "2026-10-10T17:20:40.450Z",
+          "failureClass": "failed"
+        },
+        {
+          "kind": "wake_request",
+          "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+          "source": "automation",
+          "reason": "issue_comment_mentioned",
+          "status": "claimed",
+          "coalescedCount": 0,
+          "runId": "7b1748f7-db9e-498d-a199-03321fa7a39e",
+          "requestedAt": "2026-10-10T16:54:11.933Z",
+          "claimedAt": "2026-10-10T16:54:42.366Z",
+          "finishedAt": null,
+          "failureClass": null
+        },
+        {
+          "kind": "wake_request",
+          "agentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+          "source": "assignment",
+          "reason": "other",
+          "status": "cancelled",
+          "coalescedCount": 0,
+          "runId": "aba9c5e7-ace2-4873-818e-7b959bcbf218",
+          "requestedAt": "2026-10-10T16:41:48.429Z",
+          "claimedAt": "2026-10-10T16:42:17.322Z",
+          "finishedAt": "2026-10-10T16:53:59.133Z",
+          "failureClass": "failed"
+        },
+        {
+          "kind": "wake_request",
+          "agentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+          "source": "automation",
+          "reason": "other",
+          "status": "deferred_issue_execution",
+          "coalescedCount": 3,
+          "runId": null,
+          "requestedAt": "2026-10-10T16:20:40.036Z",
+          "claimedAt": null,
+          "finishedAt": null,
+          "failureClass": null
+        },
+        {
+          "kind": "wake_request",
+          "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+          "source": "automation",
+          "reason": "other",
+          "status": "coalesced",
+          "coalescedCount": 9,
+          "runId": "7b1748f7-db9e-498d-a199-03321fa7a39e",
+          "requestedAt": "2026-10-10T15:58:01.141Z",
+          "claimedAt": null,
+          "finishedAt": "2026-10-10T16:54:26.936Z",
+          "failureClass": null
+        },
+        {
+          "kind": "wake_request",
+          "agentId": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+          "source": "automation",
+          "reason": "other",
+          "status": "claimed",
+          "coalescedCount": 0,
+          "runId": "fbd3c757-d3e3-4cfd-be47-7051c1e94eec",
+          "requestedAt": "2026-10-10T15:57:12.126Z",
+          "claimedAt": "2026-10-10T18:13:56.539Z",
+          "finishedAt": null,
+          "failureClass": null
+        }
+      ]
+    },
+    "queueObservation": {
+      "observedAt": "2026-10-10T18:28:41.281744+00:00",
+      "http": "200",
+      "queueId": "523aa4b6-6c28-48e5-a545-4043bb1f0e6d",
+      "state": "deferred",
+      "targetRunId": "fbd3c757-d3e3-4cfd-be47-7051c1e94eec",
+      "protocol": "legacy",
+      "steeringDisposition": "unsupported",
+      "executionWait": {
+        "reason": "execution_recovery",
+        "message": "Waiting for execution recovery. Your message is saved."
+      },
+      "commentIds": [
+        "d880751e-e061-4f14-9f83-74451901aeed",
+        "edac8355-7baa-421a-ba51-f37d776d9aa3"
+      ]
+    },
+    "parentRunReadback": {
+      "observedAt": "2026-10-10T18:29:46.183246+00:00",
+      "http": "200",
+      "curlExit": 0,
+      "data": {
+        "id": "fbd3c757-d3e3-4cfd-be47-7051c1e94eec",
+        "agentId": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+        "status": "cancelled",
+        "startedAt": "2026-10-10T18:13:56.539Z",
+        "finishedAt": "2026-10-10T18:29:07.234Z",
+        "execution": {
+          "phase": "failed",
+          "label": "Cancelled",
+          "cause": "issue_reassigned",
+          "lastConfirmedActivityAt": "2026-10-10T18:29:07.329Z",
+          "retryAt": null,
+          "attempt": 1,
+          "maxAttempts": 3,
+          "recoveryOwner": null,
+          "nextAction": null,
+          "permittedActions": [
+            "inspect_run"
+          ],
+          "predecessorRunId": null,
+          "successorRunId": null
+        },
+        "currentStatusMessage": null,
+        "currentStatusUpdatedAt": null,
+        "lastEventAt": null,
+        "error": "Cancelled before issue reassignment",
+        "errorCode": "issue_reassigned",
+        "issueId": "e7cb422f-9c00-46f6-b0c3-decce627b08e"
+      }
+    },
+    "completedReviewReadback": {
+      "observedAt": "2026-10-10T18:30:23.032471+00:00",
+      "http": "200",
+      "id": "e7cb422f-9c00-46f6-b0c3-decce627b08e",
+      "status": "in_review",
+      "assigneeAgentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+      "executionBlocker": null,
+      "executionState": {
+        "status": "pending",
+        "monitor": {
+          "kind": "external_service",
+          "notes": "resume session 529de394-7f59-4ecc-9106-6b52b2816a12 in pane w1TC:p1; checkpoint by run 32610e37-e6ab-4aea-8fa2-71a39c30a7b9",
+          "status": "triggered",
+          "clearedAt": null,
+          "timeoutAt": "2026-10-10T10:32:00.000Z",
+          "clearReason": null,
+          "externalRef": "[redacted]",
+          "maxAttempts": 6,
+          "nextCheckAt": null,
+          "scheduledBy": "assignee",
+          "serviceName": "herdr-bridge checkpoint",
+          "attemptCount": 4,
+          "recoveryPolicy": null,
+          "lastTriggeredAt": "2026-10-10T10:06:58.449Z"
+        },
+        "reviewRequest": null,
+        "currentStageId": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+        "lastDecisionId": "2adfc4b5-96c1-4c6f-ade1-92050f738a8c",
+        "returnAssignee": {
+          "type": "agent",
+          "userId": null,
+          "agentId": "92a7b4f2-787b-4cbb-954e-46831397ab09"
+        },
+        "currentStageType": "review",
+        "completedStageIds": [],
+        "currentStageIndex": 0,
+        "currentParticipant": {
+          "type": "agent",
+          "userId": null,
+          "agentId": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6"
+        },
+        "lastDecisionOutcome": "changes_requested",
+        "changesRequestedCount": 2
+      },
+      "reviewAttention": {
+        "state": "covered",
+        "activeRun": {
+          "kind": "active_run",
+          "label": "Active review run",
+          "responder": "Meownero \u00b7 Rust & Cuprate Parity",
+          "since": "2026-10-10T18:29:51.246Z",
+          "ref": "36ee3e02-90cc-4c1f-a7ce-0c98052e5571"
+        }
+      },
+      "attachment": {
+        "id": "6e45c6e6-353b-4ff4-b66c-8e1ebe664900",
+        "companyId": "0fd20c15-76d7-46b2-bbd7-ea21fac7b4c3",
+        "issueId": "e7cb422f-9c00-46f6-b0c3-decce627b08e",
+        "issueCommentId": null,
+        "originatingRunId": "fbd3c757-d3e3-4cfd-be47-7051c1e94eec",
+        "assetId": "7db23e04-2579-4adf-beb3-ad75502d6555",
+        "provider": "local_disk",
+        "objectKey": "0fd20c15-76d7-46b2-bbd7-ea21fac7b4c3/issues/e7cb422f-9c00-46f6-b0c3-decce627b08e/2026/10/10/88679b8c-b91d-4a1d-a28b-5cf6e3dbcdfc-corrected-source-598296e.zip",
+        "contentType": "application/zip",
+        "byteSize": 57728,
+        "sha256": "5fd3a9158834884c5ce4eb2d25d5476d826f411a53af9e2b3266e1e01925da9f",
+        "originalFilename": "corrected-source-598296e.zip",
+        "createdByAgentId": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+        "createdByUserId": null,
+        "createdAt": "2026-10-10T18:28:00.120Z",
+        "updatedAt": "2026-10-10T18:28:00.120Z",
+        "contentPath": "/api/attachments/6e45c6e6-353b-4ff4-b66c-8e1ebe664900/content",
+        "openPath": "/api/attachments/6e45c6e6-353b-4ff4-b66c-8e1ebe664900/content",
+        "downloadPath": "/api/attachments/6e45c6e6-353b-4ff4-b66c-8e1ebe664900/content?download=1"
+      }
+    },
+    "nativeLayoutReadback": {
+      "observedAt": "2026-10-10T18:31:02.964750+00:00",
+      "panes": [
+        {
+          "pane_id": "w1XK:p5",
+          "agent": "codex",
+          "agent_status": "done",
+          "terminal_title": "01a126be-22c3-7c71-a83e-077777c7e5d1",
+          "cwd": "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages",
+          "agent_session": null
+        },
+        {
+          "pane_id": "w1XK:p6",
+          "agent": "claude",
+          "agent_status": "done",
+          "terminal_title": "\u2733 studio-lead",
+          "cwd": "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages",
+          "agent_session": {
+            "agent": "claude",
+            "kind": "id",
+            "source": "herdr:claude",
+            "value": "a993e15e-d599-4abb-b15d-bd2e452d4cf6"
+          }
+        }
+      ]
+    }
+  },
+  "outcome": "Original review is active on corrected candidate; current issue may close. Parent retains all source/image/journey/distribution acceptance gates."
+}
