@@ -1,0 +1,45 @@
+--- a/vanguard/run-portable-linux-ci.py
++++ b/vanguard/run-portable-linux-ci.py
+@@ -169,6 +169,25 @@
+ 
+ 
+ 
++def package_failure(error, inputs):
++    """Record a bound source location, never exception text, argv or paths."""
++    kinds = {'AssertionError', 'RuntimeError', 'CalledProcessError', 'OSError',
++             'ValueError', 'KeyError', 'KeyboardInterrupt', 'SystemExit'}
++    value = {'schema': 'meownero-native-linux-package-failure/1', 'phase': 'PACKAGE',
++             'failure_type': type(error).__name__ if type(error).__name__ in kinds else 'OTHER_ERROR',
++             'source_module': 'UNKNOWN', 'source_line': None, 'source_sha256': None}
++    modules = {str(ROOT / 'vanguard' / name): name
++               for name in ('package-portable.py', 'portable_licenses.py')}
++    frame = error.__traceback__
++    while frame is not None:
++        name = modules.get(frame.tb_frame.f_code.co_filename)
++        if name is not None:
++            value.update(source_module=name, source_line=frame.tb_lineno,
++                         source_sha256=inputs['source_files']['vanguard/' + name])
++        frame = frame.tb_next
++    return value
++
++
+ def worker(phase, inputs, out):
+     if phase == 'fetch':
+         fetch(inputs, out)
+@@ -190,7 +209,15 @@
+         load('run-portable-check.py').main()
+     else:
+         sys.argv = [scripts[phase], *argv[phase]]
+-        load(scripts[phase]).main()
++        try:
++            load(scripts[phase]).main()
++        except BaseException as error:
++            if phase == 'package':
++                try:
++                    write(out / 'public/package-diagnostic.json', package_failure(error, inputs))
++                except BaseException:
++                    error.add_note('PACKAGE_DIAGNOSTIC_EXPORT_FAILED')
++            raise
+ 
+ 
+ def main():
