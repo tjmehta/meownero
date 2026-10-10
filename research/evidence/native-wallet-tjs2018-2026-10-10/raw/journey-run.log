@@ -1,10 +1,10 @@
-dbus-daemon[713561]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=714395 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
-dbus-daemon[713561]: Successfully activated service 'org.a11y.atspi.Registry'
+dbus-daemon[2394712]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=2395194 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
+dbus-daemon[2394712]: Successfully activated service 'org.a11y.atspi.Registry'
 SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
-dbus-daemon[713551]: [session uid=1000 pid=713551 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=714461 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
-dbus-daemon[713551]: [session uid=1000 pid=713551 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+dbus-daemon[2394702]: [session uid=1000 pid=2394702 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=2395332 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
+dbus-daemon[2394702]: [session uid=1000 pid=2394702 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
 fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
-PASS A0 app window mapped — 0.271 s from launch
+PASS A0 app window mapped — 0.324 s from launch
 PASS H hidden content unreachable to AT (welcome) — []
 PASS A1 first run exposes no wallet pages
 PASS A2 Tab order on Welcome — ["What does this mean?", "Create a new wallet", "Restore from recovery words", "Open a wallet file", "What does this mean?"]
@@ -59,6 +59,7 @@ PASS B10 no submission happened after the stale review — app=meownero-wallet 0
 DEBUG b11 focused {'role': 'heading', 'name': 'Overview', 'showing': True, 'description': '', 'focused': True, 'enabled': True, 'checked': False}
 PASS B11 a late prepare reply cannot open review over another page — []
 PASS B12 form keeps what was typed — 2.5
+PASS B12b markup in a note is shown literally in review
 PASS B13 submitting announced
 PASS B14 Sent: heading focused and outcome announced — {"role": "heading", "name": "Sent", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
 PASS B15 change explained on Sent
@@ -70,6 +71,8 @@ PASS B19 detail dialog opens — {"role": "push button", "name": "Done", "showin
 PASS H hidden content unreachable to AT (unknown detail) — []
 PASS B20 absence proof resolves to not sent, announced
 PASS B21 sending is available again
+PASS B21b markup note appears literally in Activity
+PASS B21c no remote content was fetched — [{"path": "/", "agent": "Go-http-client/1.1"}, {"path": "/", "agent": "Go-http-client/1.1"}]
 PASS B22 arrow key picks but changes nothing — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true} Status: Connected and synced
 PASS B23 consent dialog starts on Keep current node, described by the exposure — {"role": "push button", "name": "Keep current node", "showing": true, "description": "An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata.", "focused": true, "enabled": true, "checked": false}
 PASS B24 at 880x600 the whole explanation is inside the window, above Connect — window 880x600+0+0; explanation 476x60+202+227; connect y=377
@@ -78,5 +81,5 @@ PASS B25 Escape changes nothing and returns focus to Connect — {"role": "push 
 PASS B26 network change closes stale consent and connects nothing — [] Status: Connected and synced
 PASS B27 explicit consent connects and is announced — Trust: Untrusted, by your choice
 PASS B28 reduced motion follows the system preference change — reduced=1; app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=testnet reduced_motion=1 node_state=remote chain_tip=1341 wallet_loaded=1 locked=0 history_rows=6 pending=0 unknown_submissions=0 stale_replies_dropped=1 stale_actions_refused=0
-TOTAL 72 checks, 0 failed
+TOTAL 75 checks, 0 failed
 A connection to the bus can't be made

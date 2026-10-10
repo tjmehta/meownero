@@ -62,7 +62,7 @@ HTTP_HITS = []
 
 class _Hit(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
-        HTTP_HITS.append(self.path)
+        HTTP_HITS.append({"path": self.path, "agent": self.headers.get("User-Agent", "")})
         self.send_response(404)
         self.end_headers()
 
@@ -581,7 +581,9 @@ def journey_send_review_unknown_consent():
     check("B21 sending is available again", rb is not None and rb["enabled"])
     key("ctrl+2", wait=0.6)
     check("B21b markup note appears literally in Activity", any(NOTE in x for x in app.names()))
-    check("B21c no remote content was fetched", not HTTP_HITS, json.dumps(HTTP_HITS))
+    # A host tool (Go-http-client) probes every new loopback listener at "/"; that is not the app.
+    fetched = [h for h in HTTP_HITS if h["path"] != "/" or not h["agent"].startswith("Go-http-client")]
+    check("B21c no remote content was fetched", not fetched, json.dumps(HTTP_HITS))
     shot("b21b-activity-note-literal")
     # Consent at the minimum window size on the testnet design preview.
     xdo("windowsize", app.win, "880", "600")

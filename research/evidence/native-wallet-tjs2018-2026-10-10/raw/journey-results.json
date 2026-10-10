@@ -3,7 +3,7 @@
   {
    "check": "A0 app window mapped",
    "pass": true,
-   "detail": "0.271 s from launch"
+   "detail": "0.324 s from launch"
   },
   {
    "check": "H hidden content unreachable to AT (welcome)",
@@ -266,6 +266,11 @@
    "detail": "2.5"
   },
   {
+   "check": "B12b markup in a note is shown literally in review",
+   "pass": true,
+   "detail": ""
+  },
+  {
    "check": "B13 submitting announced",
    "pass": true,
    "detail": ""
@@ -321,6 +326,16 @@
    "detail": ""
   },
   {
+   "check": "B21b markup note appears literally in Activity",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B21c no remote content was fetched",
+   "pass": true,
+   "detail": "[{\"path\": \"/\", \"agent\": \"Go-http-client/1.1\"}, {\"path\": \"/\", \"agent\": \"Go-http-client/1.1\"}]"
+  },
+  {
    "check": "B22 arrow key picks but changes nothing",
    "pass": true,
    "detail": "{\"role\": \"radio button\", \"name\": \"Someone else's node\", \"showing\": true, \"description\": \"Faster to start, but it can observe your activity\", \"focused\": true, \"enabled\": true, \"checked\": true} Status: Connected and synced"
@@ -363,112 +378,112 @@
  ],
  "announcements": [
   {
-   "t": 1791671907.808,
+   "t": 1791674329.207,
    "type": "object:announcement",
    "text": "The passwords don't match."
   },
   {
-   "t": 1791671917.54,
+   "t": 1791674339.133,
    "type": "object:announcement",
    "text": "That isn't word 4. Check your paper."
   },
   {
-   "t": 1791671924.675,
+   "t": 1791674346.051,
    "type": "object:announcement",
    "text": "Copied"
   },
   {
-   "t": 1791671927.294,
+   "t": 1791674348.641,
    "type": "object:announcement",
    "text": "That password doesn't open this wallet."
   },
   {
-   "t": 1791671930.276,
+   "t": 1791674351.559,
    "type": "object:announcement",
    "text": "Wallet locked."
   },
   {
-   "t": 1791671947.75,
+   "t": 1791674369.098,
    "type": "object:announcement",
    "text": "Recovery phrases have 25 words. You've entered 24."
   },
   {
-   "t": 1791671951.907,
+   "t": 1791674373.297,
    "type": "object:announcement",
    "text": "Block 99,999 is in the future. This chain is at block 1,340."
   },
   {
-   "t": 1791671956.488,
+   "t": 1791674377.905,
    "type": "object:announcement",
    "text": "Wallet restored. Found 4 payments. Spendable balance 1,218.8608\u2026 MEOW."
   },
   {
-   "t": 1791671967.028,
+   "t": 1791674388.395,
    "type": "object:announcement",
    "text": "Preparing the payment."
   },
   {
-   "t": 1791671970.521,
+   "t": 1791674392.03,
    "type": "object:announcement",
    "text": "Preparing the payment."
   },
   {
-   "t": 1791671971.746,
+   "t": 1791674393.257,
    "type": "object:announcement",
    "text": "Connection: Node unreachable. Sending paused"
   },
   {
-   "t": 1791671972.75,
+   "t": 1791674394.325,
    "type": "object:announcement",
    "text": "Connection: Synced. Block 1,340"
   },
   {
-   "t": 1791671976.269,
+   "t": 1791674397.858,
    "type": "object:announcement",
    "text": "Preparing the payment."
   },
   {
-   "t": 1791671979.84,
+   "t": 1791674402.41,
    "type": "object:announcement",
    "text": "Preparing the payment."
   },
   {
-   "t": 1791671981.065,
+   "t": 1791674403.816,
    "type": "object:announcement",
    "text": "Submitting the payment to your node."
   },
   {
-   "t": 1791671982.461,
+   "t": 1791674405.226,
    "type": "object:announcement",
    "text": "Sent. Submitted to your node and waiting to confirm."
   },
   {
-   "t": 1791671988.2,
+   "t": 1791674410.887,
    "type": "object:announcement",
    "text": "Preparing the payment."
   },
   {
-   "t": 1791671989.428,
+   "t": 1791674412.112,
    "type": "object:announcement",
    "text": "Submitting the payment to your node."
   },
   {
-   "t": 1791671990.834,
+   "t": 1791674413.505,
    "type": "object:announcement",
    "text": "Submission status unknown. Check this payment before trying again."
   },
   {
-   "t": 1791671994.632,
+   "t": 1791674417.503,
    "type": "object:announcement",
    "text": "Checking with your node."
   },
   {
-   "t": 1791671995.435,
+   "t": 1791674418.307,
    "type": "object:announcement",
    "text": "Not sent: your node never received this payment, and the coins are back in your balance."
   },
   {
-   "t": 1791672005.433,
+   "t": 1791674429.276,
    "type": "object:announcement",
    "text": "Connection: Synced. Using someone else's node"
   }

@@ -9,15 +9,16 @@ not accept it.
 | Item | Value |
 | --- | --- |
 | Branch | `TJS-2018-meownero-native-wallet-implement-accepted-qt-c-core-journeys-with-simulated-backend` |
-| Code head | `21f1e68` (on handoff `daa68776`; design README/prototype hashes verified) |
-| Executable | `wallet-ui/build/meownero-wallet`, SHA-256 `2491eb15b46bf28fefd6779907fd844a10c8e7a9acac472b0d521cc43c256a16`, 6,366,136 bytes, unsigned, dynamically linked |
+| Code head | `b18ef30` (security-review repairs on `21f1e68`; on handoff `daa68776`; design README/prototype hashes verified) |
+| Executable | `wallet-ui/build/meownero-wallet`, SHA-256 `42425e72552e29e7b5ae5b07486804a7e34d2dc18add6e68322dc7f755e52094`, 6,397,272 bytes, unsigned, dynamically linked |
 | Reproducible | A clean rebuild in a second directory is byte-identical (`raw/measure.txt`) |
 | Build recipe | `wallet-ui/README.md` |
 | Host | Linux 6.8.0-146-generic x86_64, Ubuntu 24.04.4 LTS, glibc 2.39, GNOME/Xorg; all UI checks on an owned nested Xephyr display `:47` |
 | Toolchain | Qt 6.12.0 `linux_gcc_64` (icu, qtbase, qtdeclarative) via aqtinstall 3.3.0; GCC 13.3.0; CMake 4.4.4; Ninja 1.13.2. Library and deb hashes in `raw/measure.txt` |
 | Qt modules linked | Core, DBus, Gui, Network, OpenGL, Qml, QmlMeta, QmlModels, QmlWorkerScript, Quick, QuickControls2, QuickTemplates2 (plus the xcb platform plugin). Qt's SBOM (`sbom/qt*-6.12.0.spdx.json`) gives each `LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only`. This slice uses them dynamically under the LGPL-3.0 option; no GPL-only module, no paid license. Notices and relinking materials would be needed for any distribution, and none is made |
 
-QtNetwork is linked only as a transitive dependency of QtQml. The app opens no
+QtNetwork is linked so the QML engine can be given a network factory that refuses
+everything except `qrc:`/`data:` (no request reaches a socket). The app opens no
 socket, loads only compiled-in `qrc:` QML, and has no WebEngine/WebView.
 
 ## What was checked, and how
@@ -25,8 +26,8 @@ socket, loads only compiled-in `qrc:` QML, and has no WebEngine/WebView.
 | File | Content | Result |
 | --- | --- | --- |
 | `raw/tst_amount.txt` | Ported `PARSER_CASES`, refusals, locale comma decimal, overflow refusal, compact truncation with "…", 1 atomic unit, signs, plain round trip | 28/28 pass |
-| `raw/tst_controller.txt` | Exact prepared review relayed unchanged; edit, lock, node loss and late replies invalidate review; submission finishes after leaving Send; unknown submit blocks payments, ignores blocks without it, resolves only on node evidence; refusal changes nothing; consent bound to session/network; address rules; dust/large balances; recovery-word lifetime; restore validation; diagnostics allowlist; node states name the part at fault | 18/18 pass |
-| `harness/run-journeys.sh` → `raw/journey-results.json`, `raw/journey-run.log`, `screens/` | Real XTest keyboard input; focus, names, descriptions, tree contents, announcements and geometry read over AT-SPI on a private accessibility bus. Create → back up → receive → copy → re-reveal behind the password → lock/unlock → restore; send with refused inputs, review, Escape, stale review, leaving while preparing, confirm, connection drop, block without it, node absence proof; remote-node consent at 880 × 600; reduced motion; hidden-content audit on eight screens | 72/72 pass, 22 announcements recorded |
+| `raw/tst_controller.txt` | Exact prepared review relayed unchanged; edit, lock, node loss and late replies invalidate review; submission finishes after leaving Send; unknown submit blocks payments, ignores blocks without it, resolves only on node evidence; refusal changes nothing; consent bound to session/network; address rules; dust/large balances; recovery-word lifetime; restore validation; diagnostics allowlist; node states name the part at fault | 22/22 pass (adds ports of security-review probes p1b, p1c, p2a, p2b) |
+| `harness/run-journeys.sh` → `raw/journey-results.json`, `raw/journey-run.log`, `screens/` | Real XTest keyboard input; focus, names, descriptions, tree contents, announcements and geometry read over AT-SPI on a private accessibility bus. Create → back up → receive → copy → re-reveal behind the password → lock/unlock → restore; send with refused inputs, review, Escape, stale review, leaving while preparing, confirm, connection drop, block without it, node absence proof; remote-node consent at 880 × 600; reduced motion; hidden-content audit on eight screens; a markup note (`<img src=http://127.0.0.1:18777/…>`) typed into the real Note field with a loopback listener | 75/75 pass |
 | `harness/orca-journey.sh` → `raw/orca-speech-*-readable.txt`, `raw/orca-speech-*.txt`, `raw/orca-debug-*.log.gz` | **Orca 46.1**, a real screen reader, driven by real key presses through create (welcome → name/password with error → recovery words → acknowledgement → word check) and send (kit wallet → refused amount → preparing → review → confirm → Sent → Node radios) | Speech transcripts below |
 | `harness/measure.sh` → `raw/measure.txt`, `raw/libraries-loaded.txt` | Hashes, linked modules, rebuild check, startup, idle CPU, RSS, mapped Qt bytes | See Measurements |
 
@@ -56,6 +57,18 @@ private session whose speech-dispatcher played into ALSA's `null` device.
 Speech was generated and logged but not heard. No human listened, and nobody
 judged comprehension. NVDA and VoiceOver were not available on this host.
 
+## Security review response (changes requested on `4e7bfe2`, comment `4baac315`)
+
+| Finding | Fix (code `b18ef30`) | Evidence on the new executable |
+| --- | --- | --- |
+| 1. A wallet change during a submission dropped the relay reply, left `m_attempt` set, lost the payment and wedged sending | `refuseWalletChange()` guards every wallet-changing path while a submission is in flight: unlock page → welcome/create/restore, open new/restored wallet, fixture story and restore fills, `startOver`. It announces the reason. A matched relay reply always clears the attempt | `tst_controller`: `walletChangeWaitsForSubmissionInFlight` (p1b path: lock → "Use a different wallet" → restore is refused; the relayed payment gets its row; a new send relays), `fixtureStoryChangeWaitsForSubmission` (p1c), `noDroppedReplyLeavesAttemptSet`. A mutation check (guard disabled) fails the first two |
+| 2. `AText` rendered controller strings as rich text; a note `<img src=http://…>` fetched a remote image | `AText` defaults to `Text.PlainText`. StyledText remains only at the four app-authored sites (`OverviewPage` ×2, `OnboardingPage` bullets, `WalletPage` about line). Both `TextArea`s are pinned to plain text. `main.cpp` installs a `QQmlNetworkAccessManagerFactory` that refuses everything but `qrc:`/`data:` | Journey B12b/B21b: the note appears literally in Review and Activity. B21c: no request for the note image. **Negative control** on the old executable `2491eb15…` (`raw/negative-control-21f1e68-journey-b.json`): two `GET /review-note.png` (UA `Mozilla/5.0`) |
+| R1 (risk, cheap to fix). Node-check evidence wasn't bound to the session, and a lost check blocked reconcile for good | Check replies require the asking session's epoch; invalidation clears an outstanding check | `nodeCheckReplyDroppedAfterNodeLossOrLock` (p2a, p2b): after node loss or lock the reply is dropped, the payment stays unknown, Check with node runs again and resolves |
+
+Left as recorded for later slices (not requested here): R2 (absence claims from someone else's node, a design question for Studio and design), R3 (`--start` opens the fixture wallet unlocked; fixture-only, must not reach a real build), R4 (native digits in the integer part for ar_EG/fa_IR, for design lead) and R5 (the real seam must display and check the engine's prepared destination, amount and fee).
+
+A host tool (`Go-http-client/1.1`) probes every new loopback listener at `/`. Those hits appear in the B21c detail and are excluded from the check by path and agent.
+
 ## Defects found and fixed by these author checks
 
 All of them were in the candidate before these fixes. QA should re-check them.
@@ -81,10 +94,10 @@ All of them were in the candidate before these fixes. QA should re-check them.
 
 | Measure | Observation | Method and limits |
 | --- | --- | --- |
-| Launch → mapped window | 0.233–0.262 s over 5 runs | `date` before exec until `xdotool search` finds the window. Not first-frame time; caches warm after run 1; nested X server, no WM |
+| Launch → mapped window | 0.233–0.277 s over 5 runs | `date` before exec until `xdotool search` finds the window. Not first-frame time; caches warm after run 1; nested X server, no WM |
 | Idle CPU | 0 ticks over 10 s, after a 3 s settle | `/proc/pid/stat` utime+stime at 10 ms resolution; zero means below resolution |
-| RSS | 192,260 kB (VmRSS = VmHWM) on Overview | One sample; includes the software/GL stack of this host |
-| Footprint | Executable 6,366,136 bytes. 29 Qt toolchain libraries/plugins mapped, 87,771,600 bytes. Installed toolchain 1,620,430,098 bytes (Qt), 5,147,759 (sysroot), 35,138,704 (aqt venv) | Mapped bytes are not an installer size; no package was built |
+| RSS | 192,432 kB (VmRSS = VmHWM) on Overview | One sample; includes the software/GL stack of this host |
+| Footprint | Executable 6,397,272 bytes. 29 Qt toolchain libraries/plugins mapped, 87,771,600 bytes. Installed toolchain 1,620,430,098 bytes (Qt), 5,147,759 (sysroot), 35,138,704 (aqt venv) | Mapped bytes are not an installer size; no package was built |
 
 These are not comparable with the TJS-1996 experiment (Python launcher, other
 renderer). No other OS or architecture was measured.
