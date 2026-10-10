@@ -18,5 +18,6 @@ Rectangle {
         font.weight: Font.DemiBold
         font.letterSpacing: 0.6
         color: Theme.net
+        Accessible.ignored: true
     }
 }

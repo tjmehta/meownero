@@ -92,7 +92,7 @@ PageBase {
             ColumnLayout {
                 spacing: 10
                 DefRow { label: "Fee paid"; value: page.r.fee || "" }
-                DefRow { label: "To"; accessibleValue: page.r.to || ""; AddressText { Layout.fillWidth: true; text: page.r.to || "" } }
+                DefRow { label: "To"; accessibleValue: page.r.to || ""; AddressText { Layout.fillWidth: true; text: page.r.to || ""; presentational: true } }
                 DefRow {
                     label: "Transaction ID"; accessibleValue: page.r.txid || ""
                     AddressText { Layout.fillWidth: true; text: page.r.txid || ""; grouped: false; onCopy: () => Wallet.copyTransactionId(page.r.rowId) }
@@ -132,9 +132,11 @@ PageBase {
             Flow {
                 Layout.fillWidth: true; spacing: 10
                 Repeater {
-                    model: Wallet.kitWallets
+                    // A fixed count keeps the buttons (and focus) alive when the selection changes.
+                    model: 2
                     AppButton {
-                        required property var modelData
+                        required property int index
+                        readonly property var modelData: Wallet.kitWallets[index]
                         text: modelData.label + "  " + modelData.short
                         checkable: true
                         checked: modelData.selected
@@ -270,14 +272,14 @@ PageBase {
             DefRow {
                 Layout.topMargin: 6
                 label: "You send"; accessibleValue: (review.v.amount || "") + ", test coins"
-                RowLayout { spacing: 8; AText { text: review.v.amount || ""; font.pointSize: Theme.pt(13.5); color: Theme.fg } NetTag {} }
+                RowLayout { spacing: 8; AText { text: review.v.amount || ""; font.pointSize: Theme.pt(13.5); color: Theme.fg; Accessible.ignored: true } NetTag {} }
             }
             DefRow { label: "Network fee"; value: review.v.fee || "" }
             DefRow {
                 label: "Total"; accessibleValue: (review.v.total || "") + ", test coins"
-                RowLayout { spacing: 8; AText { text: review.v.total || ""; font.pointSize: Theme.pt(13.5); font.weight: Font.Bold; color: Theme.fg } NetTag {} }
+                RowLayout { spacing: 8; AText { text: review.v.total || ""; font.pointSize: Theme.pt(13.5); font.weight: Font.Bold; color: Theme.fg; Accessible.ignored: true } NetTag {} }
             }
-            DefRow { label: "To"; accessibleValue: review.v.to || ""; AddressText { Layout.fillWidth: true; text: review.v.to || "" } }
+            DefRow { label: "To"; accessibleValue: review.v.to || ""; AddressText { Layout.fillWidth: true; text: review.v.to || ""; presentational: true } }
             DefRow { label: "Network"; value: review.v.network || "" }
             DefRow { visible: !!review.v.note; label: "Note"; value: (review.v.note || "") + " (this computer only)" }
             AText {

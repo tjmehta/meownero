@@ -43,14 +43,14 @@ AppDialog {
         }
         DefRow {
             label: "Amount"
-            AmountLabel { view: dlg.d.amount || ({}); tag: true }
+            AmountLabel { view: dlg.d.amount || ({}); tag: true; presentational: true }
             accessibleValue: (dlg.d.amount ? dlg.d.amount.accessible : "") + ", test coins"
         }
         DefRow { visible: !!dlg.d.isOut; label: "Network fee"; value: dlg.d.fee || "" }
         DefRow {
             visible: !!dlg.d.isOut
             label: "To"
-            AddressText { Layout.fillWidth: true; text: dlg.d.to || "" }
+            AddressText { Layout.fillWidth: true; text: dlg.d.to || ""; presentational: true }
             accessibleValue: dlg.d.to || ""
         }
         DefRow { visible: !!dlg.d.isIn; label: "From"; value: "Not shown in this wallet"; valueColor: Theme.muted }

@@ -10,12 +10,14 @@ FocusScope {
     property bool grouped: true
     property var onCopy: null
     property real px: 13
+    // Inside a definition row that already names the value, stay out of the tree.
+    property bool presentational: false
     implicitHeight: flow.implicitHeight
     implicitWidth: 300
     activeFocusOnTab: onCopy !== null
     Accessible.role: Accessible.StaticText
     Accessible.name: text
-    Accessible.ignored: !visible
+    Accessible.ignored: !visible || presentational
     Accessible.focusable: activeFocusOnTab
     Accessible.description: onCopy !== null ? "Press the copy shortcut to copy" : ""
 

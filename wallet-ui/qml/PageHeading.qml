@@ -12,5 +12,6 @@ AText {
     Accessible.role: Accessible.Heading
     Accessible.name: text
     Accessible.focusable: true
-    activeFocusOnTab: false
+    // In the Tab chain only while focused, so Tab continues into the page, not the window start.
+    activeFocusOnTab: activeFocus
 }

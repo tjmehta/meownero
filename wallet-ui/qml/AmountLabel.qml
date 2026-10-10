@@ -10,11 +10,13 @@ Row {
     property bool unit: true
     property bool tag: false
     property color color: Theme.fg
+    // Inside a definition row that already names the value, stay out of the tree.
+    property bool presentational: false
     readonly property bool big: px > 24
     spacing: 0
     Accessible.role: Accessible.StaticText
     Accessible.name: (view.accessible || "") + (tag ? ", test coins" : "")
-    Accessible.ignored: !visible
+    Accessible.ignored: !visible || presentational
 
     AText {
         id: digits
