@@ -8,7 +8,7 @@ set -euo pipefail
 BUILD=$(cd "$1" && pwd)
 OUT=$(cd "$2" && pwd)
 NUM=${3:-47}
-JOURNEY=${JOURNEY:-ABC}
+JOURNEY=${JOURNEY:-ABCD}
 HERE=$(cd "$(dirname "$0")" && pwd)
 mkdir -p "$OUT/screens" "$OUT/raw"
 

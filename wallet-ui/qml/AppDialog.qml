@@ -10,6 +10,8 @@ Dialog {
     id: dlg
     property string description: ""
     property Item returnFocusTo: null
+    // Used when the opener is gone or hidden by the time the dialog closes (a page heading).
+    property Item fallbackFocus: null
     property Item initialFocus: null
     property bool restoreFocus: true
     property bool wide: false
@@ -60,9 +62,12 @@ Dialog {
     onClosed: {
         // A focus target chosen while closing (navigation, Keep, Connect) wins;
         // otherwise focus returns to the control that opened the dialog.
-        if (!UiState.dialogClosed() && restoreFocus && returnFocusTo)
-            returnFocusTo.forceActiveFocus()
+        if (!UiState.dialogClosed() && restoreFocus)
+            UiState.focus(returnTarget())
         restoreFocus = true
+    }
+    function returnTarget() {
+        return returnFocusTo && returnFocusTo.visible && returnFocusTo.enabled ? returnFocusTo : fallbackFocus
     }
     function closeWithoutRestoring() {
         restoreFocus = false

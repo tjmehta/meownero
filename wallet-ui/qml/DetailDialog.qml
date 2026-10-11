@@ -16,7 +16,7 @@ AppDialog {
         function onReconciled(id) {
             if (dlg.visible && id === dlg.rowId) {
                 dlg.closeWithoutRestoring()
-                UiState.focus(dlg.returnFocusTo)
+                UiState.focus(dlg.returnTarget()) // Check payment may be gone once resolved
             }
         }
     }

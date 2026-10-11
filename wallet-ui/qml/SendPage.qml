@@ -303,9 +303,10 @@ PageBase {
                 kind: "primary"
                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
                 onClicked: {
-                    const token = review.v.token
+                    // Consume the prepared payment first. With reduced motion the dialog closes
+                    // synchronously, and its dismissal handler would otherwise cancel the review.
+                    Wallet.confirmSend(review.v.token)
                     review.closeWithoutRestoring()
-                    Wallet.confirmSend(token)
                 }
             }
         }

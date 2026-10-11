@@ -15,7 +15,7 @@ QtObject {
         if (!item)
             return
         item.forceActiveFocus()
-        if (closingDialogs > 0)
+        if (closingDialogs > 0 || openDialogs > 0)
             deferredFocus = item
     }
     function dialogClosed() {

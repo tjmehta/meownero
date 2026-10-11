@@ -11,6 +11,7 @@ Item {
     function openDetail(rowId, opener) {
         detail.rowId = rowId
         detail.returnFocusTo = opener
+        detail.fallbackFocus = pageLoader.item ? pageLoader.item.heading : null
         detail.open()
     }
 

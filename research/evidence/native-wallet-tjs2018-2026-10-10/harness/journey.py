@@ -530,6 +530,105 @@ def journey_large_exact_amount_fits():
         f.write(out)
 
 
+# ---------------------------------------------------------------- journey D
+def rows(app):
+    import re
+    m = re.search(r"history_rows=(\d+)", app.diagnostics())
+    return int(m.group(1)) if m else -1
+
+
+def press_by_pointer(app, name):
+    n = next((m for m in app.raw() if m.get_role_name() == "push button" and m.get_name() == name), None)
+    if n is None:
+        return False
+    e = n.get_component_iface().get_extents(Atspi.CoordType.SCREEN)
+    xdo("mousemove", str(e.x + e.width // 2), str(e.y + e.height // 2), "click", "1")
+    xdo("mousemove", "1040", "790")
+    return True
+
+
+def journey_confirmations_with_and_without_reduced_motion():
+    """Journey QA F4: final Connect and prepared Send execute exactly once, by keyboard and
+    by pointer, with reduced motion on and off; Escape still cancels."""
+    app = App("--start", "overview", "--reviewer-fixtures")
+    for motion in ("reduced", "normal"):
+        want = "reduced_motion=1" if motion == "reduced" else "reduced_motion=0"
+        if want not in app.diagnostics():
+            os.kill(PORTAL_PID, signal.SIGUSR1)
+            pump(1.0)
+        check("D0 %s motion active" % motion, want in app.diagnostics())
+        for how in ("keyboard", "pointer"):
+            before = rows(app)
+            key("ctrl+3", wait=0.5)
+            if any(x == "Send another" for x in app.names()):
+                app.tab_to("Send another")
+                key("Return", wait=0.5)
+            app.tab_to("Test wallet B")
+            key("space", wait=0.3)
+            app.tab_to("Amount in MEOW")
+            key("ctrl+a")
+            typ("1")
+            key("Return", wait=1.3)
+            n, f = app.focused()
+            opened = f["name"] == "Send 1 MEOW" and in_dialog(n, "Review payment")
+            t = time.time()
+            if how == "keyboard":
+                key("Return", wait=0.3)
+            else:
+                press_by_pointer(app, "Send 1 MEOW")
+            pump(2.0)
+            _, f = app.focused()
+            after = rows(app)
+            check("D1 %s motion, %s: prepared Send executes exactly once" % (motion, how),
+                  opened and after == before + 1 and announced_since(t, "Sent. Submitted") and not announced_since(t, "out of date")
+                  and f["name"] == "Sent",
+                  "review opened=%s rows %d -> %d focus %r" % (opened, before, after, f["name"]))
+        app.press_fixture("Testnet (design preview)")
+        for how in ("keyboard", "pointer"):
+            key("ctrl+5", wait=0.5)
+            app.tab_to("My own node on this computer") or app.tab_to("Someone else's node")
+            if app.focused()[1]["name"] == "My own node on this computer":
+                key("Down", wait=0.3)
+            app.tab_to("Connect to someone else's node…")
+            key("Return", wait=0.6)
+            opened = "Connect to someone else's node?" in app.dialogs()
+            t = time.time()
+            if how == "keyboard":
+                app.tab_to("Connect to someone else's node")
+                key("Return", wait=0.6)
+            else:
+                press_by_pointer(app, "Connect to someone else's node")
+                pump(0.6)
+            trust = next((x for x in app.names() if x.startswith("Trust: ")), "")
+            _, f = app.focused()
+            check("D2 %s motion, %s: final Connect executes exactly once" % (motion, how),
+                  opened and trust == "Trust: Untrusted, by your choice" and not announced_since(t, "out of date")
+                  and f["role"] == "radio button" and f["name"] == "Someone else's node",
+                  "opened=%s %s focus %r" % (opened, trust, f["name"]))
+            # Back to your own node: one Connect, no dialog.
+            key("Down", wait=0.3)
+            app.tab_to("Connect to my own node")
+            key("Return", wait=0.6)
+        # Escape still cancels with this motion setting.
+        app.tab_to("My own node on this computer")
+        key("Down", wait=0.3)
+        app.tab_to("Connect to someone else's node…")
+        key("Return", wait=0.6)
+        key("Escape", wait=0.6)
+        trust = next((x for x in app.names() if x.startswith("Trust: ")), "")
+        check("D3 %s motion: Escape cancels consent and connects nothing" % motion,
+              trust == "Trust: Trusted, because you chose your own node" and app.focused()[1]["name"] == "Connect to someone else's node…"
+              and not app.dialogs(), trust)
+        app.tab_to("Keep current node")
+        key("Return", wait=0.4)
+        app.press_fixture("Local regtest")
+    if "reduced_motion=1" in app.diagnostics():
+        os.kill(PORTAL_PID, signal.SIGUSR1)
+    out = app.quit()
+    with open(os.path.join(OUT, "raw", "journey-d-app.log"), "w") as f:
+        f.write(out)
+
+
 # ---------------------------------------------------------------- journey B
 def fill_send(app, amount):
     app.tab_to("Test wallet B")
@@ -649,6 +748,11 @@ def journey_send_review_unknown_consent():
     key("Return", wait=0.3)
     pump(1.2)
     check("B20 absence proof resolves to not sent, announced", announced_since(t, "Not sent: your node never received this payment"))
+    # Journey QA F5: the resolved payment removes "Check payment"; focus lands on a named destination.
+    _, f = app.focused()
+    check("B20b after reconcile, focus is on the named Send heading", f["role"] == "heading" and f["name"] == "Send", json.dumps(f))
+    key("Tab", wait=0.3)
+    check("B20c next Tab continues into the form", app.focused()[1]["name"] == "Test wallet B", json.dumps(app.focused()[1]))
     rb = next((i for i in app.nodes() if i["name"] == "Review payment" and i["role"] == "push button"), None)
     check("B21 sending is available again", rb is not None and rb["enabled"])
     key("ctrl+2", wait=0.6)
@@ -741,9 +845,9 @@ def journey_send_review_unknown_consent():
 
 
 if __name__ == "__main__":
-    only = os.environ.get("JOURNEY", "ABC")
+    only = os.environ.get("JOURNEY", "ABCD")
     for tag, fn in (("A", journey_create_backup_receive_restore), ("B", journey_send_review_unknown_consent),
-                    ("C", journey_large_exact_amount_fits)):
+                    ("C", journey_large_exact_amount_fits), ("D", journey_confirmations_with_and_without_reduced_motion)):
         if tag not in only:
             continue
         try:

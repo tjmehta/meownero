@@ -139,8 +139,8 @@ PageBase {
                 accessibleDescription: Wallet.remoteExposure
                 DialogButtonBox.buttonRole: DialogButtonBox.RejectRole
                 onClicked: {
-                    consent.closeWithoutRestoring()
                     Wallet.keepCurrentNode()
+                    consent.closeWithoutRestoring()
                     page.focusChecked()
                 }
             }
@@ -149,9 +149,10 @@ PageBase {
                 kind: "primary"
                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
                 onClicked: {
-                    const token = Wallet.consentToken
+                    // Consume the consent first (it closes the dialog through consentClosed);
+                    // dismissal on close then finds nothing to dismiss, with or without animation.
+                    Wallet.confirmRemoteNode(Wallet.consentToken)
                     consent.closeWithoutRestoring()
-                    Wallet.confirmRemoteNode(token)
                     // Connected: the chosen radio. Refused as stale: the pick is cleared, so the checked radio too.
                     page.focusChecked()
                 }
