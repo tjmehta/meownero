@@ -1,0 +1,57 @@
+[
+  {
+    "check": "H1 outgoing row has full accessible amount and status",
+    "pass": true,
+    "detail": "[\"Sent, To Test wallet B \\u00b7 Lunch test, \\u22122.5 MEOW, Waiting to confirm\"]"
+  },
+  {
+    "check": "H2 keyboard reaches a payment row",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "check": "H3 keyboard opens details",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "check": "H4 status refresh preserves named row opener focus",
+    "pass": true,
+    "detail": "{\"role\": \"push button\", \"name\": \"Sent, To Test wallet B \\u00b7 Lunch test, \\u22122.5 MEOW, 1 of 10 confirmations\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+    "check": "H5 pointer opens the same payment",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "check": "H6 pointer detail has same title and status",
+    "pass": false,
+    "detail": ""
+  },
+  {
+    "check": "H7 keyboard reaches digit toggle",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "check": "H8 digit toggle keeps its focus and pressed state",
+    "pass": true,
+    "detail": "{\"role\": \"push button\", \"name\": \"Show every digit\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": true}"
+  },
+  {
+    "check": "H9 Activity keeps four named rows after toggle",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "check": "H10 keyboard reaches Overview balance",
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "check": "H11 balance toggle keeps accessible focus",
+    "pass": true,
+    "detail": "{\"role\": \"push button\", \"name\": \"Spendable now: 1,218.860837064635 MEOW, test coins. Show every digit\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  }
+]

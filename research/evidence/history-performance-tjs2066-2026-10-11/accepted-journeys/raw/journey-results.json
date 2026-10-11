@@ -1,0 +1,701 @@
+{
+ "results": [
+  {
+   "check": "A0 app window mapped",
+   "pass": true,
+   "detail": "0.270 s from launch"
+  },
+  {
+   "check": "H hidden content unreachable to AT (welcome)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "A1 first run exposes no wallet pages",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A2 Tab order on Welcome",
+   "pass": true,
+   "detail": "[\"What does this mean?\", \"Create a new wallet\", \"Restore from recovery words\", \"Open a wallet file\", \"What does this mean?\"]"
+  },
+  {
+   "check": "A3 navigation moves focus to the page heading",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Name and protect this wallet\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A3b Tab from the heading continues into the page",
+   "pass": true,
+   "detail": "{\"role\": \"text\", \"name\": \"Wallet name\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A4 mismatch error focuses the field and is linked",
+   "pass": true,
+   "detail": "{\"role\": \"password text\", \"name\": \"Repeat password\", \"showing\": true, \"description\": \"The passwords don't match.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A5 field error is announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A6 create-2 heading focused",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Write down your recovery words\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A7 hidden recovery words are absent from the accessibility tree",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "H hidden content unreachable to AT (create-2 veiled)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "A8 revealed words are exposed by position",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A9 leaving the words hides them again",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A10 words veiled again on return",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A11 word check heading focused",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Check your paper\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A11b quiz words are buttons, not check boxes",
+   "pass": true,
+   "detail": "[\"push button\"]"
+  },
+  {
+   "check": "A12 wrong word is announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A12b a picked word reports its pressed state",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"meadow\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": true}"
+  },
+  {
+   "check": "A13 new wallet opens on Overview heading",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Overview\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A14 only the current page exists in the tree",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "H hidden content unreachable to AT (overview empty)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "A15 Ctrl+4 reaches Receive heading",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Receive\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A16 receive address is exposed exactly",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A17 copy shortcut on the focused address reports its result",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A18 password dialog starts in its field",
+   "pass": true,
+   "detail": "{\"role\": \"password text\", \"name\": \"Password\", \"showing\": true, \"description\": \"Simulated wallet: use the password you chose for it.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A19 wrong password keeps words hidden and is announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A20 correct password reveals words in a named dialog",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A21 Escape hides words and returns focus to the opener",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Show recovery words\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A22 Ctrl+L locks: unlock heading focused, no wallet pages",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Native QA is locked\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A23 section shortcuts do nothing while locked",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A24 unlock returns to Overview",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A25 missing word: focus moves to the first empty box",
+   "pass": true,
+   "detail": "{\"role\": \"text\", \"name\": \"Word 25\", \"showing\": true, \"description\": \"Recovery phrases have 25 words. You've entered 24.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A26 restore error announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A27 restore-2 heading",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Where should the wallet start?\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A28 future block refused and focused",
+   "pass": true,
+   "detail": "{\"role\": \"text\", \"name\": \"Created at block (optional)\", \"showing\": true, \"description\": \"Block 99999 is in the future. This chain is at block 1340.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "A29 restore finishes with the scanned result",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "A30 restored wallet opens",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B0 reduced motion off under the stub portal default",
+   "pass": true,
+   "detail": "app=meownero-wallet 0.1.0 (simulated backend)\u2029qt=6.12.0\u2029os=Ubuntu 24.04.4 LTS x86_64\u2029network=regtest\u2029reduced_motion=0\u2029node_state=synced\u2029chain_tip=1340\u2029wallet_loaded=1 locked=0\u2029history_rows=4 pending=1 unknown_submissions=0\u2029stale_replies_dropped=0 stale_actions_refused=0"
+  },
+  {
+   "check": "B1 Ctrl+3 reaches Send heading",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B1b Tab from the Send heading reaches the first kit wallet",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Test wallet B\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "H hidden content unreachable to AT (send form)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B2 comma refused with a message, focus on amount",
+   "pass": true,
+   "detail": "{\"role\": \"text\", \"name\": \"Amount in MEOW\", \"showing\": true, \"description\": \"Use only digits and \\u201c.\\u201d for decimals, for example 1000.5. Commas, spaces and other separators aren't accepted, so the amount can't be misread.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B3 13 decimals refused, never rounded",
+   "pass": true,
+   "detail": "{\"role\": \"text\", \"name\": \"Amount in MEOW\", \"showing\": true, \"description\": \"MEOW has 12 decimal places. This amount has 13. Remove the extra digits; the wallet will not round it for you.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B4 preparing announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B5 review dialog opens on its confirm button",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Send 2.5 MEOW\", \"showing\": true, \"description\": \"Total 2.50006152 MEOW, test coins, including the network fee 0.00006152 MEOW, to 48oicAQMJAXY7wNJ9dYYiBLJkTJKaRFfqJFHFUcmWMgmjQr5sBRJQAdA2biBSFRipb6Kw6KMA7oKhVqQphBgRXM2phFLM9q\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B6 review shows exact prepared values",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B6b background Receive is inert to assistive actions behind Review",
+   "pass": true,
+   "detail": "enabled=False action=True dialog_open=True focus 'Send 2.5 MEOW' -> 'Send 2.5 MEOW'"
+  },
+  {
+   "check": "H hidden content unreachable to AT (review dialog)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B7 Tab stays inside the dialog",
+   "pass": true,
+   "detail": "[\"Edit\", \"Send 2.5 MEOW\", \"Edit\", \"Send 2.5 MEOW\", \"Edit\", \"Send 2.5 MEOW\"]"
+  },
+  {
+   "check": "B8 Escape discards review and restores focus",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Review payment\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B9 node loss closes the open review",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B10 no submission happened after the stale review",
+   "pass": true,
+   "detail": "app=meownero-wallet 0.1.0 (simulated backend)\u2029qt=6.12.0\u2029os=Ubuntu 24.04.4 LTS x86_64\u2029network=regtest\u2029reduced_motion=0\u2029node_state=synced\u2029chain_tip=1340\u2029wallet_loaded=1 locked=0\u2029history_rows=4 pending=1 unknown_submissions=0\u2029stale_replies_dropped=0 stale_actions_refused=0"
+  },
+  {
+   "check": "B11 a late prepare reply cannot open review over another page",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B12 form keeps what was typed",
+   "pass": true,
+   "detail": "2.5"
+  },
+  {
+   "check": "B12b markup in a note is shown literally in review",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B13 submitting announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B14 Sent: heading focused and outcome announced",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Sent\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B15 change explained on Sent",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "H hidden content unreachable to AT (sent result)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B16 dropped submission is 'Submission status unknown'",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Submission status unknown\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B17 another payment is blocked while unknown",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B18 a new block without it proves nothing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B19 detail dialog opens",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Done\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "H hidden content unreachable to AT (unknown detail)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B20 absence proof resolves to not sent, announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B20b after reconcile, focus is on the named Send heading",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Send\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B20c next Tab continues into the form",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Test wallet B\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B21 sending is available again",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B21b markup note appears literally in Activity",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B21c no remote content was fetched",
+   "pass": true,
+   "detail": "[{\"path\": \"/\", \"agent\": \"Go-http-client/1.1\"}, {\"path\": \"/\", \"agent\": \"Go-http-client/1.1\"}]"
+  },
+  {
+   "check": "B22 arrow key picks but changes nothing",
+   "pass": true,
+   "detail": "{\"role\": \"radio button\", \"name\": \"Someone else's node\", \"showing\": true, \"description\": \"Faster to start, but it can observe your activity\", \"focused\": true, \"enabled\": true, \"checked\": true} Status: Connected and synced"
+  },
+  {
+   "check": "B23 consent dialog starts on Keep current node, described by the exposure",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Keep current node\", \"showing\": true, \"description\": \"An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B24 at 880x600 the whole explanation is inside the window, above Connect",
+   "pass": true,
+   "detail": "window 880x600+0+0; explanation 476x60+202+227; connect y=377"
+  },
+  {
+   "check": "B24b background Receive is inert to assistive actions behind consent",
+   "pass": true,
+   "detail": "enabled=False action=True dialog_open=True focus 'Keep current node' -> 'Keep current node'"
+  },
+  {
+   "check": "H hidden content unreachable to AT (consent dialog)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B25 Escape changes nothing and returns focus to Connect",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Connect to someone else's node\\u2026\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B26 network change closes stale consent and connects nothing",
+   "pass": true,
+   "detail": "[] Status: Connected and synced"
+  },
+  {
+   "check": "B26b Keep returns focus to the checked radio and connects nothing",
+   "pass": true,
+   "detail": "{\"role\": \"radio button\", \"name\": \"My own node on this computer\", \"showing\": true, \"description\": \"Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network.\", \"focused\": true, \"enabled\": true, \"checked\": true} Status: Connected and synced"
+  },
+  {
+   "check": "B26c after Keep, Down operates the radio choice",
+   "pass": true,
+   "detail": "{\"role\": \"radio button\", \"name\": \"Someone else's node\", \"showing\": true, \"description\": \"Faster to start, but it can observe your activity\", \"focused\": true, \"enabled\": true, \"checked\": true}"
+  },
+  {
+   "check": "B27 explicit consent connects and is announced",
+   "pass": true,
+   "detail": "Trust: Untrusted, by your choice"
+  },
+  {
+   "check": "B27b after Connect, focus is on the connected radio",
+   "pass": true,
+   "detail": "{\"role\": \"radio button\", \"name\": \"Someone else's node\", \"showing\": true, \"description\": \"Faster to start, but it can observe your activity\", \"focused\": true, \"enabled\": true, \"checked\": true}"
+  },
+  {
+   "check": "B27c after Connect, Down picks without changing the node",
+   "pass": true,
+   "detail": "{\"role\": \"radio button\", \"name\": \"My own node on this computer\", \"showing\": true, \"description\": \"Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network.\", \"focused\": true, \"enabled\": true, \"checked\": true} Trust: Untrusted, by your choice"
+  },
+  {
+   "check": "B28 reduced motion follows the system preference change",
+   "pass": true,
+   "detail": "reduced=1; app=meownero-wallet 0.1.0 (simulated backend)\u2029qt=6.12.0\u2029os=Ubuntu 24.04.4 LTS x86_64\u2029network=testnet\u2029reduced_motion=1\u2029node_state=remote\u2029chain_tip=1341\u2029wallet_loaded=1 locked=0\u2029history_rows=6 pending=0 unknown_submissions=0\u2029stale_replies_dropped=1 stale_actions_refused=0"
+  },
+  {
+   "check": "C1 exact large balance shown",
+   "pass": true,
+   "detail": "Spendable now: 1,919,033.123395269011 MEOW, test coins. Show every digit"
+  },
+  {
+   "check": "C2 Test coins tag box is complete inside the window",
+   "pass": true,
+   "detail": "tag box x 260-338 y 223-243; border columns 18/19 of 21 px; balance box x 260-848; window right 880"
+  },
+  {
+   "check": "D0 reduced motion active",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "D1 reduced motion, keyboard: prepared Send executes exactly once",
+   "pass": true,
+   "detail": "review opened=True rows 4 -> 5 focus 'Sent'"
+  },
+  {
+   "check": "D1 reduced motion, pointer: prepared Send executes exactly once",
+   "pass": true,
+   "detail": "review opened=True rows 5 -> 6 focus 'Sent'"
+  },
+  {
+   "check": "D2 reduced motion, keyboard: final Connect executes exactly once",
+   "pass": true,
+   "detail": "opened=True Trust: Untrusted, by your choice focus \"Someone else's node\""
+  },
+  {
+   "check": "D2 reduced motion, pointer: final Connect executes exactly once",
+   "pass": true,
+   "detail": "opened=True Trust: Untrusted, by your choice focus \"Someone else's node\""
+  },
+  {
+   "check": "D3 reduced motion: Escape cancels consent and connects nothing",
+   "pass": true,
+   "detail": "Trust: Trusted, because you chose your own node"
+  },
+  {
+   "check": "D0 normal motion active",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "D1 normal motion, keyboard: prepared Send executes exactly once",
+   "pass": true,
+   "detail": "review opened=True rows 6 -> 7 focus 'Sent'"
+  },
+  {
+   "check": "D1 normal motion, pointer: prepared Send executes exactly once",
+   "pass": true,
+   "detail": "review opened=True rows 7 -> 8 focus 'Sent'"
+  },
+  {
+   "check": "D2 normal motion, keyboard: final Connect executes exactly once",
+   "pass": true,
+   "detail": "opened=True Trust: Untrusted, by your choice focus \"Someone else's node\""
+  },
+  {
+   "check": "D2 normal motion, pointer: final Connect executes exactly once",
+   "pass": true,
+   "detail": "opened=True Trust: Untrusted, by your choice focus \"Someone else's node\""
+  },
+  {
+   "check": "D3 normal motion: Escape cancels consent and connects nothing",
+   "pass": true,
+   "detail": "Trust: Trusted, because you chose your own node"
+  }
+ ],
+ "announcements": [
+  {
+   "t": 1791739940.472,
+   "type": "object:announcement",
+   "text": "The passwords don't match."
+  },
+  {
+   "t": 1791739950.59,
+   "type": "object:announcement",
+   "text": "That isn't word 4. Check your paper."
+  },
+  {
+   "t": 1791739961.386,
+   "type": "object:announcement",
+   "text": "Copied"
+  },
+  {
+   "t": 1791739964.311,
+   "type": "object:announcement",
+   "text": "That password doesn't open this wallet."
+  },
+  {
+   "t": 1791739967.672,
+   "type": "object:announcement",
+   "text": "Wallet locked."
+  },
+  {
+   "t": 1791739985.25,
+   "type": "object:announcement",
+   "text": "Recovery phrases have 25 words. You've entered 24."
+  },
+  {
+   "t": 1791739989.465,
+   "type": "object:announcement",
+   "text": "Block 99999 is in the future. This chain is at block 1340."
+  },
+  {
+   "t": 1791739994.058,
+   "type": "object:announcement",
+   "text": "Wallet restored. Found 4 payments. Spendable balance 1,218.8608\u2026 MEOW."
+  },
+  {
+   "t": 1791740005.131,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740009.73,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740011.035,
+   "type": "object:announcement",
+   "text": "Connection: Node unreachable. Sending paused"
+  },
+  {
+   "t": 1791740012.089,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Block 1340"
+  },
+  {
+   "t": 1791740016.325,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740021.679,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740023.096,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791740024.508,
+   "type": "object:announcement",
+   "text": "Sent. Submitted to your node and waiting to confirm."
+  },
+  {
+   "t": 1791740030.231,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740031.458,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791740032.849,
+   "type": "object:announcement",
+   "text": "Submission status unknown. Check this payment before trying again."
+  },
+  {
+   "t": 1791740036.702,
+   "type": "object:announcement",
+   "text": "Checking with your node."
+  },
+  {
+   "t": 1791740037.505,
+   "type": "object:announcement",
+   "text": "Not sent: your node never received this payment, and the coins are back in your balance."
+  },
+  {
+   "t": 1791740052.19,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Using someone else's node"
+  },
+  {
+   "t": 1791740067.783,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740069.163,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791740070.56,
+   "type": "object:announcement",
+   "text": "Sent. Submitted to your node and waiting to confirm."
+  },
+  {
+   "t": 1791740075.802,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740077.293,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791740078.602,
+   "type": "object:announcement",
+   "text": "Sent. Submitted to your node and waiting to confirm."
+  },
+  {
+   "t": 1791740083.344,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Using someone else's node"
+  },
+  {
+   "t": 1791740084.866,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Block 1340"
+  },
+  {
+   "t": 1791740087.719,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Using someone else's node"
+  },
+  {
+   "t": 1791740089.315,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Block 1340"
+  },
+  {
+   "t": 1791740100.165,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740101.528,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791740102.917,
+   "type": "object:announcement",
+   "text": "Sent. Submitted to your node and waiting to confirm."
+  },
+  {
+   "t": 1791740108.178,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791740109.693,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791740111.019,
+   "type": "object:announcement",
+   "text": "Sent. Submitted to your node and waiting to confirm."
+  },
+  {
+   "t": 1791740115.881,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Using someone else's node"
+  },
+  {
+   "t": 1791740117.526,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Block 1340"
+  },
+  {
+   "t": 1791740120.575,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Using someone else's node"
+  },
+  {
+   "t": 1791740122.183,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Block 1340"
+  }
+ ]
+}

@@ -1,0 +1,133 @@
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Found OpenGL: ~/.local/share/meownero/toolchain/sysroot/usr/lib/x86_64-linux-gnu/libOpenGL.so
+-- Found WrapOpenGL: TRUE
+-- Found WrapVulkanHeaders: /home/linuxbrew/.linuxbrew/include
+-- Configuring done (1.2s)
+-- Generating done (0.1s)
+-- Build files have been written to: <agent-scratch>
+[1/115] Running qmlimportscanner for meownero-wallet
+[2/115] Generating qt.conf part for meownero-wallet
+[3/115] Copying meownero-wallet qml sources into build dir
+[4/115] Copying meownero-wallet qml resources into build dir
+[5/115] Populating .qmlls.build.ini file at <agent-scratch>
+[6/115] Generating qt.conf file
+[7/115] Running qmlimportscanner for tst_amount
+[8/115] Running qmlimportscanner for tst_controller
+[9/115] Running qmlimportscanner for tst_activity
+[10/115] Automatic MOC and UIC for target wallet_core
+[11/115] Running AUTOMOC file extraction for target wallet_core
+[12/115] Running moc --collect-json for target wallet_core
+[13/115] Building CXX object CMakeFiles/wallet_core.dir/src/amount.cpp.o
+[14/115] Building CXX object CMakeFiles/wallet_core.dir/wallet_core_autogen/mocs_compilation.cpp.o
+[15/115] Building CXX object CMakeFiles/wallet_core.dir/src/ledger.cpp.o
+[16/115] Building CXX object CMakeFiles/wallet_core.dir/src/simulatedbackend.cpp.o
+[17/115] Building CXX object CMakeFiles/wallet_core.dir/src/activitymodel.cpp.o
+[18/115] Building CXX object CMakeFiles/wallet_core.dir/src/walletcontroller.cpp.o
+[19/115] Linking CXX static library libwallet_core.a
+[20/115] Automatic MOC and UIC for target meownero-wallet
+[21/115] Running AUTOMOC file extraction for target meownero-wallet
+[22/115] Running moc --collect-json for target meownero-wallet
+[23/115] Automatic QML type registration for target meownero-wallet
+[24/115] Running rcc for resource qmake_Meownero
+[25/115] Generating .rcc/qmlcache/meownero-wallet_qmlcache_loader.cpp
+[26/115] Automatic MOC and UIC for target tst_amount
+[27/115] Generating .rcc/qmlcache/meownero-wallet_qml_Theme_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_Theme_qml.cpp.aotstats
+[28/115] Generating .rcc/qmlcache/meownero-wallet_qml_Main_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_Main_qml.cpp.aotstats
+[29/115] Generating .rcc/qmlcache/meownero-wallet_qml_AmountLabel_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_AmountLabel_qml.cpp.aotstats
+[30/115] Generating .rcc/qmlcache/meownero-wallet_qml_AppButton_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_AppButton_qml.cpp.aotstats
+[31/115] Generating .rcc/qmlcache/meownero-wallet_qml_NetTag_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_NetTag_qml.cpp.aotstats
+[32/115] Generating .rcc/qmlcache/meownero-wallet_qml_Banner_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_Banner_qml.cpp.aotstats
+[33/115] Generating .rcc/qmlcache/meownero-wallet_qml_ConditionBanners_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_ConditionBanners_qml.cpp.aotstats
+[34/115] Generating .rcc/qmlcache/meownero-wallet_qml_AddressText_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_AddressText_qml.cpp.aotstats
+[35/115] Generating .rcc/qmlcache/meownero-wallet_qml_PageHeading_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_PageHeading_qml.cpp.aotstats
+[36/115] Generating .rcc/qmlcache/meownero-wallet_qml_FieldError_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_FieldError_qml.cpp.aotstats
+[37/115] Generating .rcc/qmlcache/meownero-wallet_qml_Sidebar_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_Sidebar_qml.cpp.aotstats
+[38/115] Generating .rcc/qmlcache/meownero-wallet_qml_CoinMark_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_CoinMark_qml.cpp.aotstats
+[39/115] Generating .rcc/qmlcache/meownero-wallet_qml_ShellPage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_ShellPage_qml.cpp.aotstats
+[40/115] Generating .rcc/qmlcache/meownero-wallet_qml_AppDialog_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_AppDialog_qml.cpp.aotstats
+[41/115] Generating .rcc/qmlcache/meownero-wallet_qml_ActivityPage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_ActivityPage_qml.cpp.aotstats
+[42/115] Generating .rcc/qmlcache/meownero-wallet_qml_OverviewPage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_OverviewPage_qml.cpp.aotstats
+[43/115] Generating .rcc/qmlcache/meownero-wallet_qml_ReceivePage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_ReceivePage_qml.cpp.aotstats
+[44/115] Generating .rcc/qmlcache/meownero-wallet_qml_SendPage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_SendPage_qml.cpp.aotstats
+[45/115] Generating .rcc/qmlcache/meownero-wallet_qml_NodePage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_NodePage_qml.cpp.aotstats
+[46/115] Generating .rcc/qmlcache/meownero-wallet_qml_WalletPage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_WalletPage_qml.cpp.aotstats
+[47/115] Generating .rcc/qmlcache/meownero-wallet_qml_OnboardingPage_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_OnboardingPage_qml.cpp.aotstats
+[48/115] Generating .rcc/qmlcache/meownero-wallet_qml_WordsGrid_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_WordsGrid_qml.cpp.aotstats
+[49/115] Generating .rcc/qmlcache/meownero-wallet_qml_Icon_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_Icon_qml.cpp.aotstats
+[50/115] Generating .rcc/qmlcache/meownero-wallet_qml_Spinner_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_Spinner_qml.cpp.aotstats
+[51/115] Generating .rcc/qmlcache/meownero-wallet_qml_ActivityList_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_ActivityList_qml.cpp.aotstats
+[52/115] Generating .rcc/qmlcache/meownero-wallet_qml_ChoiceItem_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_ChoiceItem_qml.cpp.aotstats
+[53/115] Generating .rcc/qmlcache/meownero-wallet_qml_DefRow_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_DefRow_qml.cpp.aotstats
+[54/115] Generating .rcc/qmlcache/meownero-wallet_qml_SectionLabel_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_SectionLabel_qml.cpp.aotstats
+[55/115] Generating .rcc/qmlcache/meownero-wallet_qml_DetailDialog_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_DetailDialog_qml.cpp.aotstats
+[56/115] Generating .rcc/qmlcache/meownero-wallet_qml_Field_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_Field_qml.cpp.aotstats
+[57/115] Generating .rcc/qmlcache/meownero-wallet_qml_AText_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_AText_qml.cpp.aotstats
+[58/115] Generating .rcc/qmlcache/meownero-wallet_qml_UiState_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_UiState_qml.cpp.aotstats
+[59/115] Generating .rcc/qmlcache/meownero-wallet_qml_PageBase_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_PageBase_qml.cpp.aotstats
+[60/115] Running rcc for resource meownero-wallet_raw_qml_0
+[61/115] Running rcc for resource meownero-wallet_raw_qml_0_extra_qmldirs
+[62/115] Generating .rcc/qmlcache/meownero-wallet_qml_ReviewerFixtures_qml.cpp, .rcc/qmlcache/meownero-wallet_qml_ReviewerFixtures_qml.cpp.aotstats
+[63/115] Automatic MOC and UIC for target tst_controller
+[64/115] Building CXX object CMakeFiles/meownero-wallet.dir/meownero-wallet_autogen/mocs_compilation.cpp.o
+[65/115] Automatic MOC and UIC for target tst_activity
+[66/115] Building CXX object CMakeFiles/meownero-wallet.dir/meownero-wallet_qmltyperegistrations.cpp.o
+[67/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.qt/rcc/qrc_qmake_Meownero.cpp.o
+[68/115] Building CXX object CMakeFiles/meownero-wallet.dir/src/main.cpp.o
+[69/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qmlcache_loader.cpp.o
+[70/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_Main_qml.cpp.o
+[71/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_Theme_qml.cpp.o
+[72/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_AppButton_qml.cpp.o
+[73/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_AmountLabel_qml.cpp.o
+[74/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_NetTag_qml.cpp.o
+[75/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_Banner_qml.cpp.o
+[76/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_ConditionBanners_qml.cpp.o
+[77/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_AddressText_qml.cpp.o
+[78/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_FieldError_qml.cpp.o
+[79/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_PageHeading_qml.cpp.o
+[80/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_ShellPage_qml.cpp.o
+[81/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_CoinMark_qml.cpp.o
+[82/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_Sidebar_qml.cpp.o
+[83/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_AppDialog_qml.cpp.o
+[84/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_OverviewPage_qml.cpp.o
+[85/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_ActivityPage_qml.cpp.o
+[86/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_SendPage_qml.cpp.o
+[87/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_ReceivePage_qml.cpp.o
+[88/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_NodePage_qml.cpp.o
+[89/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_WalletPage_qml.cpp.o
+[90/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_WordsGrid_qml.cpp.o
+[91/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_OnboardingPage_qml.cpp.o
+[92/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_Spinner_qml.cpp.o
+[93/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_Icon_qml.cpp.o
+[94/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_ChoiceItem_qml.cpp.o
+[95/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_ActivityList_qml.cpp.o
+[96/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_SectionLabel_qml.cpp.o
+[97/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_DefRow_qml.cpp.o
+[98/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_DetailDialog_qml.cpp.o
+[99/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_Field_qml.cpp.o
+[100/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_UiState_qml.cpp.o
+[101/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_AText_qml.cpp.o
+[102/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_PageBase_qml.cpp.o
+[103/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.qt/rcc/qrc_meownero-wallet_raw_qml_0.cpp.o
+[104/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.qt/rcc/qrc_meownero-wallet_raw_qml_0_extra_qmldirs.cpp.o
+[105/115] Building CXX object CMakeFiles/tst_amount.dir/tst_amount_autogen/mocs_compilation.cpp.o
+[106/115] Building CXX object CMakeFiles/meownero-wallet.dir/build/.rcc/qmlcache/meownero-wallet_qml_ReviewerFixtures_qml.cpp.o
+[107/115] Building CXX object CMakeFiles/tst_controller.dir/tst_controller_autogen/mocs_compilation.cpp.o
+[108/115] Building CXX object CMakeFiles/tst_amount.dir/tests/tst_amount.cpp.o
+[109/115] Building CXX object CMakeFiles/tst_activity.dir/tst_activity_autogen/mocs_compilation.cpp.o
+[110/115] Building CXX object CMakeFiles/tst_controller.dir/tests/tst_controller.cpp.o
+[111/115] Linking CXX executable meownero-wallet
+[112/115] Building CXX object CMakeFiles/tst_activity.dir/tests/tst_activity.cpp.o
+[113/115] Linking CXX executable tst_amount
+[114/115] Linking CXX executable tst_controller
+[115/115] Linking CXX executable tst_activity
