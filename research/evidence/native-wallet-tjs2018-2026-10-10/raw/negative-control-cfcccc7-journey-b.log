@@ -1,0 +1,53 @@
+dbus-daemon[765668]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=767642 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
+dbus-daemon[765668]: Successfully activated service 'org.a11y.atspi.Registry'
+SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
+dbus-daemon[765594]: [session uid=1000 pid=765594 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=767800 comm="/tmp/tjs2018-negctl/src/wallet-ui/build/meownero-w" label="unconfined")
+dbus-daemon[765594]: [session uid=1000 pid=765594 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
+PASS B0 reduced motion off under the stub portal default — app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=regtest reduced_motion=0 node_state=synced chain_tip=1340 wallet_loaded=1 locked=0 history_rows=4 pending=1 unknown_submissions=0 stale_replies_dropped=0 stale_actions_refused=0
+PASS B1 Ctrl+3 reaches Send heading
+PASS B1b Tab from the Send heading reaches the first kit wallet — {"role": "push button", "name": "Test wallet B", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS H hidden content unreachable to AT (send form) — []
+PASS B2 comma refused with a message, focus on amount — {"role": "text", "name": "Amount in MEOW", "showing": true, "description": "Use only digits and \u201c.\u201d for decimals, for example 1000.5. Commas, spaces and other separators aren't accepted, so the amount can't be misread.", "focused": true, "enabled": true, "checked": false}
+PASS B3 13 decimals refused, never rounded — {"role": "text", "name": "Amount in MEOW", "showing": true, "description": "MEOW has 12 decimal places. This amount has 13. Remove the extra digits; the wallet will not round it for you.", "focused": true, "enabled": true, "checked": false}
+PASS B4 preparing announced
+PASS B5 review dialog opens on its confirm button — {"role": "push button", "name": "Send 2.5 MEOW", "showing": true, "description": "Total 2.50006152 MEOW, test coins, including the network fee 0.00006152 MEOW, to 48oicAQMJAXY7wNJ9dYYiBLJkTJKaRFfqJFHFUcmWMgmjQr5sBRJQAdA2biBSFRipb6Kw6KMA7oKhVqQphBgRXM2phFLM9q", "focused": true, "enabled": true, "checked": false}
+PASS B6 review shows exact prepared values
+PASS B6b background Receive is inert to assistive actions behind Review — enabled=False action=True dialog_open=True focus 'Send 2.5 MEOW' -> 'Send 2.5 MEOW'
+PASS H hidden content unreachable to AT (review dialog) — []
+PASS B7 Tab stays inside the dialog — ["Edit", "Send 2.5 MEOW", "Edit", "Send 2.5 MEOW", "Edit", "Send 2.5 MEOW"]
+PASS B8 Escape discards review and restores focus — {"role": "push button", "name": "Review payment", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B9 node loss closes the open review — []
+PASS B10 no submission happened after the stale review — app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=regtest reduced_motion=0 node_state=synced chain_tip=1340 wallet_loaded=1 locked=0 history_rows=4 pending=1 unknown_submissions=0 stale_replies_dropped=0 stale_actions_refused=0
+DEBUG b11 focused {'role': 'heading', 'name': 'Overview', 'showing': True, 'description': '', 'focused': True, 'enabled': True, 'checked': False}
+PASS B11 a late prepare reply cannot open review over another page — []
+PASS B12 form keeps what was typed — 2.5
+PASS B12b markup in a note is shown literally in review
+PASS B13 submitting announced
+PASS B14 Sent: heading focused and outcome announced — {"role": "heading", "name": "Sent", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B15 change explained on Sent
+PASS H hidden content unreachable to AT (sent result) — []
+PASS B16 dropped submission is 'Submission status unknown' — {"role": "heading", "name": "Submission status unknown", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B17 another payment is blocked while unknown
+PASS B18 a new block without it proves nothing
+PASS B19 detail dialog opens — {"role": "push button", "name": "Done", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS H hidden content unreachable to AT (unknown detail) — []
+PASS B20 absence proof resolves to not sent, announced
+PASS B21 sending is available again
+PASS B21b markup note appears literally in Activity
+PASS B21c no remote content was fetched — [{"path": "/", "agent": "Go-http-client/1.1"}, {"path": "/", "agent": "Go-http-client/1.1"}]
+PASS B22 arrow key picks but changes nothing — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true} Status: Connected and synced
+PASS B23 consent dialog starts on Keep current node, described by the exposure — {"role": "push button", "name": "Keep current node", "showing": true, "description": "An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata.", "focused": true, "enabled": true, "checked": false}
+PASS B24 at 880x600 the whole explanation is inside the window, above Connect — window 880x600+0+0; explanation 476x60+202+227; connect y=377
+PASS B24b background Receive is inert to assistive actions behind consent — enabled=False action=True dialog_open=True focus 'Keep current node' -> 'Keep current node'
+PASS H hidden content unreachable to AT (consent dialog) — []
+PASS B25 Escape changes nothing and returns focus to Connect — {"role": "push button", "name": "Connect to someone else's node\u2026", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B26 network change closes stale consent and connects nothing — [] Status: Connected and synced
+FAIL B26b Keep returns focus to the checked radio and connects nothing — {"role": "panel", "name": "", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false} Status: Connected and synced
+FAIL B26c after Keep, Down operates the radio choice — {"role": "panel", "name": "", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+FAIL B27 explicit consent connects and is announced
+FAIL B27b after Connect, focus is on the connected radio — {"role": "heading", "name": "Activity", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+FAIL B27c after Connect, Down picks without changing the node — {"role": "heading", "name": "Activity", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false} 
+PASS B28 reduced motion follows the system preference change — reduced=1; app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=testnet reduced_motion=1 node_state=synced chain_tip=1341 wallet_loaded=1 locked=0 history_rows=6 pending=0 unknown_submissions=0 stale_replies_dropped=1 stale_actions_refused=0
+TOTAL 44 checks, 5 failed
+A connection to the bus can't be made

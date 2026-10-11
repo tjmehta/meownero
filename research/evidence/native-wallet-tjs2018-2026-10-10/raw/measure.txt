@@ -1,0 +1,53 @@
+## Host
+Linux 6.8.0-146-generic #146-Ubuntu SMP PREEMPT_DYNAMIC Thu Sep  3 16:12:30 UTC 2026 x86_64 GNU/Linux
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+ldd (Ubuntu GLIBC 2.39-0ubuntu8.9) 2.39
+display: Xephyr :47 (nested in the host's GNOME/Xorg session), no window manager
+
+## Toolchain
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake version 4.4.4
+ninja 1.13.2.git.kitware.jobserver-pipe-1
+INFO    : aqtinstall(aqt) v3.3.0 on Python 3.14.7 [CPython GCC 13.3.0]
+Qt: QT_VERSION = 6.12.0
+26341368e3f2017ab9e33a3faa8806ae87fd59f2f8491f4c5aa7e8c1053b8a05  ~/.local/share/meownero/toolchain/qt/6.12.0/gcc_64/lib/libQt6Core.so.6.12.0
+392cf5a2fed77ca7b861484ae0f25a2f7f54789024e79518c6c28e1ddf5b4b1a  ~/.local/share/meownero/toolchain/qt/6.12.0/gcc_64/lib/libQt6Gui.so.6.12.0
+53d4866ee32ea978858a396a2545c699e964a32668cc2b0945790a3bbab4f713  ~/.local/share/meownero/toolchain/qt/6.12.0/gcc_64/lib/libQt6Qml.so.6.12.0
+3b75b0bb058b3e0457892afb5f877e87d6f34829e19b713d749b3f76eec9e2bd  ~/.local/share/meownero/toolchain/qt/6.12.0/gcc_64/lib/libQt6Quick.so.6.12.0
+d7331bd109f681b00d24c66029c8bc4bb5aaca2be8f6995c4163e3d8a5d086d2  ~/.local/share/meownero/toolchain/qt/6.12.0/gcc_64/lib/libQt6QuickControls2.so.6.12.0
+e6e7427f4a8d60867d932ecec6d58059f20a24f52bb77dc4b90dd29815037087  ~/.local/share/meownero/toolchain/qt/6.12.0/gcc_64/lib/libQt6QuickTemplates2.so.6.12.0
+fe274149676867bb59884a3bb0aa5ae6b2365a92f1e7449ea12a4dc267a53fa3  ~/.local/share/meownero/toolchain/qt/6.12.0/gcc_64/lib/libQt6XcbQpa.so.6.12.0
+3a0315216bb0d6fc4bbe7f689cf0168c2ffa3e62ac69bff06bbbe49679259990  ~/.local/share/meownero/toolchain/debs/libegl-dev_1.7.0-1build1_amd64.deb
+b7145fd8f8abe20d5cb436d2eae9b3235bd91be6fbddac581620d16763bd9250  ~/.local/share/meownero/toolchain/debs/libgl-dev_1.7.0-1build1_amd64.deb
+0e2654950a881c20b640a3af590add2e0b612b8c0fdd945761fc695e1b6eb797  ~/.local/share/meownero/toolchain/debs/libglx-dev_1.7.0-1build1_amd64.deb
+da50e2804e80391e5c3d7f61af70b41ff6d0d20e4862136ceb8828000637c273  ~/.local/share/meownero/toolchain/debs/libopengl-dev_1.7.0-1build1_amd64.deb
+137cf52479b5a9d8c5926d70d311af04be41941a32ee777340d704cc458c06d8  ~/.local/share/meownero/toolchain/debs/libxcb-cursor0_0.1.4-1build1_amd64.deb
+15e0ffd6632cea94d58680fd8eaacc9e1bf3fff9f687f09a91a5623ad82da05c  ~/.local/share/meownero/toolchain/debs/mesa-common-dev_25.2.8-0ubuntu0.24.04.4_amd64.deb
+toolchain installed bytes: 1620430098 (Qt) 5147759 (sysroot) 35138704 (aqt venv)
+
+## Executable
+039353b67ada38abd2d8989227b95a100f6054447d2d6062bc005b6181ce0bea  ~/Developer/.worktrees/meownero/TJS-2018-meownero-native-wallet-implement-accepted-qt-c-core-journeys-with-simulated-backend/wallet-ui/build/meownero-wallet
+bytes 6458224
+~/Developer/.worktrees/meownero/TJS-2018-meownero-native-wallet-implement-accepted-qt-c-core-journeys-with-simulated-backend/wallet-ui/build/meownero-wallet: ELF 64-bit LSB pie executable, x86-64, version 1 (GNU/Linux), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=aabb522fa9f9f715e95d8f4b1bc8be72b255fe21, for GNU/Linux 3.2.0, not stripped
+linked Qt modules:
+libQt6Core libQt6DBus libQt6Gui libQt6Network libQt6OpenGL libQt6Qml libQt6QmlMeta libQt6QmlModels libQt6QmlWorkerScript libQt6Quick libQt6QuickControls2 libQt6QuickTemplates2 
+
+## Reproducibility: clean rebuild in a second directory
+039353b67ada38abd2d8989227b95a100f6054447d2d6062bc005b6181ce0bea  /tmp/tjs2018-rebuild/meownero-wallet
+byte-identical to the candidate build
+
+## Startup: process launch to mapped window (5 cold-ish runs; page cache not dropped)
+run 1: .245789822 s
+run 2: .231039639 s
+run 3: .218949135 s
+run 4: .205178192 s
+run 5: .232431939 s
+idle CPU over 10 s after 3 s settle: 0 ticks (CLK_TCK 100)
+VmHWM:	  192384 kB
+VmRSS:	  192384 kB
+shared objects mapped: 109, of which from the Qt toolchain: 29
+bytes of Qt toolchain libraries/plugins mapped: 87771600
+
+## Limits
+Single host and display; nested X server; no window manager; caches warm after the first run; ticks are 10 ms resolution;
+mapped-window time is not first-frame time; mapped library bytes are not an installer size; no package was built.

@@ -1,0 +1,266 @@
+{
+ "results": [
+  {
+   "check": "B0 reduced motion off under the stub portal default",
+   "pass": true,
+   "detail": "app=meownero-wallet 0.1.0 (simulated backend)\u2029qt=6.12.0\u2029os=Ubuntu 24.04.4 LTS x86_64\u2029network=regtest\u2029reduced_motion=0\u2029node_state=synced\u2029chain_tip=1340\u2029wallet_loaded=1 locked=0\u2029history_rows=4 pending=1 unknown_submissions=0\u2029stale_replies_dropped=0 stale_actions_refused=0"
+  },
+  {
+   "check": "B1 Ctrl+3 reaches Send heading",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B1b Tab from the Send heading reaches the first kit wallet",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Test wallet B\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "H hidden content unreachable to AT (send form)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B2 comma refused with a message, focus on amount",
+   "pass": true,
+   "detail": "{\"role\": \"text\", \"name\": \"Amount in MEOW\", \"showing\": true, \"description\": \"Use only digits and \\u201c.\\u201d for decimals, for example 1000.5. Commas, spaces and other separators aren't accepted, so the amount can't be misread.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B3 13 decimals refused, never rounded",
+   "pass": true,
+   "detail": "{\"role\": \"text\", \"name\": \"Amount in MEOW\", \"showing\": true, \"description\": \"MEOW has 12 decimal places. This amount has 13. Remove the extra digits; the wallet will not round it for you.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B4 preparing announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B5 review dialog opens on its confirm button",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Send 2.5 MEOW\", \"showing\": true, \"description\": \"Total 2.50006152 MEOW, test coins, including the network fee 0.00006152 MEOW, to 48oicAQMJAXY7wNJ9dYYiBLJkTJKaRFfqJFHFUcmWMgmjQr5sBRJQAdA2biBSFRipb6Kw6KMA7oKhVqQphBgRXM2phFLM9q\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B6 review shows exact prepared values",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "H hidden content unreachable to AT (review dialog)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B7 Tab stays inside the dialog",
+   "pass": true,
+   "detail": "[\"Edit\", \"Send 2.5 MEOW\", \"Edit\", \"Send 2.5 MEOW\", \"Edit\", \"Send 2.5 MEOW\"]"
+  },
+  {
+   "check": "B8 Escape discards review and restores focus",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Review payment\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B9 node loss closes the open review",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B10 no submission happened after the stale review",
+   "pass": true,
+   "detail": "app=meownero-wallet 0.1.0 (simulated backend)\u2029qt=6.12.0\u2029os=Ubuntu 24.04.4 LTS x86_64\u2029network=regtest\u2029reduced_motion=0\u2029node_state=synced\u2029chain_tip=1340\u2029wallet_loaded=1 locked=0\u2029history_rows=4 pending=1 unknown_submissions=0\u2029stale_replies_dropped=0 stale_actions_refused=0"
+  },
+  {
+   "check": "B11 a late prepare reply cannot open review over another page",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B12 form keeps what was typed",
+   "pass": true,
+   "detail": "2.5"
+  },
+  {
+   "check": "B12b markup in a note is shown literally in review",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B13 submitting announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B14 Sent: heading focused and outcome announced",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Sent\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B15 change explained on Sent",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "H hidden content unreachable to AT (sent result)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B16 dropped submission is 'Submission status unknown'",
+   "pass": true,
+   "detail": "{\"role\": \"heading\", \"name\": \"Submission status unknown\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B17 another payment is blocked while unknown",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B18 a new block without it proves nothing",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B19 detail dialog opens",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Done\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "H hidden content unreachable to AT (unknown detail)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B20 absence proof resolves to not sent, announced",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B21 sending is available again",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B21b markup note appears literally in Activity",
+   "pass": true,
+   "detail": ""
+  },
+  {
+   "check": "B21c no remote content was fetched",
+   "pass": false,
+   "detail": "[{\"path\": \"/\", \"agent\": \"Go-http-client/1.1\"}, {\"path\": \"/\", \"agent\": \"Go-http-client/1.1\"}, {\"path\": \"/review-note.png\", \"agent\": \"Mozilla/5.0\"}, {\"path\": \"/review-note.png\", \"agent\": \"Mozilla/5.0\"}]"
+  },
+  {
+   "check": "B22 arrow key picks but changes nothing",
+   "pass": true,
+   "detail": "{\"role\": \"radio button\", \"name\": \"Someone else's node\", \"showing\": true, \"description\": \"Faster to start, but it can observe your activity\", \"focused\": true, \"enabled\": true, \"checked\": true} Status: Connected and synced"
+  },
+  {
+   "check": "B23 consent dialog starts on Keep current node, described by the exposure",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Keep current node\", \"showing\": true, \"description\": \"An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata.\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B24 at 880x600 the whole explanation is inside the window, above Connect",
+   "pass": true,
+   "detail": "window 880x600+0+0; explanation 476x60+202+227; connect y=377"
+  },
+  {
+   "check": "H hidden content unreachable to AT (consent dialog)",
+   "pass": true,
+   "detail": "[]"
+  },
+  {
+   "check": "B25 Escape changes nothing and returns focus to Connect",
+   "pass": true,
+   "detail": "{\"role\": \"push button\", \"name\": \"Connect to someone else's node\\u2026\", \"showing\": true, \"description\": \"\", \"focused\": true, \"enabled\": true, \"checked\": false}"
+  },
+  {
+   "check": "B26 network change closes stale consent and connects nothing",
+   "pass": true,
+   "detail": "[] Status: Connected and synced"
+  },
+  {
+   "check": "B27 explicit consent connects and is announced",
+   "pass": true,
+   "detail": "Trust: Untrusted, by your choice"
+  },
+  {
+   "check": "B28 reduced motion follows the system preference change",
+   "pass": true,
+   "detail": "reduced=1; app=meownero-wallet 0.1.0 (simulated backend)\u2029qt=6.12.0\u2029os=Ubuntu 24.04.4 LTS x86_64\u2029network=testnet\u2029reduced_motion=1\u2029node_state=remote\u2029chain_tip=1341\u2029wallet_loaded=1 locked=0\u2029history_rows=6 pending=0 unknown_submissions=0\u2029stale_replies_dropped=1 stale_actions_refused=0"
+  }
+ ],
+ "announcements": [
+  {
+   "t": 1791674506.027,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791674509.623,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791674510.863,
+   "type": "object:announcement",
+   "text": "Connection: Node unreachable. Sending paused"
+  },
+  {
+   "t": 1791674511.955,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Block 1,340"
+  },
+  {
+   "t": 1791674515.507,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791674519.9,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791674521.318,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791674522.729,
+   "type": "object:announcement",
+   "text": "Sent. Submitted to your node and waiting to confirm."
+  },
+  {
+   "t": 1791674528.348,
+   "type": "object:announcement",
+   "text": "Preparing the payment."
+  },
+  {
+   "t": 1791674529.572,
+   "type": "object:announcement",
+   "text": "Submitting the payment to your node."
+  },
+  {
+   "t": 1791674530.981,
+   "type": "object:announcement",
+   "text": "Submission status unknown. Check this payment before trying again."
+  },
+  {
+   "t": 1791674534.973,
+   "type": "object:announcement",
+   "text": "Checking with your node."
+  },
+  {
+   "t": 1791674535.777,
+   "type": "object:announcement",
+   "text": "Not sent: your node never received this payment, and the coins are back in your balance."
+  },
+  {
+   "t": 1791674546.785,
+   "type": "object:announcement",
+   "text": "Connection: Synced. Using someone else's node"
+  }
+ ]
+}

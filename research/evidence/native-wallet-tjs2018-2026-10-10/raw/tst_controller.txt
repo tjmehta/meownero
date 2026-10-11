@@ -1,0 +1,26 @@
+********* Start testing of TstController *********
+Config: Using QtTest library 6.12.0, Qt 6.12.0 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 11.5.0 20240719 (Red Hat 11.5.0-5)), ubuntu 24.04
+PASS   : TstController::initTestCase()
+PASS   : TstController::reviewShowsExactPreparedValuesAndSameTransactionIsRelayed()
+PASS   : TstController::editingInvalidatesReview()
+PASS   : TstController::leavingSendWhilePreparingDropsTheLateReply()
+PASS   : TstController::lockAndNodeChangesInvalidatePreparedPayment()
+PASS   : TstController::lateReplyAfterLockCannotReopenReview()
+PASS   : TstController::submissionUnderWayFinishesAfterLeavingSend()
+PASS   : TstController::droppedSubmissionStaysUnknownUntilEvidence()
+PASS   : TstController::unknownSubmissionFoundInBlockResolvesToWaiting()
+PASS   : TstController::refusedSubmissionChangesNothing()
+PASS   : TstController::remoteConsentIsBoundToSessionAndNetwork()
+PASS   : TstController::addressRules()
+PASS   : TstController::dustAndLargeBalances()
+PASS   : TstController::recoveryWordsHideOnLeaveLockAndBackground()
+PASS   : TstController::restoreValidationAndPaste()
+PASS   : TstController::diagnosticsUseAnAllowlist()
+PASS   : TstController::nodeStatesNamePartAtFaultAndAreAnnounced()
+PASS   : TstController::walletChangeWaitsForSubmissionInFlight()
+PASS   : TstController::fixtureStoryChangeWaitsForSubmission()
+PASS   : TstController::noDroppedReplyLeavesAttemptSet()
+PASS   : TstController::nodeCheckReplyDroppedAfterNodeLossOrLock()
+PASS   : TstController::cleanupTestCase()
+Totals: 22 passed, 0 failed, 0 skipped, 0 blacklisted, 3043ms
+********* Finished testing of TstController *********

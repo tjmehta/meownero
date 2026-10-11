@@ -1,0 +1,67 @@
+import QtQuick
+import QtQuick.Controls.Basic
+
+// Standard Button with the accepted styling: 8 px radius, network accent for
+// primary, no pill shapes. Toggles keep a constant label and report "pressed".
+Button {
+    id: control
+    property string kind: "default" // default | primary | quiet
+    property bool large: false
+    property string iconName: ""
+    property string accessibleDescription: ""
+
+    font.pointSize: Theme.pt(large ? 14 : 13.5)
+    font.weight: Font.Medium
+    leftPadding: kind === "quiet" ? 6 : (large ? 18 : 14)
+    rightPadding: leftPadding
+    topPadding: large ? 11 : 8
+    bottomPadding: topPadding
+    focusPolicy: Qt.StrongFocus
+    // Inert behind a modal is not "unavailable": keep the normal look under the scrim.
+    property bool inBackground: false
+    Component.onCompleted: {
+        for (let p = parent; p; p = p.parent)
+            if (p.objectName === "appContent") { inBackground = true; break }
+    }
+    opacity: enabled || (inBackground && UiState.openDialogs > 0) ? 1 : 0.45
+
+    // Checkable buttons are toggles that report pressed, not check boxes (D14).
+    Accessible.role: Accessible.Button
+    // Any keyboard or programmatic focus (dialog initial focus, focus return) shows the ring.
+    readonly property bool focusRing: activeFocus && focusReason !== Qt.MouseFocusReason
+    Accessible.name: text
+    Accessible.ignored: !visible
+    Accessible.description: accessibleDescription
+    Keys.onReturnPressed: if (enabled) clicked()
+    Keys.onEnterPressed: if (enabled) clicked()
+
+    contentItem: Row {
+        spacing: 8
+        Icon {
+            visible: control.iconName !== ""
+            name: control.iconName
+            size: 16
+            color: label.color
+            anchors.verticalCenter: parent.verticalCenter
+        }
+        AText {
+            id: label
+            text: control.text
+            font: control.font
+            color: control.kind === "primary" ? Theme.netInk : control.kind === "quiet" ? Theme.net : Theme.fg
+            anchors.verticalCenter: parent.verticalCenter
+            Accessible.ignored: true
+        }
+    }
+
+    background: Rectangle {
+        radius: Theme.controlRadius
+        color: control.kind === "primary" ? (control.hovered && control.enabled ? Qt.tint(Theme.net, Qt.rgba(Theme.fg.r, Theme.fg.g, Theme.fg.b, 0.12)) : Theme.net)
+             : control.kind === "quiet" ? ((control.checked || (control.hovered && control.enabled)) ? Theme.netSoft : "transparent")
+             : (control.hovered && control.enabled ? Theme.surface2 : Theme.surface)
+        border.width: control.focusRing ? 2 : (control.kind === "default" ? 1 : 0)
+        border.color: control.focusRing ? Theme.net : Theme.borderStrong
+        scale: control.pressed && !Theme.reducedMotion ? 0.97 : 1
+        Behavior on scale { NumberAnimation { duration: Theme.reducedMotion ? 0 : 140; easing.type: Easing.OutQuint } }
+    }
+}

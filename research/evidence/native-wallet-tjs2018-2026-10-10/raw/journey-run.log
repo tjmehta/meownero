@@ -1,0 +1,107 @@
+dbus-daemon[3177216]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=3178103 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
+dbus-daemon[3177216]: Successfully activated service 'org.a11y.atspi.Registry'
+SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
+dbus-daemon[3177206]: [session uid=1000 pid=3177206 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=3178310 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
+dbus-daemon[3177206]: [session uid=1000 pid=3177206 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
+PASS A0 app window mapped — 0.331 s from launch
+PASS H hidden content unreachable to AT (welcome) — []
+PASS A1 first run exposes no wallet pages
+PASS A2 Tab order on Welcome — ["What does this mean?", "Create a new wallet", "Restore from recovery words", "Open a wallet file", "What does this mean?"]
+PASS A3 navigation moves focus to the page heading — {"role": "heading", "name": "Name and protect this wallet", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A3b Tab from the heading continues into the page — {"role": "text", "name": "Wallet name", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A4 mismatch error focuses the field and is linked — {"role": "password text", "name": "Repeat password", "showing": true, "description": "The passwords don't match.", "focused": true, "enabled": true, "checked": false}
+PASS A5 field error is announced
+PASS A6 create-2 heading focused — {"role": "heading", "name": "Write down your recovery words", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A7 hidden recovery words are absent from the accessibility tree
+PASS H hidden content unreachable to AT (create-2 veiled) — []
+PASS A8 revealed words are exposed by position
+PASS A9 leaving the words hides them again
+PASS A10 words veiled again on return
+PASS A11 word check heading focused — {"role": "heading", "name": "Check your paper", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+DEBUG quiz options [('push button', 'mitten'), ('push button', 'orchard'), ('push button', 'lantern'), ('push button', 'tabby'), ('push button', 'marble'), ('push button', 'copper'), ('push button', 'velvet'), ('push button', 'orchard'), ('push button', 'meadow'), ('push button', 'ember'), ('push button', 'tabby')]
+PASS A11b quiz words are buttons, not check boxes — ["push button"]
+PASS A12 wrong word is announced
+PASS A12b a picked word reports its pressed state — {"role": "push button", "name": "meadow", "showing": true, "description": "", "focused": true, "enabled": true, "checked": true}
+PASS A13 new wallet opens on Overview heading — {"role": "heading", "name": "Overview", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A14 only the current page exists in the tree
+PASS H hidden content unreachable to AT (overview empty) — []
+PASS A15 Ctrl+4 reaches Receive heading — {"role": "heading", "name": "Receive", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A16 receive address is exposed exactly
+PASS A17 copy shortcut on the focused address reports its result
+PASS A18 password dialog starts in its field — {"role": "password text", "name": "Password", "showing": true, "description": "Simulated wallet: use the password you chose for it.", "focused": true, "enabled": true, "checked": false}
+PASS A19 wrong password keeps words hidden and is announced
+PASS A20 correct password reveals words in a named dialog
+PASS A21 Escape hides words and returns focus to the opener — {"role": "push button", "name": "Show recovery words", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A22 Ctrl+L locks: unlock heading focused, no wallet pages — {"role": "heading", "name": "Native QA is locked", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A23 section shortcuts do nothing while locked
+PASS A24 unlock returns to Overview
+PASS A25 missing word: focus moves to the first empty box — {"role": "text", "name": "Word 25", "showing": true, "description": "Recovery phrases have 25 words. You've entered 24.", "focused": true, "enabled": true, "checked": false}
+PASS A26 restore error announced
+PASS A27 restore-2 heading — {"role": "heading", "name": "Where should the wallet start?", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS A28 future block refused and focused — {"role": "text", "name": "Created at block (optional)", "showing": true, "description": "Block 99,999 is in the future. This chain is at block 1,340.", "focused": true, "enabled": true, "checked": false}
+PASS A29 restore finishes with the scanned result
+PASS A30 restored wallet opens
+PASS B0 reduced motion off under the stub portal default — app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=regtest reduced_motion=0 node_state=synced chain_tip=1340 wallet_loaded=1 locked=0 history_rows=4 pending=1 unknown_submissions=0 stale_replies_dropped=0 stale_actions_refused=0
+PASS B1 Ctrl+3 reaches Send heading
+PASS B1b Tab from the Send heading reaches the first kit wallet — {"role": "push button", "name": "Test wallet B", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS H hidden content unreachable to AT (send form) — []
+PASS B2 comma refused with a message, focus on amount — {"role": "text", "name": "Amount in MEOW", "showing": true, "description": "Use only digits and \u201c.\u201d for decimals, for example 1000.5. Commas, spaces and other separators aren't accepted, so the amount can't be misread.", "focused": true, "enabled": true, "checked": false}
+PASS B3 13 decimals refused, never rounded — {"role": "text", "name": "Amount in MEOW", "showing": true, "description": "MEOW has 12 decimal places. This amount has 13. Remove the extra digits; the wallet will not round it for you.", "focused": true, "enabled": true, "checked": false}
+PASS B4 preparing announced
+PASS B5 review dialog opens on its confirm button — {"role": "push button", "name": "Send 2.5 MEOW", "showing": true, "description": "Total 2.50006152 MEOW, test coins, including the network fee 0.00006152 MEOW, to 48oicAQMJAXY7wNJ9dYYiBLJkTJKaRFfqJFHFUcmWMgmjQr5sBRJQAdA2biBSFRipb6Kw6KMA7oKhVqQphBgRXM2phFLM9q", "focused": true, "enabled": true, "checked": false}
+PASS B6 review shows exact prepared values
+PASS B6b background Receive is inert to assistive actions behind Review — enabled=False action=True dialog_open=True focus 'Send 2.5 MEOW' -> 'Send 2.5 MEOW'
+PASS H hidden content unreachable to AT (review dialog) — []
+PASS B7 Tab stays inside the dialog — ["Edit", "Send 2.5 MEOW", "Edit", "Send 2.5 MEOW", "Edit", "Send 2.5 MEOW"]
+PASS B8 Escape discards review and restores focus — {"role": "push button", "name": "Review payment", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B9 node loss closes the open review — []
+PASS B10 no submission happened after the stale review — app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=regtest reduced_motion=0 node_state=synced chain_tip=1340 wallet_loaded=1 locked=0 history_rows=4 pending=1 unknown_submissions=0 stale_replies_dropped=0 stale_actions_refused=0
+DEBUG b11 focused {'role': 'heading', 'name': 'Overview', 'showing': True, 'description': '', 'focused': True, 'enabled': True, 'checked': False}
+PASS B11 a late prepare reply cannot open review over another page — []
+PASS B12 form keeps what was typed — 2.5
+PASS B12b markup in a note is shown literally in review
+PASS B13 submitting announced
+PASS B14 Sent: heading focused and outcome announced — {"role": "heading", "name": "Sent", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B15 change explained on Sent
+PASS H hidden content unreachable to AT (sent result) — []
+PASS B16 dropped submission is 'Submission status unknown' — {"role": "heading", "name": "Submission status unknown", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B17 another payment is blocked while unknown
+PASS B18 a new block without it proves nothing
+PASS B19 detail dialog opens — {"role": "push button", "name": "Done", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS H hidden content unreachable to AT (unknown detail) — []
+PASS B20 absence proof resolves to not sent, announced
+PASS B20b after reconcile, focus is on the named Send heading — {"role": "heading", "name": "Send", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B20c next Tab continues into the form — {"role": "push button", "name": "Test wallet B", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B21 sending is available again
+PASS B21b markup note appears literally in Activity
+PASS B21c no remote content was fetched — [{"path": "/", "agent": "Go-http-client/1.1"}, {"path": "/", "agent": "Go-http-client/1.1"}]
+PASS B22 arrow key picks but changes nothing — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true} Status: Connected and synced
+PASS B23 consent dialog starts on Keep current node, described by the exposure — {"role": "push button", "name": "Keep current node", "showing": true, "description": "An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata.", "focused": true, "enabled": true, "checked": false}
+PASS B24 at 880x600 the whole explanation is inside the window, above Connect — window 880x600+0+0; explanation 476x60+202+227; connect y=377
+PASS B24b background Receive is inert to assistive actions behind consent — enabled=False action=True dialog_open=True focus 'Keep current node' -> 'Keep current node'
+PASS H hidden content unreachable to AT (consent dialog) — []
+PASS B25 Escape changes nothing and returns focus to Connect — {"role": "push button", "name": "Connect to someone else's node\u2026", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B26 network change closes stale consent and connects nothing — [] Status: Connected and synced
+PASS B26b Keep returns focus to the checked radio and connects nothing — {"role": "radio button", "name": "My own node on this computer", "showing": true, "description": "Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network.", "focused": true, "enabled": true, "checked": true} Status: Connected and synced
+PASS B26c after Keep, Down operates the radio choice — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true}
+PASS B27 explicit consent connects and is announced — Trust: Untrusted, by your choice
+PASS B27b after Connect, focus is on the connected radio — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true}
+PASS B27c after Connect, Down picks without changing the node — {"role": "radio button", "name": "My own node on this computer", "showing": true, "description": "Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network.", "focused": true, "enabled": true, "checked": true} Trust: Untrusted, by your choice
+PASS B28 reduced motion follows the system preference change — reduced=1; app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=testnet reduced_motion=1 node_state=remote chain_tip=1341 wallet_loaded=1 locked=0 history_rows=6 pending=0 unknown_submissions=0 stale_replies_dropped=1 stale_actions_refused=0
+PASS C1 exact large balance shown — Spendable now: 1,919,033.123395269011 MEOW, test coins. Show every digit
+PASS C2 Test coins tag box is complete inside the window — tag box x 260-338 y 223-243; border columns 18/19 of 21 px; balance box x 260-848; window right 880
+PASS D0 reduced motion active
+PASS D1 reduced motion, keyboard: prepared Send executes exactly once — review opened=True rows 4 -> 5 focus 'Sent'
+PASS D1 reduced motion, pointer: prepared Send executes exactly once — review opened=True rows 5 -> 6 focus 'Sent'
+PASS D2 reduced motion, keyboard: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D2 reduced motion, pointer: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D3 reduced motion: Escape cancels consent and connects nothing — Trust: Trusted, because you chose your own node
+PASS D0 normal motion active
+PASS D1 normal motion, keyboard: prepared Send executes exactly once — review opened=True rows 6 -> 7 focus 'Sent'
+PASS D1 normal motion, pointer: prepared Send executes exactly once — review opened=True rows 7 -> 8 focus 'Sent'
+PASS D2 normal motion, keyboard: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D2 normal motion, pointer: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D3 normal motion: Escape cancels consent and connects nothing — Trust: Trusted, because you chose your own node
+TOTAL 97 checks, 0 failed
+A connection to the bus can't be made
