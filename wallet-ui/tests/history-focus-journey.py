@@ -29,7 +29,8 @@ try:
     j.shot("h04-row-focus-after-status-refresh")
     j.check("H5 pointer opens the same payment", j.press_by_pointer(app, focus["name"]))
     j.pump(0.4)
-    j.check("H6 pointer detail has same title and status", "Sent" in app.dialogs() and "1 of 10 confirmations" in app.names())
+    status = [n.get_name() for n in app.raw() if j.in_dialog(n, "Sent") and n.get_name().startswith("Status:")]
+    j.check("H6 pointer detail has same title and status", "Sent" in app.dialogs() and "Status: 1 of 10 confirmations" in status, json.dumps(status))
     j.key("Escape")
     j.check("H7 keyboard reaches digit toggle", app.tab_to("Show every digit", back=True))
     j.key("space")
