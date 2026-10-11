@@ -1,10 +1,10 @@
-dbus-daemon[2394712]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=2395194 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
-dbus-daemon[2394712]: Successfully activated service 'org.a11y.atspi.Registry'
+dbus-daemon[4088739]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=4089931 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
+dbus-daemon[4088739]: Successfully activated service 'org.a11y.atspi.Registry'
 SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
-dbus-daemon[2394702]: [session uid=1000 pid=2394702 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=2395332 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
-dbus-daemon[2394702]: [session uid=1000 pid=2394702 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+dbus-daemon[4088727]: [session uid=1000 pid=4088727 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=4090060 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
+dbus-daemon[4088727]: [session uid=1000 pid=4088727 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
 fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
-PASS A0 app window mapped — 0.324 s from launch
+PASS A0 app window mapped — 0.275 s from launch
 PASS H hidden content unreachable to AT (welcome) — []
 PASS A1 first run exposes no wallet pages
 PASS A2 Tab order on Welcome — ["What does this mean?", "Create a new wallet", "Restore from recovery words", "Open a wallet file", "What does this mean?"]
@@ -51,6 +51,7 @@ PASS B3 13 decimals refused, never rounded — {"role": "text", "name": "Amount 
 PASS B4 preparing announced
 PASS B5 review dialog opens on its confirm button — {"role": "push button", "name": "Send 2.5 MEOW", "showing": true, "description": "Total 2.50006152 MEOW, test coins, including the network fee 0.00006152 MEOW, to 48oicAQMJAXY7wNJ9dYYiBLJkTJKaRFfqJFHFUcmWMgmjQr5sBRJQAdA2biBSFRipb6Kw6KMA7oKhVqQphBgRXM2phFLM9q", "focused": true, "enabled": true, "checked": false}
 PASS B6 review shows exact prepared values
+PASS B6b background Receive is inert to assistive actions behind Review — enabled=False action=True dialog_open=True focus 'Send 2.5 MEOW' -> 'Send 2.5 MEOW'
 PASS H hidden content unreachable to AT (review dialog) — []
 PASS B7 Tab stays inside the dialog — ["Edit", "Send 2.5 MEOW", "Edit", "Send 2.5 MEOW", "Edit", "Send 2.5 MEOW"]
 PASS B8 Escape discards review and restores focus — {"role": "push button", "name": "Review payment", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
@@ -76,10 +77,13 @@ PASS B21c no remote content was fetched — [{"path": "/", "agent": "Go-http-cli
 PASS B22 arrow key picks but changes nothing — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true} Status: Connected and synced
 PASS B23 consent dialog starts on Keep current node, described by the exposure — {"role": "push button", "name": "Keep current node", "showing": true, "description": "An untrusted node can observe your connection and request activity and link submitted transactions to that connection. Untrusted mode does not hide this metadata.", "focused": true, "enabled": true, "checked": false}
 PASS B24 at 880x600 the whole explanation is inside the window, above Connect — window 880x600+0+0; explanation 476x60+202+227; connect y=377
+PASS B24b background Receive is inert to assistive actions behind consent — enabled=False action=True dialog_open=True focus 'Keep current node' -> 'Keep current node'
 PASS H hidden content unreachable to AT (consent dialog) — []
 PASS B25 Escape changes nothing and returns focus to Connect — {"role": "push button", "name": "Connect to someone else's node\u2026", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
 PASS B26 network change closes stale consent and connects nothing — [] Status: Connected and synced
 PASS B27 explicit consent connects and is announced — Trust: Untrusted, by your choice
 PASS B28 reduced motion follows the system preference change — reduced=1; app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=testnet reduced_motion=1 node_state=remote chain_tip=1341 wallet_loaded=1 locked=0 history_rows=6 pending=0 unknown_submissions=0 stale_replies_dropped=1 stale_actions_refused=0
-TOTAL 75 checks, 0 failed
+PASS C1 exact large balance shown — Spendable now: 1,919,033.123395269011 MEOW, test coins. Show every digit
+PASS C2 Test coins tag box is complete inside the window — tag box x 260-338 y 223-243; border columns 18/19 of 21 px; balance box x 260-848; window right 880
+TOTAL 79 checks, 0 failed
 A connection to the bus can't be made
