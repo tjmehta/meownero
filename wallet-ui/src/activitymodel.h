@@ -4,6 +4,7 @@
 // already formatted by the controller's exact rules.
 
 #include <QAbstractListModel>
+#include "ledger.h"
 
 class WalletController;
 
@@ -31,7 +32,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     int count() const { return rowCount(); }
 
-    void refresh();
+    void refresh(const QList<const ledger::Tx *> &sorted);
 
 signals:
     void countChanged();

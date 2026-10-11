@@ -495,8 +495,9 @@ void WalletController::say(const QString &text) { emit announce(text); }
 
 void WalletController::refreshModels()
 {
-    m_activity->refresh();
-    m_recent->refresh();
+    const auto sorted = m_ledger.sorted();
+    m_activity->refresh(sorted);
+    m_recent->refresh(sorted);
 }
 
 void WalletController::copyAddress()
@@ -527,23 +528,25 @@ void WalletController::copyTransactionId(const QString &rowId)
     say(msg);
 }
 
+QString WalletController::rowSubtitle(const Tx &tx) const
+{
+    const QString kit = kitLabelFor(tx.to);
+    const QString notePart = tx.note.isEmpty() ? QString() : QStringLiteral(" · ") + tx.note;
+    if (tx.type == TxType::Out && tx.status != TxStatus::Unknown && !kit.isEmpty())
+        return QStringLiteral("To ") + kit + notePart;
+    if (tx.type == TxType::Mined)
+        return QStringLiteral("Blocks %1–%2").arg(m_locale.toString(tx.firstHeight), m_locale.toString(tx.firstHeight + tx.blocks - 1));
+    if (tx.type == TxType::In)
+        return tx.note.isEmpty() ? QStringLiteral("Sender not shown") : tx.note;
+    return QStringLiteral("To ") + shortAddress(addressFor(tx.to)) + notePart;
+}
+
 QVariantMap WalletController::detail(const QString &rowId) const
 {
     const Tx *tx = m_ledger.find(rowId);
     if (!tx)
         return {};
     const bool out = tx->type == TxType::Out;
-    QString subtitle;
-    const QString kit = kitLabelFor(tx->to);
-    const QString notePart = tx->note.isEmpty() ? QString() : QStringLiteral(" · ") + tx->note;
-    if (out && tx->status != TxStatus::Unknown && !kit.isEmpty())
-        subtitle = QStringLiteral("To ") + kit + notePart;
-    else if (tx->type == TxType::Mined)
-        subtitle = QStringLiteral("Blocks %1–%2").arg(m_locale.toString(tx->firstHeight), m_locale.toString(tx->firstHeight + tx->blocks - 1));
-    else if (tx->type == TxType::In)
-        subtitle = tx->note.isEmpty() ? QStringLiteral("Sender not shown") : tx->note;
-    else
-        subtitle = QStringLiteral("To ") + shortAddress(addressFor(tx->to)) + notePart;
 
     QString block = !tx->height ? QStringLiteral("Not in a block yet")
                     : tx->type == TxType::Mined
@@ -552,7 +555,7 @@ QVariantMap WalletController::detail(const QString &rowId) const
     return {
         {QStringLiteral("rowId"), tx->id},
         {QStringLiteral("title"), ledger::title(*tx)},
-        {QStringLiteral("subtitle"), subtitle},
+        {QStringLiteral("subtitle"), rowSubtitle(*tx)},
         {QStringLiteral("rowAmount"), amountView(tx->amount, out, m_exact, true)},
         {QStringLiteral("amount"), amountView(tx->amount, out, true, true)},
         {QStringLiteral("isOut"), out},

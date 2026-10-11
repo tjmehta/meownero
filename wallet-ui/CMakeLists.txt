@@ -67,7 +67,7 @@ qt_add_qml_module(meownero-wallet
 target_link_libraries(meownero-wallet PRIVATE wallet_core Qt6::Network Qt6::Quick Qt6::QuickControls2)
 
 enable_testing()
-foreach(t tst_amount tst_controller)
+foreach(t tst_amount tst_controller tst_activity)
     qt_add_executable(${t} tests/${t}.cpp)
     target_link_libraries(${t} PRIVATE wallet_core Qt6::Test)
     add_test(NAME ${t} COMMAND ${t})
