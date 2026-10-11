@@ -1,10 +1,10 @@
-dbus-daemon[4088739]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=4089931 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
-dbus-daemon[4088739]: Successfully activated service 'org.a11y.atspi.Registry'
+dbus-daemon[898612]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=899741 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
+dbus-daemon[898612]: Successfully activated service 'org.a11y.atspi.Registry'
 SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
-dbus-daemon[4088727]: [session uid=1000 pid=4088727 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=4090060 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
-dbus-daemon[4088727]: [session uid=1000 pid=4088727 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+dbus-daemon[898602]: [session uid=1000 pid=898602 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=899900 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
+dbus-daemon[898602]: [session uid=1000 pid=898602 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
 fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
-PASS A0 app window mapped — 0.275 s from launch
+PASS A0 app window mapped — 0.345 s from launch
 PASS H hidden content unreachable to AT (welcome) — []
 PASS A1 first run exposes no wallet pages
 PASS A2 Tab order on Welcome — ["What does this mean?", "Create a new wallet", "Restore from recovery words", "Open a wallet file", "What does this mean?"]
@@ -81,9 +81,13 @@ PASS B24b background Receive is inert to assistive actions behind consent — en
 PASS H hidden content unreachable to AT (consent dialog) — []
 PASS B25 Escape changes nothing and returns focus to Connect — {"role": "push button", "name": "Connect to someone else's node\u2026", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
 PASS B26 network change closes stale consent and connects nothing — [] Status: Connected and synced
+PASS B26b Keep returns focus to the checked radio and connects nothing — {"role": "radio button", "name": "My own node on this computer", "showing": true, "description": "Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network.", "focused": true, "enabled": true, "checked": true} Status: Connected and synced
+PASS B26c after Keep, Down operates the radio choice — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true}
 PASS B27 explicit consent connects and is announced — Trust: Untrusted, by your choice
+PASS B27b after Connect, focus is on the connected radio — {"role": "radio button", "name": "Someone else's node", "showing": true, "description": "Faster to start, but it can observe your activity", "focused": true, "enabled": true, "checked": true}
+PASS B27c after Connect, Down picks without changing the node — {"role": "radio button", "name": "My own node on this computer", "showing": true, "description": "Recommended: your wallet's requests stay on this computer. Payments you send are still relayed to the network.", "focused": true, "enabled": true, "checked": true} Trust: Untrusted, by your choice
 PASS B28 reduced motion follows the system preference change — reduced=1; app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=testnet reduced_motion=1 node_state=remote chain_tip=1341 wallet_loaded=1 locked=0 history_rows=6 pending=0 unknown_submissions=0 stale_replies_dropped=1 stale_actions_refused=0
 PASS C1 exact large balance shown — Spendable now: 1,919,033.123395269011 MEOW, test coins. Show every digit
 PASS C2 Test coins tag box is complete inside the window — tag box x 260-338 y 223-243; border columns 18/19 of 21 px; balance box x 260-848; window right 880
-TOTAL 79 checks, 0 failed
+TOTAL 83 checks, 0 failed
 A connection to the bus can't be made

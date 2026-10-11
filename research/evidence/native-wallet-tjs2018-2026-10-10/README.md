@@ -9,8 +9,8 @@ not accept it.
 | Item | Value |
 | --- | --- |
 | Branch | `TJS-2018-meownero-native-wallet-implement-accepted-qt-c-core-journeys-with-simulated-backend` |
-| Code head | `cfcccc7` (journey-QA repairs on security-approved `b18ef30`; on handoff `daa68776`; design README/prototype hashes verified) |
-| Executable | `wallet-ui/build/meownero-wallet`, SHA-256 `6adf508af986c2acd00481cae35bd36b88b7519649c92a9ae593a17c310895ca`, 6,463,248 bytes, unsigned, dynamically linked |
+| Code head | `e836f53` (journey-QA repairs F1–F3 on security-approved `b18ef30`; on handoff `daa68776`; design README/prototype hashes verified) |
+| Executable | `wallet-ui/build/meownero-wallet`, SHA-256 `353d2bc4b8d8841eeb66521e743c182952c4da345c48a61aa57dbc91944de2c7`, 6,466,664 bytes, unsigned, dynamically linked |
 | Reproducible | A clean rebuild in a second directory is byte-identical (`raw/measure.txt`) |
 | Build recipe | `wallet-ui/README.md` |
 | Host | Linux 6.8.0-146-generic x86_64, Ubuntu 24.04.4 LTS, glibc 2.39, GNOME/Xorg; all UI checks on an owned nested Xephyr display `:47` |
@@ -27,7 +27,7 @@ socket, loads only compiled-in `qrc:` QML, and has no WebEngine/WebView.
 | --- | --- | --- |
 | `raw/tst_amount.txt` | Ported `PARSER_CASES`, refusals, locale comma decimal, overflow refusal, compact truncation with "…", 1 atomic unit, signs, plain round trip | 28/28 pass |
 | `raw/tst_controller.txt` | Exact prepared review relayed unchanged; edit, lock, node loss and late replies invalidate review; submission finishes after leaving Send; unknown submit blocks payments, ignores blocks without it, resolves only on node evidence; refusal changes nothing; consent bound to session/network; address rules; dust/large balances; recovery-word lifetime; restore validation; diagnostics allowlist; node states name the part at fault | 22/22 pass (adds ports of security-review probes p1b, p1c, p2a, p2b) |
-| `harness/run-journeys.sh` → `raw/journey-results.json`, `raw/journey-run.log`, `screens/` | Real XTest keyboard input; focus, names, descriptions, tree contents, announcements and geometry read over AT-SPI on a private accessibility bus. Create → back up → receive → copy → re-reveal behind the password → lock/unlock → restore; send with refused inputs, review, Escape, stale review, leaving while preparing, confirm, connection drop, block without it, node absence proof; remote-node consent at 880 × 600; reduced motion; hidden-content audit on eight screens; a markup note (`<img src=http://127.0.0.1:18777/…>`) typed into the real Note field with a loopback listener; AT-SPI actions on background controls behind Review and consent; a pixel check of the complete Test coins tag at 880 × 600 on the large exact balance | 79/79 pass |
+| `harness/run-journeys.sh` → `raw/journey-results.json`, `raw/journey-run.log`, `screens/` | Real XTest keyboard input; focus, names, descriptions, tree contents, announcements and geometry read over AT-SPI on a private accessibility bus. Create → back up → receive → copy → re-reveal behind the password → lock/unlock → restore; send with refused inputs, review, Escape, stale review, leaving while preparing, confirm, connection drop, block without it, node absence proof; remote-node consent at 880 × 600; reduced motion; hidden-content audit on eight screens; a markup note (`<img src=http://127.0.0.1:18777/…>`) typed into the real Note field with a loopback listener; AT-SPI actions on background controls behind Review and consent; a pixel check of the complete Test coins tag at 880 × 600 on the large exact balance; named, actionable focus after consent Keep and Connect | 83/83 pass |
 | `harness/orca-journey.sh` → `raw/orca-speech-*-readable.txt`, `raw/orca-speech-*.txt`, `raw/orca-debug-*.log.gz` | **Orca 46.1**, a real screen reader, driven by real key presses through create (welcome → name/password with error → recovery words → acknowledgement → word check) and send (kit wallet → refused amount → preparing → review → confirm → Sent → Node radios) | Speech transcripts below |
 | `harness/measure.sh` → `raw/measure.txt`, `raw/libraries-loaded.txt` | Hashes, linked modules, rebuild check, startup, idle CPU, RSS, mapped Qt bytes | See Measurements |
 
@@ -63,6 +63,8 @@ judged comprehension. NVDA and VoiceOver were not available on this host.
 | --- | --- | --- |
 | F1. The background behind Review and consent accepted AT-SPI actions: Receive closed the modal and navigated | The app behind an open modal (ribbon and page) is `enabled: false` while `UiState.openDialogs > 0`. It is inert to pointer, keyboard and assistive actions, and AT-SPI reports it as not enabled. The dialog count drops on `aboutToHide`, so focus restoration still lands. Background controls keep their normal look under the scrim | B6b and B24b: background Receive is not enabled; its action leaves the dialog open and focus unchanged. Trapping (B7), Escape and focus return (B8, B25), the legitimate dialog actions (B13–B14, B27) and all earlier checks still pass |
 | F2. At 880 × 600 the exact large balance pushed its Test coins tag off the right edge | The balance is a width-bound flow. Exact digits wrap anywhere only if they must, and the complete tag moves to the next line. The amount rule is unchanged; design lead keeps the responsive treatment | Journey C: `1,919,033.123395269011 MEOW` is shown, and the tag box (both vertical borders, from pixels) lies inside the window. `screens/c01-large-exact-880x600.png`. Author capture at 1.5× scale (1320 × 900 physical): `screens/scale15-large-exact.png`. Dark mode changes colours only, and that layout was not separately captured |
+
+| F3 (recheck of `786bee6`, comment `ea24cb33`). After consent Keep or the final Connect, focus fell to an unnamed panel and Down no longer operated the radios. This predates the repairs | Qt hands focus to the window content item when a popup finishes its exit transition, overriding focus moved while the dialog was closing. `UiState.focus()` applies the target immediately and again once the dialog has closed. It is used for consent Keep/Connect (the checked radio), review confirm and navigation (the page heading) and reconcile (the opener). Escape still returns focus to the opener (code `e836f53`) | B26b/B26c: Keep lands on the checked "My own node on this computer" radio and Down moves the pick. B27b/B27c: Connect lands on the connected "Someone else's node" radio and Down picks without changing the node. **Negative control** on `6adf508a…` (`raw/negative-control-cfcccc7-journey-b.json`): B26b/B26c fail on an unnamed `panel`, reproducing F3 |
 
 **Negative control** on the previous executable `42425e72…` (`raw/negative-control-b18ef30-journeys-bc.json`, `screens/negative-control-b18ef30-c01.png`): B6b and B24b fail (Receive enabled; the action closes the dialog and focus moves to the Receive heading), and C2 fails (tag box x 838–879, right border cut at the window edge).
 
@@ -103,10 +105,10 @@ All of them were in the candidate before these fixes. QA should re-check them.
 
 | Measure | Observation | Method and limits |
 | --- | --- | --- |
-| Launch → mapped window | 0.218–0.265 s over 5 runs | `date` before exec until `xdotool search` finds the window. Not first-frame time; caches warm after run 1; nested X server, no WM |
+| Launch → mapped window | 0.201–0.231 s over 5 runs | `date` before exec until `xdotool search` finds the window. Not first-frame time; caches warm after run 1; nested X server, no WM |
 | Idle CPU | 0 ticks over 10 s, after a 3 s settle | `/proc/pid/stat` utime+stime at 10 ms resolution; zero means below resolution |
-| RSS | 192,572 kB (VmRSS = VmHWM) on Overview | One sample; includes the software/GL stack of this host |
-| Footprint | Executable 6,463,248 bytes. 29 Qt toolchain libraries/plugins mapped, 87,771,600 bytes. Installed toolchain 1,620,430,098 bytes (Qt), 5,147,759 (sysroot), 35,138,704 (aqt venv) | Mapped bytes are not an installer size; no package was built |
+| RSS | 192,068 kB (VmRSS = VmHWM) on Overview | One sample; includes the software/GL stack of this host |
+| Footprint | Executable 6,466,664 bytes. 29 Qt toolchain libraries/plugins mapped, 87,771,600 bytes. Installed toolchain 1,620,430,098 bytes (Qt), 5,147,759 (sysroot), 35,138,704 (aqt venv) | Mapped bytes are not an installer size; no package was built |
 
 These are not comparable with the TJS-1996 experiment (Python launcher, other
 renderer). No other OS or architecture was measured.
