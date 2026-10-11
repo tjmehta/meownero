@@ -124,6 +124,7 @@ public:
     // Display helpers (pure formatting of controller-owned values)
     QVariantMap amountView(quint64 magnitude, bool negative, bool exact, bool sign) const;
     QString amountText(quint64 magnitude, bool exact = true) const;
+    QString rowSubtitle(const ledger::Tx &tx) const;
     const ledger::Ledger &ledgerState() const { return m_ledger; }
 
     // ---- Actions ----

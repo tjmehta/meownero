@@ -1,0 +1,18 @@
+dbus-daemon[925205]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=926658 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
+dbus-daemon[925205]: Successfully activated service 'org.a11y.atspi.Registry'
+SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
+dbus-daemon[925188]: [session uid=1000 pid=925188 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=926929 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
+dbus-daemon[925188]: [session uid=1000 pid=925188 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
+PASS H1 outgoing row has full accessible amount and status — ["Sent, To Test wallet B \u00b7 Lunch test, \u22122.5 MEOW, Waiting to confirm"]
+PASS H2 keyboard reaches a payment row
+PASS H3 keyboard opens details
+PASS H4 status refresh preserves named row opener focus — {"role": "push button", "name": "Sent, To Test wallet B \u00b7 Lunch test, \u22122.5 MEOW, 1 of 10 confirmations", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS H5 pointer opens the same payment
+PASS H6 pointer detail has same title and status — ["Status: 1 of 10 confirmations"]
+PASS H7 keyboard reaches digit toggle
+PASS H8 digit toggle keeps its focus and pressed state — {"role": "push button", "name": "Show every digit", "showing": true, "description": "", "focused": true, "enabled": true, "checked": true}
+PASS H9 Activity keeps four named rows after toggle
+PASS H10 keyboard reaches Overview balance
+PASS H11 balance toggle keeps accessible focus — {"role": "push button", "name": "Spendable now: 1,218.860837064635 MEOW, test coins. Show every digit", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+A connection to the bus can't be made

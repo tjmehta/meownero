@@ -1,0 +1,16 @@
+{
+  "accepted_base": "9660919e70c35433762e64c5bc04e0d271830ee6",
+  "qt": "6.12.0",
+  "build_type": "Release",
+  "compiler": "c++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "host": "Linux dev 6.8.0-146-generic #146-Ubuntu SMP PREEMPT_DYNAMIC Thu Sep  3 16:12:30 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux",
+  "instrumentation": "wallet-ui/tests/prepare-history-benchmark.py; excluded from ordinary CMake app target",
+  "benchmark_overlay_sha256": "ac25736f4e22dbf56b97b44bebded86f867ba5e5922f53021a1298f898f16acc",
+  "backend": "xcb on owned Xephyr :59, software renderer, basic GUI-thread render loop",
+  "settling": "600ms after engine load, 300ms between refresh and first toggle, page-entry animation 180ms; no simulated backend operation in matrix",
+  "limitations": [
+    "warm filesystem caches, shared host CPU scheduling, synthetic repetition of the four accepted transaction shapes",
+    "frameSwapped records submitted frame rather than physical display scanout",
+    "RSS is process high-water including initial delegate allocation"
+  ]
+}

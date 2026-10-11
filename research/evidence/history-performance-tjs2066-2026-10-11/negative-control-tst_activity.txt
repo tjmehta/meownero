@@ -1,0 +1,15 @@
+********* Start testing of TstActivity *********
+Config: Using QtTest library 6.12.0, Qt 6.12.0 (x86_64-little_endian-lp64 shared (dynamic) release build; by GCC 11.5.0 20240719 (Red Hat 11.5.0-5)), ubuntu 24.04
+PASS   : TstActivity::initTestCase()
+FAIL!  : TstActivity::fixtureRowsAndExactDigits() Compared values are not the same
+   Actual   (reset.count()): 1
+   Expected (0)            : 0
+   Loc: [src/tests/tst_activity.cpp(35)]
+PASS   : TstActivity::populatedHistoryMatchesIndependentFormattingAndStableOrder()
+FAIL!  : TstActivity::statusRefreshKeepsRowsAndReorderRebuildsCorrectly() Compared values are not the same
+   Actual   (resets.count()): 1
+   Expected (0)             : 0
+   Loc: [src/tests/tst_activity.cpp(106)]
+PASS   : TstActivity::cleanupTestCase()
+Totals: 3 passed, 2 failed, 0 skipped, 0 blacklisted, 41ms
+********* Finished testing of TstActivity *********

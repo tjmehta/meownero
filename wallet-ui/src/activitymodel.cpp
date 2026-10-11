@@ -40,21 +40,21 @@ QHash<int, QByteArray> ActivityModel::roleNames() const
             {IconRole, "iconKey"}};
 }
 
-void ActivityModel::refresh()
+void ActivityModel::refresh(const QList<const ledger::Tx *> &sorted)
 {
     const int before = int(m_rows.size());
-    beginResetModel();
-    m_rows.clear();
+    QList<Row> rows;
+    rows.reserve(m_limit > 0 ? qMin(qsizetype(m_limit), sorted.size()) : sorted.size());
     const ledger::Ledger &l = m_controller->ledgerState();
-    for (const ledger::Tx *tx : l.sorted()) {
-        if (m_limit > 0 && m_rows.size() >= m_limit)
+    for (const ledger::Tx *tx : sorted) {
+        if (m_limit > 0 && rows.size() >= m_limit)
             break;
-        const QVariantMap d = m_controller->detail(tx->id);
-        const QVariantMap a = d.value(QStringLiteral("rowAmount")).toMap();
+        const QVariantMap a = m_controller->amountView(tx->amount, tx->type == ledger::TxType::Out,
+                                                     m_controller->exactDigits(), true);
         Row r;
         r.id = tx->id;
         r.title = ledger::title(*tx);
-        r.subtitle = d.value(QStringLiteral("subtitle")).toString();
+        r.subtitle = m_controller->rowSubtitle(*tx);
         r.amountText = a.value(QStringLiteral("text")).toString();
         r.moreDigits = a.value(QStringLiteral("more")).toBool();
         r.amountAccessible = a.value(QStringLiteral("accessible")).toString();
@@ -63,9 +63,33 @@ void ActivityModel::refresh()
         r.icon = tx->type == ledger::TxType::Mined ? QStringLiteral("block")
                  : tx->type == ledger::TxType::In  ? QStringLiteral("down")
                                                    : QStringLiteral("up");
-        m_rows.append(r);
+        rows.append(r);
     }
-    endResetModel();
+    bool sameIds = rows.size() == m_rows.size();
+    for (int i = 0; sameIds && i < rows.size(); ++i)
+        sameIds = rows[i].id == m_rows[i].id;
+    if (!sameIds) {
+        beginResetModel();
+        m_rows = std::move(rows);
+        endResetModel();
+    } else {
+        // Keep row objects and persistent indexes alive for focus and dialogs.
+        // Only changed roles are notified; unchanged refreshes do no QML work.
+        for (int i = 0; i < rows.size(); ++i) {
+            const Row &a = m_rows[i], &b = rows[i];
+            QList<int> roles;
+            if (a.title != b.title) roles.append(TitleRole);
+            if (a.subtitle != b.subtitle) roles.append(SubtitleRole);
+            if (a.amountText != b.amountText) roles.append(AmountTextRole);
+            if (a.moreDigits != b.moreDigits) roles.append(MoreDigitsRole);
+            if (a.amountAccessible != b.amountAccessible) roles.append(AmountAccessibleRole);
+            if (a.statusText != b.statusText) roles.append(StatusTextRole);
+            if (a.statusKind != b.statusKind) roles.append(StatusKindRole);
+            if (a.icon != b.icon) roles.append(IconRole);
+            m_rows[i] = std::move(rows[i]);
+            if (!roles.isEmpty()) emit dataChanged(index(i), index(i), roles);
+        }
+    }
     if (before != m_rows.size())
         emit countChanged();
 }
