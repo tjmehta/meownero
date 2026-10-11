@@ -1,10 +1,10 @@
-dbus-daemon[898612]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=899741 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
-dbus-daemon[898612]: Successfully activated service 'org.a11y.atspi.Registry'
+dbus-daemon[3177216]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1000 pid=3178103 comm="/usr/bin/python3 -I ~/Developer/.workt" label="unconfined")
+dbus-daemon[3177216]: Successfully activated service 'org.a11y.atspi.Registry'
 SpiRegistry daemon is running with well-known name - org.a11y.atspi.Registry
-dbus-daemon[898602]: [session uid=1000 pid=898602 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=899900 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
-dbus-daemon[898602]: [session uid=1000 pid=898602 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
+dbus-daemon[3177206]: [session uid=1000 pid=3177206 pidfd=5] Activating service name='org.gtk.vfs.Daemon' requested by ':1.7' (uid=1000 pid=3178310 comm="~/Developer/.worktrees/meownero/TJS-20" label="unconfined")
+dbus-daemon[3177206]: [session uid=1000 pid=3177206 pidfd=5] Successfully activated service 'org.gtk.vfs.Daemon'
 fusermount3: failed to access mountpoint /run/user/1000/gvfs: Permission denied
-PASS A0 app window mapped — 0.345 s from launch
+PASS A0 app window mapped — 0.331 s from launch
 PASS H hidden content unreachable to AT (welcome) — []
 PASS A1 first run exposes no wallet pages
 PASS A2 Tab order on Welcome — ["What does this mean?", "Create a new wallet", "Restore from recovery words", "Open a wallet file", "What does this mean?"]
@@ -71,6 +71,8 @@ PASS B18 a new block without it proves nothing
 PASS B19 detail dialog opens — {"role": "push button", "name": "Done", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
 PASS H hidden content unreachable to AT (unknown detail) — []
 PASS B20 absence proof resolves to not sent, announced
+PASS B20b after reconcile, focus is on the named Send heading — {"role": "heading", "name": "Send", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
+PASS B20c next Tab continues into the form — {"role": "push button", "name": "Test wallet B", "showing": true, "description": "", "focused": true, "enabled": true, "checked": false}
 PASS B21 sending is available again
 PASS B21b markup note appears literally in Activity
 PASS B21c no remote content was fetched — [{"path": "/", "agent": "Go-http-client/1.1"}, {"path": "/", "agent": "Go-http-client/1.1"}]
@@ -89,5 +91,17 @@ PASS B27c after Connect, Down picks without changing the node — {"role": "radi
 PASS B28 reduced motion follows the system preference change — reduced=1; app=meownero-wallet 0.1.0 (simulated backend) qt=6.12.0 os=Ubuntu 24.04.4 LTS x86_64 network=testnet reduced_motion=1 node_state=remote chain_tip=1341 wallet_loaded=1 locked=0 history_rows=6 pending=0 unknown_submissions=0 stale_replies_dropped=1 stale_actions_refused=0
 PASS C1 exact large balance shown — Spendable now: 1,919,033.123395269011 MEOW, test coins. Show every digit
 PASS C2 Test coins tag box is complete inside the window — tag box x 260-338 y 223-243; border columns 18/19 of 21 px; balance box x 260-848; window right 880
-TOTAL 83 checks, 0 failed
+PASS D0 reduced motion active
+PASS D1 reduced motion, keyboard: prepared Send executes exactly once — review opened=True rows 4 -> 5 focus 'Sent'
+PASS D1 reduced motion, pointer: prepared Send executes exactly once — review opened=True rows 5 -> 6 focus 'Sent'
+PASS D2 reduced motion, keyboard: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D2 reduced motion, pointer: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D3 reduced motion: Escape cancels consent and connects nothing — Trust: Trusted, because you chose your own node
+PASS D0 normal motion active
+PASS D1 normal motion, keyboard: prepared Send executes exactly once — review opened=True rows 6 -> 7 focus 'Sent'
+PASS D1 normal motion, pointer: prepared Send executes exactly once — review opened=True rows 7 -> 8 focus 'Sent'
+PASS D2 normal motion, keyboard: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D2 normal motion, pointer: final Connect executes exactly once — opened=True Trust: Untrusted, by your choice focus "Someone else's node"
+PASS D3 normal motion: Escape cancels consent and connects nothing — Trust: Trusted, because you chose your own node
+TOTAL 97 checks, 0 failed
 A connection to the bus can't be made
