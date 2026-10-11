@@ -16,7 +16,7 @@ AppDialog {
         function onReconciled(id) {
             if (dlg.visible && id === dlg.rowId) {
                 dlg.closeWithoutRestoring()
-                if (dlg.returnFocusTo) dlg.returnFocusTo.forceActiveFocus()
+                UiState.focus(dlg.returnFocusTo)
             }
         }
     }

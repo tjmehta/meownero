@@ -54,7 +54,7 @@ Item {
         target: Wallet
         function onFocusHeading() {
             if (pageLoader.item && pageLoader.item.heading)
-                pageLoader.item.heading.forceActiveFocus()
+                UiState.focus(pageLoader.item.heading)
         }
     }
 }

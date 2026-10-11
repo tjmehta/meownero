@@ -53,9 +53,14 @@ Dialog {
     }
     onOpened: (initialFocus ? initialFocus : contentItem).forceActiveFocus()
     // Re-enable the background as soon as closing starts, so focus can return to it.
-    onAboutToHide: UiState.openDialogs = Math.max(0, UiState.openDialogs - 1)
+    onAboutToHide: {
+        UiState.openDialogs = Math.max(0, UiState.openDialogs - 1)
+        UiState.closingDialogs++
+    }
     onClosed: {
-        if (restoreFocus && returnFocusTo)
+        // A focus target chosen while closing (navigation, Keep, Connect) wins;
+        // otherwise focus returns to the control that opened the dialog.
+        if (!UiState.dialogClosed() && restoreFocus && returnFocusTo)
             returnFocusTo.forceActiveFocus()
         restoreFocus = true
     }

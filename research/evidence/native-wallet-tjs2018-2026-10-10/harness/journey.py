@@ -703,11 +703,31 @@ def journey_send_review_unknown_consent():
     key("Down", wait=0.3)
     app.tab_to("Connect to someone else's node…")
     key("Return", wait=0.6)
+    # Journey QA F3: Keep (the dialog's initial focus) lands on the named, checked radio,
+    # and the arrow keys still operate the choice.
+    key("Return", wait=0.8)
+    _, f = app.focused()
+    status = next((x for x in app.names() if x.startswith("Status: ")), "")
+    check("B26b Keep returns focus to the checked radio and connects nothing",
+          f["role"] == "radio button" and f["name"] == "My own node on this computer" and f["checked"]
+          and status == "Status: Connected and synced" and not app.dialogs(), json.dumps(f) + " " + status)
+    key("Down", wait=0.4)
+    _, f = app.focused()
+    check("B26c after Keep, Down operates the radio choice", f["name"] == "Someone else's node" and f["checked"], json.dumps(f))
+    app.tab_to("Connect to someone else's node…")
+    key("Return", wait=0.6)
     app.tab_to("Connect to someone else's node")
     t = time.time()
-    key("Return", wait=0.6)
+    key("Return", wait=0.8)
     status = next((x for x in app.names() if x.startswith("Trust: ")), "")
     check("B27 explicit consent connects and is announced", status == "Trust: Untrusted, by your choice" and announced_since(t, "Using someone else's node"), status)
+    _, f = app.focused()
+    check("B27b after Connect, focus is on the connected radio", f["role"] == "radio button" and f["name"] == "Someone else's node" and f["checked"], json.dumps(f))
+    key("Down", wait=0.4)
+    _, f = app.focused()
+    status = next((x for x in app.names() if x.startswith("Trust: ")), "")
+    check("B27c after Connect, Down picks without changing the node", f["name"] == "My own node on this computer" and f["checked"]
+          and status == "Trust: Untrusted, by your choice", json.dumps(f) + " " + status)
     shot("b27-remote-connected", "880x600")
     # Reduced motion follows the portal preference.
     os.kill(PORTAL_PID, signal.SIGUSR1)

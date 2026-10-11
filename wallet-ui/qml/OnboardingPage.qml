@@ -32,7 +32,7 @@ Item {
 
     Connections {
         target: Wallet
-        function onFocusHeading() { if (stepLoader.item && stepLoader.item.heading) stepLoader.item.heading.forceActiveFocus() }
+        function onFocusHeading() { if (stepLoader.item && stepLoader.item.heading) UiState.focus(stepLoader.item.heading) }
         function onFocusField(name) { if (stepLoader.item && stepLoader.item.focusField) stepLoader.item.focusField(name) }
     }
 

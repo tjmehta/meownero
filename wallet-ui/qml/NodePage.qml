@@ -13,7 +13,7 @@ PageBase {
     readonly property bool remote: n.remote
     readonly property bool far: (Wallet.nodePick !== "" ? Wallet.nodePick : (remote ? "remote" : "local")) === "remote"
 
-    function focusChecked() { (page.far ? remoteChoice : localChoice).forceActiveFocus() }
+    function focusChecked() { UiState.focus(page.far ? remoteChoice : localChoice) }
 
     Connections {
         target: Wallet
@@ -151,10 +151,9 @@ PageBase {
                 onClicked: {
                     const token = Wallet.consentToken
                     consent.closeWithoutRestoring()
-                    if (Wallet.confirmRemoteNode(token))
-                        page.focusChecked()
-                    else
-                        connectButton.forceActiveFocus()
+                    Wallet.confirmRemoteNode(token)
+                    // Connected: the chosen radio. Refused as stale: the pick is cleared, so the checked radio too.
+                    page.focusChecked()
                 }
             }
         }
