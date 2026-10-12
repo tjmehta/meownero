@@ -173,6 +173,51 @@ def public_worker_receipt(value):
     return result
 
 
+def package_failure(error, inputs):
+    """Record a bound source location, never exception text, argv or paths."""
+    kinds = {'AssertionError', 'RuntimeError', 'CalledProcessError', 'OSError',
+             'ValueError', 'KeyError', 'KeyboardInterrupt', 'SystemExit'}
+    value = {'schema': 'meownero-native-linux-package-failure/1', 'phase': 'PACKAGE',
+             'failure_type': type(error).__name__ if type(error).__name__ in kinds else 'OTHER_ERROR',
+             'source_module': 'UNKNOWN', 'source_line': None, 'source_sha256': None}
+    modules = {str(ROOT / 'vanguard' / name): name
+               for name in ('package-portable.py', 'portable_licenses.py')}
+    frame = error.__traceback__
+    while frame is not None:
+        name = modules.get(frame.tb_frame.f_code.co_filename)
+        if name is not None:
+            value.update(source_module=name, source_line=frame.tb_lineno,
+                         source_sha256=inputs['source_files']['vanguard/' + name])
+            context = frame.tb_frame.f_locals.get('package_context') if name == 'portable_licenses.py' else None
+            if isinstance(context, dict):
+                components = {'boost', 'openssl', 'sodium', 'unbound', 'zeromq'}
+                component = context.get('component')
+                public = {'component': component if isinstance(component, str) and component in components else 'UNKNOWN',
+                          'libraries': [], 'link_commands': []}
+                names = r'lib(?:boost_(?:filesystem|program_options|serialization|thread|chrono|atomic|container|date_time|charconv|locale)|ssl|crypto|sodium|unbound|zmq)\.(?:a|so(?:\.\d+)*)'
+                rows = context.get('libraries', ())
+                if isinstance(rows, (list, tuple, set)):
+                    for row in list(rows)[:64]:
+                        if isinstance(row, (list, tuple)) and len(row) == 2:
+                            basename, origin = row
+                            if isinstance(basename, str) and isinstance(origin, str) and origin in {'pinned_depends', 'system', 'bundled', 'non_pinned_depends', 'unmapped_contrib', 'unmapped_relative'}:
+                                public['libraries'].append({'basename': basename if re.fullmatch(names, basename) else 'OTHER_LIBRARY',
+                                                            'origin': origin})
+                public['libraries'] = sorted(public['libraries'], key=lambda row: (row['basename'], row['origin']))
+                rows = context.get('link_commands', ())
+                if isinstance(rows, (list, tuple)):
+                    for row in rows[:64]:
+                        if not isinstance(row, dict):
+                            continue
+                        target, digest = row.get('target'), row.get('sha256')
+                        if isinstance(target, str) and target in {'daemon', 'simplewallet', 'wallet_rpc_server'} and isinstance(digest, str) and re.fullmatch(r'[0-9a-f]{64}', digest):
+                            public['link_commands'].append({'target': target, 'sha256': digest,
+                                                            'kind': 'response_file' if 'response_file' in row else 'link_command'})
+                value['depends_inventory'] = public
+        frame = frame.tb_next
+    return value
+
+
 def worker(phase, inputs, out):
     if phase == 'fetch':
         fetch(inputs, out)
@@ -195,7 +240,15 @@ def worker(phase, inputs, out):
         load('run-portable-check.py').main()
     else:
         sys.argv = [scripts[phase], *argv[phase]]
-        load(scripts[phase]).main()
+        try:
+            load(scripts[phase]).main()
+        except BaseException as error:
+            if phase == 'package':
+                try:
+                    write(out / 'public/package-diagnostic.json', package_failure(error, inputs))
+                except BaseException:
+                    error.add_note('PACKAGE_DIAGNOSTIC_EXPORT_FAILED')
+            raise
 
 
 def main():

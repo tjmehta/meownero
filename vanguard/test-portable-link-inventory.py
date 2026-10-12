@@ -219,13 +219,18 @@ def main():
             with patch.object(licenses, 'retain_depends', return_value=retained):
                 licenses.coverage(build, package, False, [], depends_static=True)
 
-        for prior, number in ((31, 33), (32, 34)):
-            carrier = EVIDENCE / f'linux{number}-package-controller.source.py'
+        controllers = {
+            33: EVIDENCE / 'linux33-package-controller.source.py',
+            34: EVIDENCE / 'linux34-package-controller.source.py',
+            'current-x86_64': ROOT / 'vanguard/run-portable-linux-ci.py',
+            'current-aarch64': ROOT / 'vanguard/run-portable-linux-ci.py',
+        }
+        for number, carrier in controllers.items():
             spec = importlib.util.spec_from_file_location(f'controller{number}', carrier)
             ci = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(ci)
             ci.ROOT = ROOT
-            inputs = {'target': 'linux-x86_64' if number == 33 else 'linux-aarch64',
+            inputs = {'target': 'linux-x86_64' if number in (33, 'current-x86_64') else 'linux-aarch64',
                       'source_files': {'vanguard/portable_licenses.py': licenses.sha(Path(licenses.__file__))}}
             try:
                 missing()
@@ -241,12 +246,16 @@ def main():
             assert len(context['link_commands']) == 3
             assert 'PRIVATE_PATH_SENTINEL' not in json.dumps(diagnostic)
             assert not any('response_file' in row for row in context['link_commands'])
-            old = ast.parse((EVIDENCE / f'linux{prior}-package-controller.source.py').read_text())
-            new = ast.parse(carrier.read_text())
             functions = lambda tree: {n.name: ast.dump(n) for n in tree.body if isinstance(n, ast.FunctionDef)}
-            before, after = functions(old), functions(new)
-            assert set(before) == set(after)
-            assert [name for name in before if before[name] != after[name]] == ['package_failure']
+            after = functions(ast.parse(carrier.read_text()))
+            if number in (33, 34):
+                prior = 31 if number == 33 else 32
+                before = functions(ast.parse((EVIDENCE / f'linux{prior}-package-controller.source.py').read_text()))
+                assert set(before) == set(after)
+                assert [name for name in before if before[name] != after[name]] == ['package_failure']
+            else:
+                retained_functions = functions(ast.parse((EVIDENCE / 'linux34-package-controller.source.py').read_text()))
+                assert after['package_failure'] == retained_functions['package_failure']
             cases.append({'controller': number, 'case': 'missing-component-and-safe-source-bound-diagnostic', 'result': 'PASS'})
 
             try:
@@ -332,7 +341,7 @@ def main():
 
     receipt = {'schema': 'meownero-pinned-linker-inventory-fixtures/1', 'result': 'PASS',
                'source_sha256': licenses.sha(Path(licenses.__file__)),
-               'controllers': {str(n): licenses.sha(EVIDENCE / f'linux{n}-package-controller.source.py') for n in (33, 34)},
+               'controllers': {str(n): licenses.sha(carrier) for n, carrier in controllers.items()},
                'fixture_source_sha256': licenses.sha(Path(__file__)), 'cases': cases,
                'native_archive_or_runtime_acceptance': False}
     args.out.write_text(json.dumps(receipt, indent=2) + '\n')

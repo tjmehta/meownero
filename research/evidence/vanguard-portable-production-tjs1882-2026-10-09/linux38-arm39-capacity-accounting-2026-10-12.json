@@ -1,0 +1,82 @@
+{
+  "schema": "meownero-linux-preparation-capacity-accounting/1",
+  "issue": "TJS-1882",
+  "run_id": "f9a1ca7c-5934-45f9-92d3-676235cd4070",
+  "observed_utc": "2026-10-12T16:59:35.285043+00:00",
+  "wake_comment": "5cc930e0-6208-47ca-acd3-697e2b8c635d",
+  "source_trust": "Adopted studio-lead comment, not fresh billing or spend approval",
+  "prior_resumption": "279418cd-37a4-4f40-a651-16b9a0803f8d",
+  "linux_preparation_authorization": "Studio directive 883b0bab permits Linux advancement after first safe i686 action; verified capability blocker and lead acknowledgement satisfy that first step",
+  "windows_i68635": {
+    "source_clearance": "774ef8bf source-only unchanged",
+    "packet_id": "03d24579-ca7a-49b1-91d9-c87835d4102f",
+    "packet_sha256": "1b9809eccd24d9e0f17bc834647e0c7cd9f0c664d3daf58792efb79e936805ba",
+    "dispatch_owner": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+    "dispatch_status": "HELD_NOT_DISPATCHED",
+    "unblock": "Explicit Meownero-applicable spending authority and raised limit, or included-capacity reset around 2026-11-01; fresh quota/storage/active-run check before publication",
+    "pending_messages": [
+      "<message-id>",
+      "<message-id>"
+    ],
+    "new_spend_authority": false,
+    "standalone_32bit_Windows": "UNTESTED"
+  },
+  "linux_successors": [
+    {
+      "candidate": 38,
+      "predecessor": 36,
+      "target": "linux-x86_64",
+      "frozen_files": 18,
+      "changed_paths": [
+        ".github/workflows/tjs1882-native-linux.yml",
+        "ci/tjs1882/linux-build-inputs.json",
+        "vanguard/package-portable.py",
+        "vanguard/portable-tester.py",
+        "vanguard/portable_licenses.py",
+        "vanguard/run-portable-ci.py",
+        "vanguard/run-portable-linux-ci.py",
+        "vanguard/test-portable-refusals.py"
+      ],
+      "native_acceptance": false
+    },
+    {
+      "candidate": 39,
+      "predecessor": 37,
+      "target": "linux-aarch64",
+      "frozen_files": 18,
+      "changed_paths": [
+        ".github/workflows/tjs1882-native-linux-arm.yml",
+        "ci/tjs1882/linux-arm-build-inputs.json",
+        "vanguard/package-portable.py",
+        "vanguard/portable-tester.py",
+        "vanguard/portable_licenses.py",
+        "vanguard/run-portable-ci.py",
+        "vanguard/run-portable-linux-ci.py",
+        "vanguard/test-portable-refusals.py"
+      ],
+      "native_acceptance": false
+    }
+  ],
+  "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "original_stage": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+  "return_writer": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+  "historical_scoped_acceptance": "3_OF_7_UNCHANGED",
+  "full_seven_target_release": "OPEN",
+  "docker_leaf": {
+    "status": "ACCEPTED_AND_PUBLISHED_UNCHANGED",
+    "page": "https://meownero.com/downloads",
+    "zip": "https://meownero.com/downloads/artifacts/meownero-vanguard-linux-x64-docker-96aa5a8.zip",
+    "bytes": 190475713,
+    "sha256": "0b72d59fba8bd01b1ba45e72016c4e5c36176026918c1152c1e75d3e01030978",
+    "image": "sha256:fd7256b13c90935782aedcebd23dcbd8dbe1e16853974ffb6722a116e32a13f9",
+    "scope": "Linux x64 local regtest inside Ubuntu Docker only",
+    "retested": false
+  },
+  "ARM12": "TERMINAL_FAILED slow-hash.c:1021 missing POSIX sys/mman.h; no duplicate worker",
+  "TJS2018_TJS2066": "CLOSED_UNCHANGED",
+  "github_mutations": 0,
+  "native_runs_started": 0,
+  "actions_minutes_consumed": 0,
+  "new_user_or_group_messages": 0,
+  "preserved_initial_files": 6
+}

@@ -1,0 +1,397 @@
+{
+  "schema": "meownero-linux-current-helper-successors/1",
+  "source_base_commit": "0a12af99d122d37216b6cc501d997a1d9a75cb6e",
+  "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "original_stage": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+  "return_writer": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+  "targets": [
+    {
+      "candidate": 38,
+      "predecessor": 36,
+      "target": "linux-x86_64",
+      "payload": "/storage/data/meownero-tjs1882-runf9a1ca7c/native-linux-payload38-frozen",
+      "publication": "HELD_ON_ACTIONS_CAPACITY_AND_ORIGINAL_SOURCE_REVIEW",
+      "source_clearance": "PENDING_ORIGINAL_REVIEWER",
+      "input_name": "ci/tjs1882/linux-build-inputs.json",
+      "workflow_name": ".github/workflows/tjs1882-native-linux.yml",
+      "changed_paths": [
+        ".github/workflows/tjs1882-native-linux.yml",
+        "ci/tjs1882/linux-build-inputs.json",
+        "vanguard/package-portable.py",
+        "vanguard/portable-tester.py",
+        "vanguard/portable_licenses.py",
+        "vanguard/run-portable-ci.py",
+        "vanguard/run-portable-linux-ci.py",
+        "vanguard/test-portable-refusals.py"
+      ],
+      "unchanged_predecessor_files": 10,
+      "files": {
+        ".github/workflows/tjs1882-native-linux.yml": {
+          "sha256": "801701e1051c8134103b46f6027d7940514a9068cf6903e8796676b5fa24100a",
+          "bytes": 2423
+        },
+        "ci/tjs1882/linux-build-inputs.json": {
+          "sha256": "4cf6de02805fd2adfa67b0cef5ced7efa29a655ae1da13bc2dbd42557e2bd2b3",
+          "bytes": 6576
+        },
+        "docs/vanguard-portable-tester.md": {
+          "sha256": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+          "bytes": 5987
+        },
+        "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt": {
+          "sha256": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+          "bytes": 404
+        },
+        "vanguard/licenses/easyloggingpp-9.96.7/LICENSE": {
+          "sha256": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+          "bytes": 1192
+        },
+        "vanguard/licenses/easyloggingpp-9.96.7/provenance.json": {
+          "sha256": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+          "bytes": 592
+        },
+        "vanguard/package-portable.py": {
+          "sha256": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+          "bytes": 10479
+        },
+        "vanguard/portable-build.py": {
+          "sha256": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+          "bytes": 22020
+        },
+        "vanguard/portable-prepare-old-linux.py": {
+          "sha256": "b05132bcbb2ca7601f4d5bdde121cacb6ed7e1403842d70ac20609de72b9d1e6",
+          "bytes": 9862
+        },
+        "vanguard/portable-tester.py": {
+          "sha256": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+          "bytes": 26094
+        },
+        "vanguard/portable_licenses.py": {
+          "sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+          "bytes": 20477
+        },
+        "vanguard/run-portable-check.py": {
+          "sha256": "8d7dafdb20783c8d1be6fd29c77a8b88979465552dc13bf7ca649200acac359d",
+          "bytes": 6518
+        },
+        "vanguard/run-portable-ci.py": {
+          "sha256": "cd53d5b5a09243a66fde86b1404f2697e44cad895df9e4f082ec81fab7b14c9a",
+          "bytes": 57530
+        },
+        "vanguard/run-portable-linux-ci.py": {
+          "sha256": "639efb3728effbffefff62e853b2cac6a91041628fbdcb91ec9cc3b9ecae7f6b",
+          "bytes": 26732
+        },
+        "vanguard/source-lock.json": {
+          "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+          "bytes": 6950
+        },
+        "vanguard/test-portable-refusals.py": {
+          "sha256": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4",
+          "bytes": 13693
+        },
+        "vanguard/tester-profile.json": {
+          "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+          "bytes": 989
+        },
+        "vanguard/tester.py": {
+          "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+          "bytes": 38818
+        }
+      },
+      "input_FIRST": [
+        {
+          "path": "ci/tjs1882/linux-build-inputs.json",
+          "sha256": "4cf6de02805fd2adfa67b0cef5ced7efa29a655ae1da13bc2dbd42557e2bd2b3",
+          "bytes": 6576
+        },
+        {
+          "path": "docs/vanguard-portable-tester.md",
+          "sha256": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+          "bytes": 5987
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt",
+          "sha256": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+          "bytes": 404
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/LICENSE",
+          "sha256": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+          "bytes": 1192
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/provenance.json",
+          "sha256": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+          "bytes": 592
+        },
+        {
+          "path": "vanguard/package-portable.py",
+          "sha256": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+          "bytes": 10479
+        },
+        {
+          "path": "vanguard/portable-build.py",
+          "sha256": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+          "bytes": 22020
+        },
+        {
+          "path": "vanguard/portable-prepare-old-linux.py",
+          "sha256": "b05132bcbb2ca7601f4d5bdde121cacb6ed7e1403842d70ac20609de72b9d1e6",
+          "bytes": 9862
+        },
+        {
+          "path": "vanguard/portable-tester.py",
+          "sha256": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+          "bytes": 26094
+        },
+        {
+          "path": "vanguard/portable_licenses.py",
+          "sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+          "bytes": 20477
+        },
+        {
+          "path": "vanguard/run-portable-check.py",
+          "sha256": "8d7dafdb20783c8d1be6fd29c77a8b88979465552dc13bf7ca649200acac359d",
+          "bytes": 6518
+        },
+        {
+          "path": "vanguard/run-portable-ci.py",
+          "sha256": "cd53d5b5a09243a66fde86b1404f2697e44cad895df9e4f082ec81fab7b14c9a",
+          "bytes": 57530
+        },
+        {
+          "path": "vanguard/run-portable-linux-ci.py",
+          "sha256": "639efb3728effbffefff62e853b2cac6a91041628fbdcb91ec9cc3b9ecae7f6b",
+          "bytes": 26732
+        },
+        {
+          "path": "vanguard/source-lock.json",
+          "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+          "bytes": 6950
+        },
+        {
+          "path": "vanguard/test-portable-refusals.py",
+          "sha256": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4",
+          "bytes": 13693
+        },
+        {
+          "path": "vanguard/tester-profile.json",
+          "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+          "bytes": 989
+        },
+        {
+          "path": "vanguard/tester.py",
+          "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+          "bytes": 38818
+        }
+      ],
+      "workflow_LAST": {
+        "path": ".github/workflows/tjs1882-native-linux.yml",
+        "sha256": "801701e1051c8134103b46f6027d7940514a9068cf6903e8796676b5fa24100a",
+        "bytes": 2423
+      }
+    },
+    {
+      "candidate": 39,
+      "predecessor": 37,
+      "target": "linux-aarch64",
+      "payload": "/storage/data/meownero-tjs1882-runf9a1ca7c/native-linux-payload39-frozen",
+      "publication": "HELD_ON_ACTIONS_CAPACITY_AND_ORIGINAL_SOURCE_REVIEW",
+      "source_clearance": "PENDING_ORIGINAL_REVIEWER",
+      "input_name": "ci/tjs1882/linux-arm-build-inputs.json",
+      "workflow_name": ".github/workflows/tjs1882-native-linux-arm.yml",
+      "changed_paths": [
+        ".github/workflows/tjs1882-native-linux-arm.yml",
+        "ci/tjs1882/linux-arm-build-inputs.json",
+        "vanguard/package-portable.py",
+        "vanguard/portable-tester.py",
+        "vanguard/portable_licenses.py",
+        "vanguard/run-portable-ci.py",
+        "vanguard/run-portable-linux-ci.py",
+        "vanguard/test-portable-refusals.py"
+      ],
+      "unchanged_predecessor_files": 10,
+      "files": {
+        ".github/workflows/tjs1882-native-linux-arm.yml": {
+          "sha256": "532f2c2ca8c18adb0682fbabde4b0b72c2e51979cd99ed40f29228ae656debc1",
+          "bytes": 2468
+        },
+        "ci/tjs1882/linux-arm-build-inputs.json": {
+          "sha256": "684c737cb1b4b8fa9a66911eeca79743e5532fb9d7704bb744d08f557e043b8d",
+          "bytes": 6858
+        },
+        "docs/vanguard-portable-tester.md": {
+          "sha256": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+          "bytes": 5987
+        },
+        "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt": {
+          "sha256": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+          "bytes": 404
+        },
+        "vanguard/licenses/easyloggingpp-9.96.7/LICENSE": {
+          "sha256": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+          "bytes": 1192
+        },
+        "vanguard/licenses/easyloggingpp-9.96.7/provenance.json": {
+          "sha256": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+          "bytes": 592
+        },
+        "vanguard/package-portable.py": {
+          "sha256": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+          "bytes": 10479
+        },
+        "vanguard/portable-build.py": {
+          "sha256": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+          "bytes": 22020
+        },
+        "vanguard/portable-prepare-old-linux.py": {
+          "sha256": "b05132bcbb2ca7601f4d5bdde121cacb6ed7e1403842d70ac20609de72b9d1e6",
+          "bytes": 9862
+        },
+        "vanguard/portable-tester.py": {
+          "sha256": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+          "bytes": 26094
+        },
+        "vanguard/portable_licenses.py": {
+          "sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+          "bytes": 20477
+        },
+        "vanguard/run-portable-check.py": {
+          "sha256": "8d7dafdb20783c8d1be6fd29c77a8b88979465552dc13bf7ca649200acac359d",
+          "bytes": 6518
+        },
+        "vanguard/run-portable-ci.py": {
+          "sha256": "cd53d5b5a09243a66fde86b1404f2697e44cad895df9e4f082ec81fab7b14c9a",
+          "bytes": 57530
+        },
+        "vanguard/run-portable-linux-ci.py": {
+          "sha256": "639efb3728effbffefff62e853b2cac6a91041628fbdcb91ec9cc3b9ecae7f6b",
+          "bytes": 26732
+        },
+        "vanguard/source-lock.json": {
+          "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+          "bytes": 6950
+        },
+        "vanguard/test-portable-refusals.py": {
+          "sha256": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4",
+          "bytes": 13693
+        },
+        "vanguard/tester-profile.json": {
+          "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+          "bytes": 989
+        },
+        "vanguard/tester.py": {
+          "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+          "bytes": 38818
+        }
+      },
+      "input_FIRST": [
+        {
+          "path": "ci/tjs1882/linux-arm-build-inputs.json",
+          "sha256": "684c737cb1b4b8fa9a66911eeca79743e5532fb9d7704bb744d08f557e043b8d",
+          "bytes": 6858
+        },
+        {
+          "path": "docs/vanguard-portable-tester.md",
+          "sha256": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+          "bytes": 5987
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt",
+          "sha256": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+          "bytes": 404
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/LICENSE",
+          "sha256": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+          "bytes": 1192
+        },
+        {
+          "path": "vanguard/licenses/easyloggingpp-9.96.7/provenance.json",
+          "sha256": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+          "bytes": 592
+        },
+        {
+          "path": "vanguard/package-portable.py",
+          "sha256": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+          "bytes": 10479
+        },
+        {
+          "path": "vanguard/portable-build.py",
+          "sha256": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+          "bytes": 22020
+        },
+        {
+          "path": "vanguard/portable-prepare-old-linux.py",
+          "sha256": "b05132bcbb2ca7601f4d5bdde121cacb6ed7e1403842d70ac20609de72b9d1e6",
+          "bytes": 9862
+        },
+        {
+          "path": "vanguard/portable-tester.py",
+          "sha256": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+          "bytes": 26094
+        },
+        {
+          "path": "vanguard/portable_licenses.py",
+          "sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+          "bytes": 20477
+        },
+        {
+          "path": "vanguard/run-portable-check.py",
+          "sha256": "8d7dafdb20783c8d1be6fd29c77a8b88979465552dc13bf7ca649200acac359d",
+          "bytes": 6518
+        },
+        {
+          "path": "vanguard/run-portable-ci.py",
+          "sha256": "cd53d5b5a09243a66fde86b1404f2697e44cad895df9e4f082ec81fab7b14c9a",
+          "bytes": 57530
+        },
+        {
+          "path": "vanguard/run-portable-linux-ci.py",
+          "sha256": "639efb3728effbffefff62e853b2cac6a91041628fbdcb91ec9cc3b9ecae7f6b",
+          "bytes": 26732
+        },
+        {
+          "path": "vanguard/source-lock.json",
+          "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+          "bytes": 6950
+        },
+        {
+          "path": "vanguard/test-portable-refusals.py",
+          "sha256": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4",
+          "bytes": 13693
+        },
+        {
+          "path": "vanguard/tester-profile.json",
+          "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+          "bytes": 989
+        },
+        {
+          "path": "vanguard/tester.py",
+          "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+          "bytes": 38818
+        }
+      ],
+      "workflow_LAST": {
+        "path": ".github/workflows/tjs1882-native-linux-arm.yml",
+        "sha256": "532f2c2ca8c18adb0682fbabde4b0b72c2e51979cd99ed40f29228ae656debc1",
+        "bytes": 2468
+      }
+    }
+  ],
+  "native_acceptance": false,
+  "historical_scoped_targets_accepted": 3,
+  "requested_targets": 7,
+  "docker_leaf": "ACCEPTED_AND_PUBLISHED_UNCHANGED",
+  "source_change": "Restore exact predecessor package diagnostic in the current shared two-architecture controller; preserve primary failure when diagnostic export fails. Rebind all source helpers to current bytes.",
+  "controller_ast_unchanged": [
+    "fetch",
+    "resources",
+    "main",
+    "public_worker_receipt",
+    "load",
+    "write",
+    "sha"
+  ]
+}
