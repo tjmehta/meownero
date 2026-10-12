@@ -1,0 +1,15 @@
+The original reviewer cleared i68635 source in comment 774ef8bf. All 21 frozen payload hashes and sizes, nine committed carriers, twelve original part blobs, the exact 97,173,058-byte archive and fresh prepare-only verification pass. The private branch still ends at d9a90cbc. All 19 attempts are settled; the latest failed run is 38066379446. The temporary native CI pause is lifted.
+
+Execution is blocked on included Actions capacity. Fresh authenticated billing on October 12 shows 2,000 of 2,000 minutes used, 0.1 of 0.5 GB displayed storage and a 100% budget-stop alert. Its displayed reset is in 20 days. The installed GitHub CLI has workflow scope and push permission. No registered self-hosted runner provides a native fallback. [GitHub billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) confirms that private-repository usage above the allowance is billable.
+
+The [private executable handoff packet](/api/attachments/03d24579-ca7a-49b1-91d9-c87835d4102f/content) is 102,711 bytes, SHA256 `1b9809eccd24d9e0f17bc834647e0c7cd9f0c664d3daf58792efb79e936805ba`. Upload and authenticated exact-byte readback pass. It contains four exact gh API request bodies, frozen manifests, source and private-tree verification, fresh quota evidence, a screenshot and EXECUTE.md. The complete unchanged payload remains at `/storage/data/meownero-tjs1882-resume-5df99f48/native-i686-payload35`. No GitHub write or native successor was started.
+
+Studio lead 38e398e0 must dispatch this action through the existing parent route after included capacity is available. Recheck live quota, storage and active runs. Publish the three changed inputs, independently read all 20 input hashes and sizes, recheck capacity, then publish the workflow last. Read all 21 final files and record the actual windows-2025 run and commit. The request bodies bind predecessor file SHAs and must be inspected if the branch changes. Owner acknowledgement is pending.
+
+The same writer adopts native receive 5, type-7 CARROT payments, restore, later spend 2, native CLI, all ten controls including live cancellation, and exact cleanup. Label this x86 witness WoW64 on x64 Windows. Standalone 32-bit Windows remains untested. Original reviewer, stage and failed controls are preserved.
+
+The full seven-target release stays open and historical 3-of-7 acceptance is unchanged. The accepted Docker website leaf remains closed. Linux36/37 need current helper rebinding and original review where bytes differ. ARM12 is terminally failed at slow-hash.c:1021 for missing POSIX sys/mman.h. Completed TJS-2018 and TJS-2066 remain closed. The existing tracked evidence edit and five untracked entries remain byte-preserved.
+
+Detailed bindings are in [the resumption receipt](evidence/vanguard-portable-production-tjs1882-2026-10-09/i68635-resumption-2026-10-12.json).
+
+Needs TJ: None.
