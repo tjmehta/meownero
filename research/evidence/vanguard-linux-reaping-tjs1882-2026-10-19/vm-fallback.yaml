@@ -1,0 +1,43 @@
+{
+  "minimumLimaVersion": "2.0.0",
+  "vmType": "vz",
+  "arch": "aarch64",
+  "cpus": 2,
+  "memory": "10GiB",
+  "disk": "60GiB",
+  "images": [
+    {
+      "location": "https://cloud-images.ubuntu.com/releases/jammy/release/ubuntu-22.04-server-cloudimg-arm64.img",
+      "arch": "aarch64",
+      "digest": "sha256:86e13258765945ad792dac75fac7f02f4db9fa73a4a535ffa472266e7041fa19"
+    }
+  ],
+  "mounts": [],
+  "containerd": {
+    "system": false,
+    "user": false
+  },
+  "ssh": {
+    "loadDotSSHPubKeys": false,
+    "forwardAgent": false
+  },
+  "vmOpts": {
+    "vz": {
+      "rosetta": {
+        "enabled": false,
+        "binfmt": false
+      }
+    }
+  },
+  "portForwards": [
+    {
+      "guestPortRange": [
+        1,
+        65535
+      ],
+      "ignore": true
+    }
+  ],
+  "propagateProxyEnv": false,
+  "upgradePackages": false
+}

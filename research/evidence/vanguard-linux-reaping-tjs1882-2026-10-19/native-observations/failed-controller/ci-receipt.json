@@ -1,0 +1,43 @@
+{
+  "schema": "meownero-owned-native-ubuntu22-build-and-journey/1",
+  "result": "FAIL",
+  "target": "linux-aarch64",
+  "architecture": "aarch64",
+  "inputs_sha256": "e6a66a1bad8287aced76956da4a03f7e401e64336967bff1a7f3c3b1e44a51e9",
+  "phases": [
+    {
+      "phase": "fetch",
+      "resources": {
+        "available_memory_bytes": 9935388672,
+        "free_disk_bytes": 58915999744,
+        "docker_free_disk_bytes": 58915999744
+      }
+    }
+  ],
+  "debian12_execution": "UNTESTED",
+  "independent_release_acceptance": "PENDING_ORIGINAL_REVIEWER",
+  "local_runner": {
+    "execution_provider": "OWNED_NATIVE_UBUNTU22_VM",
+    "provenance_sha256": "1352351c7520cfe82e3fdea8314e19305be2f33a7e3b605709a935a844546ea7",
+    "qualification_evidence_sha256": "b0285792dcb3fec4c5c59d0e37fbb06691573bccb3844fca5a7ce03d582b463f",
+    "environment_identity_sha256": "b9b461930fda9eacd349bb575d79fda21edd66cab5a67b23b698c865e3c49c55",
+    "machine_id_sha256": "f97b51a2e236f1fd482c5a50641bc71bfb30fbbc2c59704ec05dc1de8c729ec4",
+    "boot_id_sha256": "7da6dc6ed1263f2055b2f6a8e313722e983792184c9ff00869f09dbeb4fa9010",
+    "docker_id_sha256": "7467a4b8d766290d18485879a9b6f31610e4042f9d108beacb7c33568ec8bb98",
+    "physical_host_architecture": "arm64"
+  },
+  "native_runner": {
+    "system": "Linux",
+    "architecture": "aarch64",
+    "os": "Ubuntu22.04",
+    "glibc": "glibc 2.35",
+    "resources": {
+      "available_memory_bytes": 9935388672,
+      "free_disk_bytes": 58915999744,
+      "docker_free_disk_bytes": 58915999744
+    }
+  },
+  "failure_type": "AssertionError",
+  "owned_ephemeral_lock_removed": true,
+  "wall_seconds": 2.87
+}

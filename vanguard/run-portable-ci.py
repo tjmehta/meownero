@@ -387,11 +387,26 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             reject('REMEMBERED_HELPER_SYSTEM_FILE_CHANGED', observation)
         if row[1] != os.getuid():
             reject('REAL_UID_MISMATCH', observation)
-        if pid not in known and (states.get(pid, '').startswith('Z') or row[4] == '(ps)') and pid_absent(pid, {}):
+        absent = False
+        if pid not in known and (states.get(pid, '').startswith('Z') or row[4] == '(ps)'):
+            absent = pid_absent(pid, {})
+            if not absent and platform.system() == 'Linux' and states.get(pid, '').startswith('Z'):
+                # Timed Popen.wait can sleep before reaping an exited child.
+                # https://docs.python.org/3.13/library/subprocess.html#subprocess.Popen.wait
+                # Wait read-only for actual absence; infer no executable or
+                # ownership, and never extend the phase's existing deadline.
+                reaping_began = time.monotonic()
+                reaping_end = min(reaping_began + 0.25, began + timeout)
+                while not absent and time.monotonic() < reaping_end:
+                    time.sleep(min(0.005, max(0, reaping_end - time.monotonic())))
+                    absent = pid_absent(pid, {})
+                observation['reaping_grace_seconds'] = round(time.monotonic() - reaping_began, 6)
+        if absent:
             # A snapshot may precede reaping while inspection follows it. Prove
             # numeric PID absence independently; infer no executable or role.
             observation['role'] = 'ALREADY_ABSENT_UNVERIFIED_SNAPSHOT'
             observation['argv_role'] = 'PS_EXIT_DISPLAY' if row[4] == '(ps)' else 'UNVERIFIED_ZOMBIE'
+            observation['absence_proof'] = 'ACTUAL_PID_ABSENCE'
             receipt['unverified_observations'].append(observation)
             return False
         if states.get(pid, '').startswith('Z'):

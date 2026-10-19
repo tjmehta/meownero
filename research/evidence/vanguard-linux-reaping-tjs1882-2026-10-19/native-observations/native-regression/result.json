@@ -1,0 +1,24 @@
+{
+  "cases": [
+    {
+      "case": "transient",
+      "expected_failure": null,
+      "actual_failure": null,
+      "result": "PASS",
+      "wrapper_reaped": true,
+      "unrelated_preserved": true,
+      "receipt": "transient/public/supervision.json"
+    },
+    {
+      "case": "persistent",
+      "expected_failure": "UNVERIFIED_FIRST_ZOMBIE",
+      "actual_failure": "UNVERIFIED_FIRST_ZOMBIE",
+      "result": "PASS",
+      "wrapper_reaped": true,
+      "unrelated_preserved": true,
+      "receipt": "persistent/public/supervision.json"
+    }
+  ],
+  "unrelated_fixture_reaped": true,
+  "result": "PASS"
+}

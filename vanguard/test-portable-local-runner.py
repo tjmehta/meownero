@@ -142,6 +142,7 @@ class Admission(unittest.TestCase):
         self.admit()
         root = self.path.parent
         inputs = json.loads((controller.ROOT / 'research/evidence/vanguard-local-runner-tjs1882-2026-10-19/local-39-inputs.json').read_text())
+        inputs['source_files']['vanguard/run-portable-ci.py'] = controller.sha(controller.ROOT / 'vanguard/run-portable-ci.py')
         input_file = root / 'inputs.json'
         input_file.write_text(json.dumps(inputs))
         digest = hashlib.sha256(self.path.read_bytes()).hexdigest()
@@ -187,6 +188,7 @@ class LocalCli(unittest.TestCase):
             root = Path(directory)
             inputs = json.loads((controller.ROOT / 'research/evidence/vanguard-portable-production-tjs1882-2026-10-09/linux38-inputs.source.json').read_text())
             inputs['source_files']['vanguard/run-portable-linux-ci.py'] = controller.sha(Path(controller.__file__))
+            inputs['source_files']['vanguard/run-portable-ci.py'] = controller.sha(controller.ROOT / 'vanguard/run-portable-ci.py')
             input_file = root / 'inputs.json'
             input_file.write_text(json.dumps(inputs))
             value = {'schema': 'meownero-owned-native-linux-runner/1', 'issue': 'TJS-1882',
