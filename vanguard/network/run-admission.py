@@ -31,7 +31,12 @@ CASES = ('positive', 'positive-reward', 'wrong-height', 'wrong-unlock', 'empty-o
 
 def validate_reuse(pin, receipt):
     """Compare every archived source member and copied Cargo input before reuse."""
-    old = network.read_json(REUSE / 'receipt.json')
+    # This internal hash-bound telemetry contains a full Cargo input manifest;
+    # the public profile reader's 64 KiB limit is intentionally inappropriate.
+    network.require(g.digest(REUSE / 'receipt.json') == g.digest(
+        network.HERE / 'evidence/native-genesis-attempt01/receipt.json'), 'prior receipt changed')
+    with (REUSE / 'receipt.json').open() as stream:
+        old = json.load(stream)
     network.require(old['result'] == 'PASS_NATIVE_RECIPE_HELPERS_ONLY', 'prior helper failed')
     network.require(old['source_lock_sha256'] == g.digest(network.HERE.parent / 'source-lock.json') and
                     old['upstream_commit'] == pin['upstream']['commit'] and
