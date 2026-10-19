@@ -1,0 +1,66 @@
+{
+  "schema": "meownero-native-arm39-host-cleanup/1",
+  "result": "PASS_OWNED_VM_DISKS_CACHE_LOCK_AND_STAGING_REMOVED_SHARED_COLIMA_PRESERVED",
+  "vm": "tjs1882-arm39-abf0b97a",
+  "actions": [
+    {
+      "argv": [
+        "/opt/homebrew/bin/limactl",
+        "list",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"name\":\"tjs1882-arm39-abf0b97a\",\"hostname\":\"lima-tjs1882-arm39-abf0b97a\",\"status\":\"Running\",\"dir\":\"~/.lima/tjs1882-arm39-abf0b97a\",\"vmType\":\"vz\",\"arch\":\"aarch64\",\"cpus\":2,\"memory\":10737418240,\"disk\":64424509440,\"sshLocalPort\":58011,\"sshConfigFile\":\"~/.lima/tjs1882-arm39-abf0b97a/ssh.config\",\"hostAgentPID\":68783,\"driverPID\":68783,\"config\":{\"minimumLimaVersion\":\"2.0.0\",\"vmType\":\"vz\",\"vmOpts\":{\"vz\":{\"rosetta\":{\"binfmt\":false,\"enabled\":false}}},\"os\":\"Linux\",\"arch\":\"aarch64\",\"images\":[{\"location\":\"https://cloud-images.ubuntu.com/releases/jammy/release/ubuntu-22.04-server-cloudimg-arm64.img\",\"arch\":\"aarch64\",\"digest\":\"sha256:86e13258765945ad792dac75fac7f02f4db9fa73a4a535ffa472266e7041fa19\"}],\"cpus\":2,\"memory\":\"10GiB\",\"disk\":\"60GiB\",\"mountInotify\":false,\"ssh\":{\"localPort\":0,\"loadDotSSHPubKeys\":false,\"forwardAgent\":false,\"forwardX11\":false,\"forwardX11Trusted\":false},\"firmware\":{\"legacyBIOS\":false},\"audio\":{\"device\":\"\",\"interface\":\"\"},\"video\":{\"display\":\"none\"},\"upgradePackages\":false,\"containerd\":{\"system\":false,\"user\":false,\"archives\":[{\"location\":\"https://github.com/containerd/nerdctl/releases/download/v2.3.5/nerdctl-full-2.3.5-linux-amd64.tar.gz\",\"arch\":\"x86_64\",\"digest\":\"sha256:b697295c623639734aaab737523c808fd3cc8d3046039fd94fff1744e4c317aa\"},{\"location\":\"https://github.com/containerd/nerdctl/releases/download/v2.3.5/nerdctl-full-2.3.5-linux-arm64.tar.gz\",\"arch\":\"aarch64\",\"digest\":\"sha256:6e4b687f1d138e750a3c8372abc0f81d3d7490b6359c48c0562fc7dfe98859b2\"}]},\"guestInstallPrefix\":\"/usr/local\",\"portForwards\":[{\"guestIPMustBeZero\":false,\"guestIP\":\"127.0.0.1\",\"guestPortRange\":[1,65535],\"hostIP\":\"127.0.0.1\",\"hostPortRange\":[1,65535],\"proto\":\"any\",\"ignore\":true}],\"hostResolver\":{\"enabled\":true,\"ipv6\":false},\"propagateProxyEnv\":false,\"caCerts\":{\"removeDefaults\":false},\"plain\":false,\"timezone\":\"America/Los_Angeles\",\"nestedVirtualization\":false,\"user\":{\"name\":\"tjmehta\",\"comment\":\"Tejesh Mehta\",\"home\":\"~.guest\",\"shell\":\"/bin/bash\",\"uid\":501,\"passwordlessSudo\":true},\"tpm\":false},\"sshAddress\":\"127.0.0.1\",\"protected\":false,\"limaVersion\":\"2.2.0\",\"HostOS\":\"darwin\",\"HostArch\":\"aarch64\",\"LimaHome\":\"~/.lima\",\"IdentityFile\":\"~/.lima/_config/user\"}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/opt/homebrew/bin/limactl",
+        "stop",
+        "tjs1882-arm39-abf0b97a"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "time=\"2026-10-19T02:46:29-07:00\" level=info msg=\"Sending SIGINT to hostagent process 68783\"\ntime=\"2026-10-19T02:46:29-07:00\" level=info msg=\"Waiting for the host agent and the driver processes to shut down\"\ntime=\"2026-10-19T02:46:29-07:00\" level=info msg=\"[hostagent] Received SIGINT, shutting down the host agent\"\ntime=\"2026-10-19T02:46:29-07:00\" level=info msg=\"[hostagent] Shutting down the host agent\"\ntime=\"2026-10-19T02:46:29-07:00\" level=info msg=\"[hostagent] Shutting down VZ\"\ntime=\"2026-10-19T02:46:33-07:00\" level=info msg=\"[hostagent] [VZ] - vm state change: stopped\"\ntime=\"2026-10-19T02:46:33-07:00\" level=error msg=\"[hostagent] accept tcp 127.0.0.1:58011: use of closed network connection\"\ntime=\"2026-10-19T02:46:33-07:00\" level=info msg=\"Waiting for the instance to shut down\"\ntime=\"2026-10-19T02:46:33-07:00\" level=info msg=\"The instance tjs1882-arm39-abf0b97a has shut down\"\n"
+    },
+    {
+      "argv": [
+        "/opt/homebrew/bin/limactl",
+        "delete",
+        "--tty=false",
+        "tjs1882-arm39-abf0b97a"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "time=\"2026-10-19T02:46:33-07:00\" level=info msg=\"The vz driver process seems already stopped\"\ntime=\"2026-10-19T02:46:33-07:00\" level=info msg=\"The host agent process seems already stopped\"\ntime=\"2026-10-19T02:46:33-07:00\" level=info msg=\"Removing *.pid *.sock *.tmp under `~/.lima/tjs1882-arm39-abf0b97a`\"\ntime=\"2026-10-19T02:46:34-07:00\" level=info msg=\"Deleted `tjs1882-arm39-abf0b97a` (`~/.lima/tjs1882-arm39-abf0b97a`)\"\n"
+    },
+    {
+      "argv": [
+        "/opt/homebrew/bin/colima",
+        "list",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"name\":\"default\",\"status\":\"Running\",\"arch\":\"aarch64\",\"cpus\":4,\"memory\":6442450944,\"disk\":107374182400,\"runtime\":\"docker\"}\n",
+      "stderr": ""
+    }
+  ],
+  "vm_and_disks_removed": true,
+  "exact_owned_download_and_raw_cache_removed": true,
+  "exact_owned_host_lock_removed": true,
+  "non_owned_colima": {
+    "name": "default",
+    "status": "Running",
+    "arch": "aarch64",
+    "cpus": 4,
+    "memory": 6442450944,
+    "disk": 107374182400,
+    "runtime": "docker"
+  },
+  "completion_helper": {
+    "command": "ios cleanup complete Developer/ios-builds/tjs1882-abf0b97a",
+    "result": "REJECTED_STAGING_ROOT_OUTSIDE_ALLOWED_ROOTS",
+    "fallback": "Exact owned staging removed after local capture verification"
+  },
+  "exact_owned_staging_removed": true
+}

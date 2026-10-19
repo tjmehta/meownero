@@ -1,0 +1,37 @@
+{
+  "schema": "meownero-older-linux-builder/1",
+  "target": "linux-aarch64",
+  "builder_image": "sha256:97c7ba8af5d9149f8b6384ce43cd0774fd54b591470765aa12d3addf7abdf098",
+  "result": "PREPARED_OLDER_BUILDER",
+  "compiler_execution_substrate": "NATIVE",
+  "distribution": "Ubuntu 22.04",
+  "base_manifest": "ubuntu@sha256:30dfd7fe96f97c5f5ddf388ce8d098aa509644ad68fdef67244fb71b8169ffcb",
+  "base_image": "sha256:30dfd7fe96f97c5f5ddf388ce8d098aa509644ad68fdef67244fb71b8169ffcb",
+  "registry_access": "Anonymous official public image, explicit empty Hub record and no helper in task-owned client",
+  "cleanup": {
+    "id": "5fa20e425892a40bb7b006aa93b9f8d277c4b384b93e4a343fc689e317658548",
+    "removed": true
+  },
+  "commands": [
+    {
+      "label": "OTHER_PHASE",
+      "exit": 0,
+      "wall_seconds": 0.7888746769999955
+    },
+    {
+      "label": "prepare",
+      "exit": 0,
+      "wall_seconds": 38.01122514400001
+    },
+    {
+      "label": "OTHER_PHASE",
+      "exit": 0,
+      "wall_seconds": 14.01194707900001
+    },
+    {
+      "label": "cleanup",
+      "exit": 0,
+      "wall_seconds": 0.16387368700000593
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "meownero-owned-debian12-runtime-preparation/1",
+  "result": "PASS_PREPARED_NATIVE_DEBIAN12_RUNTIME_JOURNEY_UNTESTED",
+  "commands": [
+    {
+      "label": "manifest",
+      "exit": 0,
+      "wall_seconds": 21.434
+    },
+    {
+      "label": "pull",
+      "exit": 0,
+      "wall_seconds": 6.86
+    },
+    {
+      "label": "prepare",
+      "exit": 0,
+      "wall_seconds": 8.136
+    },
+    {
+      "label": "commit",
+      "exit": 0,
+      "wall_seconds": 1.478
+    }
+  ],
+  "base_manifest": "debian@sha256:a1b86db52ce3daef089e45aabe36dfec4091f82464c25c1fdcf03de197cbe82a",
+  "manifest_inspection_sha256": "669d2b066949b44bc9887715a7cbf05382084a98a7ee520578134417f52f254c",
+  "runtime_image": "sha256:e153876532e7d577964de084deef81107825e40b30405d0eaa9f9f64179f881a",
+  "base_image": "sha256:a1b86db52ce3daef089e45aabe36dfec4091f82464c25c1fdcf03de197cbe82a",
+  "environment": "PRETTY_NAME=\"Debian GNU/Linux 12 (bookworm)\"\nNAME=\"Debian GNU/Linux\"\nVERSION_ID=\"12\"\nVERSION=\"12 (bookworm)\"\nVERSION_CODENAME=bookworm\nID=debian\nHOME_URL=\"https://www.debian.org/\"\nSUPPORT_URL=\"https://www.debian.org/support\"\nBUG_REPORT_URL=\"https://bugs.debian.org/\"\nglibc 2.36\nPython 3.11.2\n",
+  "peak_memory_bytes": 162791424,
+  "memory_events": {
+    "low": "0",
+    "high": "0",
+    "max": "0",
+    "oom": "0",
+    "oom_kill": "0",
+    "oom_group_kill": "0"
+  },
+  "owned_container_removed": true
+}
