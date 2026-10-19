@@ -1,0 +1,108 @@
+{
+  "result": "PASS_TOOLING_ONLY",
+  "tests": 11,
+  "skipped": 0,
+  "failures": 0,
+  "errors": 0,
+  "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [GCC 13.3.0]",
+  "profile_sha256": "d3d9905bd3c1464f4940f49e0872dfa8e7510127ddf83b781d6c6743e0627168",
+  "native_network_proof": "NOT_RUN",
+  "cli_diagnostics": [
+    {
+      "arguments": [
+        "--profile",
+        "<scratch>/input.json",
+        "prepare",
+        "--out",
+        "<scratch>/mainnet",
+        "--node-id",
+        "client-a",
+        "--bootstrap",
+        "<scratch>/peers.json"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "REFUSED: foreign or changed network profile\n"
+    },
+    {
+      "arguments": [
+        "--profile",
+        "<scratch>/input.json",
+        "prepare",
+        "--out",
+        "<scratch>/stagenet",
+        "--node-id",
+        "client-a",
+        "--bootstrap",
+        "<scratch>/peers.json"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "REFUSED: foreign or changed network profile\n"
+    },
+    {
+      "arguments": [
+        "--profile",
+        "<scratch>/input.json",
+        "prepare",
+        "--out",
+        "<scratch>/regtest",
+        "--node-id",
+        "client-a",
+        "--bootstrap",
+        "<scratch>/peers.json"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "REFUSED: foreign or changed network profile\n"
+    },
+    {
+      "arguments": [
+        "--profile",
+        "<scratch>/input.json",
+        "prepare",
+        "--out",
+        "<scratch>/upstream-testnet",
+        "--node-id",
+        "client-a",
+        "--bootstrap",
+        "<scratch>/peers.json"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "REFUSED: foreign or changed network profile\n"
+    },
+    {
+      "arguments": [
+        "--profile",
+        "<scratch>/input.json",
+        "prepare",
+        "--out",
+        "<scratch>/selected-9-90",
+        "--node-id",
+        "client-a",
+        "--bootstrap",
+        "<scratch>/peers.json"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "REFUSED: foreign or changed network profile\n"
+    },
+    {
+      "arguments": [
+        "readiness"
+      ],
+      "exit": 3,
+      "stdout": "{\n  \"result\": \"BLOCKED_PROTOCOL_AND_NATIVE_GATES\",\n  \"launch_ready\": false,\n  \"unresolved\": [\n    \"core-crypto-genesis-and-activation\",\n    \"current-lineage-selected-policy-integration\",\n    \"launch-difficulty-and-capacity\",\n    \"native-profile-separation-persistence-recovery\",\n    \"package-wallet-profile-integration\",\n    \"private-operator-capacity-assignment\",\n    \"independent-core-security-acceptance\"\n  ]\n}\n",
+      "stderr": ""
+    },
+    {
+      "arguments": [
+        "run"
+      ],
+      "exit": 2,
+      "stdout": "",
+      "stderr": "usage: network.py [-h] [--profile PROFILE]\n                  {validate,check-source,identity-overlay,prepare,readiness} ...\nnetwork.py: error: argument command: invalid choice: 'run' (choose from 'validate', 'check-source', 'identity-overlay', 'prepare', 'readiness')\n"
+    }
+  ]
+}

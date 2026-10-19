@@ -1,0 +1,80 @@
+{
+  "schema": "meownero-vanguard-shared-network/1",
+  "profile_id": "meownero-vanguard-shared-testnet-v1",
+  "status": "protocol-proposal",
+  "valueless": true,
+  "launch_ready": false,
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "source_lock_sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+  "network": {
+    "native_selector": "testnet",
+    "id_derivation": "sha256(profile_id + \"/network-id\")[0:16]",
+    "id_hex": "e16d7839ed4d3ec8363d078df18fff6d",
+    "address_prefixes": {
+      "standard": 4240,
+      "integrated": 4241,
+      "subaddress": 4242
+    },
+    "ports": {
+      "p2p": 48080,
+      "daemon_rpc": 48081,
+      "zmq_reserved_disabled": 48082,
+      "wallet_rpc": 48083
+    },
+    "data_directory": "meownero-vanguard-shared-testnet-v1/{node_id}",
+    "native_data_suffix": "testnet/lmdb",
+    "discovery": "exclusive-peers-only",
+    "dns_seeds": [],
+    "ip_seeds": [],
+    "daemon_bootstrap_rpc": false
+  },
+  "consensus_proposal": {
+    "genesis_reward_atomic": 0,
+    "genesis_nonce": 424001,
+    "genesis_tx_hex": null,
+    "genesis_block_hash": null,
+    "activation": [
+      {
+        "version": 1,
+        "height": 0
+      },
+      {
+        "version": 17,
+        "height": 1
+      }
+    ],
+    "reward_atomic": 9000000000000,
+    "target_seconds": 90,
+    "fallback_reward_atomic": 12000000000000,
+    "fallback_target_seconds": 120,
+    "atomic_decimals": 12,
+    "fees": "miners",
+    "premine": false,
+    "difficulty_floor": null,
+    "capacity_policy": "pending matched-capacity intended-crypto measurement"
+  },
+  "containment": {
+    "bind_ip": "127.0.0.1",
+    "rpc_authenticated": true,
+    "rpc_restricted": true,
+    "wallet_rpc_authenticated": true,
+    "wallet_rpc_restricted": true,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "pids": 256,
+    "minimum_available_memory_bytes": 5368709120,
+    "minimum_free_disk_bytes": 5368709120,
+    "lifetime_seconds": 900,
+    "network": "none",
+    "public_endpoints": false
+  },
+  "unresolved": [
+    "core-crypto-genesis-and-activation",
+    "current-lineage-selected-policy-integration",
+    "launch-difficulty-and-capacity",
+    "native-profile-separation-persistence-recovery",
+    "package-wallet-profile-integration",
+    "private-operator-capacity-assignment",
+    "independent-core-security-acceptance"
+  ]
+}
