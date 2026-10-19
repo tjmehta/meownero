@@ -15,16 +15,23 @@ python3 -B vanguard/network/network.py validate
 python3 -B vanguard/network/network.py check-source --source "$PINNED_UPSTREAM_SOURCE"
 python3 -B vanguard/network/network.py identity-overlay \
   --source "$PINNED_UPSTREAM_SOURCE" --out "$PAPERCLIP_RUN_SCRATCH_DIR/identity-new"
+python3 -B vanguard/network/network.py genesis-inputs \
+  --source "$PINNED_UPSTREAM_SOURCE" --out "$PAPERCLIP_RUN_SCRATCH_DIR/genesis-inputs-new"
 python3 -B vanguard/network/test_network.py \
   --source "$PINNED_UPSTREAM_SOURCE" --scratch "$PAPERCLIP_RUN_SCRATCH_DIR" \
   --evidence "$PAPERCLIP_RUN_SCRATCH_DIR/checks-new"
 python3 -B vanguard/network/network.py readiness
 ```
 
-The source-check command reads the seventeen pinned paths, five submodule HEADs
+The source-check command reads the thirty-four pinned paths, five submodule HEADs
 and Cargo.lock. It does not download dependencies, configure, build, alter the
 source cache or attest executable bytes. The identity-overlay command writes a
 patch and original/changed SHA256 receipt, not a runnable node tree.
+The genesis-inputs command exports the native helper plus activation/genesis
+validation patch and source bindings. It does not compile, execute, set the
+profile's genesis fields or modify an upstream tree. The native construction
+direction is accepted in consultation; exact native bytes and final acceptance
+remain unverified. See [native preparation](native/README.md).
 
 Copy [operators.example.json](operators.example.json) to task scratch. Keep its
 profile hash. Replace nulls only with explicitly assigned operator pseudonyms,
@@ -102,7 +109,7 @@ must exclude endpoint/auth headers and all wallet secrets. Bind public evidence
 with digests and redacted, scoped identities. Do not promise P2P anonymity or
 cryptographic authentication of an operator based on its profile string.
 
-## Native acceptance sequence after the protocol ruling
+## Native acceptance sequence
 
 This tests the missing claim: **the complete dedicated-profile native binaries
 form and recover their own network while refusing foreign lineages**. Repeating
@@ -114,7 +121,8 @@ the accepted upstream regtest payment trial does not test that claim.
    unauthorized requests plus restricted-method denial before funding.
    Require the proposed v1@0/v18@1 native fork state and version-one cutoff 0,
    including native wallet agreement and positive FCMP++/CARROT plus adverse
-   legacy proof/output/ring controls. First record the Cryptography ruling and
+   legacy proof/output/ring controls. The Cryptography ruling is recorded in
+   profile.consultation; retain its exact comment binding and
    native genesis serialization/admission/amount-zero commitment/tree-root
    vectors described in the launch sheet. Static v18 metadata is not this proof.
 2. Start two actual native peers through only the assigned loopback transport.

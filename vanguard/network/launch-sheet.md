@@ -1,8 +1,11 @@
 # TJS-2504 source-bound shared-testnet checkpoint
 
 2026-10-19. This is an implemented protocol proposal checkpoint, **not a
-launchable candidate**. Core has supplied the conditional v18 direction; the
-first network-native claim still needs Cryptography's genesis/activation ruling.
+launchable candidate**. The [Cryptography consultation](<private-tracker>/TJS/issues/TJS-2504#comment-3b6c0197-43f9-4c30-a90c-399f82fc0b57)
+accepts the genesis construction and v18 activation directions for bounded
+non-public implementation. The conceptual ruling is complete. Exact bytes and
+final native acceptance remain unverified. The native recipe and activation/
+height-zero validation patch are prepared; neither has been compiled or run.
 No daemon, wallet, service or external endpoint was started for this checkpoint. Configuration
 checks cannot establish native separation, consensus or recoverability.
 
@@ -16,14 +19,17 @@ It pins Cargo.lock
 `6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239`,
 Rust 1.93.0, monero-oxide `31c26d96eaadbba910ffe3613ad8b4cf9c598a93`,
 crypto-bigint `78352771313f1e9b8e48abe5ce30d50d6bdd291d` and five
-upstream submodules. [Source bindings](source-bindings.json) hash the seventeen
-actual native files inspected. This is not an assertion that an entire source
+upstream submodules. [Source bindings](source-bindings.json) hash the thirty-four
+actual native source/header/build files inspected. This is not an assertion that an entire source
 tree, submodule worktree or binary is clean. The read-only local source has a
-pre-existing `tests/CMakeLists.txt` injection, outside these seventeen paths.
+pre-existing `tests/CMakeLists.txt` injection, outside these thirty-four paths.
 
 [profile.json](profile.json) has canonical SHA256
-`b1711b3114e234a4975bcefc6f02fa1175df1d213ed03372bb5c50bc503aef31`.
-This supersedes the rejected v17 proposal digest
+`920825038185340ea4461e3899c0c74e579249fa57735621b7929dec4f3ef7c5`.
+This records consultation completion and the public fixture recipe. It supersedes
+the pre-consultation v18 digest
+`b1711b3114e234a4975bcefc6f02fa1175df1d213ed03372bb5c50bc503aef31`
+and the rejected v17 proposal digest
 `d3d9905bd3c1464f4940f49e0872dfa8e7510127ddf83b781d6c6743e0627168`.
 Canonical means UTF-8 JSON with sorted keys, compact separators and no nonfinite
 numbers, as implemented by `profile_hash` in [network.py](network.py). This
@@ -41,8 +47,8 @@ semantics. The existing packages need rebuilding/integrating for this profile.
 | Standard/integrated/subaddress prefixes | 4240 / 4241 / 4242, distinct from upstream and historical Candidate M; native encoding/decoding is still NOT_RUN |
 | P2P / daemon RPC / reserved disabled ZMQ / wallet RPC | 48080 / 48081 / 48082 / 48083 |
 | Data root | A fresh private task directory, then namespace/node ID; native `--testnet` appends `testnet/lmdb` |
-| Genesis | Zero reward/premine required. Proposed nonce start 424001. Transaction bytes and resulting native block hash are **null**, pending the decision below |
-| Activation | Core-directed v1 at height 0, v18 at height 1, version-one cutoff 0; conditional on Cryptography consultation and native acceptance, not installed |
+| Genesis | Zero reward/premine required. Proposed nonce start 424001. Transaction bytes and resulting native block hash are **null**, pending native recipe execution and admission |
+| Activation | Core-directed v1 at height 0, v18 at height 1, version-one cutoff 0; accepted implementation direction; native acceptance pending, not installed |
 | Issuance | Selected perpetual 9 MEOW/90 s; gated 12/120 fallback unchanged. Twelve decimal atomic precision, fees to miners, no premine, tax, burn, halving, cap or sunset |
 | Difficulty/capacity | Unresolved launch difficulty and matched-capacity intended-crypto gate. No fixed-difficulty override proposed for a shared network |
 | Discovery | Explicit exclusive native P2P peers; no DNS, IP seed or daemon bootstrap-RPC fallback in the operator recipe |
@@ -83,13 +89,14 @@ when the browser could not retrieve the pinned page.
 | `src/cryptonote_basic/cryptonote_basic_impl.cpp:131-191`; `src/wallet/wallet_rpc_server.cpp:727` | Native address encoding and parsing use the selected network config; both wallet and daemon must use the rebuilt profile |
 | `src/rpc/rpc_args.cpp:226-245`; `src/wallet/wallet_rpc_server.cpp:330-390` | Daemon accepts RPC_LOGIN from its environment. Wallet RPC generates authentication when none is supplied unless disable-rpc-login is set. The generated proposal never disables authentication |
 
-### Concrete owner decision
+### Accepted direction and native prerequisites
 
 The [independent Core verdict](<private-tracker>/TJS/issues/TJS-2504#document-core-review),
 revision `05b73cee-4e45-4fe5-8755-7d22870bc0cd`, rejects permanent v17.
 The updated proposal follows that direction. Cryptography
-`637e65be-a666-4b41-b211-9fea5eef61da` must still rule on the following
-construction and activation before the affected implementation:
+`637e65be-a666-4b41-b211-9fea5eef61da` has accepted the following construction
+and activation for implementation. Exact bytes and final candidate are still
+unverified:
 
 1. Construct a deterministic zero-reward genesis using existing upstream native
    transaction construction and serialization, with valid torsion-free outputs
@@ -97,8 +104,10 @@ construction and activation before the affected implementation:
    native genesis hash. Core's concrete direction is a v1 block containing a
    v2/RCTNull coinbase, height-zero generation input, unlock time 60 and one
    zero-valued `txout_to_key`. Derive subgroup-valid output and extra keys
-   reproducibly through existing native routines from public inputs. No blob
-   or derivation recipe has been accepted. Test native serialize/parse roundtrip,
+   reproducibly through existing native routines from public inputs. The public recipe now uses native recovery from canonical little-endian
+   scalars 1/2/3 for spend/view/transaction keys and native output derivation at
+   index zero. These public inputs carry no positive value. No exact blob has
+   been accepted. Test native serialize/parse roundtrip,
    exact transaction/block hashes, TESTNET admission with zero generated coins,
    amount-zero commitment, tree leaf/root and unchanged torsion rejection.
    Do not reuse the historical keys without validation,
@@ -118,20 +127,39 @@ construction and activation before the affected implementation:
    and generated-coins accounting with differential vectors. Freeze difficulty
    and capacity only from the required engineering evidence.
 
-This changes an assurance/consensus boundary and is outside an identity-only
-configuration choice. No code in this checkpoint implements that decision.
-The updated scoped consultation is on [TJS-2504](<private-tracker>/TJS/issues/TJS-2504#comment-fb58a037-4cf6-47d2-8870-9c0e7f1c272a).
-The smallest next action is that source-bound Cryptography ruling on this
-same issue, then the assigned writer can extend only its owned overlay paths.
-No TJ decision, new account or purchased auditor is required.
+The native helper in [native/genesis.cpp](native/genesis.cpp) constructs the
+specified v2/RCTNull one-zero-output transaction explicitly, uses native
+serialization and genesis nonce selection, verifies the amount0 commitment G,
+records the legacy O/I/C tuple and invokes unchanged native torsion controls on
+valid, identity, small-order, malformed and historical torsion-bearing points.
+Helper results are distinct from actual block admission and persisted roots.
+No native result is claimed before compilation and execution.
+
+`network.py genesis-inputs` emits that source plus a reversible activation and
+height-zero validation patch. Its TESTNET table is v1@0/v18@1, times1341378000/
+1341378001 (monotonic bookkeeping times using the original v1 epoch), cutoff0.
+The validation change only overrides the reward for explicit TESTNET height0,
+requires the specified v2/RCTNull/one-zero-output form and fee0, and continues
+through native exact-coinbase and torsion checks. Height1 remains on ordinary
+reward validation even though generated coins are still zero. This patch omits
+the as-yet ungenerated genesis bytes and the selected-policy overlay and is not
+launchable. MAINNET/STAGENET tables and all crypto verifiers remain unchanged.
+
+The first native premise is reproducible recipe/helper success followed by real
+TESTNET admission and maturity/root evidence. That premise must be exercised
+before treating dependent network or wallet machinery as runnable. The writer
+has requested an idle slot from the active platform owner in
+[this build-slot request](<private-tracker>/TJS/issues/TJS-2504#comment-80fd656e-4d6b-4547-a8d5-3ebd8b41f5d3).
+No build is authorized by silence. No TJ decision, new account or purchased
+auditor is required.
 
 ## Requirements and independent acceptance map
 
 | Requirement/invariant | Current check/evidence | Remaining acceptance |
 | --- | --- | --- |
-| Current lineage, original/changed source binding | 17 native paths, all submodule HEADs and Cargo.lock checked; scoped identity patch applies and reverses byte-for-byte | Full clean build and exact executable manifests for completed overlay |
+| Current lineage, original/changed source binding | 34 native paths, all submodule HEADs and Cargo.lock checked; scoped identity patch applies and reverses byte-for-byte | Full clean build and exact executable manifests for completed overlay |
 | Dedicated network and address identity | Distinct proposed UUID/prefixes/ports; only TESTNET identity region changes | Real native wallet roundtrip and upstream/mainnet/old-profile address refusals |
-| Genesis, activation, policy | Explicit null genesis/floor, conditional v18 activation/cutoff 0, fixed settled policy; superseded v17 profile and bootstrap digest refused | Cryptography ruling, implementation and native positive/adverse consensus acceptance |
+| Genesis, activation, policy | Explicit null genesis/floor, conditional v18 activation/cutoff 0, fixed settled policy; superseded v17 profile and bootstrap digest refused | Completed consultation recorded; native recipe/admission, full selected-policy implementation and native positive/adverse acceptance remain |
 | Same/foreign/bootstrap network separation | Same-profile tooling succeeds; foreign selectors/profiles, profile hashes, foreign/default/public/DNS bootstrap endpoints, port aliases and injected fields fail | Native positive handshake; wrong UUID and same-UUID/wrong-genesis refusal, foreign seed and upstream mainnet/regtest controls |
 | Fresh data and restart isolation | Distinct prepared directories, no-overwrite sentinel and symlink controls pass; no LMDB created | Real persisted reopening while counterpart is stopped, then catch-up and recovery |
 | Private authenticated restricted RPC | Proposed loopback/restricted settings, no auth-disable path; 0600 files/0700 directories checked | Runtime listeners, unauthenticated/forbidden-method refusals, secret-free logs and exits |
@@ -140,14 +168,15 @@ No TJ decision, new account or purchased auditor is required.
 | Native distribution and wallet payment | Exact remaining integration below | Same profile across daemon/CLI/wallet packages and genuine payment/restore/later spend |
 | Independent acceptance/integration | Core/Security native review stages already configured on issue | Complete candidate independently accepted, then lead-only accepted integration receipt |
 
-The thirteen tooling tests cover multiple adverse variants and do not represent
-native network trials. [tooling-checks.json](evidence/tooling-checks.json)
-contains CLI exit/output diagnostics. [source-check.json](evidence/source-check.json)
+The fifteen current tooling tests cover multiple adverse variants and do not represent
+native network trials. [tooling-checks.json](evidence/consultation-applied/tooling-checks.json)
+contains CLI exit/output diagnostics. [source-check.json](evidence/consultation-applied/source-check.json)
 records the source scope. Early test-harness failure diagnostics are retained.
 [The alias regression](evidence/bootstrap-alias-regression.json) reproduces both
 successful preparations on the reviewed baseline and both refusals on this
 correction before output creation. [The response](review-response.md) records
-which review findings remain open.
+which review findings remain open. Earlier correction receipts and alias
+regression diagnostics retain their original profile hashes and meaning.
 
 ## Existing evidence retained without rerunning
 
@@ -167,7 +196,7 @@ historical Candidate M 9/90 data proves shared-network readiness.
 
 ## Exact remaining package and wallet integration
 
-After the protocol decision, build daemon, CLI and wallet RPC from one complete
+After native genesis admission and completed-overlay verification, build daemon, CLI and wallet RPC from one complete
 overlay and pinned dependencies; record original and changed source trees,
 toolchains and binary hashes. Existing portable regtest packages cannot become
 this network by adding a configuration file. The package owner must carry this

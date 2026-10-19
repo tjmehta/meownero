@@ -4,6 +4,24 @@
   "status": "protocol-proposal",
   "valueless": true,
   "launch_ready": false,
+  "consultation": {
+    "comment_id": "3b6c0197-43f9-4c30-a90c-399f82fc0b57",
+    "reviewed_candidate": "4d89b4a35d0a3c8d8f40648989d5b6ffacc2e7b7",
+    "direction": "accepted-for-bounded-non-public-implementation",
+    "exact_genesis_and_candidate": "unverified",
+    "genesis": {
+      "block_version": 1,
+      "transaction_version": 2,
+      "rct_type": "RCTNull",
+      "input_height": 0,
+      "unlock_time": 60,
+      "outputs": 1,
+      "output_amount_atomic": 0,
+      "output_type": "txout_to_key",
+      "public_recovery_scalars_little_endian": [1, 2, 3],
+      "amount_zero_commitment_hex": "5866666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
   "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
   "source_lock_sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
   "network": {
@@ -70,7 +88,7 @@
     "public_endpoints": false
   },
   "unresolved": [
-    "cryptography-genesis-and-v18-activation-ruling",
+    "native-genesis-serialization-admission-and-root-evidence",
     "current-lineage-selected-policy-integration",
     "launch-difficulty-and-capacity",
     "native-profile-separation-persistence-recovery",

@@ -92,6 +92,23 @@ class Boundaries(unittest.TestCase):
         self.assertEqual(result.returncode, 2, result.stderr)
         self.assertFalse(out.exists())
 
+    def test_consultation_direction_does_not_accept_genesis_or_launch(self):
+        self.assertEqual(self.p['consultation']['comment_id'], '3b6c0197-43f9-4c30-a90c-399f82fc0b57')
+        self.assertEqual(self.p['consultation']['exact_genesis_and_candidate'], 'unverified')
+        self.assertIsNone(self.p['consensus_proposal']['genesis_tx_hex'])
+        self.assertIsNone(self.p['consensus_proposal']['genesis_block_hash'])
+        self.assertNotIn('cryptography-genesis-and-v18-activation-ruling', self.p['unresolved'])
+        other = copy.deepcopy(self.p)
+        other['consultation']['exact_genesis_and_candidate'] = 'accepted'
+        with self.assertRaises(ValueError):
+            n.profile(self.save(other))
+        stale = copy.deepcopy(self.bootstrap)
+        stale['primary']['profile_sha256'] = 'b1711b3114e234a4975bcefc6f02fa1175df1d213ed03372bb5c50bc503aef31'
+        out = self.root / 'pre-consultation-profile'
+        result = self.invoke('prepare', '--bootstrap', self.save(stale), '--node-id', 'client-a', '--out', out)
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertFalse(out.exists())
+
     def test_malformed_and_oversized_json(self):
         for raw in ('{"schema":1,"schema":2}', '{"x":NaN}', '{broken', ' ' * 65537):
             path = self.root / 'bad.json'
@@ -238,6 +255,52 @@ class Boundaries(unittest.TestCase):
         subprocess.run(['git', 'init', '-q', str(other)], check=True, timeout=10)
         with self.assertRaises(subprocess.CalledProcessError):
             n.checked_source(other)
+
+    def test_native_inputs_patch_scope_reversibility_and_no_overwrite(self):
+        if not SOURCE:
+            self.skipTest('supply --source for actual pinned source')
+        originals = n.checked_source(SOURCE)
+        changes = n.genesis_admission_changes(originals)
+        fork = 'src/hardforks/hardforks.cpp'
+        chain = 'src/cryptonote_core/blockchain.cpp'
+        self.assertEqual(set(changes), {fork, chain})
+        before, after = originals[fork].decode(), changes[fork].decode()
+        self.assertEqual(before.split('const hardfork_t testnet_hard_forks[]')[0],
+                         after.split('const hardfork_t testnet_hard_forks[]')[0])
+        self.assertEqual(before.split('const hardfork_t stagenet_hard_forks[]')[1],
+                         after.split('const hardfork_t stagenet_hard_forks[]')[1])
+        self.assertIn('{ 18, 1, 0, 1341378001 }', after)
+        self.assertIn('testnet_hard_fork_version_1_till = 0;', after)
+        # This is a source-scope assertion, not a simulated block-admission test.
+        changed = changes[chain].decode()
+        start = changed.index('  // Dedicated TESTNET zero-premine genesis.')
+        end = changed.index('  if(base_reward + fee < money_in_use)', start)
+        self.assertEqual((changed[:start] + changed[end:]).encode(), originals[chain])
+        self.assertIn('m_nettype == TESTNET && get_block_height(b) == 0', changed[start:end])
+        self.assertNotIn('return true', changed[start:end])
+        self.assertNotIn('already_generated_coins ==', changed[start:end])
+        self.assertIn('b.miner_tx.vout.size() == 1', changed[start:end])
+        output = self.root / 'native-inputs'
+        receipt = n.genesis_inputs(SOURCE, output, self.p)
+        self.assertEqual(receipt['testnet_admission'], 'NOT_RUN')
+        self.assertFalse(receipt['launch_ready'])
+        for name, digest in receipt['owned_source_sha256'].items():
+            self.assertEqual(n.sha((output / name).read_bytes()), digest)
+        tree = self.root / 'native-disposable'
+        for name in changes:
+            (tree / name).parent.mkdir(parents=True, exist_ok=True)
+            (tree / name).write_bytes(originals[name])
+        patch = output / 'activation-genesis-admission.patch'
+        for reverse, expected in ((False, changes), (True, originals)):
+            cmd = ['git', 'apply'] + (['--reverse'] if reverse else []) + [str(patch)]
+            result = subprocess.run(cmd, cwd=tree, capture_output=True, text=True, timeout=10)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            for name in changes:
+                self.assertEqual((tree / name).read_bytes(), expected[name])
+        original_receipt = (output / 'genesis-inputs.json').read_bytes()
+        with self.assertRaises(ValueError):
+            n.genesis_inputs(SOURCE, output, self.p)
+        self.assertEqual((output / 'genesis-inputs.json').read_bytes(), original_receipt)
 
 
 if __name__ == '__main__':

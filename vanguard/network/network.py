@@ -160,6 +160,72 @@ def overlay(source, out, value):
     return receipt
 
 
+def genesis_admission_changes(originals):
+    """Scoped prerequisite, not the completed selected-policy overlay."""
+    fork_name = 'src/hardforks/hardforks.cpp'
+    fork = originals[fork_name].decode()
+    start = fork.index('const hardfork_t testnet_hard_forks[] = {')
+    end = fork.index('\n};', start) + len('\n};')
+    fork = (fork[:start] + '''const hardfork_t testnet_hard_forks[] = {
+  // Dedicated valueless network: genesis v1, mandatory FCMP++/CARROT at height 1.
+  { 1, 0, 0, 1341378000 },
+  { 18, 1, 0, 1341378001 },
+};''' + fork[end:])
+    old = 'const uint64_t testnet_hard_fork_version_1_till = 624633;'
+    require(fork.count(old) == 1, 'ambiguous TESTNET version-one cutoff')
+    fork = fork.replace(old, 'const uint64_t testnet_hard_fork_version_1_till = 0;')
+    name = 'src/cryptonote_core/blockchain.cpp'
+    chain = originals[name].decode()
+    anchor = '  if(base_reward + fee < money_in_use)\n'
+    require(chain.count(anchor) == 1, 'ambiguous native reward validation')
+    # Retain the ordinary weight check above and exact-coinbase/torsion checks
+    # below. No early-success path and no already_generated_coins heuristic.
+    addition = '''  // Dedicated TESTNET zero-premine genesis. Height one also starts with
+  // zero generated coins, so only the explicit block height identifies genesis.
+  if (m_nettype == TESTNET && get_block_height(b) == 0)
+  {
+    CHECK_AND_ASSERT_MES(fee == 0 && b.miner_tx.version == 2 &&
+      b.miner_tx.rct_signatures.type == rct::RCTTypeNull &&
+      b.miner_tx.vout.size() == 1 && b.miner_tx.vout[0].amount == 0 &&
+      b.miner_tx.vout[0].target.type() == typeid(txout_to_key), false,
+      "invalid dedicated TESTNET zero-premine genesis");
+    base_reward = 0;
+  }
+'''
+    chain = chain.replace(anchor, addition + anchor)
+    return {fork_name: fork.encode(), name: chain.encode()}
+
+
+def genesis_inputs(source, out, value):
+    originals = checked_source(source)
+    changes = genesis_admission_changes(originals)
+    patch = ''.join(''.join(difflib.unified_diff(
+        originals[name].decode().splitlines(True), raw.decode().splitlines(True),
+        fromfile='a/' + name, tofile='b/' + name, n=3))
+        for name, raw in changes.items())
+    out = fresh_directory(out)
+    (out / 'native').mkdir(mode=0o700)
+    owned = {}
+    for name in ('CMakeLists.txt', 'genesis.cpp'):
+        raw = (HERE / 'native' / name).read_bytes()
+        (out / 'native' / name).write_bytes(raw)
+        owned['native/' + name] = sha(raw)
+    (out / 'activation-genesis-admission.patch').write_text(patch)
+    receipt = {'schema': 'meownero-vanguard-genesis-inputs/1',
+               'result': 'PREPARED_NOT_COMPILED_NOT_LAUNCHABLE',
+               'profile_sha256': profile_hash(value), 'upstream_commit': value['upstream_commit'],
+               'consultation': value['consultation'],
+               'native_recipe': 'NOT_RUN', 'testnet_admission': 'NOT_RUN',
+               'files': {name: {'original_sha256': sha(originals[name]),
+                                'changed_sha256': sha(raw)} for name, raw in changes.items()},
+               'owned_source_sha256': owned, 'patch_sha256': sha(patch.encode()),
+               'missing': ['native-derived-genesis-bytes-and-hash', 'selected-9-90-policy-overlay',
+                           'native-admission-root-maturity-and-wallet-evidence'],
+               'launch_ready': False}
+    write_json(out / 'genesis-inputs.json', receipt)
+    return receipt
+
+
 def topology(path, value):
     data = read_json(path)
     require(set(data) == {'schema', 'primary', 'recovery'}, 'unexpected topology fields')
@@ -236,6 +302,9 @@ def main():
     make = sub.add_parser('identity-overlay')
     make.add_argument('--source', type=Path, required=True)
     make.add_argument('--out', type=Path, required=True)
+    native = sub.add_parser('genesis-inputs')
+    native.add_argument('--source', type=Path, required=True)
+    native.add_argument('--out', type=Path, required=True)
     prep = sub.add_parser('prepare')
     prep.add_argument('--out', type=Path, required=True)
     prep.add_argument('--node-id', required=True)
@@ -255,6 +324,8 @@ def main():
                       'scope': 'listed files and submodule HEADs only; not full-tree or executable provenance'}
         elif args.command == 'identity-overlay':
             result = overlay(args.source, args.out, value)
+        elif args.command == 'genesis-inputs':
+            result = genesis_inputs(args.source, args.out, value)
         elif args.command == 'prepare':
             result = prepare(args.out, args.node_id, args.bootstrap, args.role, value)
         else:
