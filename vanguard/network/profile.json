@@ -18,7 +18,11 @@
       "outputs": 1,
       "output_amount_atomic": 0,
       "output_type": "txout_to_key",
-      "public_recovery_scalars_little_endian": [1, 2, 3],
+      "public_recovery_scalars_little_endian": [
+        1,
+        2,
+        3
+      ],
       "amount_zero_commitment_hex": "5866666666666666666666666666666666666666666666666666666666666666"
     }
   },
@@ -49,8 +53,8 @@
   "consensus_proposal": {
     "genesis_reward_atomic": 0,
     "genesis_nonce": 424001,
-    "genesis_tx_hex": null,
-    "genesis_block_hash": null,
+    "genesis_tx_hex": "023c01ff000100025aeaf0562ffc3ae8b12bb4cfc3f07bf56916dd1e3b2e9cbf2674e54c5ba6dfe42101d4b4f5784868c3020403246717ec169ff79e26608ea126a1ab69ee77d1b1671200",
+    "genesis_block_hash": "885cb43cf51086063f15c94d2fb7f327e34c447de53c9c6291b1a86d6510dab6",
     "activation": [
       {
         "version": 1,
@@ -88,12 +92,20 @@
     "public_endpoints": false
   },
   "unresolved": [
-    "native-genesis-serialization-admission-and-root-evidence",
+    "native-genesis-admission-and-root-evidence",
     "current-lineage-selected-policy-integration",
     "launch-difficulty-and-capacity",
     "native-profile-separation-persistence-recovery",
     "package-wallet-profile-integration",
     "private-operator-capacity-assignment",
     "independent-core-security-acceptance"
-  ]
+  ],
+  "native_genesis_recipe": {
+    "result": "PASS_NATIVE_RECIPE_HELPERS_ONLY",
+    "path": "evidence/native-genesis-attempt01/recipe1.json",
+    "sha256": "12e6e285abc394b1a775912c7d3eca74b9aa696546dc78828c58322a512486b9",
+    "generated_from_profile_sha256": "920825038185340ea4461e3899c0c74e579249fa57735621b7929dec4f3ef7c5",
+    "testnet_admission": "NOT_RUN",
+    "binary_sha256": "5a9048e5147e2d8692b1682263354dce6f36ff3531784519a711a6131835029b"
+  }
 }

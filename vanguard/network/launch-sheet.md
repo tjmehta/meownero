@@ -3,9 +3,11 @@
 2026-10-19. This is an implemented protocol proposal checkpoint, **not a
 launchable candidate**. The [Cryptography consultation](<private-tracker>/TJS/issues/TJS-2504#comment-3b6c0197-43f9-4c30-a90c-399f82fc0b57)
 accepts the genesis construction and v18 activation directions for bounded
-non-public implementation. The conceptual ruling is complete. Exact bytes and
-final native acceptance remain unverified. The native recipe and activation/
-height-zero validation patch are prepared; neither has been compiled or run.
+non-public implementation. The conceptual ruling is complete. The native helper
+now reproduces exact genesis bytes/hashes and unchanged helper controls. TESTNET
+admission, persisted roots and final native acceptance remain unverified. The
+combined admission prerequisite patch is prepared, uncompiled and unadmitted.
+See [the bounded native result](native-result.md).
 No daemon, wallet, service or external endpoint was started for this checkpoint. Configuration
 checks cannot establish native separation, consensus or recoverability.
 
@@ -25,8 +27,10 @@ tree, submodule worktree or binary is clean. The read-only local source has a
 pre-existing `tests/CMakeLists.txt` injection, outside these thirty-four paths.
 
 [profile.json](profile.json) has canonical SHA256
-`920825038185340ea4461e3899c0c74e579249fa57735621b7929dec4f3ef7c5`.
-This records consultation completion and the public fixture recipe. It supersedes
+`56a25f173448b3caa34ae9bb29761f5d467376df4470902fd89824ddc11fe4e8`.
+This binds the native-derived genesis and exact helper evidence. It supersedes
+the pre-execution digest
+`920825038185340ea4461e3899c0c74e579249fa57735621b7929dec4f3ef7c5`,
 the pre-consultation v18 digest
 `b1711b3114e234a4975bcefc6f02fa1175df1d213ed03372bb5c50bc503aef31`
 and the rejected v17 proposal digest
@@ -47,7 +51,7 @@ semantics. The existing packages need rebuilding/integrating for this profile.
 | Standard/integrated/subaddress prefixes | 4240 / 4241 / 4242, distinct from upstream and historical Candidate M; native encoding/decoding is still NOT_RUN |
 | P2P / daemon RPC / reserved disabled ZMQ / wallet RPC | 48080 / 48081 / 48082 / 48083 |
 | Data root | A fresh private task directory, then namespace/node ID; native `--testnet` appends `testnet/lmdb` |
-| Genesis | Zero reward/premine required. Proposed nonce start 424001. Transaction bytes and resulting native block hash are **null**, pending native recipe execution and admission |
+| Genesis | Native-derived v2/RCTNull one-zero-output transaction is pinned in the profile. Actual nonce424001; block hash `885cb43cf51086063f15c94d2fb7f327e34c447de53c9c6291b1a86d6510dab6`. Admission remains unverified |
 | Activation | Core-directed v1 at height 0, v18 at height 1, version-one cutoff 0; accepted implementation direction; native acceptance pending, not installed |
 | Issuance | Selected perpetual 9 MEOW/90 s; gated 12/120 fallback unchanged. Twelve decimal atomic precision, fees to miners, no premine, tax, burn, halving, cap or sunset |
 | Difficulty/capacity | Unresolved launch difficulty and matched-capacity intended-crypto gate. No fixed-difficulty override proposed for a shared network |
@@ -95,8 +99,8 @@ The [independent Core verdict](<private-tracker>/TJS/issues/TJS-2504#document-co
 revision `05b73cee-4e45-4fe5-8755-7d22870bc0cd`, rejects permanent v17.
 The updated proposal follows that direction. Cryptography
 `637e65be-a666-4b41-b211-9fea5eef61da` has accepted the following construction
-and activation for implementation. Exact bytes and final candidate are still
-unverified:
+and activation for implementation. Native bytes are now reproduced; exact-byte
+acceptance and the final candidate remain unverified:
 
 1. Construct a deterministic zero-reward genesis using existing upstream native
    transaction construction and serialization, with valid torsion-free outputs
@@ -133,7 +137,8 @@ serialization and genesis nonce selection, verifies the amount0 commitment G,
 records the legacy O/I/C tuple and invokes unchanged native torsion controls on
 valid, identity, small-order, malformed and historical torsion-bearing points.
 Helper results are distinct from actual block admission and persisted roots.
-No native result is claimed before compilation and execution.
+The bounded native helper result is `PASS_NATIVE_RECIPE_HELPERS_ONLY`; two
+outputs match byte-for-byte. This is not TESTNET admission or persisted state.
 
 `network.py genesis-inputs` emits that source plus a reversible activation and
 height-zero validation patch. Its TESTNET table is v1@0/v18@1, times1341378000/
@@ -142,16 +147,20 @@ The validation change only overrides the reward for explicit TESTNET height0,
 requires the specified v2/RCTNull/one-zero-output form and fee0, and continues
 through native exact-coinbase and torsion checks. Height1 remains on ordinary
 reward validation even though generated coins are still zero. This patch omits
-the as-yet ungenerated genesis bytes and the selected-policy overlay and is not
-launchable. MAINNET/STAGENET tables and all crypto verifiers remain unchanged.
+the genesis bytes and selected-policy overlay and is not launchable.
+`admission-overlay` combines its changes with the bound native-derived genesis
+and dedicated identity; its three-file patch has not been compiled or admitted.
+MAINNET/STAGENET tables and all crypto verifiers remain unchanged.
 
-The first native premise is reproducible recipe/helper success followed by real
-TESTNET admission and maturity/root evidence. That premise must be exercised
+The reproducible recipe/helper premise is satisfied. The next native premise
+is real TESTNET admission and maturity/root evidence. That premise must be exercised
 before treating dependent network or wallet machinery as runnable. The writer
 has requested an idle slot from the active platform owner in
 [this build-slot request](<private-tracker>/TJS/issues/TJS-2504#comment-80fd656e-4d6b-4547-a8d5-3ebd8b41f5d3).
-No build is authorized by silence. No TJ decision, new account or purchased
-auditor is required.
+The platform replied and the one granted local attempt is complete. Another
+native workload needs a newly coordinated bounded window. The next source-bound
+input is `network.py admission-overlay`; see [the exact boundary](native/admission-boundary.md).
+No TJ decision, new account or purchased auditor is required.
 
 ## Requirements and independent acceptance map
 
@@ -159,7 +168,7 @@ auditor is required.
 | --- | --- | --- |
 | Current lineage, original/changed source binding | 34 native paths, all submodule HEADs and Cargo.lock checked; scoped identity patch applies and reverses byte-for-byte | Full clean build and exact executable manifests for completed overlay |
 | Dedicated network and address identity | Distinct proposed UUID/prefixes/ports; only TESTNET identity region changes | Real native wallet roundtrip and upstream/mainnet/old-profile address refusals |
-| Genesis, activation, policy | Explicit null genesis/floor, conditional v18 activation/cutoff 0, fixed settled policy; superseded v17 profile and bootstrap digest refused | Completed consultation recorded; native recipe/admission, full selected-policy implementation and native positive/adverse acceptance remain |
+| Genesis, activation, policy | Native-derived exact genesis; two helper runs agree; amount0 commitment/leaf and helper controls pass. Unresolved floor, proposed v18 activation/cutoff0 and settled policy retained; stale profiles refused | Genuine TESTNET admission/root/maturity, full selected-policy implementation and independent positive/adverse native acceptance remain |
 | Same/foreign/bootstrap network separation | Same-profile tooling succeeds; foreign selectors/profiles, profile hashes, foreign/default/public/DNS bootstrap endpoints, port aliases and injected fields fail | Native positive handshake; wrong UUID and same-UUID/wrong-genesis refusal, foreign seed and upstream mainnet/regtest controls |
 | Fresh data and restart isolation | Distinct prepared directories, no-overwrite sentinel and symlink controls pass; no LMDB created | Real persisted reopening while counterpart is stopped, then catch-up and recovery |
 | Private authenticated restricted RPC | Proposed loopback/restricted settings, no auth-disable path; 0600 files/0700 directories checked | Runtime listeners, unauthenticated/forbidden-method refusals, secret-free logs and exits |
@@ -168,7 +177,7 @@ auditor is required.
 | Native distribution and wallet payment | Exact remaining integration below | Same profile across daemon/CLI/wallet packages and genuine payment/restore/later spend |
 | Independent acceptance/integration | Core/Security native review stages already configured on issue | Complete candidate independently accepted, then lead-only accepted integration receipt |
 
-The fifteen current tooling tests cover multiple adverse variants and do not represent
+The seventeen current tooling tests cover multiple adverse variants and do not represent
 native network trials. [tooling-checks.json](evidence/consultation-applied/tooling-checks.json)
 contains CLI exit/output diagnostics. [source-check.json](evidence/consultation-applied/source-check.json)
 records the source scope. Early test-harness failure diagnostics are retained.

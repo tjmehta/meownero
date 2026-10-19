@@ -2,8 +2,10 @@
 
 The [Cryptography ruling](<private-tracker>/TJS/issues/TJS-2504#comment-3b6c0197-43f9-4c30-a90c-399f82fc0b57)
 accepts implementation of the proposed construction and v18 activation. It does
-not accept absent genesis bytes or the final candidate. The code here is
-**prepared, uncompiled and unexecuted**. There is no native result yet.
+not accept exact genesis bytes or the final candidate. The helper was built
+from exported pinned source and passed twice, with byte-identical recipe outputs.
+See [the result](../native-result.md). The combined TESTNET admission overlay
+has not been compiled or admitted; no persisted root is established.
 
 `genesis.cpp` uses the pinned native crypto and transaction/block serializers.
 Its recovery inputs are the public canonical little-endian scalars 1,2,3 for
@@ -36,15 +38,46 @@ shape check continues through the existing exact-coinbase and torsion code;
 there is no early success or FAKECHAIN exception. The first rewarded block is
 height1, even though its previous generated-coins balance is also zero.
 
-The patch deliberately omits the still-unproduced genesis blob and selected
-9/90 implementation. It must not be treated as a completed network overlay.
+The `genesis-inputs` patch omits the genesis blob and selected9/90 implementation.
+`network.py admission-overlay` now adds the bound native-derived bytes and
+dedicated identity to those prerequisite changes. Both commands only write
+fresh scratch outputs. Neither produces the completed selected-policy overlay.
 
-Before compilation, obtain the platform owner's idle-slot reply to
-[the resource request](<private-tracker>/TJS/issues/TJS-2504#comment-80fd656e-4d6b-4547-a8d5-3ebd8b41f5d3).
-That owner is currently active on the native package task. No build slot has
-been confirmed. The existing source and builder are read-only inputs; never
+The platform owner's [local-slot reply](<private-tracker>/TJS/issues/TJS-2504#comment-2d70177d-b7a7-4ef6-8079-242320bdcb1f)
+permits one bounded local attempt after fresh admission. It covers the local
+default Docker daemon only; the native package task's separate ARM guest remains
+outside this slot. The existing source and builder are read-only inputs; never
 reconfigure or copy generated files into that source, its cache or another
-writer's worktree. No build has run here, including syntax-only compilation.
+writer's worktree.
+
+That one attempt is now complete. Another native workload requires a new bounded
+platform coordination window. Do not rerun the recipe on the consumed grant.
+The next missing claim is genuine TESTNET genesis admission and persisted state,
+as specified in [admission-boundary.md](admission-boundary.md).
+
+`../run-genesis.py` implements this grant. It opens the existing host lock
+without creation/truncation, checks the platform-recorded device/inode and takes
+it nonblocking. Under that lock it checks native processes/containers and at
+least5GiB available memory/disk, exports the pinned Git and five submodule
+objects, copies Cargo registry/Git inputs without hardlinks or credentials,
+verifies the two Rust checkout pins and checks the toolchain. It never uses the
+shared source's dirty test CMake or cached build objects.
+
+```sh
+python3 -B vanguard/network/run-genesis.py --out "$TASK_PRIVATE_SCRATCH/native-attempt-new"
+```
+
+The output must be a fresh leaf below an owned private parent outside a Git
+checkout. The runner uses the explicitly granted local input paths. It records
+source archive/cache/helper digests, toolchains, actual commands, raw configure/
+build/helper logs, recipe repetition and container state/cleanup. Source pins
+are rechecked after the attempt. One task-named container gets the exact granted
+caps, network-none/no ports and read-only toolchain. Host supervision reserves
+the last20 of900 seconds for cleanup. Only its returned container ID/cidfile is
+used for cleanup, under the same host lock. Lock contention refuses before
+Docker creation. There is no automatic retry; any resource, dependency or time
+failure must retain diagnostics and return to the platform owner for the next
+bounded action. A successful helper is still not TESTNET admission.
 
 After slot assignment, use one private task-owned clean source staging tree and
 the existing contained builder/offline dependencies. Add this target directory
@@ -60,8 +93,8 @@ cmake --build /src/build/network --target vanguard_network_genesis --parallel 1
 ```
 
 The private test-directory name must be `tests/vanguard-network` for the path
-above. The builder/staging driver still needs the platform's confirmed input
-paths and provenance; this command sequence is unexecuted preparation. Record
+above. The runner stages this exact command sequence using the platform's
+confirmed inputs. Record
 the clean source/submodule trees, added test CMake line, helper and patch
 digests, toolchains, native executable hashes, complete stdout/stderr and exit.
 Do not present cached object reuse as a full clean build. Use the shared

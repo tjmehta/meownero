@@ -1,0 +1,54 @@
+{
+  "container_id": "ce2562789300613f8f46c04d1071109da886a7442a06f4d70459881823eac5da",
+  "host_config": {
+    "NetworkMode": "none",
+    "Memory": 4294967296,
+    "MemorySwap": 4294967296,
+    "NanoCpus": 2000000000,
+    "PidsLimit": 256,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "PortBindings": {},
+    "Ulimits": [
+      {
+        "Name": "core",
+        "Hard": 0,
+        "Soft": 0
+      }
+    ],
+    "Privileged": false,
+    "PidMode": ""
+  },
+  "mounts": [
+    {
+      "Type": "bind",
+      "Source": "<agent-scratch>",
+      "Destination": "/src",
+      "RW": true
+    },
+    {
+      "Type": "bind",
+      "Source": "<agent-scratch>",
+      "Destination": "/cargo-home",
+      "RW": true
+    },
+    {
+      "Type": "bind",
+      "Source": "~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu",
+      "Destination": "/opt/rust",
+      "RW": false
+    },
+    {
+      "Type": "bind",
+      "Source": "<agent-scratch>",
+      "Destination": "/out",
+      "RW": true
+    }
+  ],
+  "running": true,
+  "published_ports": {}
+}

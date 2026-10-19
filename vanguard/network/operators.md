@@ -17,6 +17,8 @@ python3 -B vanguard/network/network.py identity-overlay \
   --source "$PINNED_UPSTREAM_SOURCE" --out "$PAPERCLIP_RUN_SCRATCH_DIR/identity-new"
 python3 -B vanguard/network/network.py genesis-inputs \
   --source "$PINNED_UPSTREAM_SOURCE" --out "$PAPERCLIP_RUN_SCRATCH_DIR/genesis-inputs-new"
+python3 -B vanguard/network/network.py admission-overlay \
+  --source "$PINNED_UPSTREAM_SOURCE" --out "$PAPERCLIP_RUN_SCRATCH_DIR/admission-overlay-new"
 python3 -B vanguard/network/test_network.py \
   --source "$PINNED_UPSTREAM_SOURCE" --scratch "$PAPERCLIP_RUN_SCRATCH_DIR" \
   --evidence "$PAPERCLIP_RUN_SCRATCH_DIR/checks-new"
@@ -31,7 +33,12 @@ The genesis-inputs command exports the native helper plus activation/genesis
 validation patch and source bindings. It does not compile, execute, set the
 profile's genesis fields or modify an upstream tree. The native construction
 direction is accepted in consultation; exact native bytes and final acceptance
-remain unverified. See [native preparation](native/README.md).
+remain independently unaccepted. The native helper has now reproduced the exact
+bytes, hashes, amount0 commitment and helper controls. `admission-overlay`
+exports a source-bound three-file TESTNET prerequisite patch containing those
+bytes, the dedicated identity, v18 activation and height-zero validation. It
+has not been compiled/admitted and still omits selected-policy integration.
+See [the result](native-result.md) and [native preparation](native/README.md).
 
 Copy [operators.example.json](operators.example.json) to task scratch. Keep its
 profile hash. Replace nulls only with explicitly assigned operator pseudonyms,

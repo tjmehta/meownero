@@ -63,11 +63,28 @@ def profile(path=None):
             'network ID derivation mismatch')
     require(value['valueless'] is True and len(value['unresolved']) > 0,
             'checkpoint must retain unresolved gates')
+    native_recipe(value)
     return value
 
 
 def profile_hash(value):
     return sha(canonical(value))
+
+
+def native_recipe(value):
+    binding = value['native_genesis_recipe']
+    raw = (HERE / binding['path']).read_bytes()
+    require(sha(raw) == binding['sha256'], 'native recipe evidence binding mismatch')
+    recipe = read_json(HERE / binding['path'])
+    require(recipe['result'] == binding['result'] == 'PASS_NATIVE_RECIPE_HELPERS_ONLY' and
+            recipe['testnet_admission'] == binding['testnet_admission'] == 'NOT_RUN',
+            'native helper evidence cannot establish TESTNET admission')
+    require(recipe['upstream_commit'] == value['upstream_commit'] and
+            recipe['genesis_tx_hex'] == value['consensus_proposal']['genesis_tx_hex'] and
+            recipe['genesis_block_hash'] == value['consensus_proposal']['genesis_block_hash'] and
+            recipe['actual_nonce'] == value['consensus_proposal']['genesis_nonce'],
+            'native recipe/profile mismatch')
+    return recipe
 
 
 def checked_source(source):
@@ -226,6 +243,36 @@ def genesis_inputs(source, out, value):
     return receipt
 
 
+def admission_overlay(source, out, value):
+    """Materialize native-derived bytes; this does not run native admission."""
+    recipe = native_recipe(value)
+    originals = checked_source(source)
+    changes = genesis_admission_changes(originals)
+    name = 'src/cryptonote_config.h'
+    text = identity_overlay(originals[name], value).decode()
+    start = text.index('  namespace testnet\n')
+    end = text.index('  namespace stagenet\n', start)
+    section, count = re.subn(r'(GENESIS_TX = ")[0-9a-f]+(";)',
+        lambda match: match[1] + recipe['genesis_tx_hex'] + match[2], text[start:end])
+    require(count == 1, 'ambiguous TESTNET genesis constant')
+    changes[name] = (text[:start] + section + text[end:]).encode()
+    patch = ''.join(''.join(difflib.unified_diff(
+        originals[name].decode().splitlines(True), raw.decode().splitlines(True),
+        fromfile='a/' + name, tofile='b/' + name, n=3)) for name, raw in changes.items())
+    out = fresh_directory(out)
+    (out / 'testnet-admission-prerequisite.patch').write_text(patch)
+    receipt = {'schema': 'meownero-vanguard-testnet-admission-overlay/1',
+               'result': 'PREPARED_NOT_COMPILED_NOT_ADMITTED', 'launch_ready': False,
+               'profile_sha256': profile_hash(value), 'upstream_commit': value['upstream_commit'],
+               'native_recipe_sha256': value['native_genesis_recipe']['sha256'],
+               'testnet_admission': 'NOT_RUN', 'selected_policy': 'NOT_INTEGRATED',
+               'files': {name: {'original_sha256': sha(originals[name]),
+                                'changed_sha256': sha(raw)} for name, raw in changes.items()},
+               'patch_sha256': sha(patch.encode())}
+    write_json(out / 'admission-overlay.json', receipt)
+    return receipt
+
+
 def topology(path, value):
     data = read_json(path)
     require(set(data) == {'schema', 'primary', 'recovery'}, 'unexpected topology fields')
@@ -305,6 +352,9 @@ def main():
     native = sub.add_parser('genesis-inputs')
     native.add_argument('--source', type=Path, required=True)
     native.add_argument('--out', type=Path, required=True)
+    admission = sub.add_parser('admission-overlay')
+    admission.add_argument('--source', type=Path, required=True)
+    admission.add_argument('--out', type=Path, required=True)
     prep = sub.add_parser('prepare')
     prep.add_argument('--out', type=Path, required=True)
     prep.add_argument('--node-id', required=True)
@@ -326,6 +376,8 @@ def main():
             result = overlay(args.source, args.out, value)
         elif args.command == 'genesis-inputs':
             result = genesis_inputs(args.source, args.out, value)
+        elif args.command == 'admission-overlay':
+            result = admission_overlay(args.source, args.out, value)
         elif args.command == 'prepare':
             result = prepare(args.out, args.node_id, args.bootstrap, args.role, value)
         else:

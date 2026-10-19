@@ -95,8 +95,11 @@ class Boundaries(unittest.TestCase):
     def test_consultation_direction_does_not_accept_genesis_or_launch(self):
         self.assertEqual(self.p['consultation']['comment_id'], '3b6c0197-43f9-4c30-a90c-399f82fc0b57')
         self.assertEqual(self.p['consultation']['exact_genesis_and_candidate'], 'unverified')
-        self.assertIsNone(self.p['consensus_proposal']['genesis_tx_hex'])
-        self.assertIsNone(self.p['consensus_proposal']['genesis_block_hash'])
+        recipe = n.native_recipe(self.p)
+        self.assertEqual(recipe['genesis_tx_hex'], self.p['consensus_proposal']['genesis_tx_hex'])
+        self.assertEqual(recipe['genesis_block_hash'], self.p['consensus_proposal']['genesis_block_hash'])
+        self.assertEqual(recipe['result'], 'PASS_NATIVE_RECIPE_HELPERS_ONLY')
+        self.assertEqual(recipe['testnet_admission'], 'NOT_RUN')
         self.assertNotIn('cryptography-genesis-and-v18-activation-ruling', self.p['unresolved'])
         other = copy.deepcopy(self.p)
         other['consultation']['exact_genesis_and_candidate'] = 'accepted'
@@ -105,6 +108,21 @@ class Boundaries(unittest.TestCase):
         stale = copy.deepcopy(self.bootstrap)
         stale['primary']['profile_sha256'] = 'b1711b3114e234a4975bcefc6f02fa1175df1d213ed03372bb5c50bc503aef31'
         out = self.root / 'pre-consultation-profile'
+        result = self.invoke('prepare', '--bootstrap', self.save(stale), '--node-id', 'client-a', '--out', out)
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertFalse(out.exists())
+
+    def test_changed_genesis_and_stale_pre_recipe_profile_are_refused(self):
+        for key, value in [('genesis_tx_hex', '00'), ('genesis_block_hash', '0' * 64)]:
+            other = copy.deepcopy(self.p)
+            other['consensus_proposal'][key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                n.profile(self.save(other))
+            with self.assertRaises(ValueError):
+                n.native_recipe(other)
+        stale = copy.deepcopy(self.bootstrap)
+        stale['primary']['profile_sha256'] = '920825038185340ea4461e3899c0c74e579249fa57735621b7929dec4f3ef7c5'
+        out = self.root / 'pre-recipe'
         result = self.invoke('prepare', '--bootstrap', self.save(stale), '--node-id', 'client-a', '--out', out)
         self.assertEqual(result.returncode, 2, result.stderr)
         self.assertFalse(out.exists())
@@ -301,6 +319,36 @@ class Boundaries(unittest.TestCase):
         with self.assertRaises(ValueError):
             n.genesis_inputs(SOURCE, output, self.p)
         self.assertEqual((output / 'genesis-inputs.json').read_bytes(), original_receipt)
+
+    def test_native_derived_admission_patch_scope_reversibility_and_no_overwrite(self):
+        if not SOURCE:
+            self.skipTest('supply --source for actual pinned source')
+        originals = n.checked_source(SOURCE)
+        output = self.root / 'admission'
+        receipt = n.admission_overlay(SOURCE, output, self.p)
+        self.assertEqual(set(receipt['files']), {'src/cryptonote_config.h',
+            'src/hardforks/hardforks.cpp', 'src/cryptonote_core/blockchain.cpp'})
+        self.assertEqual(receipt['testnet_admission'], 'NOT_RUN')
+        self.assertEqual(receipt['selected_policy'], 'NOT_INTEGRATED')
+        self.assertFalse(receipt['launch_ready'])
+        tree = self.root / 'admission-disposable'
+        for name in receipt['files']:
+            (tree / name).parent.mkdir(parents=True, exist_ok=True)
+            (tree / name).write_bytes(originals[name])
+        patch = output / 'testnet-admission-prerequisite.patch'
+        subprocess.run(['git', 'apply', str(patch)], cwd=tree, check=True, timeout=10)
+        before = originals['src/cryptonote_config.h'].decode()
+        after = (tree / 'src/cryptonote_config.h').read_text()
+        self.assertEqual(before.split('  namespace testnet\n')[0], after.split('  namespace testnet\n')[0])
+        self.assertEqual(before.split('  namespace stagenet\n')[1], after.split('  namespace stagenet\n')[1])
+        self.assertIn('GENESIS_TX = "' + self.p['consensus_proposal']['genesis_tx_hex'] + '";', after)
+        for name, hashes in receipt['files'].items():
+            self.assertEqual(n.sha((tree / name).read_bytes()), hashes['changed_sha256'])
+        subprocess.run(['git', 'apply', '--reverse', str(patch)], cwd=tree, check=True, timeout=10)
+        for name in receipt['files']:
+            self.assertEqual((tree / name).read_bytes(), originals[name])
+        with self.assertRaises(ValueError):
+            n.admission_overlay(SOURCE, output, self.p)
 
 
 if __name__ == '__main__':
