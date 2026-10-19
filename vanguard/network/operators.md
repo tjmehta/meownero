@@ -21,7 +21,7 @@ python3 -B vanguard/network/test_network.py \
 python3 -B vanguard/network/network.py readiness
 ```
 
-The source-check command reads the thirteen pinned paths, five submodule HEADs
+The source-check command reads the seventeen pinned paths, five submodule HEADs
 and Cargo.lock. It does not download dependencies, configure, build, alter the
 source cache or attest executable bytes. The identity-overlay command writes a
 patch and original/changed SHA256 receipt, not a runnable node tree.
@@ -33,6 +33,10 @@ fail preparation; this document does not allocate operators or ports. Endpoint
 availability and process ownership must be checked by the eventual native runner.
 The prepared client binds fixed48080/48081/48083; its selected seed must use a
 different port. Recovery endpoints and operator identities must be distinct.
+Ports must use canonical ASCII decimal spelling in 1024..65535, with no leading
+zeroes, spaces, sign or Unicode numerals. Both roles are validated before any
+output is written. `127.0.0.1:048180` is refused even when selecting primary;
+it cannot act as a separate recovery endpoint for `127.0.0.1:48180`.
 Literal fixture identities in tests are not operating hosts.
 
 ```sh
@@ -53,6 +57,8 @@ a port, starts a process, creates LMDB, connects to a seed or creates credential
 The two preparations are alternative review inputs; do not start both clients.
 Canonical JSON details follow the [Python JSON interface](https://docs.python.org/3.14/library/json.html).
 The reader bounds input to64KiB and rejects duplicate keys/nonfinite numbers.
+Port spelling uses [Python full-string matching](https://docs.python.org/3/library/re.html#re.fullmatch)
+with explicit ASCII character ranges rather than Unicode decimal classification.
 
 ## Capacity proposal and boundaries
 
@@ -106,6 +112,11 @@ the accepted upstream regtest payment trial does not test that claim.
    binary hashes and resource/cleanup deadlines. Check both peers against it and
    use distinct fresh roots with no upstream database. Authenticate RPC and test
    unauthorized requests plus restricted-method denial before funding.
+   Require the proposed v1@0/v18@1 native fork state and version-one cutoff 0,
+   including native wallet agreement and positive FCMP++/CARROT plus adverse
+   legacy proof/output/ring controls. First record the Cryptography ruling and
+   native genesis serialization/admission/amount-zero commitment/tree-root
+   vectors described in the launch sheet. Static v18 metadata is not this proof.
 2. Start two actual native peers through only the assigned loopback transport.
    Read native genesis/header/network ID and selected wallet address encodings.
    Require positive handshake and matching tips; test wrong UUID and same UUID

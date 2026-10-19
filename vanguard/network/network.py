@@ -175,7 +175,10 @@ def topology(path, value):
         require(isinstance(row['endpoint'], str), 'unassigned bootstrap endpoint')
         host, port = row['endpoint'].rsplit(':', 1)
         require(str(ipaddress.IPv4Address(host)) == '127.0.0.1', 'only contained loopback endpoints allowed')
-        require(port.isdecimal() and 1024 <= int(port) <= 65535, 'invalid bootstrap port')
+        # A single spelling makes the endpoint uniqueness check below compare
+        # actual destinations. isdecimal() also accepts non-ASCII numerals.
+        require(re.fullmatch(r'[1-9][0-9]{3,4}', port) is not None and
+                1024 <= int(port) <= 65535, 'bootstrap port must be canonical ASCII decimal in 1024..65535')
         require(int(port) not in {18080, 19080, 28080, 29080, 38080, 39080}, 'foreign default bootstrap port')
     for key in ('node_id', 'operator_id', 'endpoint'):
         require(data['primary'][key] != data['recovery'][key], 'primary and recovery share ' + key)

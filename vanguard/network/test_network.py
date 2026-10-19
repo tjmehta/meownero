@@ -78,6 +78,20 @@ class Boundaries(unittest.TestCase):
         with self.assertRaises(ValueError):
             n.profile(self.save(other))
 
+    def test_superseded_v17_profile_and_bootstrap_digest_are_refused(self):
+        other = copy.deepcopy(self.p)
+        other['consensus_proposal']['activation'][1]['version'] = 17
+        result = self.invoke('--profile', self.save(other), 'validate')
+        self.assertEqual(result.returncode, 2, result.stderr)
+        stale = copy.deepcopy(self.bootstrap)
+        for role in ('primary', 'recovery'):
+            stale[role]['profile_sha256'] = 'd3d9905bd3c1464f4940f49e0872dfa8e7510127ddf83b781d6c6743e0627168'
+        out = self.root / 'stale'
+        result = self.invoke('prepare', '--bootstrap', self.save(stale, 'peers.json'),
+                             '--node-id', 'client-a', '--out', out)
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertFalse(out.exists())
+
     def test_malformed_and_oversized_json(self):
         for raw in ('{"schema":1,"schema":2}', '{"x":NaN}', '{broken', ' ' * 65537):
             path = self.root / 'bad.json'
@@ -154,6 +168,22 @@ class Boundaries(unittest.TestCase):
         with self.assertRaises(ValueError):
             n.prepare(checkout / 'never', 'client-a', self.save(self.bootstrap), 'primary', self.p)
         self.assertFalse((checkout / 'never').exists())
+
+    def test_bootstrap_port_aliases_are_refused_before_writing(self):
+        # Core's exact reproduction: these two spellings reach the same socket.
+        # Exercise both selected roles; an invalid recovery must fail even when
+        # preparing for the primary. Keep the distinct positive control above.
+        for alias in ('048180', '00048180', '４８１８０', '٤٨١٨٠', '+48180', '48180 ', '48180\n'):
+            peers = copy.deepcopy(self.bootstrap)
+            peers['recovery']['endpoint'] = '127.0.0.1:' + alias
+            for role in ('primary', 'recovery'):
+                out = self.root / 'alias-refused'
+                with self.subTest(alias=alias, role=role):
+                    result = self.invoke('prepare', '--bootstrap', self.save(peers),
+                                         '--node-id', 'client-a', '--role', role, '--out', out)
+                    self.assertEqual(result.returncode, 2, result.stderr)
+                    self.assertIn('canonical ASCII decimal', result.stderr)
+                    self.assertFalse(out.exists())
 
     def test_self_peer_and_rpc_port_are_refused(self):
         for port in (48080, 48081, 48082, 48083):

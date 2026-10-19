@@ -1,0 +1,42 @@
+{
+  "schema": "meownero-vanguard-bootstrap-alias-regression/1",
+  "baseline_commit": "0e6b2b51c218bfcc00beba2ae488e702a88bddac",
+  "baseline_network_py_sha256": "530b0f562455b576a0b699a24923a54f44dd3d4636c74dc5969f33925ae87e90",
+  "current_network_py_sha256": "f27e7572a9d8732c9aad22c441431101d71d0f1cf429ee484e7a7240c3d0dae9",
+  "old_profile_sha256": "d3d9905bd3c1464f4940f49e0872dfa8e7510127ddf83b781d6c6743e0627168",
+  "new_profile_sha256": "b1711b3114e234a4975bcefc6f02fa1175df1d213ed03372bb5c50bc503aef31",
+  "primary_endpoint": "127.0.0.1:48180",
+  "recovery_endpoint": "127.0.0.1:048180",
+  "native_network_proof": "NOT_RUN",
+  "observations": [
+    {
+      "version": "baseline",
+      "role": "primary",
+      "result": "PREPARED_NOT_STARTED",
+      "selected_endpoint": "127.0.0.1:48180",
+      "output_created": true
+    },
+    {
+      "version": "baseline",
+      "role": "recovery",
+      "result": "PREPARED_NOT_STARTED",
+      "selected_endpoint": "127.0.0.1:048180",
+      "output_created": true
+    },
+    {
+      "version": "current",
+      "role": "primary",
+      "result": "REFUSED",
+      "reason": "bootstrap port must be canonical ASCII decimal in 1024..65535",
+      "output_created": false
+    },
+    {
+      "version": "current",
+      "role": "recovery",
+      "result": "REFUSED",
+      "reason": "bootstrap port must be canonical ASCII decimal in 1024..65535",
+      "output_created": false
+    }
+  ],
+  "fixture_cleanup": "REMOVED"
+}
