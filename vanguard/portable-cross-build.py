@@ -392,6 +392,25 @@ def main():
                     'reference': 'https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/exit-exit-exit',
                     'scope': 'Windows ARM64 declaration include only: process.h declares existing _exit; random generation, failure path, source pin and other targets unchanged.'})
                 save()
+                slow_hash = source / 'src/crypto/slow-hash.c'
+                slow_hash_patch = Path(__file__).with_name('patches') / 'monero-e151643c-windows-arm64-slow-hash-platform.patch'
+                tester.require(args.target == 'windows-aarch64' and
+                    PIN['upstream']['commit'] == 'e151643c5269c83bf24a83b2548e2493876026b2' and
+                    tester.sha(slow_hash) == '886ae10164b0593e35df7419cd5834ce66a6db5a5f54a623a5364804f868fd83' and
+                    tester.sha(slow_hash_patch) == '38a310034b4ed0ee490aa2430d53f80866af83a8a769516b87720d8faa06cf80',
+                    'unverified Windows ARM64 slow-hash platform adaptation')
+                run('slow-hash-arm64-platform', ['patch', '-p1', '-F', '0', '-i', str(slow_hash_patch)], cwd=source)
+                tester.require(tester.sha(slow_hash) == 'dae4f22d4034adc4d926f02f11b3cc6ab66b191384e31fd8b8e15656147221de',
+                    'Windows ARM64 slow-hash platform adaptation output differs')
+                receipt['patches'].append({'file': str(slow_hash.relative_to(source)),
+                    'before_sha256': '886ae10164b0593e35df7419cd5834ce66a6db5a5f54a623a5364804f868fd83',
+                    'after_sha256': tester.sha(slow_hash), 'patch_sha256': tester.sha(slow_hash_patch),
+                    'references': [
+                        'https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualalloc',
+                        'https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-virtualfree',
+                        'https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent'],
+                    'scope': 'Windows ARM64 allocation/release and OS CPU feature query only; malloc fallback, hash arithmetic, AES loops, source/dependency pins and non-Windows branches unchanged. Cross compilation is not native execution.'})
+                save()
                 options += ['boost_toolset_mingw32=clang']
                 options += ['mingw32_' + upper + '=/out/llvm/bin/llvm-' + lower for upper, lower in [('AR', 'ar'), ('RANLIB', 'ranlib'), ('NM', 'nm'), ('STRIP', 'strip')]]
                 options += ['host_WINDRES=/out/llvm/bin/' + host + '-windres']
