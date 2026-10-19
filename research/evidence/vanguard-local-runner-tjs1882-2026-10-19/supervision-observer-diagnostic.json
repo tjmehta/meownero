@@ -1,0 +1,144 @@
+{
+  "result": "EXCLUDED_OBSERVER_FAILURE",
+  "cause": "Expected deadline raises TimeoutExpired rather than RuntimeError; fixture observation caught the wrong exception type. Supervisor retained terminal cleanup.",
+  "cleanup_receipt": {
+    "schema": "meownero-local-source-supervision-fixture/1",
+    "result": "FAIL",
+    "wrapper_reaped": true,
+    "cleanup": [
+      {
+        "pid": 51377,
+        "removed": true
+      },
+      {
+        "pid": 51413,
+        "removed": true
+      }
+    ],
+    "signals": [],
+    "observer_ruid": 1000,
+    "observer_euid": 1000,
+    "helper_observations": [],
+    "unverified_observations": [],
+    "wrapper_pid": 51377,
+    "failure_stage": "OBSERVE_OWNED_DESCENDANTS",
+    "snapshot_cost": {
+      "calls": 7,
+      "max_elapsed_seconds": 0.120235,
+      "recent": [
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "INITIAL_OBSERVATION",
+          "timeout_seconds": 5,
+          "result": "PASS",
+          "observer_pid": 51385,
+          "spawn_seconds": 0.008142,
+          "communicate_seconds": 0.100101,
+          "output_bytes": 229299,
+          "process_rows": 1305,
+          "observer_reaped": true,
+          "numeric_pid_absent": true,
+          "reap_seconds": 0.00021,
+          "elapsed_seconds": 0.109153
+        },
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "LIVE_OBSERVATION",
+          "timeout_seconds": 5,
+          "result": "PASS",
+          "observer_pid": 51434,
+          "spawn_seconds": 0.000369,
+          "communicate_seconds": 0.090316,
+          "output_bytes": 229443,
+          "process_rows": 1306,
+          "observer_reaped": true,
+          "numeric_pid_absent": true,
+          "reap_seconds": 0.000256,
+          "elapsed_seconds": 0.091327
+        },
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "LIVE_OBSERVATION",
+          "timeout_seconds": 5,
+          "result": "PASS",
+          "observer_pid": 51679,
+          "spawn_seconds": 0.000347,
+          "communicate_seconds": 0.095385,
+          "output_bytes": 229719,
+          "process_rows": 1306,
+          "observer_reaped": true,
+          "numeric_pid_absent": true,
+          "reap_seconds": 0.000161,
+          "elapsed_seconds": 0.096131
+        },
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "LIVE_OBSERVATION",
+          "timeout_seconds": 5,
+          "result": "PASS",
+          "observer_pid": 51747,
+          "spawn_seconds": 0.000349,
+          "communicate_seconds": 0.088512,
+          "output_bytes": 229634,
+          "process_rows": 1305,
+          "observer_reaped": true,
+          "numeric_pid_absent": true,
+          "reap_seconds": 0.000164,
+          "elapsed_seconds": 0.089301
+        },
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "LIVE_OBSERVATION",
+          "timeout_seconds": 5,
+          "result": "PASS",
+          "observer_pid": 52011,
+          "spawn_seconds": 0.000369,
+          "communicate_seconds": 0.11641,
+          "output_bytes": 229810,
+          "process_rows": 1305,
+          "observer_reaped": true,
+          "numeric_pid_absent": true,
+          "reap_seconds": 0.000172,
+          "elapsed_seconds": 0.117377
+        },
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "OWNED_CLEANUP",
+          "timeout_seconds": 5,
+          "result": "PASS",
+          "observer_pid": 52277,
+          "spawn_seconds": 0.000442,
+          "communicate_seconds": 0.119121,
+          "output_bytes": 228859,
+          "process_rows": 1303,
+          "observer_reaped": true,
+          "numeric_pid_absent": true,
+          "reap_seconds": 0.000271,
+          "elapsed_seconds": 0.120235
+        },
+        {
+          "operation": "OWNED_PROCESS_SNAPSHOT",
+          "context": "OWNED_CLEANUP",
+          "timeout_seconds": 5,
+          "result": "PASS",
+          "observer_pid": 52443,
+          "spawn_seconds": 0.000373,
+          "communicate_seconds": 0.105999,
+          "output_bytes": 229136,
+          "process_rows": 1304,
+          "observer_reaped": true,
+          "numeric_pid_absent": true,
+          "reap_seconds": 0.000222,
+          "elapsed_seconds": 0.107077
+        }
+      ]
+    },
+    "failure_reason": "WRAPPER_DEADLINE",
+    "failure_type": "TimeoutExpired",
+    "wrapper_exit_before_cleanup": null,
+    "forwarded_sigterm": true,
+    "rejected_observation_cleanup": [],
+    "wall_seconds": 1.509,
+    "cancellation_signals": []
+  }
+}

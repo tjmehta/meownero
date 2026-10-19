@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the locked older Linux baseline on an owned native GitHub runner."""
+"""Build the locked Linux baseline on a hosted or explicitly bound owned runner."""
 import argparse
 import hashlib
 import importlib.util
@@ -49,6 +49,50 @@ def resources(parent, reserve=10, minimum_available=5 * 1024**3):
     assert available >= minimum_available, 'available memory gate'
     assert min(free, docker_free) >= reserve * 1024**3, 'disk reserve gate'
     return {'available_memory_bytes': available, 'free_disk_bytes': free, 'docker_free_disk_bytes': docker_free}
+
+
+def local_runner(path, digest, target):
+    """Bind an owned Ubuntu22 VM to observations, without claiming hosted CI."""
+    assert digest and re.fullmatch(r'[0-9a-f]{64}', digest)
+    assert sha(path) == digest, 'local provenance checksum mismatch'
+    value = json.loads(path.read_text())
+    assert set(value) == {'schema', 'issue', 'target', 'environment', 'physical_host_architecture',
+                          'machine_id_sha256', 'boot_id_sha256', 'docker_id', 'docker_name',
+                          'qualification_evidence_sha256'}
+    assert value['schema'] == 'meownero-owned-native-linux-runner/1' and value['issue'] == 'TJS-1882'
+    arch = TARGETS[target][0]
+    assert value['target'] == target, 'local provenance target mismatch'
+    assert re.fullmatch(r'tjs1882-[a-z0-9-]{1,80}', value['environment']), 'task-owned VM identity required'
+    assert value['physical_host_architecture'] in (('aarch64', 'arm64') if arch == 'aarch64' else ('x86_64',)), 'native physical host required'
+    for key in ('machine_id_sha256', 'boot_id_sha256', 'qualification_evidence_sha256'):
+        assert isinstance(value[key], str) and re.fullmatch(r'[0-9a-f]{64}', value[key])
+    assert all(isinstance(value[key], str) and value[key] for key in ('docker_id', 'docker_name'))
+    assert not any(key.startswith(('GITHUB_', 'RUNNER_')) for key in os.environ), 'local execution must not impersonate hosted CI'
+    assert platform.system() == 'Linux' and platform.machine() == arch, 'native local controller required'
+    assert sys.version_info >= (3, 13)
+    release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+    assert release['ID'].strip('"') == 'ubuntu' and release['VERSION_ID'].strip('"') == '22.04', 'owned Ubuntu22 VM required'
+    assert subprocess.check_output(['getconf', 'GNU_LIBC_VERSION'], text=True, timeout=10).strip() == 'glibc 2.35'
+    assert sha(Path('/etc/machine-id')) == value['machine_id_sha256'], 'local VM identity changed'
+    assert sha(Path('/proc/sys/kernel/random/boot_id')) == value['boot_id_sha256'], 'local VM boot changed; requalify'
+    assert not Path('/.dockerenv').exists() and not Path('/run/.containerenv').exists(), 'controller must run inside the owned VM, not a container'
+    assert not any(os.environ.get(key) for key in ('DOCKER_HOST', 'DOCKER_CONTEXT', 'DOCKER_TLS_VERIFY', 'DOCKER_CERT_PATH')), 'local Docker overrides forbidden'
+    context = json.loads(subprocess.check_output(['docker', 'context', 'inspect'], text=True, timeout=15))
+    assert len(context) == 1 and context[0]['Name'] == 'default'
+    assert context[0]['Endpoints']['docker']['Host'] == 'unix:///var/run/docker.sock', 'VM-local Docker socket required'
+    info = json.loads(subprocess.check_output(['docker', 'info', '--format', '{{json .}}'], text=True, timeout=15))
+    assert info['ID'] == value['docker_id'] and info['Name'] == value['docker_name'], 'owned Docker daemon identity changed'
+    assert info['Name'] in (value['environment'], 'lima-' + value['environment']), 'task-owned daemon required'
+    assert info['OSType'] == 'linux' and info['Architecture'] in TARGETS[target][2]
+    assert info['DockerRootDir'] == '/var/lib/docker', 'VM-local Docker data required'
+    assert not subprocess.check_output(['docker', 'ps', '-q'], text=True, timeout=15).strip(), 'preserve other workloads'
+    # Raw hardware/daemon identifiers and qualification data stay private.
+    return {'execution_provider': 'OWNED_NATIVE_UBUNTU22_VM', 'provenance_sha256': digest,
+            'qualification_evidence_sha256': value['qualification_evidence_sha256'],
+            'environment_identity_sha256': hashlib.sha256(value['environment'].encode()).hexdigest(),
+            'machine_id_sha256': value['machine_id_sha256'], 'boot_id_sha256': value['boot_id_sha256'],
+            'docker_id_sha256': hashlib.sha256(value['docker_id'].encode()).hexdigest(),
+            'physical_host_architecture': value['physical_host_architecture']}
 
 
 def fetch(inputs, out):
@@ -257,6 +301,8 @@ def main():
     parser.add_argument('--inputs-sha256', required=True)
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--validate-only', action='store_true')
+    parser.add_argument('--local-provenance', type=Path, help='Exact qualification binding for a separately owned native Ubuntu22 VM')
+    parser.add_argument('--local-provenance-sha256')
     parser.add_argument('--phase', choices=['fetch', 'prepare', 'build', 'package', 'runtime'])
     args = parser.parse_args()
     os.umask(0o077)
@@ -271,6 +317,9 @@ def main():
     assert inputs['compile_resource_policy'] == policy, 'architecture-bound compile resource policy mismatch'
     for name, digest in inputs['source_files'].items():
         assert sha(ROOT / name) == digest, 'CI source input mismatch: ' + name
+    assert bool(args.local_provenance) == bool(args.local_provenance_sha256), 'local provenance requires path and checksum'
+    assert not (args.validate_only and args.phase), 'validation must not execute a worker phase'
+    local = local_runner(args.local_provenance, args.local_provenance_sha256, inputs['target']) if args.local_provenance else None
     out = args.out.absolute()
     if args.phase:
         assert out.is_dir() and not out.is_symlink()
@@ -284,14 +333,20 @@ def main():
              'target': inputs['target'], 'architecture': arch, 'inputs_sha256': args.inputs_sha256, 'github_sha': os.environ.get('GITHUB_SHA'),
              'github_run_id': os.environ.get('GITHUB_RUN_ID'), 'phases': [],
              'debian12_execution': 'UNTESTED', 'independent_release_acceptance': 'PENDING_ORIGINAL_REVIEWER'}
+    if local:
+        proof.update(schema='meownero-owned-native-ubuntu22-build-and-journey/1', local_runner=local)
+        proof.pop('github_sha')
+        proof.pop('github_run_id')
     began, lock_identity = time.monotonic(), None
     lock = Path('/tmp/meownero-swarm-20260912-heavy.lock')
     try:
         if args.validate_only:
             proof['result'] = 'PASS_ALLOWLIST_ONLY_RUNNER_BUILD_NATIVE_JOURNEY_UNTESTED'
             return
-        assert os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_OS') == 'Linux'
-        assert os.environ.get('RUNNER_ARCH') == runner_arch and platform.system() == 'Linux' and platform.machine() == arch
+        if not local:
+            assert os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_OS') == 'Linux'
+            assert os.environ.get('RUNNER_ARCH') == runner_arch
+        assert platform.system() == 'Linux' and platform.machine() == arch
         assert sys.version_info >= (3, 13)
         glibc = subprocess.check_output(['getconf', 'GNU_LIBC_VERSION'], text=True, timeout=10).strip()
         assert glibc == 'glibc 2.35', 'actual native Ubuntu22 libc required'
@@ -321,8 +376,10 @@ def main():
             remaining = 6900 - (time.monotonic() - began) - 180
             assert remaining > 0, 'finite115minute controller budget exhausted'
             try:
+                local_args = ['--local-provenance', str(args.local_provenance.absolute()),
+                              '--local-provenance-sha256', args.local_provenance_sha256] if local else []
                 supervisor.mac_check([sys.executable, '-B', __file__, '--inputs', args.inputs,
-                    '--inputs-sha256', args.inputs_sha256, '--out', out, '--phase', name], private,
+                    '--inputs-sha256', args.inputs_sha256, '--out', out, '--phase', name, *local_args], private,
                     supervision_public, timeout=min(seconds, remaining), cleanup_seconds=180,
                     supervision_schema='meownero-native-linux-ci-owned-supervision/1', failure_label='native Linux ' + name)
                 row['result'] = 'PASS'
