@@ -1,0 +1,159 @@
+{
+  "result": "PASS_WINDOWS_LIB_INVENTORY",
+  "cases": [
+    {
+      "case": "original-real-links-miss-boost",
+      "result": "REPRODUCED"
+    },
+    {
+      "case": "patched-real-links-cover-exact-boost-archives",
+      "result": "PASS"
+    },
+    {
+      "case": "absolute-windows-only-lib-inventory",
+      "result": "PASS"
+    },
+    {
+      "case": "relative-windows-only-lib-inventory",
+      "result": "PASS"
+    },
+    {
+      "case": "container-windows-only-lib-inventory",
+      "result": "PASS"
+    },
+    {
+      "case": "response-windows-only-lib-inventory",
+      "result": "PASS"
+    },
+    {
+      "case": "wrong-target",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "wrong-directory",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "project-imposter",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "system-imposter",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "unmapped-contrib",
+      "result": "PASS_REFUSAL"
+    }
+  ],
+  "count": 11,
+  "actual_boost_archives": [
+    {
+      "name": "libboost_atomic.lib",
+      "sha256": "2af2948dfe0d57bca44d5e898efc5922594305af2b95d8cc32a5ac9ac8e898be",
+      "arm64_object_members": 1,
+      "bytes": 10406
+    },
+    {
+      "name": "libboost_charconv.lib",
+      "sha256": "91fd58e9b416179a84b3b68494bdb7abd8489ba76ff911b2145fa954304b77b4",
+      "arm64_object_members": 2,
+      "bytes": 154250
+    },
+    {
+      "name": "libboost_chrono.lib",
+      "sha256": "7fbee38c987870801943dbc8ea8b2808f2417d4521c13a638e6018d1f707e996",
+      "arm64_object_members": 3,
+      "bytes": 121170
+    },
+    {
+      "name": "libboost_container.lib",
+      "sha256": "c3ac443a1fff7c9f3120081e5e501de966e0103852a192ff34f25872a9afb9f8",
+      "arm64_object_members": 7,
+      "bytes": 143546
+    },
+    {
+      "name": "libboost_date_time.lib",
+      "sha256": "03e0cde094a9357e89dcba11f4114ec7ee7eb1206f0d704782b92c369b246f47",
+      "arm64_object_members": 1,
+      "bytes": 1184
+    },
+    {
+      "name": "libboost_filesystem.lib",
+      "sha256": "130c56f57f3ef87e428086337e92fba42247ef813c43154bb92b8ac04c05679d",
+      "arm64_object_members": 10,
+      "bytes": 374854
+    },
+    {
+      "name": "libboost_locale.lib",
+      "sha256": "d8dfa968f01402e886507a1500b6f563bb02cbbe896f8b2a5338296c969ffdee",
+      "arm64_object_members": 26,
+      "bytes": 1724758
+    },
+    {
+      "name": "libboost_program_options.lib",
+      "sha256": "caa219a9de47a248700f3b40d3f5891eb8e216fe7089da301e871ffce3209abf",
+      "arm64_object_members": 11,
+      "bytes": 1281376
+    },
+    {
+      "name": "libboost_serialization.lib",
+      "sha256": "a282ae2444295d041bcf40495f0e1f909b77e75547dc017dcbaba08f857abf01",
+      "arm64_object_members": 35,
+      "bytes": 1343896
+    },
+    {
+      "name": "libboost_thread.lib",
+      "sha256": "efc1de0cb14eabab54cbd7e7867bb36bb18305ddafd9e599e484a95c1b32edff",
+      "arm64_object_members": 5,
+      "bytes": 198896
+    }
+  ],
+  "actual_link_bindings": [
+    {
+      "target": "daemon",
+      "sha256": "43cc0b5bb68d83f9cac577689acf3595c3bac788b021ce3a27289859bddfffea"
+    },
+    {
+      "target": "daemon",
+      "response_file": "src/daemon/CMakeFiles/daemon.dir/objects1.rsp",
+      "sha256": "fade8513ad98f3183879ff75c4a5ef630100055aeb1503c984609c21cbf17cb3"
+    },
+    {
+      "target": "daemon",
+      "response_file": "src/daemon/CMakeFiles/daemon.dir/linkLibs.rsp",
+      "sha256": "b2bc6be49d0c3e08b38042d2415cb46526278911948d170a5209456742f28204"
+    },
+    {
+      "target": "simplewallet",
+      "sha256": "f41e4d87c985ed88bdb0545530b70ca005892f20e9a8e4345f3f1a8ce694cb3f"
+    },
+    {
+      "target": "simplewallet",
+      "response_file": "src/simplewallet/CMakeFiles/simplewallet.dir/objects1.rsp",
+      "sha256": "0d7e0b43804a7846e141127e37d7917ed139a62a2465ee1c706f7765a5b51a35"
+    },
+    {
+      "target": "simplewallet",
+      "response_file": "src/simplewallet/CMakeFiles/simplewallet.dir/linkLibs.rsp",
+      "sha256": "8a1bf0be5d5e734b3ee0244e5069c80157bd84e3ab2e3bd7697213190713503e"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "sha256": "27e0531d0021d2d427315ce278ecb71fdfc481d6509be4e8bf74cf3a04d84ebd"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "response_file": "src/wallet/CMakeFiles/wallet_rpc_server.dir/objects1.rsp",
+      "sha256": "d2f5a00c7a8f87b6118c243ba570dbbe2d95231b994892e813ed09d244eef7a9"
+    },
+    {
+      "target": "wallet_rpc_server",
+      "response_file": "src/wallet/CMakeFiles/wallet_rpc_server.dir/linkLibs.rsp",
+      "sha256": "210885e330a344a078ddceb1a634e5bddd1d82ee76d4aed258ac7548fc931f86"
+    }
+  ],
+  "original_module_sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+  "candidate_module_sha256": "10aa313a12277f76013b70f170eb49751bd518fcfd4297c18909a0db57919089",
+  "scope": "LICENSE_INVENTORY_AND_CROSS_OBJECTS_ONLY_NO_NATIVE_WINDOWS_EXECUTION"
+}

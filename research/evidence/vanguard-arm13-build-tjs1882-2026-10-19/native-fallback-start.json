@@ -1,0 +1,25 @@
+{
+  "schema": "meownero-arm13-native-fallback-start/1",
+  "observed_utc": "2026-10-19T16:03:55.341128+00:00",
+  "source_commit": "6fb3c3ec4a8e6a13dcbec7b638525556d4f84568",
+  "source_helper_sha256": "0dab03dfc1f866087c4306143e80f2b8e196f1766321bae5c9ae077c1a9213a1",
+  "fallback_reason": "Colima pre-existing x64 translation had GCC internal segmentation failure at Boost B2 before product compilation; zero cgroup OOM",
+  "prior_attempt": {
+    "result": "FAILED_ATTEMPT",
+    "build_receipt_sha256": "d74c6a7fa68352f3a3e6b67306c2bbbba0f2414c8dc4c1d0f4ac741ef71d2267",
+    "container_memory_peak": 1183793152,
+    "all_owned_containers_removed": true
+  },
+  "new_target": "windows-aarch64",
+  "new_compiler_substrate": "NATIVE_AMD64_LINUX",
+  "limits": {
+    "cpus": 2,
+    "memory_bytes": 3221225472,
+    "memory_swap_bytes": 3221225472,
+    "pids": 256,
+    "offline_compile": true,
+    "compile_deadline_seconds": 3600
+  },
+  "native_windows_execution": "UNTESTED",
+  "source_pins_unchanged": true
+}

@@ -1,0 +1,10 @@
+--- contrib/depends/hosts/mingw32.mk
++++ contrib/depends/hosts/mingw32.mk
+@@ -1,6 +1,7 @@
+ mingw32_CFLAGS=-pipe -std=$(C_STANDARD)
+ mingw32_CXXFLAGS=-pipe -std=$(CXX_STANDARD)
+ mingw32_ARFLAGS=cr
++mingw32_CPPFLAGS=-DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 -DBOOST_USE_WINAPI_VERSION=0x0A00
+ 
+ mingw32_release_CFLAGS=-O2
+ mingw32_release_CXXFLAGS=$(mingw32_release_CFLAGS)

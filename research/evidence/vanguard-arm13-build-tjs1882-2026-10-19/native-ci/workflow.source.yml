@@ -1,0 +1,49 @@
+name: TJS-1882 exact ARM13 native Windows qualification
+on:
+  push:
+    branches: [tjs1882-native-windows-arm13]
+    paths: [.github/workflows/tjs1882-native-windows-arm13.yml]
+permissions:
+  contents: read
+concurrency:
+  group: tjs1882-native-windows-arm13
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: windows-11-arm
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        env:
+          GIT_CONFIG_COUNT: '1'
+          GIT_CONFIG_KEY_0: core.autocrlf
+          GIT_CONFIG_VALUE_0: 'false'
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /ci/tjs1882/packages/windows-aarch64/
+            /vanguard/run-portable-ci.py
+            /vanguard/ci-inputs.json
+            /vanguard/test-portable-refusals.py
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.13.16'
+          architecture: arm64
+      - name: Exact archive native journey and ten controls
+        shell: pwsh
+        run: >-
+          python -B vanguard/run-portable-ci.py
+          --inputs vanguard/ci-inputs.json
+          --inputs-sha256 1e7cf3b77c719eb9f04172b2a994616601f20d38a29090791ae7d9397bfb0802
+          --target windows-aarch64
+          --out "$env:RUNNER_TEMP/tjs1882-native-arm13"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: tjs1882-windows-aarch64-${{ github.run_id }}
+          path: ${{ runner.temp }}/tjs1882-native-arm13/public/*.json
+          if-no-files-found: warn
+          retention-days: 3

@@ -1,0 +1,10 @@
+--- contrib/depends/packages/openssl.mk
++++ contrib/depends/packages/openssl.mk
+@@ -54,6 +54,7 @@
+ define $(package)_preprocess_cmds
+   sed -i.old 's|crypto ssl apps util tools fuzz providers doc|crypto ssl util tools providers|' build.info && \
+   patch -p1 < $($(package)_patch_dir)/fix-android.patch && \
++  cp $($(package)_patch_dir)/99-tjs1882-mingwarm64.conf Configurations/99-tjs1882-mingwarm64.conf && \
+   rm -rf doc demos apps test
+ endef
+ 

@@ -1,0 +1,106 @@
+--- a/vanguard/run-portable-ci.py
++++ b/vanguard/run-portable-ci.py
+@@ -232,6 +232,14 @@
+         if key in value:
+             assert len(value[key]) == 64 and set(value[key]) <= set('0123456789abcdef')
+             result[key] = value[key]
++    if 'native_qualification' in value:
++        qualified = value['native_qualification']
++        assert qualified['process_machine'] == 0 and qualified['native_machine'] == qualified['python_machine'] == 0xaa64
++        assert qualified['armv8_crypto'] is True and qualified['programs_arm64'] is True and qualified['emulation'] is False
++        digest = qualified['python_sha256']
++        assert type(digest) is str and len(digest) == 64 and set(digest) <= set('0123456789abcdef')
++        result['native_qualification'] = {key: qualified[key] for key in
++            ('process_machine', 'native_machine', 'python_machine', 'python_sha256', 'armv8_crypto', 'programs_arm64', 'emulation')}
+     result['phases'] = []
+     for row in value.get('phases', []):
+         assert row['name'] in ('exception-probe', 'preflight', 'journey', 'controls')
+@@ -715,15 +723,57 @@
+                     signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+ 
+ 
++def windows_arm64_qualification(backend, package, row):
++    """Require native ARM64 CPython and exact ARM64 programs before spawning."""
++    assert os.name == 'nt' and platform.python_implementation() == 'CPython'
++    assert sys.version_info >= (3, 13) and platform.machine().upper() in ('ARM64', 'AARCH64')
++    assert backend.C.sizeof(backend.C.c_void_p) == 8
++    assert backend.native_architecture() == 'aarch64'
++    process, native = backend.W.USHORT(), backend.W.USHORT()
++    backend.check(backend.api(backend.k, 'IsWow64Process2', backend.W.BOOL,
++        backend.W.HANDLE, backend.C.POINTER(backend.W.USHORT), backend.C.POINTER(backend.W.USHORT))(
++        backend._winapi.GetCurrentProcess(), backend.C.byref(process), backend.C.byref(native)))
++    assert process.value == 0 and native.value == 0xaa64, 'native ARM64 process required; emulation refused'
++    crypto = backend.api(backend.k, 'IsProcessorFeaturePresent', backend.W.BOOL, backend.W.DWORD)(30)
++    assert crypto, 'ARMv8 crypto instructions required by exact compile flags'
++
++    def machine(path):
++        with path.open('rb') as stream:
++            header = stream.read(64)
++            assert len(header) == 64 and header[:2] == b'MZ', 'PE DOS header required'
++            offset = int.from_bytes(header[60:64], 'little')
++            assert 64 <= offset <= path.stat().st_size - 26, 'PE offset out of bounds'
++            stream.seek(offset)
++            header = stream.read(26)
++        assert header[:4] == b'PE\0\0' and header[24:26] == b'\x0b\x02', 'PE32+ required'
++        assert int.from_bytes(header[4:6], 'little') == 0xaa64, 'native ARM64 PE required'
++        return 0xaa64
++
++    python_machine = machine(Path(sys.executable))
++    for name, digest in row['program_sha256'].items():
++        assert name in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')
++        path = package / 'bin' / (name + '.exe')
++        assert sha(path) == digest, 'program binding changed before native qualification'
++        machine(path)
++    assert set(row['program_sha256']) == {'monerod', 'monero-wallet-cli', 'monero-wallet-rpc'}
++    return {'process_machine': process.value, 'native_machine': native.value,
++            'python_machine': python_machine, 'python_sha256': sha(Path(sys.executable)),
++            'armv8_crypto': True, 'programs_arm64': True, 'emulation': False}
++
++
+ def windows_check(package, out, row):
+     spec = importlib.util.spec_from_file_location('ci_windows', package / 'portable_windows.py')
+     backend = importlib.util.module_from_spec(spec)
+     spec.loader.exec_module(backend)
+-    assert backend.native_architecture() == 'x86_64' and backend.C.sizeof(backend.C.c_void_p) == 8
+     receipt = {'schema': 'meownero-native-windows-ci-check/1', 'result': 'FAIL',
+                'native_architecture': backend.native_architecture(), 'phases': []}
+     architecture = json.loads((package / 'release.json').read_text())['architecture']
+-    assert architecture in ('i686', 'x86_64')
++    assert architecture in ('i686', 'x86_64', 'aarch64')
++    assert backend.C.sizeof(backend.C.c_void_p) == 8
++    if architecture == 'aarch64':
++        receipt['native_qualification'] = windows_arm64_qualification(backend, package, row)
++    else:
++        assert backend.native_architecture() == 'x86_64'
+     assert architecture == row.get('architecture', 'x86_64'), 'Windows package target mismatch'
+     receipt['package_architecture'] = architecture
+     receipt['execution_substrate'] = 'NATIVE_WINDOWS_WOW64' if architecture == 'i686' else 'NATIVE'
+@@ -854,7 +904,7 @@
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('--inputs', type=Path, required=True)
+     parser.add_argument('--inputs-sha256', required=True)
+-    parser.add_argument('--target', choices=['windows-i686', 'windows-x86_64', 'macos-x86_64'], required=True)
++    parser.add_argument('--target', choices=['windows-i686', 'windows-x86_64', 'windows-aarch64', 'macos-x86_64'], required=True)
+     parser.add_argument('--out', type=Path, required=True)
+     parser.add_argument('--prepare-only', action='store_true', help='Verify bytes only; never execution evidence')
+     args = parser.parse_args()
+@@ -915,7 +965,9 @@
+             return
+         assert sys.version_info >= (3, 13)
+         if args.target.startswith('windows-'):
+-            assert os.name == 'nt' and platform.machine().upper() in ('AMD64', 'X86_64')
++            assert os.name == 'nt'
++            allowed = ('ARM64', 'AARCH64') if args.target == 'windows-aarch64' else ('AMD64', 'X86_64')
++            assert platform.machine().upper() in allowed
+             check_root = out
+             windows_check(package, out, row)
+         else:
+@@ -954,7 +1006,7 @@
+         controls = json.loads((check_root / 'controls/controls.json').read_text())
+         check = json.loads((check_root / 'check-receipt.json').read_text())
+         assert journey['result'] == 'PASS_NATIVE_JOURNEY' and journey['cleanup'] and all(x['removed'] for x in journey['cleanup'])
+-        assert journey['architecture'] == ('i686' if args.target == 'windows-i686' else 'x86_64')
++        assert journey['architecture'] == row['architecture']
+         assert journey['upstream_commit'] == inputs['upstream_commit']
+         assert journey['release_manifest_sha256'] == row['release_manifest_sha256']
+         assert journey['program_sha256'] == row['program_sha256']
