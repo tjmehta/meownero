@@ -50,10 +50,36 @@ outside this slot. The existing source and builder are read-only inputs; never
 reconfigure or copy generated files into that source, its cache or another
 writer's worktree.
 
-That one attempt is now complete. Another native workload requires a new bounded
-platform coordination window. Do not rerun the recipe on the consumed grant.
-The next missing claim is genuine TESTNET genesis admission and persisted state,
-as specified in [admission-boundary.md](admission-boundary.md).
+That helper attempt is complete. The subsequent
+[platform grant](<private-tracker>/TJS/issues/TJS-2504#comment-15414082-2a53-4872-8d19-b87f302f0bae)
+allows one new local admission attempt after fresh nonblocking admission. It
+does not renew the helper grant or reserve host capacity.
+
+`../run-admission.py` implements that separate window. It verifies every original
+archive member in the task-owned export, refuses unexpected source paths,
+checks the copied Cargo inputs and prior helper binary, records hashes of reused
+objects, and applies only the committed three-file admission overlay. It reuses
+the task-owned incremental build; it is not a clean rebuild. Shared source/cache
+and package paths are never writable mounts. It keeps the same host lock through
+exact-container removal and records load, memory, disk, process/container
+collisions, limits, toolchains and complete failures. Failed admission creates
+no container and does not wait for capacity.
+
+```sh
+python3 -B vanguard/network/run-admission.py --out "$TASK_PRIVATE_SCRATCH/admission-attempt-new"
+```
+
+`admission.cpp` initializes actual TESTNET with null test options, offline/DNS
+disabled/fast-sync disabled and no fixed difficulty. It checks height, genesis
+bytes/hash, zero generated coins, stored output/commitment/origin/unlock data,
+scheduled tree metadata and next-block v18 state, then reopens and compares a
+second independent fresh database. A zero-layer immature root is explicitly
+unavailable, never an accepted mature root. This is database agreement, not
+two-peer networking. Separate fresh negative cases exercise the native public
+`reset_and_set_genesis_block` API after ordinary initialization; they do not
+claim alternate-config initialization. Each case has a 45-second limit. Raw
+logs and exits survive every failure. Selected 9/90 policy, maturity/funding,
+two-peer continuity, wallet and operator acceptance remain separate requirements.
 
 `../run-genesis.py` implements this grant. It opens the existing host lock
 without creation/truncation, checks the platform-recorded device/inode and takes
