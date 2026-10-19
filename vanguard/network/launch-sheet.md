@@ -4,10 +4,11 @@
 launchable candidate**. The [Cryptography consultation](<private-tracker>/TJS/issues/TJS-2504#comment-3b6c0197-43f9-4c30-a90c-399f82fc0b57)
 accepts the genesis construction and v18 activation directions for bounded
 non-public implementation. The conceptual ruling is complete. The native helper
-now reproduces exact genesis bytes/hashes and unchanged helper controls. TESTNET
-admission, persisted roots and final native acceptance remain unverified. The
-combined admission prerequisite patch is prepared, uncompiled and unadmitted.
-See [the bounded native result](native-result.md).
+now reproduces exact genesis bytes/hashes and unchanged helper controls. Genuine
+TESTNET genesis admission, persisted zero accounting/commitment, immature tree
+metadata, v18 next-block state and reopen/second-database agreement now pass.
+Mature roots and final native acceptance remain open. See
+[the admission result](admission-result.md) and [earlier helper result](native-result.md).
 No daemon, wallet, service or external endpoint was started for this checkpoint. Configuration
 checks cannot establish native separation, consensus or recoverability.
 
@@ -51,8 +52,8 @@ semantics. The existing packages need rebuilding/integrating for this profile.
 | Standard/integrated/subaddress prefixes | 4240 / 4241 / 4242, distinct from upstream and historical Candidate M; native encoding/decoding is still NOT_RUN |
 | P2P / daemon RPC / reserved disabled ZMQ / wallet RPC | 48080 / 48081 / 48082 / 48083 |
 | Data root | A fresh private task directory, then namespace/node ID; native `--testnet` appends `testnet/lmdb` |
-| Genesis | Native-derived v2/RCTNull one-zero-output transaction is pinned in the profile. Actual nonce424001; block hash `885cb43cf51086063f15c94d2fb7f327e34c447de53c9c6291b1a86d6510dab6`. Admission remains unverified |
-| Activation | Core-directed v1 at height 0, v18 at height 1, version-one cutoff 0; accepted implementation direction; native acceptance pending, not installed |
+| Genesis | Native-derived v2/RCTNull one-zero-output transaction is pinned in the profile. Actual nonce424001; block hash `885cb43cf51086063f15c94d2fb7f327e34c447de53c9c6291b1a86d6510dab6`. Bounded native TESTNET genesis admission passes; independent acceptance pending |
+| Activation | Core-directed v1 at height 0, v18 at height 1, version-one cutoff 0; native next-block state is 18; no height-one block admitted or public installation |
 | Issuance | Selected perpetual 9 MEOW/90 s; gated 12/120 fallback unchanged. Twelve decimal atomic precision, fees to miners, no premine, tax, burn, halving, cap or sunset |
 | Difficulty/capacity | Unresolved launch difficulty and matched-capacity intended-crypto gate. No fixed-difficulty override proposed for a shared network |
 | Discovery | Explicit exclusive native P2P peers; no DNS, IP seed or daemon bootstrap-RPC fallback in the operator recipe |

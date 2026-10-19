@@ -1,4 +1,10 @@
-# Next native boundary at the pinned source
+# Genesis admission boundary at the pinned source
+
+The bounded witness now passes. See [the admission result](../admission-result.md)
+and frozen executed source/evidence there. This specification remains the
+source rationale. Mature roots, height-one funding, same-boundary positive reset
+controls, alternate-config startup rejection and full two-peer continuity are
+still unverified. The single new platform grant is consumed and staging cleaned.
 
 This source inspection does not establish admission. It specifies the next
 runtime check after the reproducible native genesis helper succeeds. Sources

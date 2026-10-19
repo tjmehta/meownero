@@ -37,8 +37,9 @@ remain independently unaccepted. The native helper has now reproduced the exact
 bytes, hashes, amount0 commitment and helper controls. `admission-overlay`
 exports a source-bound three-file TESTNET prerequisite patch containing those
 bytes, the dedicated identity, v18 activation and height-zero validation. It
-has not been compiled/admitted and still omits selected-policy integration.
-See [the result](native-result.md) and [native preparation](native/README.md).
+passed the bounded genuine TESTNET genesis admission/reopen witness and still
+omits selected-policy integration. See [the admission result](admission-result.md),
+[earlier helper result](native-result.md) and [native preparation](native/README.md).
 
 Copy [operators.example.json](operators.example.json) to task scratch. Keep its
 profile hash. Replace nulls only with explicitly assigned operator pseudonyms,

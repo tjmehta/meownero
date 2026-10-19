@@ -5,7 +5,8 @@ accepts implementation of the proposed construction and v18 activation. It does
 not accept exact genesis bytes or the final candidate. The helper was built
 from exported pinned source and passed twice, with byte-identical recipe outputs.
 See [the result](../native-result.md). The combined TESTNET admission overlay
-has not been compiled or admitted; no persisted root is established.
+now passes the bounded real-core genesis witness; its stored root is immature
+and unavailable. See [the admission result](../admission-result.md).
 
 `genesis.cpp` uses the pinned native crypto and transaction/block serializers.
 Its recovery inputs are the public canonical little-endian scalars 1,2,3 for
@@ -52,8 +53,11 @@ writer's worktree.
 
 That helper attempt is complete. The subsequent
 [platform grant](<private-tracker>/TJS/issues/TJS-2504#comment-15414082-2a53-4872-8d19-b87f302f0bae)
-allows one new local admission attempt after fresh nonblocking admission. It
-does not renew the helper grant or reserve host capacity.
+allowed one new local admission attempt after fresh nonblocking admission. That
+attempt is now complete; no grant or host reservation remains. Task-owned
+source/build/Cargo staging and stopped databases were archived as needed and
+removed. Commands below document the executed one-shot recipe, not current
+authority to rerun it. A future attempt needs fresh coordination and staging.
 
 `../run-admission.py` implements that separate window. It verifies every original
 archive member in the task-owned export, refuses unexpected source paths,

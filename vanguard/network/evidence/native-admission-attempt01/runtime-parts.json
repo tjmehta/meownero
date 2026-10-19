@@ -1,0 +1,28 @@
+{
+  "archive": "native-runtime.tgz",
+  "archive_sha256": "ac1777eebc5521b6645bf8da43b281fbb911faacd1013b693c1a5f338c278f8b",
+  "parts": [
+    {
+      "name": "native-runtime.tgz.part00",
+      "bytes": 8388608,
+      "sha256": "bf707ea42fab65b9c9f655e8ab7c238c9cb0aa59b66fbbda7f9f318b75ff3e2d",
+      "attachment_id": "97dada5f-bdff-48c3-bca7-fd0ef2cc9823",
+      "content_path": "/api/attachments/97dada5f-bdff-48c3-bca7-fd0ef2cc9823/content",
+      "authenticated_readback": "PASS_SHA256"
+    },
+    {
+      "name": "native-runtime.tgz.part01",
+      "bytes": 8130646,
+      "sha256": "8b94558734302a805e1943f225621fddb3dfeef8d3825336f63a9f25cb601f65",
+      "attachment_id": "886a4a39-24e1-4274-91a2-09d59426d304",
+      "content_path": "/api/attachments/886a4a39-24e1-4274-91a2-09d59426d304/content",
+      "authenticated_readback": "PASS_SHA256"
+    }
+  ],
+  "reassemble": "cat native-runtime.tgz.part00 native-runtime.tgz.part01 > native-runtime.tgz",
+  "original_upload_refusal": "422: 10 MB per-file attachment limit; full archive is 16519254 bytes",
+  "authenticated_reassembly_readback": {
+    "result": "PASS",
+    "members_verified": 30
+  }
+}

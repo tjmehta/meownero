@@ -1,0 +1,111 @@
+{
+  "schema": "meownero-vanguard-shared-network/1",
+  "profile_id": "meownero-vanguard-shared-testnet-v1",
+  "status": "protocol-proposal",
+  "valueless": true,
+  "launch_ready": false,
+  "consultation": {
+    "comment_id": "3b6c0197-43f9-4c30-a90c-399f82fc0b57",
+    "reviewed_candidate": "4d89b4a35d0a3c8d8f40648989d5b6ffacc2e7b7",
+    "direction": "accepted-for-bounded-non-public-implementation",
+    "exact_genesis_and_candidate": "unverified",
+    "genesis": {
+      "block_version": 1,
+      "transaction_version": 2,
+      "rct_type": "RCTNull",
+      "input_height": 0,
+      "unlock_time": 60,
+      "outputs": 1,
+      "output_amount_atomic": 0,
+      "output_type": "txout_to_key",
+      "public_recovery_scalars_little_endian": [
+        1,
+        2,
+        3
+      ],
+      "amount_zero_commitment_hex": "5866666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "source_lock_sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+  "network": {
+    "native_selector": "testnet",
+    "id_derivation": "sha256(profile_id + \"/network-id\")[0:16]",
+    "id_hex": "e16d7839ed4d3ec8363d078df18fff6d",
+    "address_prefixes": {
+      "standard": 4240,
+      "integrated": 4241,
+      "subaddress": 4242
+    },
+    "ports": {
+      "p2p": 48080,
+      "daemon_rpc": 48081,
+      "zmq_reserved_disabled": 48082,
+      "wallet_rpc": 48083
+    },
+    "data_directory": "meownero-vanguard-shared-testnet-v1/{node_id}",
+    "native_data_suffix": "testnet/lmdb",
+    "discovery": "exclusive-peers-only",
+    "dns_seeds": [],
+    "ip_seeds": [],
+    "daemon_bootstrap_rpc": false
+  },
+  "consensus_proposal": {
+    "genesis_reward_atomic": 0,
+    "genesis_nonce": 424001,
+    "genesis_tx_hex": "023c01ff000100025aeaf0562ffc3ae8b12bb4cfc3f07bf56916dd1e3b2e9cbf2674e54c5ba6dfe42101d4b4f5784868c3020403246717ec169ff79e26608ea126a1ab69ee77d1b1671200",
+    "genesis_block_hash": "885cb43cf51086063f15c94d2fb7f327e34c447de53c9c6291b1a86d6510dab6",
+    "activation": [
+      {
+        "version": 1,
+        "height": 0
+      },
+      {
+        "version": 18,
+        "height": 1
+      }
+    ],
+    "version_one_till": 0,
+    "reward_atomic": 9000000000000,
+    "target_seconds": 90,
+    "fallback_reward_atomic": 12000000000000,
+    "fallback_target_seconds": 120,
+    "atomic_decimals": 12,
+    "fees": "miners",
+    "premine": false,
+    "difficulty_floor": null,
+    "capacity_policy": "pending matched-capacity intended-crypto measurement"
+  },
+  "containment": {
+    "bind_ip": "127.0.0.1",
+    "rpc_authenticated": true,
+    "rpc_restricted": true,
+    "wallet_rpc_authenticated": true,
+    "wallet_rpc_restricted": true,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "pids": 256,
+    "minimum_available_memory_bytes": 5368709120,
+    "minimum_free_disk_bytes": 5368709120,
+    "lifetime_seconds": 900,
+    "network": "none",
+    "public_endpoints": false
+  },
+  "unresolved": [
+    "native-genesis-admission-and-root-evidence",
+    "current-lineage-selected-policy-integration",
+    "launch-difficulty-and-capacity",
+    "native-profile-separation-persistence-recovery",
+    "package-wallet-profile-integration",
+    "private-operator-capacity-assignment",
+    "independent-core-security-acceptance"
+  ],
+  "native_genesis_recipe": {
+    "result": "PASS_NATIVE_RECIPE_HELPERS_ONLY",
+    "path": "evidence/native-genesis-attempt01/recipe1.json",
+    "sha256": "12e6e285abc394b1a775912c7d3eca74b9aa696546dc78828c58322a512486b9",
+    "generated_from_profile_sha256": "920825038185340ea4461e3899c0c74e579249fa57735621b7929dec4f3ef7c5",
+    "testnet_admission": "NOT_RUN",
+    "binary_sha256": "5a9048e5147e2d8692b1682263354dce6f36ff3531784519a711a6131835029b"
+  }
+}
