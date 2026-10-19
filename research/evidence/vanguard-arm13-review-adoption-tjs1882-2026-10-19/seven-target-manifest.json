@@ -1,0 +1,131 @@
+{
+  "schema": "meownero-seven-target-native-checkpoint/5",
+  "captured_utc": "2026-10-19T17:07:43.583242+00:00",
+  "issue": "TJS-1882",
+  "run_id": "c2ca678b-a9b7-4dd0-861a-8f67c275fed4",
+  "release_status": "OPEN",
+  "historical_native_accepted_targets": 3,
+  "requested_targets": 7,
+  "source_pin": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "controller_source_commit": "b1af96dabd4d34198e06d05e4f777bd9f55e781a",
+  "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "historical_stage": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+  "targets": {
+    "windows-x86_64": {
+      "status": "HISTORICAL_SCOPED_NATIVE_ACCEPTANCE_PRESERVED",
+      "archive_sha256": "859d4644815b4c990cca093c6d74bb077e6ab74f267236ed84746d5b6cf690d0",
+      "witness": "Windows Server2025 x64 only; other Windows versions UNTESTED",
+      "acceptance_comment": "<private-tracker>/TJS/issues/TJS-1882#comment-74d6566c-63f8-4361-bcb9-6640aa42c141",
+      "fresh_execution": false
+    },
+    "macos-aarch64": {
+      "status": "HISTORICAL_SCOPED_NATIVE_ACCEPTANCE_PRESERVED",
+      "archive_sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+      "witness": "Native macOS26.5.1 Apple Silicon; other OS versions UNTESTED",
+      "acceptance_comment": "<private-tracker>/TJS/issues/TJS-1882#comment-03ba5237-db67-43de-bd90-060745e520fc",
+      "fresh_execution": false
+    },
+    "macos-x86_64": {
+      "status": "HISTORICAL_SCOPED_NATIVE_ACCEPTANCE_PRESERVED",
+      "archive_sha256": "7a3ddef44b58c752dd508bd6d2251266de4a1af3a1d635680854707a8cdb3a09",
+      "witness": "Native macOS15.7.9 Intel22 run38014113675; other OS versions UNTESTED",
+      "acceptance_comment": "<private-tracker>/TJS/issues/TJS-1882#comment-fda3519a-1333-4eeb-b8d4-cd87fdb7c9a6",
+      "fresh_execution": false
+    },
+    "linux-aarch64": {
+      "status": "ACCEPT_SCOPED_EXACT_ARM39_ARTIFACT",
+      "archive": "meownero-vanguard-aarch64.tar.gz",
+      "archive_bytes": 72731614,
+      "archive_sha256": "b9f06ea78cf7da5c2272b998b48eed5a46dc404b721f32db7f09dc39407de1dc",
+      "release_manifest_sha256": "d0b3c2d7a405d2ede1d07227ab90feb6d142afd6b3b15468af353d8800449d58",
+      "built": true,
+      "native_executed": true,
+      "independently_accepted": true,
+      "binary_format": "ELF64 little endian aarch64",
+      "minimum_glibc": "2.35",
+      "cpu": "ARMv8-A AES/PMULL/SHA1/SHA2",
+      "signing": "unsigned",
+      "notarization": "not applicable",
+      "patches": [],
+      "coverage": [
+        "Ubuntu22.04 native aarch64 owned VZ guest with HWE6.8; contained Ubuntu22 builder/runtime",
+        "Debian12 glibc2.36 native aarch64 container userland on same guest; not a Debian kernel/bare-metal witness",
+        "Independent reviewer Ubuntu24.04.4 native aarch64 Colima container; same exact archive, full journey and ten controls"
+      ],
+      "other_distributions": "UNTESTED_FOR_THIS_EXACT_ARCHIVE",
+      "bindings": "native-evidence-bindings.json",
+      "delivery": "delivery-manifest.json",
+      "acceptance_document_revision": "79710ac3-4e44-4175-9af8-70236f654ed6",
+      "acceptance_comment": "<private-tracker>/TJS/issues/TJS-1882#comment-b4a7a2b6-842e-4ab7-b058-d6625f5598ca",
+      "fresh_execution_this_run": false
+    },
+    "linux-x86_64": {
+      "status": "CURRENT_LOCAL38_NATIVE_EXECUTION_BLOCKED",
+      "built_this_run": false,
+      "native_executed_this_run": false,
+      "source_only": "Source-cleared local38 successor retained; frozen Linux38 unchanged",
+      "blocker": "Trusted build-mac-to-dev route works, but physical Ubuntu24 x86_64 lacks /dev/kvm, exposed virtualization extensions and installed VM launcher; shared Ubuntu24 Docker cannot satisfy native Ubuntu22 isolated admission. Actions included capacity unconfirmed (billing API404 insufficient user scope).",
+      "owner": "Studio lead38e398e0 / existing parent capacity route",
+      "smallest_next_action": "Provide a qualified isolated native x86_64 Ubuntu22 environment with original reserves, or confirm existing included Actions capacity/storage; then run the full reviewed local38/frozen Linux38 controller. No paid dispatch or admission bypass."
+    },
+    "windows-i686": {
+      "status": "I68635_NATIVE_SUCCESSOR_HELD_FOR_EXISTING_CAPACITY_ROUTE",
+      "archive_sha256": "3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745",
+      "prior_native_execution": "Prior WoW64 exception and journey evidence retained; current i68635 full controls/cancellation/Job cleanup and standalone32bit Windows remain UNTESTED",
+      "owner": "Studio lead38e398e0 / parent",
+      "smallest_next_action": "Confirm existing included Windows capacity/storage or applicable authorized spend limit, then exact previously reviewed i68635 dispatch; no new dispatch in this run."
+    },
+    "windows-aarch64": {
+      "status": "ARM13_BUILT_UNTESTED_COMPILED_ARTIFACT_AND_PRIVATE_DELTAS_ACCEPTED",
+      "archive": "meownero-vanguard-windows-aarch64.zip",
+      "archive_sha256": "fff26ea94928d2756cbf4b4b59bd2277a685e980d482cf389c8be405617ae15d",
+      "archive_bytes": 66636343,
+      "release_manifest_sha256": "676994c2752e419d50cb5b3a74a98304f2f6819e60d2e9b0fa2ef6461958c5a0",
+      "source_review": "ACCEPT_SCOPED_ARM13_SOURCE_FOR_BOUNDED_BUILD",
+      "built": true,
+      "native_executed": false,
+      "independently_accepted": false,
+      "binary_format": "PE32+ ARM64 0xaa64",
+      "signing": "UNSIGNED",
+      "cpu": "ARMv8-A crypto required by exact flags",
+      "minimum_os": "Declared Windows10v1709+; native runtime floor UNTESTED",
+      "historical_ARM12_failure": "Preserved missing sys/mman.h build failure",
+      "current_build": "All3 programs cross-built on native Linux x64 with original resource limits; first QEMU GCC internal failure preserved",
+      "packaging": "Private Windows-only .lib recognition patch; frozen shared helper unchanged; linked dependency coverage PASS",
+      "native_ci": "Separate exact-archive ARM64/no-emulation private payload staged; 22 mocked guards and prepare-only hash binding PASS; NOT native execution",
+      "owner": "Studio lead / parent confirms fresh included minutes/storage or supplies existing qualified host; stored writer qualifies and executes exact native controller",
+      "smallest_next_action": "Confirm included Actions minutes/storage or supply an existing qualified native Windows ARM64 host, then input-FIRST remote readback/workflow-LAST exact publication and full native qualification. Reuse completed compiled-artifact/delta review.",
+      "compiled_artifact_and_private_deltas_accepted": true,
+      "native_acceptance": "INSUFFICIENT_EVIDENCE",
+      "review_comment_id": "480927b9-f9de-45f7-9ded-328b91c39e61",
+      "review_attachment_id": "02716f05-9e5f-495d-bb35-3343db784bc4",
+      "review_attachment_sha256": "66a204dd83625736f4b71b07632105aeee7a8e4692a6942200a84af3ab30b8e5"
+    }
+  },
+  "accepted_docker_leaf": {
+    "status": "ACCEPTED_PUBLISHED_SEPARATE_LEAF_PRESERVED",
+    "counts_as_new_native_target": false,
+    "sha256": "0b72d59fba8bd01b1ba45e72016c4e5c36176026918c1152c1e75d3e01030978",
+    "acceptance_comment": "<private-tracker>/TJS/issues/TJS-1882#comment-70f508a3-a5d8-4b81-b09b-15553e392e5e"
+  },
+  "distribution_limits": {
+    "Ubuntu22.04_ARM64": "PASS_EXACT_CURRENT_ARCHIVE",
+    "Debian12_ARM64": "PASS_EXACT_CURRENT_ARCHIVE_NATIVE_CONTAINER_USERLAND_ONLY",
+    "Ubuntu24_Debian13": "Historical other-archive witnesses retained; current Ubuntu24 ARM64 acceptance separately recorded, current Debian13 UNTESTED",
+    "Fedora_RHEL_Arch_openSUSE": "UNTESTED_EXACT_CURRENT_ARCHIVE",
+    "glibc_below_2_35": "OUTSIDE_RECORDED_ABI_FLOOR",
+    "x64_distributions": "CURRENT_NATIVE_SUCCESSOR_UNTESTED",
+    "Ubuntu24_ARM64": "INDEPENDENT_PASS_EXACT_ARCHIVE_NATIVE_CONTAINER"
+  },
+  "parent_group_delivery": "PARENT_OWNS_WEBSITE_DISTRIBUTION_AFTER_ACCEPTANCE_NO_GROUP_MEDIA_ATTACHMENTS",
+  "no_new_paid_dispatch_publication_integration_or_group_send": true,
+  "previous_checkpoint": {
+    "path": "research/evidence/vanguard-arm13-build-tjs1882-2026-10-19/seven-target-manifest.json",
+    "sha256": "61e3f39943f7d19e5bca4a620206605f44d6f12ef5ca0f271cab61a117374b80",
+    "preserved_unchanged": true
+  },
+  "scoped_native_accepted_targets": 4,
+  "acceptance_binding": "arm39-acceptance-binding.json",
+  "current_arm13_source_commit": "6fb3c3ec4a8e6a13dcbec7b638525556d4f84568",
+  "current_arm13_review_binding": "review-binding.json"
+}
