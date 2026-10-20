@@ -128,8 +128,13 @@ def changes(originals, value):
                        'cryptonote::get_difficulty_target(m_nettype, ' + version + ')')
     text = replace(text, '(get_current_hard_fork_version() < 2 ? CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS_V1 : CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS_V2)',
         '(get_difficulty_target() * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS)')
-    text = replace(text, ' * DIFFICULTY_TARGET_V2 / 2;', ' * get_difficulty_target() / 2;')
-    text = replace(text, 'timestamps.back() + DIFFICULTY_TARGET_V2;', 'timestamps.back() + get_difficulty_target();')
+    # Upstream projects with 120 seconds even at foreign v1, whose difficulty
+    # target is 60. Only the dedicated TESTNET changes this RPC projection.
+    text = replace(text, '  uint64_t median_ts = epee::misc_utils::median(timestamps);',
+        '  const uint64_t projection_target = m_nettype == TESTNET ? get_difficulty_target() : DIFFICULTY_TARGET_V2;\n'
+        '  uint64_t median_ts = epee::misc_utils::median(timestamps);')
+    text = replace(text, ' * DIFFICULTY_TARGET_V2 / 2;', ' * projection_target / 2;')
+    text = replace(text, 'timestamps.back() + DIFFICULTY_TARGET_V2;', 'timestamps.back() + projection_target;')
     result[name] = text.encode()
     name = 'src/cryptonote_core/tx_pool.cpp'
     text = originals[name].decode()
@@ -161,7 +166,7 @@ def prepare(source, out, value):
                    'fallback_enabled': False, 'genesis_height': 0, 'genesis_reward_atomic': 0},
         'native_policy': 'NOT_RUN', 'native_network_separation': 'NOT_RUN',
         'remaining': ['native-policy-construction-and-validation', 'native-height-one-maturity-payment',
-                      'timestamp-lock-conversion-review', 'wallet-target-and-fork-integration',
+                      'native-inherited-unlock-rule-and-maturity', 'wallet-target-and-fork-integration',
                       'native-peer-bootstrap-persistence-recovery', 'independent-core-security-acceptance']}
     out = n.fresh_directory(out)
     (out / 'selected-9-90.patch').write_text(patch)

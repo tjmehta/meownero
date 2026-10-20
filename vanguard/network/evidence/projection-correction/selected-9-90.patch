@@ -1,0 +1,318 @@
+--- a/src/cryptonote_basic/cryptonote_basic_impl.cpp
++++ b/src/cryptonote_basic/cryptonote_basic_impl.cpp
+@@ -80,16 +80,29 @@
+     return CRYPTONOTE_MAX_TX_SIZE;
+   }
+   //-----------------------------------------------------------------------------------------------
+-  bool get_block_reward(size_t median_weight, size_t current_block_weight, uint64_t already_generated_coins, uint64_t &reward, uint8_t version) {
++  uint64_t get_difficulty_target(network_type nettype, uint8_t version)
++  {
++    if (nettype == TESTNET)
++      return config::testnet::MEOWNERO_TARGET_SECONDS;
++    return version < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
++  }
++  //-----------------------------------------------------------------------------------------------
++  bool get_block_reward(size_t median_weight, size_t current_block_weight, uint64_t already_generated_coins, uint64_t &reward, uint8_t version, network_type nettype) {
+     static_assert(DIFFICULTY_TARGET_V2%60==0&&DIFFICULTY_TARGET_V1%60==0,"difficulty targets must be a multiple of 60");
+-    const int target = version < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
+-    const int target_minutes = target / 60;
+-    const int emission_speed_factor = EMISSION_SPEED_FACTOR_PER_MINUTE - (target_minutes-1);
+-
+-    uint64_t base_reward = (MONEY_SUPPLY - already_generated_coins) >> emission_speed_factor;
+-    if (base_reward < FINAL_SUBSIDY_PER_MINUTE*target_minutes)
+-    {
+-      base_reward = FINAL_SUBSIDY_PER_MINUTE*target_minutes;
++    uint64_t base_reward;
++    if (nettype == TESTNET)
++      base_reward = config::testnet::MEOWNERO_BLOCK_REWARD;
++    else
++    {
++      const int target = version < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
++      const int target_minutes = target / 60;
++      const int emission_speed_factor = EMISSION_SPEED_FACTOR_PER_MINUTE - (target_minutes-1);
++
++      base_reward = (MONEY_SUPPLY - already_generated_coins) >> emission_speed_factor;
++      if (base_reward < FINAL_SUBSIDY_PER_MINUTE*target_minutes)
++      {
++        base_reward = FINAL_SUBSIDY_PER_MINUTE*target_minutes;
++      }
+     }
+ 
+     uint64_t full_reward_zone = get_min_block_weight(version);
+--- a/src/cryptonote_basic/cryptonote_basic_impl.h
++++ b/src/cryptonote_basic/cryptonote_basic_impl.h
+@@ -63,7 +63,8 @@
+   /************************************************************************/
+   size_t get_min_block_weight(uint8_t version);
+   size_t get_max_tx_size();
+-  bool get_block_reward(size_t median_weight, size_t current_block_weight, uint64_t already_generated_coins, uint64_t &reward, uint8_t version);
++  uint64_t get_difficulty_target(network_type nettype, uint8_t version);
++  bool get_block_reward(size_t median_weight, size_t current_block_weight, uint64_t already_generated_coins, uint64_t &reward, uint8_t version, network_type nettype = MAINNET);
+ 
+   std::string get_account_address_as_str(
+       network_type nettype
+--- a/src/cryptonote_config.h
++++ b/src/cryptonote_config.h
+@@ -301,17 +301,20 @@
+ 
+   namespace testnet
+   {
+-    uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 53;
+-    uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 54;
+-    uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 63;
+-    uint16_t const P2P_DEFAULT_PORT = 28080;
+-    uint16_t const RPC_DEFAULT_PORT = 28081;
+-    uint16_t const ZMQ_RPC_DEFAULT_PORT = 28082;
++    // Dedicated valueless profile; fallback requires a separate reviewed network.
++    constexpr uint64_t MEOWNERO_BLOCK_REWARD = 9000000000000;
++    constexpr uint64_t MEOWNERO_TARGET_SECONDS = 90;
++    uint64_t const CRYPTONOTE_PUBLIC_ADDRESS_BASE58_PREFIX = 4240;
++    uint64_t const CRYPTONOTE_PUBLIC_INTEGRATED_ADDRESS_BASE58_PREFIX = 4241;
++    uint64_t const CRYPTONOTE_PUBLIC_SUBADDRESS_BASE58_PREFIX = 4242;
++    uint16_t const P2P_DEFAULT_PORT = 48080;
++    uint16_t const RPC_DEFAULT_PORT = 48081;
++    uint16_t const ZMQ_RPC_DEFAULT_PORT = 48082;
+     boost::uuids::uuid const NETWORK_ID = { {
+-        0x12 ,0x30, 0xF1, 0x71 , 0x61, 0x04 , 0x41, 0x61, 0x17, 0x31, 0x00, 0x82, 0x16, 0xA1, 0xA1, 0x11
++        0xe1, 0x6d, 0x78, 0x39, 0xed, 0x4d, 0x3e, 0xc8, 0x36, 0x3d, 0x07, 0x8d, 0xf1, 0x8f, 0xff, 0x6d
+       } }; // Bender's daydream
+-    std::string const GENESIS_TX = "013c01ff0001ffffffffffff03029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121017767aafcde9be00dcfd098715ebcf7f410daebc582fda69d24a28e9d0bc890d1";
+-    uint32_t const GENESIS_NONCE = 10001;
++    std::string const GENESIS_TX = "023c01ff000100025aeaf0562ffc3ae8b12bb4cfc3f07bf56916dd1e3b2e9cbf2674e54c5ba6dfe42101d4b4f5784868c3020403246717ec169ff79e26608ea126a1ab69ee77d1b1671200";
++    uint32_t const GENESIS_NONCE = 424001;
+   }
+ 
+   namespace stagenet
+--- a/src/cryptonote_core/blockchain.cpp
++++ b/src/cryptonote_core/blockchain.cpp
+@@ -1083,7 +1083,7 @@
+   std::vector<difficulty_type> new_cumulative_difficulties;
+   for (uint64_t height = start_height; height <= top_height; ++height)
+   {
+-    size_t target = get_ideal_hard_fork_version(height) < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
++    size_t target = cryptonote::get_difficulty_target(m_nettype, get_ideal_hard_fork_version(height));
+     difficulty_type recalculated_diff = next_difficulty(timestamps, difficulties, target);
+ 
+     boost::multiprecision::uint256_t recalculated_cum_diff_256 = boost::multiprecision::uint256_t(recalculated_diff) + last_cum_diff;
+@@ -1386,7 +1386,7 @@
+   }
+ 
+   // FIXME: This will fail if fork activation heights are subject to voting
+-  size_t target = get_ideal_hard_fork_version(bei.height) < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
++  size_t target = cryptonote::get_difficulty_target(m_nettype, get_ideal_hard_fork_version(bei.height));
+ 
+   // calculate the difficulty target for the block and return it
+   return next_difficulty(timestamps, cumulative_difficulties, target);
+@@ -1479,10 +1479,21 @@
+     get_last_n_blocks_weights(last_blocks_weights, CRYPTONOTE_REWARD_BLOCKS_WINDOW);
+     median_weight = epee::misc_utils::median(last_blocks_weights);
+   }
+-  if (!get_block_reward(median_weight, cumulative_block_weight, already_generated_coins, base_reward, version))
++  if (!get_block_reward(median_weight, cumulative_block_weight, already_generated_coins, base_reward, version, m_nettype))
+   {
+     MERROR_VER("block weight " << cumulative_block_weight << " is bigger than allowed for this blockchain");
+     return false;
++  }
++  // Dedicated TESTNET zero-premine genesis. Height one also starts with
++  // zero generated coins, so only the explicit block height identifies genesis.
++  if (m_nettype == TESTNET && get_block_height(b) == 0)
++  {
++    CHECK_AND_ASSERT_MES(fee == 0 && b.miner_tx.version == 2 &&
++      b.miner_tx.rct_signatures.type == rct::RCTTypeNull &&
++      b.miner_tx.vout.size() == 1 && b.miner_tx.vout[0].amount == 0 &&
++      b.miner_tx.vout[0].target.type() == typeid(txout_to_key), false,
++      "invalid dedicated TESTNET zero-premine genesis");
++    base_reward = 0;
+   }
+   if(base_reward + fee < money_in_use)
+   {
+@@ -1855,7 +1866,7 @@
+   //make blocks coin-base tx looks close to real coinbase tx to get truthful blob weight
+   uint8_t hf_version = b.major_version;
+   size_t max_outs = hf_version >= 4 ? 1 : 11;
+-  bool r = construct_miner_tx(height, median_weight, already_generated_coins, txs_weight, fee, miner_address, b.miner_tx, ex_nonce, max_outs, hf_version);
++  bool r = construct_miner_tx(height, median_weight, already_generated_coins, txs_weight, fee, miner_address, b.miner_tx, ex_nonce, max_outs, hf_version, m_nettype);
+   CHECK_AND_ASSERT_MES(r, false, "Failed to construct miner tx, first chance");
+   cumulative_weight = txs_weight + get_transaction_weight(b.miner_tx);
+ #if defined(DEBUG_CREATE_BLOCK_TEMPLATE)
+@@ -1864,7 +1875,7 @@
+ #endif
+   for (size_t try_count = 0; try_count != 10; ++try_count)
+   {
+-    r = construct_miner_tx(height, median_weight, already_generated_coins, cumulative_weight, fee, miner_address, b.miner_tx, ex_nonce, max_outs, hf_version);
++    r = construct_miner_tx(height, median_weight, already_generated_coins, cumulative_weight, fee, miner_address, b.miner_tx, ex_nonce, max_outs, hf_version, m_nettype);
+ 
+     CHECK_AND_ASSERT_MES(r, false, "Failed to construct miner tx, second chance");
+     size_t coinbase_weight = get_transaction_weight(b.miner_tx);
+@@ -4032,7 +4043,7 @@
+     median = m_current_block_cumul_weight_limit / 2;
+     const uint64_t blockchain_height = m_db->height();
+     already_generated_coins = blockchain_height ? m_db->get_block_already_generated_coins(blockchain_height - 1) : 0;
+-    if (!get_block_reward(median, 1, already_generated_coins, base_reward, version))
++    if (!get_block_reward(median, 1, already_generated_coins, base_reward, version, m_nettype))
+       return false;
+   }
+ 
+@@ -4191,7 +4202,7 @@
+ 
+   const uint64_t already_generated_coins = db_height ? m_db->get_block_already_generated_coins(db_height - 1) : 0;
+   uint64_t base_reward;
+-  if (!get_block_reward(m_current_block_cumul_weight_limit / 2, 1, already_generated_coins, base_reward, version))
++  if (!get_block_reward(m_current_block_cumul_weight_limit / 2, 1, already_generated_coins, base_reward, version, m_nettype))
+   {
+     MERROR("Failed to determine block reward, using placeholder " << print_money(BLOCK_REWARD_OVERESTIMATE) << " as a high bound");
+     base_reward = BLOCK_REWARD_OVERESTIMATE;
+@@ -4247,7 +4258,7 @@
+   {
+     //interpret as time
+     const uint64_t current_time = hf_version >= HF_VERSION_DETERMINISTIC_UNLOCK_TIME ? get_adjusted_time(m_db->height()) : static_cast<uint64_t>(time(NULL));
+-    if(current_time + (get_current_hard_fork_version() < 2 ? CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS_V1 : CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_SECONDS_V2) >= unlock_time)
++    if(current_time + (get_difficulty_target() * CRYPTONOTE_LOCKED_TX_ALLOWED_DELTA_BLOCKS) >= unlock_time)
+       return true;
+     else
+       return false;
+@@ -4338,15 +4349,16 @@
+   {
+     timestamps.push_back(m_db->get_block_timestamp(offset));
+   }
++  const uint64_t projection_target = m_nettype == TESTNET ? get_difficulty_target() : DIFFICULTY_TARGET_V2;
+   uint64_t median_ts = epee::misc_utils::median(timestamps);
+ 
+   // project the median to match approximately when the block being validated will appear
+   // the median is calculated from a chunk of past blocks, so we use +1 to offset onto the current block
+-  median_ts += (BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW + 1) * DIFFICULTY_TARGET_V2 / 2;
++  median_ts += (BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW + 1) * projection_target / 2;
+ 
+   // project the current block's time based on the previous block's time
+   // we don't use the current block's time directly to mitigate timestamp manipulation
+-  uint64_t adjusted_current_block_ts = timestamps.back() + DIFFICULTY_TARGET_V2;
++  uint64_t adjusted_current_block_ts = timestamps.back() + projection_target;
+ 
+   // return minimum of ~current block time and adjusted median time
+   // we do this since it's better to report a time in the past than a time in the future
+@@ -6018,7 +6030,7 @@
+ 
+ uint64_t Blockchain::get_difficulty_target() const
+ {
+-  return get_current_hard_fork_version() < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
++  return cryptonote::get_difficulty_target(m_nettype, get_current_hard_fork_version());
+ }
+ 
+ std::map<uint64_t, std::tuple<uint64_t, uint64_t, uint64_t>> Blockchain:: get_output_histogram(const std::vector<uint64_t> &amounts, bool unlocked, uint64_t recent_cutoff, uint64_t min_count) const
+--- a/src/cryptonote_core/blockchain.h
++++ b/src/cryptonote_core/blockchain.h
+@@ -1033,6 +1033,7 @@
+      * @return difficulty target
+      */
+     uint64_t get_difficulty_target() const;
++    network_type get_nettype() const { return m_nettype; }
+ 
+     /**
+      * @brief remove transactions from the transaction pool (if present)
+--- a/src/cryptonote_core/cryptonote_tx_utils.cpp
++++ b/src/cryptonote_core/cryptonote_tx_utils.cpp
+@@ -103,13 +103,22 @@
+     LOG_PRINT_L2("destinations include " << num_stdaddresses << " standard addresses and " << num_subaddresses << " subaddresses");
+   }
+   //---------------------------------------------------------------
+-  bool construct_miner_tx(size_t height, size_t median_weight, uint64_t already_generated_coins, size_t current_block_weight, uint64_t fee, const account_public_address &miner_address, transaction& tx, const blobdata& extra_nonce, size_t max_outs, uint8_t hard_fork_version) {
++  bool construct_miner_tx(size_t height, size_t median_weight, uint64_t already_generated_coins, size_t current_block_weight, uint64_t fee, const account_public_address &miner_address, transaction& tx, const blobdata& extra_nonce, size_t max_outs, uint8_t hard_fork_version, network_type nettype) {
+     tx.vin.clear();
+     tx.vout.clear();
+     tx.extra.clear();
+ 
++    if (nettype == TESTNET && height == 0)
++    {
++      CHECK_AND_ASSERT_MES(fee == 0, false, "genesis cannot collect fees");
++      blobdata genesis;
++      CHECK_AND_ASSERT_MES(epee::string_tools::parse_hexstr_to_binbuff(get_config(TESTNET).GENESIS_TX, genesis),
++        false, "invalid configured TESTNET genesis encoding");
++      return parse_and_validate_tx_from_blob(genesis, tx);
++    }
++
+     uint64_t block_reward;
+-    if(!get_block_reward(median_weight, current_block_weight, already_generated_coins, block_reward, hard_fork_version))
++    if(!get_block_reward(median_weight, current_block_weight, already_generated_coins, block_reward, hard_fork_version, nettype))
+     {
+       LOG_PRINT_L0("Block is too big");
+       return false;
+--- a/src/cryptonote_core/cryptonote_tx_utils.h
++++ b/src/cryptonote_core/cryptonote_tx_utils.h
+@@ -38,7 +38,7 @@
+ namespace cryptonote
+ {
+   //---------------------------------------------------------------
+-  bool construct_miner_tx(size_t height, size_t median_weight, uint64_t already_generated_coins, size_t current_block_weight, uint64_t fee, const account_public_address &miner_address, transaction& tx, const blobdata& extra_nonce = blobdata(), size_t max_outs = 999, uint8_t hard_fork_version = 1);
++  bool construct_miner_tx(size_t height, size_t median_weight, uint64_t already_generated_coins, size_t current_block_weight, uint64_t fee, const account_public_address &miner_address, transaction& tx, const blobdata& extra_nonce = blobdata(), size_t max_outs = 999, uint8_t hard_fork_version = 1, network_type nettype = MAINNET);
+ 
+   struct tx_source_entry
+   {
+--- a/src/cryptonote_core/tx_pool.cpp
++++ b/src/cryptonote_core/tx_pool.cpp
+@@ -1663,7 +1663,7 @@
+     fee = 0;
+     
+     //baseline empty block
+-    if (!get_block_reward(median_weight, total_weight, already_generated_coins, best_coinbase, version))
++    if (!get_block_reward(median_weight, total_weight, already_generated_coins, best_coinbase, version, m_blockchain.get_nettype()))
+     {
+       MERROR("Failed to get block reward for empty block");
+       return false;
+@@ -1717,7 +1717,7 @@
+         // If we're getting lower coinbase tx,
+         // stop including more tx
+         uint64_t block_reward;
+-        if(!get_block_reward(median_weight, total_weight + meta.weight, already_generated_coins, block_reward, version))
++        if(!get_block_reward(median_weight, total_weight + meta.weight, already_generated_coins, block_reward, version, m_blockchain.get_nettype()))
+         {
+           LOG_PRINT_L2("  would exceed maximum block weight");
+           continue;
+--- a/src/hardforks/hardforks.cpp
++++ b/src/hardforks/hardforks.cpp
+@@ -82,31 +82,12 @@
+ const uint64_t mainnet_hard_fork_version_1_till = 1009826;
+ 
+ const hardfork_t testnet_hard_forks[] = {
+-  // version 1 from the start of the blockchain
+-  { 1, 1, 0, 1341378000 },
+-
+-  // version 2 starts from block 624634, which is on or around the 23rd of November, 2015. Fork time finalised on 2015-11-20. No fork voting occurs for the v2 fork.
+-  { 2, 624634, 0, 1445355000 },
+-
+-  // versions 3-5 were passed in rapid succession from September 18th, 2016
+-  { 3, 800500, 0, 1472415034 },
+-  { 4, 801219, 0, 1472415035 },
+-  { 5, 802660, 0, 1472415036 + 86400*180 }, // add 5 months on testnet to shut the update warning up since there's a large gap to v6
+-
+-  { 6, 971400, 0, 1501709789 },
+-  { 7, 1057027, 0, 1512211236 },
+-  { 8, 1057058, 0, 1533211200 },
+-  { 9, 1057778, 0, 1533297600 },
+-  { 10, 1154318, 0, 1550153694 },
+-  { 11, 1155038, 0, 1550225678 },
+-  { 12, 1308737, 0, 1569582000 },
+-  { 13, 1543939, 0, 1599069376 },
+-  { 14, 1544659, 0, 1599069377 },
+-  { 15, 1982800, 0, 1652727000 },
+-  { 16, 1983520, 0, 1652813400 },
++  // Dedicated valueless network: genesis v1, mandatory FCMP++/CARROT at height 1.
++  { 1, 0, 0, 1341378000 },
++  { 18, 1, 0, 1341378001 },
+ };
+ const size_t num_testnet_hard_forks = sizeof(testnet_hard_forks) / sizeof(testnet_hard_forks[0]);
+-const uint64_t testnet_hard_fork_version_1_till = 624633;
++const uint64_t testnet_hard_fork_version_1_till = 0;
+ 
+ const hardfork_t stagenet_hard_forks[] = {
+   // version 1 from the start of the blockchain
+--- a/src/rpc/core_rpc_server.cpp
++++ b/src/rpc/core_rpc_server.cpp
+@@ -1370,7 +1370,7 @@
+     res.is_background_mining_enabled = lMiner.get_is_background_mining_enabled();
+     store_difficulty(m_core.get_blockchain_storage().get_difficulty_for_next_block(), res.difficulty, res.wide_difficulty, res.difficulty_top64);
+     
+-    res.block_target = m_core.get_blockchain_storage().get_current_hard_fork_version() < 2 ? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2;
++    res.block_target = m_core.get_blockchain_storage().get_difficulty_target();
+     if ( lMiner.is_mining() ) {
+       res.speed = lMiner.get_speed();
+       res.threads_count = lMiner.get_threads_count();

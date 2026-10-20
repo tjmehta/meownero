@@ -1,0 +1,44 @@
+{
+  "schema": "meownero-vanguard-projection-correction/1",
+  "result": "PASS_SOURCE_AND_ARITHMETIC_ONLY",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "consultation_commit": "c4e0dde0d38e100d9541c5c0f7ba1c5285bc8de5",
+  "prior_candidate": "ebb953530ecfc3bf712e9cb08e042cf11b7f272c",
+  "prior_overlay_sha256": "0f971c34e3401f2faf85fa98862f7f28698af3b5ee28765c17657f8bee5eb044",
+  "corrected_overlay_sha256": "32c40224dcd618995ef4d846cab411a85783314da79a803ed16074241780312c",
+  "profile_sha256": "56a25f173448b3caa34ae9bb29761f5d467376df4470902fd89824ddc11fe4e8",
+  "source_lock_sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "changed_overlay_paths": [
+    "src/cryptonote_core/blockchain.cpp"
+  ],
+  "unchanged_overlay_paths": [
+    "src/cryptonote_basic/cryptonote_basic_impl.cpp",
+    "src/cryptonote_basic/cryptonote_basic_impl.h",
+    "src/cryptonote_config.h",
+    "src/cryptonote_core/blockchain.h",
+    "src/cryptonote_core/cryptonote_tx_utils.cpp",
+    "src/cryptonote_core/cryptonote_tx_utils.h",
+    "src/cryptonote_core/tx_pool.cpp",
+    "src/hardforks/hardforks.cpp",
+    "src/rpc/core_rpc_server.cpp"
+  ],
+  "delta_sha256": "f518b49915d29e0a948ff92cfb412b5cbf599a14645772d8883a2dc44dda27b3",
+  "scoped_source_files_verified": 38,
+  "foreign_v1_projection": {
+    "upstream": 1700003660,
+    "corrected": 1700003660,
+    "known_bad": 1700003600
+  },
+  "known_bad_projection_and_reordered_median_detected": true,
+  "inherited_nonzero_unlock_rule": "UNCHANGED_SOURCE_CHECKED",
+  "coinbase_exact_height_plus_60": "UNCHANGED_SOURCE_CHECKED",
+  "unlock_mapping": "UNCHANGED_SOURCE_CHECKED",
+  "startup_below_60_blocks": "UNCHANGED_WALL_CLOCK_FALLBACK",
+  "median_sorts_before_back": "UNCHANGED_SOURCE_CHECKED",
+  "native_policy": "NOT_RUN",
+  "native_peer_wallet_persistence": "NOT_RUN",
+  "grant_binding": "CHANGED_ARTIFACT_REQUIRES_PLATFORM_REBIND",
+  "unconsumed_prior_grant_comment": "3127e4f4-46ae-4e8d-9732-128640aca67a"
+}

@@ -12,10 +12,14 @@ and final candidate acceptance remain open. See [the admission result](admission
 and [the earlier helper result](native-result.md).
 
 The [current-lineage 9/90 preparation](selected-policy.md) adds a separate frozen
-ten-file policy overlay, eleven source/admission-guard checks and an executable
-bounded native test runner. It has not been compiled or run. The profile digest
-and accepted genesis evidence stay unchanged. Full network execution still needs
-the recorded timestamp-lock consultation and a new finite platform window.
+ten-file policy overlay and an executable bounded native test runner. The
+[Core consultation response](projection-correction.md) restricts adjusted-time
+projection changes to dedicated TESTNET and retains inherited v18 unlock rules.
+Fourteen source/admission-guard checks pass; the overlay has not been compiled or
+run. The profile digest and accepted genesis evidence stay unchanged. The unused
+platform grant binds the prior artifact and needs an explicit update before
+executing the corrected candidate. Native peer/wallet proof and independent
+acceptance remain open.
 
 `python3 -B vanguard/network/network.py validate` checks an exact profile copy.
 `check-source` verifies listed native source/pin bindings.

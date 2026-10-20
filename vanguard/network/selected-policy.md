@@ -1,5 +1,12 @@
 # Current-lineage 9/90 preparation
 
+The current overlay incorporates the [Core projection correction](projection-correction.md).
+Its SHA256 is `32c40224dcd618995ef4d846cab411a85783314da79a803ed16074241780312c`;
+the [current machine receipt](evidence/projection-correction/policy-overlay.json)
+is the runner's frozen input. The original preparation and evidence below remain
+the historical `ebb9535` checkpoint. Its unused platform grant does not authorize
+the changed artifact until the platform owner updates that binding.
+
 This checkpoint prepares the selected policy on upstream
 `e151643c5269c83bf24a83b2548e2493876026b2`, starting from accepted genesis
 checkpoint `983f405dfcb72b843a653a728e1e8a8af1de94e3`. No native build or
@@ -120,21 +127,22 @@ build consumes the new window; no native retry or reservation is implied.
 
 ## Review boundary before full network execution
 
-The proposed chain target also feeds deterministic timestamp projection and the
-legacy seconds-based unlock tolerance. Those lines are explicit in the patch.
-Core and Privacy/Cryptography must review their interaction with v18 before
-full-network assurance is claimed. No point/proof verifier is changed.
+Core's [source consultation](core-review/lock-consultation.md) settles the mapping
+question for this fresh v1@0/v18@1 chain. Inherited Rule 8 already rejects every
+nonzero ordinary-transaction unlock at v17 and later. Retain that rule, exact
+coinbase unlock h+60, ordinary age 10, and the existing FCMP lock conversion.
+No new epoch, mapping, network parameter or denial rule is needed. The native
+verifier, wallet request routes, actual maturity and persisted roots still need
+the positive and adverse observations specified by Core. Privacy's independent
+consultation and final Core/Security acceptance remain separate.
 
-Separately, pinned `get_last_locked_block_index` in
-`src/cryptonote_basic/cryptonote_format_utils.cpp:2102` hardcodes the mainnet v15
-time/height and divides by the global120-second target. Its own TODO asks for
-network-aware conversion. It has no network argument and participates in
-FCMP output lock metadata. This preparation leaves it unchanged. Do not silently
-replace its historical anchor or turn unsupported timestamp locks into height
-locks. The concrete consultation asks Core/Cryptography to select a network-aware
-mapping and adverse vectors, or explicitly constrain timestamp-locked transactions
-pending that implementation. Any constraint itself needs reviewed consensus
-and wallet agreement. No such choice has been made here.
+The corrected full-window projection uses 90 seconds only for dedicated TESTNET
+and preserves literal 120 for every foreign selector, including v1. Median still
+sorts the timestamps before `back()` reads their maximum. The inherited path
+below 60 samples returns wall time. These projection calculations are distinct
+from output-lock conversion and maturity. The unchanged mainnet timestamp anchor
+is not a general mapping for a future chain admitting timestamp locks or old
+history; such a chain requires separate protocol and state review.
 
 Wallet restore-height estimates, time displays and legacy selection windows still
 use120-second constants; wallet fork-table validation and addresses must agree

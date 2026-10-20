@@ -18,6 +18,29 @@ import network as n
 import policy as p
 
 
+def adjusted_function(raw):
+    return raw.decode().split('uint64_t Blockchain::get_adjusted_time(uint64_t height) const\n', 1)[1].split(
+        '//------------------------------------------------------------------', 1)[0]
+
+
+def projection_is_scoped(original, changed):
+    before = adjusted_function(original)
+    expected = before.replace('  uint64_t median_ts =',
+        '  const uint64_t projection_target = m_nettype == TESTNET ? get_difficulty_target() : DIFFICULTY_TARGET_V2;\n'
+        '  uint64_t median_ts =', 1)
+    expected = expected.replace(' * DIFFICULTY_TARGET_V2 / 2;', ' * projection_target / 2;', 1)
+    expected = expected.replace('timestamps.back() + DIFFICULTY_TARGET_V2;',
+                                'timestamps.back() + projection_target;', 1)
+    return adjusted_function(changed) == expected
+
+
+def adjusted_reference(samples, target):
+    """Pinned full-window arithmetic only; does not run C++ or model startup."""
+    ordered = sorted(samples)
+    median = (ordered[29] + ordered[30]) // 2
+    return min(median + 61 * target // 2, ordered[-1] + target)
+
+
 class PolicyBoundary(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -107,7 +130,53 @@ class PolicyBoundary(unittest.TestCase):
         self.assertEqual(len(calls), 8)
         chain = self.changed['src/cryptonote_core/blockchain.cpp'].decode()
         self.assertNotIn('? DIFFICULTY_TARGET_V1 : DIFFICULTY_TARGET_V2', chain)
-        self.assertNotIn('DIFFICULTY_TARGET_V2', chain)
+        self.assertEqual(chain.count('DIFFICULTY_TARGET_V2'), 1)
+
+    def test_projection_correction_is_testnet_only_and_preserves_operation_order(self):
+        name = 'src/cryptonote_core/blockchain.cpp'
+        self.assertTrue(projection_is_scoped(self.originals[name], self.changed[name]))
+        # The old generic projection is a known-bad control. Foreign v1 must
+        # retain 120 here even though its difficulty helper correctly returns60.
+        bad = self.changed[name].replace(
+            b'm_nettype == TESTNET ? get_difficulty_target() : DIFFICULTY_TARGET_V2',
+            b'get_difficulty_target()')
+        self.assertNotEqual(bad, self.changed[name])
+        self.assertFalse(projection_is_scoped(self.originals[name], bad))
+        # Exact function comparison also preserves the <60 wall-clock return,
+        # median-before-back order, sampling, and final minimum.
+        median = '  uint64_t median_ts = epee::misc_utils::median(timestamps);\n'
+        moved = self.changed[name].replace(median.encode(), b'', 1).replace(
+            b'  // return minimum of ~current block time',
+            median.encode() + b'  // return minimum of ~current block time', 1)
+        self.assertFalse(projection_is_scoped(self.originals[name], moved))
+
+    def test_projection_arithmetic_counterexample_and_nonmonotone_windows(self):
+        regular60 = [1700000000 + i * 60 for i in range(60)]
+        self.assertEqual(adjusted_reference(regular60, 120), 1700003660)
+        self.assertEqual(adjusted_reference(regular60, 60), 1700003600)
+        regular90 = [1700000000 + i * 90 for i in range(60)]
+        self.assertEqual(adjusted_reference(regular90, 90), 1700005400)
+        self.assertEqual(adjusted_reference(regular90[1:] + regular90[:1], 90), 1700005400)
+        self.assertEqual(adjusted_reference([1700000000] * 60, 90), 1700000090)
+        self.assertEqual(adjusted_reference([1700000000] * 59 + [1700001000], 90), 1700001090)
+        self.assertEqual(adjusted_reference([1700000000] * 59 + [1700010000], 90), 1700002745)
+        self.assertEqual(adjusted_reference([1700000000 + i * 120 for i in range(60)], 120), 1700007200)
+
+    def test_inherited_unlock_rule_mapping_and_exact_coinbase_remain_intact(self):
+        config = self.changed['src/cryptonote_config.h'].decode()
+        self.assertIn('#define HF_VERSION_REJECT_UNLOCK_TIME           17', config)
+        name = 'src/cryptonote_core/tx_verification_utils.cpp'
+        self.assertNotIn(name, self.changed)
+        rule = self.originals[name].decode().split('// Rule 8\n', 1)[1].split('// Rule 9\n', 1)[0]
+        for marker in ('hf_version >= HF_VERSION_REJECT_UNLOCK_TIME && tx.unlock_time != 0',
+                       'tvc.m_verifivation_failed = true;', 'tvc.m_nonzero_unlock_time = true;', 'return false;'):
+            self.assertIn(marker, rule)
+        self.assertNotIn('src/cryptonote_basic/cryptonote_format_utils.cpp', self.changed)
+        self.assertIn('{ 18, 1, 0, 1341378001 }', self.changed['src/hardforks/hardforks.cpp'].decode())
+        name = 'src/cryptonote_core/blockchain.cpp'
+        marker = 'CHECK_AND_ASSERT_MES(b.miner_tx.unlock_time == height + CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW'
+        for raw in (self.originals[name], self.changed[name]):
+            self.assertIn(marker, raw.decode())
 
     def test_zero_balance_does_not_select_genesis_and_accounting_is_unchanged(self):
         constructor = self.changed['src/cryptonote_core/cryptonote_tx_utils.cpp'].decode()
@@ -152,13 +221,15 @@ class PolicyBoundary(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'changed policy source'):
                 p.checked_source(SOURCE)
 
-    def test_consumed_grants_are_refused_before_output_creation(self):
-        for grant in ('2d70177d-b7a7-4ef6-8079-242320bdcb1f', '15414082-2a53-4872-8d19-b87f302f0bae'):
+    def test_consumed_or_prior_overlay_grants_are_refused_before_output_creation(self):
+        for grant, reason in (('2d70177d-b7a7-4ef6-8079-242320bdcb1f', 'prior grant is consumed'),
+                              ('15414082-2a53-4872-8d19-b87f302f0bae', 'prior grant is consumed'),
+                              ('3127e4f4-46ae-4e8d-9732-128640aca67a', 'updated platform binding required')):
             out = self.root / 'never'
             result = subprocess.run([sys.executable, '-B', str(n.HERE / 'run-policy.py'),
                 '--out', str(out), '--grant-comment', grant], capture_output=True, text=True, timeout=10)
             self.assertNotEqual(result.returncode, 0)
-            self.assertIn('prior grant is consumed', result.stderr)
+            self.assertIn(reason, result.stderr)
             self.assertFalse(out.exists())
 
     def test_lock_contention_and_wrong_inode_refuse_before_native_admission(self):
@@ -203,5 +274,7 @@ if __name__ == '__main__':
     n.write_json(out / 'checks.json', {'result': 'PASS_SOURCE_POLICY_CHECKS' if result.wasSuccessful() else 'FAIL',
         'tests': result.testsRun, 'failures': len(result.failures), 'errors': len(result.errors),
         'profile_sha256': n.profile_hash(n.profile()), 'native_policy': 'NOT_RUN',
+        'foreign_v1_projection': {'upstream': 1700003660, 'corrected': 1700003660, 'known_bad': 1700003600},
+        'known_bad_projection_and_reordered_median_detected': True,
         'native_network_separation': 'NOT_RUN', 'launch_ready': False})
     raise SystemExit(0 if result.wasSuccessful() else 1)

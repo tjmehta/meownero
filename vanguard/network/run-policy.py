@@ -31,6 +31,8 @@ def main():
     n.require(re.fullmatch(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', args.grant_comment), 'grant UUID required')
     n.require(args.grant_comment not in {'2d70177d-b7a7-4ef6-8079-242320bdcb1f',
                                        '15414082-2a53-4872-8d19-b87f302f0bae'}, 'prior grant is consumed')
+    n.require(args.grant_comment != '3127e4f4-46ae-4e8d-9732-128640aca67a',
+              'grant binds the prior overlay; updated platform binding required')
     os.umask(0o077)
     out = n.fresh_directory(args.out)
     start = time.monotonic()
@@ -84,7 +86,7 @@ def main():
             g.run(['tar', '-xf', str(archive), '-C', str(destination)], deadline=deadline)
         n.require(all((source / name).read_bytes() == raw for name, raw in originals.items()), 'export source mismatch')
         overlay = policy.prepare(g.BASE / 'monero-fcmp', out / 'overlay', value)
-        n.require(overlay == n.read_json(n.HERE / 'evidence/selected-policy/policy-overlay.json'),
+        n.require(overlay == n.read_json(n.HERE / 'evidence/projection-correction/policy-overlay.json'),
                   'overlay differs from frozen candidate')
         patch = out / 'overlay/selected-9-90.patch'
         g.run(['git', 'apply', '--check', str(patch)], cwd=source, deadline=deadline)
