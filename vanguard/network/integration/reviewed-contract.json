@@ -1,0 +1,294 @@
+{
+  "schema": "tjs2504-core-reconciled-planning-contract/1",
+  "state": "PROPOSAL_ONLY_CORE_SCOPE_RECONCILED",
+  "issue": "TJS-2504",
+  "candidate_base": "cb95cc036000a70bc688deeba6bff1b384b27eb3",
+  "upstream": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "base_plan_revision": "51ad73fa-5689-4f73-8264-3d07b578e5e8",
+  "base_planning_packet_sha256": "014c0e138094e12b87496c04a25d5df0ed4580cf700ee94a78331d71dbda54e0",
+  "profile_sha256": "56a25f173448b3caa34ae9bb29761f5d467376df4470902fd89824ddc11fe4e8",
+  "overlay_sha256": "32c40224dcd618995ef4d846cab411a85783314da79a803ed16074241780312c",
+  "implementation_authorized_by_this_handoff": false,
+  "native_execution_authorized": false,
+  "grant": null,
+  "launch_ready": false,
+  "budget": {
+    "schema": "tjs2504-proposed-native-budget/1",
+    "proposal_only": true,
+    "execution_authorized": false,
+    "next_slice": {
+      "name": "complete-profile-binaries-and-genesis-peer-wallet-boundary",
+      "total_wall_seconds": 4500,
+      "stage_and_build_seconds": 3600,
+      "runtime_seconds": 600,
+      "cleanup_seconds": 300,
+      "cpu_count": 2,
+      "cpu_seconds_upper_bound": 9000,
+      "memory_bytes": 4294967296,
+      "swap_bytes": 0,
+      "pids": 256,
+      "compile_jobs": 1,
+      "minimum_available_memory_bytes": 5368709120,
+      "minimum_free_disk_bytes": 21474836480,
+      "staging_high_water_bytes": 16106127360,
+      "free_disk_abort_bytes": 4294967296,
+      "non_genesis_blocks": 0,
+      "payments": 0,
+      "attempts": 1,
+      "retry": false
+    },
+    "funded_followup": {
+      "not_grant_ready": true,
+      "minimum_non_genesis_blocks": 71,
+      "proposed_main_chain_block_cap": 80,
+      "proposed_alternative_block_cap": 6,
+      "proposed_rejected_blocks_cap": 32,
+      "proposed_transaction_constructions_cap": 100,
+      "nominal_minimum_seconds": 6390,
+      "nominal_main_cap_seconds": 7200,
+      "nominal_main_plus_alt_seconds": 7740,
+      "exploratory_wall_cap_seconds": 14400,
+      "cleanup_reserve_seconds": 300,
+      "cpu_count": 2,
+      "cpu_seconds_upper_bound": 28800,
+      "funding_coinbase_height": 1,
+      "coinbase_last_locked_index": 60,
+      "coinbase_first_eligible_count": 61,
+      "payment_height": 61,
+      "payment_last_locked_index": 70,
+      "payment_first_eligible_count": 71,
+      "later_spend_height": 71,
+      "target_seconds": 90,
+      "fixed_difficulty": false,
+      "premine": false,
+      "fee_budget": "native estimated fee, first payment 1 MEOW only if 1+fee<9; second payment 0.1 MEOW only if 0.1+fee<1; abort rather than add funds or change consensus",
+      "no_completion_guarantee": true
+    }
+  },
+  "platform_snapshot": {
+    "at": "2026-10-20T13:34:05Z",
+    "available_memory_bytes": 4763348992,
+    "required_memory_bytes": 5368709120,
+    "shortfall_bytes": 605360128,
+    "free_disk_bytes": 1114159116288,
+    "logical_cpus": 12,
+    "load_1_5_15": [
+      4.038,
+      3.81,
+      3.565
+    ],
+    "reservation": false,
+    "load_admission_rule": null,
+    "snapshot_is_fresh_admission": false
+  },
+  "aggregate_resource_boundary": {
+    "scope": [
+      "host_supervisor",
+      "host_export",
+      "host_cargo_copy",
+      "host_evidence_archive",
+      "container_all_processes",
+      "cleanup"
+    ],
+    "cpu_limit_proposal": 2,
+    "memory_limit_proposal_bytes": 4294967296,
+    "swap_limit_proposal_bytes": 0,
+    "enforcement_mechanism": "UNRESOLVED_SOURCE_PREPARATION_AND_PLATFORM_DECISION_REQUIRED",
+    "container_counters_sufficient": false,
+    "all_writable_paths_in_disk_accounting": true,
+    "unapproved_host_reconfiguration": false
+  },
+  "authentication": {
+    "per_child_allowlisted_environment": true,
+    "wallet_inherits_RPC_LOGIN": false,
+    "wallet_rpc_login_option": false,
+    "daemon_login_in_private_wallet_config_only": true,
+    "native_wallet_login_cwd": "fresh_distinct_owner_only",
+    "login_file_allowed_modes": [
+      "0400",
+      "0600"
+    ],
+    "public_credentials": false,
+    "public_raw_responses": false,
+    "missing_wrong_auth_bracketed_with_allowed_read": true,
+    "old_wallet_credentials_rejected_after_reopen": true
+  },
+  "restricted_wallet": {
+    "full_keys": true,
+    "trusted_controller_only": true,
+    "keyless_or_general_non_signing_boundary": false,
+    "denied_error_code": -7,
+    "denial_methods": [
+      "transfer",
+      "transfer_split",
+      "sweep_all",
+      "sweep_single",
+      "sign",
+      "sign_transfer",
+      "query_key",
+      "set_daemon",
+      "store",
+      "stop_wallet",
+      "close_wallet",
+      "create_address",
+      "create_account",
+      "create_wallet",
+      "open_wallet",
+      "restore_deterministic_wallet",
+      "refresh"
+    ],
+    "no_denial_claim": [
+      "get_tx_key",
+      "get_tx_proof",
+      "get_spend_proof",
+      "get_reserve_proof"
+    ],
+    "valid_loaded_authenticated_request_required": true,
+    "malformed_or_insufficient_funds_is_pass": false,
+    "subaddresses_provisioned_before_restriction": true,
+    "foreign_address_params": {
+      "any_net_type": false,
+      "allow_openalias": false
+    }
+  },
+  "wallet_handoff": {
+    "sequence": [
+      "private_signer_or_cli",
+      "saved_exited_unlocked",
+      "restricted_full_key_wallet",
+      "signal_saved_exited_unlocked",
+      "later_reopen"
+    ],
+    "overlapping_writers": false,
+    "restricted_shutdown_rpc": false,
+    "proposed_term_wait_seconds": 20,
+    "proposed_kill_wait_seconds": 5,
+    "forced_kill_passes_persistence": false,
+    "must_fit_global_phase_deadline": true,
+    "exact_pid_start_identity": true,
+    "save_exit_listener_absence_file_lock_release_required": true,
+    "restore_height": 0
+  },
+  "daemon_observables": {
+    "native_p2p_handshake_required": true,
+    "allowed": [
+      "get_info",
+      "get_block_count",
+      "get_transaction_pool_hashes",
+      "get_transaction_pool_stats"
+    ],
+    "hidden_not_used_as_witness": [
+      "get_connections",
+      "get_peer_list",
+      "get_transaction_pool",
+      "start_mining",
+      "stop_mining",
+      "mining_status",
+      "generateblocks"
+    ],
+    "still_privileged_mapped": [
+      "send_raw_transaction",
+      "submit_block"
+    ],
+    "block_count_per_peer": 1,
+    "non_genesis_blocks": 0,
+    "payments": 0,
+    "proof_construction": false
+  },
+  "next_prerequisites": [
+    {
+      "owner": "Core existing scope consultation",
+      "action": "answer zero-funding wallet and fixture boundary challenge; no final stage decision"
+    },
+    {
+      "owner": "existing lead/T3 coordination",
+      "action": "authorized source-only implementation continuation under planning-only handoff"
+    },
+    {
+      "owner": "P2P/Mining",
+      "action": "prepare source runner and driver, freeze exact candidate and aggregate enforcement/accounting proposal"
+    },
+    {
+      "owner": "Platform",
+      "action": "separately exact artifact-bound grant including load rule and aggregate resources; fresh memory floor and original inode admission before work"
+    }
+  ],
+  "preserved_execution": {
+    "stage": "bab7a7aa-fe78-4cc9-8822-2b3d1e9b35de",
+    "decision": "52c7a4e3-be38-4338-bd39-2da99c28b85d",
+    "changes_requested_count": 1,
+    "next": "independent Security then lead accepted-only integration"
+  },
+  "native_outputs": {
+    "build.json": "NOT_RUN",
+    "peer.json": "NOT_RUN",
+    "wallet.json": "NOT_RUN",
+    "auth.json": "NOT_RUN",
+    "isolation.json": "NOT_RUN",
+    "reopen.json": "NOT_RUN",
+    "resources.json": "NOT_RUN",
+    "cleanup.json": "NOT_RUN"
+  },
+  "consultation_core": {
+    "id": "7cfa6583-0e07-406f-baea-9894b68d19d9",
+    "author_agent_id": "781fc18f-d668-407b-8114-20094b3b18cc",
+    "run_id": "2f59057b-c463-40ef-ae8b-9b107c67765d",
+    "scope_response_complete": true,
+    "implementation_continuation": false,
+    "runtime_grant": false,
+    "native_review_decision": false,
+    "retained_archive_sha256": "dd2e642fd97f5e6ad38bd7e306826edbcce0c8d03dc461dcf42002e4780d843c"
+  },
+  "wallet_creation": {
+    "caller": "native CLI generate-new-wallet",
+    "final_height_command": "set refresh-from-block-height 0",
+    "persist": "native rewrite then save and exit",
+    "getter_after_sequential_reopen": "set -> get_refresh_from_block_height == 0",
+    "refresh": "private CLI refresh 0 before restriction",
+    "restoration": "stopped valueless file bundle copied to fresh owned root; CLI getter after reopen",
+    "seed_restore_native": "NOT_RUN",
+    "zero_generation_option_alone_sufficient": false,
+    "date_search_is_120_second_estimate": false
+  },
+  "native_exclusions": {
+    "foreign_db_identity_refusal": "NOT_RUN",
+    "checkpoint_rejection": "NOT_RUN",
+    "offline_wallet_fork_agreement": "NOT_RUN",
+    "seed_restore_and_funded_rescan": "NOT_RUN",
+    "non_genesis_and_full_matrix": "NOT_RUN"
+  },
+  "native_controls": {
+    "uuid": "well-formed handshake reaches native UUID guard",
+    "chain_genesis": {
+      "request_id": 2006,
+      "response_id": 2007,
+      "valid_positive_block_ids": "[dedicated genesis]",
+      "negative_last_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "native_guard": "Blockchain::find_blockchain_supplement genesis block mismatch",
+      "timeout_sufficient": false,
+      "explicit_rpc_error_or_disconnect_required": false,
+      "unchanged_state": [
+        "height",
+        "top_block_hash",
+        "cumulative_difficulty",
+        "pool_hashes"
+      ]
+    },
+    "retained_roots": "launcher/manifest refusal before any writer, never native foreign DB identity refusal",
+    "offline_fork": "bound source table only; no native CLI/API witness frozen",
+    "restart": "owned PID plus process start ticks; restricted get_info start_time is masked"
+  },
+  "next_external_prerequisite": "Authorized source-only implementation continuation through existing Meownero lead/T3 coordination; Core scope response is complete.",
+  "source_preparation_deliverables": [
+    "committed grant-bound full-profile supervisor and driver",
+    "exact native wire fixtures with guard witnesses",
+    "private CLI height setter/save/reopen and wallet lifecycle",
+    "17 schema-valid restricted method controls",
+    "row-level native output schemas and exclusions",
+    "source-only adverse/refusal tests",
+    "concrete aggregate host/container resource mechanism or Platform overhead allocation proposal",
+    "candidate/runner/artifact and mount manifests"
+  ],
+  "remaining_native_matrix_unchanged": true,
+  "source_preparation_in_this_run": false
+}

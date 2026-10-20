@@ -1,0 +1,524 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proposed genesis-only row documents",
+  "type": "object",
+  "required": [
+    "build.json",
+    "peer.json",
+    "wallet.json",
+    "auth.json",
+    "isolation.json",
+    "reopen.json",
+    "resources.json",
+    "cleanup.json"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "build.json": {
+      "type": "object",
+      "required": [
+        "three_production_binaries",
+        "rpc_translation_unit"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "three_production_binaries": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "rpc_translation_unit": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "peer.json": {
+      "type": "object",
+      "required": [
+        "native_handshake",
+        "genesis_state",
+        "daemon_fork_table"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "native_handshake": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "genesis_state": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "daemon_fork_table": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "wallet.json": {
+      "type": "object",
+      "required": [
+        "persisted_height_zero",
+        "address_roundtrip",
+        "foreign_prefix_refusal"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "persisted_height_zero": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "address_roundtrip": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "foreign_prefix_refusal": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "auth.json": {
+      "type": "object",
+      "required": [
+        "http_auth",
+        "seventeen_denials",
+        "rotated_login"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "http_auth": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "seventeen_denials": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "rotated_login": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "isolation.json": {
+      "type": "object",
+      "required": [
+        "uuid_guard",
+        "chain_genesis_guard",
+        "launcher_refusals",
+        "no_fallback"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "uuid_guard": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "chain_genesis_guard": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "launcher_refusals": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "no_fallback": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "reopen.json": {
+      "type": "object",
+      "required": [
+        "wallet_save_exit_release",
+        "wallet_cold_restore",
+        "daemon_reopen_restore"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "wallet_save_exit_release": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "wallet_cold_restore": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "daemon_reopen_restore": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "resources.json": {
+      "type": "object",
+      "required": [
+        "parent_enclosure",
+        "deadlines",
+        "disk",
+        "no_oom"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "parent_enclosure": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "deadlines": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "disk": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "no_oom": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    },
+    "cleanup.json": {
+      "type": "object",
+      "required": [
+        "owned_pids_absent",
+        "owned_cid_absent",
+        "owned_staging_removed",
+        "lock_released"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "owned_pids_absent": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "owned_cid_absent": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "owned_staging_removed": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "lock_released": {
+          "type": "object",
+          "required": [
+            "status"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "PASS",
+                "FAIL",
+                "NOT_RUN"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      }
+    }
+  }
+}
