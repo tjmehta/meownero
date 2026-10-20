@@ -22,7 +22,7 @@ EXTRA=['src/p2p/p2p_protocol_defs.h','src/p2p/net_node.inl',
        'contrib/epee/include/storages/portable_storage.h',
        'src/common/password.cpp','src/rpc/rpc_args.cpp','src/wallet/wallet_rpc_server.h',
        'src/rpc/CMakeLists.txt','src/p2p/net_node.cpp','tests/unit_tests/base58.cpp','tests/functional_tests/wallet.py']
-CODE=['profile_contract.py','run-profile.py','profile-integration.py','freeze-profile.py','test_profile.py']
+CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.py','profile-integration.py','freeze-profile.py','test_profile.py']
 
 
 def source_inputs():
@@ -49,7 +49,7 @@ def source_inputs():
         fixture_sha256={label:c.digest(c.chain_request(value)) for label,value in
                         [('matching-genesis',c.GENESIS),('wrong-genesis','00'*32)]},
         proposed_native_outputs=c.empty_rows(),exclusions={key:'NOT_RUN' for key in c.EXCLUDED},
-        cgroup_mechanism='common-cgroup-v2-dedicated-docker-fixed-filesystem/1',
+        cgroup_mechanism='platform-rootful-cgroupfs-v2-fixed-ext4/2',
         native_execution='NOT_RUN')
 
 

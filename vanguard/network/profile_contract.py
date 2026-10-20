@@ -129,22 +129,22 @@ def admit(snapshot):
     require(not snapshot['native_processes'] and not snapshot['native_containers'], 'workload collision')
 
 
-def grant_payload(comment, *, commit, inputs_hash, artifact_hash, now):
+def grant_payload(comment, *, commit, inputs_hash, artifact_hash, bootstrap_hash, now):
     require(comment['id'] not in CONSUMED and not comment.get('deletedAt') and
             comment['issueId'] == ISSUE and comment['authorAgentId'] == PLATFORM and
             comment.get('authorType') == 'agent', 'not a new attributed Platform grant')
     blocks = re.findall(r'```meownero-platform-grant\n(.*?)\n```', comment['body'], re.S)
     require(len(blocks) == 1, 'exact structured grant required')
     value = json.loads(blocks[0])
-    expected = dict(schema='meownero-platform-grant/1', issue_id=ISSUE,
+    expected = dict(schema='meownero-platform-grant/2', issue_id=ISSUE,
                     candidate_commit=commit, inputs_sha256=inputs_hash,
-                    artifact_sha256=artifact_hash, limits=LIMITS,
+                    artifact_sha256=artifact_hash, bootstrap_sha256=bootstrap_hash, limits=LIMITS,
                     attempts=1, retry=False, workload='three-production-binaries-genesis-only')
     require(all(value.get(k) == v for k,v in expected.items()), 'grant binding mismatch')
     require(value.get('authorized') is True and value['not_before_unix'] <= now < value['expires_unix'],
             'grant absent, premature or expired')
-    require(value['enclosure']['mechanism'] == 'common-cgroup-v2-dedicated-docker-fixed-filesystem/1',
-            'whole-attempt enclosure missing')
+    require('enclosure' not in value and 'ledger_directory' not in value, 'runtime facts do not belong in authorization')
+    require(bool(re.fullmatch('[0-9a-f]{64}', bootstrap_hash or '')), 'exact bootstrap hash required')
     return value
 
 
@@ -155,7 +155,7 @@ def enclosure(counters, self_group, daemon_group, parent):
     require(counters['cpu.max'] == '200000 100000' and
             counters['memory.max'] == str(LIMITS['memory_bytes']) and
             counters['memory.swap.max'] == '0' and counters['pids.max'] == '256' and
-            counters['cgroup.procs'] == '' and counters['memory.oom.group'] == '1',
+            counters['cgroup.procs'] == '' and counters['memory.oom.group'] == '0',
             'aggregate limits/topology differ')
 
 

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """One future grant-bound production build and genesis-only attempt.
 
-No resource provisioning or implicit grant. Platform must launch this process and
-its dedicated Docker daemon below the frozen common parent before entry. Current
-source-only authorization does not permit invoking this entry point for runtime.
+No resource provisioning or implicit grant. No qualified outer implementation is
+supplied. The source-frozen handoff is conditional and this entry point refuses
+even a manually populated bootstrap hash until a reviewed implementation exists.
 """
 import argparse
-import fcntl
 import importlib.util
 import json
 import os
@@ -22,6 +21,7 @@ import urllib.request
 import network as n
 import policy
 import profile_contract as c
+import profile_handoff as handoff
 
 spec = importlib.util.spec_from_file_location('genesis', c.HERE / 'run-genesis.py')
 g = importlib.util.module_from_spec(spec)
@@ -51,14 +51,9 @@ def command(argv, deadline, **kwargs):
 
 
 def admission(docker, image, fs):
-    snap = g.admission(image)  # Uses the existing host socket only for collision detection.
-    snap['free_disk_bytes'] = shutil.disk_usage(fs).free
-    snap['load'] = list(os.getloadavg())
-    # The dedicated attempt daemon must have no container before creation.
-    c.require(not subprocess.check_output(docker + ['ps','-aq'],text=True,timeout=10).strip(),
-              'dedicated attempt daemon has preexisting containers')
-    c.admit(snap)
-    return snap
+    # The prior shared-socket observer cannot perform an enclosed second admission.
+    # The qualified outer must supply the exact live collision/admission channel.
+    raise ValueError('qualified second-admission channel is not supplied')
 
 
 def read_enclosure(value):
@@ -82,13 +77,18 @@ def read_enclosure(value):
     info = json.loads(subprocess.check_output(docker+['info','--format','{{json .}}'],text=True,timeout=10))
     c.require(info['CgroupVersion'] == '2' and info['CgroupDriver'] == 'cgroupfs', 'requires cgroupfs v2')
     c.require(Path(info['DockerRootDir']).is_relative_to(root), 'Docker writable store outside bounded root')
-    c.require(e['attempt_started_monotonic'] <= time.monotonic() < e['attempt_started_monotonic'] + 60,
-              'enclosure startup took more than 60s or invalid host clock')
-    # Platform's launcher starts its independent hard watchdog at the same origin,
-    # covering provisioning/image import and a controller killed before finally.
-    c.require(e['watchdog']['deadline_monotonic'] == e['attempt_started_monotonic'] + 4500 and
-              e['watchdog']['cleanup_owner'] == c.PLATFORM and e['watchdog']['kill_parent_at_deadline'] is True,
-              'independent deadline and cleanup owner missing')
+    c.require({'cpu','memory','pids'} <= set((cg/'cgroup.controllers').read_text().split()) and
+              {'cpu','memory','pids'} <= set((cg/'cgroup.subtree_control').read_text().split()),
+              'aggregate controllers not active')
+    work = Path('/sys/fs/cgroup' + e['workload_cgroup'])
+    recovery = value['recovery']['pid_identity']
+    c.stop_identity(recovery,pid_identity(recovery[0]))
+    c.require(group(recovery[0]).startswith(parent+'/recovery/') and
+              group('self').startswith(e['workload_cgroup']+'/') and
+              group(daemon[0]).startswith(e['workload_cgroup']+'/'), 'recovery/work placement')
+    c.require((work/'memory.oom.group').read_text().strip() == '1', 'workload OOM grouping')
+    # Daemon/containerd/shims, mount topology, recovery immunity and image import
+    # still require a qualified outer implementation and its authoritative receipt.
     return root,cg,docker
 
 
@@ -123,6 +123,9 @@ def main():
     parser.add_argument('--inputs',type=Path,default=c.HERE/'integration/inputs.json')
     parser.add_argument('--grant-comment',required=True)
     parser.add_argument('--artifact-sha256',required=True)
+    parser.add_argument('--context-fd',type=int)
+    parser.add_argument('--lock-fd',type=int)
+    parser.add_argument('--ledger-fd',type=int)
     args = parser.parse_args()
     os.umask(0o077)
     # Refuse consumed/random identifiers before any resource or native operation.
@@ -132,19 +135,21 @@ def main():
     c.require(not subprocess.check_output(['git','-C',str(n.ROOT),'status','--porcelain'],text=True).strip(),
               'commit exact candidate first')
     manifest = check_inputs(args.inputs)
-    # Concrete prerequisite: Platform must source-freeze the outer launcher that
-    # performs admission/ledger BEFORE provisioning and owns cleanup after death.
-    # This candidate cannot authorize or invent that platform implementation.
-    c.require(manifest.get('platform_bootstrap_sha256') is not None,
-              'Platform pre-admission enclosure bootstrap is not yet frozen')
+    # No source-table entry exists. JSON/hash edits cannot enable native work.
+    handoff.require_bootstrap(manifest)
     inputs_hash = c.digest(args.inputs.read_bytes())
     comment = json.loads(api('/api/issues/'+c.ISSUE+'/comments/'+args.grant_comment))
     grant = c.grant_payload(comment,commit=commit,inputs_hash=inputs_hash,
-                            artifact_hash=args.artifact_sha256,now=time.time())
+                            artifact_hash=args.artifact_sha256,bootstrap_hash=manifest['platform_bootstrap_sha256'],now=time.time())
     c.require(c.digest(api('/api/attachments/'+grant['artifact_attachment_id']+'/content')) == args.artifact_sha256,
               'authenticated candidate artifact readback mismatch')
-    root,cg,docker = read_enclosure(grant)
-    start = grant['enclosure']['attempt_started_monotonic']
+    context = handoff.read_inherited(args.context_fd,args.lock_fd,args.ledger_fd,
+        bindings=dict(grant_id=args.grant_comment,grant_sha256=c.digest(c.canonical(grant)),
+                      candidate_commit=commit,inputs_sha256=inputs_hash,
+                      artifact_sha256=args.artifact_sha256,bootstrap_sha256=manifest['platform_bootstrap_sha256']),
+        now=time.monotonic(),identity=pid_identity)
+    root,cg,docker = read_enclosure(context)
+    start = context['origin']
     build_deadline,runtime_deadline,end = start+3600,start+4200,start+4500
     out = root/'attempt'
     public = root/'public'
@@ -153,9 +158,8 @@ def main():
     receipt = dict(result='NOT_STARTED',launch_ready=False,grant=args.grant_comment,
                    candidate_commit=commit,inputs_sha256=inputs_hash,rows=rows,
                    exclusions={key:'NOT_RUN' for key in c.EXCLUDED})
-    fd = None
     cid = None
-    consumed = False
+    consumed = True  # Existing durable receipt; never consume again here.
     def interrupted(signum,frame):
         raise RuntimeError('supervisor interrupted')
     for sig in (signal.SIGINT,signal.SIGHUP,signal.SIGTERM): signal.signal(sig,interrupted)
@@ -187,18 +191,7 @@ def main():
                     try: proc.wait(timeout=min(5,max(0.1,end-time.monotonic())))
                     except subprocess.TimeoutExpired: proc.kill(); proc.wait(timeout=2)
     try:
-        fd = os.open(c.LOCK,os.O_RDWR|os.O_NOFOLLOW)
-        c.check_lock(os.fstat(fd),os.getuid())
-        fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
-        receipt['admission'] = admission(docker,manifest['builder_image'],root.parent)
-        # Durable one-use ledger is outside disposable staging. Never erase it.
-        ledger = c.no_alias(grant['ledger_directory'])
-        c.require(ledger.stat().st_uid == os.getuid() and ledger.stat().st_mode & 0o077 == 0, 'ledger ownership')
-        ledger_fd = os.open(ledger/(args.grant_comment+'.json'),os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
-        with os.fdopen(ledger_fd,'w') as stream:
-            json.dump(dict(grant=args.grant_comment,candidate=commit,state='CONSUMED',start=start),stream)
-            stream.flush(); os.fsync(stream.fileno())
-        consumed = True
+        receipt['admission'] = context['first_admission']
         out.mkdir(mode=0o700);public.mkdir(mode=0o700);(out/'tmp').mkdir()
         receipt['result'] = 'INCOMPLETE'
         source = out/'source';source.mkdir()
@@ -227,8 +220,8 @@ def main():
         image = json.loads(subprocess.check_output(docker+['image','inspect',manifest['builder_image']],text=True,timeout=10))[0]
         c.require(image['Id'] == manifest['builder_image'] and image['Architecture'] == 'amd64' and image['Os'] == 'linux','builder identity')
         create = docker+['create','--pull=never','--network=none','--read-only','--log-driver=none',
-          '--cgroup-parent='+grant['enclosure']['cgroup_parent'],'--cap-drop=ALL','--security-opt=no-new-privileges',
-          '--cpus=2','--memory=4g','--memory-swap=4g','--pids-limit=256','--ulimit','core=0',
+          '--cgroup-parent='+context['enclosure']['workload_cgroup'],'--cap-drop=ALL','--security-opt=no-new-privileges',
+          '--cpus=2','--memory=3840m','--memory-swap=3840m','--pids-limit=224','--ulimit','core=0',
           '--user',f'{os.getuid()}:{os.getgid()}','--label','meownero.task=TJS-2504',
           '--cidfile',str(out/'container.cid'),
           '--mount',f'type=bind,src={out},dst=/out',
@@ -243,9 +236,9 @@ def main():
         c.require(re.fullmatch('[0-9a-f]{64}',cid),'exact CID')
         inspect = json.loads(subprocess.check_output(docker+['inspect',cid],text=True,timeout=10))[0]
         hc=inspect['HostConfig']
-        c.require(hc['CgroupParent'] == grant['enclosure']['cgroup_parent'] and hc['NetworkMode']=='none' and
+        c.require(hc['CgroupParent'] == context['enclosure']['workload_cgroup'] and hc['NetworkMode']=='none' and
                   hc['ReadonlyRootfs'] and hc['LogConfig']['Type']=='none' and not hc['PortBindings'] and
-                  hc['Memory']==hc['MemorySwap']==4*1024**3 and hc['NanoCpus']==2_000_000_000 and hc['PidsLimit']==256,
+                  hc['Memory']==hc['MemorySwap']==3840*1024**2 and hc['NanoCpus']==2_000_000_000 and hc['PidsLimit']==224,
                   'created containment mismatch')
         receipt['container_id']=cid
         supervised(docker+['start','-a',cid],build_deadline,out/'build-console.log')
@@ -260,7 +253,7 @@ def main():
             if name not in ('build.json','resources.json','cleanup.json'):
                 rows[name]=c.json_file(public/name)
         sample()
-        rows['resources.json']={key:dict(status='PASS') for key in c.REQUIRED['resources.json']}
+        # Samples are provisional; only the outer can finalize aggregate status.
     except Exception as error:
         # Exception strings may contain process output. Export the class only.
         receipt['failure_class']=type(error).__name__
@@ -280,33 +273,25 @@ def main():
                 probe=subprocess.run(docker+['inspect',cid],capture_output=True,text=True,timeout=5)
                 c.require(probe.returncode != 0 and 'no such' in probe.stderr.lower(),'container absence unconfirmed')
                 cleanup['owned_cid_absent']=dict(status='PASS')
-                # Kernel population is verified by Platform's independent watchdog too.
-                c.require(not any('docker-'+cid in p.name for p in cg.rglob('*')),'container cgroup remains')
-                cleanup['owned_pids_absent']=dict(status='PASS')
-            if out.exists():
-                shutil.rmtree(out)
-                c.require(not out.exists(),'staging removal failed')
-                cleanup['owned_staging_removed']=dict(status='PASS')
+                # CID absence alone says nothing about daemon/helper/PID absence.
+            # The outer preserves allowlisted evidence, then removes private staging,
+            # daemon/helpers, filesystem and backing image within the cleanup reserve.
         except Exception as error:
             receipt['cleanup_failure_class']=type(error).__name__
             receipt['result']='FAIL'
-        finally:
-            if fd is not None:
-                os.close(fd)
-                # Independent open plus nonblocking flock proves release, while retaining original inode.
-                probe=os.open(c.LOCK,os.O_RDWR|os.O_NOFOLLOW)
-                try:
-                    c.check_lock(os.fstat(probe),os.getuid());fcntl.flock(probe,fcntl.LOCK_EX|fcntl.LOCK_NB)
-                    cleanup['lock_released']=dict(status='PASS')
-                finally: os.close(probe)
-        rows['cleanup.json']=cleanup
+        # Closing the inner copy never releases the supervisor's retained copy.
+        # Never call LOCK_UN or probe acquisition while the outer still holds it.
+        os.close(args.lock_fd)
+        rows = handoff.inner_rows(rows)
+        receipt['outer_completion'] = 'NOT_RUN'
+        receipt['provisional_cid_cleanup'] = cleanup
         receipt['wall_seconds']=time.monotonic()-start
-        if receipt['result']=='INCOMPLETE': receipt['result']=c.verdict(rows)
+        if receipt['result']=='INCOMPLETE': receipt['result']='PENDING_OUTER_COMPLETION'
         if public.exists():
             for name,data in rows.items(): n.write_json(public/name,data)
             n.write_json(public/'receipt.json',receipt)
         print(json.dumps(dict(result=receipt['result'],launch_ready=False,consumed=consumed)))
-    return 0 if receipt['result'].startswith('PASS_') else (3 if not consumed else 124 if time.monotonic()>=runtime_deadline else 1)
+    return 0 if receipt['result']=='PENDING_OUTER_COMPLETION' else (124 if time.monotonic()>=runtime_deadline else 1)
 
 
 if __name__=='__main__':

@@ -20,17 +20,17 @@ driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
 
 
 def grant():
-    value=dict(schema='meownero-platform-grant/1',issue_id=c.ISSUE,candidate_commit='candidate',
+    value=dict(schema='meownero-platform-grant/2',issue_id=c.ISSUE,candidate_commit='candidate',
         inputs_sha256='inputs',artifact_sha256='artifact',limits=c.LIMITS,attempts=1,retry=False,
         workload='three-production-binaries-genesis-only',authorized=True,not_before_unix=10,expires_unix=20,
-        enclosure=dict(mechanism='common-cgroup-v2-dedicated-docker-fixed-filesystem/1'))
+        bootstrap_sha256='b'*64)
     comment=dict(id='new',issueId=c.ISSUE,authorAgentId=c.PLATFORM,authorType='agent')
     return comment,value
 
 
 def check_grant(comment,value,now=15):
     comment=dict(comment,body='```meownero-platform-grant\n'+json.dumps(value)+'\n```')
-    return c.grant_payload(comment,commit='candidate',inputs_hash='inputs',artifact_hash='artifact',now=now)
+    return c.grant_payload(comment,commit='candidate',inputs_hash='inputs',artifact_hash='artifact',bootstrap_hash='b'*64,now=now)
 
 
 class SourceBoundaryTests(unittest.TestCase):
@@ -53,7 +53,7 @@ class SourceBoundaryTests(unittest.TestCase):
                 with self.assertRaises(ValueError):check_grant(comment,dict(value,**{key:bad}))
     def test_uuid_alone_is_not_a_grant(self):
         comment,value=grant();comment['body']='approved '+comment['id']
-        with self.assertRaises(ValueError):c.grant_payload(comment,commit='candidate',inputs_hash='inputs',artifact_hash='artifact',now=15)
+        with self.assertRaises(ValueError):c.grant_payload(comment,commit='candidate',inputs_hash='inputs',artifact_hash='artifact',bootstrap_hash='b'*64,now=15)
     def test_original_lock_replacements_are_refused(self):
         info=SimpleNamespace(st_mode=stat.S_IFREG|0o600,st_dev=c.LOCK_ID[0],st_ino=c.LOCK_ID[1],st_uid=os.getuid())
         c.check_lock(info,os.getuid())
@@ -70,7 +70,7 @@ class SourceBoundaryTests(unittest.TestCase):
                 with self.assertRaises(ValueError):c.admit(dict(valid,**{key:bad}))
     def test_container_only_containment_never_satisfies_aggregate(self):
         counters={'cpu.max':'200000 100000','memory.max':str(4*1024**3),'memory.swap.max':'0',
-                  'memory.oom.group':'1','pids.max':'256','cgroup.procs':''}
+                  'memory.oom.group':'0','pids.max':'256','cgroup.procs':''}
         c.enclosure(counters,'/owned/controller','/owned/docker','/owned')
         for self_group,daemon in [('/other/controller','/owned/docker'),('/owned/controller','/system/docker')]:
             with self.assertRaises(ValueError):c.enclosure(counters,self_group,daemon,'/owned')
