@@ -30,7 +30,8 @@ def main():
     args = parser.parse_args()
     n.require(re.fullmatch(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', args.grant_comment), 'grant UUID required')
     n.require(args.grant_comment not in {'2d70177d-b7a7-4ef6-8079-242320bdcb1f',
-                                       '15414082-2a53-4872-8d19-b87f302f0bae'}, 'prior grant is consumed')
+                                       '15414082-2a53-4872-8d19-b87f302f0bae',
+                                       '0ae5446a-0da7-4f75-9604-50b4e7b090c8'}, 'prior grant is consumed')
     n.require(args.grant_comment != '3127e4f4-46ae-4e8d-9732-128640aca67a',
               'grant binds the prior overlay; updated platform binding required')
     os.umask(0o077)

@@ -17,11 +17,13 @@ ten-file policy overlay and an executable bounded native test runner. The
 projection changes to dedicated TESTNET and retains inherited v18 unlock rules.
 The independent [Privacy consultation](privacy-response.md) confirms this direction;
 both source consultations are complete, with native acceptance checks still open.
-Fourteen source/admission-guard checks pass; the overlay has not been compiled or
-run. The profile digest and accepted genesis evidence stay unchanged. The unused
-platform grant binds the prior artifact and needs an explicit update before
-executing the corrected candidate. Native peer/wallet proof and independent
-acceptance remain open.
+The [bounded native policy witness](policy-result.md) now passes twice on the
+exact approved checkout: reward/target helpers, address separation, CARROT
+construction, height-one template and positive reset. This does not compile the
+RPC server or prove peer/wallet behavior. Fourteen source/admission-guard checks
+pass, including refusal of the now-consumed platform grant before output
+creation. Profile, overlay and accepted genesis evidence stay unchanged.
+Native peer/wallet proof and independent acceptance remain open.
 
 `python3 -B vanguard/network/network.py validate` checks an exact profile copy.
 `check-source` verifies listed native source/pin bindings.

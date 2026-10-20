@@ -2,9 +2,10 @@
 
 The [October20 selected-policy preparation](selected-policy.md) supersedes the
 policy-implementation inventory below. It supplies a separate ten-file overlay
-and proposed bounded native workload. That C++ patch remains uncompiled and no
-new network or wallet behavior is proven. Genesis admission evidence and profile
-hash retain their original meaning.
+and the now-completed [bounded native policy witness](policy-result.md). Native
+reward/target/address/CARROT helpers and a height-one template pass twice. RPC
+server compilation, full peer and wallet behavior remain unproven. Genesis
+admission evidence and profile hash retain their original meaning.
 
 2026-10-19. This is an implemented protocol proposal checkpoint, **not a
 launchable candidate**. The [Cryptography consultation](<private-tracker>/TJS/issues/TJS-2504#comment-3b6c0197-43f9-4c30-a90c-399f82fc0b57)
@@ -55,7 +56,7 @@ semantics. The existing packages need rebuilding/integrating for this profile.
 | --- | --- |
 | Namespace | `meownero-vanguard-shared-testnet-v1` |
 | P2P UUID bytes | `e16d7839ed4d3ec8363d078df18fff6d`, first 16 SHA256 bytes of namespace plus `/network-id` |
-| Standard/integrated/subaddress prefixes | 4240 / 4241 / 4242, distinct from upstream and historical Candidate M; native encoding/decoding is still NOT_RUN |
+| Standard/integrated/subaddress prefixes | 4240 / 4241 / 4242, distinct from upstream and historical Candidate M; 39 native same/foreign address checks pass in each invocation |
 | P2P / daemon RPC / reserved disabled ZMQ / wallet RPC | 48080 / 48081 / 48082 / 48083 |
 | Data root | A fresh private task directory, then namespace/node ID; native `--testnet` appends `testnet/lmdb` |
 | Genesis | Native-derived v2/RCTNull one-zero-output transaction is pinned in the profile. Actual nonce424001; block hash `885cb43cf51086063f15c94d2fb7f327e34c447de53c9c6291b1a86d6510dab6`. Bounded native TESTNET genesis admission passes; independent acceptance pending |
@@ -207,7 +208,8 @@ independent reopening. Earlier failed attempts remain failures.
 
 [Accepted receipt bindings](evidence/accepted-evidence-bindings.json) hash the
 unchanged native result and host receipt read here. This run does not reauthenticate
-live tips. Its new profile has **no native proof**. Neither that witness nor
+live tips. The dedicated profile now has the bounded genesis and policy-helper
+proofs above; it still has **no native P2P/wallet proof**. Neither that witness nor
 historical Candidate M 9/90 data proves shared-network readiness.
 
 ## Exact remaining package and wallet integration

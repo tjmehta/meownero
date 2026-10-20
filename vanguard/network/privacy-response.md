@@ -1,5 +1,12 @@
 # Privacy consultation response, 2026-10-20 UTC
 
+Execution update, October 20 13:08 UTC: the platform rebind was obtained and its
+single finite grant is now consumed. The corrected core/helper target passed
+twice on approved checkout `a1558795663e5999785a5586bf6c755c7826071a`;
+see [the native result](policy-result.md). Native projection, unlock/maturity,
+peer/wallet and final-review requirements below remain open. The original
+consultation/pre-execution account below retains its historical timestamp.
+
 The independent [Privacy/Cryptography ruling](<private-tracker>/TJS/issues/TJS-2504#comment-92c3db8f-40a3-483e-99f1-4975701a59c8)
 confirms the inherited v18 nonzero-unlock restriction and the foreign-selector
 projection correction. The [Core response](projection-correction.md) already

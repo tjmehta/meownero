@@ -1,0 +1,72 @@
+{
+  "schema": "meownero-tjs2504-native-postcheck-cleanup/1",
+  "observed_at": "2026-10-20T13:08:45.049400+00:00",
+  "launch_ready": false,
+  "driver_exit": {
+    "ended_at": "2026-10-20T13:08:38.670174+00:00",
+    "driver_returncode": 0,
+    "driver_pid": 552155,
+    "retry_authorized": false
+  },
+  "native_result": "PASS_NATIVE_POLICY_HELPERS_AND_TEMPLATE_ONLY",
+  "exact_container_id": "a8b9c69ff88cc313c488d394caf77013810feabd64631003942448a08c2832b2",
+  "container_absent": true,
+  "lock_reacquired_nonblocking": {
+    "device": 66306,
+    "inode": 657237,
+    "uid": 1000,
+    "mode": "0o600"
+  },
+  "postcheck_lock_released": true,
+  "candidate_commit": "a1558795663e5999785a5586bf6c755c7826071a",
+  "upstream_source_recheck_count": 38,
+  "applied_overlay_recheck": {
+    "src/cryptonote_basic/cryptonote_basic_impl.cpp": "c1175cabf88d10b47bb7f5a4ca6c1bbd9407a43fed0eb0c646dbaba04c49bb55",
+    "src/cryptonote_basic/cryptonote_basic_impl.h": "ba57439c69170e4170df140d5a076b013638e05378de01f1ad1f472d287755f0",
+    "src/cryptonote_config.h": "88b9cb16053993e5741493fc34a60770009c3ca4703c03572ed1d314a88288ea",
+    "src/cryptonote_core/blockchain.cpp": "e8855bafba52ccb213853e22882d3cd1109866a01fb17ffd5d1d14bfcdf74869",
+    "src/cryptonote_core/blockchain.h": "181c5acab76e047c845e7a02fc34b8e2175410af70f11780319f3afaa885b307",
+    "src/cryptonote_core/cryptonote_tx_utils.cpp": "1d2cea84ded72aec56395edbd27c2de7e92dc73f147f7808aa69a945516fa709",
+    "src/cryptonote_core/cryptonote_tx_utils.h": "357dc86dd89ff0ec867b649a8ea8b097cab68d51720735bc7492e8ed4ceb2273",
+    "src/cryptonote_core/tx_pool.cpp": "df1c59aa5c4a10dcfb96dff541acc5a2e04fdd44097d05949b77597504582542",
+    "src/hardforks/hardforks.cpp": "08f645f982252a8caac4068a2534a9ae9c054b3a21ef04961af01d4b5d0dd31d",
+    "src/rpc/core_rpc_server.cpp": "fec05d7494d04fc30c97a68a726e1e93c163724b35f3314c29029a59f52bb3c1"
+  },
+  "binary_sha256": "2ec35d3debd8d51fa82d68e9bc301f97f128d5181f0b2768e7f519cabd53940f",
+  "native_summary": {
+    "result": "PASS_NATIVE_POLICY_HELPERS_AND_TEMPLATE_ONLY",
+    "launch_ready": false,
+    "reward_vectors": 13608,
+    "address_vectors": 39,
+    "constructions": 24,
+    "positive_reset": true,
+    "admitted_non_genesis_blocks": 0,
+    "two_peer_network": "NOT_RUN",
+    "mature_root": "NOT_RUN"
+  },
+  "native_outputs_byte_identical": true,
+  "native_json_sha256": "d17081c14440119ff09fe035dc5b087bf173c2674ab765d1bdba07a638e5affc",
+  "stopped_state_archive": {
+    "path": "stopped-native-state.tar.gz",
+    "sha256": "0c967feb803aec1060582f930981e8f9e954130f72ec95153cf88d0a1b8e329c",
+    "members": [
+      "source/build/network/tests/vanguard-policy/vanguard_network_policy",
+      "db-policy01",
+      "db-policy02"
+    ]
+  },
+  "removed_exact_owned_paths": [
+    "native-policy-attempt01/source",
+    "native-policy-attempt01/cargo-home",
+    "native-policy-attempt01/db-policy01",
+    "native-policy-attempt01/db-policy02",
+    "native-policy-attempt01/source-external-gtest.tar",
+    "native-policy-attempt01/source-external-mx25519.tar",
+    "native-policy-attempt01/source-external-randomx.tar",
+    "native-policy-attempt01/source-external-rapidjson.tar",
+    "native-policy-attempt01/source-external-supercop.tar",
+    "native-policy-attempt01/source-root.tar"
+  ],
+  "remaining_staging_entries": [],
+  "result": "PASS_POSTCHECK_AND_OWNED_CLEANUP"
+}

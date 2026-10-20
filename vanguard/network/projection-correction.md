@@ -1,5 +1,12 @@
 # Core consultation response
 
+Execution update, October 20 13:08 UTC: the platform rebind was obtained and its
+single finite grant is now consumed. The corrected core/helper target passed
+twice on approved checkout `a1558795663e5999785a5586bf6c755c7826071a`;
+see [the native result](policy-result.md). Native projection, unlock/maturity,
+peer/wallet and final-review requirements below remain open. The original
+consultation/pre-execution account below retains its historical timestamp.
+
 The October 20 Core source ruling is incorporated. This remains an uncompiled,
 non-public candidate preparation, not final acceptance. The ten-file overlay
 SHA256 is `32c40224dcd618995ef4d846cab411a85783314da79a803ed16074241780312c`.

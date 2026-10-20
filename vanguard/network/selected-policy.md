@@ -4,8 +4,11 @@ The current overlay incorporates the [Core projection correction](projection-cor
 Its SHA256 is `32c40224dcd618995ef4d846cab411a85783314da79a803ed16074241780312c`;
 the [current machine receipt](evidence/projection-correction/policy-overlay.json)
 is the runner's frozen input. The original preparation and evidence below remain
-the historical `ebb9535` checkpoint. Its unused platform grant does not authorize
-the changed artifact until the platform owner updates that binding.
+the historical `ebb9535` checkpoint. The platform subsequently rebound the
+corrected candidate; that single grant is now consumed by the successful
+[native helper/template witness](policy-result.md). Its two summaries are
+byte-identical. The original preparation and workload recipe below are retained
+as history, not authority to repeat the attempt.
 
 This checkpoint prepares the selected policy on upstream
 `e151643c5269c83bf24a83b2548e2493876026b2`, starting from accepted genesis
@@ -62,7 +65,7 @@ The source/document diff whitespace check passes. The verbatim unified patch
 contains upstream blank context lines with a required leading space; its full
 diff-check diagnostic is retained as `patch-format-diff-check.txt`.
 
-## Exact next native workload
+## Executed finite native workload
 
 The missing claim is that the linked current-lineage implementation honors its
 TESTNET-specific reward/target and address separation through actual native

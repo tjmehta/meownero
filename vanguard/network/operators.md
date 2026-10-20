@@ -4,10 +4,12 @@ This recipe is executable through preparation only. `network.py` has no launch
 subcommand. `readiness` exits3 and lists the unresolved protocol/native gates.
 Proposal configs must not be fed to the existing upstream packages.
 
-For the new selected9/90 overlay and its next finite native workload, use
-[selected-policy.md](selected-policy.md). The prior genesis/admission grants are
-consumed. The new runner is executable preparation and needs a fresh platform
-window; the full network also needs the recorded lock-metadata review.
+For the selected9/90 overlay and its executed finite workload, use
+[selected-policy.md](selected-policy.md) and [the native result](policy-result.md).
+The helper, genesis-admission and corrected policy grants are consumed. The policy
+runner refuses their UUIDs before output creation. Full native peer/wallet work
+needs its own exact implementation/workload and platform grant; the Core/Privacy
+source lock-domain consultations are complete, with their native matrix open.
 
 ## Inspect and prepare
 

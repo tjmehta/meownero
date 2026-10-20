@@ -224,6 +224,7 @@ class PolicyBoundary(unittest.TestCase):
     def test_consumed_or_prior_overlay_grants_are_refused_before_output_creation(self):
         for grant, reason in (('2d70177d-b7a7-4ef6-8079-242320bdcb1f', 'prior grant is consumed'),
                               ('15414082-2a53-4872-8d19-b87f302f0bae', 'prior grant is consumed'),
+                              ('0ae5446a-0da7-4f75-9604-50b4e7b090c8', 'prior grant is consumed'),
                               ('3127e4f4-46ae-4e8d-9732-128640aca67a', 'updated platform binding required')):
             out = self.root / 'never'
             result = subprocess.run([sys.executable, '-B', str(n.HERE / 'run-policy.py'),
