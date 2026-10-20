@@ -15,6 +15,8 @@ The [current-lineage 9/90 preparation](selected-policy.md) adds a separate froze
 ten-file policy overlay and an executable bounded native test runner. The
 [Core consultation response](projection-correction.md) restricts adjusted-time
 projection changes to dedicated TESTNET and retains inherited v18 unlock rules.
+The independent [Privacy consultation](privacy-response.md) confirms this direction;
+both source consultations are complete, with native acceptance checks still open.
 Fourteen source/admission-guard checks pass; the overlay has not been compiled or
 run. The profile digest and accepted genesis evidence stay unchanged. The unused
 platform grant binds the prior artifact and needs an explicit update before

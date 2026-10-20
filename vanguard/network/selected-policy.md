@@ -133,8 +133,9 @@ nonzero ordinary-transaction unlock at v17 and later. Retain that rule, exact
 coinbase unlock h+60, ordinary age 10, and the existing FCMP lock conversion.
 No new epoch, mapping, network parameter or denial rule is needed. The native
 verifier, wallet request routes, actual maturity and persisted roots still need
-the positive and adverse observations specified by Core. Privacy's independent
-consultation and final Core/Security acceptance remain separate.
+the positive and adverse observations specified by Core and the independent
+[Privacy consultation](privacy-response.md). Both source consultations are now
+complete; native checks and final Core/Security acceptance remain open.
 
 The corrected full-window projection uses 90 seconds only for dedicated TESTNET
 and preserves literal 120 for every foreign selector, including v1. Median still

@@ -75,8 +75,9 @@ required for funded unlock 0/nonzero controls, pool/supplement/main/alternative
 admission and caches, wallet transfer/split/sweep routes, exact coinbase, early
 and mature spends, projection windows, persistence/reconstruction and isolation.
 The helper-only workload must not acquire those additional scopes implicitly.
-Keep the separately requested Privacy ruling independent; this response does
-not stand in for it or for final native Core/Security review stages.
+The independent [Privacy ruling](privacy-response.md) now confirms this direction
+and the same foreign-selector correction. Both source consultations are complete.
+Neither replaces the native checks or final Core/Security review stages.
 
 ## Native attempt and authority
 
