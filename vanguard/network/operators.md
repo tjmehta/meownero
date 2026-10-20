@@ -4,6 +4,11 @@ This recipe is executable through preparation only. `network.py` has no launch
 subcommand. `readiness` exits3 and lists the unresolved protocol/native gates.
 Proposal configs must not be fed to the existing upstream packages.
 
+For the new selected9/90 overlay and its next finite native workload, use
+[selected-policy.md](selected-policy.md). The prior genesis/admission grants are
+consumed. The new runner is executable preparation and needs a fresh platform
+window; the full network also needs the recorded lock-metadata review.
+
 ## Inspect and prepare
 
 Use the task's existing execution checkout and an existing task-owned private

@@ -11,6 +11,12 @@ reopen and second-database agreement now pass. Mature roots, full network behavi
 and final candidate acceptance remain open. See [the admission result](admission-result.md)
 and [the earlier helper result](native-result.md).
 
+The [current-lineage 9/90 preparation](selected-policy.md) adds a separate frozen
+ten-file policy overlay, eleven source/admission-guard checks and an executable
+bounded native test runner. It has not been compiled or run. The profile digest
+and accepted genesis evidence stay unchanged. Full network execution still needs
+the recorded timestamp-lock consultation and a new finite platform window.
+
 `python3 -B vanguard/network/network.py validate` checks an exact profile copy.
 `check-source` verifies listed native source/pin bindings.
 `identity-overlay` writes a TESTNET identity-only proposal patch to fresh scratch.

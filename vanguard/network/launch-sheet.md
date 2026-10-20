@@ -1,5 +1,11 @@
 # TJS-2504 source-bound shared-testnet checkpoint
 
+The [October20 selected-policy preparation](selected-policy.md) supersedes the
+policy-implementation inventory below. It supplies a separate ten-file overlay
+and proposed bounded native workload. That C++ patch remains uncompiled and no
+new network or wallet behavior is proven. Genesis admission evidence and profile
+hash retain their original meaning.
+
 2026-10-19. This is an implemented protocol proposal checkpoint, **not a
 launchable candidate**. The [Cryptography consultation](<private-tracker>/TJS/issues/TJS-2504#comment-3b6c0197-43f9-4c30-a90c-399f82fc0b57)
 accepts the genesis construction and v18 activation directions for bounded
