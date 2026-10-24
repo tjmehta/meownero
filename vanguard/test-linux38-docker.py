@@ -133,6 +133,8 @@ class Controls(unittest.TestCase):
                 root = Path(directory)
                 binding = root / 'binding.json'
                 binding.write_text('{}')
+                lock = root / 'heavy.lock'
+                lock.touch(mode=0o600)
                 state = (binding, 'a' * 64, {'kernel': 'kernel', 'boot_id_sha256': 'b' * 64})
                 calls = []
 
@@ -148,7 +150,7 @@ class Controls(unittest.TestCase):
                         return 'invalid witness'
                     raise AssertionError('unexpected command')
 
-                with patch.object(provider, '_binding', state), patch.object(provider, 'admit'), \
+                with patch.object(provider, '_binding', state), patch.object(provider, 'admit'), patch.object(provider, 'LOCK', lock), \
                      patch.object(provider, 'query', side_effect=query), patch.object(provider, 'unrelated', return_value={'unrelated'}), \
                      patch.object(provider, 'preserved') as preserve, patch.object(docker_support, 'proof'), \
                      patch.object(docker_support, 'cleanup_named', return_value={'removed': True}) as cleanup:

@@ -8,7 +8,7 @@ import shutil
 import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
-INPUTS = ROOT / 'research/evidence/vanguard-linux38-docker-tjs1882-2026-10-24/inputs.json'
+INPUTS = ROOT / 'research/evidence/vanguard-linux38-docker-correction1-tjs1882-2026-10-24/inputs.json'
 
 
 def sha(path):

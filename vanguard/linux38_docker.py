@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import platform
 import re
+import shlex
 import shutil
 import stat
 import subprocess
@@ -23,6 +24,46 @@ SCOPE = 'NATIVE_X64_UBUNTU22_DOCKER_USERLAND'
 GIB = 1024**3
 LOCK = Path('/tmp/meownero-swarm-20260912-heavy.lock')
 _binding = None
+_lock_stream = None
+
+
+def identity(path):
+    path = path.absolute()
+    assert not any(p.is_symlink() for p in (path, *path.parents)), 'symlink in bind source'
+    assert not any(c in str(path) for c in (',', '\n', '\r', ':')), 'ambiguous bind source'
+    value = path.stat()
+    assert stat.S_ISDIR(value.st_mode) or (stat.S_ISREG(value.st_mode) and value.st_nlink == 1)
+    return f'{value.st_dev}:{value.st_ino}'
+
+
+def mount_witness(mounts):
+    """Bind exact existing worker paths and refuse mismatches before its payload.
+
+    Docker resolves sources on the daemon host, not the controller. Directory
+    device/inode pairs must therefore agree, even for a same-kernel controller
+    with private mounts. --mount also refuses absent daemon paths.
+    https://docs.docker.com/engine/storage/bind-mounts/#syntax
+    """
+    assert _lock_stream is not None, 'canonical lock must remain held through worker exit'
+    lock_identity = identity(LOCK)
+    held = os.fstat(_lock_stream.fileno())
+    assert lock_identity == f'{held.st_dev}:{held.st_ino}', 'held canonical lock changed'
+    flags = ['--mount', f'type=bind,src={LOCK},dst=/canonical-heavy-lock,readonly']
+    script = ['set -e', 'command -v flock >/dev/null', 'exec 9</canonical-heavy-lock',
+              f'test "$(stat -Lc \'%d:%i\' /proc/self/fd/9)" = {shlex.quote(lock_identity)}',
+              # A shared flock must contend with our live exclusive descriptor.
+              'if flock -s -n -E 75 9; then exit 76; else test "$?" = 75; fi',
+              'exec 9<&-']
+    destinations = {'/canonical-heavy-lock'}
+    for source, destination, readonly in mounts:
+        source = source.absolute()
+        assert re.fullmatch(r'/[A-Za-z0-9/_.-]+', destination) and destination not in destinations
+        destinations.add(destination)
+        expected = identity(source)
+        flags += ['--mount', f'type=bind,src={source},dst={destination}' + (',readonly' if readonly else '')]
+        script.append(f'test "$(stat -Lc \'%d:%i\' {shlex.quote(destination)})" = {shlex.quote(expected)}')
+    script.append('# end mount witness')
+    return flags, '\n'.join(script) + '\n'
 
 
 def sha(path):
@@ -79,16 +120,29 @@ def admit(path, digest, target):
 @contextmanager
 def shared_lock():
     # Never create, replace or unlink the canonical inode.
-    assert LOCK.is_file() and not LOCK.is_symlink() and LOCK.stat().st_nlink == 1
-    with LOCK.open('rb') as stream:
+    # Compile headroom checks nest inside the same worker's held descriptor.
+    global _lock_stream
+    expected = identity(LOCK)
+    assert LOCK.is_file()
+    if _lock_stream is not None:
+        held = os.fstat(_lock_stream.fileno())
+        assert expected == f'{held.st_dev}:{held.st_ino}', 'held canonical lock changed'
+        yield held.st_ino
+        assert identity(LOCK) == expected, 'shared lock identity changed'
+        return
+    with os.fdopen(os.open(LOCK, os.O_RDONLY | os.O_NOFOLLOW), 'rb') as stream:
         before = os.fstat(stream.fileno())
-        assert before.st_uid == os.getuid()
+        assert before.st_uid == os.getuid() and expected == f'{before.st_dev}:{before.st_ino}'
         fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
         try:
+            _lock_stream = stream
             yield before.st_ino
         finally:
-            assert LOCK.stat().st_ino == before.st_ino and not LOCK.is_symlink(), 'shared lock identity changed'
-            fcntl.flock(stream, fcntl.LOCK_UN)
+            try:
+                assert identity(LOCK) == expected, 'shared lock identity changed'
+            finally:
+                _lock_stream = None
+                fcntl.flock(stream, fcntl.LOCK_UN)
 
 
 def unrelated():
@@ -124,6 +178,11 @@ def check_witness(lines, value, digest):
 
 def resources(parent, reserve=10, minimum_available=6 * GIB):
     """Fresh daemon-side topology, mounts, headroom and actual cgroup witness."""
+    with shared_lock():
+        return _resources(parent, reserve, minimum_available)
+
+
+def _resources(parent, reserve, minimum_available):
     assert _binding is not None, 'Docker provenance admission required'
     path, digest, value = _binding
     admit(path, digest, 'linux-x86_64')
@@ -141,7 +200,10 @@ def resources(parent, reserve=10, minimum_available=6 * GIB):
     invocation = uuid.uuid4().hex
     name = 'tjs1882-' + invocation + '-linux38-admission'
     baseline = unrelated()
-    script = '''set -e
+    mounts, witness = mount_witness([(path, '/binding', True), (parent, '/output', True),
+                                     (Path(__file__).resolve().parent.parent, '/source', True),
+                                     (Path('/var/lib/docker'), '/capacity', True)])
+    script = witness + '''set -e
 uname -m
 uname -r
 cat /proc/sys/kernel/random/boot_id
@@ -163,14 +225,13 @@ cat /sys/fs/cgroup/cpu.max
                     '--pull=never', '--network=none', '--read-only', '--cpus=1', '--memory=64m',
                     '--memory-swap=64m', '--pids-limit=16', '--cap-drop=ALL',
                     '--security-opt=no-new-privileges', '--ulimit', 'core=0',
-                    '--mount', 'type=bind,src=' + str(path) + ',dst=/binding,readonly',
-                    '--mount', 'type=bind,src=' + str(parent) + ',dst=/output,readonly',
-                    '--mount', 'type=bind,src=/var/lib/docker,dst=/capacity,readonly',
+                    *mounts,
                     image['Id'], 'sh', '-ec', script)
         proof(cid, 'meownero.invocation', invocation, name=name, image=image['Id'])
         receipt['cid'] = cid
         result = check_witness(query('start', '-a', cid).splitlines(), value, digest)
-        receipt.update(result='PASS', resources=result)
+        receipt.update(result='PASS', resources=result, canonical_lock_contention='PASS',
+                       source_output_mount_identity='PASS')
     finally:
         with cleanup_signals():
             try:

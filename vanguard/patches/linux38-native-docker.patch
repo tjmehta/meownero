@@ -114,7 +114,7 @@
 +            with provider.shared_lock():
 +                pass
 +            provider.preserved(baseline)
-+            row = {'phase': name, 'resources': resources(out.parent, 10, policy['host_minimum_available_bytes'])}
++            row = {'phase': name, 'resources': resources(out, 10, policy['host_minimum_available_bytes'])}
 @@ -379,2 +338,2 @@
 -                local_args = ['--local-provenance', str(args.local_provenance.absolute()),
 -                              '--local-provenance-sha256', args.local_provenance_sha256] if local else []
@@ -140,11 +140,14 @@
 +    if args.native_docker_memory_policy:
 +        tester.require(not args.reuse_arm_cache and not args.inspect_built and not translated, 'fresh native Docker compile only')
 +        compile_resources = provider.compile_resources(args.target, preparation, work.parent)
+@@ -142 +148 @@
+-    with tester.heavy_lock():
++    with provider.shared_lock():
 @@ -290 +296,2 @@
 -            compile_resources = native_compile_resources(args.target, preparation)  # Fresh immediately before compile.
 +            compile_resources = (provider.compile_resources(args.target, preparation, work.parent) if args.native_docker_memory_policy
 +                                 else native_compile_resources(args.target, preparation))  # Fresh before compile.
-@@ -292,0 +300,9 @@
+@@ -292,0 +300,12 @@
 +        if args.native_docker_memory_policy:
 +            script = '''set -e
 +test "$(cat /sys/fs/cgroup/memory.max)" = 4294967296
@@ -154,14 +157,21 @@
 +. /etc/os-release; test "$VERSION_ID" = 22.04
 +test "$(getconf GNU_LIBC_VERSION)" = 'glibc 2.35'
 +''' + script
-@@ -310,0 +327,6 @@
++        mount_args, witness = provider.mount_witness([(source, mount, False),
++            (work / 'cargo-home', '/cargo-home', False), (rust, '/opt/rust', True), (work, '/out', False)])
++        script = witness + script
+@@ -298,2 +317 @@
+-                '-v', f'{source}:{mount}', '-v', f'{work / "cargo-home"}:/cargo-home',
+-                '-v', f'{rust}:/opt/rust:ro', '-v', f'{work}:/out', '-e', 'CARGO_HOME=/cargo-home',
++                *mount_args, '-e', 'CARGO_HOME=/cargo-home',
+@@ -310,0 +329,6 @@
 +            if args.native_docker_memory_policy:
 +                diagnostic = build_diagnostics(work)
 +                tester.require(0 < diagnostic['peak_memory_bytes'] <= 4 * 1024**3 and
 +                               diagnostic['memory_events'].get('oom') == 0 and diagnostic['memory_events'].get('oom_kill') == 0,
 +                               'actual compiler cgroup memory gate')
 +                receipt['build_diagnostic'] = diagnostic
-@@ -323 +345,3 @@
+@@ -323 +347,3 @@
 -                    if cidfile.exists():
 +                    if not cidfile.exists():
 +                        receipt['cleanup'] = provider.cleanup_owned(name, image, invocation)
@@ -170,6 +180,9 @@
 +++ b/vanguard/run-portable-check.py
 @@ -11,0 +12 @@
 +import linux38_docker as provider
+@@ -37 +38 @@
+-    with tester.heavy_lock():
++    with provider.shared_lock():
 @@ -46,0 +48,6 @@
 +test "$(cat /sys/fs/cgroup/memory.max)" = 2147483648
 +test "$(cat /sys/fs/cgroup/memory.swap.max)" = 0
@@ -177,7 +190,14 @@
 +test "$(cat /sys/fs/cgroup/cpu.max)" = '200000 100000'
 +. /etc/os-release; test "$VERSION_ID" = 22.04
 +test "$(getconf GNU_LIBC_VERSION)" = 'glibc 2.35'
-@@ -83 +90,3 @@
+@@ -56,0 +64,3 @@
++        mount_args, witness = provider.mount_witness([(archive, '/artifact.tar.gz', True),
++            (out, '/out', False), (ROOT / 'vanguard', '/harness', True)])
++        script = witness + script
+@@ -61 +71 @@
+-            '-v', f'{archive}:/artifact.tar.gz:ro', '-v', f'{out}:/out', '-v', f'{ROOT / "vanguard"}:/harness:ro',
++            *mount_args,
+@@ -83 +93,3 @@
 -                    if cidfile.exists():
 +                    if not cidfile.exists():
 +                        receipt['cleanup'] = provider.cleanup_owned(name, image, owner)
@@ -186,7 +206,16 @@
 +++ b/vanguard/portable-prepare-old-linux.py
 @@ -14,0 +15 @@
 +import linux38_docker as provider
-@@ -136 +137,4 @@
+@@ -41 +42 @@
+-    with tester.heavy_lock():
++    with provider.shared_lock():
+@@ -117,0 +119,2 @@
++            mount_args, witness = provider.mount_witness([(out, '/out', False)])
++            script = witness + script
+@@ -121 +124 @@
+-                           '--ulimit', 'core=0', '-v', str(out) + ':/out', image, 'bash', '-ec', script], 900)
++                           '--ulimit', 'core=0', *mount_args, image, 'bash', '-ec', script], 900)
+@@ -136 +139,4 @@
 -                    if cidfile.exists():
 +                    if not cidfile.exists():
 +                        receipt['cleanup'] = (provider.cleanup_owned(name, receipt['base_image'], invocation)
