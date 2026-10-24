@@ -165,6 +165,11 @@ class Controls(unittest.TestCase):
                 self.assertIn('--network=none', create)
                 self.assertIn('--read-only', create)
                 self.assertIn('--cap-drop=ALL', create)
+                # The canonical 0600 lock belongs to the task UID. Container
+                # root with all capabilities dropped cannot open that inode.
+                self.assertIn('--user', create)
+                self.assertEqual(create[create.index('--user') + 1], f'{lock.stat().st_uid}:{os.getgid()}')
+                self.assertFalse(any(flag.startswith('--cap-add') for flag in create))
                 self.assertNotIn('--privileged', create)
 
     def test_witness_binding_and_resource_refusals(self):

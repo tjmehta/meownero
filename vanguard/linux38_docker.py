@@ -225,6 +225,7 @@ cat /sys/fs/cgroup/cpu.max
                     '--pull=never', '--network=none', '--read-only', '--cpus=1', '--memory=64m',
                     '--memory-swap=64m', '--pids-limit=16', '--cap-drop=ALL',
                     '--security-opt=no-new-privileges', '--ulimit', 'core=0',
+                    '--user', f'{os.getuid()}:{os.getgid()}',
                     *mounts,
                     image['Id'], 'sh', '-ec', script)
         proof(cid, 'meownero.invocation', invocation, name=name, image=image['Id'])
