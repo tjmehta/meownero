@@ -1,0 +1,102 @@
+{
+  "schema": "meownero-portable-journey/1",
+  "result": "PASS_NATIVE_JOURNEY",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "architecture": "x86_64",
+  "release_manifest_sha256": "b49a7dc4d0bdf54a32d3b39ff22c92b6066a20ec92ed5b5bdc70807be3d97b12",
+  "program_sha256": {
+    "monerod": "5bb259140a42528bdb272e4915517711fe88e50e0d380fb5da50be81d09dc969",
+    "monero-wallet-cli": "ceb5aa75cf23cf56368818c543459db612590bbb830fa6d7122e2e5ac2b5aa74",
+    "monero-wallet-rpc": "6746e648b338f3f339c17f6f275f4a9078e968f9a2baf0ab194bf8a477ce8d51"
+  },
+  "cleanup": [
+    {
+      "name": "cli",
+      "pid": 54,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "restored",
+      "pid": 52,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "receiver",
+      "pid": 50,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "sender",
+      "pid": 48,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "daemon",
+      "pid": 31,
+      "exit": 0,
+      "removed": true
+    }
+  ],
+  "payments": [
+    {
+      "tx_hash": "7d99dd059fcca8747b990769a51573e5085d9d95c806a30808e7a007b9fc3009",
+      "amount_atomic": 5000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    },
+    {
+      "tx_hash": "775abe3cc827e9d4598d3293a850885a730a03cfc83acde5a45b17b06bad9174",
+      "amount_atomic": 2000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    }
+  ],
+  "native_processes": [
+    {
+      "name": "daemon",
+      "pid": 31,
+      "binary_sha256": "5bb259140a42528bdb272e4915517711fe88e50e0d380fb5da50be81d09dc969",
+      "bundled_library_sha256": {
+        "libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a",
+        "libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128"
+      }
+    },
+    {
+      "name": "sender",
+      "pid": 48,
+      "binary_sha256": "6746e648b338f3f339c17f6f275f4a9078e968f9a2baf0ab194bf8a477ce8d51",
+      "bundled_library_sha256": {
+        "libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+      }
+    },
+    {
+      "name": "receiver",
+      "pid": 50,
+      "binary_sha256": "6746e648b338f3f339c17f6f275f4a9078e968f9a2baf0ab194bf8a477ce8d51",
+      "bundled_library_sha256": {
+        "libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+      }
+    },
+    {
+      "name": "restored",
+      "pid": 52,
+      "binary_sha256": "6746e648b338f3f339c17f6f275f4a9078e968f9a2baf0ab194bf8a477ce8d51",
+      "bundled_library_sha256": {
+        "libstdc++.so.6": "ff0825e113603c3866680d5d52216bc6d8eedf3a59f52a0aef67ff01994db128",
+        "libgcc_s.so.1": "fc9d43b2f6c20e53b009238f767c5b949d202389e20de9e202ea684b4ba3729a"
+      }
+    }
+  ],
+  "execution_substrate": "NATIVE",
+  "receive_atomic": 5000000000000,
+  "restore_matches": true,
+  "subsequent_spend_atomic": 2000000000000,
+  "cli_open_restored_wallet": true,
+  "wall_seconds": 33.218
+}
