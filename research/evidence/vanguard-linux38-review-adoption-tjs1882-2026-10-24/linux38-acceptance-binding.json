@@ -1,0 +1,53 @@
+{
+  "schema": "meownero-linux38-native-acceptance-adoption/1",
+  "adopted_utc": "2026-10-24T06:39:40.304726+00:00",
+  "issue": "TJS-1882",
+  "run_id": "9dfa9d79-ca9c-430b-a55c-73838e9c051f",
+  "review_verdict": {
+    "schema": "meownero-independent-linux38-native-verdict/1",
+    "verdict": "ACCEPT_SCOPED_LINUX38_NATIVE_ARCHIVE",
+    "state_family": "NATIVE_VERIFIED_UNSIGNED_ARCHIVE",
+    "archive_sha256": "fc4bde3b0a665bebcd22140fbc67fad2f15b5c841252a18dff0d5c5d79d56743",
+    "manifest_sha256": "b49a7dc4d0bdf54a32d3b39ff22c92b6066a20ec92ed5b5bdc70807be3d97b12",
+    "source_commit": "be5e7b161a08bbb396a00c46905b3ade6eec21aa",
+    "evidence_commit": "e32aae8a7bab3ea211f4d50ddd55f9b353599588",
+    "reviewer_agent_id": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+    "review_run_id": "385acabe-a9b0-4e46-97e4-1a7a3e3da45c",
+    "tested_environment": "Native x64 Ubuntu24 host/kernel with pinned Ubuntu22 Docker userland/glibc2.35",
+    "journey": "PASS_NATIVE_JOURNEY",
+    "controls_passed": 10,
+    "runtime_peak_memory_bytes": 1570418688,
+    "oom_events": 0,
+    "license_components": 94,
+    "license_notice_references_verified": 244,
+    "full_release": "OPEN",
+    "final_artifact_stage": "DORMANT",
+    "other_distro_acceptance": "NONE_NEW",
+    "group_delivery": "NOT_PERFORMED",
+    "source_changes": "NONE"
+  },
+  "review_document_key": "linux38-independent-native-review",
+  "review_document_revision": "704b24bf-ed6a-4a06-837e-7c8facbd6ac1",
+  "review_attachment": {
+    "id": "0708f8ae-c4f1-4c62-aeae-732bafa59fbe",
+    "bytes": 17523,
+    "sha256": "38b25b98a4ca519b743f7cda2254470d97a6424a46e1f7308805106ca6e16989",
+    "fresh_authenticated_readback": "PASS"
+  },
+  "adoption_validation": {
+    "result": "PASS_ADOPTION_INPUTS",
+    "independent_packet_bytes": 17523,
+    "independent_packet_sha256": "38b25b98a4ca519b743f7cda2254470d97a6424a46e1f7308805106ca6e16989",
+    "safe_regular_members": 22,
+    "packet_manifest_bindings_verified": 20,
+    "sha256sum_bindings_verified": 20,
+    "delivery_index_equal": true,
+    "source_head": "e32aae8a7bab3ea211f4d50ddd55f9b353599588",
+    "tracked_vanguard_matches_cleared_source": true,
+    "six_original_files_preserved": true,
+    "native_journey_repeated": false,
+    "container_started": false
+  },
+  "reused_evidence": "Independent exact-archive download, native journey, ten controls, ABI/license and owned cleanup evidence; no repeat compilation/native execution",
+  "scope_change": "Adds scoped Linux x64 acceptance; both Windows holds, prior acceptances, owner approval, historical findings and TJS-2504 stop preserved"
+}
