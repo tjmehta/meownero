@@ -1,0 +1,334 @@
+--- a/vanguard/run-portable-linux-docker.py
++++ b/vanguard/run-portable-linux-docker.py
+@@ -40,59 +40,10 @@
+     return module
+ 
+ 
+-def resources(parent, reserve=10, minimum_available=5 * 1024**3):
+-    available = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines()
+-                         if line.startswith('MemAvailable:'))) * 1024
+-    free = shutil.disk_usage(parent).free
+-    docker_free = shutil.disk_usage('/var/lib/docker').free
+-    assert minimum_available in (5 * 1024**3, 6 * 1024**3)
+-    assert available >= minimum_available, 'available memory gate'
+-    assert min(free, docker_free) >= reserve * 1024**3, 'disk reserve gate'
+-    return {'available_memory_bytes': available, 'free_disk_bytes': free, 'docker_free_disk_bytes': docker_free}
+-
+-
+-def local_runner(path, digest, target):
+-    """Bind an owned Ubuntu22 VM to observations, without claiming hosted CI."""
+-    assert digest and re.fullmatch(r'[0-9a-f]{64}', digest)
+-    assert sha(path) == digest, 'local provenance checksum mismatch'
+-    value = json.loads(path.read_text())
+-    assert set(value) == {'schema', 'issue', 'target', 'environment', 'physical_host_architecture',
+-                          'machine_id_sha256', 'boot_id_sha256', 'docker_id', 'docker_name',
+-                          'qualification_evidence_sha256'}
+-    assert value['schema'] == 'meownero-owned-native-linux-runner/1' and value['issue'] == 'TJS-1882'
+-    arch = TARGETS[target][0]
+-    assert value['target'] == target, 'local provenance target mismatch'
+-    assert re.fullmatch(r'tjs1882-[a-z0-9-]{1,80}', value['environment']), 'task-owned VM identity required'
+-    assert value['physical_host_architecture'] in (('aarch64', 'arm64') if arch == 'aarch64' else ('x86_64',)), 'native physical host required'
+-    for key in ('machine_id_sha256', 'boot_id_sha256', 'qualification_evidence_sha256'):
+-        assert isinstance(value[key], str) and re.fullmatch(r'[0-9a-f]{64}', value[key])
+-    assert all(isinstance(value[key], str) and value[key] for key in ('docker_id', 'docker_name'))
+-    assert not any(key.startswith(('GITHUB_', 'RUNNER_')) for key in os.environ), 'local execution must not impersonate hosted CI'
+-    assert platform.system() == 'Linux' and platform.machine() == arch, 'native local controller required'
+-    assert sys.version_info >= (3, 13)
+-    release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+-    assert release['ID'].strip('"') == 'ubuntu' and release['VERSION_ID'].strip('"') == '22.04', 'owned Ubuntu22 VM required'
+-    assert subprocess.check_output(['getconf', 'GNU_LIBC_VERSION'], text=True, timeout=10).strip() == 'glibc 2.35'
+-    assert sha(Path('/etc/machine-id')) == value['machine_id_sha256'], 'local VM identity changed'
+-    assert sha(Path('/proc/sys/kernel/random/boot_id')) == value['boot_id_sha256'], 'local VM boot changed; requalify'
+-    assert not Path('/.dockerenv').exists() and not Path('/run/.containerenv').exists(), 'controller must run inside the owned VM, not a container'
+-    assert not any(os.environ.get(key) for key in ('DOCKER_HOST', 'DOCKER_CONTEXT', 'DOCKER_TLS_VERIFY', 'DOCKER_CERT_PATH')), 'local Docker overrides forbidden'
+-    context = json.loads(subprocess.check_output(['docker', 'context', 'inspect'], text=True, timeout=15))
+-    assert len(context) == 1 and context[0]['Name'] == 'default'
+-    assert context[0]['Endpoints']['docker']['Host'] == 'unix:///var/run/docker.sock', 'VM-local Docker socket required'
+-    info = json.loads(subprocess.check_output(['docker', 'info', '--format', '{{json .}}'], text=True, timeout=15))
+-    assert info['ID'] == value['docker_id'] and info['Name'] == value['docker_name'], 'owned Docker daemon identity changed'
+-    assert info['Name'] in (value['environment'], 'lima-' + value['environment']), 'task-owned daemon required'
+-    assert info['OSType'] == 'linux' and info['Architecture'] in TARGETS[target][2]
+-    assert info['DockerRootDir'] == '/var/lib/docker', 'VM-local Docker data required'
+-    assert not subprocess.check_output(['docker', 'ps', '-q'], text=True, timeout=15).strip(), 'preserve other workloads'
+-    # Raw hardware/daemon identifiers and qualification data stay private.
+-    return {'execution_provider': 'OWNED_NATIVE_UBUNTU22_VM', 'provenance_sha256': digest,
+-            'qualification_evidence_sha256': value['qualification_evidence_sha256'],
+-            'environment_identity_sha256': hashlib.sha256(value['environment'].encode()).hexdigest(),
+-            'machine_id_sha256': value['machine_id_sha256'], 'boot_id_sha256': value['boot_id_sha256'],
+-            'docker_id_sha256': hashlib.sha256(value['docker_id'].encode()).hexdigest(),
+-            'physical_host_architecture': value['physical_host_architecture']}
++# This successor keeps the frozen controller intact in the repository.
++import linux38_docker as provider
++resources = provider.resources
++local_runner = provider.admit
+ 
+ 
+ def fetch(inputs, out):
+@@ -177,7 +128,7 @@
+     result['commands'] = []
+     if 'native_compile_resources' in value:
+         policy = value['native_compile_resources']
+-        assert policy['scope'] == 'FRESH_NATIVE_UBUNTU22_ONLY'
++        assert policy['scope'] == 'NATIVE_X64_UBUNTU22_DOCKER_USERLAND'
+         safe = {'scope': policy['scope']}
+         for key in ('container_memory_bytes', 'container_memory_swap_bytes', 'host_minimum_available_bytes', 'measured_available_bytes'):
+             assert type(policy[key]) is int and policy[key] >= 0
+@@ -272,7 +223,7 @@
+         'prepare': ['--out', str(out / 'builder'), '--target', inputs['target']],
+         'build': ['--cache', str(cache), '--rust', str(out / 'rust'), '--out', str(out / 'build'),
+                   '--target', inputs['target'], '--older-builder-receipt', str(out / 'builder/preparation.json'),
+-                  '--depends-sources', str(cache / 'depends-sources'), '--native-ubuntu22-memory-policy'],
++                  '--depends-sources', str(cache / 'depends-sources'), '--native-docker-memory-policy'],
+         'package': ['--build', str(out / 'build'), '--out', str(out / 'package')],
+     }
+     scripts = {'prepare': 'portable-prepare-old-linux.py', 'build': 'portable-build.py', 'package': 'package-portable.py'}
+@@ -301,8 +252,8 @@
+     parser.add_argument('--inputs-sha256', required=True)
+     parser.add_argument('--out', type=Path, required=True)
+     parser.add_argument('--validate-only', action='store_true')
+-    parser.add_argument('--local-provenance', type=Path, help='Exact qualification binding for a separately owned native Ubuntu22 VM')
+-    parser.add_argument('--local-provenance-sha256')
++    parser.add_argument('--docker-provenance', type=Path, help='Exact native-host/shared-daemon binding for pinned Ubuntu22 Docker userland')
++    parser.add_argument('--docker-provenance-sha256')
+     parser.add_argument('--phase', choices=['fetch', 'prepare', 'build', 'package', 'runtime'])
+     args = parser.parse_args()
+     os.umask(0o077)
+@@ -311,18 +262,23 @@
+     assert inputs['schema'] == 'meownero-private-native-linux-build-inputs/1'
+     arch, runner_arch, docker_arches, _, runner = TARGETS[inputs['target']]
+     assert inputs['runner'] == runner
+-    policy = {'scope': 'FRESH_NATIVE_UBUNTU22_ONLY', 'target': inputs['target'],
++    policy = {'scope': 'NATIVE_X64_UBUNTU22_DOCKER_USERLAND', 'target': inputs['target'],
+               'container_memory_bytes': 4 * 1024**3, 'container_memory_swap_bytes': 4 * 1024**3,
+               'host_minimum_available_bytes': 6 * 1024**3}
+     assert inputs['compile_resource_policy'] == policy, 'architecture-bound compile resource policy mismatch'
+     for name, digest in inputs['source_files'].items():
+         assert sha(ROOT / name) == digest, 'CI source input mismatch: ' + name
+-    assert bool(args.local_provenance) == bool(args.local_provenance_sha256), 'local provenance requires path and checksum'
++    assert bool(args.docker_provenance) == bool(args.docker_provenance_sha256), 'local provenance requires path and checksum'
+     assert not (args.validate_only and args.phase), 'validation must not execute a worker phase'
+-    local = local_runner(args.local_provenance, args.local_provenance_sha256, inputs['target']) if args.local_provenance else None
++    local = local_runner(args.docker_provenance, args.docker_provenance_sha256, inputs['target']) if args.docker_provenance else None
++    assert local or args.validate_only, 'Docker provenance is required for execution'
+     out = args.out.absolute()
++    if not args.validate_only:
++        with provider.shared_lock():
++            pass  # Busy-lock refusal precedes output creation and all workloads.
+     if args.phase:
+         assert out.is_dir() and not out.is_symlink()
++        resources(out, 10, policy["host_minimum_available_bytes"])
+         worker(args.phase, inputs, out)
+         return
+     assert out.parent.is_dir() and not out.exists() and not any(p.is_symlink() for p in (out, *out.parents))
+@@ -334,11 +290,12 @@
+              'github_run_id': os.environ.get('GITHUB_RUN_ID'), 'phases': [],
+              'debian12_execution': 'UNTESTED', 'independent_release_acceptance': 'PENDING_ORIGINAL_REVIEWER'}
+     if local:
+-        proof.update(schema='meownero-owned-native-ubuntu22-build-and-journey/1', local_runner=local)
++        proof.update(schema='meownero-native-x64-ubuntu22-docker-build-and-journey/1', local_runner=local)
+         proof.pop('github_sha')
+         proof.pop('github_run_id')
+     began, lock_identity = time.monotonic(), None
+-    lock = Path('/tmp/meownero-swarm-20260912-heavy.lock')
++    lock = provider.LOCK
++    baseline = provider.unrelated() if local else set()
+     try:
+         if args.validate_only:
+             proof['result'] = 'PASS_ALLOWLIST_ONLY_RUNNER_BUILD_NATIVE_JOURNEY_UNTESTED'
+@@ -349,24 +306,26 @@
+         assert platform.system() == 'Linux' and platform.machine() == arch
+         assert sys.version_info >= (3, 13)
+         glibc = subprocess.check_output(['getconf', 'GNU_LIBC_VERSION'], text=True, timeout=10).strip()
+-        assert glibc == 'glibc 2.35', 'actual native Ubuntu22 libc required'
++        assert glibc == 'glibc 2.39', 'actual Ubuntu24 controller libc required'
+         release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+-        assert release['ID'].strip('"') == 'ubuntu' and release['VERSION_ID'].strip('"') == '22.04'
++        assert release['ID'].strip('"') == 'ubuntu' and release['VERSION_ID'].strip('"') == '24.04'
+         assert subprocess.check_output(['docker', 'info', '--format', '{{.OSType}} {{.Architecture}}'], text=True, timeout=15).strip() in {'linux ' + value for value in docker_arches}
+-        assert not subprocess.check_output(['docker', 'ps', '-q'], text=True, timeout=15).strip(), 'preserve other workloads'
++        provider.preserved(baseline)
+         if arch == 'aarch64':
+             features = [set(line.split(':', 1)[1].split()) for line in Path('/proc/cpuinfo').read_text().splitlines()
+                         if line.startswith('Features')]
+             assert features and all({'aes', 'pmull', 'sha1', 'sha2'} <= row for row in features), 'native ARM crypto instructions required'
+ 
+         proof['native_runner'] = {'system': platform.system(), 'architecture': platform.machine(),
+-            'os': 'Ubuntu22.04', 'glibc': glibc, 'resources': resources(out.parent, minimum_available=policy['host_minimum_available_bytes'])}
+-        with lock.open('xb') as stream:
+-            os.chmod(lock, 0o600)
+-            lock_identity = lock.stat().st_ino
++            'os': 'Ubuntu24.04', 'glibc': glibc, 'kernel': platform.release(), 'worker_userland': 'Ubuntu22.04/glibc2.35', 'resources': resources(out, minimum_available=policy['host_minimum_available_bytes'])}
++        with provider.shared_lock() as identity:
++            lock_identity = identity
+         supervisor = load('run-portable-ci.py')
+         for name, seconds in [('fetch', 900), ('prepare', 1200), ('build', 3600), ('package', 180), ('runtime', 1500)]:
+-            row = {'phase': name, 'resources': resources(out.parent, 5 if name == 'runtime' else 10, policy['host_minimum_available_bytes'])}
++            with provider.shared_lock():
++                pass
++            provider.preserved(baseline)
++            row = {'phase': name, 'resources': resources(out.parent, 10, policy['host_minimum_available_bytes'])}
+             proof['phases'].append(row)
+             write(public / 'ci-receipt.json', proof)
+             private = out / ('supervise-' + name)
+@@ -376,8 +335,8 @@
+             remaining = 6900 - (time.monotonic() - began) - 180
+             assert remaining > 0, 'finite115minute controller budget exhausted'
+             try:
+-                local_args = ['--local-provenance', str(args.local_provenance.absolute()),
+-                              '--local-provenance-sha256', args.local_provenance_sha256] if local else []
++                local_args = ['--docker-provenance', str(args.docker_provenance.absolute()),
++                              '--docker-provenance-sha256', args.docker_provenance_sha256] if local else []
+                 supervisor.mac_check([sys.executable, '-B', __file__, '--inputs', args.inputs,
+                     '--inputs-sha256', args.inputs_sha256, '--out', out, '--phase', name, *local_args], private,
+                     supervision_public, timeout=min(seconds, remaining), cleanup_seconds=180,
+@@ -426,7 +385,7 @@
+         artifacts.mkdir(mode=0o700)
+         shutil.copyfile(archive, artifacts / archive.name)
+         (artifacts / 'SHA256SUMS').write_text(sha(archive) + '  ' + archive.name + '\n')
+-        proof.update(result='PASS_NATIVE_UBUNTU22_BUILD_ARCHIVE_JOURNEY_TEN_CONTROLS_PENDING_REVIEW',
++        proof.update(result='PASS_NATIVE_X64_UBUNTU22_USERLAND_JOURNEY_TEN_CONTROLS_PENDING_REVIEW',
+                      archive_sha256=sha(archive), archive_bytes=archive.stat().st_size,
+                      release_manifest_sha256=journey['release_manifest_sha256'], minimum_glibc=release['minimum_glibc'])
+     except BaseException as error:
+@@ -459,8 +418,9 @@
+                             remaining = subprocess.check_output(['docker', 'ps', '-aq', '--no-trunc'], text=True, timeout=15).splitlines()
+                             assert all(p.read_text().strip() not in remaining for p in cidfiles), 'recorded owned container remains'
+                     assert lock.stat().st_ino == lock_identity and lock.stat().st_uid == os.getuid() and not lock.is_symlink()
+-                    lock.unlink()
+-                    proof['owned_ephemeral_lock_removed'] = True
++                    provider.preserved(baseline)
++                    proof['canonical_shared_lock_preserved'] = True
++                    proof['unrelated_container_count'] = len(baseline)
+             except BaseException as error:
+                 proof['result'] = 'FAIL'
+                 proof['cleanup_failure_type'] = type(error).__name__
+--- a/vanguard/portable-build.py
++++ b/vanguard/portable-build.py
+@@ -20,6 +20,7 @@
+ import time
+ import uuid
+ import portable_licenses
++import linux38_docker as provider
+ 
+ ROOT = Path(__file__).resolve().parent.parent
+ spec = importlib.util.spec_from_file_location('tester', ROOT / 'vanguard/tester.py')
+@@ -115,6 +116,7 @@
+     parser.add_argument('--older-builder-receipt', type=Path, help='Exact task-owned Ubuntu 22.04 builder preparation receipt')
+     parser.add_argument('--depends-sources', type=Path, help='Read-only cache of checksum-pinned depends source archives')
+     parser.add_argument('--native-ubuntu22-memory-policy', action='store_true')
++    parser.add_argument('--native-docker-memory-policy', action='store_true')
+     args = parser.parse_args()
+     work = tester.fresh(args.out)
+     cache, rust = args.cache.resolve(), args.rust.resolve()
+@@ -136,6 +138,10 @@
+                    architecture == 'amd64'), 'translated compiler requires the existing ARM64 Mac host')
+     tester.require(native == architecture or translated, 'native compiler architecture required')
+     compile_resources = None
++    tester.require(not (args.native_ubuntu22_memory_policy and args.native_docker_memory_policy), 'choose one resource policy')
++    if args.native_docker_memory_policy:
++        tester.require(not args.reuse_arm_cache and not args.inspect_built and not translated, 'fresh native Docker compile only')
++        compile_resources = provider.compile_resources(args.target, preparation, work.parent)
+     if args.native_ubuntu22_memory_policy:
+         tester.require(not args.reuse_arm_cache and not args.inspect_built and not translated, 'fresh native resource policy only')
+         compile_resources = native_compile_resources(args.target, preparation)  # Before acquiring the lock.
+@@ -287,9 +293,19 @@
+         if reuse_paths:
+             script = script.replace('/opt/rust', '/work/rust')
+         if compile_resources:
+-            compile_resources = native_compile_resources(args.target, preparation)  # Fresh immediately before compile.
++            compile_resources = (provider.compile_resources(args.target, preparation, work.parent) if args.native_docker_memory_policy
++                                 else native_compile_resources(args.target, preparation))  # Fresh before compile.
+             receipt['native_compile_resources'] = compile_resources
+             save()
++        if args.native_docker_memory_policy:
++            script = '''set -e
++test "$(cat /sys/fs/cgroup/memory.max)" = 4294967296
++test "$(cat /sys/fs/cgroup/memory.swap.max)" = 0
++test "$(cat /sys/fs/cgroup/pids.max)" = 256
++test "$(cat /sys/fs/cgroup/cpu.max)" = '200000 100000'
++. /etc/os-release; test "$VERSION_ID" = 22.04
++test "$(getconf GNU_LIBC_VERSION)" = 'glibc 2.35'
++''' + script
+         container_memory = '4g' if compile_resources else '3g'
+         argv = docker + ['run', '--platform=linux/' + architecture, '--pull=never', '--name', name, '--cidfile', str(cidfile),
+                 '--label', 'meownero.invocation=' + invocation, '--network=none', '--cpus=2',
+@@ -308,6 +324,12 @@
+             receipt['binaries'] = {name: {'sha256': tester.sha(source / 'build/vanguard/bin' / name),
+                 'bytes': (source / 'build/vanguard/bin' / name).stat().st_size}
+                 for name in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')}
++            if args.native_docker_memory_policy:
++                diagnostic = build_diagnostics(work)
++                tester.require(0 < diagnostic['peak_memory_bytes'] <= 4 * 1024**3 and
++                               diagnostic['memory_events'].get('oom') == 0 and diagnostic['memory_events'].get('oom_kill') == 0,
++                               'actual compiler cgroup memory gate')
++                receipt['build_diagnostic'] = diagnostic
+             receipt['result'] = 'BUILT_VERSION_EXECUTED_JOURNEY_UNTESTED'
+         except BaseException as error:
+             receipt['result'] = 'FAILED_ATTEMPT'
+@@ -320,7 +342,9 @@
+             cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+             try:
+                 try:
+-                    if cidfile.exists():
++                    if not cidfile.exists():
++                        receipt['cleanup'] = provider.cleanup_owned(name, image, invocation)
++                    else:
+                         cid = cidfile.read_text().strip()
+                         receipt['cleanup'] = {'id': cid, 'removed': False, 'ownership': 'unknown'}
+                         save()
+--- a/vanguard/run-portable-check.py
++++ b/vanguard/run-portable-check.py
+@@ -9,6 +9,7 @@
+ import signal
+ import subprocess
+ import uuid
++import linux38_docker as provider
+ 
+ ROOT = Path(__file__).resolve().parent.parent
+ spec = importlib.util.spec_from_file_location('tester', ROOT / 'vanguard/tester.py')
+@@ -44,6 +45,12 @@
+         name, cidfile = 'tjs1882-' + owner + '-journey', out / 'container.id'
+         script = '''set -e
+ trap 'cat /sys/fs/cgroup/memory.peak > /out/runtime.memory; cat /sys/fs/cgroup/memory.events > /out/runtime.memory-events' EXIT
++test "$(cat /sys/fs/cgroup/memory.max)" = 2147483648
++test "$(cat /sys/fs/cgroup/memory.swap.max)" = 0
++test "$(cat /sys/fs/cgroup/pids.max)" = 256
++test "$(cat /sys/fs/cgroup/cpu.max)" = '200000 100000'
++. /etc/os-release; test "$VERSION_ID" = 22.04
++test "$(getconf GNU_LIBC_VERSION)" = 'glibc 2.35'
+ uname -smr > /out/environment.txt
+ cat /etc/os-release >> /out/environment.txt
+ python3 --version >> /out/environment.txt
+@@ -80,7 +87,9 @@
+             cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+             try:
+                 try:
+-                    if cidfile.exists():
++                    if not cidfile.exists():
++                        receipt['cleanup'] = provider.cleanup_owned(name, image, owner)
++                    else:
+                         cid = cidfile.read_text().strip()
+                         receipt['cleanup'] = {'id': cid, 'removed': False}
+                         proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
+--- a/vanguard/portable-prepare-old-linux.py
++++ b/vanguard/portable-prepare-old-linux.py
+@@ -12,6 +12,7 @@
+ import subprocess
+ import time
+ import uuid
++import linux38_docker as provider
+ 
+ spec = importlib.util.spec_from_file_location('portable_build', Path(__file__).with_name('portable-build.py'))
+ builder = importlib.util.module_from_spec(spec)
+@@ -133,7 +134,10 @@
+             cleanup_handlers = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT)}
+             try:
+                 try:
+-                    if cidfile.exists():
++                    if not cidfile.exists():
++                        receipt['cleanup'] = (provider.cleanup_owned(name, receipt['base_image'], invocation)
++                                              if receipt.get('base_image') else {'removed': True, 'no_create_possible': True})
++                    else:
+                         cid = cidfile.read_text().strip()
+                         receipt['cleanup'] = {'id': cid, 'removed': False}
+                         proof = json.loads(tester.command(docker + ['inspect', cid]))[0]
