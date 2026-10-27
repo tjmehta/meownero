@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTesterCommands, getTesterRelease } from "@/lib/tester-release";
+import {
+  getNativeTesterCommands,
+  getNativeTesterRelease,
+  getTesterCommands,
+  getTesterRelease,
+} from "@/lib/tester-release";
 
 const title = "Local tester downloads | Meownero";
 const description =
-  "A disposable Linux x64 Docker tester for Meownero's local, valueless FCMP++/CARROT regtest. No mainnet, public testnet or GUI wallet download.";
+  "Disposable Linux x64 testers for Meownero's local, valueless FCMP++/CARROT regtest: a native archive and a Docker bundle. No mainnet, public testnet or GUI wallet download.";
 
 export const metadata: Metadata = {
   title,
@@ -39,6 +44,8 @@ export default function Downloads() {
   const release = getTesterRelease();
   const commands =
     release.status === "published" ? getTesterCommands(release) : null;
+  const native = getNativeTesterRelease();
+  const nativeCommands = getNativeTesterCommands(native);
 
   return (
     <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-10 md:py-16">
@@ -50,7 +57,7 @@ export default function Downloads() {
 
       <header className="mt-12 max-w-2xl">
         <p className="text-sm font-medium tracking-wide text-gold">
-          Test-only · Linux x64 · Docker
+          Test-only · Linux x64
         </p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tighter text-balance md:text-5xl">
           Try a local wallet journey.
@@ -60,7 +67,97 @@ export default function Downloads() {
           coins. Everything stays on your own machine. This is not a shared
           public testnet or mainnet, and it must not be used with real funds.
         </p>
+        <p className="mt-4 leading-relaxed text-muted-foreground">
+          Two testers run the same kind of journey: a native archive that runs
+          the programs directly, and a Docker bundle that runs them in a
+          container.
+        </p>
       </header>
+
+      <section aria-labelledby="native-heading" className="mt-10">
+        <div className="rounded-xl border border-gold/30 bg-card p-6 md:p-8">
+          <h2 id="native-heading" className="text-xl font-semibold">
+            Linux x64 native tester
+          </h2>
+          <p className="mt-3 leading-relaxed text-muted-foreground">
+            Native Linux programs with a command-line launcher. No Docker, and
+            it installs nothing. Not a graphical wallet.
+          </p>
+          <div className="mt-6">
+            <a href={native.archive.url} className={linkStyle} download={native.archive.filename}>
+              Download native tester
+            </a>
+            <p className="mt-2 break-all text-sm text-muted-foreground">
+              {native.archive.filename} · {native.archive.bytes.toLocaleString("en-US")} bytes
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">SHA256</p>
+            <code className="mt-1 block break-all font-mono text-sm leading-relaxed">
+              {native.archive.sha256}
+            </code>
+            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+              Unsigned. Tested on an Ubuntu 22.04 userland (glibc 2.35) running
+              on an Ubuntu 24.04 x64 kernel. Bare-metal Ubuntu 22.04, Debian 12
+              and other distributions are untested.
+            </p>
+          </div>
+        </div>
+
+        <h3 className="mt-8 font-medium">Before you start</h3>
+        <ul className="mt-3 list-disc space-y-3 pl-5 leading-relaxed text-muted-foreground">
+          <li>Linux x64 with glibc 2.35 or newer, Python 3.8 or newer, tar and sha256sum.</li>
+          <li>Two CPU cores, at least 5 GiB of available memory and 5 GiB of free disk space.</li>
+          <li>Run as a non-root user. Use only disposable test wallets, never a personal recovery phrase.</li>
+        </ul>
+
+        <h3 className="mt-8 font-medium">1. Check the archive before extraction</h3>
+        <p className="mt-2 leading-relaxed text-muted-foreground">
+          Save the archive with the name shown above in a new folder and open a
+          terminal there. The checksum must report OK. Stop if any check or
+          command below fails.
+        </p>
+        <Command>{nativeCommands.checksum}</Command>
+
+        <h3 className="mt-8 font-medium">2. Extract it</h3>
+        <p className="mt-2 leading-relaxed text-muted-foreground">
+          The extracted folder must not already exist. Stay in this terminal
+          inside it.
+        </p>
+        <Command>{nativeCommands.unpack}</Command>
+
+        <h3 className="mt-8 font-medium">3. Check the package, then run the local journey</h3>
+        <p className="mt-2 leading-relaxed text-muted-foreground">
+          The preflight checks every packaged file, the source pins, the
+          architecture and your glibc version. The run writes to a new
+          journey01 folder beside the package; use a fresh name for every
+          later run.
+        </p>
+        <Command>{nativeCommands.run}</Command>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          Require PASS_NATIVE_JOURNEY in journey01/result.json. That receipt is
+          the only file to share. Keep journey01/private unshared: it holds the
+          disposable wallets, chain data and logs. Read TESTER.md in the package
+          for manual wallet commands.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          The package&apos;s own release.json still says BUILT_UNTESTED because it
+          was frozen at build time. The later native journey and independent
+          review are bound to the SHA256 above.
+        </p>
+
+        <h3 className="mt-8 font-medium">What it checks</h3>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          Mine test coins, send five to a new wallet, confirm the private
+          FCMP++/CARROT payment, recover that wallet from its seed, then spend
+          two coins back and confirm receipt. Programs listen only on
+          loopback, each attempt has a twenty-minute deadline, and the launcher
+          stops only its own processes.
+        </p>
+
+        <dl className="mt-6 text-sm">
+          <dt className="text-muted-foreground">Source commit</dt>
+          <dd className="mt-1 break-all font-mono leading-relaxed">{native.sourceCommit}</dd>
+        </dl>
+      </section>
 
       <section aria-labelledby="download-heading" className="mt-10 rounded-xl border border-gold/30 bg-card p-6 md:p-8">
         <h2 id="download-heading" className="text-xl font-semibold">
@@ -101,7 +198,7 @@ export default function Downloads() {
       </section>
 
       <section aria-labelledby="requirements-heading" className="mt-10">
-        <h2 id="requirements-heading" className="text-xl font-semibold">Before you start</h2>
+        <h2 id="requirements-heading" className="text-xl font-semibold">Before you start with Docker</h2>
         <ul className="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-muted-foreground">
           <li>Tested on Ubuntu 24.04.4 LTS, Linux x64, Docker Engine 29.5.3, cgroup v2 and Python 3.14.7. Python 3.11 or newer is the baseline; other hosts and versions are untested.</li>
           <li>Docker client and daemon on the same Linux kernel, using a local Unix socket. This tester makes no support claim for remote Docker, Docker Desktop, ARM, macOS or Windows.</li>
@@ -112,7 +209,7 @@ export default function Downloads() {
       </section>
 
       <section aria-labelledby="journey-heading" className="mt-10">
-        <h2 id="journey-heading" className="text-xl font-semibold">What it checks</h2>
+        <h2 id="journey-heading" className="text-xl font-semibold">What the Docker tester checks</h2>
         <p className="mt-4 leading-relaxed text-muted-foreground">
           Receive test coins, make a private payment, recover a test wallet,
           spend again, and open the recovered wallet in the CLI. A full journey
@@ -128,7 +225,7 @@ export default function Downloads() {
 
       {commands ? (
         <section aria-labelledby="setup-heading" className="mt-10 space-y-6">
-          <h2 id="setup-heading" className="text-xl font-semibold">Verify, load, then run</h2>
+          <h2 id="setup-heading" className="text-xl font-semibold">Docker: verify, load, then run</h2>
           <div>
             <h3 className="font-medium">1. Check the ZIP before extraction</h3>
             <p className="mt-2 leading-relaxed text-muted-foreground">
@@ -175,7 +272,7 @@ export default function Downloads() {
       ) : null}
 
       <section aria-labelledby="identity-heading" className="mt-10 rounded-xl border border-border p-6">
-        <h2 id="identity-heading" className="text-xl font-semibold">Exact tester identity</h2>
+        <h2 id="identity-heading" className="text-xl font-semibold">Exact Docker tester identity</h2>
         <dl className="mt-4 space-y-4 text-sm">
           <div>
             <dt className="text-muted-foreground">Source commit</dt>
