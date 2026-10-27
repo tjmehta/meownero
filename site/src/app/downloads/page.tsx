@@ -102,14 +102,15 @@ export default function Downloads() {
           </div>
         </div>
 
-        <h3 className="mt-8 font-medium">Before you start</h3>
-        <ul className="mt-3 list-disc space-y-3 pl-5 leading-relaxed text-muted-foreground">
+        <h2 className="mt-10 text-xl font-semibold">Before you start</h2>
+        <ul className="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-muted-foreground">
           <li>Linux x64 with glibc 2.35 or newer, Python 3.8 or newer, tar and sha256sum.</li>
           <li>Two CPU cores, at least 5 GiB of available memory and 5 GiB of free disk space.</li>
           <li>Run as a non-root user. Use only disposable test wallets, never a personal recovery phrase.</li>
         </ul>
 
-        <h3 className="mt-8 font-medium">1. Check the archive before extraction</h3>
+        <h2 className="mt-10 text-xl font-semibold">Verify, extract, then run</h2>
+        <h3 className="mt-6 font-medium">1. Check the archive before extraction</h3>
         <p className="mt-2 leading-relaxed text-muted-foreground">
           Save the archive with the name shown above in a new folder and open a
           terminal there. The checksum must report OK. Stop if any check or
@@ -117,14 +118,14 @@ export default function Downloads() {
         </p>
         <Command>{nativeCommands.checksum}</Command>
 
-        <h3 className="mt-8 font-medium">2. Extract it</h3>
+        <h3 className="mt-6 font-medium">2. Extract it</h3>
         <p className="mt-2 leading-relaxed text-muted-foreground">
           The extracted folder must not already exist. Stay in this terminal
           inside it.
         </p>
         <Command>{nativeCommands.unpack}</Command>
 
-        <h3 className="mt-8 font-medium">3. Check the package, then run the local journey</h3>
+        <h3 className="mt-6 font-medium">3. Check the package, then run the local journey</h3>
         <p className="mt-2 leading-relaxed text-muted-foreground">
           The preflight checks every packaged file, the source pins, the
           architecture and your glibc version. The run writes to a new
@@ -144,8 +145,8 @@ export default function Downloads() {
           review are bound to the SHA256 above.
         </p>
 
-        <h3 className="mt-8 font-medium">What it checks</h3>
-        <p className="mt-3 leading-relaxed text-muted-foreground">
+        <h2 className="mt-10 text-xl font-semibold">What it checks</h2>
+        <p className="mt-4 leading-relaxed text-muted-foreground">
           Mine test coins, send five to a new wallet, confirm the private
           FCMP++/CARROT payment, recover that wallet from its seed, then spend
           two coins back and confirm receipt. Programs listen only on
