@@ -1,10 +1,12 @@
 # Source candidate and current boundary
 
+The latest [October 27 lead decision](/TJS/issues/TJS-2504#comment-c78e1c2c-262f-41fb-9f1e-6e3ef52ca45d) supersedes the earlier source-work stop. This candidate adds `profile_outer.py`, `run-outer.py`, outer failure-path tests and four null capability bindings. Read [capability-checklist.md](capability-checklist.md) for kept guarantees, replaceable mechanisms, actual source behavior and precise missing host facilities. The outer lifecycle is implemented; its privileged/delegated manager adapter, hard storage boundary, immutable image and private admission channel remain unbound. This is not a runnable contained host launcher. Native acceptance remains NOT_RUN. The source-only budget is one implementation and one correction pass; no runtime or grant request is authorized here.
+
 This implements the bounded source-only continuation authorized in TJS-2504 comment `cf81ba5e-fcb5-44fe-ae6b-5537f57484bd`. P2P/Mining remains the writer. Native execution, building, source/Cargo build staging, resource admission/reservation, containers and launch are unauthorized in this continuation. `cb95cc036000a70bc688deeba6bff1b384b27eb3` and its executed helper evidence are preserved unchanged. Grant `0ae5446a-0da7-4f75-9604-50b4e7b090c8` remains consumed.
 
 Revision2 reconciles Platform's source findings in comment `ca2ad2ac-d448-44fe-b228-c151c53fbcfe`. The [outer contract](outer-contract.md) is authoritative for the handoff/resource proposal and its unresolved interfaces. The inner now accepts inherited original-lock and existing CONSUMED-ledger descriptors plus a private sealed context; immutable grant v2 excludes runtime facts. It never consumes again or unlocks. Its resource/cleanup rows remain NOT_RUN until an independent outer completion. `platform_bootstrap_sha256` remains null and the source implementation table is empty. Both null and manually populated hashes refuse before grant/resource/native operations. The shared-socket second-admission observer has been removed; its qualified outer replacement is also unavailable and refuses.
 
-This is a committed source correction with a concrete named prerequisite. It supplies no qualified outer, manager unit/delegation, offline image archive, fixed filesystem or runtime grant. Exact source hashes do not make this grant-ready. Platform must identify an already authorized supported interface for those capabilities, including FD survival and independent recovery/accounting. P2P/Mining remains the same writer and owns implementing against that interface once supplied. No install or reconfiguration is authorized.
+This is a source candidate with a concrete named prerequisite. It supplies no qualified outer adapter, manager unit/delegation, offline image archive, fixed filesystem or runtime grant. Exact source hashes do not make this grant-ready. Platform must qualify the new source against an already authorized supported interface for those capabilities, including FD survival and independent recovery/accounting. P2P/Mining remains the same writer and owns the exact source adapter after qualification. No install or reconfiguration is authorized.
 The source driver has not been exercised against native binaries. Exact prompts, native daemon startup on the corrected overlay, native frame acceptance and save/reopen behavior remain unmeasured. Source checks settle request field coverage and guard ordering, not native behavior. The successful source-only tests use disposable files and modeled process/counter values. They never touch the original heavy lock or inspect current capacity. No slice PASS is claimed.
 
 ## Inputs and commands
@@ -17,6 +19,8 @@ Allowed source checks:
 python3 -B vanguard/network/freeze-profile.py --check
 python3 -B -m unittest discover -s vanguard/network -p test_profile.py -v
 python3 -B -m unittest discover -s vanguard/network -p test_handoff.py -v
+python3 -B -m unittest discover -s vanguard/network -p test_outer.py -v
+python3 -B vanguard/network/run-outer.py --check
 python3 -B vanguard/network/test_network.py --source <pinned-source> --scratch <owned-source-test-scratch> --evidence <network-source-evidence>
 python3 -B vanguard/network/test_policy.py --source <pinned-source> --scratch <owned-source-test-scratch> --evidence <fresh-policy-source-evidence>
 python3 -B vanguard/network/test_admission.py --scratch <owned-source-test-scratch>
@@ -70,7 +74,7 @@ See [outer-contract.md](outer-contract.md) for the exact revision2 proposal, all
 
 Keep original device66306/inode657237,5GiB memory/20GiB backing admission, fixed filesystem<=15GiB,4GiB free-disk abort, two admissions, one compiler job and4500=3600+600+300s. Load1/5/15<=6.0 remains a proposal. The canonical2026-10-20T13:34:05Z snapshot remains dated evidence,605,360,128 bytes below the memory floor. No capacity feasibility or current admission is established. All setup, image import, build, runtime, export, private cleanup and daemon/helper shutdown must be counted. No parent-wide kill is claimed to preserve an exporter in that parent.
 
-The bounded source correction stops at the named privileged/delegation/disk/image/admission prerequisite. It does not request a runtime grant against an incomplete outer. No Core or Privacy consultation is repeated. Preserve their authorship and all full-candidate acceptance requirements.
+The source lifecycle and checklist are ready for one exact Platform qualification. The remaining adapter/host-capability work stops at the named independent keeper/recovery/observer and hard storage prerequisite. Rootful/loop/ext4 are replaceable proposal choices, as detailed in the checklist; the existing inner still enforces its frozen mechanism until a separately reviewed delta changes it. No runtime grant is requested against this incomplete adapter. No Core or Privacy consultation is repeated. Preserve their authorship and all full-candidate acceptance requirements. The latest lead decision places any exact runtime grant after the existing independent Core and Security reviews.
 
 ## Source references and independent gates
 

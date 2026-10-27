@@ -22,7 +22,8 @@ EXTRA=['src/p2p/p2p_protocol_defs.h','src/p2p/net_node.inl',
        'contrib/epee/include/storages/portable_storage.h',
        'src/common/password.cpp','src/rpc/rpc_args.cpp','src/wallet/wallet_rpc_server.h',
        'src/rpc/CMakeLists.txt','src/p2p/net_node.cpp','tests/unit_tests/base58.cpp','tests/functional_tests/wallet.py']
-CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.py','profile-integration.py','freeze-profile.py','test_profile.py']
+CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.py','profile-integration.py',
+      'freeze-profile.py','test_profile.py','profile_outer.py','run-outer.py','test_outer.py']
 
 
 def source_inputs():
@@ -39,6 +40,7 @@ def source_inputs():
     return dict(schema='meownero-complete-profile-inputs/1',
         source_candidate_state='SOURCE_ONLY_NOT_NATIVE_ACCEPTED',launch_ready=False,
         implementation_authorization_comment='cf81ba5e-fcb5-44fe-ae6b-5537f57484bd',
+        outer_source_authorization_comment='c78e1c2c-262f-41fb-9f1e-6e3ef52ca45d',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],

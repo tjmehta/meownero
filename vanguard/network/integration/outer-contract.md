@@ -1,4 +1,8 @@
-# Outer handoff revision 2, unsupported until Platform qualification
+# Outer handoff, source lifecycle added October 27
+
+The [October 27 source-work decision](/TJS/issues/TJS-2504#comment-c78e1c2c-262f-41fb-9f1e-6e3ef52ca45d) supersedes the source-work stop below. Read [capability-checklist.md](capability-checklist.md) first for the guarantee/mechanism split, implemented lifecycle and exact qualification request. `profile_outer.py` now supplies the outer lifecycle source and disposable-file/failure-path tests; no qualified manager adapter or runtime route is supplied. `run-outer.py --check` reports the four null named inputs without host operations. Default invocation refuses. No bootstrap hash or source qualification table is filled. Historical revision 2 below retains the precise existing inner interface, not a mandate that every eventual mechanism be rootful/loop/ext4.
+
+## Retained revision 2 inner interface and prior consultation
 
 This is the source correction to Platform comment `ca2ad2ac-d448-44fe-b228-c151c53fbcfe`, authored by Platform `92a7b4f2-787b-4cbb-954e-46831397ab09` in run `1d5c3ef6-3b8c-4f9f-95e7-58912d624002`. Its full authenticated API record is preserved in `consultations.json`. This writer implements the inner correction and proposes the outer contract. No installed launcher, unit, delegation, filesystem capability, image archive, capacity or execution permission is attested. Core and Privacy native boundaries are unchanged.
 
