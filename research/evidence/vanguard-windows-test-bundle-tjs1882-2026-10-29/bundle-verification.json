@@ -1,0 +1,70 @@
+{
+  "schema": "meownero-windows-bundle-local-check/1",
+  "source_revision": "4564531f143e40ee6f5efdc3aee7380de3f0d0da",
+  "bundle_bytes": 163986069,
+  "bundle_sha256": "69b182c744e3e7eb00dcfb0b8e3fe6770f7b23441dea1df7408e9c695aa1064b",
+  "safe_regular_zip_members": 14,
+  "manifest_file_hashes": 13,
+  "controller_preservation": "EXACT_BOTH",
+  "checks": [
+    {
+      "target": "windows-i686",
+      "result": "PASS_INPUT_BYTES_ONLY_NATIVE_EXECUTION_UNTESTED",
+      "report_sha256": "33e46d935a4e5244544bb019cb718a068d9288d9526de597814a14aee4c28186",
+      "exit": 0
+    },
+    {
+      "target": "windows-aarch64",
+      "result": "PASS_INPUT_BYTES_ONLY_NATIVE_EXECUTION_UNTESTED",
+      "report_sha256": "a061ca59c814a1b5331c04b3f1dfb93f9a3860fe71bc240fd3bdd67afb7e20dc",
+      "exit": 0
+    },
+    {
+      "target": null,
+      "result": "NOT_RUN",
+      "report_sha256": "4bc62c6dfdad7620d7525594b9de4d234e91285b86a013a947633912e6e85f90",
+      "exit": 1
+    },
+    {
+      "negative_control": "append_space_to_i686_input",
+      "result": "REFUSED_BUNDLE_HASH_MISMATCH",
+      "exit": 1
+    }
+  ],
+  "known_delivery_conflicts": [
+    {
+      "archive": "meownero-vanguard-windows-aarch64.zip",
+      "member": "meownero-vanguard-windows-aarch64/BUILD.json",
+      "kind": "HISTORICAL_BUILD_PATH"
+    },
+    {
+      "archive": "meownero-vanguard-windows-i686.zip",
+      "member": "meownero-vanguard-windows-i686/BUILD.json",
+      "kind": "HISTORICAL_BUILD_PATH"
+    },
+    {
+      "archive": "meownero-vanguard-windows-i686.zip",
+      "member": "meownero-vanguard-windows-i686/build-evidence/cached-build-receipt.json",
+      "kind": "HISTORICAL_BUILD_PATH"
+    },
+    {
+      "archive": "meownero-vanguard-windows-i686.zip",
+      "member": "meownero-vanguard-windows-i686/build-evidence/i686-exception-probe-cross-receipt.json",
+      "kind": "HISTORICAL_BUILD_PATH"
+    },
+    {
+      "archive": "meownero-vanguard-windows-i686.zip",
+      "member": "meownero-vanguard-windows-i686/build-evidence/i686-exception-probe-cross.py",
+      "kind": "HISTORICAL_BUILD_PATH"
+    },
+    {
+      "archive": "meownero-vanguard-windows-i686.zip",
+      "member": "meownero-vanguard-windows-i686/build-evidence/pre-exception-probe-build-receipt.json",
+      "kind": "HISTORICAL_BUILD_PATH"
+    }
+  ],
+  "credential_values_found": false,
+  "windows_native_execution": "NOT_RUN_NO_QUALIFIED_WINDOWS_HOST",
+  "launcher_execution": "NOT_RUN_WINDOWS_CMD_UNAVAILABLE",
+  "device_inventory_included": false
+}
