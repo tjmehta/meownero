@@ -89,11 +89,12 @@ export function Notify() {
   // Unknown during SSR: do not advertise push before checking the browser.
   const supported = useSyncExternalStore<boolean | null>(noop, pushSupported, () => null);
 
-  // Keep keyboard and screen reader users in place: back to the field after an
-  // error, onto the confirmation after success.
+  // Keep keyboard and screen reader users in place: into the field when the
+  // email form replaces the push button or shows an error, onto the
+  // confirmation after success. Mode only becomes "email" after a user action.
   useEffect(() => {
     if (mode === "done") statusRef.current?.focus();
-    else if (mode === "email" && error) inputRef.current?.focus();
+    else if (mode === "email") inputRef.current?.focus();
   }, [mode, error]);
 
   function finish() {
@@ -185,7 +186,7 @@ export function Notify() {
             readOnly={working}
             aria-invalid={error ? true : undefined}
             aria-describedby={error ? `${hintId} ${errorId}` : hintId}
-            className={`h-11 min-w-[12rem] flex-1 focus-visible:ring-0 md:text-base ${focusRing}`}
+            className={`h-11 min-w-0 flex-[1_1_12rem] focus-visible:ring-0 md:text-base ${focusRing}`}
           />
           <Button
             type="submit"
