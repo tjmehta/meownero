@@ -38,6 +38,26 @@ const testerRelease: TesterRelease = {
   imageArchiveFilename: "meownero-vanguard-linux-x64-fd7256b1.docker.tar.gz",
 };
 
+export type NativeTesterRelease = Readonly<{
+  archive: Artifact;
+  archiveRoot: string;
+  sourceCommit: string;
+}>;
+
+// Hosted archive bytes, size and checksum verified before staging this
+// download. They match the independently accepted Linux38 archive; its root
+// folder holds the launcher, native programs and license notices.
+const nativeTesterRelease: NativeTesterRelease = {
+  archive: {
+    url: "/downloads/artifacts/meownero-vanguard-linux38-x86_64.tar.gz",
+    filename: "meownero-vanguard-linux38-x86_64.tar.gz",
+    bytes: 76582444,
+    sha256: "fc4bde3b0a665bebcd22140fbc67fad2f15b5c841252a18dff0d5c5d79d56743",
+  },
+  archiveRoot: "meownero-vanguard-x86_64",
+  sourceCommit: "be5e7b161a08bbb396a00c46905b3ade6eec21aa",
+};
+
 const sha256Pattern = /^[a-f0-9]{64}$/;
 const filenamePattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
@@ -91,5 +111,32 @@ export function getTesterCommands(
     unpack: `test ! -e '${release.bundleRoot}' && test ! -L '${release.bundleRoot}' &&\nunzip '${release.bundle.filename}' &&\ncd '${release.bundleRoot}' &&\nsha256sum --check SHA256SUMS`,
     load: `docker load --input '${release.imageArchiveFilename}' &&\ntest "$(docker image inspect --format '{{.Id}}' '${release.imageId}')" = '${release.imageId}' &&\ntest "$(docker image inspect --format '{{.Os}}/{{.Architecture}}' '${release.imageId}')" = 'linux/amd64' &&\nprintf '%s\\n' 'Exact image verified: linux/amd64'`,
     run: `mkdir -m 700 receipts &&\npython3 -B vanguard/docker/run.py --image '${release.imageId}' --out ./receipts/journey01`,
+  };
+}
+
+function validateNativeRelease(release: NativeTesterRelease): void {
+  validateArtifact(release.archive);
+  if (
+    !/^[a-f0-9]{40}$/.test(release.sourceCommit) ||
+    !filenamePattern.test(release.archiveRoot) ||
+    !release.archive.filename.endsWith(".tar.gz")
+  ) {
+    throw new Error("Invalid native tester release metadata");
+  }
+}
+
+export function getNativeTesterRelease(): NativeTesterRelease {
+  validateNativeRelease(nativeTesterRelease);
+  return nativeTesterRelease;
+}
+
+export function getNativeTesterCommands(release: NativeTesterRelease) {
+  // Same rule as the Docker commands: only validated basenames and fixed
+  // identifiers enter shell examples.
+  validateNativeRelease(release);
+  return {
+    checksum: `printf '%s  %s\\n' '${release.archive.sha256}' '${release.archive.filename}' | sha256sum --check`,
+    unpack: `test ! -e '${release.archiveRoot}' && test ! -L '${release.archiveRoot}' &&\ntar -xzf '${release.archive.filename}' &&\ncd '${release.archiveRoot}'`,
+    run: `./launch.sh preflight &&\n./launch.sh run --out ../journey01`,
   };
 }
