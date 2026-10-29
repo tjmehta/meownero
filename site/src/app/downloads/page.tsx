@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cn } from "cn";
+import { Command } from "@/components/command";
+import { buttonVariants } from "@/components/ui/button";
 import {
   getNativeTesterCommands,
   getNativeTesterRelease,
@@ -28,17 +31,9 @@ export const metadata: Metadata = {
 const linkStyle =
   "rounded-sm text-gold underline underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold";
 
-function Command({ children }: { children: string }) {
-  return (
-    <pre
-      tabIndex={0}
-      aria-label="Terminal command, scroll horizontally if needed"
-      className="mt-4 overflow-x-auto rounded-lg border border-border bg-background p-4 text-sm leading-relaxed focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
-    >
-      <code className="font-mono">{children}</code>
-    </pre>
-  );
-}
+// The primary action on each tester card: a real link with download, styled
+// as the site's gold button. Full width on phones.
+const downloadStyle = cn(buttonVariants({ size: "lg" }), "h-11 w-full px-4 text-base md:w-auto");
 
 export default function Downloads() {
   const release = getTesterRelease();
@@ -48,18 +43,18 @@ export default function Downloads() {
   const nativeCommands = getNativeTesterCommands(native);
 
   return (
-    <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-10 md:py-16">
+    <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 wrap-break-word md:px-10 md:py-16">
       <nav aria-label="Site">
-        <Link href="/" className={linkStyle}>
+        <Link href="/" className={cn(linkStyle, "-mx-2 inline-flex min-h-11 items-center px-2")}>
           ← Meownero
         </Link>
       </nav>
 
-      <header className="mt-12 max-w-2xl">
+      <header className="mt-8 max-w-2xl md:mt-12">
         <p className="text-sm font-medium tracking-wide text-gold">
           Test-only · Linux x64
         </p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tighter text-balance md:text-5xl">
+        <h1 className="mt-4 text-[clamp(1.75rem,11vw,2.25rem)] leading-[1.1] font-semibold tracking-tighter text-balance md:text-5xl md:leading-none">
           Test Meownero locally.
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
@@ -74,7 +69,7 @@ export default function Downloads() {
       </header>
 
       <section aria-labelledby="native-heading" className="mt-10">
-        <div className="rounded-xl border border-gold/30 bg-card p-6 md:p-8">
+        <div className="rounded-xl border border-gold/30 bg-card p-4 md:p-8">
           <h2 id="native-heading" className="text-xl font-semibold">
             Linux x64 native tester
           </h2>
@@ -83,10 +78,10 @@ export default function Downloads() {
             it installs nothing. Not a graphical wallet.
           </p>
           <div className="mt-6">
-            <a href={native.archive.url} className={linkStyle} download={native.archive.filename}>
+            <a href={native.archive.url} className={downloadStyle} download={native.archive.filename}>
               Download native tester
             </a>
-            <p className="mt-2 break-all text-sm text-muted-foreground">
+            <p className="mt-2 text-sm wrap-anywhere text-muted-foreground">
               {native.archive.filename} · {native.archive.bytes.toLocaleString("en-US")} bytes
             </p>
             <p className="mt-2 text-xs text-muted-foreground">SHA256</p>
@@ -159,7 +154,7 @@ export default function Downloads() {
         </dl>
       </section>
 
-      <section aria-labelledby="download-heading" className="mt-10 rounded-xl border border-gold/30 bg-card p-6 md:p-8">
+      <section aria-labelledby="download-heading" className="mt-10 rounded-xl border border-gold/30 bg-card p-4 md:p-8">
         <h2 id="download-heading" className="text-xl font-semibold">
           Linux x64 Docker tester
         </h2>
@@ -172,10 +167,10 @@ export default function Downloads() {
 
         {release.status === "published" ? (
           <div className="mt-6">
-            <a href={release.bundle.url} className={linkStyle} download={release.bundle.filename}>
+            <a href={release.bundle.url} className={downloadStyle} download={release.bundle.filename}>
               Download tester ZIP
             </a>
-            <p className="mt-2 break-all text-sm text-muted-foreground">
+            <p className="mt-2 text-sm wrap-anywhere text-muted-foreground">
               {Math.round(release.bundle.bytes / 1024 / 1024)} MiB · Docker image, launcher and setup guide
             </p>
           </div>
@@ -252,8 +247,8 @@ export default function Downloads() {
         </section>
       ) : null}
 
-      <details className="mt-10 rounded-xl border border-border p-6">
-        <summary className="cursor-pointer rounded-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
+      <details className="mt-10 rounded-xl border border-border p-4 md:p-6">
+        <summary className="-my-2.5 cursor-pointer rounded-sm py-2.5 font-medium focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold">
           Docker build details
         </summary>
         <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
