@@ -1,0 +1,62 @@
+{
+  "schema": "meownero-selected-manager-source-evidence/1",
+  "run_id": "f256c6b4-dd7b-487f-b125-8fc3a9e4dda7",
+  "authorization_comment": "a5ec64fd-3da7-4044-8863-795ef7a6541f",
+  "base_commit": "1475518b800826907ac94cbd69eba65cecbf6c70",
+  "source_state": "PARTIAL_SOURCE_ADAPTER_NOT_HOST_READY",
+  "implementation_passes": 1,
+  "correction_passes": 1,
+  "tests": {
+    "manager": 29,
+    "outer": 24,
+    "profile": 18,
+    "handoff": 11,
+    "total": 82
+  },
+  "initial_failure": "One existing outer ordering assertion omitted the newly required quarantine; preserved pass1-tests.log. Correction updates that assertion and adds failure controls.",
+  "correction_result": "82 source tests pass; no further code pass performed",
+  "source_bindings": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+  "preserved_input_sections": [
+    "reference",
+    "limits",
+    "builder_image",
+    "builder_rustc",
+    "cargo_inputs",
+    "rust_inputs",
+    "fixture_sha256",
+    "proposed_native_outputs",
+    "exclusions",
+    "cgroup_mechanism",
+    "platform_bootstrap_sha256"
+  ],
+  "preserved_repository_inputs": 32,
+  "pinned_upstream_paths": 63,
+  "overlay_changed_files": 10,
+  "inputs_sha256": "be5e7555e100639d2a2d5bb93c2d801d0129af1a8d5cba921b6f76231c62f8e5",
+  "default_refusal_exit_codes": {
+    "run_outer": 3,
+    "profile_helper": 3
+  },
+  "platform_bootstrap_sha256": null,
+  "qualified_bootstraps": 0,
+  "concrete_operator": null,
+  "privileged_helper_server": null,
+  "inner_atomic_create_integration": null,
+  "independent_review": "NOT_RUN",
+  "host_activation": "NOT_RUN",
+  "original_lock_access": "NOT_RUN",
+  "resource_admission": "NOT_RUN",
+  "actual_custody_oom_recovery_enclosure_cleanup": "NOT_RUN",
+  "image_export_import": "NOT_RUN",
+  "native_execution": "NOT_RUN",
+  "public_launch": false,
+  "proposed_commands": "synthetic-command-example.json; SYNTHETIC ONLY, not a real operator binding",
+  "source_omissions": [
+    "privileged helper server",
+    "systemd FD-store custody readback and surviving namespace/recovery/deadline wiring",
+    "independent post-recovery observer and export accounting",
+    "legacy inner atomic-create integration"
+  ],
+  "next_action": "Meownero lead obtains the concrete privileged operator/authority/preparation bindings through the existing parent route. Platform reviews this exact partial source and concrete bindings before any further integration or activation.",
+  "needs_tj": "None"
+}

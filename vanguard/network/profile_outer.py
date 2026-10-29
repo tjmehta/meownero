@@ -36,6 +36,7 @@ class Manager(Protocol):
     """
     def retain(self, lock_fd, bindings, deadlines, *, deadline): ...
     def admit(self, number, *, deadline): ...
+    def quarantine(self, bindings, *, deadline): ...
     def provision(self, ledger_fd, *, deadline): ...
     def run_controller(self, context_fd, lock_fd, ledger_fd, second_admission, *, deadlines): ...
     def recover(self, *, deadline): ...
@@ -171,6 +172,14 @@ class Outer:
             c.require(first['at'] <= consumed_at <= first['at']+5, 'stale first admission at consumption')
             # Includes partial file/fsync failure: the attempt never resumes.
             result['result'] = 'FAIL'
+            # Persist the independent manager's failed-grant obligation BEFORE
+            # local consumption can be uncertain. Missing/corrupt local ledgers
+            # can never restore eligibility. A restart may only recover/observe.
+            quarantine = self.manager.quarantine(bindings, deadline=min(deadlines['build'], first['at']+5))
+            c.require(quarantine['state'] == 'QUARANTINED' and
+                      bool(re.fullmatch('[0-9a-f]{64}', quarantine['sha256'])),
+                      'independent durable manager quarantine required')
+            c.require(self.clock() <= first['at']+5, 'first admission expired during manager quarantine')
             ledger_fd, ledger = consume(ledger_directory, bindings, origin, consumed_at)
             c.require(self.clock() <= first['at']+5, 'first admission expired during durable consumption')
             enclosure = self.manager.provision(ledger_fd, deadline=deadlines['build'])

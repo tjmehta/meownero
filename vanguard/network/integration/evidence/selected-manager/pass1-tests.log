@@ -1,0 +1,111 @@
+test_attempt_grant_ledger_or_lock_mismatch_refuses (test_manager.AdmissionTests.test_attempt_grant_ledger_or_lock_mismatch_refuses) ... ok
+test_every_full_observation_field_prevents_create (test_manager.AdmissionTests.test_every_full_observation_field_prevents_create) ... ok
+test_expired_create_and_bad_request_refuse (test_manager.AdmissionTests.test_expired_create_and_bad_request_refuse) ... ok
+test_positive_then_one_use_refusal (test_manager.AdmissionTests.test_positive_then_one_use_refusal) ... ok
+test_stale_observation_consumes_channel (test_manager.AdmissionTests.test_stale_observation_consumes_channel) ... ok
+test_authenticated_packet_and_real_duplicate_description (test_manager.ChannelTests.test_authenticated_packet_and_real_duplicate_description) ... ok
+test_client_never_launches_unqualified_controller (test_manager.ChannelTests.test_client_never_launches_unqualified_controller) ... ok
+test_client_rejects_wrong_bound_reply (test_manager.ChannelTests.test_client_rejects_wrong_bound_reply) ... ok
+test_invalid_and_noncanonical_packets_refuse (test_manager.ChannelTests.test_invalid_and_noncanonical_packets_refuse) ... ok
+test_notification_is_not_accepted_without_barrier (test_manager.ChannelTests.test_notification_is_not_accepted_without_barrier) ... ok
+test_oversize_and_expired_refuse (test_manager.ChannelTests.test_oversize_and_expired_refuse) ... ok
+test_unsolicited_descriptors_closed (test_manager.ChannelTests.test_unsolicited_descriptors_closed) ... ok
+test_wrong_sender_refuses (test_manager.ChannelTests.test_wrong_sender_refuses) ... ok
+test_command_plan_keeps_fixed_paths_and_limits (test_manager.HelperManifestTests.test_command_plan_keeps_fixed_paths_and_limits) ... ok
+test_image_identity_missing_provenance_or_mutability_refuse (test_manager.HelperManifestTests.test_image_identity_missing_provenance_or_mutability_refuse) ... ok
+test_incomplete_or_foreign_recovery_never_releases (test_manager.HelperManifestTests.test_incomplete_or_foreign_recovery_never_releases) ... ok
+test_paths_reject_shell_and_systemd_substitution (test_manager.HelperManifestTests.test_paths_reject_shell_and_systemd_substitution) ... ok
+test_storage_escape_sparse_oversize_foreign_mount_refuse (test_manager.HelperManifestTests.test_storage_escape_sparse_oversize_foreign_mount_refuse) ... ok
+test_task_only_service_and_explicit_survival_gaps (test_manager.HelperManifestTests.test_task_only_service_and_explicit_survival_gaps) ... ok
+test_changed_grant_and_expiry_refuse (test_manager.JournalTests.test_changed_grant_and_expiry_refuse) ... ok
+test_crash_before_write_cannot_cold_resume (test_manager.JournalTests.test_crash_before_write_cannot_cold_resume) ... ok
+test_fsync_failure_never_retries (test_manager.JournalTests.test_fsync_failure_never_retries) ... ok
+test_hash_in_slot_is_not_activation_secret (test_manager.JournalTests.test_hash_in_slot_is_not_activation_secret) ... ok
+test_local_corruption_cannot_rearm_manager (test_manager.JournalTests.test_local_corruption_cannot_rearm_manager) ... ok
+test_missing_corrupt_alias_slot_refuses (test_manager.JournalTests.test_missing_corrupt_alias_slot_refuses) ... ok
+test_quarantine_survives_local_ledger_deletion (test_manager.JournalTests.test_quarantine_survives_local_ledger_deletion) ... ok
+test_recovered_reserved_slot_is_recovery_only (test_manager.JournalTests.test_recovered_reserved_slot_is_recovery_only) ... ok
+test_accidental_unlock_during_cleanup_is_detected (test_outer.OuterTests.test_accidental_unlock_during_cleanup_is_detected) ... ok
+test_cleanup_cannot_extend_total_deadline (test_outer.OuterTests.test_cleanup_cannot_extend_total_deadline) ... ok
+test_cleanup_failure_keeps_custody_and_exports_no_private_error (test_outer.OuterTests.test_cleanup_failure_keeps_custody_and_exports_no_private_error) ... ok
+test_consumed_grant_never_retries_or_provisions (test_outer.OuterTests.test_consumed_grant_never_retries_or_provisions) ... ok
+test_contention_refuses_without_manager_admission_or_ledger (test_outer.OuterTests.test_contention_refuses_without_manager_admission_or_ledger) ... ok
+test_context_is_private_sealed_and_not_inheritable_by_default (test_outer.OuterTests.test_context_is_private_sealed_and_not_inheritable_by_default) ... ok
+test_executable_default_refuses_with_no_lock_or_manager (test_outer.OuterTests.test_executable_default_refuses_with_no_lock_or_manager) ... ok
+test_first_admission_failure_never_consumes_or_provisions (test_outer.OuterTests.test_first_admission_failure_never_consumes_or_provisions) ... ok
+test_first_admission_staleness_refuses_before_consumption (test_outer.OuterTests.test_first_admission_staleness_refuses_before_consumption) ... ok
+test_hardlinked_lock_refuses (test_outer.OuterTests.test_hardlinked_lock_refuses) ... ok
+test_inode_replacement_and_symlink_refuse_before_manager (test_outer.OuterTests.test_inode_replacement_and_symlink_refuse_before_manager) ... ok
+test_interrupted_recovery_closes_local_fds_but_keeper_survives (test_outer.OuterTests.test_interrupted_recovery_closes_local_fds_but_keeper_survives) ... ok
+test_launcher_unwind_also_calls_recovery (test_outer.OuterTests.test_launcher_unwind_also_calls_recovery) ... ok
+test_ledger_file_then_directory_fsync_and_readonly_descriptor (test_outer.OuterTests.test_ledger_file_then_directory_fsync_and_readonly_descriptor) ... ok
+test_missing_final_observer_cannot_become_success (test_outer.OuterTests.test_missing_final_observer_cannot_become_success) ... ok
+test_partial_setup_failure_always_recovers_under_kept_lock (test_outer.OuterTests.test_partial_setup_failure_always_recovers_under_kept_lock) ... ok
+test_partial_write_or_fsync_failure_preserves_poisoned_ledger (test_outer.OuterTests.test_partial_write_or_fsync_failure_preserves_poisoned_ledger) ... ok
+test_positive_order_is_pending_until_independent_post_exit_observation (test_outer.OuterTests.test_positive_order_is_pending_until_independent_post_exit_observation) ... FAIL
+test_second_admission_missing_repeated_or_late_cannot_succeed (test_outer.OuterTests.test_second_admission_missing_repeated_or_late_cannot_succeed) ... ok
+test_second_admission_refusal_is_consumed_and_recovers (test_outer.OuterTests.test_second_admission_refusal_is_consumed_and_recovers) ... ok
+test_unbound_and_fabricated_bindings_refuse_before_any_host_call (test_outer.OuterTests.test_unbound_and_fabricated_bindings_refuse_before_any_host_call) ... ok
+test_workload_oom_controller_crash_timeout_all_recover_without_release (test_outer.OuterTests.test_workload_oom_controller_crash_timeout_all_recover_without_release) ... ok
+test_admission_floor_load_collision (test_profile.SourceBoundaryTests.test_admission_floor_load_collision) ... ok
+test_alias_hardlink_and_wrong_owner_are_refused (test_profile.SourceBoundaryTests.test_alias_hardlink_and_wrong_owner_are_refused) ... ok
+test_consumed_and_expired_grants (test_profile.SourceBoundaryTests.test_consumed_and_expired_grants) ... ok
+test_container_only_containment_never_satisfies_aggregate (test_profile.SourceBoundaryTests.test_container_only_containment_never_satisfies_aggregate) ... ok
+test_exact_portable_chain_fixture (test_profile.SourceBoundaryTests.test_exact_portable_chain_fixture) ... ok
+test_forced_kill_cannot_pass_save_or_handoff (test_profile.SourceBoundaryTests.test_forced_kill_cannot_pass_save_or_handoff) ... ok
+test_grant_binds_every_workload_input (test_profile.SourceBoundaryTests.test_grant_binds_every_workload_input) ... ok
+test_grant_requires_attributed_platform_author (test_profile.SourceBoundaryTests.test_grant_requires_attributed_platform_author) ... ok
+test_missing_bootstrap_refuses_before_any_resource_operation (test_profile.SourceBoundaryTests.test_missing_bootstrap_refuses_before_any_resource_operation) ... ok
+test_network_census_rejects_wildcard_or_external_sockets (test_profile.SourceBoundaryTests.test_network_census_rejects_wildcard_or_external_sockets) ... ok
+test_no_raw_native_output_has_been_claimed (test_profile.SourceBoundaryTests.test_no_raw_native_output_has_been_claimed) ... ok
+test_original_lock_replacements_are_refused (test_profile.SourceBoundaryTests.test_original_lock_replacements_are_refused) ... ok
+test_partial_rows_never_get_slice_pass (test_profile.SourceBoundaryTests.test_partial_rows_never_get_slice_pass) ... ok
+test_pid_reuse_never_receives_a_signal (test_profile.SourceBoundaryTests.test_pid_reuse_never_receives_a_signal) ... ok
+test_read_only_login_mode_and_alias_refusal (test_profile.SourceBoundaryTests.test_read_only_login_mode_and_alias_refusal) ... ok
+test_saved_bundle_tampering_refused_without_mutation (test_profile.SourceBoundaryTests.test_saved_bundle_tampering_refused_without_mutation) ... ok
+test_uuid_alone_is_not_a_grant (test_profile.SourceBoundaryTests.test_uuid_alone_is_not_a_grant) ... ok
+test_uuid_mutation_changes_only_16_byte_native_field (test_profile.SourceBoundaryTests.test_uuid_mutation_changes_only_16_byte_native_field) ... ok
+test_admission_precedes_consumption_and_provisioning (test_handoff.HandoffTests.test_admission_precedes_consumption_and_provisioning) ... ok
+test_completion_refuses_survivors_missing_release_and_dead_observer (test_handoff.HandoffTests.test_completion_refuses_survivors_missing_release_and_dead_observer) ... ok
+test_every_context_and_ledger_binding_is_exact (test_handoff.HandoffTests.test_every_context_and_ledger_binding_is_exact) ... ok
+test_inherited_flock_is_visible_and_inner_close_preserves_outer (test_handoff.HandoffTests.test_inherited_flock_is_visible_and_inner_close_preserves_outer) ... ok
+test_inner_cannot_finalize_resource_or_cleanup_success (test_handoff.HandoffTests.test_inner_cannot_finalize_resource_or_cleanup_success) ... ok
+test_no_manifest_value_substitutes_for_a_qualified_launcher (test_handoff.HandoffTests.test_no_manifest_value_substitutes_for_a_qualified_launcher) ... ok
+test_no_reconstructed_unconsumed_or_changed_ledger (test_handoff.HandoffTests.test_no_reconstructed_unconsumed_or_changed_ledger) ... ok
+test_nonnull_hash_refuses_before_grant_resource_or_native_calls (test_handoff.HandoffTests.test_nonnull_hash_refuses_before_grant_resource_or_native_calls) ... ok
+test_rootless_and_parent_kill_cannot_satisfy_recovery (test_handoff.HandoffTests.test_rootless_and_parent_kill_cannot_satisfy_recovery) ... ok
+test_runtime_facts_are_not_immutable_authorization (test_handoff.HandoffTests.test_runtime_facts_are_not_immutable_authorization) ... ok
+test_stale_admission_and_changed_reserve_are_refused (test_handoff.HandoffTests.test_stale_admission_and_changed_reserve_are_refused) ... ok
+
+======================================================================
+FAIL: test_positive_order_is_pending_until_independent_post_exit_observation (test_outer.OuterTests.test_positive_order_is_pending_until_independent_post_exit_observation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_outer.py", line 156, in test_positive_order_is_pending_until_independent_post_exit_observation
+    self.assertEqual(self.manager.calls,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+                     ['retain', 'admit1', 'provision', 'controller', 'admit2', 'recover', 'arm_final'])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['retain', 'admit1', 'quarantine', 'provision', 'controller', '[27 chars]nal'] != ['retain', 'admit1', 'provision', 'controller', 'admit2', 'reco[13 chars]nal']
+
+First differing element 2:
+'quarantine'
+'provision'
+
+First list contains 1 additional elements.
+First extra element 7:
+'arm_final'
+
+  ['retain',
+   'admit1',
+-  'quarantine',
+   'provision',
+   'controller',
+   'admit2',
+   'recover',
+   'arm_final']
+
+----------------------------------------------------------------------
+Ran 78 tests in 0.198s
+
+FAILED (failures=1)

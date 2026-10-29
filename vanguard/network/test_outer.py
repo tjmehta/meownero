@@ -48,6 +48,10 @@ class ModeledManager:
         return dict(at=self.now, snapshot=dict(available_memory_bytes=5*1024**3,
             free_disk_bytes=20*1024**3, load=[0, 0, 0], native_processes=[], native_containers=[]))
 
+    def quarantine(self, bindings, *, deadline):
+        self.calls.append('quarantine')
+        return dict(state='QUARANTINED', sha256='f'*64)
+
     def provision(self, ledger_fd, *, deadline):
         self.calls.append('provision')
         self.assert_held()
@@ -150,7 +154,7 @@ class OuterTests(unittest.TestCase):
     def test_positive_order_is_pending_until_independent_post_exit_observation(self):
         result = self.run_outer()
         self.assertEqual(self.manager.calls,
-                         ['retain', 'admit1', 'provision', 'controller', 'admit2', 'recover', 'arm_final'])
+                         ['retain', 'admit1', 'quarantine', 'provision', 'controller', 'admit2', 'recover', 'arm_final'])
         self.assertEqual(result['result'], 'PENDING_MANAGER_COMPLETION')
         self.assertEqual(result['manager_completion'], 'PENDING_INDEPENDENT_POST_EXIT_OBSERVATION')
         self.assertEqual(c.verdict(result['rows']), 'INCOMPLETE')
@@ -167,6 +171,30 @@ class OuterTests(unittest.TestCase):
         self.assertEqual(result['result'], 'FAIL')
         self.assertEqual(result['failure_class'], 'FileExistsError')
         self.assertNotIn('provision', self.manager.calls)
+
+    def test_missing_or_failed_quarantine_prevents_local_consumption_and_setup(self):
+        for response in (dict(state='RESERVED',sha256='f'*64), dict(state='QUARANTINED',sha256='bad')):
+            with patch.object(self.manager,'quarantine',return_value=response):
+                result=self.run_outer()
+            self.assertEqual(result['result'],'FAIL')
+            self.assertFalse((self.root/(GRANT+'.json')).exists())
+            self.assertNotIn('provision',self.manager.calls)
+            os.close(self.manager.keeper);self.manager.keeper=None
+        with patch.object(self.manager,'quarantine',side_effect=OSError('ambiguous manager write')):
+            result=self.run_outer()
+        self.assertEqual(result['result'],'FAIL')
+        self.assertFalse((self.root/(GRANT+'.json')).exists())
+        self.assertNotIn('provision',self.manager.calls)
+
+    def test_quarantine_expiry_prevents_local_consumption(self):
+        def late_quarantine(bindings,*,deadline):
+            self.manager.now=deadline+1
+            return dict(state='QUARANTINED',sha256='f'*64)
+        with patch.object(self.manager,'quarantine',side_effect=late_quarantine):
+            result=self.run_outer()
+        self.assertEqual(result['result'],'FAIL')
+        self.assertFalse((self.root/(GRANT+'.json')).exists())
+        self.assertNotIn('provision',self.manager.calls)
         self.assert_keeper_blocks_new_open()
 
     def test_first_admission_failure_never_consumes_or_provisions(self):

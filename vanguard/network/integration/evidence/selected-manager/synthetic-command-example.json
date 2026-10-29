@@ -1,0 +1,268 @@
+{
+  "label": "SYNTHETIC_ONLY_NOT_A_HOST_BINDING_OR_EXECUTION_REQUEST",
+  "binding": {
+    "schema": "meownero-rootful-helper-binding/1",
+    "attempt_id": "11111111111111111111111111111111",
+    "operator": "SYNTHETIC_NO_OPERATOR",
+    "authority_comment": "SYNTHETIC_NO_AUTHORITY",
+    "systemd_version": "255-documentation-only",
+    "helper_source_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "preparation_receipt": "SYNTHETIC_NOT_PREPARED",
+    "original_lock": [
+      66306,
+      657237
+    ],
+    "limits": {
+      "wall_seconds": 4500,
+      "build_seconds": 3600,
+      "runtime_seconds": 600,
+      "cleanup_seconds": 300,
+      "cpus": 2,
+      "cpu_seconds": 9000,
+      "memory_bytes": 4294967296,
+      "swap_bytes": 0,
+      "pids": 256,
+      "compile_jobs": 1,
+      "memory_floor": 5368709120,
+      "disk_floor": 21474836480,
+      "disk_hard_bytes": 16106127360,
+      "disk_abort_free": 4294967296,
+      "load_1_5_15_max": [
+        6.0,
+        6.0,
+        6.0
+      ],
+      "non_genesis_blocks": 0,
+      "transactions": 0,
+      "attempts": 1
+    },
+    "disk": {
+      "mount": "/synthetic/TJS2504/fixed",
+      "backing": "/synthetic/TJS2504/fixed.img",
+      "backing_filesystem": "ext4",
+      "backing_device": 66306,
+      "backing_inode": 123,
+      "fully_allocated": true,
+      "length": 16106127360,
+      "allocated_bytes": 16106127360,
+      "filesystem": "ext4",
+      "filesystem_capacity": 15032385536,
+      "nlink": 1,
+      "loop": "/dev/loop99",
+      "loop_device": 999,
+      "mount_id": 1234,
+      "namespace_inode": 5678
+    },
+    "writes": {
+      "manager": "/synthetic/TJS2504/fixed/manager",
+      "ledger": "/synthetic/TJS2504/fixed/ledger",
+      "log": "/synthetic/TJS2504/fixed/log",
+      "export": "/synthetic/TJS2504/fixed/export",
+      "docker": "/synthetic/TJS2504/fixed/docker",
+      "exec": "/synthetic/TJS2504/fixed/exec",
+      "tmp": "/synthetic/TJS2504/fixed/tmp",
+      "private": "/synthetic/TJS2504/fixed/private",
+      "attempt": "/synthetic/TJS2504/fixed/attempt",
+      "public": "/synthetic/TJS2504/fixed/public"
+    },
+    "writable_escape": false,
+    "shared_sockets_visible": false,
+    "offline_image": {
+      "image_id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "architecture": "amd64",
+      "os": "linux",
+      "read_only": true,
+      "immutable": true,
+      "path": "/synthetic/immutable/builder.tar",
+      "length": 1,
+      "device": 1,
+      "inode": 2,
+      "provenance": "SYNTHETIC",
+      "sha256": "9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    "cgroup_parent": "/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111",
+    "existing_delegation": true
+  },
+  "commands": {
+    "schema": "meownero-helper-command-manifest/1",
+    "source_only": true,
+    "operations": [
+      "retain",
+      "first_admission",
+      "quarantine",
+      "provision",
+      "recover",
+      "observe_after_exit"
+    ],
+    "activation": "REFUSED_UNQUALIFIED",
+    "setup": [
+      [
+        "/usr/bin/mount",
+        "--make-rprivate",
+        "/"
+      ],
+      [
+        "/usr/sbin/losetup",
+        "--sizelimit",
+        "16106127360",
+        "/dev/loop99",
+        "/synthetic/TJS2504/fixed.img"
+      ],
+      [
+        "/usr/bin/mount",
+        "-t",
+        "ext4",
+        "-o",
+        "nosuid,nodev",
+        "/dev/loop99",
+        "/synthetic/TJS2504/fixed"
+      ]
+    ],
+    "cgroup_writes": {
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/cpu.max": "200000 100000",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/memory.max": "4294967296",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/memory.swap.max": "0",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/pids.max": "256",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/memory.oom.group": "0",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/cgroup.subtree_control": "+cpu +memory +pids",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/work/memory.max": "4026531840",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/work/memory.oom.group": "1",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/work/pids.max": "224",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/work/memory.swap.max": "0",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/recovery/memory.max": "268435456",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/recovery/pids.max": "32",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/recovery/memory.swap.max": "0",
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/recovery/memory.oom.group": "0"
+    },
+    "daemon": [
+      "/usr/bin/dockerd",
+      "--host=unix:///synthetic/TJS2504/fixed/exec/docker.sock",
+      "--data-root=/synthetic/TJS2504/fixed/docker",
+      "--exec-root=/synthetic/TJS2504/fixed/exec",
+      "--pidfile=/synthetic/TJS2504/fixed/exec/dockerd.pid",
+      "--config-file=/synthetic/TJS2504/fixed/manager/daemon.json",
+      "--exec-opt=native.cgroupdriver=cgroupfs",
+      "--cgroup-parent=/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/work",
+      "--bridge=none",
+      "--iptables=false",
+      "--ip6tables=false",
+      "--ip-forward=false",
+      "--ip-masq=false",
+      "--userland-proxy=false",
+      "--storage-driver=vfs"
+    ],
+    "import_image": [
+      "/usr/bin/docker",
+      "--host=unix:///synthetic/TJS2504/fixed/exec/docker.sock",
+      "image",
+      "load",
+      "--input",
+      "/synthetic/immutable/builder.tar"
+    ],
+    "daemon_config": {
+      "log-driver": "none",
+      "features": {
+        "containerd-snapshotter": false
+      }
+    },
+    "environment": {
+      "HOME": "/synthetic/TJS2504/fixed/manager",
+      "TMPDIR": "/synthetic/TJS2504/fixed/tmp",
+      "XDG_RUNTIME_DIR": "/synthetic/TJS2504/fixed/exec",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "LC_ALL": "C",
+      "DOCKER_CONFIG": "/synthetic/TJS2504/fixed/manager/docker-client"
+    },
+    "work_abort_write": {
+      "/sys/fs/cgroup/synthetic/owned/meownero-TJS2504-11111111111111111111111111111111/work/cgroup.kill": "1"
+    },
+    "cleanup": [
+      [
+        "/usr/bin/umount",
+        "--",
+        "/synthetic/TJS2504/fixed"
+      ],
+      [
+        "/usr/sbin/losetup",
+        "--detach",
+        "/dev/loop99"
+      ]
+    ],
+    "forbidden": [
+      "shared_docker_socket",
+      "shared_caller_unit_changes",
+      "pull",
+      "save",
+      "shell",
+      "lazy_unmount",
+      "force_unmount",
+      "bulk_process_kill",
+      "delete_backing_or_manager_slot"
+    ],
+    "setup_preconditions": [
+      "private_namespace_identity_checked",
+      "exact_loop_unused",
+      "backing_not_associated_with_any_other_loop",
+      "backing_identity_and_full_allocation_checked",
+      "no_automatic_find_or_reuse_of_an_existing_loop"
+    ],
+    "detach_postcondition": "independently_observe_owned_loop_backing_association_absent_within_deadline",
+    "ordering": [
+      "operator_preparation_receipt",
+      "authenticate_grant_and_reviews",
+      "retain_and_pid1_readback",
+      "first_fresh_admission",
+      "durable_manager_quarantine",
+      "local_consumed_ledger",
+      "setup_and_image_import",
+      "controller",
+      "atomic_second_admission_and_create",
+      "stop_exact_cid_and_owned_pid_start_pairs",
+      "work_population_zero",
+      "export_allowlist",
+      "recovery_exit",
+      "independent_observer",
+      "unmount_and_detach",
+      "release_all_lock_copies",
+      "independent_original_inode_acquire_then_close"
+    ],
+    "limitations": [
+      "A command list is not a helper server, authority, installation or host qualification.",
+      "The legacy inner still refuses the unqualified atomic-create channel."
+    ]
+  },
+  "unit_contract": {
+    "unit": "meownero-TJS2504-11111111111111111111111111111111.service",
+    "aggregate_slice": {
+      "CPUQuota": "200%",
+      "MemoryMax": "4294967296",
+      "MemorySwapMax": "0",
+      "TasksMax": "256"
+    },
+    "keeper_service": {
+      "FileDescriptorStoreMax": "1",
+      "FileDescriptorStorePreserve": "yes",
+      "NotifyAccess": "main",
+      "Restart": "on-failure",
+      "RestartSec": "1",
+      "OOMPolicy": "continue",
+      "MemoryMax": "268435456",
+      "MemorySwapMax": "0",
+      "TasksMax": "32",
+      "ProtectSystem": "strict",
+      "PrivateMounts": "yes",
+      "PrivateTmp": "no",
+      "StandardOutput": "null",
+      "StandardError": "null",
+      "LimitCORE": "0"
+    },
+    "unresolved": [
+      "exact ExecStart/server and independent deadline owner",
+      "surviving namespace custody and recovery reentry",
+      "bounded PID1 FD-store/kernel overhead accounting and actual retain readback",
+      "root helper capability/seccomp/mount confinement and denial of shared Unix sockets",
+      "final observer accounting and original-lock release witness after recovery exit"
+    ],
+    "native_execution": "NOT_RUN"
+  }
+}
