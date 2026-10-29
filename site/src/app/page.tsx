@@ -1,8 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Principles } from "@/components/principles";
 import { Notify } from "@/components/notify";
+import { cn } from "cn";
 
 // Entity data for search and AI answer engines. Deliberately no founder,
 // address, or contact fields: the project has no public identities yet.
@@ -46,8 +48,8 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <section className="relative isolate flex min-h-[100dvh] items-center overflow-hidden">
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 pt-20 pb-16 md:grid-cols-[1.1fr_1fr] md:gap-8 md:px-10 md:py-24">
+      <section className="relative isolate flex items-center overflow-hidden md:min-h-[100dvh]">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-6 px-6 pt-8 pb-16 md:grid-cols-[1.1fr_1fr] md:gap-8 md:px-10 md:py-24">
           <div className="order-2 flex flex-col items-start md:order-1">
             <Badge
               variant="outline"
@@ -58,33 +60,42 @@ export default function Home() {
             </Badge>
 
             <h1
-              className="rise mt-6 max-w-[14ch] text-5xl font-semibold tracking-tighter text-balance md:text-6xl lg:text-7xl"
+              className="rise mt-5 max-w-[14ch] text-[clamp(2.25rem,11vw,3rem)] leading-none font-semibold tracking-tighter text-balance md:text-6xl lg:text-7xl"
               style={{ "--i": 1 } as React.CSSProperties}
             >
               Every payment is private.
             </h1>
 
             <p
-              className="rise mt-6 max-w-[42ch] text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl"
+              className="rise mt-4 max-w-[42ch] text-lg leading-relaxed text-muted-foreground text-pretty md:text-xl"
               style={{ "--i": 2 } as React.CSSProperties}
             >
               A proof-of-work coin. No premine, no presale.
             </p>
 
-            <div className="rise mt-8" style={{ "--i": 3 } as React.CSSProperties}>
+            <div className="rise mt-6 w-full" style={{ "--i": 3 } as React.CSSProperties}>
               <Notify />
             </div>
 
-            <Link
-              href="/downloads"
-              className="mt-5 rounded-sm text-sm text-gold underline underline-offset-4 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold"
+            <div
+              className="rise mt-5 w-full max-w-sm"
+              style={{ "--i": 4 } as React.CSSProperties}
             >
-              Try the Linux tester
-            </Link>
+              <Link
+                href="/downloads"
+                className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-11 w-full px-4 sm:w-auto")}
+              >
+                Try the Linux tester
+              </Link>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                Local, valueless test coins on your own machine. Not a public
+                testnet or mainnet.
+              </p>
+            </div>
           </div>
 
           <div className="order-1 flex justify-center md:order-2 md:justify-end">
-            <div className="relative aspect-square w-[min(72vw,20rem)] md:w-[min(38vw,26rem)] lg:w-[28rem]">
+            <div className="relative aspect-square w-[min(52vw,14rem)] md:w-[min(38vw,26rem)] lg:w-[28rem]">
               <div
                 aria-hidden
                 className="coin-glow pointer-events-none absolute -inset-[18%] rounded-full bg-[radial-gradient(closest-side,var(--gold-soft),transparent)]"
@@ -97,7 +108,7 @@ export default function Home() {
                     width={1024}
                     height={1024}
                     priority
-                    sizes="(min-width: 1024px) 28rem, (min-width: 768px) 38vw, 72vw"
+                    sizes="(min-width: 1024px) 28rem, (min-width: 768px) 38vw, 52vw"
                     className="size-full"
                   />
                 </div>

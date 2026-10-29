@@ -165,7 +165,36 @@
   }
 }
 
+/* Right-edge fade on a command that can still scroll sideways. Phones only;
+   wider screens show more of each line and have a visible scrollbar. */
+.command::after {
+  content: "";
+  position: absolute;
+  inset-block: 1px;
+  right: 1px;
+  width: 2.5rem;
+  border-radius: 0 calc(var(--radius) - 1px) calc(var(--radius) - 1px) 0;
+  background: linear-gradient(to left, var(--background), transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.command[data-more="true"]::after {
+  opacity: 1;
+}
+
+@media (min-width: 48rem) {
+  .command::after {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .command::after {
+    transition: none;
+  }
+
   .rise,
   .coin-in {
     animation: fade 250ms ease forwards;
