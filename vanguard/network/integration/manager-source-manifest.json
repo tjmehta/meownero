@@ -2,10 +2,10 @@
   "schema": "meownero-selected-manager-source-manifest/3",
   "authorization_comment": "a5ec64fd-3da7-4044-8863-795ef7a6541f",
   "base_commit": "1475518b800826907ac94cbd69eba65cecbf6c70",
-  "state": "TYPED_SOURCE_PACKET_FOR_INDEPENDENT_REVIEW_UNQUALIFIED_OS_BOUNDARIES",
+  "state": "GENERATED_ENTRY_SOURCE_CORRECTION_FOR_PLATFORM_REVIEW_UNQUALIFIED_OS_BOUNDARIES",
   "implementation_passes": 1,
   "correction_passes": 1,
-  "source_tests": 114,
+  "source_tests": 126,
   "host_activation": "UNAVAILABLE",
   "native_execution": "NOT_RUN",
   "platform_bootstrap_sha256": null,
@@ -16,21 +16,23 @@
   "command_builder": "profile_packet.py:render",
   "unit_contract_builder": "profile_packet.py:units",
   "source_sha256": {
-    "vanguard/network/profile_manager.py": "01260ec7e727dff75c09563bb7fe03cc2c50f3e7653c8be44765547bfa1d162d",
+    "vanguard/network/profile_manager.py": "631b7daa1684c98cd9531f765d590a6c8cc0008917b74223e61d81f4f6801c01",
     "vanguard/network/profile_helper.py": "9ca0baad73184576ec4c2bc18c38e710c9ce8710dfe08855b448c8c330c07586",
     "vanguard/network/profile_outer.py": "9ebce24be69a3016c1c19312881037de3db5bbd7dd702d8a32aef9f6c394a0a9",
     "vanguard/network/profile_handoff.py": "6487a18fd8b7092ea86781f42591f93c220ee4dfcb1949b216f64fa564f0a95f",
     "vanguard/network/run-outer.py": "7af8546d67dde357d997c7844755be4b269518d29e12534f2d0e4e141b67dc48",
     "vanguard/network/run-profile.py": "15704bddba91a0e23d78d3222e3be3094eceb51c508ce576a328a781eca88790",
-    "vanguard/network/profile_packet.py": "6e3d1f35629a89db36b6ac1ec80a7a81a1baa8c7c30c25a1e8b3096dc053be82",
-    "vanguard/network/profile_dispatch.py": "ce2707adebbe9d80b29c54a7a9dca29a098dd662d9f362c981403b8bdd08008c",
-    "vanguard/network/profile-helper.py": "59645e94c5a595bfd86445bab4680d493041d350a7f2ab0266d0eba7a0220ee5",
+    "vanguard/network/profile_packet.py": "00a7403233b048c744396fe548b004eb8c567310340b574ef773be7da729036e",
+    "vanguard/network/profile_dispatch.py": "f9aa452e8998bc0a77db9f9249fa9043799d63a1083048f0e471c91d7c68a126",
+    "vanguard/network/profile-helper.py": "5c6c98d29e65055a14a74c239d28a92888d3248a71887269d144294432a13cde",
     "vanguard/network/test_manager.py": "4d939935107f83bf8c35ee72567e43ce1665b3efdc183378c556ebebd1811e80",
     "vanguard/network/test_outer.py": "fbd2996760621cf606c59223bbd1dd52b9649887e91304326b05c3dd199cedc0",
     "vanguard/network/test_handoff.py": "b7a47243999557964199ec3e16ceb7bef6204d3cf146c32334e6ff91930b70c3",
     "vanguard/network/test_profile.py": "c2fbb1c114a5f629949fa415266b827e2af959a41016927454027f9bc9a365c3",
     "vanguard/network/test_dispatch.py": "37d5783149db16ee2c0604dc99cf1c8c508cd6b9aa86f7fc94500b3728256de2",
-    "vanguard/network/freeze-profile.py": "f1eee2f123e2c422e24462f6e625ba5491a2f45c36880955b2689292fdf2f924"
+    "vanguard/network/freeze-profile.py": "119168b5b81a5a72985c70209ea72222769a53eaa3d41d09ce4214d69528a8e6",
+    "vanguard/network/profile_bootstrap.py": "7fc3579e5b96511b07b3c821e608f946df409a66c45097e0e104c76efd2488bf",
+    "vanguard/network/test_bootstrap.py": "633c2e5c9ebddc1c9e3367c0e3dbcde9f52eca696a156d845f438cee3fb45d45"
   },
   "runtime_requirements": [
     "Meownero lead obtains Platform exact-source command-packet review",
@@ -74,5 +76,23 @@
     "spec_sha256": "b2ee5e464ba49ac991c011ed5f2082ff7bf75857ae00f400b8a1b148ae3a56df",
     "packet_file_sha256": "b593bc5dc0a564681889d5c9cac002e1b9b5cc2545296be3c9230029c9184475",
     "unit_file_sha256": "2c8be42330b64f83aa67f1ff8841633b01f296f90859da018fa161d78c514f95"
+  },
+  "generated_entry_correction": {
+    "authorization_comment": "2f5ded01-5228-4f2e-89ba-7cc9c683ef91",
+    "base_commit": "cd994f6194fdb46679d85cf31f9926fc13d29f54",
+    "implementation_passes": 1,
+    "correction_passes": 1,
+    "run_id": "e7eb8c7d-f213-4bf5-a9b3-e943b60ad90f",
+    "spec_sha256": "e57c346d0c7471d8e02f7c40642e9a805662f568adc1474f826d3328e89046f3",
+    "bootstrap": "profile_bootstrap.py:enter -> authorize_mode -> LifecycleAdapter.enter",
+    "descriptor_transport": "StandardInputFileDescriptor(h)/fd0/unnamed_SEQPACKET/SCM_RIGHTS/SCM_CREDENTIALS",
+    "os_adapter": "UNBOUND",
+    "native_execution": "NOT_RUN",
+    "file_sha256": {
+      "source-plan.json": "a2f044df74a9e0a53afd1cd612b68b5738c1253c45bcb48cbf6d676d540244f0",
+      "lifecycle-packet.json": "9ea08b379e80df17d5b210e151b1449a1e4ef4c46bff132207f5f3d21a50c506",
+      "unit-manifest.json": "abc3933259285de20027f25d69fb9979f9c01e562616e4e4e19a94eab9fcefab",
+      "completion.schema.json": "85dcf66115087e574a161ac654bbb4c3f545ec21676e0d5964486541e96a8ebf"
+    }
   }
 }

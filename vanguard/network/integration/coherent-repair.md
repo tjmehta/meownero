@@ -1,5 +1,7 @@
 # October 29 coherent source packet
 
+Historical candidate record. The current generated-entry correction is in [generated-entry.md](generated-entry.md); this record retains the prior evidence and attribution.
+
 The [lead authorization](/TJS/issues/TJS-2504#comment-157efebb-bef3-4039-9a79-739c38935024), accepted Platform findings and parent [operator setup review](/TJS/issues/TJS-1245#document-operator-setup-review), revision `aa27cba8-959c-4331-b3ab-67183608ec65`, govern this continuation from `0d899c98b65aaf780f7dccfea5dfaf447b7ebc88`. This record supersedes the exhausted-pass/pending-answer statements in the earlier packet for this finite source pass. It does not grant host operations.
 
 The canonical current interfaces are `profile_packet.py:render`, `profile_dispatch.py:Dispatcher`, `LifecycleAdapter`, `OuterManager` and `Client`, `profile-helper.py`, the FD-only `Outer`, and `run-profile.py:controller_create`. The v2 observed-disk command builder in `profile_helper.py` remains a historical post-consumption declaration fixture, not a preparation/activation API. The current packet is `source-plan.json`, `lifecycle-packet.json` and `unit-manifest.json`.

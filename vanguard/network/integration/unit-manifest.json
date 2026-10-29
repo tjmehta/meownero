@@ -2,7 +2,7 @@
   "schema": "meownero-systemd255-unit-proposal/3",
   "source_only": true,
   "activation": "REFUSED_UNQUALIFIED",
-  "spec_sha256": "b2ee5e464ba49ac991c011ed5f2082ff7bf75857ae00f400b8a1b148ae3a56df",
+  "spec_sha256": "e57c346d0c7471d8e02f7c40642e9a805662f568adc1474f826d3328e89046f3",
   "units": [
     {
       "stage": "install",
@@ -37,7 +37,8 @@
           ]
         ],
         []
-      ]
+      ],
+      "delivery": null
     },
     {
       "stage": "install",
@@ -50,11 +51,6 @@
         "meowneroTJS2504$ATTEMPT-work.slice",
         "fail",
         [
-          [
-            "Slice",
-            "s",
-            "meowneroTJS2504$ATTEMPT.slice"
-          ],
           [
             "CPUQuotaPerSecUSec",
             "t",
@@ -77,7 +73,8 @@
           ]
         ],
         []
-      ]
+      ],
+      "delivery": null
     },
     {
       "stage": "install",
@@ -90,11 +87,6 @@
         "meowneroTJS2504$ATTEMPT-control.slice",
         "fail",
         [
-          [
-            "Slice",
-            "s",
-            "meowneroTJS2504$ATTEMPT.slice"
-          ],
           [
             "CPUQuotaPerSecUSec",
             "t",
@@ -117,7 +109,8 @@
           ]
         ],
         []
-      ]
+      ],
+      "delivery": null
     },
     {
       "stage": "activation",
@@ -161,6 +154,8 @@
                   "-B",
                   "$BOUND_HELPER",
                   "serve",
+                  "--bootstrap-role",
+                  "keeper",
                   "--spec",
                   "$ROOT_OWNED_SPEC",
                   "--spec-sha256",
@@ -205,6 +200,11 @@
             "CapabilityBoundingSet",
             "t",
             2097347
+          ],
+          [
+            "StandardInputFileDescriptor",
+            "h",
+            "$BOOTSTRAP_KEEPER_RECEIVE_FD"
           ],
           [
             "StandardOutput",
@@ -281,7 +281,43 @@
           ]
         ],
         []
-      ]
+      ],
+      "delivery": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "keeper",
+        "mode": "serve",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context",
+          "retained_namespace"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "one_fresh_activation",
+        "restart": "independently_authenticated_installed_unit_two_named_stored_FDs_recovery_only",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      }
     },
     {
       "stage": "activation",
@@ -325,6 +361,8 @@
                   "-B",
                   "$BOUND_HELPER",
                   "recover",
+                  "--bootstrap-role",
+                  "deadline",
                   "--spec",
                   "$ROOT_OWNED_SPEC",
                   "--spec-sha256",
@@ -372,6 +410,11 @@
             2097347
           ],
           [
+            "StandardInputFileDescriptor",
+            "h",
+            "$BOOTSTRAP_DEADLINE_RECEIVE_FD"
+          ],
+          [
             "StandardOutput",
             "s",
             "null"
@@ -416,7 +459,43 @@
           ]
         ],
         []
-      ]
+      ],
+      "delivery": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "deadline",
+        "mode": "recover",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context",
+          "retained_namespace"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "role_invocation",
+        "restart": "new_role_bound_delivery_or_refuse",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      }
     },
     {
       "stage": "activation",
@@ -460,6 +539,8 @@
                   "-B",
                   "$BOUND_HELPER",
                   "observe",
+                  "--bootstrap-role",
+                  "observer",
                   "--spec",
                   "$ROOT_OWNED_SPEC",
                   "--spec-sha256",
@@ -506,6 +587,11 @@
             2097347
           ],
           [
+            "StandardInputFileDescriptor",
+            "h",
+            "$BOOTSTRAP_OBSERVER_RECEIVE_FD"
+          ],
+          [
             "StandardOutput",
             "s",
             "null"
@@ -550,7 +636,43 @@
           ]
         ],
         []
-      ]
+      ],
+      "delivery": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "observer",
+        "mode": "observe",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context",
+          "retained_namespace"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "role_invocation",
+        "restart": "new_role_bound_delivery_or_refuse",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      }
     },
     {
       "stage": "preparation_supervisor",
@@ -588,6 +710,8 @@
                   "$BOUND_PYTHON",
                   "-B",
                   "$BOUND_HELPER",
+                  "prepare",
+                  "--bootstrap-role",
                   "prepare",
                   "--spec",
                   "$ROOT_OWNED_SPEC",
@@ -633,6 +757,11 @@
             "CapabilityBoundingSet",
             "t",
             2097347
+          ],
+          [
+            "StandardInputFileDescriptor",
+            "h",
+            "$BOOTSTRAP_PREPARE_RECEIVE_FD"
           ],
           [
             "StandardOutput",
@@ -709,7 +838,42 @@
           ]
         ],
         []
-      ]
+      ],
+      "delivery": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "prepare",
+        "mode": "prepare",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "separate_preparation_capability",
+        "restart": "new_role_bound_delivery_or_refuse",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      }
     }
   ],
   "native_execution": "NOT_RUN"

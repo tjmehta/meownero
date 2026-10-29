@@ -11,7 +11,7 @@ import profile_contract as c
 GIB = 1024**3
 MIB = 1024**2
 SCHEMA = 'meownero-source-plan/3'
-AUTHORIZATION = '157efebb-bef3-4039-9a79-739c38935024'
+AUTHORIZATION = '2f5ded01-5228-4f2e-89ba-7cc9c683ef91'
 IDENTITIES = ('backing_inode', 'filesystem_device', 'loop', 'loop_device', 'mount_id', 'namespace_inode')
 ALLOCATION = dict(control=GIB, workload=11*GIB, archive=2*GIB, other=GIB)
 PREPARATION = dict(control=dict(seconds=300, cpu=1, memory=512*MIB, swap=0, pids=32, writes=1536*MIB),
@@ -58,6 +58,23 @@ def validate_plan(value):
     return value
 
 
+def delivery_contract(role):
+    modes=dict(prepare='prepare',keeper='serve',deadline='recover',observer='observe')
+    c.require(role in modes, 'fixed bootstrap role')
+    return dict(schema='meownero-helper-delivery/1', role=role, mode=modes[role],
+        transport='unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS',
+        property=['StandardInputFileDescriptor','h'], receiving_fd=0,
+        descriptors=['authority','sealed_context']+([] if role=='prepare' else ['retained_namespace']),
+        expectation='independently_authenticated_installed_unit_and_surviving_custodian',
+        bind=['task','attempt_id','role','mode','invocation_id','source','spec_sha256',
+            'contract_sha256','origin','deadlines','sender_credentials','sender_start',
+            'delivery_deadline','namespace_identity'],
+        one_use='separate_preparation_capability' if role=='prepare' else 'one_fresh_activation' if role=='keeper' else 'role_invocation',
+        restart='independently_authenticated_installed_unit_two_named_stored_FDs_recovery_only'
+            if role=='keeper' else 'new_role_bound_delivery_or_refuse',
+        actual_transport='UNBOUND_NOT_QUALIFIED')
+
+
 def units(value):
     """Typed systemd255 D-Bus properties, not unit-file string interpolation."""
     validate_plan(value)
@@ -66,18 +83,19 @@ def units(value):
     props = lambda **kw: [[key,kind,val] for key,(kind,val) in kw.items()]
     limits = props(CPUQuotaPerSecUSec=('t',1_950_000), MemoryMax=('t',4080*MIB),
                    MemorySwapMax=('t',0), TasksMax=('t',254))
-    rows = [(parent, limits), (work,props(Slice=('s',parent), CPUQuotaPerSecUSec=('t',1_900_000), MemoryMax=('t',3840*MIB),
+    rows = [(parent, limits), (work,props(CPUQuotaPerSecUSec=('t',1_900_000), MemoryMax=('t',3840*MIB),
             MemorySwapMax=('t',0), TasksMax=('t',224))),
-        (control,props(Slice=('s',parent), CPUQuotaPerSecUSec=('t',50_000), MemoryMax=('t',240*MIB), MemorySwapMax=('t',0), TasksMax=('t',30)))]
+        (control,props(CPUQuotaPerSecUSec=('t',50_000), MemoryMax=('t',240*MIB), MemorySwapMax=('t',0), TasksMax=('t',30)))]
     prefix = ['$BOUND_PYTHON','-B','$BOUND_HELPER']
     for role,mode in [('keeper','serve'),('deadline','recover'),('observer','observe'),('prepare','prepare')]:
-        argv = prefix+[mode,'--spec','$ROOT_OWNED_SPEC','--spec-sha256','$SPEC_SHA256']
+        argv = prefix+[mode,'--bootstrap-role',role,'--spec','$ROOT_OWNED_SPEC','--spec-sha256','$SPEC_SHA256']
         if role == 'deadline': argv += ['--deadline-owner']
         service = props(Type=('s','notify' if role=='keeper' else 'exec'), User=('s','0'), Group=('s','0'),
             Slice=('s',control), ExecStart=('a(sasb)',[['$BOUND_PYTHON',argv,False]]),
             NoNewPrivileges=('b',True), ProtectSystem=('s','strict'), PrivateTmp=('b',False),
             PrivateMounts=('b',True), RestrictAddressFamilies=('(bas)',[True,['AF_UNIX','AF_NETLINK']]),
             CapabilityBoundingSet=('t',2**21 | 2**1 | 2**0 | 2**7 | 2**6),
+            StandardInputFileDescriptor=('h','$BOOTSTRAP_'+role.upper()+'_RECEIVE_FD'),
             StandardOutput=('s','null'),StandardError=('s','null'), LimitCORE=('t',0),
             KillMode=('s','process'), TimeoutStopUSec=('t',300_000_000),
             ReadWritePaths=('as',['$C','$W','$O','$A']),
@@ -96,7 +114,8 @@ def units(value):
     return [dict(stage=('preparation_supervisor' if '-prepare.service' in name else
         'activation' if name.endswith('.service') else 'install'),bus='org.freedesktop.systemd1', path='/org/freedesktop/systemd1',
         interface='org.freedesktop.systemd1.Manager', member='StartTransientUnit',
-        signature='ssa(sv)a(sa(sv))', args=[name,'fail',properties,[]]) for name,properties in rows]
+        signature='ssa(sv)a(sa(sv))', args=[name,'fail',properties,[]],
+        delivery=delivery_contract(name.rsplit('-',1)[-1].removesuffix('.service')) if name.endswith('.service') else None) for name,properties in rows]
 
 
 def render(value):
@@ -117,7 +136,17 @@ def render(value):
     row('install','syscall','install_exact_owned_source',['openat(O_EXCL|O_NOFOLLOW)','$BOUND_HELPER_AND_SPEC_BYTES',
         'verify_hashes','fchown(0,0)','fchmod(0444)','fsync(file_and_directory)'],write=['O:installed_source_copies'],
         pre=['task_only_install_parent_fd','no_dependencies_or_shared_unit_changes'],identity=['installed_source_inodes_hashes'])
-    for call in units(value): row(call['stage'],'dbus',call['member'],call,write=['O:unit_metadata'],identity=['task_only_unit_name'])
+    for call in units(value):
+        if call['delivery'] is not None:
+            row(call['stage'],'syscall','bootstrap_delivery',call['delivery'],
+                pre=['authenticated_receiver_role_invocation_and_surviving_custodian',
+                    'delivery_pair_receiver_SO_PASSCRED_sender_without_autobind_CLOEXEC',
+                    'bounded_sendmsg_SCM_RIGHTS_exact_descriptor_order',
+                    'independent_one_use_preparation_or_first_serve_or_role_capability',
+                    'keeper_restart_uses_installed_recovery_never_packet_timeout_fallback'],
+                identity=['sender_PID_start','role_invocation','original_contract_deadlines',
+                    'receiving_endpoint_DBus_UnixFD_to_fd0'])
+        row(call['stage'],'dbus',call['member'],call,write=['O:unit_metadata'],identity=['task_only_unit_name'])
     row('control','syscall','unshare',['CLONE_NEWNS'],identity=['mount_namespace_inode'])
     row('control','argv','mount',['/usr/bin/mount','--make-rprivate','/'],pre=['private_namespace'])
     for phase,area,blocks in [('control','C',GIB//4096),('work','W',11*GIB//4096)]:

@@ -56,17 +56,21 @@ def receive_packet(endpoint, expected_credentials, deadline, *, fd_count=0, cloc
                                                socket.MSG_CMSG_CLOEXEC)
     received, credentials = [], []
     try:
+        rights_count=0;invalid_ancillary=False
         for level, kind, data in ancillary:
-            c.require(level == socket.SOL_SOCKET, 'unexpected ancillary level')
-            if kind == socket.SCM_RIGHTS:
+            if level == socket.SOL_SOCKET and kind == socket.SCM_RIGHTS:
+                rights_count+=1
                 rights = array.array('i')
                 rights.frombytes(data[:len(data)-len(data) % rights.itemsize])
                 received.extend(rights)
-            elif kind == socket.SCM_CREDENTIALS:
-                c.require(len(data) == CREDENTIAL.size, 'invalid credentials')
-                credentials.append(CREDENTIAL.unpack(data))
+                invalid_ancillary |= len(data)%rights.itemsize != 0
+            elif level == socket.SOL_SOCKET and kind == socket.SCM_CREDENTIALS:
+                if len(data)==CREDENTIAL.size:credentials.append(CREDENTIAL.unpack(data))
+                else:invalid_ancillary=True
             else:
-                raise ValueError('unexpected ancillary type')
+                invalid_ancillary=True
+        # Collect every installed FD before rejecting any ancillary item.
+        c.require(not invalid_ancillary and rights_count==(1 if fd_count else 0), 'exact ancillary records')
         c.require(not flags & (socket.MSG_TRUNC | socket.MSG_CTRUNC), 'truncated helper packet')
         c.require(credentials == [tuple(expected_credentials)] and len(received) == fd_count,
                   'helper peer or descriptor count differs')

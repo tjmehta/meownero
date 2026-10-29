@@ -360,8 +360,8 @@ class Client:
         return self.request('remove_owned',dict(container_id=cid),deadline=deadline)
 
 
-def authorize_mode(mode,plan,spec_sha256,authority,context,*,backend_table=QUALIFIED_OS):
-    """Hashes/JSON are assertions; inherited authenticated FDs supply authority."""
+def qualified_adapter(mode,plan,spec_sha256,*,backend_table=QUALIFIED_OS):
+    """Validate source/qualification before receiving any bootstrap input."""
     p.validate_plan(plan)
     c.require(c.digest(c.canonical(plan))==spec_sha256, 'exact canonical spec digest')
     c.require(mode in ('prepare','serve','recover','observe','dispose'), 'mutation mode')
@@ -377,8 +377,13 @@ def authorize_mode(mode,plan,spec_sha256,authority,context,*,backend_table=QUALI
             'exact nonnull source hash: '+key)
     digest=plan['authority']['bootstrap_sha256']
     c.require(digest in backend_table, 'no exact-source qualified OS adapter')
-    adapter=backend_table[digest]
-    if mode in ('serve','recover','observe') and authority is None and context is None:
+    return backend_table[digest]
+
+
+def authorize_mode(mode,plan,spec_sha256,authority,context,*,backend_table=QUALIFIED_OS):
+    """Hashes/JSON are assertions; inherited authenticated FDs supply authority."""
+    adapter=qualified_adapter(mode,plan,spec_sha256,backend_table=backend_table)
+    if mode=='serve' and authority is None and context is None:
         adapter.authenticate_restart(mode,plan,spec_sha256)
     else:
         c.require(type(authority) is int and type(context) is int and authority>2 and context>2 and authority!=context,
@@ -389,9 +394,10 @@ def authorize_mode(mode,plan,spec_sha256,authority,context,*,backend_table=QUALI
 
 def stored_fds(environment,*,pid,validate_lock,validate_namespace,setns):
     """Recover only from the two named PID1 FDs; never reopen a namespace path."""
+    names=environment.get('LISTEN_FDNAMES','').split(':')
     c.require(environment.get('LISTEN_PID')==str(pid) and environment.get('LISTEN_FDS')=='2' and
-        set(environment.get('LISTEN_FDNAMES','').split(':'))=={'original-lock','mount-namespace'}, 'exact named stored FDs')
-    named={name:3+i for i,name in enumerate(environment['LISTEN_FDNAMES'].split(':'))}
+        len(names)==2 and set(names)=={'original-lock','mount-namespace'}, 'exact named stored FDs')
+    named={name:3+i for i,name in enumerate(names)}
     lock,namespace=named['original-lock'],named['mount-namespace']
     validate_lock(lock);validate_namespace(namespace)
     setns(namespace,0x00020000) # CLONE_NEWNS; caller must have qualified access.
@@ -439,6 +445,8 @@ class LifecycleAdapter:
         self.boundary,self.clock=boundary,clock
         self.authenticated=None
         self.preparation_used=False
+        self.bootstrap_delivery=None
+        self.bootstrap_namespace=None
 
     def authenticate_inherited(self,mode,authority,context,plan,spec_sha256):
         receipt=self.boundary.authenticate_inherited(mode,authority,context,plan,spec_sha256)
@@ -459,15 +467,27 @@ class LifecycleAdapter:
     def enter(self,mode,plan,*,deadline_owner=False):
         c.require(self.authenticated is not None and self.authenticated['mode']==mode, 'inherited authority first')
         if mode=='prepare':return self.prepare(plan)
+        recovered=self.authenticated.get('recovery_only',False)
+        if mode=='serve' and recovered:
+            self.boundary.reenter_stored_namespace(stored_fds)
+        elif mode in ('serve','recover','observe'):
+            delivery=self.bootstrap_delivery
+            c.require(delivery is not None and self.bootstrap_namespace is not None,
+                'separate authenticated role-bound namespace delivery')
+            self.boundary.validate_retained_namespace(self.bootstrap_namespace,delivery)
+            self.boundary.enter_retained_namespace(self.bootstrap_namespace,0x00020000)
+        # All private C/W reads follow namespace validation and entry.
         context=self.boundary.read_existing_context()
         validate_contract(context['contract'])
+        if self.bootstrap_delivery is not None:
+            c.require(c.digest(c.canonical(context['contract']))==self.bootstrap_delivery['contract_sha256'],
+                'existing context must match delivered original contract')
         if mode=='serve':
-            recovered=self.authenticated.get('recovery_only',False) or context['recovered'] or not context['live_one_use_activation']
+            c.require(recovered or (context['recovered'] is False and context['live_one_use_activation'] is True),
+                'fresh activation capability required; missing state cannot rearm')
             dispatcher=Dispatcher(plan,context['contract'],self.boundary,clock=self.clock,recovered=recovered)
-            if recovered:self.boundary.reenter_stored_namespace(stored_fds)
             return self.boundary.serve_inherited_channels(dispatcher)
         if mode=='recover':
-            self.boundary.reenter_stored_namespace(stored_fds)
             if deadline_owner:
                 # Absolute CLOCK_MONOTONIC wait, never a new origin/timer on restart.
                 self.boundary.wait_until(context['contract']['deadlines']['work'])
