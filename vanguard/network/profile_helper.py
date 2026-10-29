@@ -171,7 +171,7 @@ def command_manifest(value, *, consumption):
         limitations=['A command list is not a helper server, authority, installation or host qualification.',
                      'Control preparation and workload allocation/formatting need the absent operator-bound server.',
                      'Retained control capacity and archive/preparation copies remain charged after workload cleanup.',
-                     'The legacy inner still refuses the unqualified atomic-create channel.'])
+                     'The v3 controller uses only the typed helper channel; host qualification remains absent.'])
 
 
 def unit_contract(value):
@@ -179,7 +179,7 @@ def unit_contract(value):
     validate_binding(value)
     return {'unit':'meownero-TJS2504-'+value['attempt_id']+'.service',
         'aggregate_slice':{'CPUQuota':'200%','MemoryMax':str(4*GIB),'MemorySwapMax':'0','TasksMax':'256'},
-        'keeper_service':{'FileDescriptorStoreMax':'1','FileDescriptorStorePreserve':'yes',
+        'keeper_service':{'FileDescriptorStoreMax':'2','FileDescriptorStorePreserve':'yes',
             'NotifyAccess':'main','Restart':'on-failure','RestartSec':'1', 'OOMPolicy':'continue',
             'MemoryMax':str(256*1024**2),'MemorySwapMax':'0','TasksMax':'32',
             'ProtectSystem':'strict','PrivateMounts':'yes','PrivateTmp':'no',

@@ -155,7 +155,7 @@ class SourceBoundaryTests(unittest.TestCase):
         with patch.object(runner.subprocess,'check_output',side_effect=['candidate\n','']), \
              patch.object(runner,'check_inputs',return_value={'platform_bootstrap_sha256':None}), \
              patch.object(runner,'api') as api,patch.object(runner.os,'open') as opened, \
-             patch.object(runner,'admission') as admission,patch.object(runner.sys,'argv',
+             patch.object(runner,'controller_create') as admission,patch.object(runner.sys,'argv',
                  ['run-profile.py','--grant-comment','11111111-1111-4111-8111-111111111111','--artifact-sha256','pending']):
             with self.assertRaisesRegex(ValueError,'bootstrap is not yet frozen'):runner.main()
             api.assert_not_called();opened.assert_not_called();admission.assert_not_called()

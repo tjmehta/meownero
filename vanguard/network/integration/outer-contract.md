@@ -1,5 +1,7 @@
 # Outer handoff, source lifecycle added October 27
 
+Current October 29 source packet: [coherent-repair.md](coherent-repair.md) supersedes earlier exhausted-pass, pending-answer and incompatible handoff descriptions below. The v3 typed dispatcher/controller and pure planned/observed storage packet are source-only; all live authority/facilities remain UNBOUND, bootstrap null and host/native NOT_RUN. Earlier evidence retains its original attribution.
+
 The [October 27 source-work decision](/TJS/issues/TJS-2504#comment-c78e1c2c-262f-41fb-9f1e-6e3ef52ca45d) supersedes the source-work stop below. Read [capability-checklist.md](capability-checklist.md) first for the guarantee/mechanism split, implemented lifecycle and exact qualification request. `profile_outer.py` now supplies the outer lifecycle source and disposable-file/failure-path tests; no qualified manager adapter or runtime route is supplied. `run-outer.py --check` reports the four null named inputs without host operations. Default invocation refuses. No bootstrap hash or source qualification table is filled. Historical revision 2 below retains the precise existing inner interface, not a mandate that every eventual mechanism be rootful/loop/ext4.
 
 ## Retained revision 2 inner interface and prior consultation

@@ -89,12 +89,12 @@ class GrantJournal:
     A fresh activation needs the operator's private live one-use channel as well
     as this exact reserved slot. Missing/corrupt state poisons the whole attempt.
     """
-    def __init__(self, fd, expected, *, recovered=False):
+    def __init__(self, fd, expected, *, recovered=False, owner_uid=0):
         self.fd, self.expected, self.recovered = fd, expected, recovered
         self.used = False
         info = os.fstat(fd)
         c.require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and
-                  info.st_uid == os.getuid() and stat.S_IMODE(info.st_mode) == 0o600 and
+                  info.st_uid == owner_uid and stat.S_IMODE(info.st_mode) == 0o600 and
                   0 < info.st_size <= 4096, 'private reserved manager slot required')
         c.require(fcntl.fcntl(fd, fcntl.F_GETFL) & os.O_ACCMODE == os.O_RDWR, 'writable manager slot')
         value = json.loads(os.pread(fd, info.st_size, 0))
@@ -123,7 +123,7 @@ class GrantJournal:
                     identity=list((os.fstat(self.fd).st_dev, os.fstat(self.fd).st_ino)))
 
 
-def store_lock(endpoint, lock_fd, *, deadline, clock=time.monotonic):
+def store_custody(endpoint, lock_fd, namespace_fd, *, deadline, readback, clock=time.monotonic):
     """systemd notify FDSTORE plus processing barrier. Not a custody witness.
 
     The root helper must separately inspect the actual PID1 descriptor and
@@ -132,8 +132,9 @@ def store_lock(endpoint, lock_fd, *, deadline, clock=time.monotonic):
     """
     c.require(deadline > clock(), 'FD-store send deadline')
     endpoint.settimeout(deadline-clock())
-    endpoint.sendmsg([b'FDSTORE=1\nFDNAME=original-lock\nFDPOLL=0'],
-                     [(socket.SOL_SOCKET, socket.SCM_RIGHTS, array.array('i', [lock_fd]))])
+    for name,fd in (('original-lock',lock_fd),('mount-namespace',namespace_fd)):
+        endpoint.sendmsg([('FDSTORE=1\nFDNAME='+name+'\nFDPOLL=0').encode()],
+            [(socket.SOL_SOCKET,socket.SCM_RIGHTS,array.array('i',[fd]))])
     read_fd, write_fd = os.pipe2(os.O_CLOEXEC | os.O_NONBLOCK)
     try:
         endpoint.sendmsg([b'BARRIER=1'],
@@ -148,6 +149,17 @@ def store_lock(endpoint, lock_fd, *, deadline, clock=time.monotonic):
         os.close(read_fd)
         if write_fd is not None:
             os.close(write_fd)
+
+    # A barrier acknowledges processing only. The independently authenticated
+    # readback must establish both stored identities and the same flock OFD.
+    witness=readback(lock_fd,namespace_fd,deadline)
+    c.require(witness['same_open_description'] is True and witness['namespace_retained'] is True,
+              'PID1 custody readback missing')
+    return witness
+
+
+def store_lock(endpoint,lock_fd,*,deadline,clock=time.monotonic):
+    raise ValueError('two named FDs and independent custody readback required')
 
 
 class AdmissionGate:
@@ -167,6 +179,7 @@ class AdmissionGate:
         check_peer()
         check_lock()
         before = self.clock()
+        c.require(before < request['build_deadline'], 'build deadline before observation')
         observed = observe()
         after = self.clock()
         at, started = observed['at'], observed['started_at']
@@ -186,74 +199,29 @@ class AdmissionGate:
                   'admission expired before create')
         # create is the helper's prevalidated exact operation, never supplied
         # executable text from the packet. A failed create still consumes it.
+        # Ownership is recorded even when create returns late or raises after
+        # creating a container. The caller's backend must persist its CID intent
+        # before sending create, and retain ambiguous outcomes for recovery.
+        self.create_started = True
+        self.container_id = None
+        self.uncertain = True
         cid = create()
-        return dict(observation=observed, container_id=cid)
+        self.container_id = cid
+        completed = self.clock()
+        c.require(type(cid) is str and len(cid) == 64 and
+                  all(x in '0123456789abcdef' for x in cid), 'exact owned CID')
+        c.require(completed < self.binding['build_deadline'] and
+                  completed <= started+5, 'create completion exceeded freshness/deadline')
+        self.uncertain = False
+        return dict(observation=observed, container_id=cid, completed_at=completed,
+                    create_sha256=self.binding['create_sha256'])
 
 
 class RootfulManager:
-    """Concrete Manager client over an inherited authenticated helper socket.
-
-    The helper's bound server source/commands are reviewed with this adapter.
-    Construction by the production entry point remains prohibited until its
-    exact bootstrap and real operator bindings are independently qualified.
-    """
-    def __init__(self, endpoint, credentials, bindings, *, check_peer, clock=time.monotonic):
-        c.require(endpoint.family == socket.AF_UNIX and
-                  endpoint.type & socket.SOCK_SEQPACKET == socket.SOCK_SEQPACKET and
-                  endpoint.getsockname() in ('', b'') and endpoint.getpeername() in ('', b''),
-                  'inherited unnamed seqpacket helper channel required')
-        self.endpoint, self.credentials, self.bindings = endpoint, credentials, bindings
-        self.check_peer, self.clock, self.sequence = check_peer, clock, 0
-        self.deadlines = None
-
-    def request(self, operation, payload, *, deadline, fds=()):
-        c.require(operation in ('retain','first_admission','quarantine','provision','recover','observe_after_exit'),
-                  'unknown helper operation')
-        self.check_peer()  # PID plus start ticks, not just a possibly reused PID.
-        sequence = self.sequence
-        self.sequence += 1
-        request = dict(schema='meownero-private-helper/1', operation=operation,
-                       sequence=sequence, bindings=self.bindings, deadline=deadline, payload=payload)
-        send_packet(self.endpoint, request, fds, deadline=deadline, clock=self.clock)
-        reply, _ = receive_packet(self.endpoint, self.credentials, deadline, clock=self.clock)
-        c.require(reply.get('request_sha256') == c.digest(c.canonical(request)) and
-                  reply.get('sequence') == sequence and reply.get('ok') is True,
-                  'helper refused or returned a mismatched reply')
-        return reply['result']
-
-    def retain(self, lock_fd, bindings, deadlines, *, deadline):
-        c.require(bindings == self.bindings and self.deadlines is None, 'one bound manager attempt')
-        self.deadlines = deadlines
-        result = self.request('retain', dict(deadlines=deadlines), deadline=deadline, fds=(lock_fd,))
-        c.require(result['same_description_in_pid1'] is True and result['watchdog_armed'] is True and
-                  result['original_lock'] == list(c.LOCK_ID), 'independent retained lock not witnessed')
-
-    def admit(self, number, *, deadline):
-        c.require(number == 1, 'second admission belongs to atomic helper create')
-        return self.request('first_admission', {}, deadline=deadline)
-
-    def quarantine(self, bindings, *, deadline):
-        c.require(bindings == self.bindings, 'quarantine bindings')
-        result = self.request('quarantine', {}, deadline=deadline)
-        c.require(result['state'] == 'QUARANTINED' and len(result['sha256']) == 64,
-                  'manager quarantine missing')
-        return result
-
-    def provision(self, ledger_fd, *, deadline):
-        return self.request('provision', {}, deadline=deadline, fds=(ledger_fd,))
-
-    def run_controller(self, context_fd, lock_fd, ledger_fd, second_admission, *, deadlines):
-        # Private helper runs the fixed controller, keeps the authenticated
-        # admission endpoint and performs create itself. The legacy inner has
-        # not yet been integrated with that protocol and still refuses.
-        # Refuse here as well, BEFORE requesting any controller/native launch.
-        raise ValueError('operator-bound atomic-create inner integration is not qualified')
-
-    def recover(self, *, deadline):
-        return self.request('recover', {}, deadline=deadline)
-
-    def complete_after_exit(self, result, *, deadline):
-        return self.request('observe_after_exit', dict(result=result), deadline=deadline)
+    """Compatibility name for the single v3 outer/helper protocol."""
+    def __new__(cls,*args,**kwargs):
+        from profile_dispatch import OuterManager
+        return OuterManager(*args,**kwargs)
 
 
 def source_status():
@@ -262,4 +230,4 @@ def source_status():
                 host_activation='UNAVAILABLE', launch_ready=False,
                 required_bindings=['privileged_operator', 'systemd_custody_readback',
                     'private_fixed_ext4', 'reserved_manager_slot', 'immutable_offline_image',
-                    'helper_server_and_inner_atomic_create_integration'])
+                    'qualified_OS_adapter_and_real_lifecycle_facilities'])

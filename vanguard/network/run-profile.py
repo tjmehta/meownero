@@ -22,6 +22,7 @@ import network as n
 import policy
 import profile_contract as c
 import profile_handoff as handoff
+import profile_dispatch as dispatcher
 
 spec = importlib.util.spec_from_file_location('genesis', c.HERE / 'run-genesis.py')
 g = importlib.util.module_from_spec(spec)
@@ -50,46 +51,28 @@ def command(argv, deadline, **kwargs):
     return subprocess.run(argv, check=True, timeout=left, **kwargs)
 
 
-def admission(docker, image, fs):
-    # The prior shared-socket observer cannot perform an enclosed second admission.
-    # The qualified outer must supply the exact live collision/admission channel.
-    raise ValueError('qualified second-admission channel is not supplied')
-
-
 def read_enclosure(value):
-    e = value['enclosure']
-    parent = e['cgroup_parent']
-    cg = Path('/sys/fs/cgroup' + parent)
-    c.require(c.no_alias(cg) == cg, 'cgroup path alias')
-    counters = {key:(cg/key).read_text().strip() for key in
-                ['cpu.max','memory.max','memory.swap.max','memory.oom.group','pids.max','cgroup.procs']}
-    daemon = e['docker_pid_identity']
-    c.stop_identity(daemon, pid_identity(daemon[0]))
-    c.enclosure(counters, group('self'), group(daemon[0]), parent)
-    root = c.no_alias(e['fixed_filesystem'])
-    c.require(root.is_mount() and root.stat().st_dev == e['filesystem_device'], 'fixed filesystem mount differs')
-    # Capacity is enforced by the filesystem, independent of the sampling interval.
-    usage = shutil.disk_usage(root)
-    c.require(usage.total <= c.LIMITS['disk_hard_bytes'], 'writable filesystem exceeds 15 GiB hard bound')
-    c.require(root.stat().st_uid == os.getuid() and root.stat().st_mode & 0o077 == 0, 'enclosure owner/mode')
-    docker = ['docker','--host',e['docker_socket']]
-    c.require(e['docker_socket'].startswith('unix://' + str(root) + '/'), 'Docker socket outside bounded root')
-    info = json.loads(subprocess.check_output(docker+['info','--format','{{json .}}'],text=True,timeout=10))
-    c.require(info['CgroupVersion'] == '2' and info['CgroupDriver'] == 'cgroupfs', 'requires cgroupfs v2')
-    c.require(Path(info['DockerRootDir']).is_relative_to(root), 'Docker writable store outside bounded root')
-    c.require({'cpu','memory','pids'} <= set((cg/'cgroup.controllers').read_text().split()) and
-              {'cpu','memory','pids'} <= set((cg/'cgroup.subtree_control').read_text().split()),
-              'aggregate controllers not active')
-    work = Path('/sys/fs/cgroup' + e['workload_cgroup'])
-    recovery = value['recovery']['pid_identity']
-    c.stop_identity(recovery,pid_identity(recovery[0]))
-    c.require(group(recovery[0]).startswith(parent+'/recovery/') and
-              group('self').startswith(e['workload_cgroup']+'/') and
-              group(daemon[0]).startswith(e['workload_cgroup']+'/'), 'recovery/work placement')
-    c.require((work/'memory.oom.group').read_text().strip() == '1', 'workload OOM grouping')
-    # Daemon/containerd/shims, mount topology, recovery immunity and image import
-    # still require a qualified outer implementation and its authoritative receipt.
-    return root,cg,docker
+    # The privileged daemon and its socket are never exposed to this uid1000
+    # controller. Host/mount/descendant observations belong to the helper.
+    e=value['enclosure']
+    c.require(os.getuid()==os.getgid()==1000, 'task controller uid/gid1000')
+    root=c.no_alias(e['work_directory'])
+    info=root.stat()
+    c.require(info.st_uid==info.st_gid==1000 and info.st_mode & 0o777==0o700 and
+        [info.st_dev,info.st_ino]==e['work_directory_identity'], 'owned writable user directory')
+    cg=Path('/sys/fs/cgroup'+e['workload_cgroup'])
+    c.require(group('self').startswith(e['workload_cgroup']+'/'), 'controller work placement')
+    c.require('docker_socket' not in e and 'docker_pid_identity' not in e, 'private helper boundary')
+    return root,cg
+
+
+def controller_create(helper, staging_sha256, *, deadline):
+    """The only create path: authenticated helper observes AND creates atomically."""
+    value=helper.observe_and_create(staging_sha256,deadline=deadline)
+    c.require(re.fullmatch('[0-9a-f]{64}',value['container_id']) and
+        value['observation']['started_at']<=value['completed_at']<=value['observation']['started_at']+5 and
+        value['completed_at']<deadline, 'exact timely atomic-create receipt')
+    return value
 
 
 def check_inputs(path):
@@ -126,6 +109,7 @@ def main():
     parser.add_argument('--context-fd',type=int)
     parser.add_argument('--lock-fd',type=int)
     parser.add_argument('--ledger-fd',type=int)
+    parser.add_argument('--helper-fd',type=int)
     args = parser.parse_args()
     os.umask(0o077)
     # Refuse consumed/random identifiers before any resource or native operation.
@@ -148,7 +132,14 @@ def main():
                       candidate_commit=commit,inputs_sha256=inputs_hash,
                       artifact_sha256=args.artifact_sha256,bootstrap_sha256=manifest['platform_bootstrap_sha256']),
         now=time.monotonic(),identity=pid_identity)
-    root,cg,docker = read_enclosure(context)
+    c.require(type(args.helper_fd) is int and args.helper_fd>2 and args.helper_fd not in
+        (args.context_fd,args.lock_fd,args.ledger_fd), 'distinct inherited helper channel')
+    import socket
+    endpoint=socket.socket(fileno=args.helper_fd)
+    peer=context['helper']['credentials']
+    def check_helper():c.stop_identity(context['helper']['pid_identity'],pid_identity(peer[0]))
+    helper=dispatcher.Client(endpoint,peer,context['helper']['contract'],check_peer=check_helper)
+    root,cg = read_enclosure(context)
     start = context['origin']
     build_deadline,runtime_deadline,end = start+3600,start+4200,start+4500
     out = root/'attempt'
@@ -165,31 +156,13 @@ def main():
     for sig in (signal.SIGINT,signal.SIGHUP,signal.SIGTERM): signal.signal(sig,interrupted)
     def sample():
         c.require(time.monotonic() < runtime_deadline, 'work deadline exhausted')
-        c.require(shutil.disk_usage(root.parent).free >= c.LIMITS['disk_abort_free'], 'backing disk below 4 GiB')
+        # The independent helper enforces backing admission/abort and all aggregate limits.
         counters = dict(line.split() for line in (cg/'cpu.stat').read_text().splitlines())
         c.require(int(counters['usage_usec']) <= 9000*1000000, 'aggregate CPU budget exhausted')
         events = dict(line.split() for line in (cg/'memory.events').read_text().splitlines())
         c.require(int(events['oom']) == int(events['oom_kill']) == 0, 'aggregate OOM')
         return dict(at=time.monotonic()-start,cpu=counters,memory_events=events,
                     memory_peak=int((cg/'memory.peak').read_text()),disk=shutil.disk_usage(root)._asdict())
-    def supervised(argv,deadline,log):
-        with log.open('wb') as stream:
-            proc = subprocess.Popen(argv,stdout=stream,stderr=subprocess.STDOUT,
-                env={'PATH':os.environ['PATH'],'HOME':str(out),'TMPDIR':str(out/'tmp'),
-                     'PYTHONDONTWRITEBYTECODE':'1','LC_ALL':'C'})
-            try:
-                while proc.poll() is None:
-                    c.require(time.monotonic() < deadline, 'phase deadline exhausted')
-                    observed = sample()
-                    with (public/'resource-samples.jsonl').open('a') as evidence:
-                        evidence.write(json.dumps(observed)+'\n')
-                    time.sleep(1)
-                c.require(proc.returncode == 0, 'phase failed; private diagnostics retained until cleanup')
-            finally:
-                if proc.poll() is None:
-                    proc.terminate()
-                    try: proc.wait(timeout=min(5,max(0.1,end-time.monotonic())))
-                    except subprocess.TimeoutExpired: proc.kill(); proc.wait(timeout=2)
     try:
         receipt['admission'] = context['first_admission']
         out.mkdir(mode=0o700);public.mkdir(mode=0o700);(out/'tmp').mkdir()
@@ -215,40 +188,20 @@ def main():
             c.require(c.tree_fingerprint(cargo/name)==manifest['cargo_inputs'][name],'copied Cargo inputs differ');sample()
         shutil.copytree(c.HERE,out/'harness',ignore=shutil.ignore_patterns('evidence','__pycache__','core-review'))
         shutil.copyfile(args.inputs,out/'inputs.json')
-        receipt['admission_before_create'] = admission(docker,manifest['builder_image'],root.parent)
-        c.check_lock(os.stat(c.LOCK,follow_symlinks=False),os.getuid())
-        image = json.loads(subprocess.check_output(docker+['image','inspect',manifest['builder_image']],text=True,timeout=10))[0]
-        c.require(image['Id'] == manifest['builder_image'] and image['Architecture'] == 'amd64' and image['Os'] == 'linux','builder identity')
-        create = docker+['create','--pull=never','--network=none','--read-only','--log-driver=none',
-          '--cgroup-parent='+context['enclosure']['workload_cgroup'],'--cap-drop=ALL','--security-opt=no-new-privileges',
-          '--cpus=2','--memory=3840m','--memory-swap=3840m','--pids-limit=224','--ulimit','core=0',
-          '--user',f'{os.getuid()}:{os.getgid()}','--label','meownero.task=TJS-2504',
-          '--cidfile',str(out/'container.cid'),
-          '--mount',f'type=bind,src={out},dst=/out',
-          '--mount',f'type=bind,src={out}/tmp,dst=/tmp',
-          '--mount',f'type=bind,src={public},dst=/public',
-          '--mount',f'type=bind,src={g.RUST},dst=/opt/rust,readonly',
-          '--env','PATH=/opt/rust/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          '--env','CARGO_HOME=/out/cargo-home','--env','CARGO_NET_OFFLINE=true','--env','CARGO_BUILD_JOBS=1',
-          '--env','HOME=/out/tmp','--env','LC_ALL=C','--env','PYTHONDONTWRITEBYTECODE=1',
-          manifest['builder_image'],'bash','/out/harness/integration/build.sh']
-        cid = command(create,build_deadline,capture_output=True,text=True).stdout.strip()
-        c.require(re.fullmatch('[0-9a-f]{64}',cid),'exact CID')
-        inspect = json.loads(subprocess.check_output(docker+['inspect',cid],text=True,timeout=10))[0]
-        hc=inspect['HostConfig']
-        c.require(hc['CgroupParent'] == context['enclosure']['workload_cgroup'] and hc['NetworkMode']=='none' and
-                  hc['ReadonlyRootfs'] and hc['LogConfig']['Type']=='none' and not hc['PortBindings'] and
-                  hc['Memory']==hc['MemorySwap']==3840*1024**2 and hc['NanoCpus']==2_000_000_000 and hc['PidsLimit']==224,
-                  'created containment mismatch')
+        helper.request('inspect_image',{},deadline=build_deadline)
+        staged=c.digest(c.canonical(c.tree_fingerprint(out)))
+        created=controller_create(helper,staged,deadline=build_deadline)
+        receipt['atomic_create']=created
+        cid=created['container_id']
         receipt['container_id']=cid
-        supervised(docker+['start','-a',cid],build_deadline,out/'build-console.log')
-        state=json.loads(subprocess.check_output(docker+['inspect',cid],text=True,timeout=5))[0]['State']
-        c.require(state['ExitCode']==0 and not state['OOMKilled'],'build failed or OOM')
+        state=helper.start_and_wait(cid,'build',deadline=build_deadline)
+        c.require(state['exit_code']==0 and state['oom_killed'] is False, 'build failed or OOM')
         build=c.json_file(public/'build.json');rows['build.json']=build
         # Restart this exact container with a frozen entrypoint that dispatches by sentinel.
         (out/'BUILD_COMPLETE').write_text('runtime\n')
         c.require(time.monotonic()+600 <= runtime_deadline,'full 600s runtime allowance unavailable')
-        supervised(docker+['start','-a',cid],min(time.monotonic()+600,runtime_deadline),out/'runtime-console.log')
+        state=helper.start_and_wait(cid,'runtime',deadline=min(time.monotonic()+600,runtime_deadline))
+        c.require(state['exit_code']==0 and state['oom_killed'] is False, 'runtime failed or OOM')
         for name in c.REQUIRED:
             if name not in ('build.json','resources.json','cleanup.json'):
                 rows[name]=c.json_file(public/name)
@@ -262,20 +215,12 @@ def main():
         for sig in (signal.SIGINT,signal.SIGHUP,signal.SIGTERM): signal.signal(sig,signal.SIG_IGN)
         cleanup={key:dict(status='NOT_RUN') for key in c.REQUIRED['cleanup.json']}
         try:
-            if cid is None and (out/'container.cid').exists():
-                cid=(out/'container.cid').read_text().strip()
             if cid:
-                c.require(re.fullmatch('[0-9a-f]{64}',cid),'cleanup CID')
-                inspected=json.loads(subprocess.check_output(docker+['inspect',cid],text=True,timeout=5))[0]
-                c.require(inspected['Config']['Labels'].get('meownero.task')=='TJS-2504' and
-                          any(m.get('Source')==str(out) for m in inspected['Mounts']),'CID not owned')
-                command(docker+['rm','-f',cid],end,capture_output=True)
-                probe=subprocess.run(docker+['inspect',cid],capture_output=True,text=True,timeout=5)
-                c.require(probe.returncode != 0 and 'no such' in probe.stderr.lower(),'container absence unconfirmed')
+                # Unknown or late create outcomes remain in the root helper's
+                # durable ownership journal even if no CID reply reached us.
+                removed=helper.remove_owned(cid,deadline=end)
+                c.require(removed['absent'] is True, 'owned CID absence unconfirmed')
                 cleanup['owned_cid_absent']=dict(status='PASS')
-                # CID absence alone says nothing about daemon/helper/PID absence.
-            # The outer preserves allowlisted evidence, then removes private staging,
-            # daemon/helpers, filesystem and backing image within the cleanup reserve.
         except Exception as error:
             receipt['cleanup_failure_class']=type(error).__name__
             receipt['result']='FAIL'

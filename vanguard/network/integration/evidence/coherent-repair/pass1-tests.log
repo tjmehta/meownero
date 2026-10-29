@@ -1,0 +1,264 @@
+EEEEEE............E....E....................................................EEEEEEEEEEEEEEEEE........................E........E.........
+======================================================================
+ERROR: test_changed_cargo_input_refused (test_admission.ReuseBoundary.test_changed_cargo_input_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_admission.py", line 20, in setUp
+    self.tmp = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='admission-refusal-')
+                                               ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_changed_original_source_refused (test_admission.ReuseBoundary.test_changed_original_source_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_admission.py", line 20, in setUp
+    self.tmp = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='admission-refusal-')
+                                               ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_changed_prior_binary_refused (test_admission.ReuseBoundary.test_changed_prior_binary_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_admission.py", line 20, in setUp
+    self.tmp = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='admission-refusal-')
+                                               ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_changed_receipt_refused (test_admission.ReuseBoundary.test_changed_receipt_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_admission.py", line 20, in setUp
+    self.tmp = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='admission-refusal-')
+                                               ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_extra_header_refused (test_admission.ReuseBoundary.test_extra_header_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_admission.py", line 20, in setUp
+    self.tmp = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='admission-refusal-')
+                                               ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_hash_bound_large_receipt_and_valid_export (test_admission.ReuseBoundary.test_hash_bound_large_receipt_and_valid_export)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_admission.py", line 20, in setUp
+    self.tmp = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='admission-refusal-')
+                                               ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_provision_before_durable_consumption_refuses_and_never_rearms (test_dispatch.DispatchTests.test_provision_before_durable_consumption_refuses_and_never_rearms)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_dispatch.py", line 130, in test_provision_before_durable_consumption_refuses_and_never_rearms
+    with self.assertRaises(ValueError):self.request('provision',fds=(self.dirfd,))
+                                       ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_dispatch.py", line 106, in request
+    return self.dispatch.dispatch(request,fds,channel=channel)['result']
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_dispatch.py", line 146, in dispatch
+    proposed={**self.contract,'ledger_sha256':c.digest(os.pread(fds[0],65537,0))}
+                                                       ~~~~~~~~^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory
+
+======================================================================
+ERROR: test_work_cleanup_retains_C_and_observer_waits_for_own_exit (test_dispatch.DispatchTests.test_work_cleanup_retains_C_and_observer_waits_for_own_exit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_dispatch.py", line 222, in test_work_cleanup_retains_C_and_observer_waits_for_own_exit
+    with self.assertRaises(ValueError):h.validate_completion(observed,BINDINGS)
+                                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_handoff.py", line 125, in validate_completion
+    c.require(value['schema']=='meownero-outer-completion/3' and value['bindings']==bindings,
+              ~~~~~^^^^^^^^^^
+KeyError: 'schema'
+
+======================================================================
+ERROR: test_actual_source_overlay_is_scoped_and_reversible (test_network.Boundaries.test_actual_source_overlay_is_scoped_and_reversible)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_bootstrap_adverse_boundaries (test_network.Boundaries.test_bootstrap_adverse_boundaries)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_bootstrap_port_aliases_are_refused_before_writing (test_network.Boundaries.test_bootstrap_port_aliases_are_refused_before_writing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_changed_consensus_identity_and_assurance_are_refused (test_network.Boundaries.test_changed_consensus_identity_and_assurance_are_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_changed_genesis_and_stale_pre_recipe_profile_are_refused (test_network.Boundaries.test_changed_genesis_and_stale_pre_recipe_profile_are_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_consultation_direction_does_not_accept_genesis_or_launch (test_network.Boundaries.test_consultation_direction_does_not_accept_genesis_or_launch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_data_directory_isolation_and_no_overwrite (test_network.Boundaries.test_data_directory_isolation_and_no_overwrite)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_exact_profile_copy_and_key_reordering (test_network.Boundaries.test_exact_profile_copy_and_key_reordering)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_foreign_profiles_are_refused_before_preparation (test_network.Boundaries.test_foreign_profiles_are_refused_before_preparation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_foreign_source_tree_is_refused (test_network.Boundaries.test_foreign_source_tree_is_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_malformed_and_oversized_json (test_network.Boundaries.test_malformed_and_oversized_json)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_native_derived_admission_patch_scope_reversibility_and_no_overwrite (test_network.Boundaries.test_native_derived_admission_patch_scope_reversibility_and_no_overwrite)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_native_inputs_patch_scope_reversibility_and_no_overwrite (test_network.Boundaries.test_native_inputs_patch_scope_reversibility_and_no_overwrite)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_primary_and_recovery_recipes_use_only_selected_peer (test_network.Boundaries.test_primary_and_recovery_recipes_use_only_selected_peer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_readiness_and_launch_cannot_be_enabled (test_network.Boundaries.test_readiness_and_launch_cannot_be_enabled)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_self_peer_and_rpc_port_are_refused (test_network.Boundaries.test_self_peer_and_rpc_port_are_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: test_superseded_v17_profile_and_bootstrap_digest_are_refused (test_network.Boundaries.test_superseded_v17_profile_and_bootstrap_digest_are_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_network.py", line 19, in setUp
+    self.temporary = tempfile.TemporaryDirectory(dir=SCRATCH, prefix='network-check-')
+                                                     ^^^^^^^
+NameError: name 'SCRATCH' is not defined
+
+======================================================================
+ERROR: setUpClass (test_policy.PolicyBoundary)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_policy.py", line 47, in setUpClass
+    cls.originals = p.checked_source(SOURCE)
+                                     ^^^^^^
+NameError: name 'SOURCE' is not defined
+
+======================================================================
+ERROR: test_missing_bootstrap_refuses_before_any_resource_operation (test_profile.SourceBoundaryTests.test_missing_bootstrap_refuses_before_any_resource_operation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_profile.py", line 158, in test_missing_bootstrap_refuses_before_any_resource_operation
+    patch.object(runner,'admission') as admission,patch.object(runner.sys,'argv',
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.7/lib/python3.14/unittest/mock.py", line 1510, in __enter__
+    original, local = self.get_original()
+                      ~~~~~~~~~~~~~~~~~^^
+  File "/home/linuxbrew/.linuxbrew/Cellar/python@3.14/3.14.7/lib/python3.14/unittest/mock.py", line 1480, in get_original
+    raise AttributeError(
+        "%s does not have the attribute %r" % (target, name)
+    )
+AttributeError: <module 'profile_runner_test' from '<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/run-profile.py'> does not have the attribute 'admission'
+
+----------------------------------------------------------------------
+Ran 135 tests in 0.386s
+
+FAILED (errors=27)

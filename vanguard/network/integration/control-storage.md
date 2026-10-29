@@ -1,5 +1,7 @@
 # Persistent control allocation: source fit/refusal handoff
 
+Current October 29 source packet: [coherent-repair.md](coherent-repair.md) supersedes earlier exhausted-pass, pending-answer and incompatible handoff descriptions below. The v3 typed dispatcher/controller and pure planned/observed storage packet are source-only; all live authority/facilities remain UNBOUND, bootstrap null and host/native NOT_RUN. Earlier evidence retains its original attribution.
+
 The [returned operator handback](/TJS/issues/TJS-2504#comment-0129b9cb-6539-43d3-85c7-c3dec9a9db8a), board author `local-board`, October 29, 2026, acknowledges read-only parent pickup. It permits P2P to reconcile section 15's source fit/refusal work, while stopping at absent concrete helper/operator prerequisites. Run `9c5348fd-e6d1-4e0c-a645-dd8009a3bd5b` uses that narrow continuation from `ea2f2b0`. It does not reinterpret the negative authority answer as a host grant or permission to invent a server interface.
 
 Observable source outcomes:

@@ -75,61 +75,61 @@ class JournalTests(unittest.TestCase):
         self.temp.cleanup()
 
     def test_quarantine_survives_local_ledger_deletion(self):
-        journal = manager.GrantJournal(self.fd, EXPECTED)
+        journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
         receipt = journal.quarantine(BINDINGS, activation=TOKEN, deadline=200, clock=lambda:100)
         local = self.root/'local-ledger'
         local.write_text('CONSUMED');local.unlink()
         self.assertEqual(receipt['state'], 'QUARANTINED')
-        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED)
+        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
 
     def test_workload_cleanup_cannot_rearm_persistent_control(self):
         # Real disposable removal, not a host mount/crash-survival observation.
         work = self.root/'work'
         work.mkdir()
         (work/'local-copy').write_text('CONSUMED')
-        journal = manager.GrantJournal(self.fd, EXPECTED)
+        journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
         journal.quarantine(BINDINGS, activation=TOKEN, deadline=200, clock=lambda:100)
         before = self.path.read_bytes()
         identity = (self.path.stat().st_dev,self.path.stat().st_ino)
         shutil.rmtree(work)
         self.assertEqual(self.path.read_bytes(),before)
         self.assertEqual((self.path.stat().st_dev,self.path.stat().st_ino),identity)
-        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED)
+        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
 
     def test_local_corruption_cannot_rearm_manager(self):
-        journal = manager.GrantJournal(self.fd, EXPECTED)
+        journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
         journal.quarantine(BINDINGS, activation=TOKEN, deadline=200, clock=lambda:100)
         (self.root/'local-ledger').write_text('{corrupt')
         with self.assertRaises(ValueError): journal.quarantine(BINDINGS, activation=TOKEN,deadline=200)
-        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED)
+        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
 
     def test_recovered_reserved_slot_is_recovery_only(self):
-        journal = manager.GrantJournal(self.fd, EXPECTED, recovered=True)
+        journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid(), recovered=True)
         with self.assertRaises(ValueError): journal.quarantine(BINDINGS,activation=TOKEN,deadline=200,clock=lambda:100)
 
     def test_fsync_failure_never_retries(self):
-        journal = manager.GrantJournal(self.fd, EXPECTED)
+        journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
         with patch.object(os, 'fsync', side_effect=OSError('fixture sync failure')):
             with self.assertRaises(OSError): journal.quarantine(BINDINGS,activation=TOKEN,deadline=200,clock=lambda:100)
         with self.assertRaises(ValueError): journal.quarantine(BINDINGS,activation=TOKEN,deadline=200,clock=lambda:100)
-        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED)
+        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
 
     def test_crash_before_write_cannot_cold_resume(self):
-        journal = manager.GrantJournal(self.fd, EXPECTED)
+        journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
         with patch.object(manager.outer, 'write_all', side_effect=OSError('fixture prewrite crash')):
             with self.assertRaises(OSError): journal.quarantine(BINDINGS,activation=TOKEN,deadline=200,clock=lambda:100)
-        recovered = manager.GrantJournal(self.fd, EXPECTED, recovered=True)
+        recovered = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid(), recovered=True)
         with self.assertRaises(ValueError): recovered.quarantine(BINDINGS,activation=TOKEN,deadline=200,clock=lambda:100)
 
     def test_hash_in_slot_is_not_activation_secret(self):
-        journal = manager.GrantJournal(self.fd, EXPECTED)
+        journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
         with self.assertRaises(ValueError):
             journal.quarantine(BINDINGS, activation=EXPECTED['activation_sha256'],deadline=200,clock=lambda:100)
         with self.assertRaises(ValueError): journal.quarantine(BINDINGS,activation=TOKEN,deadline=200,clock=lambda:100)
 
     def test_changed_grant_and_expiry_refuse(self):
         for change in ('grant','deadline'):
-            journal = manager.GrantJournal(self.fd, EXPECTED)
+            journal = manager.GrantJournal(self.fd, EXPECTED, owner_uid=os.getuid())
             with self.assertRaises(ValueError):
                 journal.quarantine({**BINDINGS,'grant_id':'foreign'} if change=='grant' else BINDINGS,
                     activation=TOKEN,deadline=99 if change=='deadline' else 200,clock=lambda:100)
@@ -137,7 +137,7 @@ class JournalTests(unittest.TestCase):
     def test_missing_corrupt_alias_slot_refuses(self):
         for raw in (b'', b'{corrupt', c.canonical({'state':'RESERVED'})):
             os.ftruncate(self.fd,0);os.pwrite(self.fd,raw,0)
-            with self.assertRaises((ValueError,KeyError)): manager.GrantJournal(self.fd,EXPECTED)
+            with self.assertRaises((ValueError,KeyError)): manager.GrantJournal(self.fd,EXPECTED,owner_uid=os.getuid())
         self.assertFalse((self.root/'missing').exists())
 
 
@@ -202,15 +202,9 @@ class ChannelTests(unittest.TestCase):
         # No systemd was contacted. A fixture listener holding the barrier FD
         # does not acknowledge custody or make a notification a host witness.
 
-    def test_client_rejects_wrong_bound_reply(self):
-        client=manager.RootfulManager(self.left,self.creds,BINDINGS,check_peer=lambda:None)
-        manager.send_packet(self.right,dict(sequence=0,ok=True,request_sha256='wrong',result={}))
-        with self.assertRaises(ValueError):client.request('retain',{},deadline=time.monotonic()+2)
-
-    def test_client_never_launches_unqualified_controller(self):
-        client=manager.RootfulManager(self.left,self.creds,BINDINGS,check_peer=lambda:None)
-        with self.assertRaises(ValueError):client.run_controller(3,4,5,None,deadlines={})
-        self.assertEqual(client.sequence,0)
+    def test_legacy_incomplete_client_contract_refuses(self):
+        with self.assertRaises(ValueError):
+            manager.RootfulManager(self.left,self.creds,BINDINGS,check_peer=lambda:None)
 
 
 class AdmissionTests(unittest.TestCase):

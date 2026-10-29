@@ -1,0 +1,65 @@
+{
+  "result": "PASS_FOCUSED_SOURCE_CONTRACTS_ONLY",
+  "source_tests": 114,
+  "records": 48,
+  "units": 7,
+  "source_spec_canonical_sha256": "b2ee5e464ba49ac991c011ed5f2082ff7bf75857ae00f400b8a1b148ae3a56df",
+  "file_sha256": {
+    "source-plan.json": "2397899891e835495fb9281a9b620288f9cac2a2bbd69cf8397313502a6c4d78",
+    "lifecycle-packet.json": "b593bc5dc0a564681889d5c9cac002e1b9b5cc2545296be3c9230029c9184475",
+    "unit-manifest.json": "2c8be42330b64f83aa67f1ff8841633b01f296f90859da018fa161d78c514f95",
+    "manager-source-manifest.json": "8732469083e751bd16f3fa19941a1dad6a344583497cae59523b4b564638b844",
+    "inputs.json": "141aa4c290c1cb92b171705ecc7747bc9c55d4313a415bd82afefbe4890ef241",
+    "completion.schema.json": "85dcf66115087e574a161ac654bbb4c3f545ec21676e0d5964486541e96a8ebf"
+  },
+  "initial_discovery": {
+    "tests": 135,
+    "errors": 27,
+    "preexisting_CLI_suites_without_arguments": 24,
+    "changed_fixture_errors": 3,
+    "evidence": "pass1-tests.log"
+  },
+  "intermediate_focused": {
+    "tests": 112,
+    "failures": 1,
+    "evidence": "pass2-tests.log"
+  },
+  "final_focused": {
+    "tests": 114,
+    "failures": 0,
+    "errors": 0,
+    "evidence": "correction-final-tests.log"
+  },
+  "modeled_only": [
+    "death",
+    "OOM",
+    "PID1 custody",
+    "namespace reentry",
+    "hard storage/write meters",
+    "daemon/container/process boundaries"
+  ],
+  "real_disposable": [
+    "seqpacket sender credentials",
+    "FD close/identity",
+    "flock open description duplication",
+    "file/directory fsync",
+    "one-use durable journal and local receipt",
+    "outer/client/dispatcher sequencing"
+  ],
+  "source_binding_check": "PASS",
+  "baseline_inputs": "UNCHANGED",
+  "platform_bootstrap_sha256": null,
+  "qualified_bootstraps": 0,
+  "qualified_OS_adapters": 0,
+  "capabilities": {
+    "manager": null,
+    "fixed_disk": null,
+    "offline_image": null,
+    "second_admission": null
+  },
+  "operator": "UNBOUND",
+  "host_activation": "NOT_RUN",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "next_owner": "Meownero lead for Platform exact-source command-packet review; no host qualification implied"
+}

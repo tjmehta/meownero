@@ -24,7 +24,8 @@ EXTRA=['src/p2p/p2p_protocol_defs.h','src/p2p/net_node.inl',
        'src/rpc/CMakeLists.txt','src/p2p/net_node.cpp','tests/unit_tests/base58.cpp','tests/functional_tests/wallet.py']
 CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.py','profile-integration.py',
       'freeze-profile.py','test_profile.py','profile_outer.py','run-outer.py','test_outer.py',
-      'profile_manager.py','profile_helper.py','test_manager.py']
+      'profile_manager.py','profile_helper.py','test_manager.py','profile_packet.py',
+      'profile_dispatch.py','profile-helper.py','test_dispatch.py']
 
 
 def source_inputs():
@@ -43,6 +44,7 @@ def source_inputs():
         implementation_authorization_comment='cf81ba5e-fcb5-44fe-ae6b-5537f57484bd',
         outer_source_authorization_comment='c78e1c2c-262f-41fb-9f1e-6e3ef52ca45d',
         selected_manager_source_authorization_comment='a5ec64fd-3da7-4044-8863-795ef7a6541f',
+        coherent_repair_authorization_comment='157efebb-bef3-4039-9a79-739c38935024',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],

@@ -28,8 +28,8 @@ class Manager(Protocol):
     arms crash/OOM/timeout recovery and post-exit observation, and accounts for
     its own bounded overhead. A lost acknowledgement cannot discard custody.
     provision contains ALL setup, image import and later task writes/processes.
-    run_controller uses only inherited descriptors, services the private second
-    admission callback immediately before create, and enforces all phase limits.
+    run_controller uses only inherited descriptors, services the typed atomic observation/create
+    operation through the helper-private channel, and enforces all phase limits.
     recover handles partial setup too; failures retain manager lock custody.
     complete_after_exit queues final observation AFTER this launcher exits. It
     must not release custody while descendants, mounts or cleanup are unresolved.
@@ -38,7 +38,7 @@ class Manager(Protocol):
     def admit(self, number, *, deadline): ...
     def quarantine(self, bindings, *, deadline): ...
     def provision(self, ledger_fd, *, deadline): ...
-    def run_controller(self, context_fd, lock_fd, ledger_fd, second_admission, *, deadlines): ...
+    def run_controller(self, context_fd, lock_fd, ledger_fd, *, deadlines): ...
     def recover(self, *, deadline): ...
     def complete_after_exit(self, result, *, deadline): ...
 
@@ -89,17 +89,19 @@ def write_all(fd, raw):
         view = view[written:]
 
 
-def consume(directory, bindings, origin, consumed_at):
+def consume(directory_fd, bindings, origin, consumed_at, *, identity, first_started_at):
     """Durable one-use receipt. Keep any partial file forever; never retry it.
 
-    The pre-existing private ledger directory and its bounded storage allocation
+    The pre-existing private ledger directory descriptor and its bounded storage allocation
     belong to the qualified manager. This function creates no directories.
     """
     grant_id = bindings['grant_id']
     c.require(bool(re.fullmatch(r'[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}', grant_id))
               and grant_id not in c.CONSUMED, 'new exact ledger grant id required')
-    directory = c.no_alias(directory)
-    parent = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+    c.require(type(directory_fd) is int and directory_fd>2, 'inherited ledger directory FD required')
+    from profile_dispatch import directory_fd as validate_directory
+    validate_directory(directory_fd,identity)
+    parent = os.dup(directory_fd)
     fd = readonly = None
     try:
         info = os.fstat(parent)
@@ -108,8 +110,8 @@ def consume(directory, bindings, origin, consumed_at):
         name = grant_id+'.json'
         fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC,
                      0o600, dir_fd=parent)
-        value = dict(schema='meownero-consumed-ledger/2', state='CONSUMED', bindings=bindings,
-                     origin=origin, consumed_at=consumed_at)
+        value = dict(schema='meownero-consumed-ledger/3', state='CONSUMED', bindings=bindings,
+                     origin=origin, consumed_at=consumed_at, first_started_at=first_started_at)
         write_all(fd, c.canonical(value))
         os.fsync(fd)
         os.fsync(parent)
@@ -152,9 +154,10 @@ class Outer:
     def __init__(self, manager: Manager, *, clock=time.monotonic):
         self.manager, self.clock = manager, clock
 
-    def run(self, bindings, ledger_directory):
-        origin = self.clock()
-        c.require(type(origin) in (int, float) and math.isfinite(origin), 'finite monotonic origin')
+    def run(self, bindings, ledger_directory_fd, *, ledger_identity):
+        origin = getattr(self.manager,'contract',{}).get('origin',self.clock())
+        c.require(type(origin) in (int,float) and math.isfinite(origin) and origin<=self.clock()<origin+3600,
+                  'original finite monotonic origin/build deadline')
         deadlines = dict(build=origin+3600, work=origin+4200, end=origin+4500)
         lock_fd = acquire_original()
         ledger_fd = context_fd = None
@@ -169,48 +172,42 @@ class Outer:
             check_original(lock_fd)
             first = self.fresh_admission(1, lock_fd, origin, deadlines['build'])
             consumed_at = self.clock()
-            c.require(first['at'] <= consumed_at <= first['at']+5, 'stale first admission at consumption')
+            c.require(first['at'] <= consumed_at <= first['started_at']+5, 'stale first admission at consumption')
             # Includes partial file/fsync failure: the attempt never resumes.
             result['result'] = 'FAIL'
             # Persist the independent manager's failed-grant obligation BEFORE
             # local consumption can be uncertain. Missing/corrupt local ledgers
             # can never restore eligibility. A restart may only recover/observe.
-            quarantine = self.manager.quarantine(bindings, deadline=min(deadlines['build'], first['at']+5))
+            quarantine = self.manager.quarantine(bindings, deadline=min(deadlines['build'], first['started_at']+5))
             c.require(quarantine['state'] == 'QUARANTINED' and
                       bool(re.fullmatch('[0-9a-f]{64}', quarantine['sha256'])),
                       'independent durable manager quarantine required')
-            c.require(self.clock() <= first['at']+5, 'first admission expired during manager quarantine')
-            ledger_fd, ledger = consume(ledger_directory, bindings, origin, consumed_at)
-            c.require(self.clock() <= first['at']+5, 'first admission expired during durable consumption')
+            c.require(self.clock() <= first['started_at']+5, 'first admission expired during manager quarantine')
+            ledger_fd, ledger = consume(ledger_directory_fd, bindings, origin, consumed_at,
+                identity=ledger_identity, first_started_at=first['started_at'])
+            c.require(self.clock() <= first['started_at']+5, 'first admission expired during durable consumption')
+            durable_consumed_at=self.clock()
             enclosure = self.manager.provision(ledger_fd, deadline=deadlines['build'])
             check_original(lock_fd)
             provisioned = self.clock()
             context = dict(schema='meownero-private-handoff/2', bindings=bindings,
-                origin=origin, consumed_at=consumed_at, provisioned_at=provisioned,
+                origin=origin, consumed_at=consumed_at, durable_consumed_at=durable_consumed_at, provisioned_at=provisioned,
                 first_admission=first, deadlines=deadlines,
                 ledger=dict(identity=list((os.fstat(ledger_fd).st_dev, os.fstat(ledger_fd).st_ino)),
                             sha256=c.digest(c.canonical(ledger))), **enclosure)
             h.validate_context(context, ledger, bindings=bindings, now=provisioned)
             context_fd = sealed_context(context)
-            second = []
-
-            def admit_second():
-                c.require(not second, 'second admission is one-shot; no polling or retry')
-                second.append(None)  # A failed observation also consumes the request.
-                observation = self.fresh_admission(2, lock_fd, origin, deadlines['build'])
-                second[0] = observation
-                return observation
-
-            # The qualified manager must bind this callback to the private
-            # pre-create channel. The existing inner still refuses that channel.
-            outcome = self.manager.run_controller(context_fd, lock_fd, ledger_fd, admit_second,
-                                                  deadlines=deadlines)
-            c.require(len(second) == 1 and second[0] is not None, 'second fresh admission missing')
+            outcome = self.manager.run_controller(context_fd, lock_fd, ledger_fd, deadlines=deadlines)
+            second = outcome['create_receipt']
+            c.require(second['count']==1 and second['completed_at']<deadlines['build'] and
+                second['observation']['started_at']<=second['completed_at']<=second['observation']['started_at']+5,
+                'one atomic helper observation/create receipt required')
+            c.admit(second['observation']['snapshot'])
             c.require(self.clock() <= deadlines['work'], 'work timeout; cleanup reserve retained')
             c.require(outcome['exit_code'] == 0, 'controller failed')
             rows = h.inner_rows(outcome['rows'])
             result.update(result='PENDING_MANAGER_COMPLETION', rows=rows,
-                          native_execution='UNACCEPTED_CONTROLLER_OUTPUT', second_admission=second[0])
+                          native_execution='UNACCEPTED_CONTROLLER_OUTPUT', second_admission=second)
         except Exception as error:
             # Error messages may contain credentials or raw process output.
             result['failure_class'] = type(error).__name__
@@ -247,9 +244,10 @@ class Outer:
         check_original(lock_fd)
         value = self.manager.admit(number, deadline=deadline)
         after = self.clock()
-        at = value['at']
+        at, started = value['at'], value['started_at']
         c.require(type(at) in (int, float) and math.isfinite(at)
-                  and before <= at <= after < deadline and after-at <= 5,
+                  and type(started) in (int,float) and math.isfinite(started)
+                  and before <= started <= at <= after < deadline and after-started <= 5,
                   'fresh attempt-bound admission required')
         c.admit(value['snapshot'])
         check_original(lock_fd)

@@ -1,0 +1,230 @@
+{
+  "schema": "meownero-source-plan/3",
+  "authorization_comment": "157efebb-bef3-4039-9a79-739c38935024",
+  "attempt_id": null,
+  "source": {
+    "commit": null,
+    "inputs_sha256": null,
+    "artifact_sha256": null,
+    "helper_sha256": null
+  },
+  "authority": {
+    "operator": null,
+    "authentication_route": null,
+    "preparation_authority": null,
+    "runtime_grant": null,
+    "platform_review": null,
+    "core_review": null,
+    "security_review": null,
+    "bootstrap_sha256": null,
+    "archive_sha256": null,
+    "archive_provenance": null,
+    "producer_receipt": null,
+    "tool_versions": null,
+    "namespace_access": null,
+    "pid1_custody_readback": null,
+    "hard_write_enforcement": null,
+    "overhead_qualification": null,
+    "lifecycle_authority": null,
+    "retained_control_custodian": null,
+    "disposition_authority": null
+  },
+  "original_lock": [
+    66306,
+    657237
+  ],
+  "limits": {
+    "wall_seconds": 4500,
+    "build_seconds": 3600,
+    "runtime_seconds": 600,
+    "cleanup_seconds": 300,
+    "cpus": 2,
+    "cpu_seconds": 9000,
+    "memory_bytes": 4294967296,
+    "swap_bytes": 0,
+    "pids": 256,
+    "compile_jobs": 1,
+    "memory_floor": 5368709120,
+    "disk_floor": 21474836480,
+    "disk_hard_bytes": 16106127360,
+    "disk_abort_free": 4294967296,
+    "load_1_5_15_max": [
+      6.0,
+      6.0,
+      6.0
+    ],
+    "non_genesis_blocks": 0,
+    "transactions": 0,
+    "attempts": 1
+  },
+  "allocation": {
+    "control": 1073741824,
+    "workload": 11811160064,
+    "archive": 2147483648,
+    "other": 1073741824
+  },
+  "preparation": {
+    "control": {
+      "seconds": 300,
+      "cpu": 1,
+      "memory": 536870912,
+      "swap": 0,
+      "pids": 32,
+      "writes": 1610612736
+    },
+    "archive": {
+      "seconds": 900,
+      "cpu": 1,
+      "memory": 1073741824,
+      "swap": 0,
+      "pids": 64,
+      "writes": 2147483648,
+      "output": 2147483648
+    },
+    "other_writes": 536870912,
+    "seconds": 1200,
+    "occupied": 4294967296,
+    "writes": 4294967296
+  },
+  "planned_storage": {
+    "control": {
+      "bytes": 1073741824,
+      "backing_owner": [
+        0,
+        0
+      ],
+      "backing_mode": 384,
+      "mount_owner": [
+        0,
+        0
+      ],
+      "mount_mode": 448,
+      "observed": {
+        "backing_inode": null,
+        "filesystem_device": null,
+        "loop": null,
+        "loop_device": null,
+        "mount_id": null,
+        "namespace_inode": null
+      }
+    },
+    "workload": {
+      "bytes": 11811160064,
+      "backing_owner": [
+        0,
+        0
+      ],
+      "backing_mode": 384,
+      "mount_owner": [
+        0,
+        0
+      ],
+      "mount_mode": 448,
+      "observed": {
+        "backing_inode": null,
+        "filesystem_device": null,
+        "loop": null,
+        "loop_device": null,
+        "mount_id": null,
+        "namespace_inode": null
+      }
+    },
+    "archive": {
+      "bytes": 2147483648,
+      "backing_owner": [
+        0,
+        0
+      ],
+      "backing_mode": 384,
+      "mount_owner": [
+        0,
+        0
+      ],
+      "mount_mode": 448,
+      "observed": {
+        "backing_inode": null,
+        "filesystem_device": null,
+        "loop": null,
+        "loop_device": null,
+        "mount_id": null,
+        "namespace_inode": null
+      }
+    },
+    "other": {
+      "bytes": 1073741824,
+      "backing_owner": [
+        0,
+        0
+      ],
+      "backing_mode": 384,
+      "mount_owner": [
+        0,
+        0
+      ],
+      "mount_mode": 448,
+      "observed": {
+        "backing_inode": null,
+        "filesystem_device": null,
+        "loop": null,
+        "loop_device": null,
+        "mount_id": null,
+        "namespace_inode": null
+      }
+    }
+  },
+  "ownership": {
+    "keeper": [
+      0,
+      0
+    ],
+    "deadline": [
+      0,
+      0
+    ],
+    "observer": [
+      0,
+      0
+    ],
+    "manager_slot": [
+      0,
+      0
+    ],
+    "outer": [
+      1000,
+      1000
+    ],
+    "controller": [
+      1000,
+      1000
+    ],
+    "native": [
+      1000,
+      1000
+    ],
+    "ledger_directory": [
+      1000,
+      1000
+    ],
+    "workload_directory": [
+      1000,
+      1000
+    ]
+  },
+  "retained_control": {
+    "mount_disposition": "normal_unmount_after_export_then_namespace_close",
+    "storage": "retain_backing_slot_tombstone_and_archive",
+    "expiry": "explicit_separate_disposition_only"
+  },
+  "overhead": {
+    "reserved_memory": 16777216,
+    "reserved_pids": 2,
+    "reserved_cpu_per_second": 50000,
+    "qualified": null,
+    "control_memory": 251658240,
+    "control_pids": 30,
+    "work_memory": 4026531840,
+    "work_pids": 224
+  },
+  "native_execution": "NOT_RUN",
+  "launch_ready": false
+}

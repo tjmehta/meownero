@@ -1,5 +1,7 @@
 Current storage scope: [control-storage.md](control-storage.md) supersedes any single-filesystem description. Independent persistent control, reduced workload capacity, charged archive/preparation, and actual operator bindings remain required. The source validator supplies no host qualification.
 
+Current October 29 source packet: [coherent-repair.md](coherent-repair.md) supersedes earlier exhausted-pass, pending-answer and incompatible handoff descriptions below. The v3 typed dispatcher/controller and pure planned/observed storage packet are source-only; all live authority/facilities remain UNBOUND, bootstrap null and host/native NOT_RUN. Earlier evidence retains its original attribution.
+
 # Outer launcher source and capability qualification
 
 **October 29 continuation:** [manager-contract.md](manager-contract.md) records the newly selected fixed-ext4/rootful adapter source, helper command interface, failure fixtures and remaining server/inner integration. The outer now requires independent manager quarantine before local ledger creation. The four real bindings remain null, the bootstrap remains unqualified, and no host activation is available. The earlier qualification below remains historical evidence; a new operator-bound exact artifact must be qualified before execution.

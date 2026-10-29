@@ -45,7 +45,7 @@ class ModeledManager:
     def admit(self, number, *, deadline):
         self.calls.append('admit'+str(number))
         self.now += 1
-        return dict(at=self.now, snapshot=dict(available_memory_bytes=5*1024**3,
+        return dict(at=self.now, started_at=self.now, snapshot=dict(available_memory_bytes=5*1024**3,
             free_disk_bytes=20*1024**3, load=[0, 0, 0], native_processes=[], native_containers=[]))
 
     def quarantine(self, bindings, *, deadline):
@@ -66,13 +66,13 @@ class ModeledManager:
                     recovery=dict(owner=c.PLATFORM, implementation_sha256=BINDINGS['bootstrap_sha256'],
                                   kill_scope='/modeled/work'))
 
-    def run_controller(self, context_fd, lock_fd, ledger_fd, second_admission, *, deadlines):
+    def run_controller(self, context_fd, lock_fd, ledger_fd, *, deadlines):
         self.calls.append('controller')
         assert fcntl.fcntl(context_fd, fcntl.F_GET_SEALS) & outer.SEALS == outer.SEALS
-        if self.second_mode != 'missing':
-            second_admission()
-        if self.second_mode == 'repeat':
-            second_admission()
+        observation=self.admit(2,deadline=deadlines['build'])
+        c.admit(observation['snapshot'])
+        created=dict(count=0 if self.second_mode=='missing' else 2 if self.second_mode=='repeat' else 1,
+            observation=observation,completed_at=self.now)
         if self.failure:
             raise self.failure
         self.now = deadlines['work'] if self.second_mode != 'late' else deadlines['work']+1
@@ -81,7 +81,7 @@ class ModeledManager:
         for row in rows.values():
             for key in row:
                 row[key] = dict(status='PASS')
-        return dict(exit_code=0, rows=rows)
+        return dict(exit_code=0, rows=rows,create_receipt=created)
 
     def recover(self, *, deadline):
         self.calls.append('recover')
@@ -108,15 +108,18 @@ class OuterTests(unittest.TestCase):
         self.patch.start()
         self.manager = ModeledManager()
         self.subject = outer.Outer(self.manager, clock=lambda: self.manager.now)
+        self.directory_fd=os.open(self.root,os.O_RDONLY|os.O_DIRECTORY|os.O_CLOEXEC)
+        self.directory_identity=[self.root.stat().st_dev,self.root.stat().st_ino]
 
     def tearDown(self):
         if self.manager.keeper is not None:
             os.close(self.manager.keeper)
+        os.close(self.directory_fd)
         self.patch.stop()
         self.temp.cleanup()
 
     def run_outer(self):
-        return self.subject.run(BINDINGS, self.root)
+        return self.subject.run(BINDINGS,self.directory_fd,ledger_identity=self.directory_identity)
 
     def assert_keeper_blocks_new_open(self):
         self.manager.assert_held()
@@ -242,6 +245,7 @@ class OuterTests(unittest.TestCase):
                 os.close(self.manager.keeper)
                 self.manager.keeper = None
                 # A new test-only grant is necessary. The consumed file stays.
+                os.close(self.directory_fd)
                 self.temp.cleanup()
                 self.patch.stop()
                 self.setUp()
@@ -261,6 +265,7 @@ class OuterTests(unittest.TestCase):
                 self.assert_keeper_blocks_new_open()
                 os.close(self.manager.keeper)
                 self.manager.keeper = None
+                os.close(self.directory_fd)
                 self.temp.cleanup()
                 self.patch.stop()
                 self.setUp()
@@ -335,7 +340,7 @@ class OuterTests(unittest.TestCase):
             calls.append(os.fstat(fd).st_mode)
             real(fd)
         with patch.object(outer.os, 'fsync', side_effect=fsync):
-            fd, value = outer.consume(self.root, BINDINGS, 100, 101)
+            fd, value = outer.consume(self.directory_fd,BINDINGS,100,101,identity=self.directory_identity,first_started_at=100)
         try:
             import stat
             self.assertTrue(stat.S_ISREG(calls[0]))
@@ -366,9 +371,10 @@ class OuterTests(unittest.TestCase):
                 self.assertTrue((self.root/(GRANT+'.json')).exists())
                 self.assertNotIn('provision', self.manager.calls)
                 with self.assertRaises(FileExistsError):
-                    outer.consume(self.root, BINDINGS, 100, 101)
+                    outer.consume(self.directory_fd,BINDINGS,100,101,identity=self.directory_identity,first_started_at=100)
                 os.close(self.manager.keeper)
                 self.manager.keeper = None
+                os.close(self.directory_fd)
                 self.temp.cleanup()
                 self.patch.stop()
                 self.setUp()

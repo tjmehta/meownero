@@ -14,11 +14,11 @@ import profile_handoff as h
 def fixture():
     binding = dict(grant_id='new',grant_sha256='g',candidate_commit='c',inputs_sha256='i',
                    artifact_sha256='a',bootstrap_sha256='b'*64)
-    ledger = dict(schema='meownero-consumed-ledger/2',state='CONSUMED',bindings=binding,
-                  origin=100,consumed_at=102)
+    ledger = dict(schema='meownero-consumed-ledger/3',state='CONSUMED',bindings=binding,
+                  origin=100,consumed_at=102,first_started_at=101)
     context = dict(schema='meownero-private-handoff/2',bindings=binding,
-        origin=100,consumed_at=102,provisioned_at=103,
-        first_admission=dict(at=101,snapshot=dict(available_memory_bytes=5*1024**3,
+        origin=100,consumed_at=102,durable_consumed_at=102,provisioned_at=103,
+        first_admission=dict(at=101,started_at=101,snapshot=dict(available_memory_bytes=5*1024**3,
             free_disk_bytes=20*1024**3,load=[0,0,0],native_processes=[],native_containers=[])),
         ledger=dict(sha256=c.digest(c.canonical(ledger))),
         deadlines=dict(build=3700,work=4300,end=4600),
@@ -42,7 +42,7 @@ class HandoffTests(unittest.TestCase):
         with patch.object(runner.subprocess,'check_output',side_effect=['candidate\n','']), \
              patch.object(runner,'check_inputs',return_value={'platform_bootstrap_sha256':'b'*64}), \
              patch.object(runner,'api') as api,patch.object(runner,'read_enclosure') as enclosure, \
-             patch.object(runner.os,'open') as opened,patch.object(runner,'admission') as admission, \
+             patch.object(runner.os,'open') as opened,patch.object(runner,'controller_create') as admission, \
              patch.object(runner.sys,'argv',['run-profile.py','--grant-comment',
                  '11111111-1111-4111-8111-111111111111','--artifact-sha256','pending']):
             with self.assertRaisesRegex(ValueError,'no qualified outer implementation'):runner.main()
@@ -78,7 +78,7 @@ class HandoffTests(unittest.TestCase):
 
     def test_stale_admission_and_changed_reserve_are_refused(self):
         value,ledger,binding=fixture()
-        value['consumed_at']=110;value['provisioned_at']=111
+        value['consumed_at']=110;value['durable_consumed_at']=110;value['provisioned_at']=111
         ledger['consumed_at']=110;value['ledger']['sha256']=c.digest(c.canonical(ledger))
         with self.assertRaisesRegex(ValueError,'stale'):self.check(value,ledger,binding,112)
         value,ledger,binding=fixture();value['deadlines']['work']+=1
@@ -131,23 +131,28 @@ class HandoffTests(unittest.TestCase):
         rows=c.empty_rows()
         for name in ('resources.json','cleanup.json'):
             for key in rows[name]:rows[name][key]={'status':'PASS'}
-        value=dict(schema='meownero-outer-completion/2',bindings=bindings,
-            original_lock_identity=list(c.LOCK_ID),observer=dict(outside_attempt=True,pid_identity=[99,'1']),
-            tracked_pid_identities=[[1,'1']],origin=100,recovery_exit_at=4400,observed_at=4401,
-            aggregate_cpu_usec=100,recursive_population=dict(work=0,recovery=0),
-            active_controllers=['cpu','memory','pids'],live_owned_pid_identities=[],remaining_cids=[],
-            remaining_mounts=[],remaining_loops=[],remaining_daemon_helpers=[],active_owned_units=[],
-            open_lock_descriptors=[],original_lock_release_witness='independent_nonblocking_acquire_then_close',
-            rows=rows)
+        value=dict(schema='meownero-outer-completion/3',bindings=bindings,
+            original_lock_identity=list(c.LOCK_ID), origin=100,observed_at=4405,
+            exits={name:dict(at=4400+i,pid_identity=[i+1,'1']) for i,name in
+                enumerate(('workload','cleanup','keeper','observer'))},
+            lifecycle=dict(task_scoped=True,authenticated=True,pid_identity=[99,'1'],observer_exit_witness=True),
+            result='COMPLETE_AFTER_OBSERVER_EXIT',aggregate_cpu_usec=100,memory_peak=100,pids_peak=10,
+            occupied_bytes=1024,overhead_qualified=True,tail_charged=True,
+            recursive_population=dict(work=0,control=0),live_owned_pid_identities=[],remaining_cids=[],
+            remaining_work_mounts=[],remaining_work_loops=[],remaining_daemon_helpers=[],active_owned_units=[],
+            open_lock_descriptors=[],pid1_stored_fd_names=[],
+            retained_control=dict(slot_retained=True,archive_retained=True,
+                mount_disposition='normal_unmounted_namespace_closed',custodian='MODELED',
+                disposition='separate_explicit_authority',grant_state='QUARANTINED_NEVER_REARM',identity_sha256='a'*64),
+            original_lock_release_witness='independent_nonblocking_acquire_then_close',rows=rows)
         h.validate_completion(value,bindings)
-        for key,bad in [('remaining_daemon_helpers',[[1,'1']]),('remaining_mounts',['owned']),
-                        ('remaining_loops',['owned']),('remaining_cids',['owned']),
+        for key,bad in [('remaining_daemon_helpers',[[1,'1']]),('remaining_work_mounts',['owned']),
+                        ('remaining_work_loops',['owned']),('remaining_cids',['owned']),
                         ('live_owned_pid_identities',[[1,'1']]),('active_owned_units',['owned']),
                         ('open_lock_descriptors',[3]),('original_lock_release_witness','inner_assertion'),
-                        ('recursive_population',dict(work=1,recovery=0)),
-                        ('active_controllers',['cpu']),('observed_at',4399),('observed_at',4601),
-                        ('aggregate_cpu_usec',9000*1000000+1),
-                        ('observer',dict(outside_attempt=True,pid_identity=[1,'1']))]:
+                        ('recursive_population',dict(work=1,control=0)),('tail_charged',False),
+                        ('observed_at',4399),('observed_at',4601),('aggregate_cpu_usec',9000*1000000+1),
+                        ('lifecycle',dict(task_scoped=True,authenticated=True,pid_identity=[4,'1'],observer_exit_witness=True))]:
             with self.subTest(key=key),self.assertRaises(ValueError):
                 h.validate_completion(dict(value,**{key:bad}),bindings)
         value['rows']['cleanup.json']['lock_released']['status']='NOT_RUN'

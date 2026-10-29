@@ -47,16 +47,17 @@ def lock_witness(text, owner_pid):
 def validate_context(value, ledger, *, bindings, now):
     c.require(value['schema'] == 'meownero-private-handoff/2', 'handoff schema')
     c.require(value['bindings'] == bindings and ledger['bindings'] == bindings, 'handoff binding mismatch')
-    c.require(ledger['schema'] == 'meownero-consumed-ledger/2' and ledger['state'] == 'CONSUMED',
+    c.require(ledger['schema'] == 'meownero-consumed-ledger/3' and ledger['state'] == 'CONSUMED',
               'existing CONSUMED receipt required')
     c.require(value['ledger']['sha256'] == c.digest(c.canonical(ledger)), 'ledger receipt digest')
     origin, consumed, provisioned = [value[key] for key in ('origin','consumed_at','provisioned_at')]
     first = value['first_admission']
-    times = [origin, first['at'], consumed, provisioned, now]
+    durable=value['durable_consumed_at']
+    times = [origin, first['started_at'], first['at'], consumed, durable, provisioned, now]
     c.require(all(type(t) in (int,float) and math.isfinite(t) for t in times), 'invalid monotonic times')
-    c.require(origin <= first['at'] <= consumed <= provisioned <= now < origin+3600,
+    c.require(origin <= first['started_at'] <= first['at'] <= consumed <= durable <= provisioned <= now < origin+3600,
               'admission/consumption/provisioning order or build deadline')
-    c.require(consumed-first['at'] <= 5, 'stale first admission')
+    c.require(durable-first['started_at'] <= 5 and ledger['first_started_at']==first['started_at'], 'stale first admission')
     c.admit(first['snapshot'])
     c.require(ledger['origin'] == origin and ledger['consumed_at'] == consumed, 'ledger time binding')
     c.require(value['deadlines'] == dict(build=origin+3600,work=origin+4200,end=origin+4500),
@@ -69,7 +70,7 @@ def validate_context(value, ledger, *, bindings, now):
               'independent recovery implementation binding')
     parent = value['enclosure']['cgroup_parent']
     c.require(parent.startswith('/') and parent != '/' and '..' not in Path(parent).parts and
-              value['enclosure']['workload_cgroup'] == parent+'/work', 'owned workload subtree')
+              value['enclosure']['workload_cgroup'].startswith(parent+'/'), 'owned workload subtree')
     c.require(value['recovery']['kill_scope'] == value['enclosure']['workload_cgroup'] and
               value['enclosure']['cgroup_parent'] != value['recovery']['kill_scope'],
               'emergency kill must preserve recovery sibling')
@@ -117,29 +118,41 @@ def inner_rows(rows):
 
 
 def validate_completion(value, bindings):
-    """Validate proposed outer evidence shape, never attest its host observations.
+    """External lifecycle evidence, AFTER the charged observer exits.
 
-    The unimplemented qualified manager must collect these after recovery exit.
-    A passing modeled receipt is not accepted as runtime evidence by this runner.
+    Retained C/A are expected custody, not W cleanup residue. This validates
+    evidence shape only; source fixtures cannot establish actual host events.
     """
-    c.require(value['schema'] == 'meownero-outer-completion/2' and value['bindings'] == bindings,
+    c.require(value.get('schema')=='meownero-outer-completion/3' and value['bindings']==bindings,
               'outer completion binding')
-    c.require(value['original_lock_identity'] == list(c.LOCK_ID), 'final original-inode identity')
-    c.require(value['observer']['outside_attempt'] is True and
-              value['observer']['pid_identity'] not in value['tracked_pid_identities'],
-              'completion observer must survive the attempt')
-    c.require(value['origin'] <= value['recovery_exit_at'] <= value['observed_at'] <= value['origin']+4500,
-              'completion must follow recovery exit within total deadline')
-    c.require(0 <= value['aggregate_cpu_usec'] <= 9000*1000000, 'final aggregate CPU budget')
-    c.require(value['recursive_population'] == {'work':0,'recovery':0} and
-              value['active_controllers'] == ['cpu','memory','pids'], 'final population/controllers')
-    for key in ('live_owned_pid_identities','remaining_cids','remaining_mounts','remaining_loops',
-                'remaining_daemon_helpers','active_owned_units','open_lock_descriptors'):
-        c.require(value[key] == [], 'owned cleanup incomplete: '+key)
-    c.require(value['original_lock_release_witness'] == 'independent_nonblocking_acquire_then_close',
-              'independent final lock release witness absent')
+    c.require(value['original_lock_identity']==list(c.LOCK_ID), 'final original inode')
+    phases=value['exits']
+    c.require(set(phases)=={'workload','cleanup','keeper','observer'}, 'separate exit phases')
+    times=[value['origin']]+[phases[key]['at'] for key in ('workload','cleanup','keeper','observer')]+[value['observed_at']]
+    c.require(all(type(x) in (int,float) and math.isfinite(x) for x in times) and
+        times==sorted(times) and times[-1]<=value['origin']+4500, 'all exits and charged tail within total deadline')
+    lifecycle=value['lifecycle']
+    identities=[phases[key]['pid_identity'] for key in phases]
+    c.require(lifecycle['task_scoped'] is True and lifecycle['authenticated'] is True and
+        lifecycle['pid_identity'] not in identities and lifecycle['observer_exit_witness'] is True,
+        'external lifecycle authority must establish observer exit')
+    c.require(value['result']=='COMPLETE_AFTER_OBSERVER_EXIT' and
+        value['recursive_population']==dict(work=0,control=0) and value['tail_charged'] is True,
+        'observer cannot attest its own zero population/tail')
+    c.require(0<=value['aggregate_cpu_usec']<=9000*1000000 and
+        0<=value['memory_peak']<=4*1024**3 and 0<=value['pids_peak']<=256 and
+        0<=value['occupied_bytes']<=15*1024**3 and value['overhead_qualified'] is True, 'aggregate metrics including host tail')
+    for key in ('remaining_work_mounts','remaining_work_loops','remaining_cids','live_owned_pid_identities',
+                'remaining_daemon_helpers','active_owned_units','open_lock_descriptors','pid1_stored_fd_names'):
+        c.require(value[key]==[], 'owned cleanup incomplete: '+key)
+    retained=value['retained_control']
+    c.require(retained['slot_retained'] is True and retained['archive_retained'] is True and
+        retained['mount_disposition']=='normal_unmounted_namespace_closed' and
+        retained['custodian'] and retained['disposition']=='separate_explicit_authority' and
+        retained['grant_state']=='QUARANTINED_NEVER_REARM' and
+        bool(re.fullmatch('[0-9a-f]{64}',retained['identity_sha256'])), 'retained C/archive custody')
+    c.require(value['original_lock_release_witness']=='independent_nonblocking_acquire_then_close', 'lock release witness')
     for name in ('resources.json','cleanup.json'):
-        c.require(set(value['rows'][name]) == set(c.REQUIRED[name]) and
-                  all(row['status'] == 'PASS' for row in value['rows'][name].values()),
-                  'outer resource/cleanup witness incomplete')
+        c.require(set(value['rows'][name])==set(c.REQUIRED[name]) and
+            all(row['status']=='PASS' for row in value['rows'][name].values()), 'outer rows incomplete')
     return value
