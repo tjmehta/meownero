@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import socket
+import shutil
 import tempfile
 import time
 import unittest
@@ -21,20 +22,43 @@ EXPECTED = dict(attempt_id='1'*32, bindings=BINDINGS, activation_sha256=c.digest
 
 
 def binding():
-    root = '/synthetic/TJS2504/fixed'
-    return dict(schema='meownero-rootful-helper-binding/1', attempt_id='1'*32,
+    root, control_root = '/synthetic/TJS2504/work', '/synthetic/TJS2504/control'
+    value = dict(schema='meownero-rootful-helper-binding/2', attempt_id='1'*32, bindings=BINDINGS,
         operator='SYNTHETIC_NO_OPERATOR', authority_comment='SYNTHETIC_NO_AUTHORITY',
         systemd_version='255-documentation-only', helper_source_sha256='f'*64,
         preparation_receipt='SYNTHETIC_NOT_PREPARED', original_lock=list(c.LOCK_ID), limits=c.LIMITS,
         disk=dict(mount=root,backing='/synthetic/TJS2504/fixed.img',backing_filesystem='ext4',
-            backing_device=66306,backing_inode=123,fully_allocated=True,length=15*helper.GIB,
-            allocated_bytes=15*helper.GIB,filesystem='ext4',filesystem_capacity=14*helper.GIB,
-            nlink=1,loop='/dev/loop99',loop_device=999,mount_id=1234,namespace_inode=5678),
-        writes={x:root+'/'+x for x in ('manager','ledger','log','export','docker','exec','tmp','private','attempt','public')},
+            backing_device=66306,backing_inode=123,fully_allocated=True,length=11*helper.GIB,
+            allocated_bytes=11*helper.GIB,filesystem='ext4',filesystem_capacity=10*helper.GIB,
+            filesystem_device=999,nlink=1,loop='/dev/loop99',loop_device=999,mount_id=1234,namespace_inode=5678,
+            owner_uid=0,owner_gid=0,backing_mode=0o600,mount_mode=0o700,identity_mutable=False),
+        allocation=dict(control=helper.GIB,workload=11*helper.GIB,archive=2*helper.GIB,other=helper.GIB),
+        control_reserves=dict(state=64*1024**2,log=256*1024**2,export=512*1024**2,overhead=192*1024**2),
+        writes={x:(control_root if x in helper.CONTROL_PATHS else root)+'/'+x
+                for x in helper.CONTROL_PATHS | helper.WORK_PATHS},
         writable_escape=False, shared_sockets_visible=False,
         offline_image=dict(image_id=manager.IMAGE, architecture='amd64',os='linux',read_only=True,immutable=True,
             path='/synthetic/immutable/builder.tar',length=1,device=1,inode=2,provenance='SYNTHETIC',sha256='9'*64),
         cgroup_parent='/synthetic/owned/meownero-TJS2504-'+'1'*32, existing_delegation=True)
+    value['control_disk'] = {**value['disk'], 'mount':control_root, 'backing':'/synthetic/TJS2504/control.img',
+        'backing_inode':124,'length':helper.GIB,'allocated_bytes':helper.GIB,
+        'filesystem_capacity':900*1024**2,'filesystem_device':998,'loop':'/dev/loop98','loop_device':998,'mount_id':1235,
+        'writable_by_workload':False,'prepared_before_first_admission':True,
+        'custodian':'SYNTHETIC_NO_CUSTODIAN','custody_receipt':'SYNTHETIC_NOT_PREPARED',
+        'retention':'explicit_authorized_disposition_only','restart':'recovery_only',
+        'missing_or_corrupt':'quarantine_never_rearm'}
+    value['control_identity_sha256'] = c.digest(c.canonical(value['control_disk']))
+    return value
+
+
+def consumption(value):
+    return dict(attempt_id=value['attempt_id'],bindings=value['bindings'],
+                control_identity_sha256=value.get('control_identity_sha256'),first_admission='PASS',
+                manager_state='QUARANTINED',local_state='CONSUMED')
+
+
+def command_plan(value):
+    return helper.command_manifest(value,consumption=consumption(value))
 
 
 class JournalTests(unittest.TestCase):
@@ -56,6 +80,20 @@ class JournalTests(unittest.TestCase):
         local = self.root/'local-ledger'
         local.write_text('CONSUMED');local.unlink()
         self.assertEqual(receipt['state'], 'QUARANTINED')
+        with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED)
+
+    def test_workload_cleanup_cannot_rearm_persistent_control(self):
+        # Real disposable removal, not a host mount/crash-survival observation.
+        work = self.root/'work'
+        work.mkdir()
+        (work/'local-copy').write_text('CONSUMED')
+        journal = manager.GrantJournal(self.fd, EXPECTED)
+        journal.quarantine(BINDINGS, activation=TOKEN, deadline=200, clock=lambda:100)
+        before = self.path.read_bytes()
+        identity = (self.path.stat().st_dev,self.path.stat().st_ino)
+        shutil.rmtree(work)
+        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual((self.path.stat().st_dev,self.path.stat().st_ino),identity)
         with self.assertRaises(ValueError): manager.GrantJournal(self.fd, EXPECTED)
 
     def test_local_corruption_cannot_rearm_manager(self):
@@ -238,7 +276,7 @@ class AdmissionTests(unittest.TestCase):
 
 class HelperManifestTests(unittest.TestCase):
     def test_command_plan_keeps_fixed_paths_and_limits(self):
-        value=binding();plan=helper.command_manifest(value)
+        value=binding();plan=command_plan(value)
         self.assertEqual(plan['cgroup_writes']['/sys/fs/cgroup'+value['cgroup_parent']+'/memory.max'],str(4*helper.GIB))
         self.assertTrue(plan['source_only'])
         self.assertEqual(plan['import_image'][-1],value['offline_image']['path'])
@@ -250,16 +288,71 @@ class HelperManifestTests(unittest.TestCase):
             ('backing_filesystem','xfs'),('backing_device',1),('nlink',2),('namespace_inode',0)]
         for key,value in mutations:
             candidate=binding();candidate['disk'][key]=value
-            with self.subTest(key=key),self.assertRaises(ValueError):helper.command_manifest(candidate)
+            with self.subTest(key=key),self.assertRaises(ValueError):command_plan(candidate)
         for key in binding()['writes']:
             candidate=binding();candidate['writes'][key]='/escape'
-            with self.subTest(write=key),self.assertRaises(ValueError):helper.command_manifest(candidate)
+            with self.subTest(write=key),self.assertRaises(ValueError):command_plan(candidate)
 
     def test_image_identity_missing_provenance_or_mutability_refuse(self):
         for key,value in [('image_id','sha256:'+'0'*64),('sha256',''),('provenance',''),
                           ('read_only',False),('immutable',False),('architecture','arm64')]:
             candidate=binding();candidate['offline_image'][key]=value
-            with self.subTest(key=key),self.assertRaises(ValueError):helper.command_manifest(candidate)
+            with self.subTest(key=key),self.assertRaises(ValueError):command_plan(candidate)
+
+    def test_proposed_split_charges_retained_control_and_workload_cleanup_only(self):
+        value=binding();plan=command_plan(value)
+        self.assertEqual(plan['storage_fit']['charged_bytes'],15*helper.GIB)
+        self.assertEqual(plan['storage_fit']['residual_workload_bytes'],11*helper.GIB)
+        self.assertEqual(plan['control_retained'],value['control_disk'])
+        self.assertNotIn(value['control_disk']['mount'],json.dumps(plan['cleanup']))
+        self.assertNotIn(value['control_disk']['loop'],json.dumps(plan['cleanup']))
+        self.assertIn(value['disk']['mount'],json.dumps(plan['cleanup']))
+
+    def test_single_disk_legacy_contract_and_missing_control_refuse(self):
+        value=binding();value['schema']='meownero-rootful-helper-binding/1'
+        with self.assertRaises(ValueError):command_plan(value)
+        for key in ('allocation','control_disk','control_identity_sha256','control_reserves'):
+            value=binding();del value[key]
+            with self.subTest(key=key),self.assertRaises(ValueError):command_plan(value)
+
+    def test_split_rejects_zero_negative_overflow_bool_and_full_workload(self):
+        for name,amount in [('control',0),('workload',0),('archive',-1),('other',True),
+                            ('workload',15*helper.GIB),('control',2**64),('archive',2*helper.GIB+1)]:
+            value=binding();value['allocation'][name]=amount
+            with self.subTest(name=name,amount=amount),self.assertRaises(ValueError):command_plan(value)
+
+    def test_control_identity_custody_mutability_and_alias_refuse(self):
+        for key,amount in [('identity_mutable',True),('mount_id',0),('owner_uid',1),('backing_mode',0o666),
+                           ('custodian',''),('custody_receipt',''),('writable_by_workload',True),
+                           ('prepared_before_first_admission',False),('restart','normal'),
+                           ('missing_or_corrupt','replace'),('retention','delete_after_work'),
+                           ('backing',binding()['disk']['backing']),('loop_device',999),
+                           ('mount',binding()['disk']['mount']+'/nested'),('namespace_inode',123)]:
+            value=binding();value['control_disk'][key]=amount
+            value['control_identity_sha256']=c.digest(c.canonical(value['control_disk']))
+            with self.subTest(key=key),self.assertRaises(ValueError):command_plan(value)
+        value=binding();value['control_disk']['mount_id']+=1
+        with self.assertRaises(ValueError):command_plan(value)
+
+    def test_capacity_and_preparation_archive_copies_must_fit(self):
+        for field,amount in [('length',helper.GIB+1),('allocated_bytes',helper.GIB+512),
+                             ('filesystem_capacity',800*1024**2)]:
+            value=binding();value['control_disk'][field]=amount
+            value['control_identity_sha256']=c.digest(c.canonical(value['control_disk']))
+            with self.subTest(field=field),self.assertRaises(ValueError):command_plan(value)
+        value=binding();value['control_reserves']['overhead']+=1
+        with self.assertRaises(ValueError):command_plan(value)
+        value=binding();value['offline_image']['length']=2*helper.GIB+1
+        with self.assertRaises(ValueError):command_plan(value)
+
+    def test_provisioning_refuses_before_both_durable_consumptions(self):
+        value=binding()
+        for field,bad in [('first_admission','NOT_RUN'),('manager_state','RESERVED'),
+                          ('local_state','MISSING'),('control_identity_sha256','0'*64),
+                          ('attempt_id','2'*32),('bindings',{})]:
+            witness=consumption(value);witness[field]=bad
+            with self.subTest(field=field),self.assertRaises(ValueError):
+                helper.command_manifest(value,consumption=witness)
 
     def test_task_only_service_and_explicit_survival_gaps(self):
         contract=helper.unit_contract(binding())
@@ -278,10 +371,12 @@ class HelperManifestTests(unittest.TestCase):
         valid=dict(attempt_id=candidate['attempt_id'],namespace_inode=candidate['disk']['namespace_inode'],
             loop_device=candidate['disk']['loop_device'],mount_id=candidate['disk']['mount_id'],
             work_population=0,daemon_helpers=[],remaining_cids=[],remaining_owned_pid_start_pairs=[],
-            local_ledger_removed=False,manager_slot_removed=False,lock_still_held=True)
+            local_ledger_removed=False,manager_slot_removed=False,lock_still_held=True,
+            control_retained=True,control_identity_sha256=candidate['control_identity_sha256'])
         self.assertEqual(helper.validate_recovery(valid,candidate),valid)
         for key,value in [('work_population',1),('namespace_inode',1),('remaining_cids',['c'*64]),
-                          ('manager_slot_removed',True),('lock_still_held',False)]:
+                          ('manager_slot_removed',True),('lock_still_held',False),('control_retained',False),
+                          ('control_identity_sha256','0'*64)]:
             with self.subTest(key=key),self.assertRaises(ValueError):
                 helper.validate_recovery({**valid,key:value},candidate)
 

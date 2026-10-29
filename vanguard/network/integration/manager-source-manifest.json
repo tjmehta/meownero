@@ -5,7 +5,7 @@
   "state": "PARTIAL_SOURCE_ADAPTER_NOT_HOST_READY",
   "implementation_passes": 1,
   "correction_passes": 1,
-  "source_tests": 82,
+  "source_tests": 89,
   "host_activation": "UNAVAILABLE",
   "native_execution": "NOT_RUN",
   "platform_bootstrap_sha256": null,
@@ -17,9 +17,9 @@
   "unit_contract_builder": "vanguard/network/profile_helper.py:unit_contract",
   "source_sha256": {
     "vanguard/network/profile_manager.py": "137425a395854119c29362d254aa3af7b5bd961644cade93e83764b1d28cec41",
-    "vanguard/network/profile_helper.py": "5b995f2e15bf08ce74ad23d12b1499175544eef30dc5583a03687f1eabeec454",
+    "vanguard/network/profile_helper.py": "8083229d8e35deb6b0e537aa73258d22fb4f3028ce616962708f3d637510e886",
     "vanguard/network/profile_outer.py": "1f06b1083c2dfa612a70114614797c7ba3de8fcb7f7b9208879e770ce31a11e6",
-    "vanguard/network/test_manager.py": "77d8cda7c80490bb79fdfdf09d93a66d34adaf7acc5b0de482f67bf76c52f0cf",
+    "vanguard/network/test_manager.py": "0ab35a2cdbf5d05ab603aacbe23b57690117e729613d56487a6180d84cdacab4",
     "vanguard/network/test_outer.py": "6e297bd71c1e77dcd2a03e186ae34b7ca822628a4037277704786726cbd81c2d"
   },
   "runtime_requirements": [
@@ -32,5 +32,25 @@
     "two fresh complete admissions"
   ],
   "next_owner": "Meownero lead via established studio-lead/parent operator route",
-  "launch_ready": false
+  "launch_ready": false,
+  "prior_source_tests": {
+    "count": 82,
+    "run_id": "f256c6b4-dd7b-487f-b125-8fc3a9e4dda7",
+    "evidence": "integration/evidence/selected-manager/summary.json"
+  },
+  "storage_continuation": {
+    "authorization_comment": "0129b9cb-6539-43d3-85c7-c3dec9a9db8a",
+    "base_commit": "ea2f2b0fdfa5ec0775fb3fbc5371afbfac15e18b",
+    "scope": "section-15 source allocation fit/refusal only",
+    "implementation_passes": 1,
+    "correction_passes": 1,
+    "operator_interface": "UNBOUND",
+    "proposed_gib": {
+      "control": 1,
+      "workload": 11,
+      "archive": 2,
+      "other": 1
+    },
+    "actual_storage_enforcement": "NOT_RUN"
+  }
 }
