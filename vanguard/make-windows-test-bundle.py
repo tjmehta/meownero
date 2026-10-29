@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assemble the frozen i68635 and ARM13 archives without rebuilding programs."""
+"""Assemble sanitized i68635 and ARM13 successors without rebuilding programs."""
 import argparse
 import hashlib
 import json
@@ -8,7 +8,9 @@ import shutil
 import stat
 import subprocess
 import sys
+import tempfile
 import zipfile
+from portable_provenance import refuse_private_paths, successor_archive
 
 ROOT = Path(__file__).resolve().parent.parent
 I686_INPUTS = 'a49c9c833e624c6e8abce07224f715ae6d40b345f18554b77164f4e4e7c77f2f'
@@ -20,6 +22,13 @@ ARCHIVES = {'windows-i686': '3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b
 def sha(path):
     with path.open('rb') as stream:
         return hashlib.file_digest(stream, 'sha256').hexdigest()
+
+
+def check_bundle(bundle):
+    for path in bundle.rglob('*'):
+        if path.is_file():
+            refuse_private_paths(path.relative_to(bundle).as_posix().encode())
+            refuse_private_paths(path.read_bytes())
 
 
 def main():
@@ -73,24 +82,48 @@ def main():
         for path, expected in inputs['source_files'].items():
             assert sha(lane / path) == expected
         row = inputs['targets'][target]
-        archive = bundle / row['archive_name']
-        with archive.open('xb') as stream:
-            for part in row['parts']:
-                path = parts_root / part['path']
-                assert path.stat().st_size == part['bytes'] and sha(path) == part['sha256']
-                with path.open('rb') as source:
-                    shutil.copyfileobj(source, stream)
-        assert archive.stat().st_size == row['archive_bytes'] and sha(archive) == row['archive_sha256'] == ARCHIVES[target]
+        original_inputs_sha256 = sha(lane / 'vanguard/ci-inputs.json')
+        archive = bundle / (Path(row['archive_name']).stem + '-sanitized-v1.zip')
+        with tempfile.TemporaryDirectory(prefix='tjs1882-original-') as folder:
+            original = Path(folder) / row['archive_name']
+            with original.open('xb') as stream:
+                for part in row['parts']:
+                    path = parts_root / part['path']
+                    assert path.stat().st_size == part['bytes'] and sha(path) == part['sha256']
+                    with path.open('rb') as source:
+                        shutil.copyfileobj(source, stream)
+            assert original.stat().st_size == row['archive_bytes'] and sha(original) == row['archive_sha256'] == ARCHIVES[target]
+            rewrite = successor_archive(original, archive)
+        with zipfile.ZipFile(archive) as stream:
+            release_bytes = stream.read(row['package_name'] + '/release.json')
+            release = json.loads(release_bytes)
+        row.update(archive_name=archive.name, archive_bytes=archive.stat().st_size,
+                   archive_sha256=sha(archive), release_manifest_sha256=hashlib.sha256(release_bytes).hexdigest())
+        if 'native_exception_probe' in row:
+            row['native_exception_probe']['files'] = {
+                name: release['files'][name] for name in row['native_exception_probe']['files']}
+        row['parts'] = []
+        with archive.open('rb') as stream:
+            while data := stream.read(8 * 1024**2):
+                row['parts'].append({'path': 'ci/tjs1882/packages/' + target + '/' + archive.name
+                                    + '.part-' + str(len(row['parts']) + 1).zfill(4),
+                                    'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
+        (lane / 'vanguard/ci-inputs.json').write_text(json.dumps(inputs, indent=2) + '\n')
         manifest['lanes'][target] = {'root': name, 'archive': archive.name,
-                                    'inputs_sha256': sha(lane / 'vanguard/ci-inputs.json')}
+                                    'inputs_sha256': sha(lane / 'vanguard/ci-inputs.json'),
+                                    'pre_successor_inputs_sha256': original_inputs_sha256,
+                                    'provenance_rewrite': rewrite}
         if target == 'windows-i686':
             manifest['lanes'][target]['input_adaptation'] = {
                 'original_inputs_sha256': I686_INPUTS, 'removed_unused_source_bindings': sorted(omitted),
-                'controller_and_archive': 'BYTE_IDENTICAL'}
+                'controller': 'BYTE_IDENTICAL', 'archive': 'SANITIZED_SUCCESSOR',
+                'historical_byte_audit_scope': 'UNCHANGED_PROGRAM_BYTES_ONLY'}
     manifest['files'] = {path.relative_to(bundle).as_posix(): sha(path)
                          for path in sorted(bundle.rglob('*')) if path.is_file()}
     (bundle / 'bundle.json').write_text(json.dumps(manifest, indent=2) + '\n')
-    output = args.out / 'meownero-windows-test.zip'
+    # Scan the complete tree recursively before a deliverable ZIP can exist.
+    check_bundle(bundle)
+    output = args.out / 'meownero-windows-test-sanitized-v1.zip'
     with zipfile.ZipFile(output, 'x', compression=zipfile.ZIP_STORED) as archive:
         for path in sorted(bundle.rglob('*')):
             if path.is_file():
@@ -98,6 +131,7 @@ def main():
                 info.create_system = 3
                 info.external_attr = (stat.S_IFREG | 0o644) << 16
                 archive.writestr(info, path.read_bytes())
+    refuse_private_paths(output.read_bytes())
     (args.out / 'SHA256SUMS').write_text(sha(output) + '  ' + output.name + '\n')
     print(json.dumps({'archive': str(output), 'bytes': output.stat().st_size, 'sha256': sha(output)}))
 

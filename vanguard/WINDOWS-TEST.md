@@ -34,9 +34,13 @@ deleted. The kernel tester lock may remain as an inert file in Windows Temp;
 its handle is released by the controller.
 
 No device inventory, account credentials or raw wallet/log files are included
-in the bundle or deliberately collected for the report. The unchanged archives
-retain historical build provenance paths. This candidate is for private review;
-those paths must be resolved against the delivery brief before group sharing.
+in the bundle or deliberately collected for the report. The successor archives
+replace the build host's home prefix with `/BUILD_HOME/` in provenance only.
+Each changed provenance member records its original hash and the transformation.
+Updated hash bindings describe the distribution copy; they do not claim that
+the rewritten scripts or receipts were the bytes originally executed. Programs,
+runtime controllers and licenses retain their original bytes. This candidate
+still requires independent review before group sharing.
 The report does include runtime OS/Python version and process IDs needed to
 check the test. Read it before sharing. A PASS is execution evidence for that
 machine; independent review still decides acceptance. WoW64 is not evidence of
@@ -47,5 +51,5 @@ For operators: `python windows-test-bundle.py --prepare-only --target windows-i6
 checks the pinned Intel inputs without running Windows programs. Use
 `--target windows-aarch64` for ARM bytes. Such a report is explicitly byte-only
 and does not establish native execution. No Python packages or downloads occur
-during a test run. Program licenses and build provenance remain in the unchanged
-candidate archives alongside this guide.
+during a test run. Program licenses and build provenance remain in the successor
+archives alongside this guide.

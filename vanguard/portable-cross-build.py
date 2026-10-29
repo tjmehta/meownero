@@ -20,6 +20,7 @@ import uuid
 import urllib.request
 import difflib
 import re
+from portable_provenance import recorded_receipt
 
 spec = importlib.util.spec_from_file_location('portable_build', Path(__file__).with_name('portable-build.py'))
 builder = importlib.util.module_from_spec(spec)
@@ -103,7 +104,7 @@ def main():
             receipt['builder_transfer'] = transfer
 
         def save():
-            tester.write(out / 'build-receipt.json', receipt)
+            tester.write(out / 'build-receipt.json', recorded_receipt(receipt))
 
         def run(label, argv, timeout=60, cwd=None):
             row = {'label': label, 'argv': argv}
