@@ -4,12 +4,14 @@ import argparse
 import ast
 import hashlib
 import importlib.util
+import inspect
 import json
 import os
 from pathlib import Path
 import stat
 import sys
 import time
+import urllib.error
 
 
 def main():
@@ -81,7 +83,7 @@ def main():
         save()
 
     old_trace, old_path = sys.gettrace(), list(sys.path)
-    module, original_disk_usage = None, None
+    module, original_disk_usage, original_rpc = None, None, None
     try:
         tester = args.tester.absolute()
         assert tester.is_file() and not tester.is_symlink() and tester.stat().st_nlink == 1
@@ -124,6 +126,50 @@ def main():
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         original_disk_usage = module.shutil.disk_usage
+        original_rpc = module.rpc
+        rpc_tree = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == 'rpc')
+        timeouts = [kw.value for n in ast.walk(rpc_tree) if isinstance(n, ast.Call)
+                    for kw in n.keywords if kw.arg == 'timeout']
+        assert len(timeouts) == 1 and isinstance(timeouts[0], ast.Constant) and timeouts[0].value == 90, 'bound RPC timeout changed'
+        journey_deadline = args.deadline_seconds or inspect.signature(module.run).parameters['deadline_seconds'].default
+        assert type(journey_deadline) is int and 1 <= journey_deadline <= 1200
+        journey_clock = {}
+
+        def observed_rpc(port, method, params=None):
+            if receipt['phase'] != 'FUND_WALLET':
+                return original_rpc(port, method, params)
+            operations = receipt.setdefault('funding_operations', [])
+            expected = ('generateblocks', 'refresh', 'get_balance')
+            assert len(operations) < 3 and method == expected[len(operations)], 'bound funding sequence changed'
+            start = time.monotonic()
+            elapsed = max(0, start - journey_clock['began'])
+            operation = {'operation': method, 'outcome': 'RUNNING', 'elapsed_seconds': 0,
+                'socket_timeout_seconds': 90, 'journey_deadline_seconds': journey_deadline,
+                'journey_elapsed_at_start_seconds': round(elapsed, 6),
+                'journey_remaining_at_start_seconds': round(max(0, journey_deadline - elapsed), 6)}
+            operations.append(operation)
+            save()
+            try:
+                value = original_rpc(port, method, params)
+                operation['outcome'] = 'PASS'
+                return value
+            except BaseException as error:
+                timeout = isinstance(error, TimeoutError) or isinstance(error, urllib.error.URLError) and isinstance(error.reason, TimeoutError)
+                operation['outcome'] = 'TIMEOUT' if timeout else 'ERROR'
+                operation['elapsed_seconds'] = round(max(0, time.monotonic() - start), 6)
+                failure(error)
+                receipt['first_failure']['operation'] = method
+                if timeout:
+                    # The socket timed out; this does not diagnose the daemon
+                    # or wallet engine, nor assert a total RPC wall deadline.
+                    receipt['first_failure']['reason'] = 'FUNDING_RPC_TIMEOUT'
+                save()
+                raise
+            finally:
+                operation['elapsed_seconds'] = round(max(0, time.monotonic() - start), 6)
+                save()
+
+        module.rpc = observed_rpc
 
         def disk_usage(path):
             value = original_disk_usage(path)
@@ -166,6 +212,8 @@ def main():
                     receipt['available_memory_bytes'] = available
                 phase = anchors.get(frame.f_lineno)
                 if phase and phase not in seen:
+                    if phase == 'FUND_WALLET':
+                        journey_clock['began'] = frame.f_locals['began']
                     if 'first_failure' not in receipt:
                         receipt['completed_phases'].append(receipt['phase'])
                     receipt['phase'] = phase
@@ -194,6 +242,8 @@ def main():
         sys.path[:] = old_path
         if module is not None and original_disk_usage is not None:
             module.shutil.disk_usage = original_disk_usage
+        if module is not None and original_rpc is not None:
+            module.rpc = original_rpc
         receipt['journey_public_receipt_exists'] = (args.out / 'result.json').is_file()
         save()
 

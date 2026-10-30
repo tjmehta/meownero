@@ -31,6 +31,38 @@ def check_bundle(bundle):
             refuse_private_paths(path.read_bytes())
 
 
+def successor_helpers(lane, inputs, target, bindings):
+    """Apply the reviewed delta to each frozen lane, preserving its own guards."""
+    source = bindings['source_revision']
+    assert len(source) == 40 and set(source) <= set('0123456789abcdef')
+    provenance = {'source_revision': source, 'baseline_revision': bindings['baseline_revision'], 'files': {}}
+    for name, expected in bindings['files'].items():
+        assert name in {'run-portable-ci.py', 'run-portable-journey-diagnostic.py', 'test-portable-refusals.py'}
+        path = 'vanguard/' + name
+        data = subprocess.check_output(['git', 'show', source + ':' + path], cwd=ROOT)
+        assert hashlib.sha256(data).hexdigest() == expected
+        original = (lane / path).read_bytes() if (lane / path).exists() else None
+        if name == 'run-portable-ci.py':
+            patch = bindings['controller_patches'][target]
+            delta = subprocess.check_output(['git', 'show', source + ':' + patch['path']], cwd=ROOT)
+            assert hashlib.sha256(delta).hexdigest() == patch['sha256']
+            with tempfile.TemporaryDirectory(prefix='tjs1882-helper-delta-') as folder:
+                frozen = Path(folder) / path
+                frozen.parent.mkdir()
+                frozen.write_bytes(original)
+                subprocess.run(['git', 'apply', '--check', '-'], input=delta, cwd=folder, check=True)
+                subprocess.run(['git', 'apply', '-'], input=delta, cwd=folder, check=True)
+                data = frozen.read_bytes()
+            assert hashlib.sha256(data).hexdigest() == bindings['controllers'][target]
+        elif original is not None:
+            assert hashlib.sha256(original).hexdigest() == bindings['predecessors'][name]
+        (lane / path).write_bytes(data)
+        inputs['source_files'][path] = hashlib.sha256(data).hexdigest()
+        provenance['files'][path] = {'predecessor_sha256': hashlib.sha256(original).hexdigest() if original else None,
+                                    'successor_sha256': inputs['source_files'][path]}
+    return provenance
+
+
 def main():
     if sys.flags.optimize:
         raise RuntimeError('Python optimization is refused for hash-bound assembly')
@@ -39,6 +71,7 @@ def main():
     parser.add_argument('--i686-handoff', type=Path, default=ROOT / 'build/tjs1882-run2fb8c59d-i68635-publication-handoff/i68635-frozen-source-handoff.json')
     parser.add_argument('--i686-parts', type=Path, default=ROOT / 'build/tjs1882-2493-native-ci-payload21')
     parser.add_argument('--arm-payload', type=Path, default=ROOT / 'build/tjs1882-8027288d-arm13-native-payload')
+    parser.add_argument('--helper-bindings', type=Path, default=ROOT / 'vanguard/windows-test-successor.json')
     args = parser.parse_args()
     args.out.mkdir()
     bundle = args.out / 'meownero-windows-test'
@@ -51,6 +84,9 @@ def main():
                 'source_revision': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                 'lanes': {}, 'files': {}}
     handoff = json.loads(args.i686_handoff.read_text())
+    helper_bindings = json.loads(args.helper_bindings.read_text())
+    manifest['helper_bindings'] = helper_bindings
+    manifest['helper_bindings_sha256'] = sha(args.helper_bindings)
     for target, name in [('windows-i686', 'i68635'), ('windows-aarch64', 'arm13')]:
         lane = bundle / name
         (lane / 'vanguard').mkdir(parents=True)
@@ -83,6 +119,7 @@ def main():
             assert sha(lane / path) == expected
         row = inputs['targets'][target]
         original_inputs_sha256 = sha(lane / 'vanguard/ci-inputs.json')
+        helper_provenance = successor_helpers(lane, inputs, target, helper_bindings)
         archive = bundle / (Path(row['archive_name']).stem + '-sanitized-v1.zip')
         with tempfile.TemporaryDirectory(prefix='tjs1882-original-') as folder:
             original = Path(folder) / row['archive_name']
@@ -112,11 +149,12 @@ def main():
         manifest['lanes'][target] = {'root': name, 'archive': archive.name,
                                     'inputs_sha256': sha(lane / 'vanguard/ci-inputs.json'),
                                     'pre_successor_inputs_sha256': original_inputs_sha256,
+                                    'helper_successor': helper_provenance,
                                     'provenance_rewrite': rewrite}
         if target == 'windows-i686':
             manifest['lanes'][target]['input_adaptation'] = {
                 'original_inputs_sha256': I686_INPUTS, 'removed_unused_source_bindings': sorted(omitted),
-                'controller': 'BYTE_IDENTICAL', 'archive': 'SANITIZED_SUCCESSOR',
+                'controller': 'HASH_BOUND_DIAGNOSTIC_SUCCESSOR', 'archive': 'SANITIZED_SUCCESSOR',
                 'historical_byte_audit_scope': 'UNCHANGED_PROGRAM_BYTES_ONLY'}
     manifest['files'] = {path.relative_to(bundle).as_posix(): sha(path)
                          for path in sorted(bundle.rglob('*')) if path.is_file()}

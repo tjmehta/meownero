@@ -1,0 +1,115 @@
+--- a/vanguard/run-portable-ci.py
++++ b/vanguard/run-portable-ci.py
+@@ -87,7 +87,7 @@
+             'TARGET_MISMATCH', 'OS_MISMATCH', 'SOURCE_PIN_MISMATCH', 'PACKAGE_FILE_SET', 'SYMLINK_PATH_REFUSED',
+             'UNSAFE_LOCK', 'JOURNEY_INTERRUPTED', 'WINDOWS_DEADLINE', 'NATIVE_CLI_RESTORED_WALLET_FAILED', 'NATIVE_CLI_WAIT_TIMEOUT',
+             'PACKAGE_HASH_MISMATCH', 'VERSION_CHILD_FAILED', 'JOURNEY_CHILD_EXITED', 'NATIVE_STARTUP_TIMEOUT',
+-            'RPC_FAILURE', 'EXCEPTION_UNCLASSIFIED'}
++            'RPC_FAILURE', 'FUNDING_RPC_TIMEOUT', 'EXCEPTION_UNCLASSIFIED'}
+         assert first['exception_type'] in {'RuntimeError', 'TimeoutError', 'OSError', 'PermissionError',
+             'FileExistsError', 'FileNotFoundError', 'AssertionError', 'JourneyInterrupted', 'KeyboardInterrupt',
+             'ValueError', 'KeyError', 'TypeError', 'URLError', 'HTTPError', 'TimeoutExpired', 'OTHER_EXCEPTION'}
+@@ -96,7 +96,49 @@
+             if key in first:
+                 assert type(first[key]) is int
+                 result['first_failure'][key] = first[key]
++        if 'operation' in first:
++            assert first['phase'] == 'FUND_WALLET' and first['operation'] in {'generateblocks', 'refresh', 'get_balance'}
++            result['first_failure']['operation'] = first['operation']
++    if 'funding_operations' in value:
++        operations = value['funding_operations']
++        assert type(operations) is list and len(operations) <= 3
++        result['funding_operations'] = []
++        for index, operation in enumerate(operations):
++            assert operation['operation'] == ('generateblocks', 'refresh', 'get_balance')[index]
++            assert operation['outcome'] in {'RUNNING', 'PASS', 'TIMEOUT', 'ERROR'}
++            row = {k: operation[k] for k in ('operation', 'outcome')}
++            for key in ('elapsed_seconds', 'socket_timeout_seconds', 'journey_deadline_seconds',
++                        'journey_elapsed_at_start_seconds', 'journey_remaining_at_start_seconds'):
++                number = operation[key]
++                assert type(number) in (int, float) and math.isfinite(number) and number >= 0
++                row[key] = number
++            assert row['socket_timeout_seconds'] == 90 and 1 <= row['journey_deadline_seconds'] <= 1200
++            assert row['journey_remaining_at_start_seconds'] <= row['journey_deadline_seconds']
++            result['funding_operations'].append(row)
+     return result
++
++
++def control_coverage(controls):
++    """Validate all ten outcomes; one unavailable fixture cannot grant PASS."""
++    names = ['wrong-pin', 'wrong-target', 'changed-binary', 'unlisted-private-file',
++             'symlink-directory', 'hardlink', 'collision-preservation', 'busy-lock',
++             'cancelled-owned-cleanup', 'deadline-owned-cleanup']
++    assert [row['case'] for row in controls['cases']] == names
++    incomplete = False
++    for row in controls['cases']:
++        if row.get('status') == 'NOT_EXECUTED':
++            assert row == {'case': 'symlink-directory', 'status': 'NOT_EXECUTED',
++                           'reason_enum': 'SYMLINK_PRIVILEGE_NOT_HELD', 'winerror': 1314}
++            incomplete = True
++        elif row['case'].endswith('-owned-cleanup'):
++            assert row['removed'] is True and type(row['process_count']) is int and row['process_count'] > 0
++        else:
++            assert row['refused'] is True
++            if row['case'] == 'collision-preservation':
++                assert row['sentinel_preserved'] is True
++    assert controls['result'] == ('INCOMPLETE_REFUSALS' if incomplete else 'PASS_REFUSALS')
++    return incomplete
++
+ 
+ 
+ def matching_cli_events(data, cli, image, image_sha256, system_directory, query_end):
+@@ -208,7 +250,7 @@
+     """Project fixed check evidence; execution argv and paths remain private."""
+     enums = {
+         'schema': {'meownero-native-windows-ci-check/1', 'meownero-portable-native-mac-check/1'},
+-        'result': {'FAIL', 'PASS_NATIVE_ARCHIVE_JOURNEY', 'PASS_TRANSLATED_ARCHIVE_JOURNEY'},
++        'result': {'FAIL', 'PASS_NATIVE_ARCHIVE_JOURNEY', 'PASS_TRANSLATED_ARCHIVE_JOURNEY', 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS'},
+         'native_architecture': {'i686', 'x86_64', 'aarch64'},
+         'package_architecture': {'i686', 'x86_64', 'aarch64'},
+         'execution_substrate': {'NATIVE', 'NATIVE_WINDOWS_WOW64', 'ROSETTA_TRANSLATED_MACOS_X86_64'},
+@@ -830,7 +872,7 @@
+                 raise RuntimeError('CI cancelled after owned child registration')
+             row['exit'] = child.wait(timeout=min(timeout, max(1, 1500 - (time.monotonic() - began))))
+             row['reaped'] = child.poll() is not None
+-            assert row['exit'] == 0 and not job.expired, name + ' failed'
++            assert row['exit'] in ((0, 2) if name == 'controls' else (0,)) and not job.expired, name + ' failed'
+         return row
+ 
+     try:
+@@ -873,9 +915,11 @@
+                 '--diagnostic', out / 'journey-diagnostic.json', '--out', out / 'journey'])
+         else:
+             phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
+-        phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
++        control_phase = phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
+                            '--package', package, '--out', out / 'controls'])
+-        receipt['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY'
++        incomplete = control_coverage(json.loads((out / 'controls/controls.json').read_text()))
++        assert control_phase['exit'] == (2 if incomplete else 0)
++        receipt['result'] = 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS' if incomplete else 'PASS_NATIVE_ARCHIVE_JOURNEY'
+     finally:
+         try:
+             if job is not None:
+@@ -1013,9 +1057,10 @@
+         assert journey['receive_atomic'] == 5000000000000 and journey['subsequent_spend_atomic'] == 2000000000000
+         assert journey['restore_matches'] and journey['cli_open_restored_wallet']
+         assert len(journey['payments']) == 2 and all(x['rct_type'] == 7 and x['carrot_outputs'] for x in journey['payments'])
+-        assert controls['result'] == 'PASS_REFUSALS' and len(controls['cases']) == 10
++        incomplete = control_coverage(controls)
++        assert not incomplete or args.target.startswith('windows-')
+         assert controls['release_manifest_sha256'] == row['release_manifest_sha256']
+-        assert check['result'] == 'PASS_NATIVE_ARCHIVE_JOURNEY'
++        assert check['result'] == ('INCOMPLETE_NATIVE_ARCHIVE_CONTROLS' if incomplete else 'PASS_NATIVE_ARCHIVE_JOURNEY')
+         if args.target == 'windows-i686':
+             assert journey['execution_substrate'] == check['execution_substrate'] == 'NATIVE_WINDOWS_WOW64'
+             assert check['native_architecture'] == 'x86_64' and check['windows_32bit_os_execution'] == 'UNTESTED'
+@@ -1028,7 +1073,7 @@
+             proof['windows_32bit_os_execution'] = 'UNTESTED'
+         for name, value in [('journey.json', journey), ('controls.json', controls), ('check.json', check)]:
+             write(public / name, public_check(value) if name == 'check.json' else value)
+-        proof['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
++        proof['result'] = 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS' if incomplete else 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
+     except BaseException as error:
+         proof['failure_type'] = type(error).__name__
+         raise

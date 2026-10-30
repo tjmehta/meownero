@@ -80,7 +80,16 @@ def main():
         begin(name, 'MUTATE_PACKAGE', 'PACKAGE_COPY_OR_MUTATION_ERROR')
         root = out / name
         shutil.copytree(package, root)
-        mutate(root)
+        try:
+            mutate(root)
+        except OSError as error:
+            # Only fixture creation can be unavailable. Copy/preflight failures
+            # and every other OS error still fail the control.
+            if not (windows and name == 'symlink-directory' and getattr(error, 'winerror', None) == 1314):
+                raise
+            rows.append({'case': name, 'status': 'NOT_EXECUTED',
+                         'reason_enum': 'SYMLINK_PRIVILEGE_NOT_HELD', 'winerror': 1314})
+            return
         current.update(phase='RUN_PREFLIGHT', reason_enum='TESTER_INVOCATION_ERROR')
         result = invoke(root)
         current.update(phase='REFUSAL_ASSERTION', child_exit=result.returncode)
@@ -211,7 +220,7 @@ def main():
                     raise AssertionError('owned process remains')
             rows.append({'case': name + '-owned-cleanup', 'signal': ('CTRL_BREAK_EVENT' if windows else interruption.name) if interruption is not None else 'WINDOWS_JOB_TIMER',
                          'removed': True, 'process_count': len(interrupted['cleanup'])})
-        receipt['result'] = 'PASS_REFUSALS'
+        receipt['result'] = 'INCOMPLETE_REFUSALS' if any(row.get('status') == 'NOT_EXECUTED' for row in rows) else 'PASS_REFUSALS'
     except BaseException as error:
         receipt['first_failed_case'] = {**current, 'failure_type': type(error).__name__}
         for attribute in ('errno', 'winerror'):
@@ -228,8 +237,9 @@ def main():
         finally:
             if not windows:
                 signal.pthread_sigmask(signal.SIG_SETMASK, mask)
-    print('PASS_REFUSALS', len(rows))
+    print(receipt['result'], len(rows))
+    return 2 if receipt['result'] == 'INCOMPLETE_REFUSALS' else 0
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())

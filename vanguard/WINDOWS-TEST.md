@@ -3,7 +3,9 @@
 This is an unsigned experimental test bundle. The coins have no value. It runs a
 private accelerated FCMP++/CARROT regtest on this computer using loopback only.
 It does not connect to the public Meownero network. Never enter an existing seed
-or use a real wallet. Windows native execution of these candidates is untested.
+or use a real wallet. This corrected harness needs a fresh native Windows check.
+The prior ARM wallet journey passed; the prior Intel i686/WoW64 journey timed
+out during funding. The Intel cause is still unknown.
 
 1. Install native 64-bit CPython 3.13 or later from [python.org](https://www.python.org/downloads/windows/)
    if needed. Choose **Windows installer (64-bit)** on Intel/AMD x64 Windows, or
@@ -16,11 +18,17 @@ or use a real wallet. Windows native execution of these candidates is untested.
 3. Double-click **RUN-TEST.cmd**. It selects i68635 on x64 Windows (WoW64), or
    ARM13 on ARM64 Windows. The ARM controller also requires ARMv8 crypto support.
    Standalone 32-bit Windows is unsupported by this runner. Do not run as admin.
-4. Allow up to 25 minutes for the unchanged controller. It checks exact bytes,
+4. Allow up to 25 minutes for the controller. It checks exact bytes,
    clean extraction and native program startup, receives 5 test coins, checks two
    type-7/CARROT payments, restores the disposable wallet, spends 2 coins, opens
    the native CLI, then runs all ten refusal/cancellation controls. It uses an
    owned Windows Job with a 4 GiB memory cap and checks process cleanup.
+   If Windows denies creation of the symlink test fixture with error 1314,
+   that control is marked NOT_EXECUTED and later independent checks continue.
+   The overall result is INCOMPLETE_NATIVE_ARCHIVE_CONTROLS, never PASS. Other
+   fixture errors and failed refusals remain failures. Do not run as admin to
+   change this result. Intel funding reports distinguish mining, refresh and
+   balance-query timeouts; the existing timeout budgets are unchanged.
 5. Share **only the report.zip path printed at the end**, even if the result is
    FAIL or NOT_RUN. A new `run-...` folder is used every time. Do not share the
    whole run folder: it can contain disposable wallets, seeds and private logs.
@@ -39,7 +47,9 @@ replace the build host's home prefix with `/BUILD_HOME/` in provenance only.
 Each changed provenance member records its original hash and the transformation.
 Updated hash bindings describe the distribution copy; they do not claim that
 the rewritten scripts or receipts were the bytes originally executed. Programs,
-runtime controllers and licenses retain their original bytes. This candidate
+packaged wallet testers and licenses retain their original bytes. The successor
+controller, refusal harness and diagnostic wrapper have new hash bindings
+recorded in bundle.json. This candidate
 still requires independent review before group sharing.
 The report does include runtime OS/Python version and process IDs needed to
 check the test. Read it before sharing. A PASS is execution evidence for that

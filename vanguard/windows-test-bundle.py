@@ -168,7 +168,7 @@ def main():
                     os.environ[key] = value
         result = json.loads((session / 'output/public/ci-receipt.json').read_text())['result']
         expected = 'PASS_INPUT_BYTES_ONLY_NATIVE_EXECUTION_UNTESTED' if args.prepare_only else 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
-        require(result == expected, 'CONTROLLER_DID_NOT_PASS')
+        require(result == expected or not args.prepare_only and result == 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS', 'CONTROLLER_DID_NOT_PASS')
         receipt['result'] = result
     except BaseException as error:
         receipt['failure_type'] = type(error).__name__
@@ -182,7 +182,7 @@ def main():
     print('Share only this report:', report)
     print('SHA256:', digest(report))
     print('Keep the run folder local. It can contain disposable wallets and private logs.')
-    return 0 if receipt['result'].startswith('PASS_') else 1
+    return 2 if receipt['result'] == 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS' else 0 if receipt['result'].startswith('PASS_') else 1
 
 
 if __name__ == '__main__':
