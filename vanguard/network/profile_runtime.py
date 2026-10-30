@@ -5,6 +5,8 @@ objects cannot confine an external process or establish installed crash survival
 The qualified boundary must mediate every writer and survive the keeper.
 """
 import fcntl
+import copy
+import json
 import math
 import os
 import re
@@ -14,6 +16,95 @@ import time
 import profile_contract as c
 import profile_manager as m
 import profile_packet as p
+import profile_outer as outer
+
+
+class RecordJournal:
+    """Existing control file plus pre-reserved GrantJournal slots, never created here.
+
+    Hold a separate-open flock through the effect and its durable completion.
+    Pending, torn or missing state cannot resume activation. Recovery needs an
+    independently authenticated recovery invocation and keeps the original
+    binding/deadlines. Power-loss/rollback resistance and custodian survival
+    remain properties of the separately qualified control-storage authority.
+    """
+    def __init__(self, directory_fd, identity, binding, itinerary, recovery,
+                 capabilities, *, owner_uid=0, clock=time.monotonic):
+        self.directory_fd,self.identity=directory_fd,identity
+        self.binding=copy.deepcopy(binding)
+        self.itinerary,self.recovery=list(itinerary),list(recovery)
+        c.require(self.itinerary and len(self.itinerary)<=55 and
+            len(set(self.itinerary))==len(self.itinerary) and
+            all(type(x) is int and 0<=x<55 for x in self.itinerary) and
+            self.recovery and len(set(self.recovery))==len(self.recovery) and
+            set(self.recovery)<=set(self.itinerary), 'bounded frozen record itinerary')
+        self.capabilities,self.owner_uid,self.clock=capabilities,owner_uid,clock
+        self.fd=None;self.state=None
+
+    def _persist(self):
+        raw=c.canonical(self.state)
+        c.require(len(raw)<=65536,'bounded record state')
+        os.lseek(self.fd,0,os.SEEK_SET)
+        outer.write_all(self.fd,raw)
+        os.ftruncate(self.fd,len(raw));os.fsync(self.fd)
+        c.require(os.pread(self.fd,len(raw)+1,0)==raw,'record state durable readback')
+
+    def begin(self, record, deadline, expected, secret, *, recovered=False):
+        c.require(self.fd is None,'one outstanding record')
+        try:
+            self.fd=os.open('record-order',os.O_RDWR|os.O_NOFOLLOW|os.O_CLOEXEC|os.O_NONBLOCK,
+                dir_fd=self.directory_fd)
+            info=os.fstat(self.fd)
+            c.require(stat.S_ISREG(info.st_mode) and info.st_nlink==1 and
+                info.st_uid==info.st_gid==self.owner_uid and stat.S_IMODE(info.st_mode)==0o600 and
+                [info.st_dev,info.st_ino]==self.identity and 0<info.st_size<=65536,'original record journal')
+            fcntl.flock(self.fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            raw=os.pread(self.fd,65537,0);state=json.loads(raw)
+            c.require(c.canonical(state)==raw and set(state)=={'schema','binding','itinerary','recovery',
+                'mode','position','pending','uncertain'} and state['schema']=='meownero-record-order/1' and
+                state['binding']==self.binding and state['itinerary']==self.itinerary and
+                state['recovery']==self.recovery and state['mode'] in ('LIVE','RECOVERY_ONLY') and
+                type(state['position']) is int and state['position']>=0 and
+                (state['pending'] is None or type(state['pending']) is int and state['pending'] in self.itinerary) and
+                (state['uncertain'] is None or type(state['uncertain']) is int and state['uncertain'] in self.itinerary) and
+                (state['mode']!='LIVE' or state['uncertain'] is None),'exact persistent record authority')
+            self.state=state
+            if recovered and state['mode']=='LIVE':
+                state.update(mode='RECOVERY_ONLY',position=0,uncertain=state['pending'],pending=None)
+                self._persist()
+            c.require(recovered or state['mode']=='LIVE','recovery cannot regain activation')
+            route=self.recovery if state['mode']=='RECOVERY_ONLY' else self.itinerary
+            c.require(state['pending'] is None and state['position']<len(route) and
+                route[state['position']]==record['sequence'],'replay, pending or out-of-order record')
+            c.require(state['mode']=='LIVE' or record['phase'] in ('cleanup','completion'),
+                'recovery records only; no activation or disposition')
+            c.require(self.clock()<deadline<=self.binding['deadlines']['end'],'original record deadline')
+            name='record-'+str(record['sequence'])
+            self.capabilities.consume(name,expected,secret,deadline=deadline,clock=self.clock)
+            state['pending']=record['sequence']
+            self._persist()  # Both one-use burn and pending intent precede ANY effect.
+            c.require(self.clock()<deadline,'pending intent exceeded original record deadline')
+        except BaseException:
+            self.close()
+            raise
+
+    def complete(self, record, deadline):
+        c.require(self.fd is not None and self.state['pending']==record['sequence'] and
+            self.clock()<deadline,'exact timely pending record')
+        self.state.update(pending=None,position=self.state['position']+1)
+        self._persist()
+        c.require(self.clock()<deadline,'record completion exceeded original deadline')
+        self.close()
+
+    def uncertain(self, record):
+        if self.fd is not None:
+            try:
+                self.state.update(mode='RECOVERY_ONLY',position=0,pending=None,uncertain=record['sequence'])
+                self._persist()
+            finally:self.close()
+
+    def close(self):
+        if self.fd is not None:os.close(self.fd);self.fd=None
 
 
 class CapabilityStore:

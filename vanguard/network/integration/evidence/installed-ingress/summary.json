@@ -1,0 +1,32 @@
+{
+  "result": "PASS_SOURCE_ONLY",
+  "tests": 172,
+  "test_seconds": 41.955,
+  "failed": 0,
+  "skipped": 0,
+  "command": "python3 -B -m unittest -v test_ingress test_installation test_executor test_bootstrap test_dispatch test_manager test_outer test_profile test_handoff",
+  "new_ingress_tests": 13,
+  "base": "e9cb885fbf9513801fca216fe033df7fad38f58a",
+  "run_id": "97992a39-a2ea-4530-a714-eabc0c9f8485",
+  "implementation_passes": 1,
+  "correction_passes": 1,
+  "elapsed_to_verification_seconds": 444.924437,
+  "maximum_seconds": 7200,
+  "cleanup": "TemporaryDirectory/descriptor/socket/process fixtures closed/reaped; isolated root import scratch removed; no owned remote or host staging",
+  "prior_evidence": [
+    {
+      "checks": 159,
+      "run_id": "90b2a084-f8f5-46d8-9cac-ad1eaeb3dd94",
+      "attribution": "writer, reused separately"
+    },
+    {
+      "checks": 33,
+      "additional_observations": 8,
+      "run_id": "9ecedd74-5a8c-4bb1-8acc-b2970d2dda63",
+      "attribution": "Platform independent, reused separately"
+    }
+  ],
+  "live_authority": "UNIMPLEMENTED_UNQUALIFIED",
+  "host_native_results": "NOT_RUN",
+  "launch_ready": false
+}

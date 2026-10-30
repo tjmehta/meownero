@@ -186,13 +186,17 @@ class RootEntry:
         self.boundary,self.clock,self.run=boundary,clock,run
 
     def run_authenticated_inherited_entry(self):
-        plan=self.boundary.authenticate_root_entry()
-        # Only the independently authenticated boundary supplies the frozen
-        # index bytes; request JSON and the local index cannot grant authority.
-        verify_installation(c.HERE,self.boundary.authenticated_installation_inputs())
-        executor=RecordExecutor(plan,self.boundary,clock=self.clock,run=self.run)
-        request=self.boundary.receive_authenticated_record_request()
-        return executor.execute(request)
+        try:
+            plan=self.boundary.authenticate_root_entry()
+            # Only the independently authenticated boundary supplies the frozen
+            # index bytes; request JSON and the local index cannot grant authority.
+            verify_installation(c.HERE,self.boundary.authenticated_installation_inputs())
+            executor=RecordExecutor(plan,self.boundary,clock=self.clock,run=self.run)
+            request=self.boundary.receive_authenticated_record_request()
+            return executor.execute(request)
+        finally:
+            close=getattr(self.boundary,'close_authenticated_entry',None)
+            if close is not None:close()
 
 
 def proposal(plan):
@@ -213,6 +217,10 @@ def proposal(plan):
         teardown=[r for r in records if r['phase'] in ('cleanup','completion')],
         rollback=[r for r in records if r['phase']=='dispose'],
         never_rollback='control quarantine, grant consumption or uncertain attempt eligibility',
+        ingress=dict(source='profile_ingress.InstalledIngress',transport='existing unnamed seqpacket/SCM_RIGHTS',
+            trust='independently supplied constructor anchor, never packet/seals/hash/local JSON',
+            state='existing CapabilityStore/GrantJournal plus original record-order file; no create/rearm',
+            qualification='UNQUALIFIED; no installed constructor or surviving trust anchor supplied'),
         unqualified=['installed authority/receiver','syscall/D-Bus/Docker adapters',
             'PID1 same-description readback','workload C/W namespace view','external writer mediation',
             'surviving deadline owner','observer exit/tail sensors','archive producer/custody'],
