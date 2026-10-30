@@ -50,6 +50,8 @@ def refuse_private_paths(data):
             for info in archive.getmembers():
                 refuse_private_paths(info.name.encode())
                 refuse_private_paths(info.linkname.encode())
+                refuse_private_paths(info.uname.encode())
+                refuse_private_paths(info.gname.encode())
                 refuse_private_paths(json.dumps(info.pax_headers).encode())
                 if info.isfile():
                     refuse_private_paths(archive.extractfile(info).read())

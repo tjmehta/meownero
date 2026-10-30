@@ -29,7 +29,8 @@ def bindings(context):
 
 
 def freeze(context):
-    files = [ROOT / name for name in ('source-lock.json', 'portable_licenses.py', 'package-portable.py', 'portable-tester.py')]
+    files = [ROOT / name for name in ('source-lock.json', 'portable_licenses.py', 'portable_provenance.py',
+                                    'package-portable.py', 'portable-tester.py')]
     files += [p for p in (ROOT / 'licenses').rglob('*') if p.is_file() or p.is_symlink()]
     files += [p for p in (ROOT / 'docker').iterdir() if p.is_file() or p.is_symlink()]
     files += [ROOT.parent / 'docs' / name for name in ('vanguard-portable-tester.md', 'vanguard-docker-tester.md')]

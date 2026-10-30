@@ -18,7 +18,7 @@ RUN printf 'APT::Snapshot "20261009T000000Z";\n' > /etc/apt/apt.conf.d/50snapsho
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /recipe
 COPY vanguard/source-lock.json vanguard/source-lock.json
-COPY vanguard/portable_licenses.py vanguard/package-portable.py vanguard/portable-tester.py vanguard/
+COPY vanguard/portable_licenses.py vanguard/portable_provenance.py vanguard/package-portable.py vanguard/portable-tester.py vanguard/
 COPY vanguard/licenses vanguard/licenses
 COPY docs/vanguard-portable-tester.md docs/vanguard-portable-tester.md
 COPY vanguard/docker vanguard/docker

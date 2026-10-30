@@ -175,6 +175,10 @@ def main():
         assert any(p.startswith('vanguard/licenses/') for p in expected)
         build.verify_context(context, expected)
         passed('complete-copied-notices-docs-and-input-binding')
+        loaded = subprocess.run([sys.executable, '-B', str(context / 'vanguard/package-portable.py'), '--help'],
+                                capture_output=True, text=True, timeout=15)
+        assert loaded.returncode == 0, loaded.stderr
+        passed('frozen-package-command-loads-with-all-dependencies')
         # A changed live recipe has no effect on the independent copied context.
         live = root / 'live-recipe'
         live.write_text('different live bytes')
