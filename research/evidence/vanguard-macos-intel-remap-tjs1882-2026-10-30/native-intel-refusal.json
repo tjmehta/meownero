@@ -1,0 +1,6 @@
+{
+  "exit": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/BUILD_HOME/Developer/tjs1882-681bd470/intel-package01/meownero-vanguard-macos-x86_64/tester.py\", line 482, in <module>\n    main()\n    ~~~~^^\n  File \"/BUILD_HOME/Developer/tjs1882-681bd470/intel-package01/meownero-vanguard-macos-x86_64/tester.py\", line 474, in main\n    preflight(args.translated_macos_x86_64)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/BUILD_HOME/Developer/tjs1882-681bd470/intel-package01/meownero-vanguard-macos-x86_64/tester.py\", line 121, in preflight\n    require(machine == manifest['architecture'] or\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n            (WINDOWS and machine == 'x86_64' and manifest['architecture'] == 'i686'), 'wrong architecture')\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/BUILD_HOME/Developer/tjs1882-681bd470/intel-package01/meownero-vanguard-macos-x86_64/tester.py\", line 80, in require\n    raise RuntimeError(message)\nRuntimeError: wrong architecture\n",
+  "expected": "Refuse native Intel claim on physical ARM64 host"
+}
