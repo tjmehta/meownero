@@ -1,0 +1,42 @@
+{
+  "result": "PASS_EXACT_SUCCESSOR_BINDINGS_AND_PRESERVED_GUARDS",
+  "archive": "meownero-windows-test-sanitized-v1.zip",
+  "bytes": 164120029,
+  "sha256": "90ea358de54e3c51be14d855dc561aca90b2d704ae5a476a040b2cd494a353ce",
+  "bundle_manifest_sha256": "88931bd2a6ef02ebcccb08a32d93d48f98e4203b9945c7d51dc5bc861483c0cd",
+  "helper_source_revision": "dfa1bc18c5d69b65f71c865b33f7d5caeb835df2",
+  "lanes": {
+    "windows-i686": {
+      "controller_sha256": "90d3aba06f20d92d408b639b48d63f465930fdb83c8ec8895badf83c4d7a9c54",
+      "inputs_sha256": "4b2fc274e3352466c0cf28d5f23adf0c6e40ec19b4b5f81608a4165eb1248822",
+      "archive_sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "release_manifest_sha256": "0c707d10fab98caeb35fbe9172bf5e82124814e5fd74e36fabc8131f0c75c5d3",
+      "packaged_testers_programs_and_provenance": "BYTE_IDENTICAL_TO_PREVIOUS_SANITIZED_BUNDLE",
+      "unaffected_controller_functions": "BYTE_IDENTICAL",
+      "changed_controller_functions": [
+        "main",
+        "public_check",
+        "public_diagnostic",
+        "windows_check"
+      ],
+      "native_acceptance": "NOT_RUN_LINUX_HOST"
+    },
+    "windows-aarch64": {
+      "controller_sha256": "7776dfeef443b41ad61e1664871ec364504a97da55b9beaa5120ad18aac97d64",
+      "inputs_sha256": "d4300012ec5ee44e17550e83ef00ffe64ea5aa347da92fa44140302f883fe18c",
+      "archive_sha256": "eed161eff71038e0ca37034e195d4943870c4c10cca6fd07c52b7311c1dc8484",
+      "release_manifest_sha256": "c0cc65a405cb7c4c276cd738d6ba907d7380160125913397b19244fb4f6a34a4",
+      "packaged_testers_programs_and_provenance": "BYTE_IDENTICAL_TO_PREVIOUS_SANITIZED_BUNDLE",
+      "unaffected_controller_functions": "BYTE_IDENTICAL",
+      "changed_controller_functions": [
+        "main",
+        "public_check",
+        "public_diagnostic",
+        "windows_check"
+      ],
+      "native_acceptance": "NOT_RUN_LINUX_HOST"
+    }
+  },
+  "private_home_path_scan": "PASS_RECURSIVE",
+  "native_windows_execution": "NOT_RUN"
+}

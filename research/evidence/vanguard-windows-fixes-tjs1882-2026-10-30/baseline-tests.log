@@ -1,0 +1,55 @@
+test_1314_incomplete_continues_all_later_controls (__main__.ControlTests.test_1314_incomplete_continues_all_later_controls) ... FAIL
+test_each_funding_timeout_has_distinct_exported_operation (__main__.FundingTests.test_each_funding_timeout_has_distinct_exported_operation) ... 
+  test_each_funding_timeout_has_distinct_exported_operation (__main__.FundingTests.test_each_funding_timeout_has_distinct_exported_operation) (operation='generateblocks') ... FAIL
+  test_each_funding_timeout_has_distinct_exported_operation (__main__.FundingTests.test_each_funding_timeout_has_distinct_exported_operation) (operation='refresh') ... FAIL
+  test_each_funding_timeout_has_distinct_exported_operation (__main__.FundingTests.test_each_funding_timeout_has_distinct_exported_operation) (operation='get_balance') ... FAIL
+
+======================================================================
+FAIL: test_1314_incomplete_continues_all_later_controls (__main__.ControlTests.test_1314_incomplete_continues_all_later_controls)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages/vanguard/test-windows-fixes.py", line 126, in test_1314_incomplete_continues_all_later_controls
+    self.assertIsNone(error)
+    ~~~~~~~~~~~~~~~~~^^^^^^^
+AssertionError: OSError(22, 'PRIVATE_WALLET_SEED_LOG_SENTINEL') is not None
+
+======================================================================
+FAIL: test_each_funding_timeout_has_distinct_exported_operation (__main__.FundingTests.test_each_funding_timeout_has_distinct_exported_operation) (operation='generateblocks')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages/vanguard/test-windows-fixes.py", line 249, in test_each_funding_timeout_has_distinct_exported_operation
+    self.assertEqual(value['first_failure']['reason'], 'FUNDING_RPC_TIMEOUT')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'EXCEPTION_UNCLASSIFIED' != 'FUNDING_RPC_TIMEOUT'
+- EXCEPTION_UNCLASSIFIED
++ FUNDING_RPC_TIMEOUT
+
+
+======================================================================
+FAIL: test_each_funding_timeout_has_distinct_exported_operation (__main__.FundingTests.test_each_funding_timeout_has_distinct_exported_operation) (operation='refresh')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages/vanguard/test-windows-fixes.py", line 249, in test_each_funding_timeout_has_distinct_exported_operation
+    self.assertEqual(value['first_failure']['reason'], 'FUNDING_RPC_TIMEOUT')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'EXCEPTION_UNCLASSIFIED' != 'FUNDING_RPC_TIMEOUT'
+- EXCEPTION_UNCLASSIFIED
++ FUNDING_RPC_TIMEOUT
+
+
+======================================================================
+FAIL: test_each_funding_timeout_has_distinct_exported_operation (__main__.FundingTests.test_each_funding_timeout_has_distinct_exported_operation) (operation='get_balance')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages/vanguard/test-windows-fixes.py", line 249, in test_each_funding_timeout_has_distinct_exported_operation
+    self.assertEqual(value['first_failure']['reason'], 'FUNDING_RPC_TIMEOUT')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'EXCEPTION_UNCLASSIFIED' != 'FUNDING_RPC_TIMEOUT'
+- EXCEPTION_UNCLASSIFIED
++ FUNDING_RPC_TIMEOUT
+
+
+----------------------------------------------------------------------
+Ran 2 tests in 4.491s
+
+FAILED (failures=4)
