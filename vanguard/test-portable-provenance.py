@@ -4,6 +4,7 @@ import io
 import json
 from pathlib import Path
 import tempfile
+import tarfile
 import unittest
 import zipfile
 from portable_provenance import (PLACEHOLDER, digest, home_prefixes, recorded_receipt,
@@ -15,6 +16,26 @@ def encoded(value):
 
 
 class ProvenanceTests(unittest.TestCase):
+    def test_tar_scan_refuses_compressed_program_and_pax_metadata_paths(self):
+        for field in ('program', 'pax'):
+            stream = io.BytesIO()
+            with tarfile.open(fileobj=stream, mode='w:gz') as archive:
+                data = (home_prefixes()[0] + 'source.cpp').encode() if field == 'program' else b'CLEAN_PROGRAM'
+                member = tarfile.TarInfo('package/bin/program')
+                member.size = len(data)
+                if field == 'pax':
+                    member.pax_headers = {'comment': home_prefixes()[-1] + 'build'}
+                archive.addfile(member, io.BytesIO(data))
+            with self.assertRaisesRegex(ValueError, 'PRIVATE_HOME_PREFIX'):
+                refuse_private_paths(stream.getvalue())
+        clean = io.BytesIO()
+        with tarfile.open(fileobj=clean, mode='w:gz') as archive:
+            data = b'/BUILD_HOME/source.cpp'
+            member = tarfile.TarInfo('package/bin/program')
+            member.size = len(data)
+            archive.addfile(member, io.BytesIO(data))
+        refuse_private_paths(clean.getvalue())
+
     def test_recording_removes_both_home_forms_without_changing_execution_arguments(self):
         argv = ['compiler', home_prefixes()[0] + 'source', home_prefixes()[-1] + 'output']
         receipt = {'commands': [{'argv': list(argv)}]}

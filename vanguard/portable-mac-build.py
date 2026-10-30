@@ -8,6 +8,7 @@ from pathlib import Path
 import platform
 import resource
 import portable_licenses
+import portable_provenance
 import shutil
 import signal
 import subprocess
@@ -39,7 +40,7 @@ def main():
                    'commands': [], 'downloads': [], 'result': 'INCOMPLETE'}
 
         def save():
-            tester.write(out / 'build-receipt.json', receipt)
+            tester.write(out / 'build-receipt.json', portable_provenance.recorded_receipt(receipt))
 
         def run(label, argv, timeout=60, cwd=None):
             row = {'label': label, 'argv': argv}
@@ -109,14 +110,19 @@ def main():
             sdk = tester.command(['xcrun', '--show-sdk-path'])
             cc = tester.command(['xcrun', '-f', 'clang'])
             cxx = tester.command(['xcrun', '-f', 'clang++'])
+            # Apply to depends, CMake and Cargo; static libraries also retain FILE paths.
+            mapping = str(Path.home()) + '/=' + portable_provenance.PLACEHOLDER
+            file_map = '-ffile-prefix-map=' + mapping
+            rust_map = '--remap-path-prefix=' + mapping
+            receipt['path_remapping'] = {'clang': file_map, 'rustc': rust_map}
             receipt['sdk'] = sdk
             receipt['sdk_version'] = tester.command(['xcrun', '--show-sdk-version'])
             # Use the source-pinned downloader/checksum recipes. NO_WALLET only
             # omits hardware-wallet dependencies; simplewallet still builds.
             run('depends', ['make', '-j2', 'HOST=' + host, 'NO_WALLET=1', 'NO_READLINE=1',
                             'DOWNLOAD_RETRIES=1', 'DOWNLOAD_CONNECT_TIMEOUT=20',
-                            'darwin_CC=' + cc + ' --target=' + host + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0',
-                            'darwin_CXX=' + cxx + ' --target=' + host + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0 -stdlib=libc++',
+                            'darwin_CC=' + cc + ' --target=' + host + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0 ' + file_map,
+                            'darwin_CXX=' + cxx + ' --target=' + host + ' -isysroot ' + sdk + ' -mmacosx-version-min=11.0 -stdlib=libc++ ' + file_map,
                             'darwin_LDFLAGS=-Wl,-platform_version,macos,11.0,' + receipt['sdk_version']], 2400,
                 source / 'contrib/depends')
             receipt['dependency_licenses'] = portable_licenses.retain_depends(out)
@@ -155,6 +161,7 @@ def main():
             shutil.copytree(args.cache / 'cargo-home', out / 'cargo-home')
             env = dict(os.environ, PATH=str(out / 'rust/bin') + ':' + os.environ['PATH'],
                        CARGO_HOME=str(out / 'cargo-home'), CARGO_NET_OFFLINE='true', CARGO_BUILD_JOBS='1',
+                       RUSTFLAGS=rust_map, CFLAGS=file_map, CXXFLAGS=file_map,
                        SDKROOT=sdk, MACOSX_DEPLOYMENT_TARGET='11.0')
             os.environ.update(env)
             binary_dir = source / 'build/portable'
@@ -162,10 +169,14 @@ def main():
             run('configure', ['cmake', '-DCMAKE_BUILD_TYPE=Release', '-DARCH=default', '-DBUILD_TESTS=OFF',
                 '-DUSE_DEVICE_TREZOR=OFF', '-DUSE_READLINE=OFF', '-DMANUAL_SUBMODULES=ON',
                 '-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0', '-DCMAKE_TOOLCHAIN_FILE=' + str(source /
-                ('contrib/depends/' + host + '/share/toolchain.cmake')), '../..'], 300, binary_dir)
+                ('contrib/depends/' + host + '/share/toolchain.cmake')),
+                '-DCMAKE_C_FLAGS=' + file_map, '-DCMAKE_CXX_FLAGS=' + file_map, '../..'], 300, binary_dir)
             run('build', ['make', '-j1', 'daemon', 'simplewallet', 'wallet_rpc_server'], 2400, binary_dir)
             receipt['binaries'] = {name: tester.sha(binary_dir / 'bin' / name)
                                   for name in ['monerod', 'monero-wallet-cli', 'monero-wallet-rpc']}
+            for name in receipt['binaries']:
+                portable_provenance.refuse_private_paths((binary_dir / 'bin' / name).read_bytes())
+            receipt['private_home_scan'] = 'PASS_ALL_PROGRAM_BYTES'
             receipt['result'] = 'BUILT_JOURNEY_UNTESTED'
         finally:
             save()

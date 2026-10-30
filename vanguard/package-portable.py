@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tarfile
 import portable_licenses
+import portable_provenance
 
 ROOT = Path(__file__).resolve().parent.parent
 PROGRAMS = ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')
@@ -148,12 +149,22 @@ def main():
         manifest['sdk_version'] = receipt['sdk_version']
         manifest['program_signing'] = signing_states
     (package / 'release.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    for path in sorted(package.rglob('*')):
+        portable_provenance.refuse_private_paths(str(path.relative_to(package)).encode())
+        if path.is_file():
+            portable_provenance.refuse_private_paths(path.read_bytes())
     archive = out / (package.name + '.tar.gz')
+    def public_owner(info):
+        info.uid = info.gid = 0
+        info.uname = info.gname = ''
+        return info
     with tarfile.open(archive, 'w:gz') as stream:
         for path in sorted(package.rglob('*')):
             assert not path.is_symlink(), 'package symlink refused'
             if path.is_file():
-                stream.add(path, arcname=str(Path(package.name) / path.relative_to(package)), recursive=False)
+                stream.add(path, arcname=str(Path(package.name) / path.relative_to(package)), recursive=False,
+                           filter=public_owner)
+    portable_provenance.refuse_private_paths(archive.read_bytes())
     (out / 'SHA256SUMS').write_text(sha(archive) + '  ' + archive.name + '\n')
     print('BUILT_UNTESTED', sha(archive), archive.name)
 

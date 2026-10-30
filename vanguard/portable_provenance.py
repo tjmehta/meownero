@@ -3,6 +3,7 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import tarfile
 import zipfile
 
 PLACEHOLDER = '/BUILD_HOME/'
@@ -30,7 +31,7 @@ def recorded_receipt(value):
 
 
 def refuse_private_paths(data):
-    """Scan bytes, ZIP metadata and nested members; never echo a private value."""
+    """Scan bytes, archive metadata and nested members; never echo a private value."""
     for prefix in home_prefixes():
         for encoding in ('utf-8', 'utf-16-le', 'utf-16-be'):
             if prefix.encode(encoding) in data:
@@ -44,6 +45,14 @@ def refuse_private_paths(data):
                 refuse_private_paths(info.comment)
                 refuse_private_paths(info.extra)
                 refuse_private_paths(archive.read(info))
+    elif data.startswith((b'\x1f\x8b', b'BZh', b'\xfd7zXZ\x00')) or data[257:262] == b'ustar':
+        with tarfile.open(fileobj=io.BytesIO(data), mode='r:*') as archive:
+            for info in archive.getmembers():
+                refuse_private_paths(info.name.encode())
+                refuse_private_paths(info.linkname.encode())
+                refuse_private_paths(json.dumps(info.pax_headers).encode())
+                if info.isfile():
+                    refuse_private_paths(archive.extractfile(info).read())
 
 
 def digest(data):
