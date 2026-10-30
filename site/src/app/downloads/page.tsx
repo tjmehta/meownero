@@ -4,6 +4,7 @@ import {
   getMacTesterRelease,
   getNativeTesterCommands,
   getNativeTesterRelease,
+  getPreviousWindowsTestBundle,
   getTesterCommands,
   getTesterRelease,
   getWindowsTestBundle,
@@ -49,6 +50,7 @@ export default function Downloads() {
   const native = getNativeTesterRelease();
   const nativeCommands = getNativeTesterCommands(native);
   const windows = getWindowsTestBundle();
+  const previousWindows = getPreviousWindowsTestBundle();
   const mac = getMacTesterRelease();
 
   return (
@@ -157,14 +159,16 @@ export default function Downloads() {
       </section>
 
       <section id="windows" aria-labelledby="windows-heading" className="mt-10 rounded-xl border border-gold/30 bg-card p-6 md:p-8">
-        <p className="text-sm font-medium text-gold">Untested Windows test bundle</p>
+        <p className="text-sm font-medium text-gold">Experimental Windows diagnostics · v2</p>
         <h2 id="windows-heading" className="mt-2 text-xl font-semibold">
           Run the Windows tests and send back a report.
         </h2>
         <p className="mt-3 leading-relaxed text-muted-foreground">
-          The programs are BUILT_UNTESTED: nobody has run these candidates
-          natively on Windows yet. This is an unsigned, experimental request
-          for testing, not a release or a verified Windows wallet.
+          This unsigned experimental diagnostic bundle needs fresh native
+          Windows checks. The earlier ARM wallet, restore, later-spend and CLI
+          checks passed, but control coverage was incomplete. The earlier
+          Intel funding attempt timed out; its cause is still unknown.
+          This is not a wallet fix or a verified Windows release.
         </p>
         <p className="mt-3 leading-relaxed text-muted-foreground">
           It is designed to test startup, test-coin payments, wallet recovery,
@@ -173,7 +177,7 @@ export default function Downloads() {
         </p>
         <div className="mt-6">
           <a href={windows.url} className={linkStyle} download={windows.filename}>
-            Download untested Windows test bundle
+            Download Windows diagnostics v2
           </a>
           <p className="mt-2 break-all text-sm text-muted-foreground">
             {windows.filename} · {windows.bytes.toLocaleString("en-US")} bytes
@@ -191,11 +195,11 @@ export default function Downloads() {
           administrator.
         </p>
         <p className="mt-3 leading-relaxed text-muted-foreground">
-          Install native 64-bit CPython 3.13 or later from{" "}
-          <a href="https://www.python.org/downloads/windows/" className={linkStyle}>python.org</a>
-          {" "}if needed, including the Python launcher. Choose the 64-bit
-          installer on Intel/AMD, or ARM64 on ARM Windows. Emulated x64 Python
-          on ARM is refused. See READ-ME.md for Windows version requirements.
+          The existing requirements remain native 64-bit CPython 3.13 or later
+          with the Python launcher: x64 CPython on Intel/AMD, native ARM64
+          CPython on ARM Windows. Emulated x64 Python on ARM is refused.
+          Follow READ-ME.md for the launcher and Windows requirements; this
+          rerun does not call for new packages, elevation or policy changes.
         </p>
         <h3 className="mt-6 font-medium">Check, extract, then run</h3>
         <p className="mt-2 leading-relaxed text-muted-foreground">
@@ -206,7 +210,7 @@ export default function Downloads() {
         <ol className="mt-4 list-decimal space-y-3 pl-5 leading-relaxed text-muted-foreground">
           <li>Extract the entire ZIP into a new writable local folder. Keep all files together.</li>
           <li>Open the extracted meownero-windows-test folder and double-click RUN-TEST.cmd. Leave the window open and allow up to 25 minutes.</li>
-          <li>Send back only the report.zip whose path is printed at the end, even if the result is FAIL or NOT_RUN. Read it before sharing.</li>
+          <li>Let owned-process cleanup finish. Send back only the generated report.zip, including incomplete, FAIL or NOT_RUN results. Read it before sharing.</li>
         </ol>
         <p className="mt-3 leading-relaxed text-muted-foreground">
           Do not share the whole run folder: it can contain disposable wallets,
@@ -214,12 +218,34 @@ export default function Downloads() {
           cleanup to finish. Force-closing the window may prevent a report.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          On ARM, symlink-fixture error 1314 alone must record NOT_EXECUTED,
+          continue later controls, and finish INCOMPLETE_NATIVE_ARCHIVE_CONTROLS
+          with exit 2, never PASS. If symlink creation works, actual rejection
+          and all ten controls are required. Other fixture and refusal errors
+          remain failures. Do not elevate or change Windows policy.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          Intel funding failures now report generateblocks, refresh or
+          get_balance and elapsed/budget/deadline values. The 90-second socket,
+          1200-second journey and 1500-second controller budgets are unchanged.
+          A timeout identifies the operation, not the underlying engine cause.
+          Please return the report whether the full journey passes or fails.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
           Intel/AMD x64 PCs run the i68635 programs through WoW64; ARM64 PCs run
-          ARM13 and require ARMv8 crypto support. This bundle is not the separate
-          Windows x64 archive. Its packaging has been independently reviewed;
-          the guide&apos;s earlier review-pending wording is retained in the
-          unchanged ZIP. Windows behavior remains unverified. A report is
-          evidence for that machine, not whole-release acceptance.
+          ARM13 and require ARMv8 crypto support. These are not native x64
+          programs, and standalone 32-bit Windows support is not established.
+          Source and this exact bundle have scoped independent acceptance;
+          that supersedes only the unchanged ZIP&apos;s review-pending wording.
+          Native successor execution remains unverified. Optional
+          native_cli_event NOT_REQUESTED is informational. A report is evidence
+          for that machine, not whole-release acceptance.
+        </p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+          Previous bundle, retained for reference (use v2 for this rerun):{" "}
+          <a href={previousWindows.url} className={linkStyle} download={previousWindows.filename}>
+            {previousWindows.filename}
+          </a>
         </p>
       </section>
 

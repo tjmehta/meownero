@@ -61,6 +61,14 @@ const nativeTesterRelease: NativeTesterRelease = {
 // Exact reviewed packaging successor. This is a test-and-report handoff,
 // not native Windows execution acceptance or a release.
 const windowsTestBundle: Artifact = {
+  url: "/downloads/artifacts/meownero-windows-test-diagnostics-v2.zip",
+  filename: "meownero-windows-test-diagnostics-v2.zip",
+  bytes: 164120029,
+  sha256: "bedd371bc042ec2b893e45693083eae64637ca1a1f496933f2f90a5bf6f38034",
+};
+
+// Keep the earlier download available for historical report bindings.
+const previousWindowsTestBundle: Artifact = {
   url: "/downloads/artifacts/meownero-windows-test-sanitized-v1.zip",
   filename: "meownero-windows-test-sanitized-v1.zip",
   bytes: 164091051,
@@ -88,6 +96,11 @@ export function getMacTesterRelease(): NativeTesterRelease {
 export function getWindowsTestBundle(): Artifact {
   validateArtifact(windowsTestBundle);
   return windowsTestBundle;
+}
+
+export function getPreviousWindowsTestBundle(): Artifact {
+  validateArtifact(previousWindowsTestBundle);
+  return previousWindowsTestBundle;
 }
 
 const sha256Pattern = /^[a-f0-9]{64}$/;
