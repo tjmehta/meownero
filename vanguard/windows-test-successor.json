@@ -1,0 +1,29 @@
+{
+  "schema": "meownero-windows-tester-helper-successor/1",
+  "source_revision": "dfa1bc18c5d69b65f71c865b33f7d5caeb835df2",
+  "baseline_revision": "3d04ba7be91f64ac2fdf964afe82ad6d2e6a7670",
+  "native_acceptance": "NOT_GRANTED_BY_SYNTHETIC_CHECKS",
+  "files": {
+    "run-portable-ci.py": "141148f957d2f92712e54cd22ca3413a62e30518c6591350c2e4866b0655c905",
+    "run-portable-journey-diagnostic.py": "b0a2a8cee4acdbe128eafc29fa7c81e243b55682c51605d907729a54220dc7b2",
+    "test-portable-refusals.py": "931634d8737b0a2b4d8a61e00326b30b5400f57b064f0acd4a35e18d19b4e304"
+  },
+  "predecessors": {
+    "run-portable-journey-diagnostic.py": "21bf9c9072e27135e6267192276e4bb401a46073a82b071c72ee7b6e867cb774",
+    "test-portable-refusals.py": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4"
+  },
+  "controllers": {
+    "windows-i686": "90d3aba06f20d92d408b639b48d63f465930fdb83c8ec8895badf83c4d7a9c54",
+    "windows-aarch64": "7776dfeef443b41ad61e1664871ec364504a97da55b9beaa5120ad18aac97d64"
+  },
+  "controller_patches": {
+    "windows-i686": {
+      "path": "vanguard/patches/windows-i686-tester-diagnostics.patch",
+      "sha256": "14f7e87e367f8c70726b5cf26ad6129e1bc98c3c0da4b693b7692c1a0107eca6"
+    },
+    "windows-aarch64": {
+      "path": "vanguard/patches/windows-aarch64-tester-diagnostics.patch",
+      "sha256": "c0fa9c26e1425f926e25a76e34129f083ed3e2f24b01e5874c5ac69f4a6d1c51"
+    }
+  }
+}

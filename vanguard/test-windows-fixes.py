@@ -26,6 +26,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--helpers', type=Path, default=ROOT / 'vanguard')
 parser.add_argument('--package-archive', type=Path, default=ROOT / 'build/tjs1882-run62675-windows-successor-final/meownero-windows-test/meownero-vanguard-windows-i686-sanitized-v1.zip')
 parser.add_argument('--evidence', type=Path)
+parser.add_argument('--runner', type=Path)
 args, remaining = parser.parse_known_args()
 if args.evidence:
     args.evidence.mkdir(parents=True, exist_ok=True)
@@ -41,7 +42,9 @@ def load(name, filename):
     return module
 
 ci = load('fix_ci', 'run-portable-ci.py')
-bundle = load('fix_bundle', 'windows-test-bundle.py')
+runner_spec = importlib.util.spec_from_file_location('fix_bundle', args.runner or args.helpers / 'windows-test-bundle.py')
+bundle = importlib.util.module_from_spec(runner_spec)
+runner_spec.loader.exec_module(bundle)
 PRIVATE = 'PRIVATE_WALLET_SEED_LOG_SENTINEL'
 
 class ControlTests(unittest.TestCase):

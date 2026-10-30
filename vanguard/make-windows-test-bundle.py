@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Assemble sanitized i68635 and ARM13 successors without rebuilding programs."""
+"""Assemble hash-bound Windows diagnostic successors without rebuilding programs."""
 import argparse
 import hashlib
 import json
@@ -161,7 +161,7 @@ def main():
     (bundle / 'bundle.json').write_text(json.dumps(manifest, indent=2) + '\n')
     # Scan the complete tree recursively before a deliverable ZIP can exist.
     check_bundle(bundle)
-    output = args.out / 'meownero-windows-test-sanitized-v1.zip'
+    output = args.out / 'meownero-windows-test-diagnostics-v2.zip'
     with zipfile.ZipFile(output, 'x', compression=zipfile.ZIP_STORED) as archive:
         for path in sorted(bundle.rglob('*')):
             if path.is_file():
