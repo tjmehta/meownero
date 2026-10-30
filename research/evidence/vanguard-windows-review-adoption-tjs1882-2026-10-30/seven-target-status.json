@@ -1,0 +1,133 @@
+{
+  "schema": "meownero-reviewed-windows-release-status/1",
+  "as_of": "2026-10-30",
+  "issue": "TJS-1882",
+  "writer_agent_id": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+  "reviewer_agent_id": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "candidate_source_revision": "6836e5e1b14e66292cb0393b9f8ba0d1b8ab0dec",
+  "source_bundle_scoped_acceptance_revision": "a22f00f6-e4e7-48d2-ad05-2a4d67114129",
+  "supersedes": "Pending reviewer statements in returned-report matrix at evidence commit 8d0570d; earlier immutable evidence retained.",
+  "seven_target_release": "OPEN",
+  "new_report_independent_acceptance": "ACCEPTED_SCOPED_RETURNED_REPORT_EVIDENCE",
+  "targets": [
+    {
+      "target": "windows-i686",
+      "status": "ACCEPTED_SCOPED_RECORDED_I686_WOW64_JOURNEY_AND_TEN_CONTROLS",
+      "evidence": [
+        "intel-report-v2.zip",
+        "intel-report3-v2.zip"
+      ],
+      "native_os_architecture": "x86_64",
+      "program_architecture": "i686",
+      "execution_substrate": "NATIVE_WINDOWS_WOW64",
+      "standalone_32bit_windows": "UNTESTED",
+      "independent_host_count": "UNKNOWN_NOT_ATTESTED",
+      "original_funding_timeout_root_cause": "UNKNOWN",
+      "further_bhafresh_rerun": "NOT_REQUESTED",
+      "independent_acceptance_revision": "04f52059-7791-464a-a5a7-a0c82d79956c",
+      "native_x64_programs_by_these_reports": "UNTESTED",
+      "cleanup": "TESTER_REPORTED_ZERO_ACTIVE_OWNED_PROCESSES",
+      "distribution_scope": "Existing diagnostics/test-and-report delivery only; no new publication or whole-release authorization."
+    },
+    {
+      "target": "windows-aarch64",
+      "status": "ACCEPTED_SCOPED_NATIVE_JOURNEY_NINE_CONTROLS_FULL_CONTROLS_INCOMPLETE",
+      "evidence": [
+        "arm-report-v2.zip"
+      ],
+      "native_os_architecture": "aarch64",
+      "program_architecture": "aarch64",
+      "execution_substrate": "NATIVE",
+      "completed_controls": 9,
+      "unexecuted_control": "symlink-directory",
+      "reason": "SYMLINK_PRIVILEGE_NOT_HELD",
+      "winerror": 1314,
+      "full_control_acceptance": "NOT_GRANTED",
+      "next_owner": "platform engineer; full native symlink refusal requires an already-permitted qualified route",
+      "further_bhafresh_rerun": "NOT_REQUESTED",
+      "independent_acceptance_revision": "04f52059-7791-464a-a5a7-a0c82d79956c",
+      "controller_controls_exit": 2,
+      "aggregate_result": "INCOMPLETE_NATIVE_ARCHIVE_CONTROLS",
+      "refused_true_for_unexecuted_control": false,
+      "cleanup": "TESTER_REPORTED_ZERO_ACTIVE_OWNED_PROCESSES"
+    },
+    {
+      "target": "windows-x86_64",
+      "status": "UNCHANGED_PRIOR_SANITIZED_SUCCESSOR_SCOPED_ACCEPTANCE",
+      "scope": "Historical native Server2025 witness reused for unchanged programs; other versions untested. No x64 executable run in these returned reports.",
+      "source_document": "windows-x64-successor-independent-review-2026-10-30",
+      "source_revision": "5adf41ec-f2b6-43fb-a608-451fcb15ce9e"
+    },
+    {
+      "target": "macos-aarch64",
+      "status": "UNCHANGED_REMAPPED_NATIVE_ACCEPTANCE_AND_COMPLETED_PARENT_DELIVERY",
+      "scope": "One Apple Silicon Mac, macOS26.5.1; older/fresh install/Gatekeeper untested; ad hoc signed, not notarized.",
+      "source_document": "apple-silicon-delivery-2026-10-30",
+      "source_revision": "69e1870e-3106-495c-a7ea-f8933822b24c"
+    },
+    {
+      "target": "macos-x86_64",
+      "status": "UNCHANGED_REMAPPED_ROSETTA_ONLY_ACCEPTANCE_NATIVE_INTEL_UNTESTED",
+      "source_document": "macos-intel-remapped-independent-review-2026-10-30",
+      "source_revision": "da8a8788-a6b5-412a-89c9-40d3518a5e04"
+    },
+    {
+      "target": "linux-aarch64",
+      "status": "UNCHANGED_ARM39_NATIVE_ACCEPTANCE",
+      "scope": "Recorded Ubuntu22/24 and Debian12 container-userland limits retained.",
+      "source_document": "release-handoff",
+      "source_revision": "cd1cb4bc-021f-4fb0-8a1a-45fed019cffd"
+    },
+    {
+      "target": "linux-x86_64",
+      "status": "UNCHANGED_LINUX38_NATIVE_ACCEPTANCE_AND_COMPLETED_DOCKER_DELIVERY",
+      "scope": "Ubuntu22 Docker userland on native Ubuntu24 kernel only; distro/ABI limitations unchanged.",
+      "source_document": "release-handoff",
+      "source_revision": "cd1cb4bc-021f-4fb0-8a1a-45fed019cffd"
+    }
+  ],
+  "acceptance_accounting": "Four prior native-accepted full target scopes remain. Additional accepted i686/WoW64 returned-report scope has a full journey and ten controls. ARM remains partial and native Intel Mac remains untested. No blanket standalone-32bit or whole-release acceptance is inferred.",
+  "runtime_check_in_this_run": "NOT_RUN_LINUX_EVIDENCE_INSPECTION_ONLY",
+  "external_messages_in_this_run": 0,
+  "parent_owns_future_group_delivery": true,
+  "run_id": "d7b40435-c9c9-4d69-960d-2f0a3873b2ea",
+  "adopted_evidence_revision": "8d0570d96f75488753ec124f0a4b9f50ff63c906",
+  "review_document": {
+    "key": "windows-returned-independent-review-2026-10-30",
+    "revision": "04f52059-7791-464a-a5a7-a0c82d79956c",
+    "body_sha256": "64476dd2090a60e19ae5812656229d91bff15ed28681bc4182a93c07109dc48c"
+  },
+  "final_stage": {
+    "id": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+    "decision": "changes_requested",
+    "whole_release_approval": "NOT_GRANTED"
+  },
+  "required_remaining_evidence": [
+    "Native ARM64 symlink-directory refusal on an already-permitted qualified route; full controls independently accepted.",
+    "Native Intel Mac exact remapped archive full journey and ten controls, followed by independent acceptance.",
+    "Standalone 32-bit Windows remains untested; i686/WoW64 evidence alone does not establish that OS scope.",
+    "Common-distribution/current-archive, clean-install, older-OS and delivery/integration limits remain as recorded in prior release handoff."
+  ],
+  "further_bhafresh_rerun": "NOT_REQUESTED",
+  "original_funding_timeout_root_cause": "UNKNOWN",
+  "budgets_seconds": {
+    "socket": 90,
+    "journey": 1200,
+    "controller": 1500
+  },
+  "reviewer_windows_execution": "NOT_RUN_LINUX_EVIDENCE_INSPECTION_ONLY",
+  "implementation_changed": false,
+  "retained_distribution_limits": {
+    "Ubuntu22.04_ARM64": "PASS_EXACT_CURRENT_ARCHIVE",
+    "Debian12_ARM64": "PASS_EXACT_CURRENT_ARCHIVE_NATIVE_CONTAINER_USERLAND_ONLY",
+    "Ubuntu24_Debian13": "Historical other-archive witnesses retained; current Ubuntu24 ARM64 acceptance separately recorded, current Debian13 UNTESTED",
+    "Fedora_RHEL_Arch_openSUSE": "UNTESTED_EXACT_CURRENT_ARCHIVE",
+    "glibc_below_2_35": "OUTSIDE_RECORDED_ABI_FLOOR",
+    "x64_distributions": "SCOPED_INDEPENDENT_PASS_UBUNTU22_DOCKER_USERLAND_ON_NATIVE_UBUNTU24_KERNEL_ONLY",
+    "Ubuntu24_ARM64": "INDEPENDENT_PASS_EXACT_ARCHIVE_NATIVE_CONTAINER",
+    "Ubuntu22_x64_bare_metal": "UNVERIFIED",
+    "Debian12_x64": "UNTESTED_EXACT_CURRENT_ARCHIVE"
+  },
+  "old_mac_archives": "DO_NOT_PUBLISH_OR_REDISTRIBUTE",
+  "source_integration": "PARENT_AFTER_FINAL_REVIEW_AND_PRESERVATION_CHECKS"
+}
