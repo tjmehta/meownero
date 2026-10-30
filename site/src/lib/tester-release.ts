@@ -67,6 +67,24 @@ const windowsTestBundle: Artifact = {
   sha256: "eb6b76d387f26e5b4a9f849d8e7de2fbf11e9ce06a221cb16b3f5dbd0502da46",
 };
 
+// Exact remapped successor, independently native-tested on macOS 26.5.1
+// Apple Silicon. The frozen archive retains its build-time status.
+const macTesterRelease: NativeTesterRelease = {
+  archive: {
+    url: "/downloads/artifacts/meownero-vanguard-macos-aarch64-remapped-v1.tar.gz",
+    filename: "meownero-vanguard-macos-aarch64-remapped-v1.tar.gz",
+    bytes: 63055195,
+    sha256: "c02e656ae0fe0e8ffc774392dd535f12efec89b04a7fc400b4398124505eda00",
+  },
+  archiveRoot: "meownero-vanguard-macos-aarch64",
+  sourceCommit: "85a9f4394345e520c66e85c7151b0df75e7fe15c",
+};
+
+export function getMacTesterRelease(): NativeTesterRelease {
+  validateNativeRelease(macTesterRelease);
+  return macTesterRelease;
+}
+
 export function getWindowsTestBundle(): Artifact {
   validateArtifact(windowsTestBundle);
   return windowsTestBundle;

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  getMacTesterRelease,
   getNativeTesterCommands,
   getNativeTesterRelease,
   getTesterCommands,
@@ -10,7 +11,7 @@ import {
 
 const title = "Local tester downloads | Meownero";
 const description =
-  "Local, valueless Meownero wallet tests: an untested Windows test-and-report bundle and Linux x64 testers. No mainnet, public testnet or GUI wallet download.";
+  "Local, valueless Meownero wallet tests for Apple Silicon Mac, Windows and Linux x64. No mainnet, public testnet or GUI wallet download.";
 
 export const metadata: Metadata = {
   title,
@@ -48,6 +49,7 @@ export default function Downloads() {
   const native = getNativeTesterRelease();
   const nativeCommands = getNativeTesterCommands(native);
   const windows = getWindowsTestBundle();
+  const mac = getMacTesterRelease();
 
   return (
     <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-10 md:py-16">
@@ -59,7 +61,7 @@ export default function Downloads() {
 
       <header className="mt-12 max-w-2xl">
         <p className="text-sm font-medium tracking-wide text-gold">
-          Test-only · Windows and Linux
+          Test-only · Mac, Windows and Linux
         </p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tighter text-balance md:text-5xl">
           Try a local wallet journey.
@@ -70,10 +72,89 @@ export default function Downloads() {
           public testnet or mainnet, and it must not be used with real funds.
         </p>
         <p className="mt-4 leading-relaxed text-muted-foreground">
-          Windows testers can run the experimental test-and-report bundle below.
+          Apple Silicon Mac testers can try the native archive below.
+          Windows testers can run the experimental test-and-report bundle.
           Linux x64 testers can choose a native archive or a Docker bundle.
         </p>
       </header>
+
+      <section id="macos" aria-labelledby="macos-heading" className="mt-10 rounded-xl border border-gold/30 bg-card p-6 md:p-8">
+        <h2 id="macos-heading" className="text-xl font-semibold">
+          Apple Silicon Mac tester
+        </h2>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          This file replaces the October 10 Apple Silicon archive. It runs
+          private, valueless test coins on your own machine only. It is a
+          command-line tester, not a graphical wallet or public network.
+        </p>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          Independently tested natively on one Apple Silicon Mac with macOS
+          26.5.1: receive test coins, restore the wallet, spend from the restored
+          wallet, and all ten refusal and cleanup checks passed.
+        </p>
+        <div className="mt-6">
+          <a href={mac.archive.url} className={linkStyle} download={mac.archive.filename}>
+            Download Apple Silicon tester
+          </a>
+          <p className="mt-2 break-all text-sm text-muted-foreground">
+            {mac.archive.filename} · {mac.archive.bytes.toLocaleString("en-US")} bytes
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">SHA256</p>
+          <code className="mt-1 block break-all font-mono text-sm leading-relaxed">
+            {mac.archive.sha256}
+          </code>
+        </div>
+        <h3 className="mt-6 font-medium">Before you start</h3>
+        <p className="mt-2 leading-relaxed text-muted-foreground">
+          Apple Silicon only, Python 3.8 or later, two CPU cores, 5 GiB available
+          memory and 5 GiB free disk. The programs declare macOS 11.0 as their
+          minimum; older macOS versions and a fresh macOS install are untested.
+          Use only disposable wallets, never a personal recovery phrase.
+        </p>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          Ad hoc signatures only: not Developer ID signed or notarized. macOS
+          download approval (Gatekeeper) has not been tested. A browser download
+          may be quarantined and macOS may refuse to run the programs; neither
+          outcome has been observed. TESTER.md treats download approval as a
+          separate check and gives no workaround.
+        </p>
+        <h3 className="mt-6 font-medium">Check, extract, then run</h3>
+        <p className="mt-2 leading-relaxed text-muted-foreground">
+          Suggested alternative: download in Terminal with curl. This download
+          route is also untested; it does not establish macOS approval.
+          In a new folder, run:
+        </p>
+        <Command>{`curl --fail --location --output '${mac.archive.filename}' 'https://meownero.com${mac.archive.url}'`}</Command>
+        <p className="mt-4 leading-relaxed text-muted-foreground">
+          Whether downloaded in your browser or Terminal, check the file before
+          extracting. Compare the output below with the SHA256 above. Stop if
+          they differ.
+        </p>
+        <Command>{`shasum -a 256 '${mac.archive.filename}'`}</Command>
+        <p className="mt-4 leading-relaxed text-muted-foreground">
+          After the hash matches, extract into a new folder and open the package:
+        </p>
+        <Command>{`test ! -e '${mac.archiveRoot}' && test ! -L '${mac.archiveRoot}' &&\ntar xzf '${mac.archive.filename}' &&\ncd '${mac.archiveRoot}'`}</Command>
+        <p className="mt-4 leading-relaxed text-muted-foreground">
+          Read TESTER.md, then run preflight and the journey. The output folder
+          must not already exist; choose a fresh name for every run.
+        </p>
+        <Command>{`./launch.sh preflight &&\n./launch.sh run --out ../my-disposable-journey`}</Command>
+        <p className="mt-4 leading-relaxed text-muted-foreground">
+          Share only my-disposable-journey/result.json, including a failed
+          receipt. Never share private/ or the whole output folder: it holds
+          disposable wallets, chain data and logs.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          The unchanged package says BUILT_UNTESTED because that status was
+          frozen at build time. The later independent native acceptance applies
+          to the exact SHA256 above, not other Macs or download methods.
+        </p>
+        <dl className="mt-6 text-sm">
+          <dt className="text-muted-foreground">Source commit</dt>
+          <dd className="mt-1 break-all font-mono leading-relaxed">{mac.sourceCommit}</dd>
+        </dl>
+      </section>
 
       <section id="windows" aria-labelledby="windows-heading" className="mt-10 rounded-xl border border-gold/30 bg-card p-6 md:p-8">
         <p className="text-sm font-medium text-gold">Untested Windows test bundle</p>
