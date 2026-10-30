@@ -1,11 +1,11 @@
 {
   "schema": "meownero-lifecycle-packet/3",
-  "spec_sha256": "e57c346d0c7471d8e02f7c40642e9a805662f568adc1474f826d3328e89046f3",
+  "spec_sha256": "e93a2cfdabc683fb79be6f7f60adfa7ebd14bd1a3216136c79da6ae42f6302ce",
   "source_only": true,
   "activation": "REFUSED_UNQUALIFIED",
   "plan": {
     "schema": "meownero-source-plan/3",
-    "authorization_comment": "2f5ded01-5228-4f2e-89ba-7cc9c683ef91",
+    "authorization_comment": "fdf10e5f-7009-466e-b0c5-3fa5dc70c537",
     "attempt_id": null,
     "source": {
       "commit": null,
@@ -2375,10 +2375,215 @@
       "sequence": 36,
       "phase": "work",
       "kind": "syscall",
+      "operation": "workload_namespace_view",
+      "args": [
+        "authenticated_retained_namespace_C_readonly_W_writable",
+        "PID1_workload_unit_mount_view_before_ExecStart",
+        "no_keeper_child_exec"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [
+        "workload_mount_view_C_W_devices_inodes"
+      ],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "exact_C_W_namespace_identities",
+        "independent_installed_binding_qualification"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 37,
+      "phase": "work",
+      "kind": "dbus",
+      "operation": "StartTransientUnit",
+      "args": {
+        "stage": "work",
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StartTransientUnit",
+        "signature": "ssa(sv)a(sa(sv))",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "fail",
+          [
+            [
+              "Type",
+              "s",
+              "exec"
+            ],
+            [
+              "User",
+              "s",
+              "0"
+            ],
+            [
+              "Group",
+              "s",
+              "0"
+            ],
+            [
+              "Slice",
+              "s",
+              "meowneroTJS2504$ATTEMPT-work.slice"
+            ],
+            [
+              "ExecStart",
+              "a(sasb)",
+              [
+                [
+                  "/usr/bin/dockerd",
+                  [
+                    "/usr/bin/dockerd",
+                    "--host=unix://$W/root/exec/docker.sock",
+                    "--data-root=$W/root/docker",
+                    "--exec-root=$W/root/exec",
+                    "--pidfile=$W/root/exec/dockerd.pid",
+                    "--config-file=$C/manager/daemon.json",
+                    "--exec-opt=native.cgroupdriver=cgroupfs",
+                    "--cgroup-parent=$WORK_CGROUP",
+                    "--bridge=none",
+                    "--iptables=false",
+                    "--ip6tables=false",
+                    "--ip-forward=false",
+                    "--ip-masq=false",
+                    "--userland-proxy=false",
+                    "--storage-driver=vfs"
+                  ],
+                  false
+                ]
+              ]
+            ],
+            [
+              "RestrictAddressFamilies",
+              "(bas)",
+              [
+                true,
+                [
+                  "AF_UNIX",
+                  "AF_NETLINK",
+                  "AF_INET"
+                ]
+              ]
+            ],
+            [
+              "KillMode",
+              "s",
+              "control-group"
+            ],
+            [
+              "TimeoutStopUSec",
+              "t",
+              20000000
+            ],
+            [
+              "NoNewPrivileges",
+              "b",
+              true
+            ],
+            [
+              "ProtectSystem",
+              "s",
+              "strict"
+            ],
+            [
+              "PrivateTmp",
+              "b",
+              false
+            ],
+            [
+              "PrivateMounts",
+              "b",
+              true
+            ],
+            [
+              "ReadWritePaths",
+              "as",
+              [
+                "$W"
+              ]
+            ],
+            [
+              "ReadOnlyPaths",
+              "as",
+              [
+                "$C"
+              ]
+            ],
+            [
+              "InaccessiblePaths",
+              "as",
+              [
+                "-/run/docker.sock",
+                "-/var/run/docker.sock"
+              ]
+            ],
+            [
+              "StandardOutput",
+              "s",
+              "null"
+            ],
+            [
+              "StandardError",
+              "s",
+              "null"
+            ],
+            [
+              "LimitCORE",
+              "t",
+              0
+            ]
+          ],
+          []
+        ],
+        "delivery": null
+      },
+      "uid": 0,
+      "gid": 0,
+      "writable": [
+        "O:unit_metadata",
+        "W:root"
+      ],
+      "created_or_checked": [
+        "task_only_workload_unit"
+      ],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "manager_QUARANTINED",
+        "local_CONSUMED",
+        "W_mounted_exact_identity",
+        "qualified_workload_namespace_view_before_ExecStart",
+        "frozen_config_log_none",
+        "private_root_socket_0600",
+        "PID1_not_keeper_child_exec"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 38,
+      "phase": "work",
+      "kind": "syscall",
       "operation": "place_before_exec",
       "args": [
         "work_slice_leaf.cgroup.procs",
-        "all_daemon_containerd_shim_controller_children"
+        "controller_children_only; dockerd_uses_workload_Slice"
       ],
       "uid": 0,
       "gid": 0,
@@ -2400,50 +2605,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 37,
-      "phase": "work",
-      "kind": "argv",
-      "operation": "dockerd",
-      "args": [
-        "/usr/bin/dockerd",
-        "--host=unix://$W/root/exec/docker.sock",
-        "--data-root=$W/root/docker",
-        "--exec-root=$W/root/exec",
-        "--pidfile=$W/root/exec/dockerd.pid",
-        "--config-file=$C/manager/daemon.json",
-        "--exec-opt=native.cgroupdriver=cgroupfs",
-        "--cgroup-parent=$WORK_CGROUP",
-        "--bridge=none",
-        "--iptables=false",
-        "--ip6tables=false",
-        "--ip-forward=false",
-        "--ip-masq=false",
-        "--userland-proxy=false",
-        "--storage-driver=vfs"
-      ],
-      "uid": 0,
-      "gid": 0,
-      "writable": [
-        "W:root"
-      ],
-      "created_or_checked": [],
-      "charge": "W+C",
-      "deadline": "origin+4500",
-      "environment": {
-        "LC_ALL": "C",
-        "PATH": "$PINNED_TOOL_PATH",
-        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
-      },
-      "preconditions": [
-        "work_leaf_placement_before_exec",
-        "frozen_config_log_none",
-        "private_root_socket_0600"
-      ],
-      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
-      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
-    },
-    {
-      "sequence": 38,
+      "sequence": 39,
       "phase": "work",
       "kind": "docker",
       "operation": "load",
@@ -2476,7 +2638,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 39,
+      "sequence": 40,
       "phase": "work",
       "kind": "docker",
       "operation": "inspect_image",
@@ -2504,7 +2666,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 40,
+      "sequence": 41,
       "phase": "work",
       "kind": "argv",
       "operation": "controller",
@@ -2551,7 +2713,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 41,
+      "sequence": 42,
       "phase": "work",
       "kind": "docker",
       "operation": "observe_and_create",
@@ -2584,7 +2746,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 42,
+      "sequence": 43,
       "phase": "work",
       "kind": "docker",
       "operation": "start_and_wait",
@@ -2611,7 +2773,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 43,
+      "sequence": 44,
       "phase": "cleanup",
       "kind": "docker",
       "operation": "remove_owned",
@@ -2640,7 +2802,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 44,
+      "sequence": 45,
       "phase": "cleanup",
       "kind": "syscall",
       "operation": "terminate_owned",
@@ -2669,7 +2831,81 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 45,
+      "sequence": 46,
+      "phase": "cleanup",
+      "kind": "dbus",
+      "operation": "StopUnit",
+      "args": {
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StopUnit",
+        "signature": "ss",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "replace"
+        ]
+      },
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [
+        "workload_cgroup_recursive_exit"
+      ],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "exact_owned_workload_unit",
+        "keeper_or_independent_deadline_authority"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 47,
+      "phase": "cleanup",
+      "kind": "dbus",
+      "operation": "KillUnit",
+      "args": {
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "KillUnit",
+        "signature": "ssi",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "all",
+          9
+        ]
+      },
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [
+        "workload_cgroup_recursive_exit"
+      ],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "exact_owned_workload_unit",
+        "keeper_or_independent_deadline_authority",
+        "KillUnit_only_after_bounded_StopUnit_failure"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 48,
       "phase": "cleanup",
       "kind": "syscall",
       "operation": "export",
@@ -2697,7 +2933,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 46,
+      "sequence": 49,
       "phase": "cleanup",
       "kind": "argv",
       "operation": "umount",
@@ -2725,7 +2961,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 47,
+      "sequence": 50,
       "phase": "cleanup",
       "kind": "argv",
       "operation": "detach",
@@ -2754,7 +2990,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 48,
+      "sequence": 51,
       "phase": "cleanup",
       "kind": "syscall",
       "operation": "unlinkat_owned_W",
@@ -2783,7 +3019,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 49,
+      "sequence": 52,
       "phase": "completion",
       "kind": "syscall",
       "operation": "final_custody",
@@ -2816,7 +3052,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 50,
+      "sequence": 53,
       "phase": "completion",
       "kind": "syscall",
       "operation": "observe",
@@ -2847,7 +3083,7 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
-      "sequence": 51,
+      "sequence": 54,
       "phase": "dispose",
       "kind": "syscall",
       "operation": "explicit_disposition",
@@ -3752,6 +3988,148 @@
         "restart": "new_role_bound_delivery_or_refuse",
         "actual_transport": "UNBOUND_NOT_QUALIFIED"
       }
+    },
+    {
+      "stage": "work",
+      "bus": "org.freedesktop.systemd1",
+      "path": "/org/freedesktop/systemd1",
+      "interface": "org.freedesktop.systemd1.Manager",
+      "member": "StartTransientUnit",
+      "signature": "ssa(sv)a(sa(sv))",
+      "args": [
+        "meowneroTJS2504$ATTEMPT-workload.service",
+        "fail",
+        [
+          [
+            "Type",
+            "s",
+            "exec"
+          ],
+          [
+            "User",
+            "s",
+            "0"
+          ],
+          [
+            "Group",
+            "s",
+            "0"
+          ],
+          [
+            "Slice",
+            "s",
+            "meowneroTJS2504$ATTEMPT-work.slice"
+          ],
+          [
+            "ExecStart",
+            "a(sasb)",
+            [
+              [
+                "/usr/bin/dockerd",
+                [
+                  "/usr/bin/dockerd",
+                  "--host=unix://$W/root/exec/docker.sock",
+                  "--data-root=$W/root/docker",
+                  "--exec-root=$W/root/exec",
+                  "--pidfile=$W/root/exec/dockerd.pid",
+                  "--config-file=$C/manager/daemon.json",
+                  "--exec-opt=native.cgroupdriver=cgroupfs",
+                  "--cgroup-parent=$WORK_CGROUP",
+                  "--bridge=none",
+                  "--iptables=false",
+                  "--ip6tables=false",
+                  "--ip-forward=false",
+                  "--ip-masq=false",
+                  "--userland-proxy=false",
+                  "--storage-driver=vfs"
+                ],
+                false
+              ]
+            ]
+          ],
+          [
+            "RestrictAddressFamilies",
+            "(bas)",
+            [
+              true,
+              [
+                "AF_UNIX",
+                "AF_NETLINK",
+                "AF_INET"
+              ]
+            ]
+          ],
+          [
+            "KillMode",
+            "s",
+            "control-group"
+          ],
+          [
+            "TimeoutStopUSec",
+            "t",
+            20000000
+          ],
+          [
+            "NoNewPrivileges",
+            "b",
+            true
+          ],
+          [
+            "ProtectSystem",
+            "s",
+            "strict"
+          ],
+          [
+            "PrivateTmp",
+            "b",
+            false
+          ],
+          [
+            "PrivateMounts",
+            "b",
+            true
+          ],
+          [
+            "ReadWritePaths",
+            "as",
+            [
+              "$W"
+            ]
+          ],
+          [
+            "ReadOnlyPaths",
+            "as",
+            [
+              "$C"
+            ]
+          ],
+          [
+            "InaccessiblePaths",
+            "as",
+            [
+              "-/run/docker.sock",
+              "-/var/run/docker.sock"
+            ]
+          ],
+          [
+            "StandardOutput",
+            "s",
+            "null"
+          ],
+          [
+            "StandardError",
+            "s",
+            "null"
+          ],
+          [
+            "LimitCORE",
+            "t",
+            0
+          ]
+        ],
+        []
+      ],
+      "delivery": null
     }
   ],
   "unbound": [

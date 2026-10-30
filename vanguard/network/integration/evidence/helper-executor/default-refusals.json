@@ -1,0 +1,46 @@
+[
+  {
+    "argv": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-I",
+      "-B",
+      "profile-root-helper.py"
+    ],
+    "exit": 3,
+    "output": {
+      "result": "REFUSED_UNQUALIFIED",
+      "native_execution": "NOT_RUN",
+      "launch_ready": false
+    }
+  },
+  {
+    "argv": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "profile-root-helper.py"
+    ],
+    "exit": 3,
+    "output": {
+      "result": "REFUSED_UNQUALIFIED",
+      "native_execution": "NOT_RUN",
+      "launch_ready": false
+    }
+  },
+  {
+    "argv": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "profile-helper.py",
+      "prepare",
+      "--spec",
+      "integration/source-plan.json"
+    ],
+    "exit": 3,
+    "output": {
+      "result": "REFUSED_BEFORE_HOST_OPERATIONS",
+      "failure_class": "ValueError",
+      "native_execution": "NOT_RUN",
+      "launch_ready": false
+    }
+  }
+]

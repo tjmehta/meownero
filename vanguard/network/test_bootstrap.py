@@ -237,9 +237,9 @@ class GeneratedEntryTests(unittest.TestCase):
         self.assertEqual(self.invoke('prepare',default=True)[0],3)
         self.assertEqual(self.boundary.calls,[])
 
-    def test_seven_calls_supported_slices_hierarchy_and_render_consistency(self):
+    def test_eight_calls_supported_slices_hierarchy_and_render_consistency(self):
         packet=p.render(self.plan);calls=packet['units']
-        self.assertEqual(len(calls),7)
+        self.assertEqual(len(calls),8)
         slices=[x for x in calls if x['args'][0].endswith('.slice')]
         allowed={'CPUQuotaPerSecUSec':'t','MemoryMax':'t','MemorySwapMax':'t','TasksMax':'t'}
         self.assertEqual(len(slices),3)
@@ -247,7 +247,7 @@ class GeneratedEntryTests(unittest.TestCase):
         for call in slices:
             self.assertEqual({name:kind for name,kind,value in call['args'][2]},allowed)
         for call in slices[1:]:self.assertEqual(call['args'][0].rsplit('-',1)[0]+'.slice',parent)
-        records=[r['args'] for r in packet['records'] if r['kind']=='dbus']
+        records=[r['args'] for r in packet['records'] if r['kind']=='dbus' and r['operation']=='StartTransientUnit']
         self.assertEqual({x['args'][0]:x for x in calls},{x['args'][0]:x for x in records})
         self.assertEqual(len([r for r in packet['records'] if r['operation']=='bootstrap_delivery']),4)
 

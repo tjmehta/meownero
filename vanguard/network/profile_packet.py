@@ -11,7 +11,7 @@ import profile_contract as c
 GIB = 1024**3
 MIB = 1024**2
 SCHEMA = 'meownero-source-plan/3'
-AUTHORIZATION = '2f5ded01-5228-4f2e-89ba-7cc9c683ef91'
+AUTHORIZATION = 'fdf10e5f-7009-466e-b0c5-3fa5dc70c537'
 IDENTITIES = ('backing_inode', 'filesystem_device', 'loop', 'loop_device', 'mount_id', 'namespace_inode')
 ALLOCATION = dict(control=GIB, workload=11*GIB, archive=2*GIB, other=GIB)
 PREPARATION = dict(control=dict(seconds=300, cpu=1, memory=512*MIB, swap=0, pids=32, writes=1536*MIB),
@@ -75,6 +75,15 @@ def delivery_contract(role):
         actual_transport='UNBOUND_NOT_QUALIFIED')
 
 
+def dockerd_argv():
+    """Frozen daemon argv; only its systemd ancestry changes in this pass."""
+    return ['/usr/bin/dockerd','--host=unix://$W/root/exec/docker.sock',
+        '--data-root=$W/root/docker','--exec-root=$W/root/exec','--pidfile=$W/root/exec/dockerd.pid',
+        '--config-file=$C/manager/daemon.json','--exec-opt=native.cgroupdriver=cgroupfs',
+        '--cgroup-parent=$WORK_CGROUP','--bridge=none','--iptables=false','--ip6tables=false',
+        '--ip-forward=false','--ip-masq=false','--userland-proxy=false','--storage-driver=vfs']
+
+
 def units(value):
     """Typed systemd255 D-Bus properties, not unit-file string interpolation."""
     validate_plan(value)
@@ -111,11 +120,23 @@ def units(value):
         # Each child reenters the retained namespace using the named FD. The
         # initial PrivateMounts namespace alone never establishes shared custody.
         rows.append((stem+'-'+role+'.service',service))
-    return [dict(stage=('preparation_supervisor' if '-prepare.service' in name else
+    # PID1, not the keeper, starts dockerd. The keeper's inherited socket filter
+    # must never become the workload's filter. Mount-view delivery still needs
+    # exact authorized namespace/custody bindings and independent qualification.
+    rows.append((stem+'-workload.service',props(Type=('s','exec'), User=('s','0'), Group=('s','0'),
+        Slice=('s',work),ExecStart=('a(sasb)',[['/usr/bin/dockerd',dockerd_argv(),False]]),
+        RestrictAddressFamilies=('(bas)',[True,['AF_UNIX','AF_NETLINK','AF_INET']]),
+        KillMode=('s','control-group'),TimeoutStopUSec=('t',20_000_000),
+        NoNewPrivileges=('b',True),ProtectSystem=('s','strict'),PrivateTmp=('b',False),
+        PrivateMounts=('b',True),ReadWritePaths=('as',['$W']),ReadOnlyPaths=('as',['$C']),
+        InaccessiblePaths=('as',['-/run/docker.sock','-/var/run/docker.sock']),
+        StandardOutput=('s','null'),StandardError=('s','null'),LimitCORE=('t',0))))
+    return [dict(stage=('work' if '-workload.service' in name else 'preparation_supervisor' if '-prepare.service' in name else
         'activation' if name.endswith('.service') else 'install'),bus='org.freedesktop.systemd1', path='/org/freedesktop/systemd1',
         interface='org.freedesktop.systemd1.Manager', member='StartTransientUnit',
         signature='ssa(sv)a(sa(sv))', args=[name,'fail',properties,[]],
-        delivery=delivery_contract(name.rsplit('-',1)[-1].removesuffix('.service')) if name.endswith('.service') else None) for name,properties in rows]
+        delivery=delivery_contract(name.rsplit('-',1)[-1].removesuffix('.service'))
+            if name.endswith('.service') and '-workload.service' not in name else None) for name,properties in rows]
 
 
 def render(value):
@@ -137,6 +158,8 @@ def render(value):
         'verify_hashes','fchown(0,0)','fchmod(0444)','fsync(file_and_directory)'],write=['O:installed_source_copies'],
         pre=['task_only_install_parent_fd','no_dependencies_or_shared_unit_changes'],identity=['installed_source_inodes_hashes'])
     for call in units(value):
+        if call['args'][0].endswith('-workload.service'):
+            continue  # W provisioning and namespace view must precede dockerd.
         if call['delivery'] is not None:
             row(call['stage'],'syscall','bootstrap_delivery',call['delivery'],
                 pre=['authenticated_receiver_role_invocation_and_surviving_custodian',
@@ -186,14 +209,17 @@ def render(value):
     row('admission','syscall','first_admission_quarantine_consume',['full_observation_started_at',
         'durable_manager_quarantine','task_uid1000_openat_ledger_dirfd_O_EXCL','fsync_file_directory_readback'],
         pre=['elapsed_from_first_observed_field_through_consumption<=5sec','before_build_deadline'])
-    row('work','syscall','place_before_exec',['work_slice_leaf.cgroup.procs','all_daemon_containerd_shim_controller_children'],
+    row('work','syscall','workload_namespace_view',['authenticated_retained_namespace_C_readonly_W_writable',
+        'PID1_workload_unit_mount_view_before_ExecStart','no_keeper_child_exec'],
+        pre=['exact_C_W_namespace_identities','independent_installed_binding_qualification'],
+        identity=['workload_mount_view_C_W_devices_inodes'])
+    workload_call=units(value)[-1]
+    row('work','dbus','StartTransientUnit',workload_call,write=['O:unit_metadata','W:root'],
+        pre=['manager_QUARANTINED','local_CONSUMED','W_mounted_exact_identity',
+            'qualified_workload_namespace_view_before_ExecStart','frozen_config_log_none',
+            'private_root_socket_0600','PID1_not_keeper_child_exec'],identity=['task_only_workload_unit'])
+    row('work','syscall','place_before_exec',['work_slice_leaf.cgroup.procs','controller_children_only; dockerd_uses_workload_Slice'],
         pre=['work_memory3840MiB_pids224_OOMgroup1','control240MiB30PID','reserved16MiB2PID'])
-    row('work','argv','dockerd',['/usr/bin/dockerd','--host=unix://$W/root/exec/docker.sock',
-        '--data-root=$W/root/docker','--exec-root=$W/root/exec','--pidfile=$W/root/exec/dockerd.pid',
-        '--config-file=$C/manager/daemon.json','--exec-opt=native.cgroupdriver=cgroupfs',
-        '--cgroup-parent=$WORK_CGROUP','--bridge=none','--iptables=false','--ip6tables=false',
-        '--ip-forward=false','--ip-masq=false','--userland-proxy=false','--storage-driver=vfs'],write=['W:root'],
-        pre=['work_leaf_placement_before_exec','frozen_config_log_none','private_root_socket_0600'])
     row('work','docker','load',['private_socket','image','load','--input','$SEALED_ARCHIVE'],write=['W:root'],
         pre=['sealed_archive_digest_provenance','hard_W_bound','no_pull_save'])
     row('work','docker','inspect_image',['private_socket','image','inspect','$FIXED_IMAGE'],pre=['exact_image_id_config_layers_linux_amd64'])
@@ -216,6 +242,15 @@ def render(value):
     row('cleanup','docker','remove_owned',['inspect_exact_CID_and_ownership','stop','rm','independent_absence_readback'],write=['W','C:log'])
     row('cleanup','syscall','terminate_owned',['PID_start_checked_signal_then_reap','work_subtree_cgroup.kill_only',
         'zero_recursive_population','close_owned_FDs'],write=['W','C:log'])
+    workload=units(value)[-1]['args'][0]
+    for member,signature,args in [('StopUnit','ss',[workload,'replace']),
+            ('KillUnit','ssi',[workload,'all',9])]:
+        row('cleanup','dbus',member,dict(bus='org.freedesktop.systemd1',path='/org/freedesktop/systemd1',
+            interface='org.freedesktop.systemd1.Manager',member=member,signature=signature,args=args),
+            pre=['exact_owned_workload_unit','keeper_or_independent_deadline_authority',
+                'KillUnit_only_after_bounded_StopUnit_failure'] if member=='KillUnit' else
+                ['exact_owned_workload_unit','keeper_or_independent_deadline_authority'],
+            identity=['workload_cgroup_recursive_exit'])
     row('cleanup','syscall','export',['schema_allowlist_only','reserved_C_export_FD','byte_and_cumulative_write_limit',
         'ENOSPC_keeps_quarantine'],write=['C:export'])
     row('cleanup','argv','umount',['/usr/bin/umount','--','$W'],pre=['zero_population','no_open_owned_W_descriptors'])
