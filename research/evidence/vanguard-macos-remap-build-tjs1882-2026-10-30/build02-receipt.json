@@ -1,0 +1,502 @@
+{
+  "schema": "meownero-native-mac-build/1",
+  "source_lock": {
+    "schema": "meownero-vanguard-source-lock/1",
+    "issue": "TJS-356",
+    "pinned_on": "2026-09-23",
+    "scope": "Isolated, valueless harness. It compiles and executes the upstream FCMP++ and CARROT primitives at the pins below. It is not a node, not a network, and not an audit.",
+    "upstream": {
+      "url": "https://github.com/seraphis-migration/monero.git",
+      "branch": "fcmp++-stage",
+      "commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "commit_date": "2026-09-23T09:13:54-05:00",
+      "commit_subject": "Merge pull request #473 from j-berman/fix-genesis-torsion-check",
+      "license": "BSD-3-Clause (LICENSE: Copyright (c) 2014-2024, The Monero Project)",
+      "rebase_risk": "fcmp++-stage is a moving integration branch. This pin is a commit hash, not a branch name. Evidence records upstream-head.txt and the vector hashes so a later rebase is detectable.",
+      "submodules": {
+        "external/gtest": "52eb8108c5bdec04579160ae17225d66034bd723",
+        "external/mx25519": "420ccc2f5012ee1f8e02c1976e89620e1b0959f6",
+        "external/randomx": "aaafe71322df6602c21a5c72937ac284724ae561",
+        "external/rapidjson": "24b5e7a8b27f42fa16b96fc70aade9106cf7102f",
+        "external/supercop": "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+      },
+      "primitives_used": [
+        "src/fcmp_pp (prove.h: prove_membership, verify_membership, prove_sal, verify_sal, verify)",
+        "src/fcmp_pp/fcmp_pp_rust (FFI staticlib over monero-oxide crates)",
+        "src/carrot_core (account_secrets, destination, payment_proposal, scan)",
+        "src/cryptonote_basic (address base58 encode/decode used by CARROT destinations)",
+        "tests/unit_tests/curve_trees.cpp (upstream test-tree helpers, compiled unchanged)",
+        "tests/data/fcmp_pp_verify_inputs_{1,2,4,8,128}in.bin (upstream fixed FCMP++ verify vectors)"
+      ],
+      "alternatives_rejected": {
+        "v0.19.0.0-beta.2.0 (8ed2f782)": "pins monero-oxide 0e438aed (2026-04-23), which predates the Trail of Bits fix commit 066229801a18bb11679113c93971c4f19fde0cd0 included at 31c26d96",
+        "beta-stressnet-v3 (5288ee13cbea1c584056995baa88b03d43901bc2)": "same monero-oxide pin; stress-net branch, not the integration head",
+        "monero-project/monero master (d02c7c57)": "contains only the early FCMP++ integration phases",
+        "monero-project/monero PR #9436 (head 23b1b35b)": "stale draft"
+      }
+    },
+    "rust": {
+      "cargo_lock_path": "src/fcmp_pp/fcmp_pp_rust/Cargo.lock",
+      "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+      "monero_oxide_url": "https://github.com/monero-oxide/monero-oxide",
+      "monero_oxide_rev": "31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "crypto_bigint_url": "https://github.com/kayabaNerve/crypto-bigint (branch c-repr)",
+      "crypto_bigint_rev": "78352771313f1e9b8e48abe5ce30d50d6bdd291d",
+      "crate_licenses": "MIT (crypto/fcmps, crypto/generalized-bulletproofs, crypto/divisors, crypto/helioselene LICENSE files at 31c26d96)",
+      "fetch": "cargo fetch --locked on the host into the gitignored build/vanguard-src/cargo-home; the container build runs with CARGO_NET_OFFLINE=true and --network=none"
+    },
+    "builder": {
+      "image_id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "image_note": "The accepted testnet v0 builder image, used read-only by image ID with --pull=never. It is not retagged or modified. It carries no Rust, so the host toolchain below is mounted read-only.",
+      "rustc": "rustc 1.93.0 (254b59607 2026-01-19)",
+      "rustc_note": "Upstream CI (.github/workflows/build.yml at the pin) installs toolchain 1.93 via rustup-init 1.29.0"
+    },
+    "public_review_references": {
+      "caveat": "These are third-party reviews of upstream components, cited only as references. None of them is an audit of Meownero, of this harness, or of the pinned integration commit as a whole. Agent review is not external audit.",
+      "items": [
+        {
+          "component": "FCMP++ C++ integration (monero-project/monero)",
+          "reference": "Trail of Bits security review, trailofbits/publications@73e52c96cef59d42201ff5546090b76ca67a8014 reviews/2026-07-magicgrants-monerofcmp++crypto-securityreview.pdf (sha256 4f649fe0e63a8870ae3930ea142eb405345ff07a1b5f3e2ff7741deed6dce540), linked from the description of monero-project/monero PR #10360 'FCMP++: CurveTrees class & implementation of ed25519 outputs -> curve tree leaves function'. The same description links Cypher Stack cypherstack/fcmp-impl-audit@d7de33d08c48a3c249629e47f71ea72c938a3404 FCMP_Code_Implementation_Audit.pdf section 12 (not read for this harness)",
+          "scope_caveat": "Per the PR description, both reviewed an earlier state of that PR. The ToB report covers the crypto integration phases only and lists 6 informational findings: 5 resolved, and #6 (TOB-MAGIC-FCMP-6, the Rust FFI function selene_scalar_from_bytes depends on fragile memory layout) partially resolved."
+        },
+        {
+          "component": "full-chain-membership-proofs, circuit-abstraction, ec-gadgets",
+          "reference": "Veridise audit 2025-06-03 (monero-oxide audits/fcmps/README.md @ 31c26d96); non-interactive gadgets formally verified with Picus",
+          "scope_caveat": "Covers the crates at the audited revision, not this integration."
+        },
+        {
+          "component": "generalized-bulletproofs",
+          "reference": "Cypher Stack security proofs, Goodell review, Cypher Stack audit, then the flaw and fixed protocol, then the zkSecurity re-audit (monero-oxide audits/generalized-bulletproofs/ @ 31c26d96)",
+          "scope_caveat": "Finding 02 (zeroization) is deferred to monero-oxide#200. The Lean proofs are not claimed to correspond to the implementation."
+        },
+        {
+          "component": "ec-divisors",
+          "reference": "Veridise proofs, Cypher Stack reviews, SLVer Bullet equivalence (monero-project/meta#1244), zkSecurity notes on divisor incompleteness (monero-oxide audits/divisors/README.md @ 31c26d96)",
+          "scope_caveat": "The ec-divisors prover library itself is unaudited."
+        },
+        {
+          "component": "helioselene",
+          "reference": "Veridise Security Assessment for the Helios-Selene Curve Cycle, with partial formal verification (monero-oxide audits/helioselene/ @ 31c26d96)",
+          "scope_caveat": "Curve-cycle assessment; implementation coverage is partial."
+        },
+        {
+          "component": "FCMP++ composition",
+          "reference": "Cypher Stack FCMP++ review (cypherstack/fcmp-review; monero-oxide audits/fcmp++/Review.pdf @ 31c26d96)",
+          "scope_caveat": "Protocol composition review, not a code audit of this integration."
+        },
+        {
+          "component": "CARROT",
+          "reference": "Cypher Stack CARROT specification audits 2024-11-22 and 2025-09-10 follow-up (spec scope dbb04d91d40b68b2a8b82b895acf762c864b4cbc)",
+          "scope_caveat": "Specification only. No code audit of carrot_core or carrot_impl was found."
+        }
+      ]
+    }
+  },
+  "target": "macos-aarch64",
+  "execution_substrate": "NATIVE_ARM64",
+  "commands": [
+    {
+      "label": "archive-upstream",
+      "argv": [
+        "git",
+        "-C",
+        "/BUILD_HOME/Developer/tjs1816-5a24c6b6/build01/monero-fcmp",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/source-upstream.tar",
+        "e151643c5269c83bf24a83b2548e2493876026b2"
+      ],
+      "process_group": 1583,
+      "peak_resident_bytes": 114688,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 0.18951691687107086
+    },
+    {
+      "label": "archive-external-gtest",
+      "argv": [
+        "git",
+        "-C",
+        "/BUILD_HOME/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/gtest",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/source-external-gtest.tar",
+        "52eb8108c5bdec04579160ae17225d66034bd723"
+      ],
+      "process_group": 1611,
+      "peak_resident_bytes": 131072,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 0.06708541698753834
+    },
+    {
+      "label": "archive-external-mx25519",
+      "argv": [
+        "git",
+        "-C",
+        "/BUILD_HOME/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/mx25519",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/source-external-mx25519.tar",
+        "420ccc2f5012ee1f8e02c1976e89620e1b0959f6"
+      ],
+      "process_group": 1679,
+      "peak_resident_bytes": 163840,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 0.056209541857242584
+    },
+    {
+      "label": "archive-external-randomx",
+      "argv": [
+        "git",
+        "-C",
+        "/BUILD_HOME/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/randomx",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/source-external-randomx.tar",
+        "aaafe71322df6602c21a5c72937ac284724ae561"
+      ],
+      "process_group": 1733,
+      "peak_resident_bytes": 655360,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 0.05273025017231703
+    },
+    {
+      "label": "archive-external-rapidjson",
+      "argv": [
+        "git",
+        "-C",
+        "/BUILD_HOME/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/rapidjson",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/source-external-rapidjson.tar",
+        "24b5e7a8b27f42fa16b96fc70aade9106cf7102f"
+      ],
+      "process_group": 1794,
+      "peak_resident_bytes": 163840,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 0.052507917396724224
+    },
+    {
+      "label": "archive-external-supercop",
+      "argv": [
+        "git",
+        "-C",
+        "/BUILD_HOME/Developer/tjs1816-5a24c6b6/build01/monero-fcmp/external/supercop",
+        "archive",
+        "--format=tar",
+        "-o",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/source-external-supercop.tar",
+        "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+      ],
+      "process_group": 1924,
+      "peak_resident_bytes": 32768,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 0.056960624642670155
+    },
+    {
+      "label": "native-toolchain",
+      "argv": [
+        "sh",
+        "-c",
+        "clang --version; cmake --version; xcrun --show-sdk-path; xcrun --show-sdk-version"
+      ],
+      "process_group": 2019,
+      "peak_resident_bytes": 2293760,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 0.26418358320370317
+    },
+    {
+      "label": "depends",
+      "argv": [
+        "make",
+        "-j2",
+        "HOST=arm64-apple-darwin",
+        "NO_WALLET=1",
+        "NO_READLINE=1",
+        "DOWNLOAD_RETRIES=1",
+        "DOWNLOAD_CONNECT_TIMEOUT=20",
+        "darwin_CC=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --target=arm64-apple-darwin -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -mmacosx-version-min=11.0 -ffile-prefix-map=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/=/BUILD_HOME/",
+        "darwin_CXX=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ --target=arm64-apple-darwin -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -mmacosx-version-min=11.0 -stdlib=libc++ -ffile-prefix-map=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/=/BUILD_HOME/",
+        "darwin_LDFLAGS=-Wl,-platform_version,macos,11.0,26.5"
+      ],
+      "process_group": 2303,
+      "peak_resident_bytes": 263045120,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 404.62492662481964
+    },
+    {
+      "label": "install-rustc-aarch64-apple-darwin",
+      "argv": [
+        "sh",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/downloads/rustc-1.93.0-aarch64-apple-darwin/install.sh",
+        "--prefix=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/rust",
+        "--disable-ldconfig"
+      ],
+      "process_group": 79722,
+      "peak_resident_bytes": 4341760,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 2.101040874607861
+    },
+    {
+      "label": "install-cargo-aarch64-apple-darwin",
+      "argv": [
+        "sh",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/downloads/cargo-1.93.0-aarch64-apple-darwin/install.sh",
+        "--prefix=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/rust",
+        "--disable-ldconfig"
+      ],
+      "process_group": 82218,
+      "peak_resident_bytes": 4210688,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 1.7545088748447597
+    },
+    {
+      "label": "install-rust-std-aarch64-apple-darwin",
+      "argv": [
+        "sh",
+        "/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/downloads/rust-std-1.93.0-aarch64-apple-darwin/install.sh",
+        "--prefix=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/rust",
+        "--disable-ldconfig"
+      ],
+      "process_group": 83629,
+      "peak_resident_bytes": 4734976,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 1.305150792002678
+    },
+    {
+      "label": "configure",
+      "argv": [
+        "cmake",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DARCH=default",
+        "-DBUILD_TESTS=OFF",
+        "-DUSE_DEVICE_TREZOR=OFF",
+        "-DUSE_READLINE=OFF",
+        "-DMANUAL_SUBMODULES=ON",
+        "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0",
+        "-DCMAKE_TOOLCHAIN_FILE=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/monero-fcmp/contrib/depends/arm64-apple-darwin/share/toolchain.cmake",
+        "-DCMAKE_C_FLAGS=-ffile-prefix-map=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/=/BUILD_HOME/",
+        "-DCMAKE_CXX_FLAGS=-ffile-prefix-map=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/=/BUILD_HOME/",
+        "../.."
+      ],
+      "process_group": 88684,
+      "peak_resident_bytes": 44138496,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 8.21997854160145
+    },
+    {
+      "label": "build",
+      "argv": [
+        "make",
+        "-j1",
+        "daemon",
+        "simplewallet",
+        "wallet_rpc_server"
+      ],
+      "process_group": 92803,
+      "peak_resident_bytes": 1991081984,
+      "resident_limit_bytes": 4294967296,
+      "reaped": true,
+      "exit": 0,
+      "wall_seconds": 602.8885756670497
+    }
+  ],
+  "downloads": [
+    {
+      "url": "https://static.rust-lang.org/dist/rustc-1.93.0-aarch64-apple-darwin.tar.xz",
+      "sha256": "092be03c02b44c405dab1232541c84f32b2d9e8295747568c3d531dd137221dc"
+    },
+    {
+      "url": "https://static.rust-lang.org/dist/cargo-1.93.0-aarch64-apple-darwin.tar.xz",
+      "sha256": "6443909350322ad07f09bb5edfd9ff29268e6fe88c7d78bfba7a5e254248dc25"
+    },
+    {
+      "url": "https://static.rust-lang.org/dist/rust-std-1.93.0-aarch64-apple-darwin.tar.xz",
+      "sha256": "8603c63715349636ed85b4fe716c4e827a727918c840e54aff5b243cedadf19b"
+    }
+  ],
+  "result": "BUILT_JOURNEY_UNTESTED",
+  "path_remapping": {
+    "clang": "-ffile-prefix-map=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/=/BUILD_HOME/",
+    "rustc": "--remap-path-prefix=/opt/homebrew/var/cache/tjs1882-9ea6fdb5-mac-arm-build02/=/BUILD_HOME/"
+  },
+  "sdk": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+  "sdk_version": "26.5",
+  "dependency_licenses": [
+    {
+      "component": "boost",
+      "version": "1.91.0-1",
+      "source_archive": "boost-1.91.0-1-b2-nodocs.tar.gz",
+      "source_archive_sha256": "b5a3d1490118e012f8b12688240d981bcdfcd009fd35bc70d120fbc907df4f7c",
+      "recipe_sha256": "fe6b57564c038aa044edb916074d36e5fa52ac7015354ffb29866b7099d15341",
+      "source": "https://github.com/boostorg/boost/releases/download/boost-1.91.0-1",
+      "texts": {
+        "depends/boost/boost-1.91.0-1/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/tools/boost_install/test/iostreams/bzip2-1.0.8/LICENSE": "c6dbbf828498be844a89eaa3b84adbab3199e342eb5cb2ed2f0d4ba7ec0f38a3",
+        "depends/boost/boost-1.91.0-1/tools/boost_install/test/iostreams/zlib-1.2.11/contrib/dotzlib/LICENSE_1_0.txt": "8d8291caf1cee26d23acf3eb67c9f9a2d58f1c681b16a4fbe8cbfb9e3c0b5a9b",
+        "depends/boost/boost-1.91.0-1/tools/boostlook/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/tools/quickbook/test/doc-info/copyright-fail1.quickbook": "bd89d709133ae673668ff52ce725d364062124527af052223710294a464f2de4",
+        "depends/boost/boost-1.91.0-1/tools/quickbook/test/doc-info/copyright-fail2.quickbook": "3fc858792098fb0172da4a237ac1f48a03bc4d80249b218db5702e3149c593b2",
+        "depends/boost/boost-1.91.0-1/tools/build/LICENSE.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/tools/docca/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/tools/boostbook/xsl/caramel/LICENSE": "2f59ce71dd2b1538db0976cf0886685de2cead1dbf1ddebabd90c7df21e469e7",
+        "depends/boost/boost-1.91.0-1/libs/test/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/stl_interfaces/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/iostreams/test/bzip2-1.0.8/LICENSE": "c6dbbf828498be844a89eaa3b84adbab3199e342eb5cb2ed2f0d4ba7ec0f38a3",
+        "depends/boost/boost-1.91.0-1/libs/iostreams/test/zlib-1.2.11/contrib/dotzlib/LICENSE_1_0.txt": "8d8291caf1cee26d23acf3eb67c9f9a2d58f1c681b16a4fbe8cbfb9e3c0b5a9b",
+        "depends/boost/boost-1.91.0-1/libs/iostreams/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/compute/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/parser/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/gil/LICENSE.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/safe_numerics/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/contract/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/uuid/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/nowide/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/numeric/interval/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/numeric/odeint/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/python/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/pool/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/openmethod/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/algorithm/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/tokenizer/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/date_time/xmldoc/license.xml": "477ea844df37c895dbf0aa39f935631965b0bc963024d6ca36215294cf0ed7ee",
+        "depends/boost/boost-1.91.0-1/libs/date_time/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/property_map/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/signals2/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/math/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/unordered/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/leaf/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/decimal/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/url/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/qvm/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/mqtt5/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/multiprecision/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/charconv/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/rational/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/hof/LICENSE.md": "859bddbbef21decf692e6bd16bd8a6c96cde1b989fa88ddd63bd2bde98b58b2e",
+        "depends/boost/boost-1.91.0-1/libs/format/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/yap/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/yap/example/autodiff_library/LICENSE": "bd1684bf806817f26f02585bc992fe5f5ea8788896398234b8a8187328af550b",
+        "depends/boost/boost-1.91.0-1/libs/logic/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/assign/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/locale/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/move/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/mysql/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/scope/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/mpl/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/beast/test/bench/parser/nodejs-parser/LICENSE-MIT": "2996a1c43ee757f9c997a829d82bdd584052323e73cf02ff8126c6fbd95c2d87",
+        "depends/boost/boost-1.91.0-1/libs/beast/test/bench/parser/nodejs-parser/AUTHORS": "d1a15fcf0453796ee31e900dd5edff35ae86fb6ae4375c2afda8bde0f6fd2f03",
+        "depends/boost/boost-1.91.0-1/libs/beast/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/histogram/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/pfr/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/concept_check/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/container/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/dynamic_bitset/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/callable_traits/LICENSE.md": "754f0d4ecb5f254feaa1b0d3e4180696a8af2abcc2969e5abf590834a63610e5",
+        "depends/boost/boost-1.91.0-1/libs/geometry/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/exception/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/static_string/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/redis/LICENSE.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/hana/LICENSE.md": "367ef0a8422dcd9cf3285610f6eb2a499de12e8b1c7af6154009addf088c903d",
+        "depends/boost/boost-1.91.0-1/libs/json/LICENSE_1_0.txt": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+        "depends/boost/boost-1.91.0-1/libs/ptr_container/LICENSE": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566"
+      }
+    },
+    {
+      "component": "openssl",
+      "version": "3.5.8",
+      "source_archive": "openssl-3.5.8.tar.gz",
+      "source_archive_sha256": "a8f84a39918ec6415ce765d9b429d313ba97b8143169c172e734b9514464f5b2",
+      "recipe_sha256": "56a68cf10b97c777b71ea717f0b0b9c5bae3d4dcf7a607b708069e97c2494c09",
+      "source": "https://github.com/openssl/openssl/releases/download/openssl-3.5.8",
+      "texts": {
+        "depends/openssl/openssl-3.5.8/AUTHORS.md": "b9f638dfc06b59c2d3b808186c3b30f713805a5db390f5b77b1703ac58acb83e",
+        "depends/openssl/openssl-3.5.8/LICENSE.txt": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+        "depends/openssl/openssl-3.5.8/external/perl/Text-Template-1.56/LICENSE": "9837f05336ef3cbacb6a96e1672a0426d81ad01191f214b8d48e22ca62338181"
+      }
+    },
+    {
+      "component": "sodium",
+      "version": "1.0.18",
+      "source_archive": "libsodium-1.0.18.tar.gz",
+      "source_archive_sha256": "6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1",
+      "recipe_sha256": "11ae81dc602e4f4b7a2c0b6257214f7ef5a06971d1f63c5d583d855d7646893f",
+      "source": "https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE",
+      "texts": {
+        "depends/sodium/libsodium-1.0.18/LICENSE": "dea1855c9809f3faf22aa4a1fba20ec8af5a5587f23115012e5b98279cedc4af",
+        "depends/sodium/libsodium-1.0.18/AUTHORS": "a0df2b81d86ec8b5eab931d19ff2071f48b4dd0d586d948b3f4158eae4c77334"
+      }
+    },
+    {
+      "component": "unbound",
+      "version": "1.25.2",
+      "source_archive": "unbound-1.25.2.tar.gz",
+      "source_archive_sha256": "0d92275c703d5f5f8baba3dab22117dd8c29b495588a5c229768ed6581566600",
+      "recipe_sha256": "7c15922828907c0fe064b0245c0f7cd7710144fca2349e01c7e2556a202358b4",
+      "source": "https://www.nlnetlabs.nl/downloads/unbound/",
+      "texts": {
+        "depends/unbound/unbound-1.25.2/doc/LICENSE": "8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db",
+        "depends/unbound/unbound-1.25.2/libunbound/python/LICENSE": "2ac9e5f01e1b7e5d18df69a410d343eaa7c9c76e64b85b3373b9f3a5487a1a3b",
+        "depends/unbound/unbound-1.25.2/pythonmod/LICENSE": "2ac9e5f01e1b7e5d18df69a410d343eaa7c9c76e64b85b3373b9f3a5487a1a3b",
+        "depends/unbound/unbound-1.25.2/LICENSE": "8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db"
+      }
+    },
+    {
+      "component": "zeromq",
+      "version": "4.3.5",
+      "source_archive": "zeromq-4.3.5.tar.gz",
+      "source_archive_sha256": "6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43",
+      "recipe_sha256": "9903f96d13be682904d330a08232854e663f1a42126148bb8ee73dc4f9dd7ebb",
+      "source": "https://github.com/zeromq/libzmq/releases/download/v4.3.5/",
+      "texts": {
+        "depends/zeromq/zeromq-4.3.5/LICENSE": "1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5",
+        "depends/zeromq/zeromq-4.3.5/AUTHORS": "9c7e32ac52c546ce6c9b328f348b2053ff6d56630cba06727e2e5abf644f4aed",
+        "depends/zeromq/zeromq-4.3.5/external/unity/license.txt": "3ed9b51da86f52c729c96cc99fdde6444b2297c788a9cf4ad1d3649dc34c4985",
+        "depends/zeromq/zeromq-4.3.5/external/wepoll/license.txt": "3e56262d2c0e9492f113089916ed624e98f88b31dfd6acae24ede59cdfda5a69"
+      }
+    }
+  ],
+  "generated_toolchain": {
+    "before_sha256": "b81b800f7818d896a6fbb9d4b48a100917656f3687d64045fee9b3a3f1304720",
+    "sha256": "fef448d882aebd9e984fed4aff3d2d9ed8a1e9d73adf5cc60832dd65013ba4d4",
+    "adaptation": "Select the actual Xcode SDK instead of an absent cross-SDK cache; source recipe unchanged."
+  },
+  "binaries": {
+    "monerod": "2862a15609311733ac1683133939f4ca4508cc91ba9ac8c6b66b003074e8a909",
+    "monero-wallet-cli": "f5fd936a0b92e322f3f04707ec316b89419d521a06062c76070066dcc60f07e9",
+    "monero-wallet-rpc": "21794a6c9c8d5f8134bbea93cfc4b23d935884bb602d5567e2b43a3bcb007e0b"
+  },
+  "private_home_scan": "PASS_ALL_PROGRAM_BYTES",
+  "path_recording": {
+    "home_prefix_placeholder": "/BUILD_HOME/",
+    "command_paths": "HOME_PREFIX_REPLACED_AT_RECORDING"
+  }
+}
