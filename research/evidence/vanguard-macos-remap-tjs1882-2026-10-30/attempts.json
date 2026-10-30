@@ -1,0 +1,14 @@
+{
+  "native_build_entrypoint": "REFUSED_BEFORE_ANY_BUILD_PHASE; MISSING_CANONICAL_LOCK",
+  "native_cache_diagnostic": "Attempted cached Linux rustc on Darwin; Exec format error. Cache reused for source inspection only, never as native toolchain. The Mac recipe fetches its own pinned native Rust.",
+  "license_test_invocation": "NOT_RUN: first invocation omitted required build/package fixture arguments. No new native package available; no license-control pass claimed.",
+  "link_test_invocation": "First invocation omitted required arguments; later proper fixture invocation passed all81 cases.",
+  "native_attempt_retries": 0,
+  "tar_regression_baseline": "FAILED_EXPECTED: compressed private program paths were accepted by baseline helper.",
+  "final_local_checks": {
+    "provenance": 5,
+    "windows_bundle": 5,
+    "docker_lifecycle": 24,
+    "link_inventory": 81
+  }
+}
