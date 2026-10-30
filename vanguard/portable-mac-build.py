@@ -26,11 +26,14 @@ def main():
     os.environ['GIT_OPTIONAL_LOCKS'] = '0'
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--cache', type=Path, required=True)
-    parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--out', type=Path, required=True,
+                        help='Fresh task-owned build directory outside the user home')
     parser.add_argument('--target', choices=['macos-aarch64', 'macos-x86_64'], default='macos-aarch64')
     args = parser.parse_args()
     tester.require(platform.system() == 'Darwin' and platform.machine() == 'arm64', 'native Apple Silicon required')
     out = tester.fresh(args.out)
+    # Depends embeds configured prefixes as well as source filenames.
+    portable_provenance.refuse_private_paths(str(out).encode())
     with tester.heavy_lock():
         tester.require(shutil.disk_usage(out.parent).free >= 10 * 1024**3, 'requires ten GiB disk reserve')
         out.mkdir(mode=0o700)
@@ -110,8 +113,9 @@ def main():
             sdk = tester.command(['xcrun', '--show-sdk-path'])
             cc = tester.command(['xcrun', '-f', 'clang'])
             cxx = tester.command(['xcrun', '-f', 'clang++'])
-            # Apply to depends, CMake and Cargo; static libraries also retain FILE paths.
-            mapping = str(Path.home()) + '/=' + portable_provenance.PLACEHOLDER
+            # OpenSSL records the complete compiler flags. The mapping itself
+            # must not contain the private home prefix either.
+            mapping = str(out) + '/=' + portable_provenance.PLACEHOLDER
             file_map = '-ffile-prefix-map=' + mapping
             rust_map = '--remap-path-prefix=' + mapping
             receipt['path_remapping'] = {'clang': file_map, 'rustc': rust_map}
