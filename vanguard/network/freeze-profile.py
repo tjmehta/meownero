@@ -26,7 +26,47 @@ CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.
       'freeze-profile.py','test_profile.py','profile_outer.py','run-outer.py','test_outer.py',
       'profile_manager.py','profile_helper.py','test_manager.py','profile_packet.py',
       'profile_dispatch.py','profile-helper.py','test_dispatch.py','profile_bootstrap.py','test_bootstrap.py',
-      'profile_executor.py','profile-root-helper.py','profile_runtime.py','test_executor.py']
+      'profile_executor.py','profile-root-helper.py','profile_runtime.py','test_executor.py','test_installation.py']
+
+
+def candidate_paths():
+    files=[c.HERE/name for name in CODE]
+    files+=sorted(p for p in (c.HERE/'integration').iterdir() if p.name not in
+                  ['inputs.json','evidence'] and p.is_file())
+    files.append(c.HERE/'integration/installation-inventory.json')
+    return sorted(set(files))
+
+
+def installation_inventory():
+    reference=c.json_file(c.HERE/'integration/reference-inputs.json')
+    all_sources={str(p.relative_to(n.ROOT)) for p in candidate_paths()}|set(reference['repository_files'])
+    prefix='vanguard/network/'
+    root_sources=[prefix+name for name in ('profile-root-helper.py','profile_executor.py',
+        'profile_contract.py','profile_packet.py','integration/installation-inventory.json')]
+    runtime={prefix+name for name in CODE if not name.startswith('test_')}
+    runtime|={prefix+name for name in ('network.py','policy.py','run-genesis.py','profile.json',
+        'source-bindings.json','policy-bindings.json','evidence/native-genesis-attempt01/recipe1.json',
+        'integration/build.sh','integration/reviewed-contract.json','integration/outer-capabilities.json')}
+    runtime.add('vanguard/source-lock.json')
+    # The recipe was already transitively bound by profile.json, but must also
+    # have an explicit input-index entry for installation.
+    all_sources|=runtime
+    return dict(schema='meownero-installation-inventory/1',
+        hash_index='exact authority-bound inputs.json; candidate_files + reference.repository_files',
+        groups=dict(root_helper={name:Path(name).name for name in root_sources},
+            child_runtime={name:'runtime/'+name for name in sorted(runtime)},
+            validation_data={name:'runtime/'+name for name in sorted(all_sources-runtime)}),
+        entry_points=dict(root_helper=['profile-root-helper.py'],child_runtime=[prefix+name for name in
+            ('profile-helper.py','run-outer.py','run-profile.py','profile-integration.py','freeze-profile.py')]),
+        authority_index=dict(destination='runtime/vanguard/network/integration/inputs.json',
+            binding='exact independently authenticated artifact/grant inputs_file_sha256; not self-hashed'),
+        external_runtime_inputs=dict(candidate_git_metadata='runtime/.git: original committed candidate identity; NOT_SUPPLIED_NOT_QUALIFIED',
+            pinned_source_cache_toolchain='original run-genesis.py BASE/RUST paths and source-lock/input tree bindings; not installed source files',
+            authority_and_private_state='separately authenticated contexts, capabilities, descriptors and private attempt state; UNBOUND'),
+        harness_only=dict(files=[name for name in sorted(all_sources) if Path(name).name.startswith('test_')],
+            usage='validation bytes only for unchanged full input checker; never helper/child entry points',
+            retained_evidence='integration/evidence/ is review-only and excluded except individually declared data'),
+        installed_authority='UNQUALIFIED',native_execution='NOT_RUN')
 
 
 def source_inputs():
@@ -37,9 +77,7 @@ def source_inputs():
         c.require(raw==subprocess.check_output(['git','-C',str(UP),'show',reference['upstream']+':'+name],timeout=10),
                   'extra source differs from pinned Git object: '+name)
         reference['upstream_files'][name]=c.digest(raw)
-    files=[c.HERE/name for name in CODE]
-    files+=sorted(p for p in (c.HERE/'integration').iterdir() if p.name not in
-                  ['inputs.json','evidence'] and p.is_file())
+    files=candidate_paths()+[c.HERE/'evidence/native-genesis-attempt01/recipe1.json']
     return dict(schema='meownero-complete-profile-inputs/1',
         source_candidate_state='SOURCE_ONLY_NOT_NATIVE_ACCEPTED',launch_ready=False,
         implementation_authorization_comment='cf81ba5e-fcb5-44fe-ae6b-5537f57484bd',
@@ -49,6 +87,7 @@ def source_inputs():
         generated_entry_authorization_comment='2f5ded01-5228-4f2e-89ba-7cc9c683ef91',
         helper_executor_authorization_comment='8e061330-8bd4-4665-8fa1-daeff8176dd8',
         workload_transport_authorization_comment='fdf10e5f-7009-466e-b0c5-3fa5dc70c537',
+        installation_closure_authorization_comment='33f69bb2-5193-4cfe-a793-341da4809bc9',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],
@@ -146,6 +185,10 @@ def main():
     group.add_argument('--built',type=Path)
     args=p.parse_args()
     if args.built:built(args.built);return
+    inventory=installation_inventory()
+    inventory_path=c.HERE/'integration/installation-inventory.json'
+    if args.freeze:inventory_path.write_text(json.dumps(inventory,indent=2)+'\n')
+    else:c.require(c.json_file(inventory_path)==inventory,'installation inventory drift')
     current=source_inputs()
     path=c.HERE/'integration/inputs.json'
     if args.freeze:path.write_text(json.dumps(current,indent=2)+'\n')

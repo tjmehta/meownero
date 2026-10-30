@@ -6,6 +6,7 @@ external-writer limiter is an explicit injected, UNQUALIFIED OS boundary.
 """
 import copy
 import math
+from pathlib import Path
 import re
 import subprocess
 import time
@@ -15,6 +16,7 @@ import profile_packet as p
 
 ROOT_DIRECTORY='/opt/meownero/TJS-2504/helper'
 ROOT_ENTRY=ROOT_DIRECTORY+'/profile-root-helper.py'
+CHILD_DIRECTORY=ROOT_DIRECTORY+'/runtime/vanguard/network'
 ROOT_COMMAND=['/usr/bin/python3','-I','-B',ROOT_ENTRY]
 QUALIFIED_ROOT={}  # Never populated by bindings, argv, environment or tests.
 # This is the complete low-level record protocol, distinct from the existing
@@ -28,6 +30,46 @@ OPERATIONS=('verify_inherited_authority','install_exact_owned_source','bootstrap
     'StopUnit','KillUnit','export','umount','detach','unlinkat_owned_W','final_custody',
     'observe','explicit_disposition')
 TOKEN=re.compile(r'\$[A-Z][A-Z0-9_]*')
+
+
+def verify_installation(root, inputs_raw):
+    """Check declared bytes before dispatch; authority authenticates inputs_raw.
+
+    This read-only source check neither installs files nor qualifies ownership,
+    immutability or an OS adapter. The index's own hash comes from the exact
+    artifact-bound authority, avoiding a recursive manifest hash.
+    """
+    root=Path(root)
+    import json
+    inputs=json.loads(inputs_raw)
+    sources=dict(inputs['reference']['repository_files'])
+    for name,sha in inputs['candidate_files'].items():
+        c.require(name not in sources or sources[name]==sha, 'conflicting source bindings')
+        sources[name]=sha
+    inventory_path='vanguard/network/integration/installation-inventory.json'
+    raw=(root/'installation-inventory.json').read_bytes()
+    c.require(c.digest(raw)==sources[inventory_path], 'installation inventory binding')
+    inventory=json.loads(raw)
+    c.require(inventory['schema']=='meownero-installation-inventory/1', 'installation schema')
+    groups=inventory['groups']
+    c.require(set(groups)=={'root_helper','child_runtime','validation_data'}, 'installation groups')
+    child={**groups['child_runtime'],**groups['validation_data']}
+    c.require(set(child)==set(sources) and len(child)==len(groups['child_runtime'])+
+        len(groups['validation_data']), 'complete disjoint child source inventory')
+    destinations=set()
+    for group,members in groups.items():
+        for source,destination in members.items():
+            path=Path(destination)
+            c.require(not path.is_absolute() and '..' not in path.parts and str(path)==destination,
+                'canonical relative installed path')
+            c.require(destination not in destinations, 'duplicate installed destination')
+            destinations.add(destination)
+            target=root/path
+            c.require(target==target.resolve(strict=True) and target.is_file() and
+                c.digest(target.read_bytes())==sources[source], 'missing/altered installed member: '+destination)
+    c.require((root/'runtime/vanguard/network/integration/inputs.json').read_bytes()==inputs_raw,
+        'installed authority index bytes')
+    return inventory
 
 
 def templates(plan):
@@ -103,7 +145,7 @@ class RecordExecutor:
                     record['args'][0]), 'fixed program identity; no command substitution')
                 if record['operation'] in ('outer','controller'):
                     script='run-outer.py' if record['operation']=='outer' else 'run-profile.py'
-                    c.require(argv[1:3]==['-B',ROOT_DIRECTORY+'/'+script], 'fixed owned Python entry')
+                    c.require(argv[1:3]==['-B',CHILD_DIRECTORY+'/'+script], 'fixed owned Python entry')
                 # FDs, private cwd and per-child environment come only from the
                 # guard. No inherited environment or serialized output.
                 execution=self.boundary.execution_context(record,exact,deadline)
@@ -145,6 +187,9 @@ class RootEntry:
 
     def run_authenticated_inherited_entry(self):
         plan=self.boundary.authenticate_root_entry()
+        # Only the independently authenticated boundary supplies the frozen
+        # index bytes; request JSON and the local index cannot grant authority.
+        verify_installation(c.HERE,self.boundary.authenticated_installation_inputs())
         executor=RecordExecutor(plan,self.boundary,clock=self.clock,run=self.run)
         request=self.boundary.receive_authenticated_record_request()
         return executor.execute(request)
@@ -156,7 +201,11 @@ def proposal(plan):
     return dict(schema='meownero-root-executor-proposal/1',root_entry=ROOT_ENTRY,
         root_command=ROOT_COMMAND,arguments='none; authenticated inherited role/request only',
         sudoers_proposal='tjmehta ALL=(root) NOPASSWD: /usr/bin/python3 -I -B '+ROOT_ENTRY,
-        source_closure='all manager-source-manifest members; root-owned immutable directory; no user-writable ancestors',
+        source_closure=dict(inventory='integration/installation-inventory.json',
+            hashes='exact authority-bound inputs.json candidate_files and reference.repository_files',
+            root=ROOT_DIRECTORY,child=CHILD_DIRECTORY,
+            authority_index='runtime/vanguard/network/integration/inputs.json; exact grant-bound bytes',
+            installation='root-owned immutable files and ancestors; UNQUALIFIED'),
         operations=list(OPERATIONS),command_allowlist=[dict(record=r['sequence'],phase=r['phase'],
             kind=r['kind'],operation=r['operation'],args=r['args'],uid=r['uid'],gid=r['gid'],
             preconditions=r['preconditions'],deadline=r['deadline']) for r in records],

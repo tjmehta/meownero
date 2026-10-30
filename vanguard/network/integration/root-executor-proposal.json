@@ -9,7 +9,14 @@
   ],
   "arguments": "none; authenticated inherited role/request only",
   "sudoers_proposal": "tjmehta ALL=(root) NOPASSWD: /usr/bin/python3 -I -B /opt/meownero/TJS-2504/helper/profile-root-helper.py",
-  "source_closure": "all manager-source-manifest members; root-owned immutable directory; no user-writable ancestors",
+  "source_closure": {
+    "inventory": "integration/installation-inventory.json",
+    "hashes": "exact authority-bound inputs.json candidate_files and reference.repository_files",
+    "root": "/opt/meownero/TJS-2504/helper",
+    "child": "/opt/meownero/TJS-2504/helper/runtime/vanguard/network",
+    "authority_index": "runtime/vanguard/network/integration/inputs.json; exact grant-bound bytes",
+    "installation": "root-owned immutable files and ancestors; UNQUALIFIED"
+  },
   "operations": [
     "verify_inherited_authority",
     "install_exact_owned_source",
@@ -2585,6 +2592,5 @@
   ],
   "activation": "REFUSED_UNQUALIFIED",
   "native_execution": "NOT_RUN",
-  "launch_ready": false,
-  "root_entry_sha256": "96ecc4c6c32d0c734daeb74930f6994a9325699d390fa7480f209f76487b9c89"
+  "launch_ready": false
 }

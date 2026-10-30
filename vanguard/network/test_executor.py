@@ -282,16 +282,19 @@ class ExecutorTests(unittest.TestCase):
         module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         executor,boundary,run=self.executor()
         boundary.authenticate_root_entry=lambda:p.source_plan()
+        boundary.authenticated_installation_inputs=lambda:b''  # Isolated layout is tested separately.
         boundary.receive_authenticated_record_request=lambda:self.request(executor,'umount')
         entry=e.RootEntry(boundary,clock=lambda:100,run=run)
         fixture={hashlib.sha256(path.read_bytes()).hexdigest():entry}
         output=io.StringIO()
-        with redirect_stdout(output):status=module.main([],qualified=fixture)
+        with redirect_stdout(output),patch.object(e,'verify_installation'):
+            status=module.main([],qualified=fixture)
         self.assertEqual(status,0);self.assertEqual(run.call_count,1)
         self.assertEqual(json.loads(output.getvalue())['result'],'HELPER_RETURNED')
         run.side_effect=subprocess.CalledProcessError(1,['sensitive-fixture-not-for-output'])
         output=io.StringIO()
-        with redirect_stdout(output):status=module.main([],qualified=fixture)
+        with redirect_stdout(output),patch.object(e,'verify_installation'):
+            status=module.main([],qualified=fixture)
         self.assertEqual(status,3);self.assertNotIn('sensitive',output.getvalue())
         self.assertEqual(e.QUALIFIED_ROOT,{})
 

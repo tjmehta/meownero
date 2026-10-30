@@ -2,7 +2,7 @@
   "schema": "meownero-selected-manager-source-manifest/3",
   "authorization_comment": "a5ec64fd-3da7-4044-8863-795ef7a6541f",
   "base_commit": "1475518b800826907ac94cbd69eba65cecbf6c70",
-  "state": "HELPER_EXECUTOR_WORKLOAD_TRANSPORT_SOURCE_PROPOSAL_UNQUALIFIED_OS",
+  "state": "INSTALLATION_CLOSURE_SOURCE_PROPOSAL_UNQUALIFIED_OS",
   "implementation_passes": 1,
   "correction_passes": 1,
   "source_tests": 126,
@@ -30,13 +30,15 @@
     "vanguard/network/test_handoff.py": "b7a47243999557964199ec3e16ceb7bef6204d3cf146c32334e6ff91930b70c3",
     "vanguard/network/test_profile.py": "c2fbb1c114a5f629949fa415266b827e2af959a41016927454027f9bc9a365c3",
     "vanguard/network/test_dispatch.py": "37d5783149db16ee2c0604dc99cf1c8c508cd6b9aa86f7fc94500b3728256de2",
-    "vanguard/network/freeze-profile.py": "b3832a253518734668ebb39a3266f59e6cdd221a4f6462e08ec9e183429c742b",
+    "vanguard/network/freeze-profile.py": "e529886667274c22187a7694f32e9f7e77c9a60f8d43365e8039d78128e9868a",
     "vanguard/network/profile_bootstrap.py": "7fc3579e5b96511b07b3c821e608f946df409a66c45097e0e104c76efd2488bf",
     "vanguard/network/test_bootstrap.py": "9a9692e86e3f53ea93c66366fe1c261e19357b417d71d63f4bc0e85fed6dec48",
-    "vanguard/network/profile_executor.py": "0d6c590f1d32a7c0f51638aab6db67911f5b1be9ae852849cd4cfc1a827dd3e7",
+    "vanguard/network/profile_executor.py": "a51a8a95aaefe40a1a90abfb4d1b47d9606fb57cc0e1aa4a0c0970df9c3e2a46",
     "vanguard/network/profile-root-helper.py": "96ecc4c6c32d0c734daeb74930f6994a9325699d390fa7480f209f76487b9c89",
     "vanguard/network/profile_runtime.py": "e941bbb6f94f23cb28a676b9e65a4dace26c28afd00bfdd99f34b91aa870f968",
-    "vanguard/network/test_executor.py": "ce1fa00d85fa0f6e9e0613204788fcd64cd0127010d331c9f75c05114985de46"
+    "vanguard/network/test_executor.py": "db00b10a1d2aeca9b2747b0cac1638a4536a4feae0f4e2a5579ffeb2ca43ec5a",
+    "vanguard/network/profile_contract.py": "12a9d047fca1f771d62399eca2c9e28fec798e1b6e262546cead4420f2d6665d",
+    "vanguard/network/test_installation.py": "b133964803026cec7d945d9e79d5311965cdd778568e5d752201ff14a5b23253"
   },
   "runtime_requirements": [
     "Studio lead consumes changed-source Platform verdict before an exact operator/authentication ask",
@@ -115,5 +117,17 @@
     "installed_OS": "UNQUALIFIED",
     "external_write_enforcement": "UNIMPLEMENTED_UNQUALIFIED",
     "native_execution": "NOT_RUN"
+  },
+  "installation_inventory": "integration/installation-inventory.json; hashes from authority-bound inputs.json",
+  "installation_closure_correction": {
+    "authorization_comment": "33f69bb2-5193-4cfe-a793-341da4809bc9",
+    "base_commit": "202eedfcfb535e342034488ce86a71598faa279b",
+    "run_id": "90b2a084-f8f5-46d8-9cac-ad1eaeb3dd94",
+    "implementation_passes": 1,
+    "correction_passes": 1,
+    "max_seconds": 2700,
+    "proposal_sha256": "edd45727c5e370f2b6326cca1aa2824193867be0792bb3c2abab8bb53f980020",
+    "source_tests": 159,
+    "evidence": "integration/evidence/installation-closure/summary.json"
   }
 }
