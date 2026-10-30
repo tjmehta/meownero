@@ -58,6 +58,20 @@ const nativeTesterRelease: NativeTesterRelease = {
   sourceCommit: "be5e7b161a08bbb396a00c46905b3ade6eec21aa",
 };
 
+// Exact reviewed packaging successor. This is a test-and-report handoff,
+// not native Windows execution acceptance or a release.
+const windowsTestBundle: Artifact = {
+  url: "/downloads/artifacts/meownero-windows-test-sanitized-v1.zip",
+  filename: "meownero-windows-test-sanitized-v1.zip",
+  bytes: 164091051,
+  sha256: "eb6b76d387f26e5b4a9f849d8e7de2fbf11e9ce06a221cb16b3f5dbd0502da46",
+};
+
+export function getWindowsTestBundle(): Artifact {
+  validateArtifact(windowsTestBundle);
+  return windowsTestBundle;
+}
+
 const sha256Pattern = /^[a-f0-9]{64}$/;
 const filenamePattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 

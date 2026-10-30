@@ -5,11 +5,12 @@ import {
   getNativeTesterRelease,
   getTesterCommands,
   getTesterRelease,
+  getWindowsTestBundle,
 } from "@/lib/tester-release";
 
 const title = "Local tester downloads | Meownero";
 const description =
-  "Disposable Linux x64 testers for Meownero's local, valueless FCMP++/CARROT regtest: a native archive and a Docker bundle. No mainnet, public testnet or GUI wallet download.";
+  "Local, valueless Meownero wallet tests: an untested Windows test-and-report bundle and Linux x64 testers. No mainnet, public testnet or GUI wallet download.";
 
 export const metadata: Metadata = {
   title,
@@ -46,6 +47,7 @@ export default function Downloads() {
     release.status === "published" ? getTesterCommands(release) : null;
   const native = getNativeTesterRelease();
   const nativeCommands = getNativeTesterCommands(native);
+  const windows = getWindowsTestBundle();
 
   return (
     <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10 md:px-10 md:py-16">
@@ -57,7 +59,7 @@ export default function Downloads() {
 
       <header className="mt-12 max-w-2xl">
         <p className="text-sm font-medium tracking-wide text-gold">
-          Test-only · Linux x64
+          Test-only · Windows and Linux
         </p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tighter text-balance md:text-5xl">
           Try a local wallet journey.
@@ -68,11 +70,77 @@ export default function Downloads() {
           public testnet or mainnet, and it must not be used with real funds.
         </p>
         <p className="mt-4 leading-relaxed text-muted-foreground">
-          Two testers run the same kind of journey: a native archive that runs
-          the programs directly, and a Docker bundle that runs them in a
-          container.
+          Windows testers can run the experimental test-and-report bundle below.
+          Linux x64 testers can choose a native archive or a Docker bundle.
         </p>
       </header>
+
+      <section id="windows" aria-labelledby="windows-heading" className="mt-10 rounded-xl border border-gold/30 bg-card p-6 md:p-8">
+        <p className="text-sm font-medium text-gold">Untested Windows test bundle</p>
+        <h2 id="windows-heading" className="mt-2 text-xl font-semibold">
+          Run the Windows tests and send back a report.
+        </h2>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          The programs are BUILT_UNTESTED: nobody has run these candidates
+          natively on Windows yet. This is an unsigned, experimental request
+          for testing, not a release or a verified Windows wallet.
+        </p>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          It is designed to test startup, test-coin payments, wallet recovery,
+          refusal cases and process cleanup on your own computer. No real
+          funds, personal recovery phrases or public network are involved.
+        </p>
+        <div className="mt-6">
+          <a href={windows.url} className={linkStyle} download={windows.filename}>
+            Download untested Windows test bundle
+          </a>
+          <p className="mt-2 break-all text-sm text-muted-foreground">
+            {windows.filename} · {windows.bytes.toLocaleString("en-US")} bytes
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">SHA256</p>
+          <code className="mt-1 block break-all font-mono text-sm leading-relaxed">
+            {windows.sha256}
+          </code>
+        </div>
+        <h3 className="mt-6 font-medium">Before you start</h3>
+        <p className="mt-2 leading-relaxed text-muted-foreground">
+          Use Intel/AMD x64 Windows or Windows on ARM64, with at least 10 GiB
+          free disk space and 5 GiB available RAM. Standalone 32-bit Windows is
+          not supported. Close any other Meownero tester first; do not run as
+          administrator.
+        </p>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          Install native 64-bit CPython 3.13 or later from{" "}
+          <a href="https://www.python.org/downloads/windows/" className={linkStyle}>python.org</a>
+          {" "}if needed, including the Python launcher. Choose the 64-bit
+          installer on Intel/AMD, or ARM64 on ARM Windows. Emulated x64 Python
+          on ARM is refused. See READ-ME.md for Windows version requirements.
+        </p>
+        <h3 className="mt-6 font-medium">Check, extract, then run</h3>
+        <p className="mt-2 leading-relaxed text-muted-foreground">
+          Save the ZIP, open PowerShell in its folder and compare this command&apos;s
+          output with the SHA256 above. Stop if they differ.
+        </p>
+        <Command>{`(Get-FileHash -Algorithm SHA256 '.\\${windows.filename}').Hash`}</Command>
+        <ol className="mt-4 list-decimal space-y-3 pl-5 leading-relaxed text-muted-foreground">
+          <li>Extract the entire ZIP into a new writable local folder. Keep all files together.</li>
+          <li>Open the extracted meownero-windows-test folder and double-click RUN-TEST.cmd. Leave the window open and allow up to 25 minutes.</li>
+          <li>Send back only the report.zip whose path is printed at the end, even if the result is FAIL or NOT_RUN. Read it before sharing.</li>
+        </ol>
+        <p className="mt-3 leading-relaxed text-muted-foreground">
+          Do not share the whole run folder: it can contain disposable wallets,
+          seeds and private logs. If cancelling, press Ctrl+C once and allow
+          cleanup to finish. Force-closing the window may prevent a report.
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          Intel/AMD x64 PCs run the i68635 programs through WoW64; ARM64 PCs run
+          ARM13 and require ARMv8 crypto support. This bundle is not the separate
+          Windows x64 archive. Its packaging has been independently reviewed;
+          the guide&apos;s earlier review-pending wording is retained in the
+          unchanged ZIP. Windows behavior remains unverified. A report is
+          evidence for that machine, not whole-release acceptance.
+        </p>
+      </section>
 
       <section aria-labelledby="native-heading" className="mt-10">
         <div className="rounded-xl border border-gold/30 bg-card p-6 md:p-8">
