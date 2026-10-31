@@ -1,6 +1,6 @@
 {
-  "schema": "meownero-lifecycle-packet/3",
-  "spec_sha256": "e93a2cfdabc683fb79be6f7f60adfa7ebd14bd1a3216136c79da6ae42f6302ce",
+  "schema": "meownero-lifecycle-packet/4",
+  "spec_sha256": "c97488039bfbbe61510561ceab180645c7d1232a25cbbbe78f71ff694ef49e2b",
   "source_only": true,
   "activation": "REFUSED_UNQUALIFIED",
   "plan": {
@@ -216,7 +216,7 @@
       ]
     },
     "retained_control": {
-      "mount_disposition": "normal_unmount_after_export_then_namespace_close",
+      "mount_disposition": "independent_terminal_handoff_after_journal_and_observer_tail_close",
       "storage": "retain_backing_slot_tombstone_and_archive",
       "expiry": "explicit_separate_disposition_only"
     },
@@ -266,20 +266,15 @@
       "sequence": 1,
       "phase": "install",
       "kind": "syscall",
-      "operation": "install_exact_owned_source",
-      "args": [
-        "openat(O_EXCL|O_NOFOLLOW)",
-        "$BOUND_HELPER_AND_SPEC_BYTES",
-        "verify_hashes",
-        "fchown(0,0)",
-        "fchmod(0444)",
-        "fsync(file_and_directory)"
-      ],
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "3b4c168714ec73dfed6f227fe8c9f5f419a5b4ada2f50345b2446d3d61b6099c",
+        "original_sequence": 1,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "O:installed_source_copies"
-      ],
+      "writable": [],
       "created_or_checked": [
         "installed_source_inodes_hashes"
       ],
@@ -291,8 +286,9 @@
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
       "preconditions": [
-        "task_only_install_parent_fd",
-        "no_dependencies_or_shared_unit_changes"
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -300,49 +296,16 @@
     {
       "sequence": 2,
       "phase": "install",
-      "kind": "dbus",
-      "operation": "StartTransientUnit",
+      "kind": "syscall",
+      "operation": "verify_prepared",
       "args": {
-        "stage": "install",
-        "bus": "org.freedesktop.systemd1",
-        "path": "/org/freedesktop/systemd1",
-        "interface": "org.freedesktop.systemd1.Manager",
-        "member": "StartTransientUnit",
-        "signature": "ssa(sv)a(sa(sv))",
-        "args": [
-          "meowneroTJS2504$ATTEMPT.slice",
-          "fail",
-          [
-            [
-              "CPUQuotaPerSecUSec",
-              "t",
-              1950000
-            ],
-            [
-              "MemoryMax",
-              "t",
-              4278190080
-            ],
-            [
-              "MemorySwapMax",
-              "t",
-              0
-            ],
-            [
-              "TasksMax",
-              "t",
-              254
-            ]
-          ],
-          []
-        ],
-        "delivery": null
+        "original_record_sha256": "5d0f3d8722b2e468e650c363810c7b0025336ba9a7ad7cc97c62adea9096213d",
+        "original_sequence": 2,
+        "expectation": "independent_operator_prefix_receipt"
       },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "O:unit_metadata"
-      ],
+      "writable": [],
       "created_or_checked": [
         "task_only_unit_name"
       ],
@@ -353,56 +316,27 @@
         "PATH": "$PINNED_TOOL_PATH",
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
-      "preconditions": [],
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
       "sequence": 3,
       "phase": "install",
-      "kind": "dbus",
-      "operation": "StartTransientUnit",
+      "kind": "syscall",
+      "operation": "verify_prepared",
       "args": {
-        "stage": "install",
-        "bus": "org.freedesktop.systemd1",
-        "path": "/org/freedesktop/systemd1",
-        "interface": "org.freedesktop.systemd1.Manager",
-        "member": "StartTransientUnit",
-        "signature": "ssa(sv)a(sa(sv))",
-        "args": [
-          "meowneroTJS2504$ATTEMPT-work.slice",
-          "fail",
-          [
-            [
-              "CPUQuotaPerSecUSec",
-              "t",
-              1900000
-            ],
-            [
-              "MemoryMax",
-              "t",
-              4026531840
-            ],
-            [
-              "MemorySwapMax",
-              "t",
-              0
-            ],
-            [
-              "TasksMax",
-              "t",
-              224
-            ]
-          ],
-          []
-        ],
-        "delivery": null
+        "original_record_sha256": "b2e89789282add3b5a845ad47fb0abbb97fedbfc782617a7087ccfd98e88ecd6",
+        "original_sequence": 3,
+        "expectation": "independent_operator_prefix_receipt"
       },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "O:unit_metadata"
-      ],
+      "writable": [],
       "created_or_checked": [
         "task_only_unit_name"
       ],
@@ -413,56 +347,27 @@
         "PATH": "$PINNED_TOOL_PATH",
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
-      "preconditions": [],
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
       "sequence": 4,
       "phase": "install",
-      "kind": "dbus",
-      "operation": "StartTransientUnit",
+      "kind": "syscall",
+      "operation": "verify_prepared",
       "args": {
-        "stage": "install",
-        "bus": "org.freedesktop.systemd1",
-        "path": "/org/freedesktop/systemd1",
-        "interface": "org.freedesktop.systemd1.Manager",
-        "member": "StartTransientUnit",
-        "signature": "ssa(sv)a(sa(sv))",
-        "args": [
-          "meowneroTJS2504$ATTEMPT-control.slice",
-          "fail",
-          [
-            [
-              "CPUQuotaPerSecUSec",
-              "t",
-              50000
-            ],
-            [
-              "MemoryMax",
-              "t",
-              251658240
-            ],
-            [
-              "MemorySwapMax",
-              "t",
-              0
-            ],
-            [
-              "TasksMax",
-              "t",
-              30
-            ]
-          ],
-          []
-        ],
-        "delivery": null
+        "original_record_sha256": "ccf10cbddaa40e68105441fa0bc6e1c29cbe1a61bf5349a036b5b4f9db96d93f",
+        "original_sequence": 4,
+        "expectation": "independent_operator_prefix_receipt"
       },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "O:unit_metadata"
-      ],
+      "writable": [],
       "created_or_checked": [
         "task_only_unit_name"
       ],
@@ -473,7 +378,11 @@
         "PATH": "$PINNED_TOOL_PATH",
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
-      "preconditions": [],
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
@@ -772,10 +681,12 @@
       "sequence": 7,
       "phase": "control",
       "kind": "syscall",
-      "operation": "unshare",
-      "args": [
-        "CLONE_NEWNS"
-      ],
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "5d54cc80e511ba62396b5ba881b10ba968c60c0da41d031539c22f096c236226",
+        "original_sequence": 7,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
       "writable": [],
@@ -789,20 +700,24 @@
         "PATH": "$PINNED_TOOL_PATH",
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
-      "preconditions": [],
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
     {
       "sequence": 8,
       "phase": "control",
-      "kind": "argv",
-      "operation": "mount",
-      "args": [
-        "/usr/bin/mount",
-        "--make-rprivate",
-        "/"
-      ],
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "164262de077a6d2a3c789bc314eb609f5d491ba4557cd7a88225d6b3667f9b68",
+        "original_sequence": 8,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
       "writable": [],
@@ -815,7 +730,9 @@
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
       "preconditions": [
-        "private_namespace"
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -824,18 +741,15 @@
       "sequence": 9,
       "phase": "control",
       "kind": "syscall",
-      "operation": "openat",
-      "args": [
-        "$C_PARENT_FD",
-        "$C_BASENAME",
-        "O_CREAT|O_EXCL|O_NOFOLLOW|O_RDWR|O_CLOEXEC",
-        384
-      ],
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "aff733ade8562cbbea976396cfbb36195c8c34b41077e5bf7ae9bb1e387e8bd8",
+        "original_sequence": 9,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C"
-      ],
+      "writable": [],
       "created_or_checked": [
         "C_backing_dev_inode_nlink"
       ],
@@ -847,9 +761,9 @@
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
       "preconditions": [
-        "exact_owned_parent_dirfd",
-        "nonexistent_target",
-        "hard_write_and_capacity_meter"
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -858,17 +772,15 @@
       "sequence": 10,
       "phase": "control",
       "kind": "syscall",
-      "operation": "posix_fallocate",
-      "args": [
-        "$C_FD",
-        0,
-        1073741824
-      ],
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "ecb92767863e53776beac348e1f088ea524bde3f95cb79fb0da2083a7e4a7a4a",
+        "original_sequence": 10,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C"
-      ],
+      "writable": [],
       "created_or_checked": [
         "C_allocated_bytes"
       ],
@@ -880,8 +792,9 @@
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
       "preconditions": [
-        "identity_regular_nlink1_root0600",
-        "allocated_blocks_and_length_readback"
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -889,26 +802,16 @@
     {
       "sequence": 11,
       "phase": "control",
-      "kind": "argv",
-      "operation": "mke2fs",
-      "args": [
-        "/usr/sbin/mke2fs",
-        "-t",
-        "ext4",
-        "-b",
-        "4096",
-        "-m",
-        "0",
-        "-E",
-        "lazy_itable_init=0,lazy_journal_init=0,nodiscard",
-        "/proc/self/fd/$C_FD",
-        "262144"
-      ],
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "232c2c4ebb7e88aab5d5ec2f24ee97ef83ed747d4c092a90219fe4bcc2ff1e6a",
+        "original_sequence": 11,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C"
-      ],
+      "writable": [],
       "created_or_checked": [
         "C_filesystem_uuid_capacity"
       ],
@@ -920,9 +823,9 @@
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
       "preconditions": [
-        "new_owned_verified_target",
-        "frozen_mke2fs_config_hash",
-        "pass_only_verified_backing_fd"
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -930,20 +833,16 @@
     {
       "sequence": 12,
       "phase": "control",
-      "kind": "argv",
-      "operation": "losetup",
-      "args": [
-        "/usr/sbin/losetup",
-        "--sizelimit",
-        "1073741824",
-        "$C_UNUSED_LOOP",
-        "$C_BACKING"
-      ],
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "565fb3e64c67eed372e669b2b5074fcb629f97a705a0541ce8dc17e2cc9a8592",
+        "original_sequence": 12,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C"
-      ],
+      "writable": [],
       "created_or_checked": [
         "C_loop_device_association"
       ],
@@ -955,8 +854,9 @@
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
       "preconditions": [
-        "explicit_loop_unused_no_find_or_reuse",
-        "backing_exact_identity"
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -964,22 +864,16 @@
     {
       "sequence": 13,
       "phase": "control",
-      "kind": "argv",
-      "operation": "mount",
-      "args": [
-        "/usr/bin/mount",
-        "-t",
-        "ext4",
-        "-o",
-        "nosuid,nodev",
-        "$C_LOOP",
-        "$C"
-      ],
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "099d228d1c2dd3eba92ec65c0747f1064a8e043b48638918550ece553123e688",
+        "original_sequence": 13,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C"
-      ],
+      "writable": [],
       "created_or_checked": [
         "C_mount_id_namespace_inode"
       ],
@@ -990,7 +884,11 @@
         "PATH": "$PINNED_TOOL_PATH",
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
-      "preconditions": [],
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
@@ -998,25 +896,15 @@
       "sequence": 14,
       "phase": "control",
       "kind": "syscall",
-      "operation": "mkdirat_chown_fsync",
-      "args": [
-        "$C_FD",
-        [
-          "manager",
-          "ledger",
-          "log",
-          "export"
-        ],
-        [
-          0,
-          0
-        ]
-      ],
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "4463366a48423f0afa06d010d8ddc39b729dd1e29799160e3426554608fb1930",
+        "original_sequence": 14,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C"
-      ],
+      "writable": [],
       "created_or_checked": [
         "C_directory_identities"
       ],
@@ -1027,7 +915,11 @@
         "PATH": "$PINNED_TOOL_PATH",
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
-      "preconditions": [],
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
@@ -1035,15 +927,15 @@
       "sequence": 15,
       "phase": "control",
       "kind": "syscall",
-      "operation": "ledger_dirfd_handoff",
-      "args": [
-        "openat(C,ledger); fchown(1000,1000); fchmod(0700); SCM_RIGHTS"
-      ],
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "0403f46614a7de21e983c91c469b298b53cefdc0fb0facaa8be2ee081d7454f9",
+        "original_sequence": 15,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C:ledger"
-      ],
+      "writable": [],
       "created_or_checked": [
         "ledger_directory_dev_inode_uid_mode"
       ],
@@ -1055,8 +947,9 @@
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
       "preconditions": [
-        "outer_has_no_C_path_traversal",
-        "ledger_FD_identity_in_authenticated_context"
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -1065,19 +958,15 @@
       "sequence": 16,
       "phase": "control",
       "kind": "syscall",
-      "operation": "reserve_slot",
-      "args": [
-        "openat(O_EXCL|O_NOFOLLOW,0600)",
-        "write RESERVED+source+activation_hash",
-        "fsync(file)",
-        "fsync(directory)",
-        "readback_exact_identity_bytes"
-      ],
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "3b2e96b53597824851df4363f0c93e4d20ce45dd31a0c67c38e7f11d8cec8c3e",
+        "original_sequence": 16,
+        "expectation": "independent_operator_prefix_receipt"
+      },
       "uid": 0,
       "gid": 0,
-      "writable": [
-        "C:manager"
-      ],
+      "writable": [],
       "created_or_checked": [
         "root_slot_dev_inode_digest"
       ],
@@ -1088,7 +977,11 @@
         "PATH": "$PINNED_TOOL_PATH",
         "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
       },
-      "preconditions": [],
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     },
@@ -3026,10 +2919,9 @@
       "args": [
         "durable_QUARANTINED",
         "retain_C_slot_tombstone_and_A",
-        "normal_unmount_C",
-        "close_namespace_after_all_workers_exit",
-        "release_named_PID1_FDs_and_all_lock_copies",
-        "independent_original_inode_nonblocking_acquire_then_close"
+        "prepare_independent_terminal_handoff_only",
+        "keep_C_namespace_and_lock_custody",
+        "NO_unmount_close_or_release_before_record53_completion_and_observer_tail"
       ],
       "uid": 0,
       "gid": 0,
@@ -3046,7 +2938,8 @@
       },
       "preconditions": [
         "work_cleanup_proven",
-        "C_backing_and_A_retention_receipt"
+        "C_backing_and_A_retention_receipt",
+        "independent_terminal_owner_retains_original_descriptors"
       ],
       "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
@@ -3117,6 +3010,628 @@
       "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
     }
   ],
+  "operator_prefix": {
+    "schema": "meownero-operator-prefix/1",
+    "source_only": true,
+    "authority": "independently_authenticated_outside_operator_not_root_record_ingress",
+    "operations": [
+      {
+        "sequence": 1,
+        "phase": "install",
+        "kind": "syscall",
+        "operation": "install_exact_owned_source",
+        "args": [
+          "openat(O_EXCL|O_NOFOLLOW)",
+          "$BOUND_HELPER_AND_SPEC_BYTES",
+          "verify_hashes",
+          "fchown(0,0)",
+          "fchmod(0444)",
+          "fsync(file_and_directory)"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:installed_source_copies"
+        ],
+        "created_or_checked": [
+          "installed_source_inodes_hashes"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "task_only_install_parent_fd",
+          "no_dependencies_or_shared_unit_changes"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 2,
+        "phase": "install",
+        "kind": "dbus",
+        "operation": "StartTransientUnit",
+        "args": {
+          "stage": "install",
+          "bus": "org.freedesktop.systemd1",
+          "path": "/org/freedesktop/systemd1",
+          "interface": "org.freedesktop.systemd1.Manager",
+          "member": "StartTransientUnit",
+          "signature": "ssa(sv)a(sa(sv))",
+          "args": [
+            "meowneroTJS2504$ATTEMPT.slice",
+            "fail",
+            [
+              [
+                "CPUQuotaPerSecUSec",
+                "t",
+                1950000
+              ],
+              [
+                "MemoryMax",
+                "t",
+                4278190080
+              ],
+              [
+                "MemorySwapMax",
+                "t",
+                0
+              ],
+              [
+                "TasksMax",
+                "t",
+                254
+              ]
+            ],
+            []
+          ],
+          "delivery": null
+        },
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:unit_metadata"
+        ],
+        "created_or_checked": [
+          "task_only_unit_name"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 3,
+        "phase": "install",
+        "kind": "dbus",
+        "operation": "StartTransientUnit",
+        "args": {
+          "stage": "install",
+          "bus": "org.freedesktop.systemd1",
+          "path": "/org/freedesktop/systemd1",
+          "interface": "org.freedesktop.systemd1.Manager",
+          "member": "StartTransientUnit",
+          "signature": "ssa(sv)a(sa(sv))",
+          "args": [
+            "meowneroTJS2504$ATTEMPT-work.slice",
+            "fail",
+            [
+              [
+                "CPUQuotaPerSecUSec",
+                "t",
+                1900000
+              ],
+              [
+                "MemoryMax",
+                "t",
+                4026531840
+              ],
+              [
+                "MemorySwapMax",
+                "t",
+                0
+              ],
+              [
+                "TasksMax",
+                "t",
+                224
+              ]
+            ],
+            []
+          ],
+          "delivery": null
+        },
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:unit_metadata"
+        ],
+        "created_or_checked": [
+          "task_only_unit_name"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 4,
+        "phase": "install",
+        "kind": "dbus",
+        "operation": "StartTransientUnit",
+        "args": {
+          "stage": "install",
+          "bus": "org.freedesktop.systemd1",
+          "path": "/org/freedesktop/systemd1",
+          "interface": "org.freedesktop.systemd1.Manager",
+          "member": "StartTransientUnit",
+          "signature": "ssa(sv)a(sa(sv))",
+          "args": [
+            "meowneroTJS2504$ATTEMPT-control.slice",
+            "fail",
+            [
+              [
+                "CPUQuotaPerSecUSec",
+                "t",
+                50000
+              ],
+              [
+                "MemoryMax",
+                "t",
+                251658240
+              ],
+              [
+                "MemorySwapMax",
+                "t",
+                0
+              ],
+              [
+                "TasksMax",
+                "t",
+                30
+              ]
+            ],
+            []
+          ],
+          "delivery": null
+        },
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:unit_metadata"
+        ],
+        "created_or_checked": [
+          "task_only_unit_name"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 7,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "unshare",
+        "args": [
+          "CLONE_NEWNS"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [],
+        "created_or_checked": [
+          "mount_namespace_inode"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 8,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "mount",
+        "args": [
+          "/usr/bin/mount",
+          "--make-rprivate",
+          "/"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [],
+        "created_or_checked": [],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "private_namespace"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 9,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "openat",
+        "args": [
+          "$C_PARENT_FD",
+          "$C_BASENAME",
+          "O_CREAT|O_EXCL|O_NOFOLLOW|O_RDWR|O_CLOEXEC",
+          384
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_backing_dev_inode_nlink"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "exact_owned_parent_dirfd",
+          "nonexistent_target",
+          "hard_write_and_capacity_meter"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 10,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "posix_fallocate",
+        "args": [
+          "$C_FD",
+          0,
+          1073741824
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_allocated_bytes"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "identity_regular_nlink1_root0600",
+          "allocated_blocks_and_length_readback"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 11,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "mke2fs",
+        "args": [
+          "/usr/sbin/mke2fs",
+          "-t",
+          "ext4",
+          "-b",
+          "4096",
+          "-m",
+          "0",
+          "-E",
+          "lazy_itable_init=0,lazy_journal_init=0,nodiscard",
+          "/proc/self/fd/$C_FD",
+          "262144"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_filesystem_uuid_capacity"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "new_owned_verified_target",
+          "frozen_mke2fs_config_hash",
+          "pass_only_verified_backing_fd"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 12,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "losetup",
+        "args": [
+          "/usr/sbin/losetup",
+          "--sizelimit",
+          "1073741824",
+          "$C_UNUSED_LOOP",
+          "$C_BACKING"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_loop_device_association"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "explicit_loop_unused_no_find_or_reuse",
+          "backing_exact_identity"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 13,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "mount",
+        "args": [
+          "/usr/bin/mount",
+          "-t",
+          "ext4",
+          "-o",
+          "nosuid,nodev",
+          "$C_LOOP",
+          "$C"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_mount_id_namespace_inode"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 14,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "mkdirat_chown_fsync",
+        "args": [
+          "$C_FD",
+          [
+            "manager",
+            "ledger",
+            "log",
+            "export"
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_directory_identities"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 15,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "ledger_dirfd_handoff",
+        "args": [
+          "openat(C,ledger); fchown(1000,1000); fchmod(0700); SCM_RIGHTS"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C:ledger"
+        ],
+        "created_or_checked": [
+          "ledger_directory_dev_inode_uid_mode"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "outer_has_no_C_path_traversal",
+          "ledger_FD_identity_in_authenticated_context"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 16,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "reserve_slot",
+        "args": [
+          "openat(O_EXCL|O_NOFOLLOW,0600)",
+          "write RESERVED+source+activation_hash",
+          "fsync(file)",
+          "fsync(directory)",
+          "readback_exact_identity_bytes"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C:manager"
+        ],
+        "created_or_checked": [
+          "root_slot_dev_inode_digest"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      }
+    ],
+    "before_first_entry": [
+      "exact_immutable_installation_and_index",
+      "original_retained_namespace",
+      "original_C_directory_record_order_and_all_role_capabilities",
+      "parent_work_control_accounting_units",
+      "durable_operator_quarantine_and_startup_receipt"
+    ],
+    "command": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/opt/meownero/TJS-2504/helper/profile-custodian.py"
+    ],
+    "charge": {
+      "preparation": {
+        "control": {
+          "seconds": 300,
+          "cpu": 1,
+          "memory": 536870912,
+          "swap": 0,
+          "pids": 32,
+          "writes": 1610612736
+        },
+        "archive": {
+          "seconds": 900,
+          "cpu": 1,
+          "memory": 1073741824,
+          "swap": 0,
+          "pids": 64,
+          "writes": 2147483648,
+          "output": 2147483648
+        },
+        "other_writes": 536870912,
+        "seconds": 1200,
+        "occupied": 4294967296,
+        "writes": 4294967296
+      },
+      "allocation": {
+        "control": 1073741824,
+        "workload": 11811160064,
+        "archive": 2147483648,
+        "other": 1073741824
+      },
+      "overhead": {
+        "reserved_memory": 16777216,
+        "reserved_pids": 2,
+        "reserved_cpu_per_second": 50000,
+        "qualified": null,
+        "control_memory": 251658240,
+        "control_pids": 30,
+        "work_memory": 4026531840,
+        "work_pids": 224
+      }
+    },
+    "installed_implementation": "UNIMPLEMENTED_UNQUALIFIED"
+  },
+  "terminal_handoff": {
+    "schema": "meownero-terminal-handoff/1",
+    "source_only": true,
+    "owner": "independent_outside_operator_not_a_C_bound_root_entry",
+    "ordered": [
+      "record52_intent_and_durable_completion",
+      "record53_pending_observer_and_durable_completion",
+      "all_C_bound_entries_exit_and_close_journal_directory_descriptors",
+      "independent_keeper_cleanup_and_observer_exit_witness",
+      "account_and_sync_final_C_export_tail",
+      "retain_C_quarantine_tombstone_and_A",
+      "close_all_C_writers_and_descriptors",
+      "normal_C_unmount_and_independent_absence",
+      "close_original_namespace_custody",
+      "release_PID1_named_FDs_and_all_original_lock_copies",
+      "independent_original_inode_nonblocking_acquire_then_close"
+    ],
+    "deadline": "original_origin+4500",
+    "disposition": "record54_separate_authority_only",
+    "implementation": "UNIMPLEMENTED_UNQUALIFIED"
+  },
   "units": [
     {
       "stage": "install",

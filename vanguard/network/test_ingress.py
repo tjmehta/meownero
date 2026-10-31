@@ -13,6 +13,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+import types
 import unittest
 from contextlib import redirect_stdout
 from unittest.mock import Mock,patch
@@ -243,10 +244,17 @@ class IngressTests(unittest.TestCase):
     def test_known_bad_exact_base_has_only_per_instance_record_use(self):
         raw=subprocess.check_output(['git','show','e9cb885fbf9513801fca216fe033df7fad38f58a:vanguard/network/profile_executor.py'])
         namespace={'__name__':'known_bad_executor'};exec(compile(raw,'exact-e9cb885-profile_executor.py','exec'),namespace)
+        # Keep the negative control's own renderer. Combining the old executor
+        # with the new prefix would fail its operation-table check before replay.
+        packet_raw=subprocess.check_output(['git','show',
+            'e9cb885fbf9513801fca216fe033df7fad38f58a:vanguard/network/profile_packet.py'])
+        original=types.ModuleType('exact_base_packet')
+        exec(compile(packet_raw,'exact-e9cb885-profile_packet.py','exec'),original.__dict__)
+        namespace['p']=original
         backend=InjectedBoundary()
         request=dict(operation=self.records[0]['operation'],record=0,deadline=200)
         for unused in range(2):
-            namespace['RecordExecutor'](self.plan,backend,clock=lambda:100).execute(request)
+            namespace['RecordExecutor'](original.source_plan(),backend,clock=lambda:100).execute(request)
         self.assertEqual(sum(isinstance(x,tuple) and x[0]=='syscall' for x in backend.calls),2)
         self.assertEqual(self.invoke()[0],0);self.assertEqual(self.invoke()[0],3)
 

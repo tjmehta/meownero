@@ -248,6 +248,9 @@ class GeneratedEntryTests(unittest.TestCase):
             self.assertEqual({name:kind for name,kind,value in call['args'][2]},allowed)
         for call in slices[1:]:self.assertEqual(call['args'][0].rsplit('-',1)[0]+'.slice',parent)
         records=[r['args'] for r in packet['records'] if r['kind']=='dbus' and r['operation']=='StartTransientUnit']
+        records+=[r['args'] for r in packet['operator_prefix']['operations']
+            if r['kind']=='dbus' and r['operation']=='StartTransientUnit']
+        self.assertEqual(len(records),8)  # Prefix creations and later verification do not duplicate units.
         self.assertEqual({x['args'][0]:x for x in calls},{x['args'][0]:x for x in records})
         self.assertEqual(len([r for r in packet['records'] if r['operation']=='bootstrap_delivery']),4)
 

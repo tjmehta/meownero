@@ -21,9 +21,9 @@ ROOT_COMMAND=['/usr/bin/python3','-I','-B',ROOT_ENTRY]
 QUALIFIED_ROOT={}  # Never populated by bindings, argv, environment or tests.
 # This is the complete low-level record protocol, distinct from the existing
 # outer/controller Dispatcher protocol. No free-form operation is accepted.
-OPERATIONS=('verify_inherited_authority','install_exact_owned_source','bootstrap_delivery',
-    'StartTransientUnit','unshare','mount','openat','posix_fallocate','mke2fs','losetup',
-    'mkdirat_chown_fsync','bind_user_directory','ledger_dirfd_handoff','reserve_slot',
+OPERATIONS=('verify_inherited_authority','verify_prepared','bootstrap_delivery',
+    'StartTransientUnit','mount','openat','posix_fallocate','mke2fs','losetup',
+    'mkdirat_chown_fsync','bind_user_directory',
     'bounded_archive','sd_notify','arm_deadline','first_admission_quarantine_consume',
     'workload_namespace_view','place_before_exec','load','inspect_image','place_outer_before_exec',
     'outer','controller','observe_and_create','start_and_wait','remove_owned','terminate_owned',
@@ -215,6 +215,7 @@ def proposal(plan):
             preconditions=r['preconditions'],deadline=r['deadline']) for r in records],
         substitution_authority='independent_installed_custodian_only_not_request_JSON',
         teardown=[r for r in records if r['phase'] in ('cleanup','completion')],
+        operator_prefix=p.render(plan)['operator_prefix'],terminal_handoff=p.render(plan)['terminal_handoff'],
         rollback=[r for r in records if r['phase']=='dispose'],
         never_rollback='control quarantine, grant consumption or uncertain attempt eligibility',
         ingress=dict(source='profile_ingress.InstalledIngress',transport='existing unnamed seqpacket/SCM_RIGHTS',

@@ -35,7 +35,7 @@ def source_plan():
         ownership=dict(keeper=[0,0], deadline=[0,0], observer=[0,0], manager_slot=[0,0],
             outer=[1000,1000], controller=[1000,1000], native=[1000,1000],
             ledger_directory=[1000,1000], workload_directory=[1000,1000]),
-        retained_control=dict(mount_disposition='normal_unmount_after_export_then_namespace_close',
+        retained_control=dict(mount_disposition='independent_terminal_handoff_after_journal_and_observer_tail_close',
             storage='retain_backing_slot_tombstone_and_archive', expiry='explicit_separate_disposition_only'),
         overhead=dict(reserved_memory=16*MIB, reserved_pids=2, reserved_cpu_per_second=50_000, qualified=None,
             control_memory=240*MIB, control_pids=30, work_memory=3840*MIB, work_pids=224),
@@ -270,7 +270,47 @@ def render(value):
     order=['install','preparation_supervisor','control','archive','activation','custody','admission','work','cleanup','completion','dispose']
     records.sort(key=lambda r:order.index(r['phase']))
     for i,record in enumerate(records):record['sequence']=i
-    return dict(schema='meownero-lifecycle-packet/3', spec_sha256=c.digest(c.canonical(value)),
+    # These objects must exist before the first C-bound journal entry. Keep the
+    # exact creation commands in an independent, operator-authorized prefix;
+    # ordinary root records only verify their original identities. In particular
+    # no retained C state may be formatted, reserved or installed a second time.
+    prerequisite=[1]+[r['sequence'] for r in records if r['phase']=='control']+[
+        r['sequence'] for r in records if r['kind']=='dbus' and
+        r['operation']=='StartTransientUnit' and r['args']['args'][0].endswith('.slice')]
+    preparation=[copy.deepcopy(records[n]) for n in sorted(set(prerequisite))]
+    for record in preparation:
+        original=copy.deepcopy(record)
+        records[record['sequence']].update(kind='syscall',operation='verify_prepared',
+            args=dict(original_record_sha256=c.digest(c.canonical(original)),original_sequence=original['sequence'],
+                expectation='independent_operator_prefix_receipt'),
+            writable=[],preconditions=['original_prepared_identity_and_bytes',
+                'no_create_format_overwrite_or_rearm','prefix_accounted_before_first_entry'])
+    records[52]['args']=['durable_QUARANTINED','retain_C_slot_tombstone_and_A',
+        'prepare_independent_terminal_handoff_only','keep_C_namespace_and_lock_custody',
+        'NO_unmount_close_or_release_before_record53_completion_and_observer_tail']
+    records[52]['preconditions']+=['independent_terminal_owner_retains_original_descriptors']
+    prefix=dict(schema='meownero-operator-prefix/1',source_only=True,
+        authority='independently_authenticated_outside_operator_not_root_record_ingress',
+        operations=preparation,
+        before_first_entry=['exact_immutable_installation_and_index','original_retained_namespace',
+            'original_C_directory_record_order_and_all_role_capabilities',
+            'parent_work_control_accounting_units','durable_operator_quarantine_and_startup_receipt'],
+        command=['/usr/bin/python3','-I','-B','/opt/meownero/TJS-2504/helper/profile-custodian.py'],
+        charge=dict(preparation=PREPARATION,allocation=ALLOCATION,overhead=value['overhead']),
+        installed_implementation='UNIMPLEMENTED_UNQUALIFIED')
+    terminal=dict(schema='meownero-terminal-handoff/1',source_only=True,
+        owner='independent_outside_operator_not_a_C_bound_root_entry',
+        ordered=['record52_intent_and_durable_completion','record53_pending_observer_and_durable_completion',
+            'all_C_bound_entries_exit_and_close_journal_directory_descriptors',
+            'independent_keeper_cleanup_and_observer_exit_witness','account_and_sync_final_C_export_tail',
+            'retain_C_quarantine_tombstone_and_A','close_all_C_writers_and_descriptors',
+            'normal_C_unmount_and_independent_absence','close_original_namespace_custody',
+            'release_PID1_named_FDs_and_all_original_lock_copies',
+            'independent_original_inode_nonblocking_acquire_then_close'],
+        deadline='original_origin+4500',disposition='record54_separate_authority_only',
+        implementation='UNIMPLEMENTED_UNQUALIFIED')
+    return dict(schema='meownero-lifecycle-packet/4', spec_sha256=c.digest(c.canonical(value)),
         source_only=True, activation='REFUSED_UNQUALIFIED', plan=copy.deepcopy(value), records=records,
+        operator_prefix=prefix,terminal_handoff=terminal,
         units=units(value), unbound=[key for key,val in value['authority'].items() if val is None],
         observed_storage=None, native_execution='NOT_RUN', launch_ready=False)
