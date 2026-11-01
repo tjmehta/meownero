@@ -163,9 +163,11 @@ class RecordExecutor:
             c.require(set(execution)=={'env','cwd','pass_fds','uid','gid','extra_groups'} and
                 execution['uid']==execution['gid']==record['uid'] and execution['extra_groups']==[],
                 'exact child identity/context')
+            remaining=deadline-self.clock()
+            c.require(remaining>0, 'original cutoff rechecked after child context preparation')
             result=self.run(argv,shell=False,check=True,stdin=subprocess.DEVNULL,
                 stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,close_fds=True,
-                timeout=deadline-self.clock(),env=execution['env'],cwd=execution['cwd'],
+                timeout=remaining,env=execution['env'],cwd=execution['cwd'],
                 pass_fds=tuple(execution['pass_fds']),user=execution['uid'],group=execution['gid'],
                 extra_groups=[],umask=0o077)
             c.require(result.returncode==0, 'fixed command failed')

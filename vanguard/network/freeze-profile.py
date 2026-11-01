@@ -99,6 +99,7 @@ def source_inputs():
         launch_receiver_authorization_comment='8785cbdf-59d9-4019-9439-45f23404ef5c',
         launch_receiver_platform_qualification='4c84d7e3-a5cb-4ac0-a426-86fdb9bf9b9e:6bd3a0fc-7ff0-4351-828c-32bb4de7f317',
         original_deadline_authorization_interaction='20247c15-8091-4e49-b31c-b53ba18a1f7e:801df7f3-2809-4ca4-bf90-df9d3261351b',
+        argv_deadline_authorization_interaction='6b282670-8218-44db-8d13-f12972199e61:70101dec-56c1-4375-90fe-fb8f0db51831',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],
