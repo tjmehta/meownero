@@ -156,7 +156,8 @@ class Direct(unittest.TestCase):
 
     def exercise(self, *, refuse=None, uncertain_create=False, fail_runtime=False,
                  failed_phase=None, raised_phase=None, mutate_public=None, container_exit_only=False,
-                 mutate_build=None):
+                 mutate_build=None, mutate_staging=None, cleanup_failure=False,
+                 staging_retained=False):
         inputs = self.base/'inputs.json';inputs.write_bytes(b'{}')
         value = grant(self.output);events = [];state = {'container':None,'starts':0}
         case = self
@@ -193,6 +194,7 @@ class Direct(unittest.TestCase):
                         if filename in produced:
                             (case.output/'public'/filename).write_text(json.dumps(case.producer_rows()[filename]))
                     if phase == 'build' and mutate_build:mutate_build(case.output/'public/build.json')
+                    if phase == 'build' and mutate_staging:mutate_staging(case.output/'staging')
                     if phase in (failed_phase,raised_phase):
                         secret = 'PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL'
                         for name in ('build.log','configure.log','private/console.log'):
@@ -207,7 +209,9 @@ class Direct(unittest.TestCase):
                         output = error = secret.encode()
                     if phase == 'runtime' and mutate_public:mutate_public(case.output)
                 elif cmd[0] == 'stop':state['container']['State']['Running'] = False
-                elif cmd[0] == 'rm':state['container'] = None
+                elif cmd[0] == 'rm':
+                    if cleanup_failure:raise RuntimeError('fixture cleanup failure')
+                    state['container'] = None
                 else:raise AssertionError(cmd)
                 return subprocess.CompletedProcess(argv,code,output,error)
         def admission(image,root,grant):
@@ -231,14 +235,14 @@ class Direct(unittest.TestCase):
              patch.object(sys,'argv',['run-profile.py','--inputs',str(inputs),'--grant-comment',GRANT,
                  '--artifact-sha256',c.digest(b'packet'),'--out',str(self.output)]):
             result = r.main()
-        self.assertIsNone(state['container'])
-        self.assertFalse((self.output/'staging').exists())
+        if not cleanup_failure:self.assertIsNone(state['container'])
+        self.assertEqual((self.output/'staging').exists(),staging_retained)
         fd,_ = r.acquire_lock();os.close(fd)
-        receipt = json.loads((self.output/'public/receipt.json').read_text()) if self.output.exists() else None
+        receipt = json.loads((self.output/'evidence/receipt.json').read_text()) if self.output.exists() else None
         if receipt:
             self.assertEqual(receipt['rows']['cleanup.json']['lock_released']['status'],'PASS')
             self.assertNotIn('never export',json.dumps(receipt))
-            for path in self.output.rglob('*'):
+            for path in (self.output/'evidence').iterdir():
                 if path.is_file():self.assertNotIn('PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL',path.read_text())
         return result,receipt,events
 
@@ -299,7 +303,7 @@ class Direct(unittest.TestCase):
         peer = receipt['rows']['peer.json']
         self.assertEqual(peer['native_handshake'],dict(status='PASS',request_sha256='a'*64,command=1001))
         self.assertEqual(peer['genesis_state']['status'],'NOT_RUN')
-        self.assertEqual(json.loads((self.output/'public/peer.json').read_text()),peer)
+        self.assertEqual(json.loads((self.output/'evidence/peer.json').read_text()),peer)
 
     def test_raised_command_failure_keeps_exit_code_without_exception_transcripts(self):
         result,receipt,_ = self.exercise(raised_phase='runtime')
@@ -336,7 +340,90 @@ class Direct(unittest.TestCase):
         self.assertEqual(receipt['rows']['cleanup.json']['lock_released'],dict(status='PASS',descriptor_closed=True))
         self.assertNotIn('runtime',receipt['container_counters'])
         self.assertEqual(outside.read_text(),secret)
-        self.assertEqual(set(p.name for p in (self.output/'public').iterdir()),set(c.REQUIRED)|{'receipt.json'})
+        self.assertEqual(set(p.name for p in (self.output/'evidence').iterdir()),set(c.REQUIRED)|{'receipt.json'})
+
+    def test_runtime_marker_symlink_refuses_without_clobber_or_runtime(self):
+        victim = self.base/'victim';victim.write_text('unchanged')
+        result,receipt,events = self.exercise(mutate_staging=lambda path:
+            (path/'BUILD_COMPLETE').symlink_to(victim))
+        self.assertEqual(victim.read_text(),'unchanged')
+        self.assertEqual(result,1);self.assertEqual(receipt['failure_class'],'FileExistsError')
+        self.assertEqual(events.count('start'),1);self.assertEqual(receipt['result'],'FAIL')
+
+    def test_runtime_marker_fifo_refuses_promptly_without_runtime(self):
+        start = time.monotonic()
+        result,receipt,events = self.exercise(mutate_staging=lambda path:os.mkfifo(path/'BUILD_COMPLETE'))
+        self.assertLess(time.monotonic()-start,2)
+        self.assertEqual(result,1);self.assertEqual(receipt['failure_class'],'FileExistsError')
+        self.assertEqual(events.count('start'),1);self.assertEqual(receipt['result'],'FAIL')
+
+    def planted_public(self, root, *, readonly=None):
+        public = root/'public';victims = []
+        for filename in [*c.REQUIRED,'receipt.json']:
+            victim = self.base/('victim-'+filename);victim.write_text('unchanged');victims.append(victim)
+            path = public/filename
+            path.unlink(missing_ok=True);path.symlink_to(victim)
+        (public/'unvalidated-producer.txt').write_text('UNTRUSTED_PRODUCER_SENTINEL')
+        if readonly == 'root':
+            public.chmod(0o500);self.addCleanup(public.chmod,0o700)
+        if readonly == 'subdirectory':
+            directory = public/'readonly';directory.mkdir();(directory/'entry').touch()
+            directory.chmod(0o500);self.addCleanup(directory.chmod,0o700)
+        return victims
+
+    def assert_controller_evidence(self, victims):
+        self.assertTrue(all(path.read_text() == 'unchanged' for path in victims))
+        evidence = self.output/'evidence'
+        self.assertEqual(evidence.stat().st_mode & 0o777,0o700)
+        self.assertEqual(set(path.name for path in evidence.iterdir()),set(c.REQUIRED)|{'receipt.json'})
+        for path in evidence.iterdir():
+            self.assertFalse(path.is_symlink());self.assertEqual(path.stat().st_mode & 0o777,0o600)
+            self.assertEqual(path.stat().st_nlink,1)
+            self.assertNotIn('UNTRUSTED_PRODUCER_SENTINEL',path.read_text())
+        argv = r.container_command(self.output,'unused',IMAGE)
+        self.assertNotIn(str(evidence)+':/evidence',argv)
+        self.assertFalse(any(str(evidence) in arg for arg in argv))
+
+    def test_readonly_public_root_cannot_redirect_finalization(self):
+        victims = []
+        def mutate(root):victims.extend(self.planted_public(root,readonly='root'))
+        result,receipt,_ = self.exercise(mutate_public=mutate,staging_retained=True)
+        self.assertEqual(result,1);self.assertEqual(receipt['cleanup_failure_class'],'PermissionError')
+        self.assertEqual(receipt['result'],'FAIL');self.assert_controller_evidence(victims)
+        self.assertTrue((self.output/'public/receipt.json').is_symlink())
+
+    def test_readonly_public_subdirectory_cannot_redirect_finalization(self):
+        victims = []
+        def mutate(root):victims.extend(self.planted_public(root,readonly='subdirectory'))
+        result,receipt,_ = self.exercise(mutate_public=mutate,staging_retained=True)
+        self.assertEqual(result,1);self.assertEqual(receipt['cleanup_failure_class'],'PermissionError')
+        self.assertEqual(receipt['result'],'FAIL');self.assert_controller_evidence(victims)
+
+    def test_container_cleanup_failure_still_publishes_only_controller_evidence(self):
+        victims = []
+        def mutate(root):victims.extend(self.planted_public(root))
+        result,receipt,_ = self.exercise(mutate_public=mutate,cleanup_failure=True,staging_retained=True)
+        self.assertEqual(result,1);self.assertEqual(receipt['cleanup_failure_class'],'RuntimeError')
+        self.assertEqual(receipt['rows']['cleanup.json']['owned_cid_absent']['status'],'NOT_RUN')
+        self.assert_controller_evidence(victims)
+
+    def test_exclusive_writes_refuse_existing_entries_and_evidence_directory(self):
+        self.output.mkdir();directory = self.output/'staging';directory.mkdir()
+        for kind in ('regular','directory','symlink','fifo'):
+            path = directory/'BUILD_COMPLETE'
+            if kind == 'regular':path.write_text('unchanged')
+            elif kind == 'directory':path.mkdir()
+            elif kind == 'symlink':path.symlink_to(self.base/'missing')
+            else:os.mkfifo(path)
+            with self.subTest(kind=kind),self.assertRaises(FileExistsError):r.runtime_marker(directory)
+            if kind == 'directory':path.rmdir()
+            else:path.unlink()
+        r.runtime_marker(directory)
+        self.assertEqual((directory/'BUILD_COMPLETE').read_bytes(),b'runtime\n')
+        r.publish_evidence(self.output,c.empty_rows(),{'result':'FAIL'})
+        original = (self.output/'evidence/receipt.json').read_bytes()
+        with self.assertRaises(FileExistsError):r.publish_evidence(self.output,{}, {'result':'changed'})
+        self.assertEqual((self.output/'evidence/receipt.json').read_bytes(),original)
 
     def test_bounded_reader_rejects_special_hardlinked_and_duplicate_key_files(self):
         path = self.base/'evidence.json'

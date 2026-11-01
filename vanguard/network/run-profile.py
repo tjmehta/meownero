@@ -326,6 +326,40 @@ def bounded_json(path, maximum=64*1024):
     finally: os.close(fd)
 
 
+def exclusive_write(directory_fd, filename, raw):
+    """Create one new file without following any producer-controlled entry."""
+    fd = os.open(filename,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,
+                 0o600,dir_fd=directory_fd)
+    with os.fdopen(fd,'wb') as stream:
+        stream.write(raw)
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def runtime_marker(staging):
+    fd = os.open(staging,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    try:
+        exclusive_write(fd,'BUILD_COMPLETE',b'runtime\n')
+        os.fsync(fd)
+    finally: os.close(fd)
+
+
+def publish_evidence(root, rows, receipt):
+    """The container never mounts this fresh controller-only directory."""
+    root_fd = os.open(root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    try:
+        os.mkdir('evidence',mode=0o700,dir_fd=root_fd)
+        fd = os.open('evidence',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,
+                     dir_fd=root_fd)
+        try:
+            for filename,data in [*rows.items(),('receipt.json',receipt)]:
+                exclusive_write(fd,filename,(json.dumps(data,indent=2)+'\n').encode())
+            os.fsync(fd)
+        finally: os.close(fd)
+        os.fsync(root_fd)
+    finally: os.close(root_fd)
+
+
 def witness_matches(value, shape, *, complete=False):
     if isinstance(shape,dict):
         return isinstance(value,dict) and (value.keys() == shape.keys() if complete else
@@ -387,7 +421,8 @@ def collect_public(root, rows):
             rows[filename].update(read_public_rows(public/filename,shapes))
         except FileNotFoundError: pass  # Unreached rows stay NOT_RUN.
         except Exception: rejected.append(filename)
-    # Never retain an unvalidated original or follow a public symlink on rewrite.
+    # Clear untrusted input when possible; failure leaves it quarantined.
+    # Final publication never writes into this container-mounted directory.
     for path in public.iterdir():
         if path.name not in allowed: rejected.append('unexpected-public-entry')
         if path.is_dir() and not path.is_symlink(): shutil.rmtree(path)
@@ -463,7 +498,7 @@ def main():
         for phase in ('build','runtime'):
             if phase == 'runtime':
                 c.require(time.monotonic()+600 <= control.work_end, 'full runtime allowance unavailable')
-                (args.out/'staging/BUILD_COMPLETE').write_text('runtime\n')
+                runtime_marker(args.out/'staging')
             diagnostic = receipt['phase_diagnostics'][phase] = dict(started=True)
             deadline = control.build_end if phase == 'build' else time.monotonic()+600
             result = control.run(g.DOCKER+['start','-a',value['Id']],deadline,check=False)
@@ -553,8 +588,7 @@ def main():
         receipt['rows'] = rows
         if receipt['result'] == 'INCOMPLETE': receipt['result'] = c.verdict(rows)
         if created:
-            for filename,data in rows.items(): n.write_json(args.out/'public'/filename,data)
-            n.write_json(args.out/'public/receipt.json',receipt)
+            publish_evidence(args.out,rows,receipt)
         print(json.dumps(dict(result=receipt['result'],launch_ready=False,consumed=created)))
     return 0 if receipt['result'].startswith('PASS_') else 1
 

@@ -33,7 +33,7 @@ permission, have no symlink alias and be outside a Git checkout, using the exist
 `network.fresh_directory` checks. All exports, overlays, offline Cargo copies, harness copies, private native files,
 archives and public evidence live below one fresh, grant-bound output directory.
 Its durable creation consumes this attempt; an existing directory is refused.
-Keep `consumed.json` and the public evidence after cleanup. Do not delete or reuse
+Keep `consumed.json` and controller-written `evidence/` after cleanup. Do not delete or reuse
 this directory to replay a grant. Staging is removed only after the owned container
 is confirmed absent. Unconfirmed cleanup is a failure and retains staging evidence.
 
@@ -74,8 +74,17 @@ the six native/build filenames, known rows/statuses and the frozen producer's wi
 fields. Files must be owned single-link regular files, opened without following
 symlinks, at most64 KiB each; resource counters have a separate1 KiB numeric allowlist.
 Malformed files, duplicate JSON keys, unknown fields and unexpected public entries
-fail the attempt. All producer originals are removed before controller-written public
-rows and receipt are emitted. Resource/cleanup rows remain controller-owned.
+fail the attempt. The container-mounted `public/` directory is untrusted input only. After removal
+is attempted, final rows and receipt are exclusively created under fresh mode0700
+`evidence/`, which is never mounted. All file writes use mode0600 descriptor-relative
+O_CREAT|O_EXCL|O_NOFOLLOW opens. A preexisting marker (including a symlink or FIFO)
+refuses before runtime; final publication also refuses an existing evidence directory.
+The runtime marker uses the same exclusive write anchored to a no-follow staging FD.
+If public cleanup or container-absence confirmation fails, the attempt stays FAIL;
+producer entries remain quarantined and final evidence still goes only into the
+unmounted controller directory. Resource/cleanup rows remain controller-owned.
+Publish only the nine allowlisted JSON files from `evidence/`. Never package
+`public/`, retained staging or the entire attempt root.
 
 Every PASS row requires every frozen producer witness field recursively. Build
 evidence must include all three binaries, each hash and dependency inventory, and
@@ -162,3 +171,12 @@ F1/F2 file/JSON validation also uses Python3.15.2's
 [bounded JSON parsing guidance](https://docs.python.org/3.15/library/json.html).
 Recursive PASS completeness uses the standard
 [dictionary key-view equality](https://docs.python.org/3.15/library/stdtypes.html#dictionary-view-objects).
+
+Security S1/P2 correction: answered question `70580605-1d3d-4aef-8967-570cb3d2f06d`
+on baseline `35240d74a304f0ca57a972b7a34656e33966844f`, under the same standing
+per-round allowance. Connected main/finalization tests cover marker symlink/FIFO,
+public-root/subdirectory mode0500 and early container-cleanup failure with planted
+links for every final filename. These are disposable source fixtures with substituted
+Docker/native effects, not native execution. Python3.15 descriptor/flag semantics:
+https://docs.python.org/3.15/library/os.html#os.open and
+https://docs.python.org/3.15/library/os.html#os.mkdir .

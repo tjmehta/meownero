@@ -1,0 +1,50 @@
+{
+  "schema": "meownero-direct-profile-s1-source-evidence/1",
+  "base_commit": "35240d74a304f0ca57a972b7a34656e33966844f",
+  "run_id": "762e49b8-81aa-49b6-b4f4-f9cfce3b79f9",
+  "authority_interaction": "b4df75a6-ad2c-4007-8675-e9da8376905e",
+  "security_interaction": "70580605-1d3d-4aef-8967-570cb3d2f06d",
+  "security_run": "61768eac-a729-4d04-b549-5d1a946f32e4",
+  "candidate_commit": "bound by packet manifest",
+  "source_state": "PASS_SOURCE_CHECKS_PENDING_INDEPENDENT_REVIEWS",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "source_tests": 269,
+  "source_test_seconds": 77.61,
+  "direct_controller_tests": 33,
+  "focused_seconds": 5.78,
+  "changes": [
+    "exclusive no-follow descriptor-relative marker creation",
+    "fresh controller-only never-mounted evidence directory; exclusive final writes",
+    "publication restricted to evidence/*.json, quarantined producer data excluded"
+  ],
+  "baseline_controls": {
+    "marker": {
+      "assertion_or_receipt_failure": "AssertionError",
+      "victims": 1,
+      "victims_overwritten": 1
+    },
+    "public": {
+      "assertion_or_receipt_failure": "FileNotFoundError",
+      "victims": 9,
+      "victims_overwritten": 9
+    },
+    "scope": "Two baseline write operations in candidate actual-main fixtures; not a complete baseline installation. Docker/native effects substituted."
+  },
+  "budget": {
+    "first_edit_utc": "2026-11-01T08:48:56.418212+00:00",
+    "passes": {
+      "implementation": 1,
+      "correction": 0
+    },
+    "limit_minutes": 45,
+    "finished_utc": "2026-11-01T08:54:38.742548+00:00",
+    "elapsed_minutes": 5.705405600000001
+  },
+  "runner_sha256": "91fba450a5843b4c812c30023aed23ea021b1522179d441f3b9ec7bf8b40bb46",
+  "inputs_sha256": "edde856b3db896a46293e30501c0fb0ecb86a923cc13f045115e0b6a2f0febae",
+  "limits": "Disposable files, PIDs and locks are real. Docker/native effects are substituted. No original heavy lock, capacity probe or native work.",
+  "reuse": "Prior unchanged CLI6+17+14 receipts retain original attribution; not rerun.",
+  "next": "Independent Platform source assessment, then Security serialized, then separately authenticated Platform grant comment and two fresh admissions; full launch matrix remains unfinished."
+}
