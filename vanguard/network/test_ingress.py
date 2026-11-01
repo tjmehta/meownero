@@ -73,7 +73,7 @@ class IngressTests(unittest.TestCase):
         self.recovery=[self.cleanup] if itinerary is None else [n for n in self.itinerary
             if self.records[n]['phase'] in ('cleanup','completion')]
         self.binding=dict(contract_sha256=c.digest(c.canonical(self.contract)),inputs_sha256=c.digest(index),
-            origin=100,deadlines=self.contract['deadlines'])
+            origin=100,deadlines=self.contract['deadlines'],preparation=dict(origin=100,archive_origin=100))
         self.secret=b'x'*32
         reserved=r.reserve_record_state(self.dirfd,self.binding,self.itinerary,self.recovery,
             self.secret,owner_uid=os.getuid())
@@ -115,7 +115,7 @@ class IngressTests(unittest.TestCase):
         ctx=self.memfd(c.canonical(context),sealed=not unsealed);idx=self.memfd(self.index)
         record=self.records[n]
         envelope=dict(schema='meownero-root-ingress/1',delivery=delivery,
-            request=dict(operation=record['operation'],record=n,deadline=200),
+            request=dict(operation=record['operation'],record=n,deadline=p.operation_deadline(self.plan,n,self.binding)),
             activation=self.secret.hex(),recovery_only=recovered)
         anchor=dict(schema='meownero-root-trust/1',plan=self.plan,inputs_raw=self.index,
             envelope=copy.deepcopy(envelope),receiver_credentials=[os.getpid(),os.getuid(),os.getgid()],

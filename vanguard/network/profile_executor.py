@@ -135,6 +135,7 @@ class RecordExecutor:
             # only the actual typed arguments are expanded for execution.
             exact['args']=substitute(record['args'],self.bindings)
             self.boundary.verify_bound_record(record,exact,deadline)
+            c.require(self.clock()<deadline,'original cutoff rechecked immediately before effect')
             self.effect(record,exact,deadline)
             self.boundary.complete_record(record,deadline)
             c.require(self.clock()<deadline, 'late operation consumes record and keeps recovery ownership')

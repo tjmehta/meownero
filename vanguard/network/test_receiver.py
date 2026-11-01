@@ -28,7 +28,8 @@ def bound_plan():
 
 def binding(plan,receiver,*,origin=0,end=4500):
     launch=dict(plan=plan,record_binding=dict(contract_sha256='a'*64,inputs_sha256='c'*64,
-        origin=origin,deadlines=dict(build=end-900,work=end-300,end=end)))
+        origin=origin,deadlines=dict(build=origin+3600,work=origin+4200,end=origin+4500),
+        preparation=dict(origin=origin,archive_origin=origin)))
     return r.scope(launch,0,receiver)
 
 
@@ -237,7 +238,7 @@ class ChildTests(unittest.TestCase):
         with self.assertRaises(ValueError):witness.observe(lambda row:None,deadline=time.monotonic()+5)
 
     def test_nonchild_echild_and_substituted_start_are_not_status_zero(self):
-        receiver=i.process_identity(os.getpid());scope=binding(self.plan,receiver,origin=0,end=time.monotonic()+10)
+        receiver=i.process_identity(os.getpid());scope=binding(self.plan,receiver,origin=time.monotonic()-1)
         witness=r.ChildExitWitness(receiver,scope);self.addCleanup(witness.close)
         with self.assertRaises(ChildProcessError):witness.observe(lambda row:None,deadline=time.monotonic()+5)
         pid,write,witness,scope=self.child();wrong=dict(scope['receiver'],start='1')

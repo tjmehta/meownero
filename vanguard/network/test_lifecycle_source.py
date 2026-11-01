@@ -140,7 +140,7 @@ class LifecycleSourceTests(unittest.TestCase):
             f.backend.syscall.side_effect=syscall
             case.start()
             for number in range(54):
-                self.assertEqual(case.issue(number,recovered=number>=f.cleanup),0,'record '+str(number))
+                self.assertEqual(case.issue(number,recovered=number>=f.cleanup,generated=True),0,'record '+str(number))
             m.send_packet(case.channel,dict(operation='snapshot'))
             snapshot,_=m.receive_packet(case.channel,case.server_credentials,200,clock=lambda:100)
             self.assertEqual(snapshot['completed'],list(range(54)));self.assertTrue(snapshot['entries_closed'])

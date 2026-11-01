@@ -28,7 +28,7 @@ CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.
       'profile_dispatch.py','profile-helper.py','test_dispatch.py','profile_bootstrap.py','test_bootstrap.py',
       'profile_executor.py','profile-root-helper.py','profile_runtime.py','test_executor.py','test_installation.py','profile_ingress.py','test_ingress.py',
       'profile_constructor.py','test_constructor.py','test_supervisor.py','profile-custodian.py','test_lifecycle_source.py',
-      'profile_receiver.py','test_receiver.py']
+      'profile_receiver.py','test_receiver.py','test_deadlines.py']
 
 
 def candidate_paths():
@@ -98,6 +98,7 @@ def source_inputs():
         cleanup_settlement_authorization_interaction='48d2d44f-aed2-46ee-bce4-191e04a15ae5:5187a4f2-ee85-4a05-af3b-ed058e1cd572',
         launch_receiver_authorization_comment='8785cbdf-59d9-4019-9439-45f23404ef5c',
         launch_receiver_platform_qualification='4c84d7e3-a5cb-4ac0-a426-86fdb9bf9b9e:6bd3a0fc-7ff0-4351-828c-32bb4de7f317',
+        original_deadline_authorization_interaction='20247c15-8091-4e49-b31c-b53ba18a1f7e:801df7f3-2809-4ca4-bf90-df9d3261351b',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],

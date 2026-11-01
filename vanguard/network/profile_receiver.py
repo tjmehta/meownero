@@ -22,7 +22,8 @@ def boot_id():
 
 def scope(launch,record,receiver):
     return copy.deepcopy(dict(task='TJS-2504',attempt_id=launch['plan']['attempt_id'],source=launch['plan']['source'],
-        record=record,record_binding=launch['record_binding'],receiver=receiver))
+        record=record,record_binding=launch['record_binding'],receiver=receiver,
+        operation_deadline=p.operation_deadline(launch['plan'],record,launch['record_binding'])))
 
 
 def exit_status(code,status):
@@ -119,7 +120,7 @@ class ManagerTransport:
         c.require(type(authority) is dict and set(authority)=={'bindings','record_binding'} and
             type(authority['bindings']) is dict,'independently authenticated launch substitutions/deadlines')
         self.bindings=authority['bindings'];self.record_binding=authority['record_binding']
-        c.require(set(self.record_binding)=={'contract_sha256','inputs_sha256','origin','deadlines'} and
+        c.require(set(self.record_binding)=={'contract_sha256','inputs_sha256','origin','deadlines','preparation'} and
             self.record_binding['inputs_sha256']==self.plan['source']['inputs_sha256'] and
             type(self.record_binding['origin']) in (int,float) and math.isfinite(self.record_binding['origin']) and
             set(self.record_binding['deadlines'])=={'build','work','end'},'original source/index/clock binding')
@@ -127,6 +128,7 @@ class ManagerTransport:
         c.require(ends==dict(build=origin+limits['build_seconds'],
             work=origin+limits['build_seconds']+limits['runtime_seconds'],end=origin+limits['wall_seconds']),
             'unchanged original 3600+600+300 deadlines')
+        p.operation_deadline(self.plan,0,self.record_binding)
 
     def check(self):
         c.require(self.manager['boot_id']==boot_id() and
@@ -157,7 +159,9 @@ class ManagerTransport:
         held through durable settlement confirmation, including a lost reply.
         """
         self.check();self.deadline(deadline)
-        call=p.receiver_unit(self.plan,record,endpoint_fd)
+        cutoff=p.operation_deadline(self.plan,record,self.record_binding)
+        c.require(deadline<=cutoff,'receiver launch RPC cannot extend original operation cutoff')
+        call=p.receiver_unit(self.plan,record,endpoint_fd,operation_cutoff=cutoff,now=self.clock())
         unit=call['args'][0]
         c.require(unit not in self.used and self.clock()<deadline,'one original root receiver start')
         self.used.add(unit)
@@ -174,6 +178,7 @@ class ManagerTransport:
             binding['receiver']==receiver and binding['task']=='TJS-2504' and
             binding['source']==self.plan['source'] and binding['attempt_id']==self.plan['attempt_id'] and
             binding['record_binding']==self.record_binding and
+            binding['operation_deadline']==p.operation_deadline(self.plan,binding['record'],self.record_binding) and
             deadline<=binding['record_binding']['deadlines']['end'],
             'receiver belongs to this original start')
         observed=self.boundary.receiver_properties(self.manager,unit,deadline)

@@ -110,7 +110,8 @@ class InstalledIngress:
             contract['spec_sha256']==delivery['spec_sha256'] and contract['attempt_id']==plan['attempt_id'] and
             contract['origin']==delivery['origin'] and contract['deadlines']==delivery['deadlines'] and
             anchor['record_binding']==dict(contract_sha256=delivery['contract_sha256'],
-                inputs_sha256=c.digest(anchor['inputs_raw']),origin=contract['origin'],deadlines=contract['deadlines']),
+                inputs_sha256=c.digest(anchor['inputs_raw']),origin=contract['origin'],deadlines=contract['deadlines'],
+                preparation=anchor['record_binding']['preparation']),
             'authority/source/index/original deadline binding')
         c.require(sealed_bytes(index,1024*1024)==anchor['inputs_raw'] and
             contract['bindings']['inputs_sha256']==plan['source']['inputs_sha256']==c.digest(anchor['inputs_raw']) and
@@ -146,6 +147,8 @@ class InstalledIngress:
     def admit_record(self,record,deadline):
         c.require(self.packet['request']==dict(operation=record['operation'],record=record['sequence'],deadline=deadline),
             'exact authenticated record request')
+        c.require(deadline==p.operation_deadline(self.trusted['plan'],record['sequence'],self.trusted['record_binding']) and
+            self.clock()<deadline,'original authenticated record and phase cutoff before effects')
         self._peers()
         role='record-'+str(record['sequence']);expected=self.trusted['capability_expected'][role]
         c.require(expected['bindings']==self.trusted['record_binding'] and

@@ -158,7 +158,9 @@ class SurvivingAuthority:
         try:i.process_identity(message['receiver']['pid'])
         except FileNotFoundError:pass
         else:raise ValueError('receiver still present; no independent exit')
-        if status!=0 or message['uncertain'] or previous is not None or not disposition['completed'] or disposition['uncertain']:
+        if (status!=0 or message['uncertain'] or previous is not None or not disposition['completed'] or
+                disposition['uncertain'] or self.clock()>=expected['operation_deadline'] or
+                message['witness']['observed_at']>=expected['operation_deadline']):
             self._uncertain(record)
         disposition['exit_witness_sha256']=sha
         # Retain custody until the launcher confirms receipt of this reply.
@@ -179,6 +181,8 @@ class SurvivingAuthority:
             'confirmation must acknowledge the same durable exit witness')
         receipt=dict(confirmed=True,scope=receiver_exit.scope(self.launch,self.state['pending'],self.awaiting_exit),
             exit_witness_sha256=disposition['exit_witness_sha256'])
+        if self.clock()>=receipt['scope']['operation_deadline']:
+            self._uncertain(self.state['pending'])
         if disposition['completed'] and not disposition['uncertain']:
             self.state.update(position=self.state['position']+1,stage='COMPLETED')
         else:self.state['stage']='UNCERTAIN'
@@ -227,6 +231,8 @@ class SurvivingAuthority:
         c.require(recovered or self.state['mode']=='LIVE','surviving classification cannot reactivate')
         c.require(self.state['pending'] is None and self.state['stage'] in ('RESERVED','COMPLETED','UNCERTAIN') and
             position<len(route) and route[position]==record,'issued, pending, replay or skipped record')
+        cutoff=receiver_exit.p.operation_deadline(self.launch['plan'],record,self.launch['record_binding'])
+        c.require(self.clock()<cutoff,'original record and phase deadline exhausted before issuance')
         # Burn delivery before returning any descriptor or authority packet.
         self.state['dispositions'][str(record)]=dict(consumed=True,completed=False,uncertain=False)
         self.state.update(position=position,pending=record,receiver=receiver,stage='ISSUED');self._persist()
@@ -251,8 +257,7 @@ class SurvivingAuthority:
             os.write(context,c.canonical(dict(schema='meownero-helper-bootstrap-context/1',
                 delivery=delivery,contract=self.launch['contract'])))
             fcntl.fcntl(context,fcntl.F_ADD_SEALS,b.SEALS)
-            request=dict(operation=p_record(self.launch['plan'],record)['operation'],record=record,
-                deadline=min(self.clock()+30,self.launch['record_binding']['deadlines']['end']))
+            request=dict(operation=p_record(self.launch['plan'],record)['operation'],record=record,deadline=cutoff)
             envelope=dict(schema='meownero-root-ingress/1',delivery=delivery,request=request,
                 activation=self.launch['secret'].hex(),recovery_only=recovered)
             anchor={key:copy.deepcopy(self.launch[key]) for key in ('plan','directory_identity','order_identity',
@@ -289,7 +294,9 @@ class SurvivingAuthority:
 
     def _entry(self,client,message):
         self._live()
-        c.require(self.clock()<client['request']['deadline'],'original per-record effect/completion deadline')
+        c.require(client['request']['deadline']==receiver_exit.p.operation_deadline(
+            self.launch['plan'],client['record'],self.launch['record_binding']) and
+            self.clock()<client['request']['deadline'],'original per-record effect/completion deadline')
         c.require(i.process_identity(client['receiver']['pid'])==client['receiver'],'live registered receiver')
         c.require(set(message)=={'operation','record'} and message['record']==client['record'],'exact surviving record scope')
         operation=message['operation']
@@ -407,9 +414,10 @@ class AuthorityClient:
 
     def call(self,operation):
         c.require(i.process_identity(self.credentials[0])==self.identity,'original supervisor PID/start; no reconnect')
+        rpc_deadline=min(self.clock()+5,self.deadline)
         with b.socket_from_fd(self.fd) as endpoint:
-            m.send_packet(endpoint,dict(operation=operation,record=self.record),deadline=self.deadline,clock=self.clock)
-            reply,_=m.receive_packet(endpoint,self.credentials,self.deadline,clock=self.clock)
+            m.send_packet(endpoint,dict(operation=operation,record=self.record),deadline=rpc_deadline,clock=self.clock)
+            reply,_=m.receive_packet(endpoint,self.credentials,rpc_deadline,clock=self.clock)
         c.require(reply.get('ok') is True,'surviving authority refused')
         return reply['result']
 
@@ -420,6 +428,10 @@ class AuthorityClient:
     def authenticate(self,anchor):
         c.require(self.call('authenticate')==i.authority_binding(anchor),
             'original surviving authority entry binding')
+        cutoff=receiver_exit.p.operation_deadline(anchor['plan'],self.record,anchor['record_binding'])
+        c.require(anchor['envelope']['request']['deadline']==cutoff and self.clock()<cutoff,
+            'authenticated original operation lifetime; RPC waits stay separate')
+        self.deadline=cutoff
         return True
 
     def complete(self,record):

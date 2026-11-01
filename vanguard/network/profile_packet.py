@@ -139,11 +139,46 @@ def units(value):
             if name.endswith('.service') and '-workload.service' not in name else None) for name,properties in rows]
 
 
-def receiver_unit(value,record,endpoint_fd):
+def operation_deadline(value,record,binding):
+    """Original authenticated clocks, never a duration renewed at issuance.
+
+    Preparation origins belong to the independently supplied launch binding.
+    Active work cannot consume the exclusive cleanup reserve. The renderer's
+    record limit and the enclosing phase limit both apply.
+    """
+    import math
+    c.require(type(record) is int and 0<=record<54,'no automatic disposition deadline')
+    c.require(set(binding)=={'contract_sha256','inputs_sha256','origin','deadlines','preparation'},
+        'complete original operation clock binding')
+    origin=binding['origin'];ends=binding['deadlines'];prep=binding['preparation']
+    c.require(type(origin) in (int,float) and math.isfinite(origin) and
+        ends==dict(build=origin+3600,work=origin+4200,end=origin+4500) and
+        set(prep)=={'origin','archive_origin'} and
+        all(type(x) in (int,float) and math.isfinite(x) for x in prep.values()) and
+        prep['origin']<=prep['archive_origin']<=prep['origin']+1200,
+        'unchanged original preparation and runtime clocks')
+    row=render(value)['records'][record]
+    limits={'prep_origin+1200':prep['origin']+1200,'prep_origin+300':prep['origin']+300,
+        'archive_origin+900':min(prep['archive_origin']+900,prep['origin']+1200),
+        'origin+3600':ends['build'],'origin+4200':ends['work'],'origin+4500':ends['end']}
+    c.require(row['deadline'] in limits,'frozen record deadline')
+    phase=row['phase']
+    phase_end=(ends['end'] if phase in ('cleanup','completion') else
+        ends['work'] if row['operation'] in ('outer','controller','start_and_wait') else
+        limits[row['deadline']] if phase in ('install','preparation_supervisor','control','archive') else ends['build'])
+    return min(limits[row['deadline']],phase_end,ends['end'])
+
+
+def receiver_unit(value,record,endpoint_fd,*,operation_cutoff,now):
     """Source interface: one retained, non-restarting exact root receiver."""
     validate_plan(value)
     c.require(value['attempt_id'] is not None and type(record) is int and 0<=record<54 and
         type(endpoint_fd) is int and endpoint_fd>=0,'bound original receiver record/descriptor')
+    import math
+    c.require(all(type(x) in (int,float) and math.isfinite(x) for x in (operation_cutoff,now)) and
+        now<operation_cutoff,'unexhausted original receiver operation cutoff')
+    remaining=int((operation_cutoff-now)*1_000_000)
+    c.require(0<remaining<2**64,'bounded supplementary relative receiver lifetime')
     stem='meowneroTJS2504'+value['attempt_id']
     properties=[['Type','s','exec'],['User','s','0'],['Group','s','0'],
         ['Slice','s',stem+'-control.slice'],['Restart','s','no'],['RemainAfterExit','b',True],['AddRef','b',True],
@@ -152,7 +187,7 @@ def receiver_unit(value,record,endpoint_fd):
         ['StandardInputFileDescriptor','h',endpoint_fd],['StandardOutput','s','null'],
         ['StandardError','s','null'],['LimitCORE','t',0],['NoNewPrivileges','b',True],
         ['RestrictAddressFamilies','(bas)',[True,['AF_UNIX','AF_NETLINK']]],
-        ['KillMode','s','control-group'],['RuntimeMaxUSec','t',30_000_000]]
+        ['KillMode','s','control-group'],['RuntimeMaxUSec','t',remaining]]
     return dict(bus='org.freedesktop.systemd1',path='/org/freedesktop/systemd1',
         interface='org.freedesktop.systemd1.Manager',member='StartTransientUnit',
         signature='ssa(sv)a(sa(sv))',args=[stem+'-root'+str(record)+'.service','fail',properties,[]])
@@ -351,6 +386,13 @@ def render(value):
             bus=None,record_range=[0,53],command=['/usr/bin/python3','-I','-B',
                 '/opt/meownero/TJS-2504/helper/profile-root-helper.py'],
             unit='meowneroTJS2504$ATTEMPT-root$RECORD.service',
+            deadline=dict(resolver='profile_packet.operation_deadline',
+                authority='original protected record_binding including preparation.origin/archive_origin',
+                operation='minimum original record, enclosing phase and absolute end cutoffs',
+                active_phase='build except outer/controller/start_and_wait through work; cleanup reserve excluded',
+                relative_runtime='floor remaining original cutoff at render; supplementary only, active-entry relative',
+                delivery_and_rpc='separate short waits; never the operation lifetime',
+                settlement='same original cutoff; late completion/exit/confirmation stays uncertain'),
             reference='AddRef=true_on_original_authenticated_connection_until_durable_settlement_confirmation',
             restart='no',charge='existing_control_slice_and_O_metadata_caps',qualification='UNBOUND_UNQUALIFIED'),
         units=units(value), unbound=[key for key,val in value['authority'].items() if val is None],

@@ -22,6 +22,7 @@ import profile_contract as c
 import profile_executor as e
 import profile_ingress as i
 import profile_manager as m
+import profile_packet as p
 import profile_receiver as receiver_exit
 import test_ingress
 
@@ -35,7 +36,11 @@ class SupervisorTests(unittest.TestCase):
         self.invocation=dict(operator_unit='TEST-supervisor.service',operator_invocation='a'*32,
             receiver_unit='TEST-fixed-root.service',receiver_invocation='b'*32)
 
-    def start(self,*,sync_error=None,sync_stage=None,lost_reply=None,clock_value=100):
+    def start(self,*,sync_error=None,sync_stage=None,lost_reply=None,clock_value=100,clock=None):
+        self.clock=clock or (lambda:clock_value)
+        # Harness transport stays available to observe a refused exhausted grant.
+        # It never changes the authority's original end cutoff.
+        self.transport_deadline=max(self.fixture.binding['deadlines']['end']+60,clock_value+1)
         f=self.fixture;self.index_fd=f.memfd(f.index)
         self.state_path=f.control/'supervisor-state'
         fd=os.open(self.state_path,os.O_CREAT|os.O_EXCL|os.O_RDWR|os.O_CLOEXEC,0o600)
@@ -58,7 +63,7 @@ class SupervisorTests(unittest.TestCase):
         if pid==0:
             self.channel.close()
             try:
-                authority=s.SurvivingAuthority(self.launch,f.dirfd,self.index_fd,fd,clock=lambda:clock_value)
+                authority=s.SurvivingAuthority(self.launch,f.dirfd,self.index_fd,fd,clock=self.clock)
                 if lost_reply:
                     original_send=m.send_packet;dropped=False
                     def lose(channel,message,*args,**kwargs):
@@ -75,7 +80,7 @@ class SupervisorTests(unittest.TestCase):
                             raise OSError(sync_error,'TEST supervisor persistence failure')
                         return original_sync(target)
                     os.fsync=fail
-                authority.serve(remote,creds,owner,deadline=max(200,clock_value+1))
+                authority.serve(remote,creds,owner,deadline=self.transport_deadline)
                 os._exit(0)
             except BaseException:os._exit(2)
         remote.close();os.close(fd);self.state_fd=None;self.server=pid
@@ -96,14 +101,16 @@ class SupervisorTests(unittest.TestCase):
             os.waitpid(self.server,0);self.server_reaped=True
 
     def issue(self,n=0,*,crash=False,recovered=False,mutate=None,lost_ack=False,after_local=False,
-              settle=True,exit_after_close=None,unknown_status=False,pause_after_close=None,before_wait=None,skip_auth=False):
+              settle=True,exit_after_close=None,unknown_status=False,pause_after_close=None,before_wait=None,skip_auth=False,
+              generated=False,launch_delay=None,ambiguous_launch=False,entry_mutate=None):
         f=self.fixture;tx,rx=m.private_pair();parent=[os.getpid(),os.getuid(),os.getgid()]
         pid=os.fork()
         if pid==0:
             tx.close();self.channel.close()
             try:
-                _,fds=m.receive_packet(rx,parent,200,fd_count=2,clock=lambda:100)
-                client=s.AuthorityClient(fds[0],self.server_credentials,self.server_identity,n,200,clock=lambda:100)
+                command,fds=m.receive_packet(rx,parent,self.transport_deadline,fd_count=2,clock=self.clock)
+                client=s.AuthorityClient(fds[0],self.server_credentials,self.server_identity,n,
+                    self.clock()+5,clock=self.clock)
                 if skip_auth:client.authenticate=lambda anchor:True
                 backend=f.backend
                 backend.operator_entry_expectation=lambda:client.call('expectation')
@@ -121,7 +128,21 @@ class SupervisorTests(unittest.TestCase):
                         if operation=='complete':raise OSError('TEST lost completion acknowledgement')
                         return result
                     client.call=lose
-                value=s.OperatorConstructor(backend,operator_fd=fds[1],clock=lambda:100,record_authority=client,
+                if entry_mutate:
+                    original=i.InstalledIngress
+                    def changed(boundary,anchor,*args,**kwargs):
+                        entry_mutate(anchor)
+                        return original(boundary,anchor,*args,**kwargs)
+                    i.InstalledIngress=changed
+                operator_fd=fds[1]
+                if generated:
+                    # Consume the generated fixed command and transferred stdin.
+                    # OS service launch is injected; the main/constructor/guard,
+                    # real sockets, journal, producer and child exit are real.
+                    c.require(command['argv']==['/usr/bin/python3','-I','-B',
+                        '/opt/meownero/TJS-2504/helper/profile-root-helper.py'],'generated receiver command')
+                    os.dup2(fds[1],0);operator_fd=0
+                value=s.OperatorConstructor(backend,operator_fd=operator_fd,clock=self.clock,record_authority=client,
                     run=Mock(side_effect=getattr(self,'command_effect',None),
                         return_value=types.SimpleNamespace(returncode=0)))
                 with redirect_stdout(io.StringIO()),patch.object(e.c,'HERE',f.install):
@@ -132,8 +153,10 @@ class SupervisorTests(unittest.TestCase):
                 os._exit(status)
             except BaseException:os._exit(3)
         rx.close();receiver=i.process_identity(pid)
-        witness=receiver_exit.ChildExitWitness(receiver,receiver_exit.scope(self.launch,n,receiver),clock=lambda:100)
-        self.addCleanup(witness.close)
+        witness=None
+        if 0<=n<54:
+            witness=receiver_exit.ChildExitWitness(receiver,receiver_exit.scope(self.launch,n,receiver),clock=self.clock)
+            self.addCleanup(witness.close)
         request=dict(operation='issue',receiver=receiver,record=n,recovered=recovered)
         if mutate:mutate(request)
         m.send_packet(self.channel,request)
@@ -147,7 +170,29 @@ class SupervisorTests(unittest.TestCase):
         try:
             if not reply.get('issued'):
                 os.kill(pid,signal.SIGKILL);os.waitpid(pid,0);return 3
-            self.assertEqual(len(fds),2);m.send_packet(tx,dict(start=True),fds)
+            self.assertEqual(len(fds),2)
+            if generated:
+                import test_receiver
+                manager=dict(bus='user',unique_name=':1.10',client_unique_name=':1.20',epoch='TEST-generated-launch',
+                    boot_id=receiver_exit.boot_id(),process=i.process_identity(os.getpid()),uid=os.getuid())
+                backend=test_receiver.InjectedManager(manager)
+                backend.authenticate_launch=lambda plan,owner:dict(bindings={},record_binding=f.binding)
+                def launch(owner,call,deadline):
+                    props={key:value for key,kind,value in call['args'][2]}
+                    self.generated_call=copy.deepcopy(call)
+                    c.require(props['StandardInputFileDescriptor']==fds[1],'original produced operator channel')
+                    if launch_delay:launch_delay()
+                    m.send_packet(tx,dict(argv=props['ExecStart'][0][1]),[fds[0],props['StandardInputFileDescriptor']])
+                    if ambiguous_launch:raise TimeoutError('TEST ambiguous receiver launch after delivery')
+                    return '/TEST/generated/job'
+                backend.start_transient_unit=launch
+                transport=receiver_exit.ManagerTransport(f.plan,manager,backend,clock=self.clock)
+                self.generated_transport=transport
+                try:transport.start_receiver(n,fds[1],deadline=min(self.clock()+5,
+                    p.operation_deadline(f.plan,n,f.binding)))
+                except (ValueError,TimeoutError):
+                    if not ambiguous_launch and not launch_delay:raise
+            else:m.send_packet(tx,dict(start=True),fds)
         finally:
             tx.close()
             for fd in fds:os.close(fd)
@@ -160,7 +205,7 @@ class SupervisorTests(unittest.TestCase):
         until=time.monotonic()+5
         while time.monotonic()<until:
             try:
-                value=witness.observe(persist,deadline=200);break
+                value=witness.observe(persist,deadline=f.binding['deadlines']['end']);break
             except ValueError as exc:
                 if str(exc)!='exact child terminal event required':raise
                 time.sleep(.005)
@@ -187,7 +232,7 @@ class SupervisorTests(unittest.TestCase):
 
     def snapshot(self):
         m.send_packet(self.channel,dict(operation='snapshot'))
-        return m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0]
+        return m.receive_packet(self.channel,self.server_credentials,self.transport_deadline,clock=self.clock)[0]
 
     def wait_closed(self):
         until=time.monotonic()+3
@@ -200,14 +245,14 @@ class SupervisorTests(unittest.TestCase):
     def settle(self,receiver,status,*,confirm=True):
         witness=self.exit_witnesses.get((receiver['pid'],receiver['start']))
         m.send_packet(self.channel,dict(operation='settle',receiver=receiver,witness=witness,uncertain=status is None))
-        response=m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0]
+        response=m.receive_packet(self.channel,self.server_credentials,self.transport_deadline,clock=self.clock)[0]
         if response.get('settled') is True:
             expected=dict(scope=witness['scope'],exit_witness_sha256=c.digest(c.canonical(witness)))
             self.assertEqual(response,dict(settled=True,**expected))
         if response.get('settled') is True and confirm:
             m.send_packet(self.channel,dict(operation='confirm_settlement',receiver=receiver,
                 exit_witness_sha256=c.digest(c.canonical(witness))))
-            confirmed=m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0]
+            confirmed=m.receive_packet(self.channel,self.server_credentials,self.transport_deadline,clock=self.clock)[0]
             if confirmed!=dict(confirmed=True,**expected):return confirmed
             self.last_confirmation=confirmed
         return dict(settled=True) if response.get('settled') is True else response
