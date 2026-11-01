@@ -5,6 +5,11 @@ Baseline: `fa7c19622a31439cbd386d8f8698fb4898508ef5`.
 This is source preparation. Native execution, complete launch acceptance and public
 launch remain unconfirmed. No funding, transactions or non-genesis blocks are allowed.
 
+F1/F2 correction authority: lead interaction `b4df75a6-ad2c-4007-8675-e9da8376905e`,
+answered 2026-11-01. Correction baseline: `cc5718f625c59ecc31518d4e54d8ed6e36d347fd`;
+one implementation plus one correction, at most45 minutes from first production edit.
+The clock/pass receipt is in `evidence/direct-runner-f1-f2/implementation-budget.json`.
+
 `run-profile.py` directly uses the existing `run-genesis.py` host lock, admission
 observations and pinned Docker endpoint. It imports no retired manager, outer,
 bootstrap, constructor, ingress, handoff or helper module. Those modules remain
@@ -57,6 +62,23 @@ The public contract remains `build.json`, `peer.json`, `wallet.json`, `auth.json
 NOT_RUN exclusions. `resources.json.parent_enclosure` retains its old row name for
 compatibility and explicitly describes container limits plus measured host overhead.
 Private transcripts, wallets and credentials are never copied into the source packet.
+The runner leaves `staging/private` absent so the frozen driver's own exclusive mkdir
+creates it. After the owned container is absent, the runner imports any partial public
+rows on both success and failure, before removing staging. Imports are restricted to
+the six native/build filenames, known rows/statuses and the frozen producer's witness
+fields. Files must be owned single-link regular files, opened without following
+symlinks, at most64 KiB each; resource counters have a separate1 KiB numeric allowlist.
+Malformed files, duplicate JSON keys, unknown fields and unexpected public entries
+fail the attempt. All producer originals are removed before controller-written public
+rows and receipt are emitted. Resource/cleanup rows remain controller-owned.
+
+The receipt retains only fixed phase names, numeric CLI/container exit codes and an
+OOM boolean as phase diagnostics. Failure class and rejection labels contain no raw
+exception messages, filenames from unexpected entries, stdout, stderr or private log
+content. A failed phase stays FAIL while reached public rows survive and unreached
+rows stay NOT_RUN. No private build, configure, native, RPC, wallet, frame or environment
+transcript is exported. These diagnostics identify the failed boundary; diagnosing
+private native details requires a separate authorized private inspection.
 
 Platform must read the changed source and issue one new authenticated comment on
 TJS-2504 containing exactly one fenced `meownero-direct-profile-grant` JSON block:
@@ -111,8 +133,15 @@ The source freezer checks all pinned candidate, upstream, overlay, Cargo and
 toolchain bytes. Direct-controller tests substitute Docker/native calls and use
 disposable host children/locks to check process deadlines and cleanup; they are
 source behavior evidence, not native acceptance.
+The connected staging test runs the actual staging prefix and frozen driver entry,
+stopping at a missing-binary sentinel before any native child. Failure tests exercise
+actual `main` finalization with substituted Docker responses, including CLI nonzero,
+container nonzero, partial runtime rows and private-sentinel rejection controls.
 
 Primary API references consulted for this implementation: Python 3.15.2
 [subprocess](https://docs.python.org/3.15/library/subprocess.html) and
 [signal](https://docs.python.org/3.15/library/signal.html), and Docker's
 [container create reference](https://docs.docker.com/reference/cli/docker/container/create/).
+F1/F2 file/JSON validation also uses Python3.15.2's
+[os file-descriptor APIs](https://docs.python.org/3.15/library/os.html) and
+[bounded JSON parsing guidance](https://docs.python.org/3.15/library/json.html).

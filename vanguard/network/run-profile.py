@@ -253,7 +253,7 @@ class Controller:
 
 def stage_inputs(control, inputs, manifest):
     out = control.root/'staging'
-    out.mkdir(mode=0o700);(out/'tmp').mkdir();(out/'private').mkdir(mode=0o700)
+    out.mkdir(mode=0o700);(out/'tmp').mkdir()
     source = out/'source';source.mkdir()
     pin = c.json_file(n.HERE.parent/'source-lock.json')
     for name,revision in [('',pin['upstream']['commit']),*pin['upstream']['submodules'].items()]:
@@ -309,6 +309,90 @@ def verify_limits(value):
         value['Config']['User'] == f'{os.getuid()}:{os.getgid()}', 'container limit mismatch')
 
 
+def bounded_json(path, maximum=64*1024):
+    """Read only an owned, single-link regular file, without following aliases."""
+    fd = os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+    try:
+        info = os.fstat(fd)
+        c.require(stat.S_ISREG(info.st_mode) and info.st_uid == os.getuid() and
+            info.st_nlink == 1 and info.st_size <= maximum, 'invalid evidence file')
+        raw = os.read(fd,maximum+1)
+        c.require(len(raw) <= maximum, 'oversized evidence')
+        def unique(pairs):
+            value = dict(pairs)
+            c.require(len(value) == len(pairs), 'duplicate evidence key')
+            return value
+        return json.loads(raw,object_pairs_hook=unique)
+    finally: os.close(fd)
+
+
+def witness_matches(value, shape):
+    if isinstance(shape,dict):
+        return isinstance(value,dict) and value.keys() <= shape.keys() and all(
+            witness_matches(item,shape[key]) for key,item in value.items())
+    if callable(shape): return shape(value)
+    return type(value) is type(shape) and value == shape
+
+
+def public_shapes():
+    # Only fields emitted by the frozen driver/freezer. No arbitrary text fields.
+    sha = lambda x: isinstance(x,str) and re.fullmatch('[0-9a-f]{64}',x) is not None
+    state = dict(height=1,top_block_hash=c.GENESIS,pool_hashes=[],
+        work=lambda x: isinstance(x,str) and re.fullmatch(r'(?:0x)?[0-9a-fA-F]{1,32}',x) is not None)
+    needed = lambda x: isinstance(x,list) and len(x) <= 32 and all(isinstance(v,str) and
+        re.fullmatch(r'lib[A-Za-z0-9_+.-]{1,96}\.so(?:\.[0-9]+)*',v) for v in x)
+    return dict(
+        three_production_binaries=dict(binaries={name:dict(sha256=sha,needed=needed)
+            for name in ('monerod','monero-wallet-cli','monero-wallet-rpc')}),
+        rpc_translation_unit=dict(object_sha256=sha),
+        native_handshake=dict(request_sha256=sha,command=1001),genesis_state=state,
+        daemon_fork_table=dict(v18_height=1,offline_wallet='NOT_RUN'),
+        persisted_height_zero=dict(wallets=2),address_roundtrip=dict(wallets=2),
+        foreign_prefix_refusal=dict(wallets=2),http_auth=dict(daemons=2,loopback_socket_census=True),
+        seventeen_denials=dict(wallets=2,per_wallet=17,code=-7),
+        rotated_login=dict(wallets=2,old_credentials_rejected=True),
+        uuid_guard=dict(guard='net_node.inl:handle_handshake/network_id',fixture_sha256=sha,
+            healthy_before_after=True,unchanged_state=state),
+        chain_genesis_guard=dict(guard='Blockchain::find_blockchain_supplement/genesis',fixture_sha256=sha,
+            healthy_before_after=True,unchanged_state=state,response_command=2007),
+        launcher_refusals=dict(controls=8,kind='launcher-manifest-only',original_unchanged=True),
+        no_fallback=dict(bounded_seconds=2,loopback_socket_samples=20,exclusive_endpoint_absent=True,
+            unchanged_state=state,scope='bounded-no-external-connection'),
+        wallet_save_exit_release=dict(wallets=2,forced_kill=False),
+        wallet_cold_restore=dict(wallets=2,height=0),
+        daemon_reopen_restore=dict(genesis_only=True,counterpart_stopped=True))
+
+
+def read_public_rows(path, shapes):
+    value = bounded_json(path)
+    c.require(isinstance(value,dict) and value.keys() <= set(c.REQUIRED[path.name]), 'unknown public row')
+    for key,item in value.items():
+        c.require(isinstance(item,dict) and item.get('status') in ('PASS','FAIL','NOT_RUN') and
+            witness_matches({k:v for k,v in item.items() if k != 'status'},shapes[key]),
+            'invalid public witness')
+    return value
+
+
+def collect_public(root, rows):
+    """Snapshot validated partial rows after the container stops, before cleanup."""
+    rejected = []
+    shapes = public_shapes()
+    allowed = set(c.REQUIRED)-{'resources.json','cleanup.json'}
+    public = root/'public'
+    c.require(public.is_dir() and not public.is_symlink(), 'invalid public directory')
+    for filename in sorted(allowed):
+        try:
+            rows[filename].update(read_public_rows(public/filename,shapes))
+        except FileNotFoundError: pass  # Unreached rows stay NOT_RUN.
+        except Exception: rejected.append(filename)
+    # Never retain an unvalidated original or follow a public symlink on rewrite.
+    for path in public.iterdir():
+        if path.name not in allowed: rejected.append('unexpected-public-entry')
+        if path.is_dir() and not path.is_symlink(): shutil.rmtree(path)
+        else: path.unlink()
+    return sorted(set(rejected))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--inputs',type=Path,default=c.HERE/'integration/inputs.json')
@@ -341,7 +425,8 @@ def main():
     rows = c.empty_rows()
     receipt = dict(schema='meownero-direct-profile-attempt/1',result='INCOMPLETE',launch_ready=False,
         grant=args.grant_comment,candidate_commit=commit,runner_sha256=c.digest(Path(__file__).read_bytes()),
-        lock=lock,exclusions={key:'NOT_RUN' for key in c.EXCLUDED})
+        lock=lock,phase_diagnostics={},exclusions={key:'NOT_RUN' for key in c.EXCLUDED})
+    phase = 'admission'
     created = False
     create_intent = False
     prior = {}
@@ -359,6 +444,7 @@ def main():
         finally: os.close(parent)
         (args.out/'public').mkdir(mode=0o700)
         n.write_json(args.out/'consumed.json',dict(grant=args.grant_comment,commit=commit))
+        phase = 'staging'
         stage_inputs(control,args.inputs,manifest)
         info = control.run(g.DOCKER+['image','inspect',image],control.build_end)
         c.require(json.loads(info.stdout)[0]['Id'] == image, 'local pinned image required')
@@ -366,27 +452,39 @@ def main():
         current = g.LOCK.stat(follow_symlinks=False)
         c.require((current.st_dev,current.st_ino) == (lock['device'],lock['inode']), 'lock replaced')
         receipt['second_admission'] = admit(image,args.out,grant)
+        phase = 'create'
         create_intent = True
         control.run(container_command(args.out,name,image),min(time.monotonic()+30,control.build_end))
         value = inspect_owned(control,name,image,control.build_end)
         c.require(value is not None, 'created container missing');verify_limits(value)
         receipt['container_id'] = value['Id']
-        control.run(g.DOCKER+['start','-a',value['Id']],control.build_end)
-        value = inspect_owned(control,name,image,control.build_end)
-        c.require(value['State']['ExitCode'] == 0 and not value['State']['OOMKilled'], 'native build failed')
-        rows['build.json'] = c.json_file(args.out/'public/build.json')
-        c.require(time.monotonic()+600 <= control.work_end, 'full runtime allowance unavailable')
-        (args.out/'staging/BUILD_COMPLETE').write_text('runtime\n')
-        control.run(g.DOCKER+['start','-a',value['Id']],time.monotonic()+600)
-        value = inspect_owned(control,name,image,control.work_end)
-        c.require(value['State']['ExitCode'] == 0 and not value['State']['OOMKilled'], 'native runtime failed')
-        for filename in c.REQUIRED:
-            if filename not in ('resources.json','cleanup.json'):
-                rows[filename] = c.json_file(args.out/'public'/filename)
+        for phase in ('build','runtime'):
+            if phase == 'runtime':
+                c.require(time.monotonic()+600 <= control.work_end, 'full runtime allowance unavailable')
+                (args.out/'staging/BUILD_COMPLETE').write_text('runtime\n')
+            diagnostic = receipt['phase_diagnostics'][phase] = dict(started=True)
+            deadline = control.build_end if phase == 'build' else time.monotonic()+600
+            result = control.run(g.DOCKER+['start','-a',value['Id']],deadline,check=False)
+            diagnostic['cli_exit_code'] = result.returncode
+            value = inspect_owned(control,name,image,deadline)
+            c.require(value is not None, 'phase container missing')
+            state = value['State']
+            c.require(type(state['ExitCode']) is int and -255 <= state['ExitCode'] <= 255 and
+                type(state['OOMKilled']) is bool, 'invalid phase exit state')
+            diagnostic.update(container_exit_code=state['ExitCode'],oom_killed=state['OOMKilled'])
+            c.require(result.returncode == 0 and state['ExitCode'] == 0 and not state['OOMKilled'],
+                'native phase failed')
+            if phase == 'build':
+                rows['build.json'].update(read_public_rows(args.out/'public/build.json',public_shapes()))
+                c.require(all(row['status'] == 'PASS' for row in rows['build.json'].values()),
+                    'complete build evidence required before runtime')
         control.sample(force=True)
         receipt['work_complete'] = True
     except Exception as error:
-        receipt.update(result='FAIL' if created else 'REFUSED_BEFORE_ATTEMPT',failure_class=type(error).__name__)
+        receipt.update(result='FAIL' if created else 'REFUSED_BEFORE_ATTEMPT',failure_class=type(error).__name__,
+            failure_phase=phase)
+        if isinstance(error,subprocess.CalledProcessError) and phase in receipt['phase_diagnostics']:
+            receipt['phase_diagnostics'][phase]['cli_exit_code'] = error.returncode
     finally:
         control.cleaning = True
         # Cleanup has its own exclusive reserve, still inside the 4500s wall cap.
@@ -405,11 +503,23 @@ def main():
                 if value: control.run(g.DOCKER+['rm','-f',value['Id']],control.end)
             c.require(not create_intent or inspect_owned(control,name,image,control.end) is None,'owned CID remains')
             cleanup['owned_cid_absent'] = dict(status='PASS',create_intent=create_intent)
+            if created:
+                rejected = collect_public(args.out,rows)
+                if rejected: receipt.update(result='FAIL',rejected_evidence=rejected)
             counters = {}
             if created:
                 for phase in ('build','runtime'):
                     path = args.out/'staging'/('resources-'+phase+'.json')
-                    if path.is_file(): counters[phase] = c.json_file(path)
+                    try:
+                        value = bounded_json(path,1024)
+                        c.require(isinstance(value,dict) and {'oom','oom_kill'} <= value.keys() <=
+                            {'oom','oom_kill','memory_peak_bytes','cpu_usage_usec'} and all(
+                            type(x) is int and 0 <= x < 2**64 for x in value.values()), 'invalid resource counters')
+                        counters[phase] = value
+                    except FileNotFoundError: pass
+                    except Exception:
+                        receipt['result'] = 'FAIL'
+                        receipt.setdefault('rejected_evidence',[]).append('resources-'+phase+'.json')
             receipt['container_counters'] = counters
             no_oom = len(counters) == 2 and all(x['oom_kill'] == x['oom'] == 0 for x in counters.values())
             rows['resources.json'] = dict(

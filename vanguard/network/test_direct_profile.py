@@ -133,7 +133,29 @@ class Direct(unittest.TestCase):
         self.assertFalse(any(any(part in name for part in ('manager','outer','bootstrap','constructor','ingress','helper','handoff','dispatch'))
                              for name in imports if name))
 
-    def exercise(self, *, refuse=None, uncertain_create=False, fail_runtime=False):
+    def test_actual_staging_prefix_reaches_frozen_driver_missing_binary_sentinel(self):
+        class BeforeSourceRead(Exception): pass
+        self.output.mkdir()
+        control = type('Control',(),{'root':self.output})()
+        with patch.object(c,'json_file',side_effect=BeforeSourceRead),self.assertRaises(BeforeSourceRead):
+            r.stage_inputs(control,Path('unused'),{})
+        private = self.output/'staging/private'
+        self.assertFalse(private.exists())
+        spec = importlib.util.spec_from_file_location('frozen_driver',c.HERE/'profile-integration.py')
+        driver = importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        driver.PRIVATE = private;driver.BIN = self.base/'missing-binaries'
+        old_umask = os.umask(0o077)
+        try:
+            with patch.object(driver.subprocess,'Popen') as spawn,self.assertRaises(FileNotFoundError) as error:
+                driver.main()
+            self.assertEqual(Path(error.exception.filename),driver.BIN/'monerod')
+            self.assertTrue(private.is_dir());self.assertEqual(private.stat().st_mode & 0o777,0o700)
+            spawn.assert_not_called();self.assertFalse(driver.PROCS)
+        finally:os.umask(old_umask)
+
+    def exercise(self, *, refuse=None, uncertain_create=False, fail_runtime=False,
+                 failed_phase=None, raised_phase=None, mutate_public=None, container_exit_only=False,
+                 mutate_build=None):
         inputs = self.base/'inputs.json';inputs.write_bytes(b'{}')
         value = grant(self.output);events = [];state = {'container':None,'starts':0}
         case = self
@@ -166,8 +188,23 @@ class Direct(unittest.TestCase):
                     phase = 'build' if state['starts'] == 1 else 'runtime'
                     (case.output/'staging'/('resources-'+phase+'.json')).write_text(json.dumps(dict(oom=0,oom_kill=0)))
                     for filename,keys in c.REQUIRED.items():
-                        if filename not in ('cleanup.json','resources.json'):
+                        produced = ('build.json',) if phase == 'build' else set(c.REQUIRED)-{'build.json','cleanup.json','resources.json'}
+                        if filename in produced:
                             (case.output/'public'/filename).write_text(json.dumps({key:dict(status='PASS') for key in keys}))
+                    if phase == 'build' and mutate_build:mutate_build(case.output/'public/build.json')
+                    if phase in (failed_phase,raised_phase):
+                        secret = 'PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL'
+                        for name in ('build.log','configure.log','private/console.log'):
+                            (case.output/'staging'/name).write_text(secret)
+                        if phase == 'runtime':
+                            (case.output/'public/peer.json').write_text(json.dumps(dict(
+                                native_handshake=dict(status='PASS',request_sha256='a'*64,command=1001))))
+                        if mutate_public:mutate_public(case.output)
+                        state['container']['State']['ExitCode'] = 17
+                        if phase == raised_phase:
+                            raise subprocess.CalledProcessError(17,argv,output=secret.encode(),stderr=secret.encode())
+                        code = 0 if container_exit_only else 17
+                        output = error = secret.encode()
                 elif cmd[0] == 'stop':state['container']['State']['Running'] = False
                 elif cmd[0] == 'rm':state['container'] = None
                 else:raise AssertionError(cmd)
@@ -200,6 +237,8 @@ class Direct(unittest.TestCase):
         if receipt:
             self.assertEqual(receipt['rows']['cleanup.json']['lock_released']['status'],'PASS')
             self.assertNotIn('never export',json.dumps(receipt))
+            for path in self.output.rglob('*'):
+                if path.is_file():self.assertNotIn('PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL',path.read_text())
         return result,receipt,events
 
     def test_two_admissions_one_container_same_container_restart_and_cleanup(self):
@@ -239,6 +278,103 @@ class Direct(unittest.TestCase):
         self.assertEqual(result,1);self.assertEqual(events.count('create'),1)
         self.assertLess(events.index('stop'),events.index('rm'))
         self.assertEqual(receipt['rows']['cleanup.json']['owned_cid_absent']['status'],'PASS')
+
+    def test_failed_build_retains_partial_rows_and_sanitized_exit_before_cleanup(self):
+        result,receipt,events = self.exercise(failed_phase='build')
+        self.assertEqual(result,1);self.assertEqual(receipt['result'],'FAIL')
+        self.assertEqual(receipt['failure_phase'],'build');self.assertEqual(events.count('start'),1)
+        self.assertEqual(receipt['phase_diagnostics'],dict(build=dict(started=True,cli_exit_code=17,
+            container_exit_code=17,oom_killed=False)))
+        self.assertEqual(receipt['rows']['build.json']['three_production_binaries']['status'],'PASS')
+        self.assertEqual(receipt['rows']['peer.json']['native_handshake']['status'],'NOT_RUN')
+
+    def test_partial_runtime_failure_retains_observed_witnesses_and_unreached_rows(self):
+        result,receipt,events = self.exercise(failed_phase='runtime',container_exit_only=True)
+        self.assertEqual(result,1);self.assertEqual(receipt['result'],'FAIL')
+        self.assertEqual(receipt['failure_phase'],'runtime');self.assertEqual(events.count('start'),2)
+        self.assertEqual(receipt['phase_diagnostics']['runtime'],dict(started=True,cli_exit_code=0,
+            container_exit_code=17,oom_killed=False))
+        self.assertEqual(receipt['rows']['build.json']['rpc_translation_unit']['status'],'PASS')
+        peer = receipt['rows']['peer.json']
+        self.assertEqual(peer['native_handshake'],dict(status='PASS',request_sha256='a'*64,command=1001))
+        self.assertEqual(peer['genesis_state']['status'],'NOT_RUN')
+        self.assertEqual(json.loads((self.output/'public/peer.json').read_text()),peer)
+
+    def test_raised_command_failure_keeps_exit_code_without_exception_transcripts(self):
+        result,receipt,_ = self.exercise(raised_phase='runtime')
+        self.assertEqual(result,1);self.assertEqual(receipt['failure_class'],'CalledProcessError')
+        self.assertEqual(receipt['phase_diagnostics']['runtime']['cli_exit_code'],17)
+        self.assertEqual(receipt['rows']['peer.json']['native_handshake']['status'],'PASS')
+
+    def test_incomplete_build_evidence_prevents_runtime_start(self):
+        result,receipt,events = self.exercise(mutate_build=lambda path:path.write_text('{}'))
+        self.assertEqual(result,1);self.assertEqual(receipt['failure_phase'],'build')
+        self.assertEqual(events.count('start'),1);self.assertEqual(receipt['result'],'FAIL')
+        self.assertEqual(receipt['rows']['build.json'],c.empty_rows()['build.json'])
+
+    def test_failed_runtime_rejects_malformed_oversized_symlink_and_unallowlisted_evidence(self):
+        secret = 'PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL'
+        outside = self.base/'private-transcript';outside.write_text(secret)
+        def mutate(root):
+            public = root/'public'
+            (public/'build.json').write_text('{')
+            (public/'wallet.json').write_text(json.dumps(dict(persisted_height_zero=dict(status='PASS',login=secret))))
+            (public/'auth.json').write_text(' '*65537)
+            (public/'isolation.json').unlink();(public/'isolation.json').symlink_to(outside)
+            (public/'reopen.json').write_text(json.dumps({secret:dict(status='PASS')}))
+            (public/(secret+'.log')).write_text(secret)
+            (public/'cleanup.json').write_text(json.dumps(dict(lock_released=dict(status='PASS',raw=secret))))
+            (public/'resources.json').write_text(secret)
+            (root/'staging/resources-runtime.json').write_text(json.dumps(dict(oom=0,oom_kill=0,raw=secret)))
+        result,receipt,_ = self.exercise(failed_phase='runtime',mutate_public=mutate)
+        self.assertEqual(result,1);self.assertEqual(receipt['result'],'FAIL')
+        self.assertEqual(receipt['rejected_evidence'],['auth.json','build.json','isolation.json','reopen.json',
+            'unexpected-public-entry','wallet.json','resources-runtime.json'])
+        self.assertEqual(receipt['rows']['peer.json']['native_handshake']['status'],'PASS')
+        self.assertEqual(receipt['rows']['build.json']['three_production_binaries']['status'],'PASS')
+        self.assertEqual(receipt['rows']['cleanup.json']['lock_released'],dict(status='PASS',descriptor_closed=True))
+        self.assertNotIn('runtime',receipt['container_counters'])
+        self.assertEqual(outside.read_text(),secret)
+        self.assertEqual(set(p.name for p in (self.output/'public').iterdir()),set(c.REQUIRED)|{'receipt.json'})
+
+    def test_bounded_reader_rejects_special_hardlinked_and_duplicate_key_files(self):
+        path = self.base/'evidence.json'
+        os.mkfifo(path)
+        with self.assertRaises(ValueError):r.bounded_json(path)
+        path.unlink();path.write_text('{}');os.link(path,self.base/'alias')
+        with self.assertRaises(ValueError):r.bounded_json(path)
+        (self.base/'alias').unlink();path.write_text('{"status":"PASS","status":"FAIL"}')
+        with self.assertRaises(ValueError):r.bounded_json(path)
+
+    def test_allowlist_accepts_actual_frozen_driver_row_expressions(self):
+        # Evaluate only the producer's row(...) expressions, with public fixture
+        # inputs. No RPC, sockets, wallets, frames or native children are run.
+        spec = importlib.util.spec_from_file_location('witness_driver',c.HERE/'profile-integration.py')
+        driver = importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        state = dict(height=1,top_block_hash=c.GENESIS,work='0x1',pool_hashes=[])
+        scope = dict(row=driver.row,c=c,packet=b'public-fixture',wrong=b'wrong-uuid',fixture='b'*64,
+            before=state,state=state,a=None,snapshot=lambda unused:state)
+        tree = ast.parse((c.HERE/'profile-integration.py').read_text())
+        for node in ast.walk(tree):
+            if isinstance(node,ast.Call) and isinstance(node.func,ast.Name) and node.func.id == 'row':
+                keys = c.REQUIRED['wallet.json'] if isinstance(node.args[1],ast.Name) else [None]
+                for key in keys:
+                    eval(compile(ast.Expression(node),'<frozen public row>','eval'),dict(scope,key=key))
+        public = self.base/'public';public.mkdir()
+        rows = c.empty_rows()
+        for filename,values in driver.ROWS.items():
+            if filename not in ('build.json','resources.json','cleanup.json'):
+                self.assertTrue(all(row['status'] == 'PASS' for row in values.values()))
+                (public/filename).write_text(json.dumps(values))
+        self.assertEqual(r.collect_public(self.base,rows),[])
+        for filename in ('peer.json','wallet.json','auth.json','isolation.json','reopen.json'):
+            self.assertEqual(rows[filename],driver.ROWS[filename])
+        build = dict(three_production_binaries=dict(status='PASS',binaries={name:dict(sha256='a'*64,
+            needed=['libc.so.6','libstdc++.so.6','libwallet-crypto.so']) for name in
+            ('monerod','monero-wallet-cli','monero-wallet-rpc')}),
+            rpc_translation_unit=dict(status='PASS',object_sha256='b'*64))
+        (public/'build.json').write_text(json.dumps(build))
+        self.assertEqual(r.read_public_rows(public/'build.json',r.public_shapes()),build)
 
 
 if __name__ == '__main__':unittest.main()
