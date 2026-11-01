@@ -116,7 +116,7 @@ class RecordJournal:
         os.ftruncate(self.fd,len(raw));os.fsync(self.fd)
         c.require(os.pread(self.fd,len(raw)+1,0)==raw,'record state durable readback')
 
-    def begin(self, record, deadline, expected, secret, *, recovered=False):
+    def begin(self, record, deadline, expected, secret, *, recovered=False,recovery_position=None):
         c.require(self.fd is None,'one outstanding record')
         try:
             self.fd=os.open('record-order',os.O_RDWR|os.O_NOFOLLOW|os.O_CLOEXEC|os.O_NONBLOCK,
@@ -136,6 +136,15 @@ class RecordJournal:
                 (state['uncertain'] is None or type(state['uncertain']) is int and state['uncertain'] in self.itinerary) and
                 (state['mode']!='LIVE' or state['uncertain'] is None),'exact persistent record authority')
             self.state=state
+            if recovery_position is not None:
+                # Only the separately authenticated surviving record owner
+                # supplies this position. Local bytes cannot select or rearm it.
+                c.require(recovered and type(recovery_position) is int and
+                    0<=recovery_position<len(self.recovery) and
+                    self.recovery[recovery_position]==record['sequence'], 'surviving frozen recovery position')
+                state.update(mode='RECOVERY_ONLY',position=recovery_position,
+                    uncertain=state['pending'] if state['pending'] is not None else state['uncertain'],pending=None)
+                self._persist()
             if recovered and state['mode']=='LIVE':
                 state.update(mode='RECOVERY_ONLY',position=0,uncertain=state['pending'],pending=None)
                 self._persist()

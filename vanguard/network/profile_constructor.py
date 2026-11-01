@@ -109,7 +109,6 @@ class SurvivingAuthority:
         self.launch=copy.deepcopy(launch)
         self.directory_fd,self.index_fd,self.state_fd=directory_fd,index_fd,state_fd
         self.clock=clock;self.failed=False;self.clients={};self.awaiting_exit=None
-        self.completed=[]
         self.boot=boot_identity()
         info=os.fstat(state_fd)
         c.require(stat.S_ISREG(info.st_mode) and info.st_nlink==1 and
@@ -120,13 +119,54 @@ class SurvivingAuthority:
             i.sealed_bytes(index_fd,1024*1024)==launch['inputs_raw'], 'original supervisor custody')
         fcntl.flock(state_fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
         self.binding=dict(record_binding=launch['record_binding'],boot_id=self.boot,
+            task='TJS-2504',attempt_id=launch['plan']['attempt_id'],source=launch['plan']['source'],
+            supervisor_identity=launch['supervisor_identity'],namespace_identity=launch['namespace_identity'],
             directory_identity=launch['directory_identity'],order_identity=launch['order_identity'],
             capability_identities=launch['capability_identities'],index_identity=launch['index_identity'])
-        expected=dict(schema='meownero-surviving-authority/1',binding=self.binding,
-            mode='LIVE',position=0,pending=None,stage='RESERVED')
+        expected=dict(schema='meownero-surviving-authority/2',binding=self.binding,
+            mode='LIVE',position=0,pending=None,stage='RESERVED',receiver=None,dispositions={})
         raw=os.pread(state_fd,65537,0)
         c.require(json.loads(raw)==expected and raw==c.canonical(expected),'original unused supervisor reservation')
         self.state=expected
+
+    def _uncertain(self,record):
+        # These flags only move to True. Completion followed by an abnormal
+        # receiver exit retains both facts; neither can make a record unused.
+        self.state['dispositions'][str(record)]['uncertain']=True
+        self.state.update(mode='RECOVERY_ONLY',stage='UNCERTAIN')
+
+    def _settle(self,message):
+        c.require(set(message)=={'operation','receiver','status'} and
+            self.awaiting_exit is not None and message['receiver']==self.awaiting_exit and
+            (message['status'] is None or type(message['status']) is int) and
+            self.state['receiver']==self.awaiting_exit and not self.clients and
+            self.state['stage'] in ('AWAITING_EXIT','UNCERTAIN','SETTLEMENT_SENT'),
+            'exact awaiting receiver and witnessed exit status')
+        try:i.process_identity(message['receiver']['pid'])
+        except FileNotFoundError:pass
+        else:raise ValueError('receiver still present; no independent exit')
+        record=self.state['pending'];disposition=self.state['dispositions'][str(record)]
+        if message['status']!=0 or not disposition['completed'] or disposition['uncertain']:
+            self._uncertain(record)
+        # Retain custody until the launcher confirms receipt of this reply.
+        # A lost reply cannot advance activation or silently release custody.
+        self.state['stage']='SETTLEMENT_SENT';self._persist()
+
+    def _confirm_settlement(self,message):
+        c.require(set(message)=={'operation','receiver'} and self.awaiting_exit is not None and
+            message['receiver']==self.awaiting_exit==self.state['receiver'] and
+            self.state['stage']=='SETTLEMENT_SENT' and not self.clients,
+            'original launcher received exact settlement acknowledgement')
+        try:i.process_identity(message['receiver']['pid'])
+        except FileNotFoundError:pass
+        else:raise ValueError('receiver still present; no independent exit')
+        disposition=self.state['dispositions'][str(self.state['pending'])]
+        if disposition['completed'] and not disposition['uncertain']:
+            self.state.update(position=self.state['position']+1,stage='COMPLETED')
+        else:self.state['stage']='UNCERTAIN'
+        self.state.update(pending=None,receiver=None)
+        self._persist()  # No custody release or acknowledgement before durability.
+        self.awaiting_exit=None
 
     def _persist(self):
         # Poison memory BEFORE IO. A failed fsync/readback cannot be cured by
@@ -156,18 +196,21 @@ class SurvivingAuthority:
         c.require(i.process_identity(receiver['pid'])==receiver,'original launched receiver PID/start')
         route=self.launch['recovery'] if recovered else self.launch['itinerary']
         c.require(type(record) is int and record in route and record!=54,'frozen route; no automatic disposition')
+        c.require(str(record) not in self.state['dispositions'],'consumed record never receives authority again')
         if recovered:
             if self.state['mode']=='LIVE':
-                self.state.update(mode='RECOVERY_ONLY',position=0,pending=None,stage='RESERVED');self._persist()
-            elif self.state['stage']=='UNCERTAIN' and self.state['position']==0:
-                # Only the original surviving owner may enter the frozen
-                # cleanup route. This never restores activation authority.
-                self.state.update(pending=None,stage='RESERVED');self._persist()
+                self.state.update(mode='RECOVERY_ONLY');self._persist()
+            # Disposition, rather than a reset cursor, determines eligibility.
+            unused=[n for n in route if str(n) not in self.state['dispositions']]
+            c.require(unused and unused[0]==record,'next unconsumed frozen cleanup record')
+            position=route.index(record)
+        else:position=self.state['position']
         c.require(recovered or self.state['mode']=='LIVE','surviving classification cannot reactivate')
-        c.require(self.state['stage'] in ('RESERVED','COMPLETED') and self.state['position']<len(route) and
-            route[self.state['position']]==record,'issued, pending, replay or skipped record')
+        c.require(self.state['pending'] is None and self.state['stage'] in ('RESERVED','COMPLETED','UNCERTAIN') and
+            position<len(route) and route[position]==record,'issued, pending, replay or skipped record')
         # Burn delivery before returning any descriptor or authority packet.
-        self.state.update(pending=record,stage='ISSUED');self._persist()
+        self.state['dispositions'][str(record)]=dict(consumed=True,completed=False,uncertain=False)
+        self.state.update(position=position,pending=record,receiver=receiver,stage='ISSUED');self._persist()
         sockets=[];fds=[]
         try:
             op_tx,op_rx=b.delivery_pair();sockets.extend([op_tx,op_rx])
@@ -211,12 +254,17 @@ class SurvivingAuthority:
             m.send_packet(op_tx,receipt,[in_rx.fileno(),self.directory_fd,self.index_fd])
             held=[control,au_tx]
             self.clients[control.fileno()]=dict(endpoint=control,held=held,receiver=receiver,
-                record=record,expected=expected,request=request,stage='ISSUED')
+                record=record,expected=expected,request=request,stage='ISSUED',recovered=recovered)
             sockets.remove(control);sockets.remove(au_tx)
             return client,op_rx,sockets,fds
         except BaseException:
-            for endpoint in sockets:endpoint.close()
-            for fd in fds:os.close(fd)
+            try:
+                self.awaiting_exit=receiver
+                self._uncertain(record)
+                if not self.failed:self._persist()
+            finally:
+                for endpoint in sockets:endpoint.close()
+                for fd in fds:os.close(fd)
             raise
 
     def _entry(self,client,message):
@@ -226,6 +274,11 @@ class SurvivingAuthority:
         c.require(set(message)=={'operation','record'} and message['record']==client['record'],'exact surviving record scope')
         operation=message['operation']
         if operation=='expectation':return client['expected']
+        if operation=='recovery_position':
+            c.require(client['recovered'] and client['stage']=='ISSUED' and
+                self.state['pending']==client['record'] and self.state['stage']=='ISSUED',
+                'original surviving recovery issuance before local admission')
+            return self.launch['recovery'].index(client['record'])
         if operation=='admit':
             c.require(self.state['pending']==client['record'] and self.state['stage']=='ISSUED' and
                 client['stage']=='ISSUED','one surviving effect admission')
@@ -234,9 +287,10 @@ class SurvivingAuthority:
             c.require(self.state['pending']==client['record'] and self.state['stage']=='PENDING' and
                 client['stage']=='PENDING','exact surviving pending completion')
             self.state['stage']='COMPLETION_SENT'
+            self.state['dispositions'][str(client['record'])]['completed']=True
             client['stage']='COMPLETION_SENT';self._persist()
         elif operation=='uncertain':
-            self.state.update(mode='RECOVERY_ONLY',position=0,stage='UNCERTAIN');self._persist()
+            self._uncertain(client['record']);self._persist()
         elif operation=='close':
             c.require(client['stage']=='COMPLETION_SENT','unacknowledged entry cannot close successfully')
             self.awaiting_exit=client['receiver']
@@ -259,22 +313,24 @@ class SurvivingAuthority:
                         try:
                             self._live()
                             if message==dict(operation='snapshot'):
-                                m.send_packet(channel,dict(completed=self.completed,
+                                m.send_packet(channel,dict(completed=[int(n) for n,value in
+                                    self.state['dispositions'].items() if value['completed'] and not value['uncertain']],
+                                    awaiting_exit=self.awaiting_exit,
                                     entries_closed=not self.clients and self.awaiting_exit is None,
                                     state=copy.deepcopy(self.state)));continue
                             if message.get('operation')=='settle':
-                                c.require(set(message)=={'operation','receiver','status'} and
-                                    message['receiver']==self.awaiting_exit and type(message['status']) is int and
-                                    message['status']==0 and self.state['stage']=='AWAITING_EXIT',
-                                    'original launcher must witness successful child exit after completion acknowledgement')
-                                try:i.process_identity(message['receiver']['pid'])
-                                except FileNotFoundError:pass
-                                else:raise ValueError('receiver still present; no independent exit')
-                                completed=self.state['pending']
-                                self.state.update(pending=None,position=self.state['position']+1,stage='COMPLETED')
-                                self._persist();self.awaiting_exit=None
-                                self.completed.append(completed)
-                                m.send_packet(channel,dict(settled=True));continue
+                                record=self.state['pending']
+                                self._settle(message)
+                                try:m.send_packet(channel,dict(settled=True))
+                                except Exception:
+                                    # The exact receiver has exited, but a lost
+                                    # settle acknowledgement cannot renew LIVE.
+                                    self._uncertain(record);self._persist()
+                                    raise
+                                continue
+                            if message.get('operation')=='confirm_settlement':
+                                self._confirm_settlement(message)
+                                m.send_packet(channel,dict(confirmed=True));continue
                             c.require(set(message)=={'operation','receiver','record','recovered'} and
                                 message['operation']=='issue' and type(message['recovered']) is bool,'closed launcher request')
                             client,operator,sockets,fds=self._issue(message['receiver'],message['record'],message['recovered'])
@@ -295,9 +351,11 @@ class SurvivingAuthority:
                                 del self.clients[key]
                         except Exception:
                             # Any lost packet/ack/child is retained independently.
-                            self.state.update(mode='RECOVERY_ONLY',position=0,stage='UNCERTAIN')
-                            try:self._persist()
-                            except Exception:pass
+                            self.awaiting_exit=client['receiver']
+                            self._uncertain(client['record'])
+                            if not self.failed:
+                                try:self._persist()
+                                except Exception:pass
                             try:m.send_packet(channel,dict(ok=False))
                             except Exception:pass
                             for sock in client['held']:sock.close()
@@ -336,5 +394,9 @@ class AuthorityClient:
         self.call('complete')
 
     def uncertain(self,record):self.call('uncertain')
+
+    def recovery_position(self,record):
+        c.require(record['sequence']==self.record,'exact supervised recovery record')
+        return self.call('recovery_position')
 
     def close(self):self.call('close')

@@ -94,6 +94,7 @@ def source_inputs():
         installed_ingress_authorization_document='operator-route:06954175-b2a7-4c19-b216-834812f372de',
         startup_custody_authorization_interaction='a9b68ef1-9aba-46ce-8a71-fcb84f2b6d29:ec6f1616-3436-4dfb-a83d-6933597cdc74',
         connected_producer_authorization_interaction='d8a029ff-74b9-4c48-90ce-3468fb762b6d:1b041a2a-caf0-4824-848a-197dd3fd6fd7',
+        cleanup_settlement_authorization_interaction='48d2d44f-aed2-46ee-bce4-191e04a15ae5:5187a4f2-ee85-4a05-af3b-ed058e1cd572',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],

@@ -139,8 +139,10 @@ class InstalledIngress:
         role='record-'+str(record['sequence']);expected=self.trusted['capability_expected'][role]
         c.require(expected['bindings']==self.trusted['record_binding'] and
             expected['delivery_role']==self.packet['delivery']['role'],'record capability source/role binding')
+        recovered=self.packet['recovery_only']
+        position=self.record_authority.recovery_position(record) if recovered and self.record_authority is not None else None
         self.journal.begin(record,deadline,expected,bytes.fromhex(self.packet['activation']),
-            recovered=self.packet['recovery_only'])
+            recovered=recovered,recovery_position=position)
         if self.record_authority is not None:self.record_authority.admit(record)
         self.backend.admit_record(record,deadline)  # Hard enforcement/ownership remain independently required.
 
