@@ -27,7 +27,7 @@ CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.
       'profile_manager.py','profile_helper.py','test_manager.py','profile_packet.py',
       'profile_dispatch.py','profile-helper.py','test_dispatch.py','profile_bootstrap.py','test_bootstrap.py',
       'profile_executor.py','profile-root-helper.py','profile_runtime.py','test_executor.py','test_installation.py','profile_ingress.py','test_ingress.py',
-      'profile_constructor.py','test_constructor.py']
+      'profile_constructor.py','test_constructor.py','test_supervisor.py','profile-custodian.py','test_lifecycle_source.py']
 
 
 def candidate_paths():
@@ -45,7 +45,7 @@ def installation_inventory():
     root_sources=[prefix+name for name in ('profile-root-helper.py','profile_executor.py',
         'profile_contract.py','profile_packet.py','profile_ingress.py','profile_runtime.py',
         'profile_bootstrap.py','profile_dispatch.py','profile_manager.py','profile_outer.py',
-        'profile_handoff.py','profile_helper.py','profile_constructor.py','integration/installation-inventory.json')]
+        'profile_handoff.py','profile_helper.py','profile_constructor.py','profile-custodian.py','integration/installation-inventory.json')]
     runtime={prefix+name for name in CODE if not name.startswith('test_')}
     runtime|={prefix+name for name in ('network.py','policy.py','run-genesis.py','profile.json',
         'source-bindings.json','policy-bindings.json','evidence/native-genesis-attempt01/recipe1.json',
@@ -59,7 +59,7 @@ def installation_inventory():
         groups=dict(root_helper={name:Path(name).name for name in root_sources},
             child_runtime={name:'runtime/'+name for name in sorted(runtime)},
             validation_data={name:'runtime/'+name for name in sorted(all_sources-runtime)}),
-        entry_points=dict(root_helper=['profile-root-helper.py'],child_runtime=[prefix+name for name in
+        entry_points=dict(root_helper=['profile-root-helper.py','profile-custodian.py'],child_runtime=[prefix+name for name in
             ('profile-helper.py','run-outer.py','run-profile.py','profile-integration.py','freeze-profile.py')]),
         authority_index=dict(destination='runtime/vanguard/network/integration/inputs.json',
             binding='exact independently authenticated artifact/grant inputs_file_sha256; not self-hashed'),
@@ -93,6 +93,7 @@ def source_inputs():
         installation_closure_authorization_comment='33f69bb2-5193-4cfe-a793-341da4809bc9',
         installed_ingress_authorization_document='operator-route:06954175-b2a7-4c19-b216-834812f372de',
         startup_custody_authorization_interaction='a9b68ef1-9aba-46ce-8a71-fcb84f2b6d29:ec6f1616-3436-4dfb-a83d-6933597cdc74',
+        connected_producer_authorization_interaction='d8a029ff-74b9-4c48-90ce-3468fb762b6d:1b041a2a-caf0-4824-848a-197dd3fd6fd7',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],

@@ -1,0 +1,16 @@
+test_supervisor (unittest.loader._FailedTest.test_supervisor) ... ERROR
+
+======================================================================
+ERROR: test_supervisor (unittest.loader._FailedTest.test_supervisor)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_supervisor
+Traceback (most recent call last):
+  File "/home/linuxbrew/.linuxbrew/Cellar/python@3.15/3.15.2/lib/python3.15/unittest/loader.py", line 141, in loadTestsFromName
+    module = __import__(module_name)
+ModuleNotFoundError: No module named 'test_supervisor'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

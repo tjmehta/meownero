@@ -49,10 +49,11 @@ class InstalledIngress:
     authenticated constructor/anchor lifecycle remain absent and unqualified.
     No received field can select an adapter, program, path or trust anchor.
     """
-    def __init__(self, backend, trusted, directory_fd, *, endpoint_fd=0, clock=time.monotonic):
+    def __init__(self, backend, trusted, directory_fd, *, endpoint_fd=0, clock=time.monotonic,record_authority=None):
         self.backend,self.trusted=backend,copy.deepcopy(trusted)
         self.directory_fd,self.endpoint_fd,self.clock=directory_fd,endpoint_fd,clock
         self.fds=();self.packet=None;self.journal=None
+        self.record_authority=record_authority
 
     def __getattr__(self,name):return getattr(self.backend,name)
 
@@ -140,15 +141,20 @@ class InstalledIngress:
             expected['delivery_role']==self.packet['delivery']['role'],'record capability source/role binding')
         self.journal.begin(record,deadline,expected,bytes.fromhex(self.packet['activation']),
             recovered=self.packet['recovery_only'])
+        if self.record_authority is not None:self.record_authority.admit(record)
         self.backend.admit_record(record,deadline)  # Hard enforcement/ownership remain independently required.
 
     def complete_record(self,record,deadline):
         self.backend.complete_record(record,deadline)
         self.journal.complete(record,deadline)
+        if self.record_authority is not None:self.record_authority.complete(record)
 
     def quarantine_record_uncertainty(self,record):
         try:
-            if self.journal is not None:self.journal.uncertain(record)
+            try:
+                if self.record_authority is not None:self.record_authority.uncertain(record)
+            finally:
+                if self.journal is not None:self.journal.uncertain(record)
         finally:self.backend.quarantine_record_uncertainty(record)
 
     def close_authenticated_entry(self):

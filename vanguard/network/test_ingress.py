@@ -25,11 +25,12 @@ import profile_executor as e
 import profile_ingress as i
 import profile_manager as m
 import profile_packet as p
+import profile_runtime as r
 from test_executor import InjectedBoundary
 
 
 class IngressTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self,*,itinerary=None):
         self.temp=tempfile.TemporaryDirectory(prefix='TJS2504-ingress-source-')
         self.addCleanup(self.temp.cleanup)
         self.root=Path(self.temp.name);self.root.chmod(0o700)
@@ -55,23 +56,16 @@ class IngressTests(unittest.TestCase):
         d.validate_contract(self.contract)
         self.records=p.render(self.plan)['records']
         self.cleanup=next(x['sequence'] for x in self.records if x['phase']=='cleanup')
-        self.itinerary=[0,1,self.cleanup]
-        self.recovery=[self.cleanup]
+        self.itinerary=[0,1,self.cleanup] if itinerary is None else list(itinerary)
+        self.recovery=[self.cleanup] if itinerary is None else [n for n in self.itinerary
+            if self.records[n]['phase'] in ('cleanup','completion')]
         self.binding=dict(contract_sha256=c.digest(c.canonical(self.contract)),inputs_sha256=c.digest(index),
             origin=100,deadlines=self.contract['deadlines'])
         self.secret=b'x'*32
-        self.expected={};self.identities={}
-        for n in self.itinerary:
-            name='record-'+str(n)
-            self.expected[name]=dict(role=name,delivery_role='observer' if n==self.cleanup else 'keeper',
-                bindings=self.binding,activation_sha256=c.digest(self.secret))
-            path=self.control/name
-            path.write_bytes(c.canonical(dict(schema='meownero-manager-slot/1',state='RESERVED',**self.expected[name])))
-            path.chmod(0o600);self.identities[name]=self.path_identity(path)
-        state=dict(schema='meownero-record-order/1',binding=self.binding,itinerary=self.itinerary,
-            recovery=self.recovery,mode='LIVE',position=0,pending=None,uncertain=None)
-        self.order=self.control/'record-order';self.order.write_bytes(c.canonical(state));self.order.chmod(0o600)
-        self.order_identity=self.path_identity(self.order)
+        reserved=r.reserve_record_state(self.dirfd,self.binding,self.itinerary,self.recovery,
+            self.secret,owner_uid=os.getuid())
+        self.expected=reserved['capability_expected'];self.identities=reserved['capability_identities']
+        self.order=self.control/'record-order';self.order_identity=reserved['order_identity']
         self.index=index;self.backend=InjectedBoundary()
         self.backend.authenticate_executor=lambda plan:dict(W='/fixture/W',BOUND_HELPER_AND_SPEC_BYTES='MODELED_BYTES')
         self.backend.authenticate_root_entry=lambda:copy.deepcopy(self.plan)

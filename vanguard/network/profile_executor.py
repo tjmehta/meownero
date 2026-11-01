@@ -135,38 +135,7 @@ class RecordExecutor:
             # only the actual typed arguments are expanded for execution.
             exact['args']=substitute(record['args'],self.bindings)
             self.boundary.verify_bound_record(record,exact,deadline)
-            if record['kind']=='argv':
-                argv=exact['args']
-                c.require(type(argv) is list and argv and all(type(x) is str and
-                    '\x00' not in x and '\n' not in x and '$' not in x for x in argv), 'bound argv only')
-                c.require(argv[0].startswith('/') and record['operation'] in
-                    ('mount','mke2fs','losetup','outer','controller','umount','detach'), 'enumerated program')
-                c.require(argv[0]==('/usr/bin/python3' if record['args'][0]=='$BOUND_PYTHON' else
-                    record['args'][0]), 'fixed program identity; no command substitution')
-                if record['operation'] in ('outer','controller'):
-                    script='run-outer.py' if record['operation']=='outer' else 'run-profile.py'
-                    c.require(argv[1:3]==['-B',CHILD_DIRECTORY+'/'+script], 'fixed owned Python entry')
-                # FDs, private cwd and per-child environment come only from the
-                # guard. No inherited environment or serialized output.
-                execution=self.boundary.execution_context(record,exact,deadline)
-                c.require(set(execution)=={'env','cwd','pass_fds','uid','gid','extra_groups'} and
-                    execution['uid']==execution['gid']==record['uid'] and execution['extra_groups']==[],
-                    'exact child identity/context')
-                result=self.run(argv,shell=False,check=True,stdin=subprocess.DEVNULL,
-                    stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,close_fds=True,
-                    timeout=deadline-self.clock(),env=execution['env'],cwd=execution['cwd'],
-                    pass_fds=tuple(execution['pass_fds']),user=execution['uid'],group=execution['gid'],
-                    extra_groups=[],umask=0o077)
-                c.require(result.returncode==0, 'fixed command failed')
-            elif record['kind']=='dbus':
-                c.require(record['operation'] in ('StartTransientUnit','StopUnit','KillUnit'), 'fixed bus method')
-                self.boundary.dbus(exact['args'],deadline)
-            elif record['kind']=='syscall':
-                self.boundary.syscall(record['operation'],exact['args'],deadline)
-            else:
-                c.require(record['kind']=='docker' and record['operation'] in
-                    ('load','inspect_image','observe_and_create','start_and_wait','remove_owned'), 'fixed private Docker method')
-                self.boundary.docker(record['operation'],exact['args'],deadline)
+            self.effect(record,exact,deadline)
             self.boundary.complete_record(record,deadline)
             c.require(self.clock()<deadline, 'late operation consumes record and keeps recovery ownership')
             return dict(result='RECORD_RETURNED',record=record['sequence'],native_execution='NOT_RUN')
@@ -174,6 +143,82 @@ class RecordExecutor:
             self.failed=True
             self.boundary.quarantine_record_uncertainty(record)
             raise
+
+    def effect(self,record,exact,deadline):
+        if record['kind']=='argv':
+            argv=exact['args']
+            c.require(type(argv) is list and argv and all(type(x) is str and
+                '\x00' not in x and '\n' not in x and '$' not in x for x in argv), 'bound argv only')
+            c.require(argv[0].startswith('/') and record['operation'] in
+                ('mount','mke2fs','losetup','outer','controller','umount','detach'), 'enumerated program')
+            c.require(argv[0]==('/usr/bin/python3' if record['args'][0]=='$BOUND_PYTHON' else
+                record['args'][0]), 'fixed program identity; no command substitution')
+            if record['operation'] in ('outer','controller'):
+                script='run-outer.py' if record['operation']=='outer' else 'run-profile.py'
+                c.require(argv[1:3]==['-B',CHILD_DIRECTORY+'/'+script], 'fixed owned Python entry')
+            # FDs, private cwd and per-child environment come only from the
+            # guard. No inherited environment or serialized output.
+            execution=self.boundary.execution_context(record,exact,deadline)
+            c.require(set(execution)=={'env','cwd','pass_fds','uid','gid','extra_groups'} and
+                execution['uid']==execution['gid']==record['uid'] and execution['extra_groups']==[],
+                'exact child identity/context')
+            result=self.run(argv,shell=False,check=True,stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,close_fds=True,
+                timeout=deadline-self.clock(),env=execution['env'],cwd=execution['cwd'],
+                pass_fds=tuple(execution['pass_fds']),user=execution['uid'],group=execution['gid'],
+                extra_groups=[],umask=0o077)
+            c.require(result.returncode==0, 'fixed command failed')
+        elif record['kind']=='dbus':
+            c.require(record['operation'] in ('StartTransientUnit','StopUnit','KillUnit'), 'fixed bus method')
+            self.boundary.dbus(exact['args'],deadline)
+        elif record['kind']=='syscall':
+            self.boundary.syscall(record['operation'],exact['args'],deadline)
+        else:
+            c.require(record['kind']=='docker' and record['operation'] in
+                ('load','inspect_image','observe_and_create','start_and_wait','remove_owned'), 'fixed private Docker method')
+            self.boundary.docker(record['operation'],exact['args'],deadline)
+
+
+class PrefixExecutor(RecordExecutor):
+    """Independent original launcher executes only the fourteen frozen originals.
+
+    The trusted installer must already have checked this imported closure and
+    its ancestors. The independent boundary establishes accounting before any
+    worker/operation; it supplies actual identity readbacks after each effect.
+    No installed implementation is registered or inferred from those readbacks.
+    """
+    def __init__(self,plan,boundary,*,clock=time.monotonic,run=subprocess.run):
+        self.plan=copy.deepcopy(p.validate_plan(plan))
+        self.prefix=p.render(plan)['operator_prefix']
+        self.boundary,self.clock,self.run=boundary,clock,run
+        self.bindings=boundary.authenticate_prefix(self.plan,c.digest(c.canonical(self.prefix)))
+        c.require(type(self.bindings) is dict,'independent prefix authority/bindings')
+        self.used=False;self.prepared={}
+
+    def run_authenticated_inherited_entry(self):
+        c.require(not self.used,'one original prefix, no restart or retained-state formatting')
+        self.used=True
+        self.boundary.establish_prefix_accounting(self.prefix['charge'])
+        for record in self.prefix['operations']:
+            deadline=self.boundary.admit_prefix_record(record)
+            c.require(self.clock()<deadline,'original preparation deadline')
+            exact={**record,'args':substitute(record['args'],self.bindings)}
+            self.boundary.verify_bound_record(record,exact,deadline)
+            self.effect(record,exact,deadline)
+            observed=self.boundary.complete_prefix_record(record,deadline)
+            c.require(type(observed) is dict and observed.get('original_record_sha256')==
+                c.digest(c.canonical(record)),'exact independently observed prepared object')
+            self.prepared[record['sequence']]=copy.deepcopy(observed)
+        return copy.deepcopy(self.prepared)
+
+    def verify_prepared(self,request):
+        c.require(type(request) is dict and set(request)=={'original_sequence','original_record_sha256','expectation'},
+            'closed original prefix verification')
+        observed=self.prepared.get(request['original_sequence'])
+        c.require(observed is not None and request['original_record_sha256']==observed['original_record_sha256'] and
+            request['expectation']=='independent_operator_prefix_receipt','original prefix receipt required')
+        self.boundary.verify_prepared_identity(observed)
+        return copy.deepcopy(observed)
 
 
 class RootEntry:

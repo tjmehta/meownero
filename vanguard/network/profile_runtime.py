@@ -19,6 +19,73 @@ import profile_packet as p
 import profile_outer as outer
 
 
+def reserve_record_state(directory_fd,binding,itinerary,recovery,secret,*,owner_uid=0):
+    """Prefix-only creation of original order and every role slot, never repair.
+
+    Partial creation is retained on failure. A repeated prefix cannot overwrite
+    or reserve any object again. The directory must already be independently
+    owned, accounted and under original custody before this operation.
+    """
+    c.require(type(secret) is bytes and len(secret)==32 and itinerary and len(itinerary)<=55 and
+        len(set(itinerary))==len(itinerary) and set(recovery)<=set(itinerary) and
+        all(type(n) is int and 0<=n<54 for n in itinerary), 'bounded original activation/recovery route')
+    info=os.fstat(directory_fd)
+    c.require(stat.S_ISDIR(info.st_mode) and info.st_uid==info.st_gid==owner_uid and
+        stat.S_IMODE(info.st_mode)==0o700,'original private prefix directory')
+    expected={};identities={}
+    values={'record-order':dict(schema='meownero-record-order/1',binding=binding,
+        itinerary=itinerary,recovery=recovery,mode='LIVE',position=0,pending=None,uncertain=None)}
+    for n in itinerary:
+        role='record-'+str(n)
+        expected[role]=dict(role=role,delivery_role='observer' if n in recovery else 'keeper',
+            bindings=binding,activation_sha256=c.digest(secret))
+        values[role]=dict(schema='meownero-manager-slot/1',state='RESERVED',**expected[role])
+    for name,value in values.items():
+        fd=os.open(name,os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_RDWR|os.O_CLOEXEC,0o600,dir_fd=directory_fd)
+        try:
+            raw=c.canonical(value);outer.write_all(fd,raw);os.fsync(fd)
+            c.require(os.pread(fd,len(raw)+1,0)==raw,'complete original reservation')
+            info=os.fstat(fd);identities[name]=[info.st_dev,info.st_ino]
+        finally:os.close(fd)
+    os.fsync(directory_fd)
+    order=identities.pop('record-order')
+    return dict(order_identity=order,capability_identities=identities,capability_expected=expected)
+
+
+class TerminalCustody:
+    """External terminal owner, after root record 53 and its entry have exited.
+
+    Each witness must come from the independent original lifecycle boundary.
+    No helper return, pathname/inode equality or observation of self-exit can
+    satisfy it. These OS primitives remain unqualified in the installed route.
+    """
+    def __init__(self,boundary,contract,*,clock=time.monotonic):
+        self.boundary,self.contract,self.clock=boundary,contract,clock
+        self.used=False
+
+    def run_authenticated_inherited_entry(self):
+        c.require(not self.used,'one terminal handoff')
+        self.used=True
+        self.boundary.authenticate_terminal(self.contract)
+        for number in (52,53):
+            c.require(self.boundary.record_durably_completed(number) is True,'terminal record durably completed')
+        c.require(self.boundary.all_C_entries_exited_and_closed() is True,'all C-bound entries/journals exited and closed')
+        c.require(self.boundary.independent_workers_exited() is True,'independent keeper/cleanup/observer exit')
+        self.boundary.account_and_sync_final_tail()
+        c.require(self.clock()<=self.contract['deadlines']['end'],'final tail within original absolute end')
+        self.boundary.preserve_control_quarantine_and_archive()
+        self.boundary.close_all_C_writers()
+        c.require(self.clock()<=self.contract['deadlines']['end'],'original end before normal unmount')
+        c.require(self.boundary.normal_unmount_C_and_absence() is True,'normal C unmount with independent absence')
+        c.require(self.clock()<=self.contract['deadlines']['end'],'original end before namespace close')
+        self.boundary.close_original_namespace()
+        c.require(self.clock()<=self.contract['deadlines']['end'],'original end before lock release')
+        self.boundary.release_original_lock_descriptions()
+        c.require(self.boundary.independent_original_lock_reacquire() is True,'original lock independently released')
+        c.require(self.clock()<=self.contract['deadlines']['end'],'terminal completion within original end')
+        return dict(result='SOURCE_TERMINAL_RETURNED',installed_cleanup='NOT_RUN',native_execution='NOT_RUN')
+
+
 class RecordJournal:
     """Existing control file plus pre-reserved GrantJournal slots, never created here.
 

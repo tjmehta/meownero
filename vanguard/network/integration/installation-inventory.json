@@ -16,6 +16,7 @@
       "vanguard/network/profile_handoff.py": "profile_handoff.py",
       "vanguard/network/profile_helper.py": "profile_helper.py",
       "vanguard/network/profile_constructor.py": "profile_constructor.py",
+      "vanguard/network/profile-custodian.py": "profile-custodian.py",
       "vanguard/network/integration/installation-inventory.json": "installation-inventory.json"
     },
     "child_runtime": {
@@ -27,6 +28,7 @@
       "vanguard/network/network.py": "runtime/vanguard/network/network.py",
       "vanguard/network/policy-bindings.json": "runtime/vanguard/network/policy-bindings.json",
       "vanguard/network/policy.py": "runtime/vanguard/network/policy.py",
+      "vanguard/network/profile-custodian.py": "runtime/vanguard/network/profile-custodian.py",
       "vanguard/network/profile-helper.py": "runtime/vanguard/network/profile-helper.py",
       "vanguard/network/profile-integration.py": "runtime/vanguard/network/profile-integration.py",
       "vanguard/network/profile-root-helper.py": "runtime/vanguard/network/profile-root-helper.py",
@@ -65,6 +67,7 @@
       "vanguard/network/integration/capability-checklist.md": "runtime/vanguard/network/integration/capability-checklist.md",
       "vanguard/network/integration/coherent-repair.md": "runtime/vanguard/network/integration/coherent-repair.md",
       "vanguard/network/integration/completion.schema.json": "runtime/vanguard/network/integration/completion.schema.json",
+      "vanguard/network/integration/connected-producer.md": "runtime/vanguard/network/integration/connected-producer.md",
       "vanguard/network/integration/consultations.json": "runtime/vanguard/network/integration/consultations.json",
       "vanguard/network/integration/control-storage.md": "runtime/vanguard/network/integration/control-storage.md",
       "vanguard/network/integration/generated-entry.md": "runtime/vanguard/network/integration/generated-entry.md",
@@ -97,11 +100,13 @@
       "vanguard/network/test_handoff.py": "runtime/vanguard/network/test_handoff.py",
       "vanguard/network/test_ingress.py": "runtime/vanguard/network/test_ingress.py",
       "vanguard/network/test_installation.py": "runtime/vanguard/network/test_installation.py",
+      "vanguard/network/test_lifecycle_source.py": "runtime/vanguard/network/test_lifecycle_source.py",
       "vanguard/network/test_manager.py": "runtime/vanguard/network/test_manager.py",
       "vanguard/network/test_network.py": "runtime/vanguard/network/test_network.py",
       "vanguard/network/test_outer.py": "runtime/vanguard/network/test_outer.py",
       "vanguard/network/test_policy.py": "runtime/vanguard/network/test_policy.py",
       "vanguard/network/test_profile.py": "runtime/vanguard/network/test_profile.py",
+      "vanguard/network/test_supervisor.py": "runtime/vanguard/network/test_supervisor.py",
       "vanguard/package-railway-peer.py": "runtime/vanguard/package-railway-peer.py",
       "vanguard/railway-peer.py": "runtime/vanguard/railway-peer.py",
       "vanguard/run-cross-host-build-mac.py": "runtime/vanguard/run-cross-host-build-mac.py",
@@ -110,7 +115,8 @@
   },
   "entry_points": {
     "root_helper": [
-      "profile-root-helper.py"
+      "profile-root-helper.py",
+      "profile-custodian.py"
     ],
     "child_runtime": [
       "vanguard/network/profile-helper.py",
@@ -139,11 +145,13 @@
       "vanguard/network/test_handoff.py",
       "vanguard/network/test_ingress.py",
       "vanguard/network/test_installation.py",
+      "vanguard/network/test_lifecycle_source.py",
       "vanguard/network/test_manager.py",
       "vanguard/network/test_network.py",
       "vanguard/network/test_outer.py",
       "vanguard/network/test_policy.py",
-      "vanguard/network/test_profile.py"
+      "vanguard/network/test_profile.py",
+      "vanguard/network/test_supervisor.py"
     ],
     "usage": "validation bytes only for unchanged full input checker; never helper/child entry points",
     "retained_evidence": "integration/evidence/ is review-only and excluded except individually declared data"

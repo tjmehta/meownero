@@ -1,0 +1,39 @@
+{
+  "source_tests": {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_profile",
+      "test_outer",
+      "test_handoff",
+      "test_manager",
+      "test_dispatch",
+      "test_bootstrap",
+      "test_executor",
+      "test_installation",
+      "test_ingress",
+      "test_constructor",
+      "test_supervisor",
+      "test_lifecycle_source"
+    ],
+    "exit": 0,
+    "expected_exit": 0,
+    "passed": true,
+    "log": "integration/evidence/connected-producer/committed-source_tests.log"
+  },
+  "baseline_rollback": {
+    "command": [
+      "/home/linuxbrew/.linuxbrew/opt/python@3.15/bin/python3.15",
+      "-B",
+      "integration/evidence/startup-custody/reproduce-rollback.py"
+    ],
+    "exit": 1,
+    "expected_exit": 1,
+    "passed": true,
+    "log": "integration/evidence/connected-producer/committed-baseline_rollback.log"
+  },
+  "finished_at": "2026-11-01T00:25:44.317066+00:00"
+}
