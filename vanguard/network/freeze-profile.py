@@ -27,7 +27,8 @@ CODE=['test_handoff.py','profile_handoff.py','profile_contract.py','run-profile.
       'profile_manager.py','profile_helper.py','test_manager.py','profile_packet.py',
       'profile_dispatch.py','profile-helper.py','test_dispatch.py','profile_bootstrap.py','test_bootstrap.py',
       'profile_executor.py','profile-root-helper.py','profile_runtime.py','test_executor.py','test_installation.py','profile_ingress.py','test_ingress.py',
-      'profile_constructor.py','test_constructor.py','test_supervisor.py','profile-custodian.py','test_lifecycle_source.py']
+      'profile_constructor.py','test_constructor.py','test_supervisor.py','profile-custodian.py','test_lifecycle_source.py',
+      'profile_receiver.py','test_receiver.py']
 
 
 def candidate_paths():
@@ -45,7 +46,7 @@ def installation_inventory():
     root_sources=[prefix+name for name in ('profile-root-helper.py','profile_executor.py',
         'profile_contract.py','profile_packet.py','profile_ingress.py','profile_runtime.py',
         'profile_bootstrap.py','profile_dispatch.py','profile_manager.py','profile_outer.py',
-        'profile_handoff.py','profile_helper.py','profile_constructor.py','profile-custodian.py','integration/installation-inventory.json')]
+        'profile_handoff.py','profile_helper.py','profile_constructor.py','profile_receiver.py','profile-custodian.py','integration/installation-inventory.json')]
     runtime={prefix+name for name in CODE if not name.startswith('test_')}
     runtime|={prefix+name for name in ('network.py','policy.py','run-genesis.py','profile.json',
         'source-bindings.json','policy-bindings.json','evidence/native-genesis-attempt01/recipe1.json',
@@ -95,6 +96,8 @@ def source_inputs():
         startup_custody_authorization_interaction='a9b68ef1-9aba-46ce-8a71-fcb84f2b6d29:ec6f1616-3436-4dfb-a83d-6933597cdc74',
         connected_producer_authorization_interaction='d8a029ff-74b9-4c48-90ce-3468fb762b6d:1b041a2a-caf0-4824-848a-197dd3fd6fd7',
         cleanup_settlement_authorization_interaction='48d2d44f-aed2-46ee-bce4-191e04a15ae5:5187a4f2-ee85-4a05-af3b-ed058e1cd572',
+        launch_receiver_authorization_comment='8785cbdf-59d9-4019-9439-45f23404ef5c',
+        launch_receiver_platform_qualification='4c84d7e3-a5cb-4ac0-a426-86fdb9bf9b9e:6bd3a0fc-7ff0-4351-828c-32bb4de7f317',
         baseline_commit=c.BASE,reference=reference,limits=c.LIMITS,
         builder_image=c.json_file(c.HERE.parent/'source-lock.json')['builder']['image_id'],
         builder_rustc=c.json_file(c.HERE.parent/'source-lock.json')['builder']['rustc'],

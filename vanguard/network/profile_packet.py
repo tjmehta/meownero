@@ -139,6 +139,25 @@ def units(value):
             if name.endswith('.service') and '-workload.service' not in name else None) for name,properties in rows]
 
 
+def receiver_unit(value,record,endpoint_fd):
+    """Source interface: one retained, non-restarting exact root receiver."""
+    validate_plan(value)
+    c.require(value['attempt_id'] is not None and type(record) is int and 0<=record<54 and
+        type(endpoint_fd) is int and endpoint_fd>=0,'bound original receiver record/descriptor')
+    stem='meowneroTJS2504'+value['attempt_id']
+    properties=[['Type','s','exec'],['User','s','0'],['Group','s','0'],
+        ['Slice','s',stem+'-control.slice'],['Restart','s','no'],['RemainAfterExit','b',True],['AddRef','b',True],
+        ['ExecStart','a(sasb)',[['/usr/bin/python3',['/usr/bin/python3','-I','-B',
+            '/opt/meownero/TJS-2504/helper/profile-root-helper.py'],False]]],
+        ['StandardInputFileDescriptor','h',endpoint_fd],['StandardOutput','s','null'],
+        ['StandardError','s','null'],['LimitCORE','t',0],['NoNewPrivileges','b',True],
+        ['RestrictAddressFamilies','(bas)',[True,['AF_UNIX','AF_NETLINK']]],
+        ['KillMode','s','control-group'],['RuntimeMaxUSec','t',30_000_000]]
+    return dict(bus='org.freedesktop.systemd1',path='/org/freedesktop/systemd1',
+        interface='org.freedesktop.systemd1.Manager',member='StartTransientUnit',
+        signature='ssa(sv)a(sa(sv))',args=[stem+'-root'+str(record)+'.service','fail',properties,[]])
+
+
 def render(value):
     validate_plan(value)
     records=[]
@@ -297,6 +316,22 @@ def render(value):
             'parent_work_control_accounting_units','durable_operator_quarantine_and_startup_receipt'],
         command=['/usr/bin/python3','-I','-B','/opt/meownero/TJS-2504/helper/profile-custodian.py'],
         charge=dict(preparation=PREPARATION,allocation=ALLOCATION,overhead=value['overhead']),
+        administrator_only=dict(schema='meownero-administrator-prefix/1',binding=None,
+            implementation='UNBOUND_UNQUALIFIED',authentication='administrator_only_noninteractive_task_exact_source',
+            preimport=['root_owned_immutable_opt_meownero_TJS2504_helper_and_all_ancestors',
+                'exact_authority_bound_inputs_and_complete_installation_inventory',
+                'fixed_isolated_no_argument_startup_before_any_project_import'],
+            ordered=['immutable_preimport_publication','rootful_task_cgroup_accounting_before_workers',
+                'original_private_mount_namespace_and_fixed_loop_ext4_C_W_A_O',
+                'hard_occupied_bytes_and_separate_cumulative_write_reservations_for_every_writer',
+                'original_PID1_two_named_FDs_and_independent_same_open_description_readback',
+                'fourteen_original_prefix_operations_once','durable_bound_launch_receipt'],
+            storage=dict(control_gib=1,workload_gib=11,archive_max_gib=2,other_max_gib=1,
+                aggregate_max_gib=15,metadata_and_copy_accounting='inside_existing_C_W_A_O_caps'),
+            manager_bus='independently_bound_system_or_user_for_launch_only',
+            custody='PID1_only; user_manager_is_not_independent_pid1_readback',
+            terminal='terminal_handoff_original_deadlines_normal_unmount_only',
+            grant='separate_exact_administrator_authority; no_source_packet_authorization'),
         installed_implementation='UNIMPLEMENTED_UNQUALIFIED')
     terminal=dict(schema='meownero-terminal-handoff/1',source_only=True,
         owner='independent_outside_operator_not_a_C_bound_root_entry',
@@ -312,5 +347,11 @@ def render(value):
     return dict(schema='meownero-lifecycle-packet/4', spec_sha256=c.digest(c.canonical(value)),
         source_only=True, activation='REFUSED_UNQUALIFIED', plan=copy.deepcopy(value), records=records,
         operator_prefix=prefix,terminal_handoff=terminal,
+        receiver_launch=dict(builder='profile_packet.receiver_unit',transport='profile_receiver.ManagerTransport',
+            bus=None,record_range=[0,53],command=['/usr/bin/python3','-I','-B',
+                '/opt/meownero/TJS-2504/helper/profile-root-helper.py'],
+            unit='meowneroTJS2504$ATTEMPT-root$RECORD.service',
+            reference='AddRef=true_on_original_authenticated_connection_until_durable_settlement_confirmation',
+            restart='no',charge='existing_control_slice_and_O_metadata_caps',qualification='UNBOUND_UNQUALIFIED'),
         units=units(value), unbound=[key for key,val in value['authority'].items() if val is None],
         observed_storage=None, native_execution='NOT_RUN', launch_ready=False)

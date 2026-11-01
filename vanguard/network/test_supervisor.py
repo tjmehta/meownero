@@ -22,6 +22,7 @@ import profile_contract as c
 import profile_executor as e
 import profile_ingress as i
 import profile_manager as m
+import profile_receiver as receiver_exit
 import test_ingress
 
 
@@ -30,6 +31,7 @@ class SupervisorTests(unittest.TestCase):
         self.fixture=test_ingress.IngressTests();self.fixture.setUp(itinerary=getattr(self,'itinerary',None))
         self.addCleanup(self.fixture.doCleanups)
         self.server=None;self.server_reaped=False
+        self.exit_witnesses={}
         self.invocation=dict(operator_unit='TEST-supervisor.service',operator_invocation='a'*32,
             receiver_unit='TEST-fixed-root.service',receiver_invocation='b'*32)
 
@@ -61,7 +63,7 @@ class SupervisorTests(unittest.TestCase):
                     original_send=m.send_packet;dropped=False
                     def lose(channel,message,*args,**kwargs):
                         nonlocal dropped
-                        if not dropped and (lost_reply=='settle' and message==dict(settled=True) or
+                        if not dropped and (lost_reply=='settle' and message.get('settled') is True or
                                 lost_reply=='close' and message.get('result',{}).get('ack')=='close'):
                             dropped=True;raise OSError('TEST lost '+lost_reply+' acknowledgement')
                         return original_send(channel,message,*args,**kwargs)
@@ -94,7 +96,7 @@ class SupervisorTests(unittest.TestCase):
             os.waitpid(self.server,0);self.server_reaped=True
 
     def issue(self,n=0,*,crash=False,recovered=False,mutate=None,lost_ack=False,after_local=False,
-              settle=True,exit_after_close=None,unknown_status=False,pause_after_close=None,before_wait=None):
+              settle=True,exit_after_close=None,unknown_status=False,pause_after_close=None,before_wait=None,skip_auth=False):
         f=self.fixture;tx,rx=m.private_pair();parent=[os.getpid(),os.getuid(),os.getgid()]
         pid=os.fork()
         if pid==0:
@@ -102,6 +104,7 @@ class SupervisorTests(unittest.TestCase):
             try:
                 _,fds=m.receive_packet(rx,parent,200,fd_count=2,clock=lambda:100)
                 client=s.AuthorityClient(fds[0],self.server_credentials,self.server_identity,n,200,clock=lambda:100)
+                if skip_auth:client.authenticate=lambda anchor:True
                 backend=f.backend
                 backend.operator_entry_expectation=lambda:client.call('expectation')
                 backend.operator_invocation_observation=lambda:copy.deepcopy(self.invocation)
@@ -129,6 +132,8 @@ class SupervisorTests(unittest.TestCase):
                 os._exit(status)
             except BaseException:os._exit(3)
         rx.close();receiver=i.process_identity(pid)
+        witness=receiver_exit.ChildExitWitness(receiver,receiver_exit.scope(self.launch,n,receiver),clock=lambda:100)
+        self.addCleanup(witness.close)
         request=dict(operation='issue',receiver=receiver,record=n,recovered=recovered)
         if mutate:mutate(request)
         m.send_packet(self.channel,request)
@@ -147,7 +152,21 @@ class SupervisorTests(unittest.TestCase):
             tx.close()
             for fd in fds:os.close(fd)
         if before_wait:before_wait(receiver)
-        status=os.waitstatus_to_exitcode(os.waitpid(pid,0)[1])
+        def persist(value):
+            path=f.root/('receiver-exit-'+str(pid))
+            with path.open('wb') as stream:
+                stream.write(c.canonical(value));stream.flush();os.fsync(stream.fileno())
+            self.assertEqual(json.loads(path.read_bytes()),value)
+        until=time.monotonic()+5
+        while time.monotonic()<until:
+            try:
+                value=witness.observe(persist,deadline=200);break
+            except ValueError as exc:
+                if str(exc)!='exact child terminal event required':raise
+                time.sleep(.005)
+        else:self.fail('no exact child terminal event')
+        self.exit_witnesses[(receiver['pid'],receiver['start'])]=value
+        status=receiver_exit.exit_status(value['code'],value['status'])
         self.last_receiver=receiver
         if settle:
             until=time.monotonic()+3
@@ -179,13 +198,19 @@ class SupervisorTests(unittest.TestCase):
         self.fail('entries did not close under original owner')
 
     def settle(self,receiver,status,*,confirm=True):
-        m.send_packet(self.channel,dict(operation='settle',receiver=receiver,status=status))
+        witness=self.exit_witnesses.get((receiver['pid'],receiver['start']))
+        m.send_packet(self.channel,dict(operation='settle',receiver=receiver,witness=witness,uncertain=status is None))
         response=m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0]
-        if response==dict(settled=True) and confirm:
-            m.send_packet(self.channel,dict(operation='confirm_settlement',receiver=receiver))
+        if response.get('settled') is True:
+            expected=dict(scope=witness['scope'],exit_witness_sha256=c.digest(c.canonical(witness)))
+            self.assertEqual(response,dict(settled=True,**expected))
+        if response.get('settled') is True and confirm:
+            m.send_packet(self.channel,dict(operation='confirm_settlement',receiver=receiver,
+                exit_witness_sha256=c.digest(c.canonical(witness))))
             confirmed=m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0]
-            if confirmed!=dict(confirmed=True):return confirmed
-        return response
+            if confirmed!=dict(confirmed=True,**expected):return confirmed
+            self.last_confirmation=confirmed
+        return dict(settled=True) if response.get('settled') is True else response
 
     def restore_local(self,before):
         for path,(raw,identity) in before.items():
@@ -401,6 +426,41 @@ class SupervisorTests(unittest.TestCase):
     def test_expired_original_deadline_refuses_issuance(self):
         self.start(clock_value=4600)
         self.assertEqual(self.issue(),3);self.assertEqual(self.issue(44,recovered=True),3)
+
+    def test_missing_stale_substituted_and_unreaped_witnesses_retain_custody(self):
+        self.start();self.assertEqual(self.issue(exit_after_close=9,settle=False),9)
+        receiver=self.last_receiver;original=self.exit_witnesses[(receiver['pid'],receiver['start'])]
+        cases=[None]
+        for mutate in (lambda x:x['scope'].update(record=1),lambda x:x.update(boot_id='wrong'),
+                lambda x:x['observer'].update(start='1'),lambda x:x['detail'].update(reaped=False),
+                lambda x:x['scope']['record_binding']['deadlines'].update(end=9999),
+                lambda x:x.update(code=None,status=None),lambda x:x.update(observed_at=201)):
+            changed=copy.deepcopy(original);mutate(changed);cases.append(changed)
+        for witness in cases:
+            m.send_packet(self.channel,dict(operation='settle',receiver=receiver,witness=witness,uncertain=False))
+            self.assertEqual(m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0],
+                dict(issued=False))
+            self.assertFalse(self.snapshot()['entries_closed'])
+        # A supplied legacy zero cannot replace the raw kernel status nine.
+        m.send_packet(self.channel,dict(operation='settle',receiver=receiver,status=0))
+        self.assertEqual(m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0],dict(issued=False))
+        self.assertEqual(self.settle(receiver,0),dict(settled=True))
+        self.assertEqual(self.wait_closed()['state']['mode'],'RECOVERY_ONLY')
+
+    def test_confirmation_requires_exact_durable_witness_digest(self):
+        self.start();self.assertEqual(self.issue(settle=False),0)
+        self.assertEqual(self.settle(self.last_receiver,0,confirm=False),dict(settled=True))
+        m.send_packet(self.channel,dict(operation='confirm_settlement',receiver=self.last_receiver,
+            exit_witness_sha256='0'*64))
+        self.assertEqual(m.receive_packet(self.channel,self.server_credentials,200,clock=lambda:100)[0],dict(issued=False))
+        self.assertFalse(self.snapshot()['entries_closed'])
+        self.assertEqual(self.settle(self.last_receiver,None),dict(settled=True))
+        self.assertEqual(self.wait_closed()['state']['mode'],'RECOVERY_ONLY')
+
+    def test_skipped_surviving_authentication_cannot_admit_effect(self):
+        self.start();self.assertEqual(self.issue(skip_auth=True),3)
+        self.assertEqual(self.wait_closed()['state']['mode'],'RECOVERY_ONLY')
+        self.assertEqual(self.fixture.backend.calls.count('effect'),0)
 
 
 def identity_of(path):

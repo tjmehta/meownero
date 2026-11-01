@@ -29,6 +29,19 @@ import profile_runtime as r
 from test_executor import InjectedBoundary
 
 
+class TestRecordAuthority:
+    """Explicit TEST-only authority for local journal/transport fixtures.
+
+    No surviving-owner or installed-launch claim; test_supervisor exercises the
+    separate real source process instead of this intentionally injected stub.
+    """
+    def authenticate(self,anchor):return True
+    def recovery_position(self,record):return None
+    def admit(self,record):pass
+    def complete(self,record):pass
+    def uncertain(self,record):pass
+
+
 class IngressTests(unittest.TestCase):
     def setUp(self,*,itinerary=None):
         self.temp=tempfile.TemporaryDirectory(prefix='TJS2504-ingress-source-')
@@ -115,7 +128,8 @@ class IngressTests(unittest.TestCase):
         if mutate:mutate(envelope,fds)
         if anchor_mutate:anchor_mutate(anchor)
         m.send_packet(tx,envelope,fds)
-        ingress=i.InstalledIngress(self.backend,anchor,self.dirfd,endpoint_fd=rx.fileno(),clock=lambda:100)
+        ingress=i.InstalledIngress(self.backend,anchor,self.dirfd,endpoint_fd=rx.fileno(),clock=lambda:100,
+            record_authority=TestRecordAuthority())
         entry=e.RootEntry(ingress,clock=lambda:100,run=Mock(side_effect=AssertionError('real subprocess forbidden')))
         return entry,ingress
 
@@ -129,6 +143,13 @@ class IngressTests(unittest.TestCase):
         return status,json.loads(output.getvalue())
 
     def state(self):return json.loads(self.order.read_bytes())
+
+    def test_missing_or_refusing_surviving_authority_cannot_admit(self):
+        for authority in (None,Mock(authenticate=Mock(return_value=False))):
+            entry,ingress=self.invocation();ingress.record_authority=authority
+            with self.assertRaises(ValueError):entry.run_authenticated_inherited_entry()
+        self.backend.syscall.assert_not_called()
+        self.assertEqual(self.state()['position'],0)
 
     def test_real_main_ingress_installation_and_durable_order_across_invocations(self):
         self.assertEqual(self.invoke()[0],0)

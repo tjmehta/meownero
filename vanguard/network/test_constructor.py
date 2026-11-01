@@ -62,7 +62,8 @@ class ConstructorTests(unittest.TestCase):
 
         def run():
             if crash:backend.syscall.side_effect=lambda *args:os._exit(9)
-            value=constructor.OperatorConstructor(backend,operator_fd=rx.fileno(),clock=lambda:100,run=runner)
+            value=constructor.OperatorConstructor(backend,operator_fd=rx.fileno(),clock=lambda:100,run=runner,
+                record_authority=test_ingress.TestRecordAuthority())
             table={c.digest((c.HERE/'profile-root-helper.py').read_bytes()):value}
             output=io.StringIO()
             with redirect_stdout(output),patch.object(e.c,'HERE',fixture.install):
@@ -120,6 +121,12 @@ class ConstructorTests(unittest.TestCase):
     def test_operator_does_not_trust_an_unpinned_received_receipt(self):
         self.assertEqual(self.invoke(expectation_mutate=lambda x:x.update(receipt_sha256='0'*64)),3)
         self.fixture.backend.syscall.assert_not_called()
+
+    def test_missing_surviving_authority_refuses_before_receipt_or_effect(self):
+        boundary=Mock()
+        value=constructor.OperatorConstructor(boundary,clock=lambda:100)
+        with self.assertRaises(ValueError):value.run_authenticated_inherited_entry()
+        boundary.operator_entry_expectation.assert_not_called()
 
     def test_child_crash_cannot_reactivate_and_recovery_keeps_deadlines(self):
         self.assertEqual(self.invoke(fresh=True,crash=True),9)

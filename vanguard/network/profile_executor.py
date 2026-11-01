@@ -261,6 +261,7 @@ def proposal(plan):
         substitution_authority='independent_installed_custodian_only_not_request_JSON',
         teardown=[r for r in records if r['phase'] in ('cleanup','completion')],
         operator_prefix=p.render(plan)['operator_prefix'],terminal_handoff=p.render(plan)['terminal_handoff'],
+        receiver_launch=p.render(plan)['receiver_launch'],
         rollback=[r for r in records if r['phase']=='dispose'],
         never_rollback='control quarantine, grant consumption or uncertain attempt eligibility',
         ingress=dict(source='profile_ingress.InstalledIngress',transport='existing unnamed seqpacket/SCM_RIGHTS',

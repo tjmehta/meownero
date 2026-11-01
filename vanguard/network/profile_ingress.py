@@ -42,6 +42,14 @@ def sealed_bytes(fd, maximum):
     return raw
 
 
+def authority_binding(anchor):
+    """Exact entry scope, compared on the independently authenticated link."""
+    return dict(plan=anchor['plan'],receiver=anchor['receiver'],custodian=anchor['custodian'],
+        record_binding=anchor['record_binding'],directory_identity=anchor['directory_identity'],
+        order_identity=anchor['order_identity'],capability_identities=anchor['capability_identities'],
+        request=anchor['envelope']['request'],recovery_only=anchor['envelope']['recovery_only'])
+
+
 class InstalledIngress:
     """Supply RootEntry's authentication and durable record admission methods.
 
@@ -68,6 +76,7 @@ class InstalledIngress:
 
     def authenticate_root_entry(self):
         anchor=self.trusted
+        c.require(self.record_authority is not None,'authenticated surviving record authority required')
         c.require(set(anchor)=={'schema','plan','inputs_raw','envelope','receiver_credentials','receiver',
             'custodian','descriptor_identities','endpoint_identity','directory_identity','order_identity',
             'capability_identities','capability_expected','record_binding','itinerary','recovery','owner_uid'} and
@@ -114,6 +123,8 @@ class InstalledIngress:
             info.st_uid==info.st_gid==anchor['owner_uid'] and stat.S_IMODE(info.st_mode)==0o700,
             'original private control-directory custody')
         c.require(self.backend.authenticate_root_entry()==plan,'OS authority must agree with independent anchor')
+        c.require(self.record_authority.authenticate(anchor) is True,
+            'surviving authority must authenticate this original entry scope')
         store=r.CapabilityStore(self.directory_fd,anchor['capability_identities'],owner_uid=anchor['owner_uid'])
         self.journal=r.RecordJournal(self.directory_fd,anchor['order_identity'],anchor['record_binding'],
             anchor['itinerary'],anchor['recovery'],store,owner_uid=anchor['owner_uid'],clock=self.clock)
@@ -140,16 +151,16 @@ class InstalledIngress:
         c.require(expected['bindings']==self.trusted['record_binding'] and
             expected['delivery_role']==self.packet['delivery']['role'],'record capability source/role binding')
         recovered=self.packet['recovery_only']
-        position=self.record_authority.recovery_position(record) if recovered and self.record_authority is not None else None
+        position=self.record_authority.recovery_position(record) if recovered else None
         self.journal.begin(record,deadline,expected,bytes.fromhex(self.packet['activation']),
             recovered=recovered,recovery_position=position)
-        if self.record_authority is not None:self.record_authority.admit(record)
+        self.record_authority.admit(record)
         self.backend.admit_record(record,deadline)  # Hard enforcement/ownership remain independently required.
 
     def complete_record(self,record,deadline):
         self.backend.complete_record(record,deadline)
         self.journal.complete(record,deadline)
-        if self.record_authority is not None:self.record_authority.complete(record)
+        self.record_authority.complete(record)
 
     def quarantine_record_uncertainty(self,record):
         try:
