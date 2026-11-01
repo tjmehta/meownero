@@ -149,15 +149,16 @@ class SourceBoundaryTests(unittest.TestCase):
         mutated=c.mutate_uuid(raw)
         self.assertEqual(len(raw),len(mutated));self.assertEqual(sum(a!=b for a,b in zip(raw,mutated)),1)
         with self.assertRaises(ValueError):c.mutate_uuid(head+b'no native UUID')
-    def test_missing_bootstrap_refuses_before_any_resource_operation(self):
+    def test_ungranted_direct_runner_refuses_before_any_resource_operation(self):
         spec=importlib.util.spec_from_file_location('profile_runner_test',c.HERE/'run-profile.py')
         runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
         with patch.object(runner.subprocess,'check_output',side_effect=['candidate\n','']), \
              patch.object(runner,'check_inputs',return_value={'platform_bootstrap_sha256':None}), \
              patch.object(runner,'api') as api,patch.object(runner.os,'open') as opened, \
              patch.object(runner,'controller_create') as admission,patch.object(runner.sys,'argv',
-                 ['run-profile.py','--grant-comment','11111111-1111-4111-8111-111111111111','--artifact-sha256','pending']):
-            with self.assertRaisesRegex(ValueError,'bootstrap is not yet frozen'):runner.main()
+                 ['run-profile.py','--grant-comment','11111111-1111-4111-8111-111111111111','--artifact-sha256','pending',
+                  '--out','/tmp/not-an-authorized-native-attempt']):
+            with self.assertRaisesRegex(ValueError,'new exact grant'):runner.main()
             api.assert_not_called();opened.assert_not_called();admission.assert_not_called()
     def test_network_census_rejects_wildcard_or_external_sockets(self):
         good='header\n0: 0100007F:BB21 00000000:0000 0A\n'

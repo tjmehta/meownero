@@ -165,7 +165,7 @@ with patch('subprocess.run',side_effect=AssertionError('host effect')),patch('su
     outer=load('run-outer.py');sys.argv=['run-outer.py'];assert outer.main()==3
     helper=load('profile-helper.py');assert helper.main(['dispose','--spec',str(root/'integration/source-plan.json')])==3
     runner=load('run-profile.py');assert Path(runner.g.__file__)==root/'run-genesis.py'
-    sys.argv=['run-profile.py','--grant-comment',next(iter(runner.c.CONSUMED)),'--artifact-sha256','a'*64]
+    sys.argv=['run-profile.py','--grant-comment',next(iter(runner.c.CONSUMED)),'--artifact-sha256','a'*64,'--out','/tmp/ungranted-installed-profile']
     try:runner.main()
     except ValueError:pass
     else:raise AssertionError('consumed grant accepted')

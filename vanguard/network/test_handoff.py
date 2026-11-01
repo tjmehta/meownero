@@ -35,18 +35,19 @@ class HandoffTests(unittest.TestCase):
                 h.require_bootstrap(dict(platform_bootstrap_sha256=sha))
         self.assertEqual(h.QUALIFIED_BOOTSTRAPS,{})
 
-    def test_nonnull_hash_refuses_before_grant_resource_or_native_calls(self):
+    def test_legacy_nonnull_hash_cannot_substitute_for_a_fresh_direct_grant(self):
         import importlib.util
         spec=importlib.util.spec_from_file_location('handoff_runner',c.HERE/'run-profile.py')
         runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
         with patch.object(runner.subprocess,'check_output',side_effect=['candidate\n','']), \
              patch.object(runner,'check_inputs',return_value={'platform_bootstrap_sha256':'b'*64}), \
-             patch.object(runner,'api') as api,patch.object(runner,'read_enclosure') as enclosure, \
+             patch.object(runner,'api') as api, \
              patch.object(runner.os,'open') as opened,patch.object(runner,'controller_create') as admission, \
              patch.object(runner.sys,'argv',['run-profile.py','--grant-comment',
-                 '11111111-1111-4111-8111-111111111111','--artifact-sha256','pending']):
-            with self.assertRaisesRegex(ValueError,'no qualified outer implementation'):runner.main()
-            for operation in (api,enclosure,opened,admission):operation.assert_not_called()
+                 '11111111-1111-4111-8111-111111111111','--artifact-sha256','pending',
+                 '--out','/tmp/not-an-authorized-native-attempt']):
+            with self.assertRaisesRegex(ValueError,'new exact grant'):runner.main()
+            for operation in (api,opened,admission):operation.assert_not_called()
 
     def check(self,context,ledger,binding,now=104):
         return h.validate_context(context,ledger,bindings=binding,now=now)
