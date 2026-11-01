@@ -10,6 +10,11 @@ answered 2026-11-01. Correction baseline: `cc5718f625c59ecc31518d4e54d8ed6e36d34
 one implementation plus one correction, at most45 minutes from first production edit.
 The clock/pass receipt is in `evidence/direct-runner-f1-f2/implementation-budget.json`.
 
+F3/P2 correction: Platform interaction `8005b5ca-dc3a-467e-a0fa-eaa48854d55f`
+found incomplete PASS witnesses on `c79018acf1e281494f5c33582878d698fab1092a`.
+The same lead standing allowance covers this ordinary correction from that clean
+head; its clock/pass receipt is `evidence/direct-runner-f3/implementation-budget.json`.
+
 `run-profile.py` directly uses the existing `run-genesis.py` host lock, admission
 observations and pinned Docker endpoint. It imports no retired manager, outer,
 bootstrap, constructor, ingress, handoff or helper module. Those modules remain
@@ -71,6 +76,13 @@ symlinks, at most64 KiB each; resource counters have a separate1 KiB numeric all
 Malformed files, duplicate JSON keys, unknown fields and unexpected public entries
 fail the attempt. All producer originals are removed before controller-written public
 rows and receipt are emitted. Resource/cleanup rows remain controller-owned.
+
+Every PASS row requires every frozen producer witness field recursively. Build
+evidence must include all three binaries, each hash and dependency inventory, and
+the RPC translation-unit object hash before runtime can start. Missing native PASS
+witnesses fail the attempt. Partial files and omitted unreached rows remain valid;
+FAIL/NOT_RUN rows may contain a validated subset of known witness fields. Unknown
+fields and invalid present values are refused for every status.
 
 The receipt retains only fixed phase names, numeric CLI/container exit codes and an
 OOM boolean as phase diagnostics. Failure class and rejection labels contain no raw
@@ -137,6 +149,9 @@ The connected staging test runs the actual staging prefix and frozen driver entr
 stopping at a missing-binary sentinel before any native child. Failure tests exercise
 actual `main` finalization with substituted Docker responses, including CLI nonzero,
 container nonzero, partial runtime rows and private-sentinel rejection controls.
+F3 tests remove every required top-level and nested PASS witness field, exercise
+missing binary-hash and native-witness failures through actual controller finalization,
+and retain complete frozen-driver fixtures and valid partial failure evidence.
 
 Primary API references consulted for this implementation: Python 3.15.2
 [subprocess](https://docs.python.org/3.15/library/subprocess.html) and
@@ -145,3 +160,5 @@ Primary API references consulted for this implementation: Python 3.15.2
 F1/F2 file/JSON validation also uses Python3.15.2's
 [os file-descriptor APIs](https://docs.python.org/3.15/library/os.html) and
 [bounded JSON parsing guidance](https://docs.python.org/3.15/library/json.html).
+Recursive PASS completeness uses the standard
+[dictionary key-view equality](https://docs.python.org/3.15/library/stdtypes.html#dictionary-view-objects).

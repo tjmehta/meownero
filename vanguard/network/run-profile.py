@@ -326,10 +326,11 @@ def bounded_json(path, maximum=64*1024):
     finally: os.close(fd)
 
 
-def witness_matches(value, shape):
+def witness_matches(value, shape, *, complete=False):
     if isinstance(shape,dict):
-        return isinstance(value,dict) and value.keys() <= shape.keys() and all(
-            witness_matches(item,shape[key]) for key,item in value.items())
+        return isinstance(value,dict) and (value.keys() == shape.keys() if complete else
+            value.keys() <= shape.keys()) and all(
+            witness_matches(item,shape[key],complete=complete) for key,item in value.items())
     if callable(shape): return shape(value)
     return type(value) is type(shape) and value == shape
 
@@ -368,7 +369,8 @@ def read_public_rows(path, shapes):
     c.require(isinstance(value,dict) and value.keys() <= set(c.REQUIRED[path.name]), 'unknown public row')
     for key,item in value.items():
         c.require(isinstance(item,dict) and item.get('status') in ('PASS','FAIL','NOT_RUN') and
-            witness_matches({k:v for k,v in item.items() if k != 'status'},shapes[key]),
+            witness_matches({k:v for k,v in item.items() if k != 'status'},shapes[key],
+                complete=item['status'] == 'PASS'),
             'invalid public witness')
     return value
 

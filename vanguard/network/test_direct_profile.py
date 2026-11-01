@@ -2,6 +2,7 @@
 """Direct controller tests. Docker/native execution is replaced; host children are real."""
 import ast
 import contextlib
+import copy
 import fcntl
 import importlib.util
 import json
@@ -190,7 +191,7 @@ class Direct(unittest.TestCase):
                     for filename,keys in c.REQUIRED.items():
                         produced = ('build.json',) if phase == 'build' else set(c.REQUIRED)-{'build.json','cleanup.json','resources.json'}
                         if filename in produced:
-                            (case.output/'public'/filename).write_text(json.dumps({key:dict(status='PASS') for key in keys}))
+                            (case.output/'public'/filename).write_text(json.dumps(case.producer_rows()[filename]))
                     if phase == 'build' and mutate_build:mutate_build(case.output/'public/build.json')
                     if phase in (failed_phase,raised_phase):
                         secret = 'PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL'
@@ -199,12 +200,12 @@ class Direct(unittest.TestCase):
                         if phase == 'runtime':
                             (case.output/'public/peer.json').write_text(json.dumps(dict(
                                 native_handshake=dict(status='PASS',request_sha256='a'*64,command=1001))))
-                        if mutate_public:mutate_public(case.output)
                         state['container']['State']['ExitCode'] = 17
                         if phase == raised_phase:
                             raise subprocess.CalledProcessError(17,argv,output=secret.encode(),stderr=secret.encode())
                         code = 0 if container_exit_only else 17
                         output = error = secret.encode()
+                    if phase == 'runtime' and mutate_public:mutate_public(case.output)
                 elif cmd[0] == 'stop':state['container']['State']['Running'] = False
                 elif cmd[0] == 'rm':state['container'] = None
                 else:raise AssertionError(cmd)
@@ -346,7 +347,7 @@ class Direct(unittest.TestCase):
         (self.base/'alias').unlink();path.write_text('{"status":"PASS","status":"FAIL"}')
         with self.assertRaises(ValueError):r.bounded_json(path)
 
-    def test_allowlist_accepts_actual_frozen_driver_row_expressions(self):
+    def producer_rows(self):
         # Evaluate only the producer's row(...) expressions, with public fixture
         # inputs. No RPC, sockets, wallets, frames or native children are run.
         spec = importlib.util.spec_from_file_location('witness_driver',c.HERE/'profile-integration.py')
@@ -360,21 +361,74 @@ class Direct(unittest.TestCase):
                 keys = c.REQUIRED['wallet.json'] if isinstance(node.args[1],ast.Name) else [None]
                 for key in keys:
                     eval(compile(ast.Expression(node),'<frozen public row>','eval'),dict(scope,key=key))
-        public = self.base/'public';public.mkdir()
-        rows = c.empty_rows()
-        for filename,values in driver.ROWS.items():
-            if filename not in ('build.json','resources.json','cleanup.json'):
-                self.assertTrue(all(row['status'] == 'PASS' for row in values.values()))
-                (public/filename).write_text(json.dumps(values))
-        self.assertEqual(r.collect_public(self.base,rows),[])
-        for filename in ('peer.json','wallet.json','auth.json','isolation.json','reopen.json'):
-            self.assertEqual(rows[filename],driver.ROWS[filename])
-        build = dict(three_production_binaries=dict(status='PASS',binaries={name:dict(sha256='a'*64,
+        driver.ROWS['build.json'] = dict(three_production_binaries=dict(status='PASS',binaries={name:dict(sha256='a'*64,
             needed=['libc.so.6','libstdc++.so.6','libwallet-crypto.so']) for name in
             ('monerod','monero-wallet-cli','monero-wallet-rpc')}),
             rpc_translation_unit=dict(status='PASS',object_sha256='b'*64))
-        (public/'build.json').write_text(json.dumps(build))
-        self.assertEqual(r.read_public_rows(public/'build.json',r.public_shapes()),build)
+        return {filename:values for filename,values in driver.ROWS.items()
+            if filename not in ('resources.json','cleanup.json')}
+
+    def test_allowlist_accepts_actual_frozen_driver_row_expressions(self):
+        public = self.base/'public';public.mkdir()
+        rows = c.empty_rows()
+        for filename,values in self.producer_rows().items():
+            self.assertTrue(all(row['status'] == 'PASS' for row in values.values()))
+            (public/filename).write_text(json.dumps(values))
+        self.assertEqual(r.collect_public(self.base,rows),[])
+        for filename,values in self.producer_rows().items():self.assertEqual(rows[filename],values)
+
+    def test_pass_rows_require_every_producer_field_recursively(self):
+        def paths(value,prefix=()):
+            for key,item in value.items():
+                if key == 'status':continue
+                yield prefix+(key,)
+                if isinstance(item,dict):yield from paths(item,prefix+(key,))
+        for filename,values in self.producer_rows().items():
+            path = self.base/filename
+            for key,row in values.items():
+                path.write_text(json.dumps({key:dict(status='PASS')}))
+                with self.subTest(filename=filename,row=key,missing='all'),self.assertRaises(ValueError):
+                    r.read_public_rows(path,r.public_shapes())
+                for field in paths(row):
+                    with self.subTest(filename=filename,row=key,missing=field):
+                        incomplete = copy.deepcopy(row);parent = incomplete
+                        for part in field[:-1]:parent = parent[part]
+                        del parent[field[-1]]
+                        path.write_text(json.dumps({key:incomplete}))
+                        with self.assertRaises(ValueError):r.read_public_rows(path,r.public_shapes())
+
+    def test_partial_failure_and_unreached_rows_allow_only_valid_known_fields(self):
+        path = self.base/'build.json'
+        for status in ('FAIL','NOT_RUN'):
+            for witness in ({},dict(binaries={'monerod':dict(sha256='a'*64)})):
+                value = dict(three_production_binaries=dict(status=status,**witness))
+                path.write_text(json.dumps(value))
+                self.assertEqual(r.read_public_rows(path,r.public_shapes()),value)
+            for witness in (dict(binaries={'monerod':dict(unknown=True)}),
+                            dict(binaries={'monerod':dict(sha256='invalid')})):
+                path.write_text(json.dumps(dict(three_production_binaries=dict(status=status,**witness))))
+                with self.assertRaises(ValueError):r.read_public_rows(path,r.public_shapes())
+
+    def test_missing_wallet_rpc_binary_hash_prevents_runtime_start(self):
+        def mutate(path):
+            value = json.loads(path.read_text())
+            del value['three_production_binaries']['binaries']['monero-wallet-rpc']['sha256']
+            path.write_text(json.dumps(value))
+        result,receipt,events = self.exercise(mutate_build=mutate)
+        self.assertEqual(result,1);self.assertEqual(events.count('start'),1)
+        self.assertEqual(receipt['failure_phase'],'build');self.assertEqual(receipt['result'],'FAIL')
+        self.assertEqual(receipt['rejected_evidence'],['build.json'])
+
+    def test_missing_native_witness_cannot_produce_slice_pass(self):
+        def mutate(root):
+            path = root/'public/peer.json';value = json.loads(path.read_text())
+            del value['native_handshake']['request_sha256']
+            path.write_text(json.dumps(value))
+        result,receipt,events = self.exercise(mutate_public=mutate)
+        self.assertEqual(result,1);self.assertEqual(events.count('start'),2)
+        self.assertEqual(receipt['result'],'FAIL');self.assertEqual(receipt['rejected_evidence'],['peer.json'])
+        self.assertEqual(receipt['rows']['peer.json'],c.empty_rows()['peer.json'])
+        self.assertEqual(receipt['rows']['wallet.json']['address_roundtrip']['status'],'PASS')
 
 
 if __name__ == '__main__':unittest.main()
