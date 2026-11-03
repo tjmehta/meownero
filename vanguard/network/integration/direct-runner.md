@@ -51,6 +51,11 @@ staging mount), escalates TERM to KILL, verifies absence, removes staging and cl
 the sole non-inherited lock descriptor. A lost create reply is recovered using the
 same exact ownership checks. A daemon that cannot confirm removal produces failed
 cleanup; this runner does not claim that SIGKILL or host failure is recoverable.
+A failed inspect alone never proves absence. Successful exit-0 `docker ps --all
+--no-trunc` listings must each be empty for the exact task label, anchored exact
+name and, once learned, the full container ID. Separate filters prevent one
+identity from hiding another; any nonzero response or matching row refuses.
+Docker stderr wording is ignored. An inspected replacement ID is refused.
 
 Container CPU, memory, swap and PID settings are kernel limits. Host controller
 and child CPU/RSS/PIDs are measured and compared with Platform's separately stated
@@ -82,8 +87,11 @@ refuses before runtime; final publication also refuses an existing evidence dire
 The runtime marker uses the same exclusive write anchored to a no-follow staging FD.
 If public cleanup or container-absence confirmation fails, the attempt stays FAIL;
 producer entries remain quarantined and final evidence still goes only into the
-unmounted controller directory. Resource/cleanup rows remain controller-owned.
-Publish only the nine allowlisted JSON files from `evidence/`. Never package
+unmounted controller directory. Resource/cleanup rows remain controller-owned. Already-measured host peaks and
+sample counts are serialized into resources and every cleanup row even when
+cleanup fails; the failed cleanup row remains FAIL.
+Publish only the nine regular evidence JSON files and, on eligible failed builds,
+`build-diagnostics.json` (ten named exports total) from `evidence/`. Never package
 `public/`, retained staging or the entire attempt root.
 
 Every PASS row requires every frozen producer witness field recursively. Build
@@ -97,9 +105,19 @@ The receipt retains only fixed phase names, numeric CLI/container exit codes and
 OOM boolean as phase diagnostics. Failure class and rejection labels contain no raw
 exception messages, filenames from unexpected entries, stdout, stderr or private log
 content. A failed phase stays FAIL while reached public rows survive and unreached
-rows stay NOT_RUN. No private build, configure, native, RPC, wallet, frame or environment
-transcript is exported. These diagnostics identify the failed boundary; diagnosing
-private native details requires a separate authorized private inspection.
+rows stay NOT_RUN. The lead decision [f44e6422](/TJS/issues/TJS-2504#comment-f44e6422-ea8c-4f5d-a211-78eab75077ca)
+classifies compiler output from the pinned pre-runtime build as nonprivate. Only
+a failed build, before any runtime phase and without any BUILD_COMPLETE entry,
+may export `build-diagnostics.json`, after the owned container is confirmed absent.
+It contains presence flags and the final 256 KiB each of configure.log/build.log,
+plus rustc.txt, cargo.txt and cmake-version.txt. Logs over 16 MiB or versions over
+4 KiB refuse the entire diagnostic export. Files must be owned single-link regular
+files, opened no-follow/nonblocking through a no-follow staging directory FD.
+Metadata/size changes during the bounded positional read refuse publication. Any
+BUILD_COMPLETE entry, including a planted alias or FIFO, suppresses diagnostics.
+Controller phase history also prevents export if a runtime marker is later removed.
+Native/RPC/wallet/frame/environment transcripts and all runtime output remain private.
+Security must review this changed boundary before a new grant.
 
 Platform must read the changed source and issue one new authenticated comment on
 TJS-2504 containing exactly one fenced `meownero-direct-profile-grant` JSON block:

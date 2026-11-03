@@ -151,6 +151,7 @@ class Controller:
         self.peak = dict(peak_rss_bytes=0,cpu_seconds=0,peak_pids=0,disk_bytes=0)
         self.samples = 0
         self.cleaning = False
+        self.container_id = None
         self.cpu_origin = resource.getrusage(resource.RUSAGE_SELF)
         self.children_origin = resource.getrusage(resource.RUSAGE_CHILDREN)
 
@@ -288,7 +289,14 @@ def container_command(root, name, image):
 def inspect_owned(control, name, image, deadline):
     result = control.run(g.DOCKER+['inspect',name],deadline,check=False,monitor=False)
     if result.returncode:
-        c.require(b'No such' in result.stderr, 'container absence unconfirmed')
+        # Query each identity independently: an AND-filter could hide a renamed
+        # container or a conflicting name. Error wording never proves absence.
+        filters = ['label=meownero.profile.attempt='+name,'name=^/'+re.escape(name)+'$']
+        if control.container_id: filters.append('id='+control.container_id)
+        for identity in filters:
+            listing = control.run(g.DOCKER+['ps','--all','--no-trunc','--format','{{.ID}}',
+                '--filter',identity],deadline,check=False,monitor=False)
+            c.require(listing.returncode == 0 and not listing.stdout.strip(), 'container absence unconfirmed')
         return None
     value, = json.loads(result.stdout)
     c.require(value['Name'] == '/'+name and value['Image'] == image and
@@ -296,6 +304,8 @@ def inspect_owned(control, name, image, deadline):
         any(m['Source'] == str(control.root/'staging') and m['Destination'] == '/out'
             for m in value['Mounts']), 'owned container identity mismatch')
     c.require(re.fullmatch('[0-9a-f]{64}',value['Id']), 'invalid container identity')
+    c.require(control.container_id in (None,value['Id']), 'owned container ID changed')
+    control.container_id = value['Id']
     return value
 
 
@@ -344,7 +354,46 @@ def runtime_marker(staging):
     finally: os.close(fd)
 
 
-def publish_evidence(root, rows, receipt):
+BUILD_LOG_MAX = 16*1024*1024
+BUILD_LOG_TAIL = 256*1024
+
+
+def build_diagnostics(staging):
+    """Fixed pre-runtime compiler files only, after confirmed container absence."""
+    directory = os.open(staging,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    def no_marker():
+        try: os.stat('BUILD_COMPLETE',dir_fd=directory,follow_symlinks=False)
+        except FileNotFoundError: return
+        raise ValueError('runtime marker present')
+    try:
+        no_marker()
+        files = {}
+        for name in ('configure.log','build.log','rustc.txt','cargo.txt','cmake-version.txt'):
+            maximum,tail = (BUILD_LOG_MAX,BUILD_LOG_TAIL) if name.endswith('.log') else (4096,4096)
+            try: fd = os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|os.O_CLOEXEC,dir_fd=directory)
+            except FileNotFoundError:
+                files[name] = dict(present=False)
+                continue
+            try:
+                info = os.fstat(fd)
+                c.require(stat.S_ISREG(info.st_mode) and info.st_uid == os.getuid() and
+                    info.st_nlink == 1 and info.st_size <= maximum, 'invalid compiler diagnostic file')
+                count = min(tail,info.st_size)
+                raw = os.pread(fd,count,info.st_size-count)
+                after = os.fstat(fd)
+                stable = ('st_dev','st_ino','st_mode','st_uid','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+                c.require(len(raw) == count and all(getattr(info,key) == getattr(after,key) for key in stable),
+                    'compiler diagnostic changed during read')
+                files[name] = dict(present=True,size_bytes=info.st_size,tail_bytes=count,
+                    text=raw.decode('utf-8',errors='replace'))
+            finally: os.close(fd)
+        no_marker()
+        return dict(schema='meownero-pre-runtime-build-diagnostics/1',log_max_bytes=BUILD_LOG_MAX,
+            log_tail_bytes=BUILD_LOG_TAIL,files=files)
+    finally: os.close(directory)
+
+
+def publish_evidence(root, rows, receipt, diagnostics=None):
     """The container never mounts this fresh controller-only directory."""
     root_fd = os.open(root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
     try:
@@ -352,7 +401,9 @@ def publish_evidence(root, rows, receipt):
         fd = os.open('evidence',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,
                      dir_fd=root_fd)
         try:
-            for filename,data in [*rows.items(),('receipt.json',receipt)]:
+            exports = [*rows.items(),('receipt.json',receipt)]
+            if diagnostics is not None: exports.append(('build-diagnostics.json',diagnostics))
+            for filename,data in exports:
                 exclusive_write(fd,filename,(json.dumps(data,indent=2)+'\n').encode())
             os.fsync(fd)
         finally: os.close(fd)
@@ -466,6 +517,8 @@ def main():
     phase = 'admission'
     created = False
     create_intent = False
+    diagnostics = None
+    counters = {}
     prior = {}
     def interrupted(signum,frame): raise TimeoutError('controller watchdog or termination')
     try:
@@ -528,6 +581,7 @@ def main():
         signal.setitimer(signal.ITIMER_REAL,max(.01,control.end-time.monotonic()))
         for sig in (signal.SIGINT,signal.SIGTERM,signal.SIGHUP): signal.signal(sig,signal.SIG_IGN)
         cleanup = rows['cleanup.json']
+        cleanup_key = 'owned_cid_absent'
         try:
             for child in control.children: control.stop(child)
             value = inspect_owned(control,name,image,control.end) if create_intent else None
@@ -540,10 +594,16 @@ def main():
                 if value: control.run(g.DOCKER+['rm','-f',value['Id']],control.end)
             c.require(not create_intent or inspect_owned(control,name,image,control.end) is None,'owned CID remains')
             cleanup['owned_cid_absent'] = dict(status='PASS',create_intent=create_intent)
+            cleanup_key = 'owned_staging_removed'
+            if receipt.get('failure_phase') == 'build' and 'runtime' not in receipt['phase_diagnostics']:
+                try:
+                    diagnostics = build_diagnostics(args.out/'staging')
+                    receipt['build_diagnostics'] = 'EXPORTED'
+                except Exception:
+                    receipt['build_diagnostics'] = 'REFUSED'
             if created:
                 rejected = collect_public(args.out,rows)
                 if rejected: receipt.update(result='FAIL',rejected_evidence=rejected)
-            counters = {}
             if created:
                 for phase in ('build','runtime'):
                     path = args.out/'staging'/('resources-'+phase+'.json')
@@ -557,38 +617,44 @@ def main():
                     except Exception:
                         receipt['result'] = 'FAIL'
                         receipt.setdefault('rejected_evidence',[]).append('resources-'+phase+'.json')
-            receipt['container_counters'] = counters
-            no_oom = len(counters) == 2 and all(x['oom_kill'] == x['oom'] == 0 for x in counters.values())
-            rows['resources.json'] = dict(
-                parent_enclosure=dict(status='PASS' if 'container_id' in receipt else 'NOT_RUN',
-                    mode='container-kernel-limits; host-overhead-measured-only',flags=CONTAINER_FLAGS,
-                    host_overhead_allowance=grant['host_overhead_allowance'],measured=control.peak,samples=control.samples,
-                    sampling='2s and copy/phase boundaries; RSS includes conservative per-process lifetime high-water marks'),
-                deadlines=dict(status='PASS' if time.monotonic() < control.end else 'FAIL',
-                    wall_seconds=4500,build_seconds=3600,runtime_seconds=600,cleanup_seconds=300),
-                disk=dict(status='PASS' if control.samples else 'NOT_RUN',peak_bytes=control.peak['disk_bytes'],
-                    abort_bytes=15*GiB,minimum_free_bytes=4*GiB,mode='sampled-abort-not-quota'),
-                no_oom=dict(status='PASS' if no_oom else 'NOT_RUN',counters=counters))
             if created and (args.out/'staging').exists(): shutil.rmtree(args.out/'staging')
             cleanup['owned_staging_removed'] = dict(status='PASS' if created else 'NOT_RUN')
         except Exception as error:
+            cleanup[cleanup_key] = dict(status='FAIL')
             receipt.update(result='FAIL',cleanup_failure_class=type(error).__name__)
         finally:
             try:
                 for child in control.children: control.stop(child)
                 cleanup['owned_pids_absent'] = dict(status='PASS',count=len(control.children))
             except Exception as error:
+                cleanup['owned_pids_absent'] = dict(status='FAIL')
                 receipt.update(result='FAIL',pid_cleanup_failure_class=type(error).__name__)
             finally:
                 signal.setitimer(signal.ITIMER_REAL,0)
                 os.close(fd)  # The sole lock descriptor; no child inherits it.
                 cleanup['lock_released'] = dict(status='PASS',descriptor_closed=True)
                 for sig,handler in prior.items(): signal.signal(sig,handler)
+        # Always serialize measured host values, even if container/public/staging
+        # cleanup failed. Never manufacture a successful cleanup from metrology.
+        measured = dict(control.peak)
+        for row in cleanup.values(): row.update(measured=measured,samples=control.samples)
+        receipt['container_counters'] = counters
+        no_oom = len(counters) == 2 and all(x['oom_kill'] == x['oom'] == 0 for x in counters.values())
+        rows['resources.json'] = dict(
+            parent_enclosure=dict(status='PASS' if 'container_id' in receipt else 'NOT_RUN',
+                mode='container-kernel-limits; host-overhead-measured-only',flags=CONTAINER_FLAGS,
+                host_overhead_allowance=grant['host_overhead_allowance'],measured=measured,samples=control.samples,
+                sampling='2s and copy/phase boundaries; RSS includes conservative per-process lifetime high-water marks'),
+            deadlines=dict(status='PASS' if time.monotonic() < control.end else 'FAIL',
+                wall_seconds=4500,build_seconds=3600,runtime_seconds=600,cleanup_seconds=300),
+            disk=dict(status='PASS' if control.samples else 'NOT_RUN',peak_bytes=control.peak['disk_bytes'],
+                abort_bytes=15*GiB,minimum_free_bytes=4*GiB,mode='sampled-abort-not-quota'),
+            no_oom=dict(status='PASS' if no_oom else 'NOT_RUN',counters=counters))
         receipt['wall_seconds'] = time.monotonic()-start
         receipt['rows'] = rows
         if receipt['result'] == 'INCOMPLETE': receipt['result'] = c.verdict(rows)
         if created:
-            publish_evidence(args.out,rows,receipt)
+            publish_evidence(args.out,rows,receipt,diagnostics)
         print(json.dumps(dict(result=receipt['result'],launch_ready=False,consumed=created)))
     return 0 if receipt['result'].startswith('PASS_') else 1
 

@@ -1,0 +1,63 @@
+{
+  "schema": "meownero-direct-profile-build-diagnostics-source/1",
+  "base_commit": "aadf28c6c58d4f38276667a39c87e52d745241b0",
+  "run_id": "9564880c-c5a8-447c-a7f3-42fa5754728e",
+  "authority_comment": "f44e6422-ea8c-4f5d-a211-78eab75077ca",
+  "candidate_commit": "bound by packet manifest",
+  "source_state": "PASS_SOURCE_CHECKS_PENDING_PLATFORM_THEN_SECURITY",
+  "source_tests": 277,
+  "source_test_seconds": 56.356838564854115,
+  "direct_controller_tests": 41,
+  "focused_seconds": 4.270392220001668,
+  "budget": {
+    "first_edit_utc": "2026-11-03T23:30:48.624159+00:00",
+    "passes": {
+      "implementation": 1,
+      "correction": 1
+    },
+    "limit_minutes": 45,
+    "authority_comment": "f44e6422-ea8c-4f5d-a211-78eab75077ca",
+    "correction_started_utc": "2026-11-03T23:33:53.426835+00:00",
+    "finished_utc": "2026-11-03T23:36:21.556884+00:00",
+    "elapsed_minutes": 5.54887875
+  },
+  "runner_sha256": "41130f3e00ca35d92570bae6839c8b23ddcd9e226ba49645a00637e0ec550c67",
+  "inputs_sha256": "4d81baa0538eb4f2d69ef8f6f54343c4e02022ca04480890cd74b2d36e888203",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "changes": [
+    "Separate successful empty full-ID Docker listings by task label, anchored exact name, and remembered full container ID; no inspect-error text dependency",
+    "Measured host peaks and sample count always serialized in resources and all cleanup rows; failed cleanup row remains FAIL",
+    "Only eligible pre-runtime failed builds export compiler tails and version-file presence in tenth named evidence file"
+  ],
+  "diagnostic_limits": {
+    "log_input_bytes": 16777216,
+    "log_tail_bytes": 262144,
+    "version_input_bytes": 4096,
+    "filenames": [
+      "configure.log",
+      "build.log",
+      "rustc.txt",
+      "cargo.txt",
+      "cmake-version.txt"
+    ]
+  },
+  "first_failures": {
+    "baseline": "40 tests: 19 failures, 8 errors against unchanged production controller; lowercase cleanup + absent diagnostic implementation reproduced",
+    "implementation_focused": "40 tests: one stale exact cleanup-row assertion",
+    "implementation_source": "276 tests: 63 failures before dependent historical source manifest and final frozen bindings refreshed"
+  },
+  "correction": "One correction updates the stale assertion/dependent runner hash, verifies nanosecond metadata stability excluding read-induced atime, and extends connected refusal controls; all first logs retained.",
+  "controls": [
+    "lowercase missing inspect + empty exit-0 listings",
+    "nonzero listing and matching row at every identity filter",
+    "cleanup failure retains nonzero peaks/sample count in resources and cleanup FAIL row",
+    "256 KiB tails of larger compiler logs, three version files, five presence flags",
+    "no diagnostic export for oversized log/version, symlink, FIFO, hardlink, planted marker",
+    "no diagnostics after runtime even if BUILD_COMPLETE is removed"
+  ],
+  "preserved": "Nine frozen input files byte-identical to base Git objects; original heavy lock and native Docker/runtime not used",
+  "limits": "Actual disposable files, process groups, lock fixtures and forked source tests; Docker/native effects substituted. No engine qualification, native build, live capacity proof or host-overhead acceptance.",
+  "next": "Platform changed-source response, then Security (a,c) serially; only after both accept may Platform issue fresh exact >=48h grant. Old grant365fa3e9 remains consumed. Core stage/decision/count2 unchanged; full matrix and lead integration unfinished."
+}

@@ -157,12 +157,14 @@ class Direct(unittest.TestCase):
     def exercise(self, *, refuse=None, uncertain_create=False, fail_runtime=False,
                  failed_phase=None, raised_phase=None, mutate_public=None, container_exit_only=False,
                  mutate_build=None, mutate_staging=None, cleanup_failure=False,
-                 staging_retained=False):
+                 staging_retained=False, mutate_failure=None):
         inputs = self.base/'inputs.json';inputs.write_bytes(b'{}')
         value = grant(self.output);events = [];state = {'container':None,'starts':0}
         case = self
         class FakeController(r.Controller):
-            def sample(self,force=False):self.samples += 1
+            def sample(self,force=False):
+                self.samples += 1
+                self.peak.update(peak_rss_bytes=123456,cpu_seconds=1.5,peak_pids=2,disk_bytes=4096)
             def run(self,argv,deadline,**kwargs):
                 case.assertGreater(deadline,time.monotonic())
                 case.assertEqual(argv[:len(r.g.DOCKER)],r.g.DOCKER)
@@ -181,7 +183,9 @@ class Direct(unittest.TestCase):
                     if uncertain_create:raise TimeoutError('create response lost')
                 elif cmd[0] == 'inspect':
                     if state['container']:output = json.dumps([state['container']]).encode()
-                    else:code,error = 1,b'Error: No such object'
+                    else:code,error = 1,b'error: no such object'
+                elif cmd[0] == 'ps':
+                    output = b'c'*64+b'\n' if state['container'] else b''
                 elif cmd[0] == 'start':
                     state['starts'] += 1
                     if state['starts'] == 2 and fail_runtime:
@@ -198,7 +202,9 @@ class Direct(unittest.TestCase):
                     if phase in (failed_phase,raised_phase):
                         secret = 'PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL'
                         for name in ('build.log','configure.log','private/console.log'):
-                            (case.output/'staging'/name).write_text(secret)
+                            text = 'COMPILER_ERROR_FIXTURE' if phase == 'build' and name != 'private/console.log' else secret
+                            (case.output/'staging'/name).write_text(text)
+                        if mutate_failure:mutate_failure(case.output/'staging')
                         if phase == 'runtime':
                             (case.output/'public/peer.json').write_text(json.dumps(dict(
                                 native_handshake=dict(status='PASS',request_sha256='a'*64,command=1001))))
@@ -337,7 +343,8 @@ class Direct(unittest.TestCase):
             'unexpected-public-entry','wallet.json','resources-runtime.json'])
         self.assertEqual(receipt['rows']['peer.json']['native_handshake']['status'],'PASS')
         self.assertEqual(receipt['rows']['build.json']['three_production_binaries']['status'],'PASS')
-        self.assertEqual(receipt['rows']['cleanup.json']['lock_released'],dict(status='PASS',descriptor_closed=True))
+        self.assertEqual(receipt['rows']['cleanup.json']['lock_released']['status'],'PASS')
+        self.assertTrue(receipt['rows']['cleanup.json']['lock_released']['descriptor_closed'])
         self.assertNotIn('runtime',receipt['container_counters'])
         self.assertEqual(outside.read_text(),secret)
         self.assertEqual(set(p.name for p in (self.output/'evidence').iterdir()),set(c.REQUIRED)|{'receipt.json'})
@@ -404,8 +411,105 @@ class Direct(unittest.TestCase):
         def mutate(root):victims.extend(self.planted_public(root))
         result,receipt,_ = self.exercise(mutate_public=mutate,cleanup_failure=True,staging_retained=True)
         self.assertEqual(result,1);self.assertEqual(receipt['cleanup_failure_class'],'RuntimeError')
-        self.assertEqual(receipt['rows']['cleanup.json']['owned_cid_absent']['status'],'NOT_RUN')
+        self.assertEqual(receipt['rows']['cleanup.json']['owned_cid_absent']['status'],'FAIL')
         self.assert_controller_evidence(victims)
+
+    def test_absence_uses_successful_empty_listings_not_inspect_error_text(self):
+        controller = r.Controller(self.base,grant(self.output),time.monotonic())
+        controller.container_id = 'c'*64
+        results = [subprocess.CompletedProcess([],1,b'',b'error: no such object')]
+        results += [subprocess.CompletedProcess([],0,b'',b'') for _ in range(3)]
+        with patch.object(controller,'run',side_effect=results) as run:
+            self.assertIsNone(r.inspect_owned(controller,'task',IMAGE,controller.end))
+        filters = [call.args[0] for call in run.call_args_list[1:]]
+        self.assertEqual(len(filters),3)
+        for argv in filters:
+            self.assertEqual(argv[:len(r.g.DOCKER)+3],r.g.DOCKER+['ps','--all','--no-trunc'])
+        self.assertEqual({argv[-1] for argv in filters},
+            {'label=meownero.profile.attempt=task','name=^/task$','id='+'c'*64})
+
+    def test_absence_refuses_nonzero_ps_and_any_matching_row(self):
+        for index in range(3):
+            for code,output in [(1,b''),(0,b'c'*64+b'\n')]:
+                controller = r.Controller(self.base,grant(self.output),time.monotonic())
+                controller.container_id = 'c'*64
+                results = [subprocess.CompletedProcess([],1,b'',b'No such object')]
+                results += [subprocess.CompletedProcess([],0,b'',b'') for _ in range(index)]
+                results.append(subprocess.CompletedProcess([],code,output,b'daemon unavailable'))
+                with self.subTest(index=index,code=code),patch.object(controller,'run',side_effect=results),self.assertRaises(ValueError):
+                    r.inspect_owned(controller,'task',IMAGE,controller.end)
+
+    def test_cleanup_failure_retains_measured_peaks_in_resources_and_cleanup(self):
+        _,receipt,_ = self.exercise(cleanup_failure=True,staging_retained=True)
+        resource = json.loads((self.output/'evidence/resources.json').read_text())['parent_enclosure']
+        self.assertGreater(resource['measured']['peak_rss_bytes'],0)
+        self.assertGreater(resource['samples'],0)
+        cleanup = receipt['rows']['cleanup.json']['owned_cid_absent']
+        self.assertEqual(cleanup['status'],'FAIL')
+        self.assertEqual(cleanup['measured'],resource['measured'])
+        self.assertEqual(cleanup['samples'],resource['samples'])
+
+    def test_failed_build_exports_only_bounded_compiler_tails_and_versions(self):
+        def logs(staging):
+            (staging/'configure.log').write_bytes(b'X'*300000+b'CONFIGURE_END')
+            (staging/'build.log').write_bytes(b'Y'*300000+b'BUILD_END')
+            for name in ('rustc.txt','cargo.txt','cmake-version.txt'):(staging/name).write_text(name+' version')
+        _,receipt,_ = self.exercise(failed_phase='build',mutate_failure=logs)
+        path = self.output/'evidence/build-diagnostics.json'
+        diagnostic = json.loads(path.read_text())
+        self.assertEqual(path.stat().st_mode & 0o777,0o600)
+        self.assertEqual(len(list(path.parent.iterdir())),10)
+        for name,end in [('configure.log','CONFIGURE_END'),('build.log','BUILD_END')]:
+            row = diagnostic['files'][name]
+            self.assertTrue(row['present']);self.assertEqual(row['tail_bytes'],256*1024)
+            self.assertEqual(len(row['text'].encode()),256*1024);self.assertTrue(row['text'].endswith(end))
+        for name in ('rustc.txt','cargo.txt','cmake-version.txt'):
+            self.assertEqual(diagnostic['files'][name]['text'],name+' version')
+        self.assertEqual(receipt['result'],'FAIL')
+
+    def test_diagnostic_reader_reports_absent_files_without_reading_other_paths(self):
+        staging = self.base/'staging';staging.mkdir()
+        diagnostic = r.build_diagnostics(staging)
+        self.assertEqual(len(diagnostic['files']),5)
+        self.assertTrue(all(row == {'present':False} for row in diagnostic['files'].values()))
+
+    def test_failed_build_oversized_log_symlink_and_planted_marker_export_nothing(self):
+        for kind in ('oversized','symlink','marker','fifo','hardlink'):
+            with self.subTest(kind=kind),tempfile.TemporaryDirectory() as tmp:
+                staging = Path(tmp)
+                path = staging/'build.log'
+                if kind == 'oversized':
+                    with path.open('wb') as stream:stream.truncate(r.BUILD_LOG_MAX+1)
+                elif kind == 'symlink':path.symlink_to(self.base/'missing')
+                elif kind == 'marker':(staging/'BUILD_COMPLETE').touch()
+                elif kind == 'fifo':os.mkfifo(path)
+                else:
+                    path.touch();os.link(path,staging/'alias')
+                with self.assertRaises((ValueError,OSError)):r.build_diagnostics(staging)
+
+    def test_actual_failed_build_rejects_each_unsafe_diagnostic_before_export(self):
+        for kind in ('oversized','symlink','marker','fifo','hardlink','version'):
+            with self.subTest(kind=kind):
+                case = Direct();case.setUp()
+                try:
+                    def mutate(staging):
+                        path = staging/'build.log'
+                        if kind == 'oversized':
+                            with path.open('wb') as stream:stream.truncate(r.BUILD_LOG_MAX+1)
+                        elif kind == 'symlink':
+                            path.unlink();path.symlink_to(staging/'private/secret')
+                        elif kind == 'marker':(staging/'BUILD_COMPLETE').touch()
+                        elif kind == 'fifo':path.unlink();os.mkfifo(path)
+                        elif kind == 'hardlink':os.link(path,staging/'alias')
+                        else:(staging/'cargo.txt').write_bytes(b'x'*4097)
+                    _,receipt,_ = case.exercise(failed_phase='build',mutate_failure=mutate)
+                    self.assertEqual(receipt['build_diagnostics'],'REFUSED')
+                    self.assertFalse((case.output/'evidence/build-diagnostics.json').exists())
+                finally:case.doCleanups()
+
+    def test_runtime_failure_never_exports_compiler_diagnostics(self):
+        self.exercise(failed_phase='runtime',mutate_public=lambda root:(root/'staging/BUILD_COMPLETE').unlink())
+        self.assertFalse((self.output/'evidence/build-diagnostics.json').exists())
 
     def test_exclusive_writes_refuse_existing_entries_and_evidence_directory(self):
         self.output.mkdir();directory = self.output/'staging';directory.mkdir()
