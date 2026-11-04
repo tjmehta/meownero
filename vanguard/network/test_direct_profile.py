@@ -58,6 +58,111 @@ class Direct(unittest.TestCase):
             artifact_hash=c.digest(b'packet'),runner_hash=c.digest((c.HERE/'run-profile.py').read_bytes()),
             output=self.output,now=time.time())
 
+    def readiness_timeout(self,driver,check):
+        clock=[0.0]
+        def sleep(seconds):clock[0]+=seconds
+        driver.DEADLINE=600
+        with patch.object(driver.time,'monotonic',side_effect=lambda:clock[0]),patch.object(driver.time,'sleep',side_effect=sleep):
+            with self.assertRaises(TimeoutError) as caught:driver.wait(check,seconds=.25)
+        return caught.exception
+
+    def test_readiness_transient_recovery_and_last_failure_codes(self):
+        driver=self.driver_fixture();clock=[0.0];driver.DEADLINE=600
+        def sleep(seconds):clock[0]+=seconds
+        checks=iter([ConnectionRefusedError('PRIVATE_SECRET'),False,{'ready':True}])
+        def check():
+            value=next(checks)
+            if isinstance(value,Exception):raise value
+            return value
+        with patch.object(driver.time,'monotonic',side_effect=lambda:clock[0]),patch.object(driver.time,'sleep',side_effect=sleep):
+            self.assertEqual(driver.wait(check,seconds=1),{'ready':True})
+        from integration import runtime_diagnostics as d
+        def fail():raise KeyError('PRIVATE_SECRET')
+        error=self.readiness_timeout(driver,fail)
+        self.assertIsInstance(error.__cause__,KeyError)
+        codes=d.exception_codes(error,c.require)
+        self.assertEqual(codes['readiness'],dict(operation='OTHER_OPERATION',exception_class='KeyError',
+            http_status=0,require_label='NONE',key_field='OTHER_FIELD',attempts=3))
+        self.assertNotIn('PRIVATE_SECRET',json.dumps(codes))
+        # Exact old wait loses both cause and structured diagnosis on this control.
+        old=subprocess.check_output(['git','show','530205f7:./vanguard/network/profile-integration.py']).decode()
+        baseline=type(sys)('baseline');baseline.__file__=str(c.HERE/'profile-integration.py');exec(compile(old,baseline.__file__,'exec'),baseline.__dict__)
+        bad=self.readiness_timeout(baseline,fail)
+        self.assertIsNone(bad.__cause__);self.assertNotIn('readiness',d.exception_codes(bad,c.require))
+
+    def test_readiness_snapshot_fields_guards_and_operations(self):
+        driver=self.driver_fixture()
+        good=[dict(status='OK',height=1,top_block_hash=c.GENESIS,wide_cumulative_difficulty='0x1'),{},dict(pool_stats=dict(txs_total=0))]
+        class RPC:
+            def call(self,*args,**kwargs):return next(self.rows)
+        rpc=RPC();rpc.rows=iter(copy.deepcopy(good));self.assertEqual(driver.snapshot(rpc)['height'],1)
+        cases=[(0,'status','get_info'),(0,'height','get_info'),(0,'top_block_hash','get_info'),
+            (0,'wide_cumulative_difficulty','get_info'),(2,'pool_stats','pool_stats'),(2,'txs_total','pool_stats')]
+        for row,field,operation in cases:
+            values=copy.deepcopy(good)
+            del (values[row]['pool_stats'] if field=='txs_total' else values[row])[field]
+            # Reset the RPC payload on each actual readiness attempt.
+            def check():rpc.rows=iter(copy.deepcopy(values));return driver.snapshot(rpc)
+            error=self.readiness_timeout(driver,check)
+            self.assertEqual((error.readiness['operation'],error.readiness['key_field']),(operation,field))
+        for row,field,value,label,operation in [(0,'height',0,'NON_GENESIS_OR_WRONG_CHAIN','get_info'),
+            (0,'top_block_hash','0'*64,'NON_GENESIS_OR_WRONG_CHAIN','get_info'),
+            (0,'status','BUSY','NON_GENESIS_OR_WRONG_CHAIN','get_info'),
+            (1,'tx_hashes',['PRIVATE_SECRET'],'NONEMPTY_POOL','pool_hashes'),
+            (2,'pool_stats',{'txs_total':1},'NONEMPTY_POOL','pool_stats')]:
+            values=copy.deepcopy(good);values[row][field]=value
+            def check():rpc.rows=iter(copy.deepcopy(values));return driver.snapshot(rpc)
+            error=self.readiness_timeout(driver,check)
+            self.assertEqual((error.readiness['require_label'],error.readiness['operation']),(label,operation))
+            self.assertNotIn('PRIVATE_SECRET',json.dumps(error.readiness))
+
+    def test_readiness_http_transport_payload_and_export_boundary(self):
+        import io,urllib.error
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+60
+        from integration import runtime_diagnostics as d
+        for method,path,operation in [('get_info','json_rpc','get_info'),('','get_transaction_pool_hashes','pool_hashes'),('','get_transaction_pool_stats','pool_stats')]:
+            for failure in (urllib.error.HTTPError('http://127.0.0.1/',503,'PRIVATE_SECRET',{},None),
+                    urllib.error.URLError('PRIVATE_SECRET'),ValueError('PRIVATE_SECRET')):
+                with patch.object(driver.urllib.request,'build_opener') as opener:
+                    opener.return_value.open.side_effect=failure
+                    with self.assertRaises((OSError,ValueError,RuntimeError)) as caught:driver.RPC(1,'fixture:dummy').call(method,path=path)
+                codes=caught.exception.readiness
+                self.assertEqual(codes['operation'],operation)
+                self.assertEqual(codes['http_status'],503 if isinstance(failure,urllib.error.HTTPError) else 0)
+                self.assertNotIn('PRIVATE_SECRET',json.dumps(codes))
+        for body,label,kind in [(b'{"error":{"message":"PRIVATE_SECRET"}}','NATIVE_RPC_RETURNED_ERROR','ValueError'),
+                (b'PRIVATE_SECRET','NONE','JSONDecodeError')]:
+            response=io.BytesIO(body);response.status=200
+            with patch.object(driver.urllib.request,'build_opener') as opener:
+                opener.return_value.open.return_value=response
+                with self.assertRaises(ValueError) as caught:driver.RPC(1,'fixture:dummy').call('get_info')
+            codes=caught.exception.readiness
+            self.assertEqual((codes['http_status'],codes['require_label'],codes['exception_class']),(200,label,kind))
+            self.assertNotIn('PRIVATE_SECRET',json.dumps(codes))
+        valid=dict(operation='get_info',exception_class='KeyError',http_status=0,require_label='NONE',key_field='height',attempts=3)
+        public=dict(step='READINESS_RPC',exception_class='TimeoutError',require_label='NONE',readiness=valid)
+        self.assertTrue(d.checked(public))
+        for key,bad in [('operation','PRIVATE_SECRET'),('exception_class','PRIVATE_SECRET'),('http_status',True),
+                ('http_status',600),('require_label','PRIVATE_SECRET'),('key_field','PRIVATE_SECRET'),('attempts',True),('attempts',0),('attempts',1000001)]:
+            self.assertFalse(d.checked(dict(public,readiness=dict(valid,**{key:bad}))))
+        self.assertFalse(d.checked(dict(public,readiness=dict(valid,body='PRIVATE_SECRET'))))
+        def mutate(root):(root/'public/runtime-diagnostics.json').write_text(json.dumps(public))
+        _,receipt,_=self.exercise(failed_phase='runtime',mutate_public=mutate)
+        self.assertEqual(receipt['runtime_diagnostics'],public)
+
+    def test_readiness_actual_main_preserves_private_cause_and_public_codes(self):
+        driver=self.driver_fixture()
+        def fail(*args):
+            class RPC:
+                def call(self,*args,**kwargs):return {}
+            error=self.readiness_timeout(driver,lambda:driver.snapshot(RPC()))
+            raise error
+        with patch.object(driver,'node',side_effect=fail):result,value=self.traced_main(driver)
+        self.assertEqual(result,1);self.assertEqual(value['exception_class'],'TimeoutError')
+        self.assertEqual(value['readiness']['key_field'],'status')
+        self.assertIn("KeyError: 'status'",(driver.PRIVATE/'failure-traceback').read_text())
+        self.assertEqual((driver.PRIVATE/'failure-traceback').stat().st_mode & 0o777,0o600)
+
     def test_exact_direct_grant_rejects_legacy_and_each_wrong_binding(self):
         value = grant(self.output);self.validate(value)
         for key,bad in [('schema','meownero-platform-grant/2'),('candidate_commit','b'*40),
@@ -881,11 +986,17 @@ class Direct(unittest.TestCase):
         self.assertIn('ValueError: genesis peer disagreement',(driver.PRIVATE/'failure-traceback').read_text())
         self.assertFalse((driver.PUBLIC/'failure-traceback').exists())
         self.assertEqual((driver.PRIVATE/'failure-traceback').stat().st_mode & 0o777,0o600)
-        # Only the one authorized except-block line differs from frozen baseline.
-        baseline=subprocess.check_output(['git','show','16024ec4:./vanguard/network/profile-integration.py']).decode()
+        # The lead exception allows exactly three function bodies to change.
+        baseline=subprocess.check_output(['git','show','530205f7:./vanguard/network/profile-integration.py']).decode()
         current=(c.HERE/'profile-integration.py').read_text()
-        added="        (PRIVATE/'failure-traceback').write_text(__import__('traceback').format_exc())\n"
-        self.assertEqual(current.replace(added,''),baseline)
+        def frozen(raw):
+            tree=ast.parse(raw);lines=raw.splitlines(keepends=True)
+            allowed=[item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name in {'wait','snapshot'}]
+            rpc=next(item for item in tree.body if isinstance(item,ast.ClassDef) and item.name=='RPC')
+            allowed.append(next(item for item in rpc.body if isinstance(item,ast.FunctionDef) and item.name=='call'))
+            for item in sorted(allowed,key=lambda x:x.lineno,reverse=True):lines[item.lineno-1:item.end_lineno]=['<AUTHORIZED FUNCTION>\n']
+            return ''.join(lines)
+        self.assertEqual(frozen(current),frozen(baseline))
 
     def test_actual_node_start_and_readiness_failure_codes(self):
         for target in (0,1,'readiness'):
@@ -948,8 +1059,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,444)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[445])
+        self.assertEqual(node.lineno,469)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[470])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"

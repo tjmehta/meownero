@@ -1,0 +1,52 @@
+{
+  "inspected_at": "2026-11-04T14:08:31.359496+00:00",
+  "method": "Local bounded no-follow reads; only fixed labels and driver frame locations enter model context",
+  "driver_frames": [
+    {
+      "line": 450,
+      "function": "main"
+    },
+    {
+      "line": 227,
+      "function": "node"
+    },
+    {
+      "line": 140,
+      "function": "wait"
+    }
+  ],
+  "allowlisted_exception_lines": [
+    "TimeoutError: native readiness deadline"
+  ],
+  "daemon_log_classification": {
+    "node1/native.log": {
+      "bytes": 13830,
+      "fixed_pattern_counts": {
+        "core_initialized": 1,
+        "rpc_starting": 1,
+        "rpc_started": 1,
+        "core_initialization_failed": 0,
+        "rpc_initialization_failed": 0,
+        "p2p_started": 0,
+        "bind_failure": 0,
+        "unauthorized_http": 0,
+        "exception_marker": 1
+      }
+    },
+    "node1/console.log": {
+      "bytes": 6995,
+      "fixed_pattern_counts": {
+        "core_initialized": 1,
+        "rpc_starting": 1,
+        "rpc_started": 1,
+        "core_initialization_failed": 0,
+        "rpc_initialization_failed": 0,
+        "p2p_started": 0,
+        "bind_failure": 0,
+        "unauthorized_http": 0,
+        "exception_marker": 0
+      }
+    }
+  },
+  "wallet_console_seed_password_login_files_opened": false
+}

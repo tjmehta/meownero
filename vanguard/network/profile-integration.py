@@ -101,24 +101,31 @@ def released(root):
 class RPC:
     def __init__(self,port,login): self.port,self.login=port,login
     def call(self,method,params=None,path='json_rpc',login='current',raw=False):
-        auth=self.login if login=='current' else login
-        url=f'http://127.0.0.1:{self.port}/{path}'
-        body={'jsonrpc':'2.0','id':'0','method':method,'params':params or {}} if path=='json_rpc' else params or {}
-        handlers=[]
-        if auth:
-            manager=urllib.request.HTTPPasswordMgrWithDefaultRealm()
-            manager.add_password(None,url,*auth.split(':',1))
-            handlers=[urllib.request.HTTPDigestAuthHandler(manager)]
-        request=urllib.request.Request(url,json.dumps(body).encode(),{'Content-Type':'application/json'})
+        from integration.runtime_diagnostics import readiness_failure
+        operation = {'get_info':'get_info'}.get(method, {'get_transaction_pool_hashes':'pool_hashes',
+            'get_transaction_pool_stats':'pool_stats'}.get(path, 'OTHER_OPERATION'))
         try:
-            with urllib.request.build_opener(*handlers).open(request,timeout=budget(5)) as response:
-                code=response.status;value=json.load(response)
-        except urllib.error.HTTPError as error:
-            if raw: return error.code,{}
-            raise RuntimeError('HTTP authentication/transport failure') from None
-        if raw: return code,value
-        c.require('error' not in value,'native RPC returned error')
-        return value.get('result',value)
+            auth=self.login if login=='current' else login
+            url=f'http://127.0.0.1:{self.port}/{path}'
+            body={'jsonrpc':'2.0','id':'0','method':method,'params':params or {}} if path=='json_rpc' else params or {}
+            handlers=[]
+            if auth:
+                manager=urllib.request.HTTPPasswordMgrWithDefaultRealm()
+                manager.add_password(None,url,*auth.split(':',1))
+                handlers=[urllib.request.HTTPDigestAuthHandler(manager)]
+            request=urllib.request.Request(url,json.dumps(body).encode(),{'Content-Type':'application/json'})
+            try:
+                with urllib.request.build_opener(*handlers).open(request,timeout=budget(5)) as response:
+                    code=response.status;value=json.load(response)
+            except urllib.error.HTTPError as error:
+                if raw: return error.code,{}
+                raise RuntimeError('HTTP authentication/transport failure') from error
+            if raw: return code,value
+            c.require('error' not in value,'native RPC returned error')
+            return value.get('result',value)
+        except Exception as error:
+            readiness_failure(error, operation, c.require, http_status=locals().get('code', 0))
+            raise
     def healthy(self,wallet=False):
         return self.call('get_balance' if wallet else 'get_info')
     def auth_controls(self,wallet=False,old=None):
@@ -129,15 +136,22 @@ class RPC:
             self.healthy(wallet)
 
 
-def wait(check,seconds=30):
-    end=time.monotonic()+budget(seconds)
-    while time.monotonic()<end:
+def wait(check, seconds=30):
+    from integration.runtime_diagnostics import readiness_failure
+    end = time.monotonic() + budget(seconds)
+    attempts, last_error = 0, None
+    while time.monotonic() < end:
+        attempts += 1
         try:
-            result=check()
-            if result:return result
-        except (OSError,RuntimeError,ValueError,KeyError): pass
-        time.sleep(min(.1,budget(.1)))
-    raise TimeoutError('native readiness deadline')
+            result = check()
+            if result: return result
+        except (OSError, RuntimeError, ValueError, KeyError) as error:
+            last_error = error
+        time.sleep(min(.1, budget(.1)))
+    error = TimeoutError('native readiness deadline')
+    if last_error is not None:
+        error.readiness = dict(readiness_failure(last_error, 'OTHER_OPERATION', c.require), attempts=attempts)
+    raise error from last_error
 
 
 def census():
@@ -151,14 +165,25 @@ def census():
 
 
 def snapshot(rpc):
-    info=rpc.call('get_info')
-    hashes=rpc.call('',path='get_transaction_pool_hashes')
-    stats=rpc.call('',path='get_transaction_pool_stats')
-    c.require(info['status']=='OK' and info['height']==1 and info['top_block_hash']==c.GENESIS,
-              'non-genesis or wrong chain')
-    c.require(hashes.get('tx_hashes',[])==[] and stats['pool_stats']['txs_total']==0,'nonempty pool')
-    return dict(height=info['height'],top_block_hash=info['top_block_hash'],
-                work=info['wide_cumulative_difficulty'],pool_hashes=[])
+    from integration.runtime_diagnostics import readiness_failure
+    operation = 'get_info'
+    try:
+        info = rpc.call('get_info')
+        operation = 'pool_hashes'
+        hashes = rpc.call('', path='get_transaction_pool_hashes')
+        operation = 'pool_stats'
+        stats = rpc.call('', path='get_transaction_pool_stats')
+        operation = 'get_info'
+        c.require(info['status']=='OK' and info['height']==1 and info['top_block_hash']==c.GENESIS,
+                  'non-genesis or wrong chain')
+        operation = 'pool_hashes' if hashes.get('tx_hashes', []) != [] else 'pool_stats'
+        c.require(hashes.get('tx_hashes',[])==[] and stats['pool_stats']['txs_total']==0,'nonempty pool')
+        operation = 'get_info'
+        return dict(height=info['height'],top_block_hash=info['top_block_hash'],
+                    work=info['wide_cumulative_difficulty'],pool_hashes=[])
+    except (OSError, RuntimeError, ValueError, KeyError) as error:
+        readiness_failure(error, operation, c.require)
+        raise
 
 
 def creation(kind,binaries):

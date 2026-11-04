@@ -80,26 +80,57 @@ REQUIRE_CODES = {'CLI exited before expected prompt': 'CLI_EXITED_BEFORE_EXPECTE
 EXCEPTIONS = frozenset(('NONE','OTHER_EXCEPTION','ValueError','RuntimeError','TimeoutError',
     'OSError','FileNotFoundError','PermissionError','ConnectionRefusedError',
     'ConnectionResetError','BrokenPipeError','KeyError','IndexError','TypeError',
-    'AttributeError','StopIteration','HTTPError','URLError','CalledProcessError'))
-MAIN_STEPS = ((446,'SETUP'),(448,'WIRE_BRIDGE'),(450,'NODE1_START'),(451,'HANDSHAKE'),
-    (453,'WIRE_BRIDGE'),(454,'HANDSHAKE'),(455,'SNAPSHOT_AGREEMENT'),
-    (456,'NATIVE_HANDSHAKE'),(457,'GENESIS_STATE'),(458,'DAEMON_FORK_TABLE'),
-    (465,'HTTP_AUTH'),(467,'DAEMON_SAVE'),(468,'UUID_GUARD'),(469,'NO_FALLBACK'),
-    (475,'DAEMON_SAVE'),(477,'DAEMON_REOPEN_RESTORE'),(486,'LAUNCHER_REFUSALS'),
-    (487,'DAEMON_REOPEN_RESTORE'),(488,'WALLET_SETUP'),(489,'PERSISTED_HEIGHT_ZERO'),
-    (490,'SEVENTEEN_DENIALS'),(491,'ROTATED_LOGIN'),(492,'WALLET_SAVE_EXIT_RELEASE'),
-    (493,'WALLET_COLD_RESTORE'),(494,'DAEMON_SAVE'))
-WALLET_STEPS = ((402,'WALLET_SETUP'),(405,'PERSISTED_HEIGHT_ZERO'),(408,'HTTP_AUTH'),
-    (409,'ADDRESS_ROUNDTRIP'),(415,'FOREIGN_PREFIX_REFUSAL'),(421,'SEVENTEEN_DENIALS'),
-    (430,'WALLET_SAVE_EXIT_RELEASE'),(432,'ROTATED_LOGIN'),(436,'WALLET_COLD_RESTORE'))
+    'AttributeError','StopIteration','JSONDecodeError','HTTPError','URLError','CalledProcessError'))
+MAIN_STEPS = ((471,'SETUP'),(473,'WIRE_BRIDGE'),(475,'NODE1_START'),(476,'HANDSHAKE'),
+    (478,'WIRE_BRIDGE'),(479,'HANDSHAKE'),(480,'SNAPSHOT_AGREEMENT'),
+    (481,'NATIVE_HANDSHAKE'),(482,'GENESIS_STATE'),(483,'DAEMON_FORK_TABLE'),
+    (490,'HTTP_AUTH'),(492,'DAEMON_SAVE'),(493,'UUID_GUARD'),(494,'NO_FALLBACK'),
+    (500,'DAEMON_SAVE'),(502,'DAEMON_REOPEN_RESTORE'),(511,'LAUNCHER_REFUSALS'),
+    (512,'DAEMON_REOPEN_RESTORE'),(513,'WALLET_SETUP'),(514,'PERSISTED_HEIGHT_ZERO'),
+    (515,'SEVENTEEN_DENIALS'),(516,'ROTATED_LOGIN'),(517,'WALLET_SAVE_EXIT_RELEASE'),
+    (518,'WALLET_COLD_RESTORE'),(519,'DAEMON_SAVE'))
+WALLET_STEPS = ((427,'WALLET_SETUP'),(430,'PERSISTED_HEIGHT_ZERO'),(433,'HTTP_AUTH'),
+    (434,'ADDRESS_ROUNDTRIP'),(440,'FOREIGN_PREFIX_REFUSAL'),(446,'SEVENTEEN_DENIALS'),
+    (455,'WALLET_SAVE_EXIT_RELEASE'),(457,'ROTATED_LOGIN'),(461,'WALLET_COLD_RESTORE'))
 STEPS = frozenset(code for _,code in MAIN_STEPS+WALLET_STEPS) | {
     'NODE0_START','NODE1_START','READINESS_RPC','CHAIN_GENESIS_GUARD','COMPLETE'}
 LABELS = frozenset(REQUIRE_CODES.values()) | {'NONE','OTHER_REQUIRE'}
 KEYS = {'step','exception_class','require_label'}
+READINESS_KEYS = {'operation','exception_class','http_status','require_label','key_field','attempts'}
+OPERATIONS = frozenset(('get_info','pool_hashes','pool_stats','OTHER_OPERATION'))
+FIELDS = frozenset(('status','height','top_block_hash','wide_cumulative_difficulty',
+    'tx_hashes','pool_stats','txs_total','NONE','OTHER_FIELD'))
+
+
+def checked_readiness(value):
+    return (isinstance(value,dict) and value.keys()==READINESS_KEYS and
+        isinstance(value['operation'],str) and value['operation'] in OPERATIONS and
+        isinstance(value['exception_class'],str) and value['exception_class'] in EXCEPTIONS and
+        type(value['http_status']) is int and (value['http_status']==0 or 100<=value['http_status']<=599) and
+        isinstance(value['require_label'],str) and value['require_label'] in LABELS and
+        isinstance(value['key_field'],str) and value['key_field'] in FIELDS and
+        type(value['attempts']) is int and 1<=value['attempts']<=1000000)
+
+
+def readiness_failure(error, operation, require, http_status=0):
+    """Attach only fixed tokens; keep the exception chain in private custody."""
+    prior=getattr(error,'readiness',None)
+    if checked_readiness(prior):return prior
+    codes=exception_codes(error,require)
+    cause=error.__cause__
+    status=getattr(cause if cause is not None else error,'code',http_status)
+    field=error.args[0] if isinstance(error,KeyError) and error.args else 'NONE'
+    value=dict(operation=operation if operation in OPERATIONS else 'OTHER_OPERATION',
+        exception_class=codes['exception_class'],require_label=codes['require_label'],
+        http_status=status if type(status) is int and 100<=status<=599 else 0,
+        key_field=field if isinstance(field,str) and field in FIELDS else 'OTHER_FIELD',attempts=1)
+    error.readiness=value
+    return value
 
 
 def checked(value):
-    return (isinstance(value,dict) and value.keys()==KEYS and
+    return (isinstance(value,dict) and (value.keys()==KEYS or
+        (value.keys()==KEYS|{'readiness'} and checked_readiness(value['readiness']))) and
         isinstance(value['step'],str) and value['step'] in STEPS and
         isinstance(value['exception_class'],str) and value['exception_class'] in EXCEPTIONS and
         isinstance(value['require_label'],str) and value['require_label'] in LABELS)
@@ -114,7 +145,10 @@ def exception_codes(error, require):
             label=REQUIRE_CODES.get(message,'OTHER_REQUIRE') if isinstance(message,str) else 'OTHER_REQUIRE'
         tb=tb.tb_next
     name=type(error).__name__
-    return dict(exception_class=name if name in EXCEPTIONS else 'OTHER_EXCEPTION',require_label=label)
+    result=dict(exception_class=name if name in EXCEPTIONS else 'OTHER_EXCEPTION',require_label=label)
+    readiness=getattr(error,'readiness',None)
+    if checked_readiness(readiness):result['readiness']=dict(readiness)
+    return result
 
 
 def install(driver, require):
@@ -134,13 +168,13 @@ def install(driver, require):
         name=frame.f_code.co_name
         if event=='line' and state['exception_class']=='NONE':
             line=frame.f_lineno
-            table=MAIN_STEPS if name=='main' and line<495 else WALLET_STEPS if name=='wallet_controls' else ()
+            table=MAIN_STEPS if name=='main' and line<520 else WALLET_STEPS if name=='wallet_controls' else ()
             for first,code in reversed(table):
                 if line>=first:state['step']=code;break
             if name=='node' and state['step'] in {'NODE0_START','NODE1_START','READINESS_RPC'}:
-                if line<=226:state['step']='NODE0_START' if frame.f_locals.get('index')==0 else 'NODE1_START'
+                if line<=251:state['step']='NODE0_START' if frame.f_locals.get('index')==0 else 'NODE1_START'
                 else:state['step']='READINESS_RPC'
-            if name=='isolation' and line>=324:state['step']='CHAIN_GENESIS_GUARD'
+            if name=='isolation' and line>=349:state['step']='CHAIN_GENESIS_GUARD'
         if name=='main' and event=='exception' and not emitted:
             state.update(exception_codes(arg[1],require));publish(frame)
         elif name=='main' and event=='return':
