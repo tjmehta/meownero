@@ -403,69 +403,276 @@ def isolation(packet,rpc,log):
         fixture_sha256=fixture,healthy_before_after=True,unchanged_state=before,response_command=2007)
 
 
-def cli(root,port,create=False):
-    if not create:c.root_manifest(root,SAVED[str(root)])
-    released(root)
-    password=c.check_file(root/'password').decode().strip()
-    argv=[str(BIN/'monero-wallet-cli'),'--testnet','--config-file',str(root/'cli.conf'),
-          '--password-file',str(root/'password'),'--daemon-address',f'127.0.0.1:{port}',
-          '--log-file',str(root/'cli.log')]
-    argv+=['--generate-new-wallet',str(root/'wallet'),'--mnemonic-language','English'] if create else ['--wallet-file',str(root/'wallet')]
-    master,slave=pty.openpty()
-    attrs=termios.tcgetattr(slave);attrs[3]&=~termios.ECHO;termios.tcsetattr(slave,termios.TCSANOW,attrs)
-    p=launch('cli',argv,root,stdin=slave,stdout=slave);os.close(slave)
-    transcript=b''
-    prompt=re.compile(rb'\[wallet [1-9A-HJ-NP-Za-km-z]{6}(?: \(no daemon\)| \(out of sync\))?\]: $')
-    background_prompt=(b'The daemon is not set up to background mine.\n'
-        b'With background mining enabled, the daemon will mine when idle and not on battery.\n'
-        b'Enabling this supports the network you are using, and makes you eligible for receiving new monero\n'
-        b'Do you want to do it now? [y/N]: ')
-    background_refused=False
-    def expect(label):
-        nonlocal transcript,background_refused
-        data=b'';end=time.monotonic()+budget(25);password_sent=False
-        while time.monotonic()<end:
-            if select.select([master],[],[],min(.1,budget(.1)))[0]:
-                try:raw=os.read(master,65536)
-                except OSError as error:
-                    if error.errno!=5:raise  # Linux PTY EIO when the slave closes.
-                    status=p.wait(timeout=budget(5))
-                    error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
-                    raise
-                if not raw:
-                    error=OSError(5,'CLI PTY EOF')
-                    status=p.wait(timeout=budget(5))
-                    error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
-                    raise error
-                data+=raw;transcript+=raw
-                clean=re.sub(rb'\x1b\[[0-9;]*[A-Za-z]',b'',data).replace(b'\r',b'')
-                if prompt.search(clean):return clean
-                if clean.endswith(b'Wallet password: '):
-                    c.require(not password_sent,'repeated password prompt')
-                    os.write(master,password.encode()+b'\n');password_sent=True;data=b''
-                elif label=='STARTUP_WALLET_PROMPT' and not background_refused and clean.endswith(background_prompt):
-                    # Pinned check_background_mining(): decline once, never enable mining.
-                    os.write(master,b'n\n');background_refused=True;data=b''
-                elif re.search(rb'(?:\[Y/n\]: |\[y/N\]: |Confirm password: |Enter password[^\n]*: )$',clean):
-                    raise ValueError('unknown CLI prompt; input refused')
-            c.require(p.poll() is None,'CLI exited before expected prompt')
-        raise TimeoutError('exact CLI prompt not observed')
+def _cli_skeleton(root, transcript, password):
+    """Private diagnostic only; never exported. Dictionary binds pinned english.h."""
+    # Copyright (c) 2014-2024, The Monero Project
+    #
+    # All rights reserved.
+    #
+    # Redistribution and use in source and binary forms, with or without modification, are
+    # permitted provided that the following conditions are met:
+    #
+    # 1. Redistributions of source code must retain the above copyright notice, this list of
+    # conditions and the following disclaimer.
+    #
+    # 2. Redistributions in binary form must reproduce the above copyright notice, this list
+    # of conditions and the following disclaimer in the documentation and/or other
+    # materials provided with the distribution.
+    #
+    # 3. Neither the name of the copyright holder nor the names of its contributors may be
+    # used to endorse or promote products derived from this software without specific
+    # prior written permission.
+    #
+    # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+    # EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+    # MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+    # THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    # SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+    # PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    # INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+    # STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+    # THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    words = frozenset("""
+        abbey abducts ability ablaze abnormal abort abrasive absorb abyss academy aces aching acidic acoustic acquire across
+        actress acumen adapt addicted adept adhesive adjust adopt adrenalin adult adventure aerial afar affair afield afloat
+        afoot afraid after against agenda aggravate agile aglow agnostic agony agreed ahead aided ailments aimless airport
+        aisle ajar akin alarms album alchemy alerts algebra alkaline alley almost aloof alpine already also altitude
+        alumni always amaze ambush amended amidst ammo amnesty among amply amused anchor android anecdote angled ankle
+        annoyed answers antics anvil anxiety anybody apart apex aphid aplomb apology apply apricot aptitude aquarium arbitrary
+        archer ardent arena argue arises army around arrow arsenic artistic ascend ashtray aside asked asleep aspire
+        assorted asylum athlete atlas atom atrium attire auburn auctions audio august aunt austere autumn avatar avidly
+        avoid awakened awesome awful awkward awning awoken axes axis axle aztec azure baby bacon badge baffles
+        bagpipe bailed bakery balding bamboo banjo baptism basin batch bawled bays because beer befit begun behind
+        being below bemused benches berries bested betting bevel beware beyond bias bicycle bids bifocals biggest bikini
+        bimonthly binocular biology biplane birth biscuit bite biweekly blender blip bluntly boat bobsled bodies bogeys boil
+        boldly bomb border boss both bounced bovine bowling boxes boyfriend broken brunt bubble buckets budget buffet
+        bugs building bulb bumper bunch business butter buying buzzer bygones byline bypass cabin cactus cadets cafe
+        cage cajun cake calamity camp candy casket catch cause cavernous cease cedar ceiling cell cement cent
+        certain chlorine chrome cider cigar cinema circle cistern citadel civilian claim click clue coal cobra cocoa
+        code coexist coffee cogs cohesive coils colony comb cool copy corrode costume cottage cousin cowl criminal
+        cube cucumber cuddled cuffs cuisine cunning cupcake custom cycling cylinder cynical dabbing dads daft dagger daily
+        damp dangerous dapper darted dash dating dauntless dawn daytime dazed debut decay dedicated deepest deftly degrees
+        dehydrate deity dejected delayed demonstrate dented deodorant depth desk devoid dewdrop dexterity dialect dice diet different
+        digit dilute dime dinner diode diplomat directed distance ditch divers dizzy doctor dodge does dogs doing
+        dolphin domestic donuts doorway dormant dosage dotted double dove down dozen dreams drinks drowning drunk drying
+        dual dubbed duckling dude duets duke dullness dummy dunes duplex duration dusted duties dwarf dwelt dwindling
+        dying dynamite dyslexic each eagle earth easy eating eavesdrop eccentric echo eclipse economics ecstatic eden edgy
+        edited educated eels efficient eggs egotistic eight either eject elapse elbow eldest eleven elite elope else
+        eluded emails ember emerge emit emotion empty emulate energy enforce enhanced enigma enjoy enlist enmity enough
+        enraged ensign entrance envy epoxy equip erase erected erosion error eskimos espionage essential estate etched eternal
+        ethics etiquette evaluate evenings evicted evolved examine excess exhale exit exotic exquisite extra exult fabrics factual
+        fading fainted faked fall family fancy farming fatal faulty fawns faxed fazed feast february federal feel
+        feline females fences ferry festival fetches fever fewest fiat fibula fictional fidget fierce fifteen fight films
+        firm fishing fitting five fixate fizzle fleet flippant flying foamy focus foes foggy foiled folding fonts
+        foolish fossil fountain fowls foxes foyer framed friendly frown fruit frying fudge fuel fugitive fully fuming
+        fungal furnished fuselage future fuzzy gables gadget gags gained galaxy gambit gang gasp gather gauze gave
+        gawk gaze gearbox gecko geek gels gemstone general geometry germs gesture getting geyser ghetto ghost giant
+        giddy gifts gigantic gills gimmick ginger girth giving glass gleeful glide gnaw gnome goat goblet godfather
+        goes goggles going goldfish gone goodbye gopher gorilla gossip gotten gourmet governing gown greater grunt guarded
+        guest guide gulp gumball guru gusts gutter guys gymnast gypsy gyrate habitat hacksaw haggled hairy hamburger
+        happens hashing hatchet haunted having hawk haystack hazard hectare hedgehog heels hefty height hemlock hence heron
+        hesitate hexagon hickory hiding highway hijack hiker hills himself hinder hippo hire history hitched hive hoax
+        hobby hockey hoisting hold honked hookup hope hornet hospital hotel hounded hover howls hubcaps huddle huge
+        hull humid hunter hurried husband huts hybrid hydrogen hyper iceberg icing icon identity idiom idled idols
+        igloo ignore iguana illness imagine imbalance imitate impel inactive inbound incur industrial inexact inflamed ingested initiate
+        injury inkling inline inmate innocent inorganic input inquest inroads insult intended inundate invoke inwardly ionic irate
+        iris irony irritate island isolated issued italics itches items itinerary itself ivory jabbed jackets jaded jagged
+        jailed jamming january jargon jaunt javelin jaws jazz jeans jeers jellyfish jeopardy jerseys jester jetting jewels
+        jigsaw jingle jittery jive jobs jockey jogger joining joking jolted jostle journal joyous jubilee judge juggled
+        juicy jukebox july jump junk jury justice juvenile kangaroo karate keep kennel kept kernels kettle keyboard
+        kickoff kidneys king kiosk kisses kitchens kiwi knapsack knee knife knowledge knuckle koala laboratory ladder lagoon
+        lair lakes lamb language laptop large last later launching lava lawsuit layout lazy lectures ledge leech
+        left legion leisure lemon lending leopard lesson lettuce lexicon liar library licks lids lied lifestyle light
+        likewise lilac limits linen lion lipstick liquid listen lively loaded lobster locker lodge lofty logic loincloth
+        long looking lopped lordship losing lottery loudly love lower loyal lucky luggage lukewarm lullaby lumber lunar
+        lurk lush luxury lymph lynx lyrics macro madness magically mailed major makeup malady mammal maps masterful
+        match maul maverick maximum mayor maze meant mechanic medicate meeting megabyte melting memoir menu merger mesh
+        metro mews mice midst mighty mime mirror misery mittens mixture moat mobile mocked mohawk moisture molten
+        moment money moon mops morsel mostly motherly mouth movement mowing much muddy muffin mugged mullet mumble
+        mundane muppet mural musical muzzle myriad mystery myth nabbing nagged nail names nanny napkin narrate nasty
+        natural nautical navy nearby necklace needed negative neither neon nephew nerves nestle network neutral never newt
+        nexus nibs niche niece nifty nightly nimbly nineteen nirvana nitrogen nobody nocturnal nodes noises nomad noodles
+        northern nostril noted nouns novelty nowhere nozzle nuance nucleus nudged nugget nuisance null number nuns nurse
+        nutshell nylon oaks oars oasis oatmeal obedient object obliged obnoxious observant obtains obvious occur ocean october
+        odds odometer offend often oilfield ointment okay older olive olympics omega omission omnibus onboard oncoming oneself
+        ongoing onion online onslaught onto onward oozed opacity opened opposite optical opus orange orbit orchid orders
+        organs origin ornament orphans oscar ostrich otherwise otter ouch ought ounce ourselves oust outbreak oval oven
+        owed owls owner oxidant oxygen oyster ozone pact paddles pager pairing palace pamphlet pancakes paper paradise
+        pastry patio pause pavements pawnshop payment peaches pebbles peculiar pedantic peeled pegs pelican pencil people pepper
+        perfect pests petals phase pheasants phone phrases physics piano picked pierce pigment piloted pimple pinched pioneer
+        pipeline pirate pistons pitched pivot pixels pizza playful pledge pliers plotting plus plywood poaching pockets podcast
+        poetry point poker polar ponies pool popular portents possible potato pouch poverty powder pram present pride
+        problems pruned prying psychic public puck puddle puffin pulp pumpkins punch puppy purged push putty puzzled
+        pylons pyramid python queen quick quote rabbits racetrack radar rafts rage railway raking rally ramped randomly
+        rapid rarest rash rated ravine rays razor react rebel recipe reduce reef refer regular reheat reinvest
+        rejoices rekindle relic remedy renting reorder repent request reruns rest return reunion revamp rewind rhino rhythm
+        ribbon richly ridges rift rigid rims ringing riots ripped rising ritual river roared robot rockets rodent
+        rogue roles romance roomy roped roster rotate rounded rover rowboat royal ruby rudely ruffled rugged ruined
+        ruling rumble runway rural rustled ruthless sabotage sack sadness safety saga sailor sake salads sample sanity
+        sapling sarcasm sash satin saucepan saved sawmill saxophone sayings scamper scenic school science scoop scrub scuba
+        seasons second sedan seeded segments seismic selfish semifinal sensible september sequence serving session setup seventh sewage
+        shackles shelter shipped shocking shrugged shuffled shyness siblings sickness sidekick sieve sifting sighting silk simplest sincerely
+        sipped siren situated sixteen sizes skater skew skirting skulls skydive slackens sleepless slid slower slug smash
+        smelting smidgen smog smuggled snake sneeze sniff snout snug soapy sober soccer soda software soggy soil
+        solved somewhere sonic soothe soprano sorry southern sovereign sowed soya space speedy sphere spiders splendid spout
+        sprig spud spying square stacking stellar stick stockpile strained stunning stylishly subtly succeed suddenly suede suffice
+        sugar suitcase sulking summon sunken superior surfer sushi suture swagger swept swiftly sword swung syllabus symptoms
+        syndrome syringe system taboo tacit tadpoles tagged tail taken talent tamper tanks tapestry tarnished tasked tattoo
+        taunts tavern tawny taxi teardrop technical tedious teeming tell template tender tepid tequila terminal testing tether
+        textbook thaw theatrics thirsty thorn threaten thumbs thwart ticket tidy tiers tiger tilt timber tinted tipsy
+        tirade tissue titans toaster tobacco today toenail toffee together toilet token tolerant tomorrow tonic toolbox topic
+        torch tossed total touchy towel toxic toyed trash trendy tribal trolling truth trying tsunami tubes tucks
+        tudor tuesday tufts tugs tuition tulips tumbling tunnel turnip tusks tutor tuxedo twang tweezers twice twofold
+        tycoon typist tyrant ugly ulcers ultimate umbrella umpire unafraid unbending uncle under uneven unfit ungainly unhappy
+        union unjustly unknown unlikely unmask unnoticed unopened unplugs unquoted unrest unsafe until unusual unveil unwind unzip
+        upbeat upcoming update upgrade uphill upkeep upload upon upper upright upstairs uptight upwards urban urchins urgent
+        usage useful usher using usual utensils utility utmost utopia uttered vacation vague vain value vampire vane
+        vapidly vary vastness vats vaults vector veered vegan vehicle vein velvet venomous verification vessel veteran vexed
+        vials vibrate victim video viewpoint vigilant viking village vinegar violin vipers virtual visited vitals vivid vixen
+        vocal vogue voice volcano vortex voted voucher vowels voyage vulture wade waffle wagtail waist waking wallets
+        wanted warped washing water waveform waxing wayside weavers website wedge weekday weird welders went wept were
+        western wetsuit whale when whipped whole wickets width wield wife wiggle wildly winter wipeout wiring wise
+        withdrawn wives wizard wobbly woes woken wolf womanly wonders woozy worry wounded woven wrap wrist wrong
+        yacht yahoo yanks yard yawning yearbook yellow yesterday yeti yields yodel yoga younger yoyo zapped zeal
+        zebra zero zesty zigzags zinger zippers zodiac zombie zones zoom
+    """.split())
+    # Discard an incomplete first line rather than expose a truncated secret.
+    tail = transcript[-8192:]
+    if len(transcript)>8192 and transcript[-8193:-8192]!=b'\n':
+        tail = tail.partition(b'\n')[2]
+    visible = lambda raw: ''.join(chr(b) if 32<=b<127 else f'<0x{b:02X}>' for b in raw)
+    result = []
+    for line in tail.split(b'\n'):
+        # A lexical view ignores terminal formatting, retaining original offsets.
+        # Redacted spans still render every original control/escape byte visibly.
+        views = []
+        for displayed in (False,True):
+            positions = []; index = 0
+            while index<len(line):
+                escape = re.match(rb'\x1b\[[0-?]*[ -/]*[@-~]',line[index:])
+                if not escape and displayed:
+                    escape = re.match(rb'\x1b\][\s\S]*?(?:\x07|\x1b\\)',line[index:])
+                if escape:
+                    index += escape.end(); continue
+                byte = line[index]
+                if displayed and byte==8 and positions:
+                    positions.pop()
+                elif 32<=byte<127:
+                    positions.append(index)
+                index += 1
+            views.append((bytes(line[i] for i in positions),positions))
+        if (any(re.search(rb'seed|mnemonic|key|password',value,re.I) or
+                password and password.encode() in value for value in [line]+[v[0] for v in views])):
+            continue
+        matches = []
+        for lexical,positions in views:
+            found = [(m.start(),m.end(),'<hex>') for m in re.finditer(rb'[0-9A-Fa-f]{16,}',lexical)]
+            found += [(m.start(),m.end(),'<b58>') for m in re.finditer(rb'[1-9A-HJ-NP-Za-km-z]{12,}',lexical)]
+            found += [(m.start(),m.end(),'<w>') for m in re.finditer(rb'[A-Za-z]+',lexical)
+                      if m.group().decode().lower() in words]
+            matches += [(positions[first],positions[last-1]+1,token) for first,last,token in found]
+        spans = []
+        for first,last,token in sorted(matches,key=lambda item:(item[0],-(item[1]-item[0]),
+                {'<w>':0,'<hex>':1,'<b58>':2}[item[2]])):
+            if spans and first<spans[-1][1]:
+                start,end,label = spans[-1];spans[-1]=(start,max(end,last),label)
+            else:spans.append((first,last,token))
+        cursor = 0; parts = []
+        for first,last,token in spans:
+            parts += [visible(line[cursor:first]),token,
+                visible(bytes(b for b in line[first:last] if not 32<=b<127))]
+            cursor = last
+        parts.append(visible(line[cursor:]));result.append(''.join(parts))
+    payload = '<0x0A>\n'.join(result).encode('ascii')
+    temporary = root/('.cli-skeleton-'+secrets.token_hex(8)+'.private')
+    fd = os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
     try:
-        expect('STARTUP_WALLET_PROMPT')
-        commands=['set refresh-from-block-height 0','set','address new','refresh 0','save'] if create else ['set']
-        height=False
-        for command in commands:
-            os.write(master,command.encode()+b'\n');answer=expect(command)
-            if command=='set':height=bool(re.search(rb'refresh-from-block-height = 0(?:\n|$)',answer))
-        c.require(height,'persisted CLI refresh height differs')
-        os.write(master,b'exit\n');p.wait(timeout=budget(20))
-        c.require(p.returncode==0,'CLI normal save/exit')
-        c.require(not Path(f'/proc/{p.pid}').exists(),'CLI remains')
+        with os.fdopen(fd,'wb') as stream:stream.write(payload)
+        os.replace(temporary,root/'cli-skeleton.private')
     finally:
-        (root/'cli-transcript.private').write_bytes(transcript);os.close(master)
-        if p.poll() is None:stop('cli',graceful=False)
-    released(root)
-    seal(root,'wallet',{name:c.digest((BIN/name).read_bytes()) for name in ['monerod','monero-wallet-cli','monero-wallet-rpc']})
+        temporary.unlink(missing_ok=True)
+    return payload
+
+
+def cli(root,port,create=False):
+    transcript=b'';password=''
+    try:
+        if not create:c.root_manifest(root,SAVED[str(root)])
+        released(root)
+        password=c.check_file(root/'password').decode().strip()
+        argv=[str(BIN/'monero-wallet-cli'),'--testnet','--config-file',str(root/'cli.conf'),
+              '--password-file',str(root/'password'),'--daemon-address',f'127.0.0.1:{port}',
+              '--log-file',str(root/'cli.log')]
+        argv+=['--generate-new-wallet',str(root/'wallet'),'--mnemonic-language','English'] if create else ['--wallet-file',str(root/'wallet')]
+        master,slave=pty.openpty()
+        attrs=termios.tcgetattr(slave);attrs[3]&=~termios.ECHO;termios.tcsetattr(slave,termios.TCSANOW,attrs)
+        p=launch('cli',argv,root,stdin=slave,stdout=slave);os.close(slave)
+        prompt=re.compile(rb'\[wallet [1-9A-HJ-NP-Za-km-z]{6}(?: \(no daemon\)| \(out of sync\))?\]: $')
+        background_prompt=(b'The daemon is not set up to background mine.\n'
+            b'With background mining enabled, the daemon will mine when idle and not on battery.\n'
+            b'Enabling this supports the network you are using, and makes you eligible for receiving new monero\n'
+            b'Do you want to do it now? [y/N]: ')
+        background_refused=False
+        def normalize(data):
+            data=re.sub(rb'\x1b\][\s\S]*?(?:\x07|\x1b\\)',b'',data)
+            data=re.sub(rb'\x1b\[[0-?]*[ -/]*[@-~]',b'',data)
+            data=data.replace(b'\x01',b'').replace(b'\x02',b'').replace(b'\r\n',b'\n')
+            lines=[];current=bytearray()
+            for byte in data:
+                if byte==13:current.clear()
+                elif byte==10:lines.append(bytes(current));current.clear()
+                elif byte==8:
+                    if current:current.pop()
+                else:current.append(byte)
+            return b'\n'.join(lines+[bytes(current)])
+        def expect(label):
+            nonlocal transcript,background_refused
+            data=b'';end=time.monotonic()+budget(25);password_sent=False
+            while time.monotonic()<end:
+                if select.select([master],[],[],min(.1,budget(.1)))[0]:
+                    try:raw=os.read(master,65536)
+                    except OSError as error:
+                        if error.errno!=5:raise  # Linux PTY EIO when the slave closes.
+                        status=p.wait(timeout=budget(5))
+                        error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
+                        raise
+                    if not raw:
+                        error=OSError(5,'CLI PTY EOF')
+                        status=p.wait(timeout=budget(5))
+                        error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
+                        raise error
+                    data+=raw;transcript+=raw
+                    clean=normalize(data)
+                    if prompt.search(clean):return clean
+                    if clean.endswith(b'Wallet password: '):
+                        c.require(not password_sent,'repeated password prompt')
+                        os.write(master,password.encode()+b'\n');password_sent=True;data=b''
+                    elif label=='STARTUP_WALLET_PROMPT' and not background_refused and clean.endswith(background_prompt):
+                        # Pinned check_background_mining(): decline once, never enable mining.
+                        os.write(master,b'n\n');background_refused=True;data=b''
+                    elif re.search(rb'(?:\[Y/n\]: |\[y/N\]: |Confirm password: |Enter password[^\n]*: )$',clean):
+                        raise ValueError('unknown CLI prompt; input refused')
+                c.require(p.poll() is None,'CLI exited before expected prompt')
+            raise TimeoutError('exact CLI prompt not observed')
+        try:
+            expect('STARTUP_WALLET_PROMPT')
+            commands=['set refresh-from-block-height 0','set','address new','refresh 0','save'] if create else ['set']
+            height=False
+            for command in commands:
+                os.write(master,command.encode()+b'\n');answer=expect(command)
+                if command=='set':height=bool(re.search(rb'refresh-from-block-height = 0(?:\n|$)',answer))
+            c.require(height,'persisted CLI refresh height differs')
+            os.write(master,b'exit\n');p.wait(timeout=budget(20))
+            c.require(p.returncode==0,'CLI normal save/exit')
+            c.require(not Path(f'/proc/{p.pid}').exists(),'CLI remains')
+        finally:
+            (root/'cli-transcript.private').write_bytes(transcript);os.close(master)
+            if p.poll() is None:stop('cli',graceful=False)
+        released(root)
+        seal(root,'wallet',{name:c.digest((BIN/name).read_bytes()) for name in ['monerod','monero-wallet-cli','monero-wallet-rpc']})
+    except BaseException:
+        _cli_skeleton(root,transcript,password)
+        raise
 
 
 def wallet_rpc(root,daemon_port,port,cwd):

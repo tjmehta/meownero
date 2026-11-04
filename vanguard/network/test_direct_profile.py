@@ -1263,7 +1263,15 @@ class Direct(unittest.TestCase):
         # Prior RPC exceptions plus lead-authorized wallet setup/prompt/read correction.
         baseline=subprocess.check_output(['git','show','530205f7:./vanguard/network/profile-integration.py']).decode()
         current=(c.HERE/'profile-integration.py').read_text()
+        def without_skeleton(raw):
+            helper=next((item for item in ast.parse(raw).body if isinstance(item,ast.FunctionDef)
+                         and item.name=='_cli_skeleton'),None)
+            if helper:
+                lines=raw.splitlines(keepends=True);del lines[helper.lineno-1:helper.end_lineno+2]
+                return ''.join(lines)
+            return raw
         def frozen(raw):
+            raw=without_skeleton(raw)
             tree=ast.parse(raw);lines=raw.splitlines(keepends=True)
             allowed=[item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name in {'wait','snapshot','cli','wallet_rpc','wallet_controls'}]
             rpc=next(item for item in tree.body if isinstance(item,ast.ClassDef) and item.name=='RPC')
@@ -1273,6 +1281,7 @@ class Direct(unittest.TestCase):
         self.assertEqual(frozen(current),frozen(baseline))
         baseline=subprocess.check_output(['git','show','ed78cd5:./vanguard/network/profile-integration.py']).decode()
         def outside_call_and_wallet(raw):
+            raw=without_skeleton(raw)
             tree=ast.parse(raw);lines=raw.splitlines(keepends=True)
             rpc=next(item for item in tree.body if isinstance(item,ast.ClassDef) and item.name=='RPC')
             item=next(item for item in rpc.body if isinstance(item,ast.FunctionDef) and item.name=='call')
@@ -1280,6 +1289,13 @@ class Direct(unittest.TestCase):
             for item in sorted(allowed,key=lambda x:x.lineno,reverse=True):lines[item.lineno-1:item.end_lineno]=['<AUTHORIZED RPC.call OR WALLET>\n']
             return ''.join(lines)
         self.assertEqual(outside_call_and_wallet(current),outside_call_and_wallet(baseline))
+        baseline=subprocess.check_output(['git','show','818a4fc6:./vanguard/network/profile-integration.py']).decode()
+        def exact_scope(raw):
+            tree=ast.parse(raw)
+            tree.body=[item for item in tree.body if not isinstance(item,ast.FunctionDef) or
+                       item.name not in ('cli','_cli_skeleton')]
+            return ast.dump(tree)
+        self.assertEqual(exact_scope(current),exact_scope(baseline))
 
     def test_actual_node_start_and_readiness_failure_codes(self):
         for target in (0,1,'readiness'):
@@ -1342,8 +1358,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,534)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[535])
+        self.assertEqual(node.lineno,741)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[742])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
@@ -1352,6 +1368,11 @@ class Direct(unittest.TestCase):
         self.assertNotEqual(getattr(sys.gettrace(),'__module__',None),'integration.runtime_diagnostics')
 
     def test_source_input_file_hashes_and_nonpass_build_are_rejected(self):
+        accepted=json.loads(subprocess.check_output(['git','show',
+            '818a4fc646d74b177f2981045b1c1eb125998a9b:vanguard/network/integration/inputs.json']))
+        current=c.json_file(c.HERE/'integration/inputs.json')
+        self.assertEqual(r.build_identity(accepted),r.build_identity(current),
+                         'Runtime diagnostics must preserve published retained-build compatibility')
         root=self.retained_fixture();manifest=self.build_manifest();original=r.build_identity(manifest)
         for key in ('source_lock_sha256','build_sh_sha256','freezer_sha256'):
             altered=dict(original,**{key:'0'*64})
@@ -1676,6 +1697,118 @@ class WalletCLI(unittest.TestCase):
         self.assertEqual((root/'background-refused.fixture').read_text(),'n\n')
         self.assertEqual(self.d.PROCS['cli'][0].returncode,0)
 
+    def test_readline_two_phase_csi_osc_markers_and_backspace_create_reopen(self):
+        root=self.config()
+        self.invoke(root,mode='readline-normal');self.invoke(root,False,mode='readline-normal')
+        self.assertEqual(self.d.PROCS['cli'][0].returncode,0)
+        self.assertFalse((root/'cli-skeleton.private').exists())
+
+    def test_readline_background_question_is_declined_once(self):
+        root=self.config();self.invoke(root,mode='readline-background-mining')
+        self.invoke(root,False,mode='readline-normal')
+        self.assertEqual((root/'background-refused.fixture').read_text(),'n\n')
+
+    def test_exact_818a4fc_readline_controls_fail_before_commands(self):
+        root=self.config();before=driver('818a4fc646d74b177f2981045b1c1eb125998a9b')
+        before.PRIVATE=self.d.PRIVATE;before.BIN=self.d.BIN
+        with patch.object(before,'released'),patch.object(before,'seal'),patch.object(before,'budget',return_value=.5):
+            for mode in ('readline-normal','readline-background-mining'):
+                with self.subTest(mode=mode),patch.dict(before.ENV,WALLET_CLI_FIXTURE_MODE=mode):
+                    with self.assertRaises((TimeoutError,ValueError)):before.cli(root,48081,True)
+                    self.assertIsNotNone(before.PROCS['cli'][0].returncode)
+                    self.assertFalse((root/'background-refused.fixture').exists())
+
+    def test_readline_adverse_prompts_still_refuse_and_reap(self):
+        root=self.config()
+        with patch.object(self.d,'budget',return_value=.5):
+            for mode in ('background-altered','background-during-command','confirmation',
+                         'unknown-password','repeated-password','altered-wallet','background-repeated'):
+                with self.subTest(mode=mode),self.assertRaises((ValueError,TimeoutError)):
+                    self.invoke(root,mode='readline-'+mode)
+                self.assertIsNotNone(self.d.PROCS['cli'][0].returncode)
+                skeleton=root/'cli-skeleton.private'
+                self.assertEqual(skeleton.stat().st_mode & 0o777,0o600)
+                answered=root/'background-refused.fixture'
+                self.assertEqual(answered.read_text() if answered.exists() else '',
+                                 'n\n' if mode=='background-repeated' else '')
+
+    def test_skeleton_connected_failure_redacts_fixture_password_and_secrets(self):
+        root=self.config()
+        with self.assertRaisesRegex(ValueError,'unknown CLI prompt; input refused'):
+            self.invoke(root,mode='readline-skeleton-failure')
+        skeleton=(root/'cli-skeleton.private').read_bytes()
+        for secret in [b'abbey',b'abducts',b'ability',b'Q'*95,b'0123456789abcdef'*4,
+                       (root/'password').read_bytes().strip()]:
+            self.assertNotIn(secret,skeleton)
+        self.assertIn(b'<0x1B>[?2004',skeleton)
+        self.assertIn(b'<w>',skeleton);self.assertIn(b'<b58>',skeleton);self.assertIn(b'<hex>',skeleton)
+
+    def test_skeleton_redacts_pinned_seed_address_types_and_keys(self):
+        import re
+        pinned='e151643c5269c83bf24a83b2548e2493876026b2'
+        sources={}
+        for name in ('wallet.py','integrated_address.py'):
+            path='tests/functional_tests/'+name
+            raw=subprocess.check_output(['git','-C',str(UP),'show',pinned+':'+path])
+            self.assertEqual(raw,(UP/path).read_bytes());sources[name]=raw.decode()
+        seed=re.search(r"seed = '([^']+)'",sources['wallet.py'])[1]
+        self.assertEqual(len(seed.split()),25)
+        standard=re.search(r"assert res.address == '([^']+)'",sources['wallet.py'])[1]
+        sub=re.search(r"assert res.address == '(8[^']+)'",sources['wallet.py'])[1]
+        integrated=re.search(r"assert res.integrated_address == '([^']+)'",sources['integrated_address.py'])[1]
+        keys=re.findall(r"assert res.key == '([0-9a-f]{64})'",sources['wallet.py'])
+        self.assertEqual((len(standard),len(sub),len(integrated),len(keys)),(95,95,106,2))
+        root=self.config();password=(root/'password').read_text().strip()
+        secrets=[seed,standard,sub,integrated,*keys,password]
+        raw=('\n'.join(secrets)+'\nSEED: secret-sentinel\nMnemonic: secret-sentinel\n'
+             'view KEY: secret-sentinel\nPASSWORD: secret-sentinel\n').encode()
+        result=self.d._cli_skeleton(root,raw,password)
+        for secret in secrets+seed.split()+['secret-sentinel']:
+            self.assertNotIn(secret.encode(),result)
+        self.assertEqual(result.count(b'<b58>'),3)
+        self.assertEqual(result.count(b'<hex>'),2)
+        self.assertEqual(result.count(b'<w>'),25)
+        self.assertEqual((root/'cli-skeleton.private').stat().st_mode & 0o777,0o600)
+
+    def test_skeleton_dictionary_all_1626_words_binds_pinned_header(self):
+        import re
+        raw=subprocess.check_output(['git','-C',str(UP),'show',
+            'e151643c5269c83bf24a83b2548e2493876026b2:src/mnemonics/english.h'])
+        self.assertEqual(raw,(UP/'src/mnemonics/english.h').read_bytes())
+        words=re.findall(rb'^\s*"([a-z]+)",?\s*$',raw,re.M);self.assertEqual(len(words),1626)
+        source=ast.parse((c.HERE/'profile-integration.py').read_text())
+        helper=next(node for node in source.body if isinstance(node,ast.FunctionDef) and node.name=='_cli_skeleton')
+        embedded=next(node.value for node in ast.walk(helper) if isinstance(node,ast.Constant)
+                      and isinstance(node.value,str) and 'abbey abducts ability' in node.value)
+        self.assertEqual(embedded.split(),[word.decode() for word in words])
+        root=self.config();result=b''.join(self.d._cli_skeleton(root,b'\n'.join(words[first:first+200])+b'\n', '')
+                                          for first in range(0,len(words),200))
+        expected=sum(not re.search(rb'seed|mnemonic|key|password',word,re.I) for word in words)
+        self.assertEqual(result.count(b'<w>'),expected)
+        self.assertEqual(self.d._cli_skeleton(root,b'ABBEY abducts ability', ''),b'<w> <w> <w>')
+
+    def test_skeleton_controls_formatting_tail_and_atomic_private_replacement(self):
+        root=self.config();outside=self.root/'outside';outside.write_bytes(b'untouched')
+        (root/'cli-skeleton.private').symlink_to(outside)
+        controls=bytes(range(32))+bytes(range(127,160))
+        result=self.d._cli_skeleton(root,controls,'')
+        for byte in controls:
+            self.assertIn(f'<0x{byte:02X}>'.encode(),result)
+        self.assertEqual(outside.read_bytes(),b'untouched')
+        self.assertFalse((root/'cli-skeleton.private').is_symlink())
+        self.assertEqual((root/'cli-skeleton.private').stat().st_mode & 0o777,0o600)
+        formatted=b'ab\x1b[31mbey\x1b[0m '+b'Q'*10+b'\x1b[31m'+b'Q'*20
+        result=self.d._cli_skeleton(root,formatted,'')
+        self.assertIn(b'<w><0x1B>',result);self.assertIn(b'<b58><0x1B>',result)
+        self.assertNotIn(b'abbey',result);self.assertNotIn(b'Q'*10,result)
+        self.assertEqual(self.d._cli_skeleton(root,b'ab\x1b]0;title\x07bey',''),b'<w><0x1B><0x07>')
+        self.assertEqual(self.d._cli_skeleton(root,b'abbey\b',''),b'<w><0x08>')
+        self.assertEqual(self.d._cli_skeleton(root,b'\x1b]0;abbey\x07',''),b'<0x1B>]0;<w><0x07>')
+        self.assertEqual(self.d._cli_skeleton(root,b'pa\x1b]0;title\x07ssword: SENSITIVE',''),b'')
+        self.assertEqual(self.d._cli_skeleton(root,b'x'*9000+b'\n[wallet 123ABC]: ',''),b'[wallet 123ABC]: ')
+        self.assertEqual(self.d._cli_skeleton(root,b'x'*9000,''),b'')
+        self.assertFalse(list(root.glob('.cli-skeleton-*.private')))
+
     def test_accepted_baseline_refuses_pinned_background_startup(self):
         root=self.config();before=driver('4ba03433')
         before.PRIVATE=self.d.PRIVATE;before.BIN=self.d.BIN
@@ -1809,11 +1942,13 @@ class WalletCLI(unittest.TestCase):
             tree = ast.parse(text)
             return [ast.dump(node) for node in ast.walk(tree) if
                     isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == 'require']
-        self.assertEqual(contract(before), contract(after))
+        # Wrapping cli in the authorized failure boundary changes AST walk order.
+        self.assertEqual(sorted(contract(before)), sorted(contract(after)))
         def outside_cli(text):
-            node = next(item for item in ast.parse(text).body if isinstance(item, ast.FunctionDef) and item.name == 'cli')
-            lines = text.splitlines(keepends=True); lines[node.lineno-1:node.end_lineno] = ['<AUTHORIZED CLI>\n']
-            return ''.join(lines).replace('rpc-ssl=disabled\\n', 'daemon-ssl=disabled\\n')
+            tree=ast.parse(text.replace('rpc-ssl=disabled\\n', 'daemon-ssl=disabled\\n'))
+            tree.body=[item for item in tree.body if not isinstance(item,ast.FunctionDef) or
+                       item.name not in ('cli','_cli_skeleton')]
+            return ast.dump(tree)
         self.assertEqual(outside_cli(before), outside_cli(after))
         for anchor in ["commands=['set refresh-from-block-height 0','set','address new','refresh 0','save'] if create else ['set']",
                        "os.write(master,password.encode()+b'\\n')", "os.write(master,b'exit\\n')"]:

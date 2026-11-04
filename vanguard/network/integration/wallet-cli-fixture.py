@@ -36,12 +36,21 @@ def main():
             return 1
     Path(values['log-file']).write_text('FIXTURE_OPTIONS_ACCEPTED\n')
     mode = os.environ.get('WALLET_CLI_FIXTURE_MODE', 'normal')
+    readline = mode.startswith('readline-')
+    if readline:
+        mode = mode.removeprefix('readline-')
     if mode == 'early-exit':
         return 23
     create = 'generate-new-wallet' in values
     expected = ['set refresh-from-block-height 0', 'set', 'address new', 'refresh 0', 'save', 'exit'] if create else ['set', 'exit']
 
     def emit(text):
+        if readline:
+            # console_handler.h markers + readline_buffer.cpp blank/real redisplay.
+            sys.stdout.write('\x1b]0;fixture title\x07\x1b[?2004h\r\x01\x1b[1;33m\x02')
+            sys.stdout.flush(); time.sleep(.004)
+            text = '\r\x1b]0;fixture title\x1b\\\x01\x1b[1;33m\x02'+text.replace(
+                '123ABC', '123ABZ\bC')+'\x01\x1b[0m\x02\x1b[?2004l'
         # Deliberately split prompt tokens, as a PTY may do.
         for part in (text[:4], text[4:]):
             sys.stdout.write(part); sys.stdout.flush(); time.sleep(.002)
@@ -57,6 +66,16 @@ def main():
         background(BACKGROUND.replace('The daemon', 'Another daemon') if mode=='background-altered' else BACKGROUND)
         if mode=='background-repeated':
             background()
+    if mode == 'skeleton-failure':
+        emit('abbey abducts ability\n'+Path(values['password-file']).read_text()+
+             'Q' * 95+'\n'+'0123456789abcdef' * 4+'\n')
+        emit('Is this okay? [y/N]: ')
+        sys.stdin.readline()
+        return 31
+    if mode == 'altered-wallet':
+        emit('[wallet 123ABC altered]: ')
+        sys.stdin.readline()
+        return 32
     emit(PROMPT if mode != 'out-of-sync' else '[wallet 123ABC (out of sync)]: ')
     for command in expected:
         if sys.stdin.readline().rstrip('\n') != command:

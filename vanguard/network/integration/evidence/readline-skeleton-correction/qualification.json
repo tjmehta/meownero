@@ -1,0 +1,308 @@
+{
+  "schema": "tjs2504-readline-skeleton-source-qualification/1",
+  "run_id": "eaa16c84-9ecc-4fe0-9b4e-4665669bc717",
+  "authority_interaction": "463159fd-99f1-423a-b45f-f3be3a8411c4",
+  "base_commit": "818a4fc646d74b177f2981045b1c1eb125998a9b",
+  "base_tree": "888dd8ec9f99b30cb87b9cbe0ec02396036953e9",
+  "budget": {
+    "first_edit": "2026-11-04T20:36:53.938618+00:00",
+    "deadline": "2026-11-04T21:36:53.938618+00:00",
+    "implementation_pass": 1,
+    "correction_pass_used": true,
+    "correction_first_edit": "2026-11-04T20:44:33.522801+00:00",
+    "correction_scope": "Restore original function spacing; redact both literal and displayed lexical views so OSC-split words and overwritten literal words cannot escape"
+  },
+  "implementation_passes": 1,
+  "correction_passes": 1,
+  "qualified_at": "2026-11-04T20:50:23.799288+00:00",
+  "elapsed_seconds": 809.86067,
+  "max_seconds": 3600,
+  "checks": [
+    {
+      "log": "qualified-full-source.log",
+      "sha256": "53bd429c716f7f10b32063ee8ebf970a5227fc6e3151707242e65481f00c6cb6",
+      "tests": {
+        "tests": 390,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "wall_seconds": 149.82752624503337,
+        "original_lock_guard": "path before open; device/inode before flock",
+        "native_effects": "substituted"
+      },
+      "guard": {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 149.82971169403754
+      }
+    },
+    {
+      "log": "qualified-python312-direct.log",
+      "sha256": "3f5e311278e867a234583c1ea36293f17cdba03a0fbd612e47aba5883053e0da",
+      "tests": {
+        "tests": 111,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "wall_seconds": 45.874752894975245,
+        "original_lock_guard": "path before open; device/inode before flock",
+        "native_effects": "substituted"
+      },
+      "guard": {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 45.88811013288796
+      }
+    }
+  ],
+  "freeze": {
+    "result": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+    "native_execution": "NOT_RUN",
+    "overlay_files": 10,
+    "repository_bindings": 32,
+    "upstream_bindings": 63,
+    "denial_request_bindings": {
+      "transfer": {
+        "handler": "on_transfer",
+        "schema": "COMMAND_RPC_TRANSFER",
+        "required_fields": [
+          "account_index",
+          "destinations",
+          "get_tx_key",
+          "payment_id",
+          "priority",
+          "subaddr_indices",
+          "unlock_time"
+        ]
+      },
+      "transfer_split": {
+        "handler": "on_transfer_split",
+        "schema": "COMMAND_RPC_TRANSFER_SPLIT",
+        "required_fields": [
+          "account_index",
+          "destinations",
+          "get_tx_keys",
+          "payment_id",
+          "priority",
+          "subaddr_indices",
+          "unlock_time"
+        ]
+      },
+      "sweep_all": {
+        "handler": "on_sweep_all",
+        "schema": "COMMAND_RPC_SWEEP_ALL",
+        "required_fields": [
+          "account_index",
+          "address",
+          "below_amount",
+          "get_tx_keys",
+          "payment_id",
+          "priority",
+          "subaddr_indices",
+          "unlock_time"
+        ]
+      },
+      "sweep_single": {
+        "handler": "on_sweep_single",
+        "schema": "COMMAND_RPC_SWEEP_SINGLE",
+        "required_fields": [
+          "address",
+          "get_tx_key",
+          "key_image",
+          "payment_id",
+          "priority",
+          "unlock_time"
+        ]
+      },
+      "sign": {
+        "handler": "on_sign",
+        "schema": "COMMAND_RPC_SIGN",
+        "required_fields": [
+          "data",
+          "signature_type"
+        ]
+      },
+      "sign_transfer": {
+        "handler": "on_sign_transfer",
+        "schema": "COMMAND_RPC_SIGN_TRANSFER",
+        "required_fields": [
+          "unsigned_txset"
+        ]
+      },
+      "query_key": {
+        "handler": "on_query_key",
+        "schema": "COMMAND_RPC_QUERY_KEY",
+        "required_fields": [
+          "key_type"
+        ]
+      },
+      "set_daemon": {
+        "handler": "on_set_daemon",
+        "schema": "COMMAND_RPC_SET_DAEMON",
+        "required_fields": [
+          "address",
+          "password",
+          "ssl_allowed_fingerprints",
+          "ssl_ca_file",
+          "ssl_certificate_path",
+          "ssl_private_key_path",
+          "username"
+        ]
+      },
+      "store": {
+        "handler": "on_store",
+        "schema": "COMMAND_RPC_STORE",
+        "required_fields": []
+      },
+      "stop_wallet": {
+        "handler": "on_stop_wallet",
+        "schema": "COMMAND_RPC_STOP_WALLET",
+        "required_fields": []
+      },
+      "close_wallet": {
+        "handler": "on_close_wallet",
+        "schema": "COMMAND_RPC_CLOSE_WALLET",
+        "required_fields": []
+      },
+      "create_address": {
+        "handler": "on_create_address",
+        "schema": "COMMAND_RPC_CREATE_ADDRESS",
+        "required_fields": [
+          "account_index",
+          "label"
+        ]
+      },
+      "create_account": {
+        "handler": "on_create_account",
+        "schema": "COMMAND_RPC_CREATE_ACCOUNT",
+        "required_fields": [
+          "label"
+        ]
+      },
+      "create_wallet": {
+        "handler": "on_create_wallet",
+        "schema": "COMMAND_RPC_CREATE_WALLET",
+        "required_fields": [
+          "filename",
+          "language",
+          "password"
+        ]
+      },
+      "open_wallet": {
+        "handler": "on_open_wallet",
+        "schema": "COMMAND_RPC_OPEN_WALLET",
+        "required_fields": [
+          "filename",
+          "password"
+        ]
+      },
+      "restore_deterministic_wallet": {
+        "handler": "on_restore_deterministic_wallet",
+        "schema": "COMMAND_RPC_RESTORE_DETERMINISTIC_WALLET",
+        "required_fields": [
+          "filename",
+          "language",
+          "password",
+          "seed",
+          "seed_offset"
+        ]
+      },
+      "refresh": {
+        "handler": "on_refresh",
+        "schema": "COMMAND_RPC_REFRESH",
+        "required_fields": []
+      }
+    },
+    "source_candidate_sha256": "be44d0ced651dca3b4afe2ac0ecf89943a171fd16f68d982a771f3e2388fadb2",
+    "inputs_file_sha256": "e1357a7049da495788b5c9348f52c9100e190616d99477e514c843753d619d8a",
+    "public_launch": false,
+    "limitations": [
+      "No native schema parser, prompt, daemon, wallet, guard, build, resource enclosure or cleanup was executed."
+    ]
+  },
+  "interpreters": [
+    "Python 3.15.2",
+    "Python 3.12.3"
+  ],
+  "controls": {
+    "readline_pty": "candidate create/reopen/background passes; exact818a4fc fails same two controls",
+    "adverse_prompts": "unknown, altered, repeated, command-time, confirmation/password continue refusing; n at most once",
+    "privacy": "all1626 dictionary words, public25-word English seed, standard/sub/integrated addresses,64-hex view/spend keys, actual fixture password, mixed case, CSI/OSC splits, overwritten words, C0/DEL/C1 tokens,8KiB tail cutoff,0600 atomic symlink-safe replacement",
+    "daemon_auth_17_denials_rotation": "existing direct/full controls green"
+  },
+  "intermediate": [
+    {
+      "log": "implementation-wallet-tests.log",
+      "tests": 24,
+      "failures": 3,
+      "cause": "Test expectations: hex-only A run is hex; dictionary fixture exceeded8KiB tail; authorized try wrapper reorders AST traversal. Fixture expectations corrected without dropping assertions."
+    },
+    {
+      "logs": [
+        "full-source.log",
+        "python312-direct.log"
+      ],
+      "tests": [
+        390,
+        111
+      ],
+      "failures": [
+        1,
+        1
+      ],
+      "cause": "Historical byte comparison caught a missing blank line between authorized cli and unchanged wallet_rpc; restored in correction."
+    },
+    {
+      "logs": [
+        "final-full-source.log",
+        "final-python312-direct.log"
+      ],
+      "tests": [
+        390,
+        111
+      ],
+      "failures": [
+        0,
+        0
+      ],
+      "cause": "Passed before final retained-build identity audit. Review-only extra references would change frozen build_identity; moved their hashes to review packet only, restored reference-inputs byte-for-byte, added exact baseline compatibility assertion, then refroze and reran the final qualified suites."
+    }
+  ],
+  "invariants": {
+    "owned_paths_only": true,
+    "unowned_bytecodes_count": 7,
+    "unowned_bytecode_hashes_unchanged": true,
+    "original_lock_opens_flocks": 0,
+    "protected_lock_metadata_unchanged": true,
+    "frozen_runner_freezer_build_reference_profile_policy_public_contract_unchanged": true,
+    "compiled_input_and_retained_reuse_identity_unchanged": true,
+    "driver_outside_cli_and_new_private_helper_unchanged": true,
+    "observer_only_numeric_anchors_changed": true,
+    "public_schema_codes_rows_credentials_commands_unchanged": true
+  },
+  "native_execution": "NOT_RUN_FOR_CORRECTED_CANDIDATE",
+  "historical_native": "61f43dcc consumed at818a4fc; ATTEMPTED_FAIL9/16 functionalPASS7walletNOT_RUN",
+  "source_consultation": "Platform pending, then required Security privacy review; no runtime grant yet",
+  "launch_ready": false,
+  "public_launch": false
+}
