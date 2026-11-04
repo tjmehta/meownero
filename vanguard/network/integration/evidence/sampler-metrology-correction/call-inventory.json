@@ -1,0 +1,1606 @@
+{
+  "source": "vanguard/network/run-profile.py",
+  "scope": "All syntactic calls in live supervisor/cleanup functions; main also includes pre-live and post-absence calls. See audit.md for call families and disposition.",
+  "calls": [
+    {
+      "function": "pid_identity",
+      "line": 43,
+      "call": "Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split"
+    },
+    {
+      "function": "pid_identity",
+      "line": 43,
+      "call": "Path(f'/proc/{pid}/stat').read_text().rsplit"
+    },
+    {
+      "function": "pid_identity",
+      "line": 43,
+      "call": "Path(f'/proc/{pid}/stat').read_text"
+    },
+    {
+      "function": "pid_identity",
+      "line": 43,
+      "call": "Path"
+    },
+    {
+      "function": "stopped_exit",
+      "line": 163,
+      "call": "c.require"
+    },
+    {
+      "function": "stopped_exit",
+      "line": 163,
+      "call": "type"
+    },
+    {
+      "function": "stopped_exit",
+      "line": 164,
+      "call": "type"
+    },
+    {
+      "function": "stopped_exit",
+      "line": 166,
+      "call": "diagnostic.update"
+    },
+    {
+      "function": "remember",
+      "line": 186,
+      "call": "Path('/proc').iterdir"
+    },
+    {
+      "function": "remember",
+      "line": 186,
+      "call": "Path"
+    },
+    {
+      "function": "remember",
+      "line": 187,
+      "call": "path.name.isdigit"
+    },
+    {
+      "function": "remember",
+      "line": 189,
+      "call": "(path / 'stat').read_text().rsplit(')', 1)[1].split"
+    },
+    {
+      "function": "remember",
+      "line": 189,
+      "call": "(path / 'stat').read_text().rsplit"
+    },
+    {
+      "function": "remember",
+      "line": 189,
+      "call": "(path / 'stat').read_text"
+    },
+    {
+      "function": "remember",
+      "line": 190,
+      "call": "int"
+    },
+    {
+      "function": "remember",
+      "line": 190,
+      "call": "int"
+    },
+    {
+      "function": "remember",
+      "line": 190,
+      "call": "int"
+    },
+    {
+      "function": "remember",
+      "line": 191,
+      "call": "int"
+    },
+    {
+      "function": "stop",
+      "line": 196,
+      "call": "self.remember"
+    },
+    {
+      "function": "stop",
+      "line": 199,
+      "call": "members.items"
+    },
+    {
+      "function": "stop",
+      "line": 201,
+      "call": "Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split"
+    },
+    {
+      "function": "stop",
+      "line": 201,
+      "call": "Path(f'/proc/{pid}/stat').read_text().rsplit"
+    },
+    {
+      "function": "stop",
+      "line": 201,
+      "call": "Path(f'/proc/{pid}/stat').read_text"
+    },
+    {
+      "function": "stop",
+      "line": 201,
+      "call": "Path"
+    },
+    {
+      "function": "stop",
+      "line": 202,
+      "call": "result.append"
+    },
+    {
+      "function": "stop",
+      "line": 205,
+      "call": "alive"
+    },
+    {
+      "function": "stop",
+      "line": 206,
+      "call": "os.killpg"
+    },
+    {
+      "function": "stop",
+      "line": 208,
+      "call": "min"
+    },
+    {
+      "function": "stop",
+      "line": 208,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "stop",
+      "line": 209,
+      "call": "alive"
+    },
+    {
+      "function": "stop",
+      "line": 209,
+      "call": "time.sleep"
+    },
+    {
+      "function": "stop",
+      "line": 209,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "stop",
+      "line": 210,
+      "call": "alive"
+    },
+    {
+      "function": "stop",
+      "line": 211,
+      "call": "os.killpg"
+    },
+    {
+      "function": "stop",
+      "line": 213,
+      "call": "process.wait"
+    },
+    {
+      "function": "stop",
+      "line": 213,
+      "call": "min"
+    },
+    {
+      "function": "stop",
+      "line": 213,
+      "call": "max"
+    },
+    {
+      "function": "stop",
+      "line": 213,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "stop",
+      "line": 214,
+      "call": "min"
+    },
+    {
+      "function": "stop",
+      "line": 214,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "stop",
+      "line": 215,
+      "call": "alive"
+    },
+    {
+      "function": "stop",
+      "line": 215,
+      "call": "time.sleep"
+    },
+    {
+      "function": "stop",
+      "line": 215,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "stop",
+      "line": 216,
+      "call": "c.require"
+    },
+    {
+      "function": "stop",
+      "line": 216,
+      "call": "alive"
+    },
+    {
+      "function": "run",
+      "line": 220,
+      "call": "c.require"
+    },
+    {
+      "function": "run",
+      "line": 220,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "run",
+      "line": 222,
+      "call": "dict"
+    },
+    {
+      "function": "run",
+      "line": 223,
+      "call": "str"
+    },
+    {
+      "function": "run",
+      "line": 224,
+      "call": "subprocess.Popen"
+    },
+    {
+      "function": "run",
+      "line": 226,
+      "call": "self.children.append"
+    },
+    {
+      "function": "run",
+      "line": 226,
+      "call": "pid_identity"
+    },
+    {
+      "function": "run",
+      "line": 229,
+      "call": "self.remember"
+    },
+    {
+      "function": "run",
+      "line": 230,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "run",
+      "line": 231,
+      "call": "c.require"
+    },
+    {
+      "function": "run",
+      "line": 232,
+      "call": "self.sample"
+    },
+    {
+      "function": "run",
+      "line": 234,
+      "call": "process.communicate"
+    },
+    {
+      "function": "run",
+      "line": 234,
+      "call": "min"
+    },
+    {
+      "function": "run",
+      "line": 238,
+      "call": "subprocess.CalledProcessError"
+    },
+    {
+      "function": "run",
+      "line": 239,
+      "call": "subprocess.CompletedProcess"
+    },
+    {
+      "function": "run",
+      "line": 241,
+      "call": "self.stop"
+    },
+    {
+      "function": "run",
+      "line": 243,
+      "call": "type"
+    },
+    {
+      "function": "run",
+      "line": 245,
+      "call": "type"
+    },
+    {
+      "function": "run",
+      "line": 247,
+      "call": "process.stdout.close"
+    },
+    {
+      "function": "run",
+      "line": 247,
+      "call": "process.stderr.close"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 253,
+      "call": "self.root.lstat"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 254,
+      "call": "stat.S_ISDIR"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 254,
+      "call": "self.root.resolve"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 255,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 257,
+      "call": "self.run"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 257,
+      "call": "str"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 259,
+      "call": "self.root.lstat"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 261,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 264,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 264,
+      "call": "child_diagnostic.get"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 266,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 267,
+      "call": "result.stderr.splitlines"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 269,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 270,
+      "call": "os.fsencode"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 272,
+      "call": "re.fullmatch"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 274,
+      "call": "any"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 274,
+      "call": "path.startswith"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 275,
+      "call": "path[len(prefix):].split"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 275,
+      "call": "len"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 276,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 277,
+      "call": "re.fullmatch"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 277,
+      "call": "re.escape"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 277,
+      "call": "os.fsencode"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 279,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 280,
+      "call": "int"
+    },
+    {
+      "function": "disk_bytes",
+      "line": 281,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "sample",
+      "line": 284,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "sample",
+      "line": 285,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "sample",
+      "line": 288,
+      "call": "shutil.disk_usage"
+    },
+    {
+      "function": "sample",
+      "line": 289,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "sample",
+      "line": 290,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "sample",
+      "line": 291,
+      "call": "self.disk_bytes"
+    },
+    {
+      "function": "sample",
+      "line": 291,
+      "call": "min"
+    },
+    {
+      "function": "sample",
+      "line": 292,
+      "call": "max"
+    },
+    {
+      "function": "sample",
+      "line": 293,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "sample",
+      "line": 294,
+      "call": "self.sample_host"
+    },
+    {
+      "function": "sample",
+      "line": 296,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "sample_host",
+      "line": 301,
+      "call": "Path('/proc').iterdir"
+    },
+    {
+      "function": "sample_host",
+      "line": 301,
+      "call": "Path"
+    },
+    {
+      "function": "sample_host",
+      "line": 302,
+      "call": "path.name.isdigit"
+    },
+    {
+      "function": "sample_host",
+      "line": 303,
+      "call": "(path / 'stat').read_text().rsplit(')', 1)[1].split"
+    },
+    {
+      "function": "sample_host",
+      "line": 303,
+      "call": "int"
+    },
+    {
+      "function": "sample_host",
+      "line": 303,
+      "call": "(path / 'stat').read_text().rsplit"
+    },
+    {
+      "function": "sample_host",
+      "line": 303,
+      "call": "(path / 'stat').read_text"
+    },
+    {
+      "function": "sample_host",
+      "line": 305,
+      "call": "os.getpid"
+    },
+    {
+      "function": "sample_host",
+      "line": 307,
+      "call": "processes.items"
+    },
+    {
+      "function": "sample_host",
+      "line": 307,
+      "call": "int"
+    },
+    {
+      "function": "sample_host",
+      "line": 310,
+      "call": "os.sysconf"
+    },
+    {
+      "function": "sample_host",
+      "line": 310,
+      "call": "os.sysconf"
+    },
+    {
+      "function": "sample_host",
+      "line": 311,
+      "call": "sum"
+    },
+    {
+      "function": "sample_host",
+      "line": 311,
+      "call": "int"
+    },
+    {
+      "function": "sample_host",
+      "line": 312,
+      "call": "resource.getrusage"
+    },
+    {
+      "function": "sample_host",
+      "line": 313,
+      "call": "max"
+    },
+    {
+      "function": "sample_host",
+      "line": 313,
+      "call": "resource.getrusage"
+    },
+    {
+      "function": "sample_host",
+      "line": 315,
+      "call": "sum"
+    },
+    {
+      "function": "sample_host",
+      "line": 315,
+      "call": "int"
+    },
+    {
+      "function": "sample_host",
+      "line": 315,
+      "call": "int"
+    },
+    {
+      "function": "sample_host",
+      "line": 317,
+      "call": "dict(peak_rss_bytes=rss, cpu_seconds=cpu, peak_pids=len(owned)).items"
+    },
+    {
+      "function": "sample_host",
+      "line": 317,
+      "call": "dict"
+    },
+    {
+      "function": "sample_host",
+      "line": 317,
+      "call": "len"
+    },
+    {
+      "function": "sample_host",
+      "line": 318,
+      "call": "max"
+    },
+    {
+      "function": "sample_host",
+      "line": 320,
+      "call": "MetrologyFailure"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 362,
+      "call": "control.run"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 366,
+      "call": "re.escape"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 367,
+      "call": "filters.append"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 369,
+      "call": "control.run"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 371,
+      "call": "c.require"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 371,
+      "call": "listing.stdout.strip"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 373,
+      "call": "json.loads"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 374,
+      "call": "c.require"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 375,
+      "call": "value['Config']['Labels'].get"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 376,
+      "call": "any"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 376,
+      "call": "str"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 378,
+      "call": "c.require"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 378,
+      "call": "re.fullmatch"
+    },
+    {
+      "function": "inspect_owned",
+      "line": 379,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 736,
+      "call": "argparse.ArgumentParser"
+    },
+    {
+      "function": "main",
+      "line": 737,
+      "call": "parser.add_argument"
+    },
+    {
+      "function": "main",
+      "line": 738,
+      "call": "parser.add_argument"
+    },
+    {
+      "function": "main",
+      "line": 739,
+      "call": "parser.add_argument"
+    },
+    {
+      "function": "main",
+      "line": 740,
+      "call": "parser.add_argument"
+    },
+    {
+      "function": "main",
+      "line": 741,
+      "call": "parser.add_argument"
+    },
+    {
+      "function": "main",
+      "line": 742,
+      "call": "parser.parse_args"
+    },
+    {
+      "function": "main",
+      "line": 743,
+      "call": "os.umask"
+    },
+    {
+      "function": "main",
+      "line": 744,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 744,
+      "call": "re.fullmatch"
+    },
+    {
+      "function": "main",
+      "line": 745,
+      "call": "re.fullmatch"
+    },
+    {
+      "function": "main",
+      "line": 747,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 747,
+      "call": "args.out.is_absolute"
+    },
+    {
+      "function": "main",
+      "line": 747,
+      "call": "args.out.resolve"
+    },
+    {
+      "function": "main",
+      "line": 748,
+      "call": "args.out.parent.is_dir"
+    },
+    {
+      "function": "main",
+      "line": 748,
+      "call": "args.out.exists"
+    },
+    {
+      "function": "main",
+      "line": 749,
+      "call": "subprocess.check_output(['git', '-C', str(n.ROOT), 'rev-parse', 'HEAD'], text=True, timeout=10).strip"
+    },
+    {
+      "function": "main",
+      "line": 749,
+      "call": "subprocess.check_output"
+    },
+    {
+      "function": "main",
+      "line": 749,
+      "call": "str"
+    },
+    {
+      "function": "main",
+      "line": 750,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 750,
+      "call": "subprocess.check_output(['git', '-C', str(n.ROOT), 'status', '--porcelain'], text=True, timeout=10).strip"
+    },
+    {
+      "function": "main",
+      "line": 750,
+      "call": "subprocess.check_output"
+    },
+    {
+      "function": "main",
+      "line": 750,
+      "call": "str"
+    },
+    {
+      "function": "main",
+      "line": 752,
+      "call": "check_inputs"
+    },
+    {
+      "function": "main",
+      "line": 753,
+      "call": "reuse_build"
+    },
+    {
+      "function": "main",
+      "line": 754,
+      "call": "json.loads"
+    },
+    {
+      "function": "main",
+      "line": 754,
+      "call": "api"
+    },
+    {
+      "function": "main",
+      "line": 755,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 756,
+      "call": "grant_payload"
+    },
+    {
+      "function": "main",
+      "line": 756,
+      "call": "c.digest"
+    },
+    {
+      "function": "main",
+      "line": 756,
+      "call": "args.inputs.read_bytes"
+    },
+    {
+      "function": "main",
+      "line": 757,
+      "call": "c.digest"
+    },
+    {
+      "function": "main",
+      "line": 757,
+      "call": "Path(__file__).read_bytes"
+    },
+    {
+      "function": "main",
+      "line": 757,
+      "call": "Path"
+    },
+    {
+      "function": "main",
+      "line": 758,
+      "call": "time.time"
+    },
+    {
+      "function": "main",
+      "line": 759,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 759,
+      "call": "c.digest"
+    },
+    {
+      "function": "main",
+      "line": 759,
+      "call": "api"
+    },
+    {
+      "function": "main",
+      "line": 761,
+      "call": "acquire_lock"
+    },
+    {
+      "function": "main",
+      "line": 762,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 763,
+      "call": "Controller"
+    },
+    {
+      "function": "main",
+      "line": 766,
+      "call": "c.empty_rows"
+    },
+    {
+      "function": "main",
+      "line": 767,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 768,
+      "call": "c.digest"
+    },
+    {
+      "function": "main",
+      "line": 768,
+      "call": "Path(__file__).read_bytes"
+    },
+    {
+      "function": "main",
+      "line": 768,
+      "call": "Path"
+    },
+    {
+      "function": "main",
+      "line": 772,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 772,
+      "call": "str"
+    },
+    {
+      "function": "main",
+      "line": 780,
+      "call": "TimeoutError"
+    },
+    {
+      "function": "main",
+      "line": 783,
+      "call": "signal.signal"
+    },
+    {
+      "function": "main",
+      "line": 784,
+      "call": "signal.setitimer"
+    },
+    {
+      "function": "main",
+      "line": 785,
+      "call": "admit"
+    },
+    {
+      "function": "main",
+      "line": 788,
+      "call": "n.fresh_directory"
+    },
+    {
+      "function": "main",
+      "line": 789,
+      "call": "os.open"
+    },
+    {
+      "function": "main",
+      "line": 790,
+      "call": "os.fsync"
+    },
+    {
+      "function": "main",
+      "line": 791,
+      "call": "os.close"
+    },
+    {
+      "function": "main",
+      "line": 792,
+      "call": "(args.out / 'public').mkdir"
+    },
+    {
+      "function": "main",
+      "line": 793,
+      "call": "n.write_json"
+    },
+    {
+      "function": "main",
+      "line": 793,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 795,
+      "call": "stage_reuse"
+    },
+    {
+      "function": "main",
+      "line": 796,
+      "call": "stage_inputs"
+    },
+    {
+      "function": "main",
+      "line": 797,
+      "call": "control.run"
+    },
+    {
+      "function": "main",
+      "line": 798,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 798,
+      "call": "json.loads"
+    },
+    {
+      "function": "main",
+      "line": 799,
+      "call": "control.sample"
+    },
+    {
+      "function": "main",
+      "line": 800,
+      "call": "g.LOCK.stat"
+    },
+    {
+      "function": "main",
+      "line": 801,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 802,
+      "call": "admit"
+    },
+    {
+      "function": "main",
+      "line": 805,
+      "call": "control.run"
+    },
+    {
+      "function": "main",
+      "line": 805,
+      "call": "container_command"
+    },
+    {
+      "function": "main",
+      "line": 805,
+      "call": "min"
+    },
+    {
+      "function": "main",
+      "line": 805,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 806,
+      "call": "inspect_owned"
+    },
+    {
+      "function": "main",
+      "line": 807,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 807,
+      "call": "verify_limits"
+    },
+    {
+      "function": "main",
+      "line": 811,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 811,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 812,
+      "call": "runtime_marker"
+    },
+    {
+      "function": "main",
+      "line": 813,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 814,
+      "call": "min"
+    },
+    {
+      "function": "main",
+      "line": 814,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 815,
+      "call": "control.run"
+    },
+    {
+      "function": "main",
+      "line": 818,
+      "call": "inspect_owned"
+    },
+    {
+      "function": "main",
+      "line": 819,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 820,
+      "call": "stopped_exit"
+    },
+    {
+      "function": "main",
+      "line": 822,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 826,
+      "call": "rows['build.json'].update"
+    },
+    {
+      "function": "main",
+      "line": 826,
+      "call": "read_public_rows"
+    },
+    {
+      "function": "main",
+      "line": 826,
+      "call": "public_shapes"
+    },
+    {
+      "function": "main",
+      "line": 827,
+      "call": "rows['build.json'].items"
+    },
+    {
+      "function": "main",
+      "line": 828,
+      "call": "PublicWitnessError"
+    },
+    {
+      "function": "main",
+      "line": 830,
+      "call": "isinstance"
+    },
+    {
+      "function": "main",
+      "line": 832,
+      "call": "retain_build"
+    },
+    {
+      "function": "main",
+      "line": 833,
+      "call": "control.sample"
+    },
+    {
+      "function": "main",
+      "line": 836,
+      "call": "receipt.update"
+    },
+    {
+      "function": "main",
+      "line": 836,
+      "call": "type"
+    },
+    {
+      "function": "main",
+      "line": 838,
+      "call": "isinstance"
+    },
+    {
+      "function": "main",
+      "line": 845,
+      "call": "signal.setitimer"
+    },
+    {
+      "function": "main",
+      "line": 845,
+      "call": "max"
+    },
+    {
+      "function": "main",
+      "line": 845,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 846,
+      "call": "signal.signal"
+    },
+    {
+      "function": "main",
+      "line": 850,
+      "call": "control.stop"
+    },
+    {
+      "function": "main",
+      "line": 851,
+      "call": "inspect_owned"
+    },
+    {
+      "function": "main",
+      "line": 854,
+      "call": "control.run"
+    },
+    {
+      "function": "main",
+      "line": 854,
+      "call": "min"
+    },
+    {
+      "function": "main",
+      "line": 854,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 855,
+      "call": "inspect_owned"
+    },
+    {
+      "function": "main",
+      "line": 859,
+      "call": "control.run"
+    },
+    {
+      "function": "main",
+      "line": 860,
+      "call": "inspect_owned"
+    },
+    {
+      "function": "main",
+      "line": 863,
+      "call": "stopped_exit"
+    },
+    {
+      "function": "main",
+      "line": 866,
+      "call": "control.run"
+    },
+    {
+      "function": "main",
+      "line": 867,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 867,
+      "call": "inspect_owned"
+    },
+    {
+      "function": "main",
+      "line": 868,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 870,
+      "call": "receipt.get"
+    },
+    {
+      "function": "main",
+      "line": 873,
+      "call": "read_public_rows"
+    },
+    {
+      "function": "main",
+      "line": 873,
+      "call": "public_shapes"
+    },
+    {
+      "function": "main",
+      "line": 876,
+      "call": "receipt.setdefault"
+    },
+    {
+      "function": "main",
+      "line": 877,
+      "call": "isinstance"
+    },
+    {
+      "function": "main",
+      "line": 879,
+      "call": "build_diagnostics"
+    },
+    {
+      "function": "main",
+      "line": 880,
+      "call": "receipt.get"
+    },
+    {
+      "function": "main",
+      "line": 885,
+      "call": "collect_runtime_diagnostics"
+    },
+    {
+      "function": "main",
+      "line": 887,
+      "call": "collect_public"
+    },
+    {
+      "function": "main",
+      "line": 889,
+      "call": "receipt.update"
+    },
+    {
+      "function": "main",
+      "line": 894,
+      "call": "bounded_json"
+    },
+    {
+      "function": "main",
+      "line": 895,
+      "call": "c.require"
+    },
+    {
+      "function": "main",
+      "line": 895,
+      "call": "isinstance"
+    },
+    {
+      "function": "main",
+      "line": 895,
+      "call": "value.keys"
+    },
+    {
+      "function": "main",
+      "line": 896,
+      "call": "all"
+    },
+    {
+      "function": "main",
+      "line": 897,
+      "call": "value.values"
+    },
+    {
+      "function": "main",
+      "line": 897,
+      "call": "type"
+    },
+    {
+      "function": "main",
+      "line": 902,
+      "call": "receipt.setdefault('rejected_evidence', []).append"
+    },
+    {
+      "function": "main",
+      "line": 902,
+      "call": "receipt.setdefault"
+    },
+    {
+      "function": "main",
+      "line": 905,
+      "call": "any"
+    },
+    {
+      "function": "main",
+      "line": 907,
+      "call": "c.REQUIRED.items"
+    },
+    {
+      "function": "main",
+      "line": 908,
+      "call": "any"
+    },
+    {
+      "function": "main",
+      "line": 909,
+      "call": "counters.get('runtime', {}).get"
+    },
+    {
+      "function": "main",
+      "line": 909,
+      "call": "counters.get"
+    },
+    {
+      "function": "main",
+      "line": 912,
+      "call": "private_directory"
+    },
+    {
+      "function": "main",
+      "line": 912,
+      "call": "os.close"
+    },
+    {
+      "function": "main",
+      "line": 915,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 917,
+      "call": "(args.out / 'staging').exists"
+    },
+    {
+      "function": "main",
+      "line": 917,
+      "call": "shutil.rmtree"
+    },
+    {
+      "function": "main",
+      "line": 918,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 920,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 921,
+      "call": "receipt.update"
+    },
+    {
+      "function": "main",
+      "line": 921,
+      "call": "type"
+    },
+    {
+      "function": "main",
+      "line": 924,
+      "call": "control.stop"
+    },
+    {
+      "function": "main",
+      "line": 925,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 925,
+      "call": "len"
+    },
+    {
+      "function": "main",
+      "line": 927,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 928,
+      "call": "receipt.update"
+    },
+    {
+      "function": "main",
+      "line": 928,
+      "call": "type"
+    },
+    {
+      "function": "main",
+      "line": 930,
+      "call": "signal.setitimer"
+    },
+    {
+      "function": "main",
+      "line": 931,
+      "call": "os.close"
+    },
+    {
+      "function": "main",
+      "line": 932,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 933,
+      "call": "prior.items"
+    },
+    {
+      "function": "main",
+      "line": 933,
+      "call": "signal.signal"
+    },
+    {
+      "function": "main",
+      "line": 936,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 937,
+      "call": "cleanup.values"
+    },
+    {
+      "function": "main",
+      "line": 937,
+      "call": "row.update"
+    },
+    {
+      "function": "main",
+      "line": 939,
+      "call": "all"
+    },
+    {
+      "function": "main",
+      "line": 939,
+      "call": "set"
+    },
+    {
+      "function": "main",
+      "line": 939,
+      "call": "counters.values"
+    },
+    {
+      "function": "main",
+      "line": 940,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 941,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 945,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 945,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 947,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 947,
+      "call": "receipt.get('metrology_failure', {}).get"
+    },
+    {
+      "function": "main",
+      "line": 947,
+      "call": "receipt.get"
+    },
+    {
+      "function": "main",
+      "line": 951,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 952,
+      "call": "time.monotonic"
+    },
+    {
+      "function": "main",
+      "line": 954,
+      "call": "c.verdict"
+    },
+    {
+      "function": "main",
+      "line": 956,
+      "call": "publish_evidence"
+    },
+    {
+      "function": "main",
+      "line": 957,
+      "call": "print"
+    },
+    {
+      "function": "main",
+      "line": 957,
+      "call": "json.dumps"
+    },
+    {
+      "function": "main",
+      "line": 957,
+      "call": "dict"
+    },
+    {
+      "function": "main",
+      "line": 958,
+      "call": "receipt['result'].startswith"
+    }
+  ]
+}

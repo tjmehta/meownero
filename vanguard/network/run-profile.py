@@ -151,6 +151,21 @@ def admit(image, root, grant):
     return observed
 
 
+class MetrologyFailure(ValueError):
+    """Fixed controller diagnostics; child output never enters public evidence."""
+    def __init__(self, code, reason, exit_code=None):
+        self.diagnostic = dict(code=code,reason=reason,exit_code=exit_code)
+        super().__init__(code+': '+reason)
+
+
+def stopped_exit(diagnostic, value):
+    state = value['State']
+    c.require(not state['Running'] and type(state['ExitCode']) is int and
+        -255 <= state['ExitCode'] <= 255 and type(state['OOMKilled']) is bool,
+        'invalid stopped phase exit state')
+    diagnostic.update(container_exit_code=state['ExitCode'],oom_killed=state['OOMKilled'])
+
+
 class Controller:
     def __init__(self, root, grant, start):
         self.root,self.grant,self.start = root,grant,start
@@ -200,7 +215,8 @@ class Controller:
         while alive() and time.monotonic() < grace: time.sleep(.01)
         c.require(not alive(), 'owned host process remains')
 
-    def run(self, argv, deadline, *, check=True, monitor=True, **kwargs):
+    def run(self, argv, deadline, *, check=True, monitor=True, native_diagnostic=None,
+            exit_observation=None, **kwargs):
         c.require(deadline > time.monotonic(), 'command deadline exhausted')
         # No API token, RPC login, Docker config or unrelated environment enters a child.
         env = dict(PATH=os.environ['PATH'],LC_ALL='C',GIT_NO_LAZY_FETCH='1',
@@ -224,18 +240,63 @@ class Controller:
         finally:
             try: self.stop(child)
             finally:
+                if native_diagnostic is not None and type(process.returncode) is int:
+                    native_diagnostic['cli_exit_code'] = process.returncode
+                if exit_observation is not None and type(process.returncode) is int:
+                    exit_observation['exit_code'] = process.returncode
                 process.stdout.close();process.stderr.close()
+
+    def disk_bytes(self, deadline):
+        code = 'metrology_disk_walk'
+        child_diagnostic = {}
+        try:
+            before = self.root.lstat()
+            if not stat.S_ISDIR(before.st_mode) or self.root != self.root.resolve():
+                raise MetrologyFailure(code,'unsafe_root')
+            # Explicit -P never follows links; -x stays on the root's device.
+            result = self.run(['du','-P','-sx','-B1','--',str(self.root)],deadline,
+                check=False,monitor=False,exit_observation=child_diagnostic)
+            after = self.root.lstat()
+            if (before.st_dev,before.st_ino) != (after.st_dev,after.st_ino):
+                raise MetrologyFailure(code,'changed_root',result.returncode)
+        except MetrologyFailure: raise
+        except Exception:
+            raise MetrologyFailure(code,'observation_failed',child_diagnostic.get('exit_code')) from None
+        if result.returncode not in (0,1):
+            raise MetrologyFailure(code,'child_exit',result.returncode)
+        lines = result.stderr.splitlines(keepends=True)
+        if result.returncode == 1 and not lines:
+            raise MetrologyFailure(code,'missing_error',result.returncode)
+        prefix = os.fsencode(self.root)+b'/'
+        for line in lines:
+            match = re.fullmatch(rb"du: cannot (?:access|read directory) '([^'\n]+)': No such file or directory\n",line)
+            path = match[1] if match else b''
+            if not path.startswith(prefix) or any(part in (b'',b'.',b'..')
+                    for part in path[len(prefix):].split(b'/')):
+                raise MetrologyFailure(code,'unexpected_error',result.returncode)
+        total = re.fullmatch(rb'([0-9]+)\t'+re.escape(os.fsencode(self.root))+rb'\n',result.stdout)
+        if not total:
+            raise MetrologyFailure(code,'invalid_total',result.returncode)
+        try: return int(total[1])
+        except ValueError: raise MetrologyFailure(code,'invalid_total',result.returncode) from None
 
     def sample(self, force=False):
         now = time.monotonic()
-        c.require(now < self.work_end, 'work deadline exhausted')
+        if now >= self.work_end: raise MetrologyFailure('metrology_deadline','work_deadline')
         if not force and now-self.last_sample < 2: return
         self.last_sample = now
-        c.require(shutil.disk_usage(self.root).free >= 4*GiB, 'backing free disk below 4 GiB')
-        # du counts allocated blocks in the single owned directory, including evidence.
-        result = self.run(['du','-sx','-B1',str(self.root)],min(now+10,self.work_end),monitor=False)
-        used = int(result.stdout.split()[0]);self.peak['disk_bytes'] = max(self.peak['disk_bytes'],used)
-        c.require(used <= 15*GiB, 'owned directory exceeds 15 GiB')
+        try: free = shutil.disk_usage(self.root).free
+        except OSError: raise MetrologyFailure('metrology_backing_disk','observation_failed') from None
+        if free < 4*GiB: raise MetrologyFailure('metrology_backing_disk','free disk below 4 GiB')
+        used = self.disk_bytes(min(now+10,self.work_end))
+        self.peak['disk_bytes'] = max(self.peak['disk_bytes'],used)
+        if used > 15*GiB: raise MetrologyFailure('metrology_disk_walk','owned directory exceeds 15 GiB')
+        try: self.sample_host()
+        except MetrologyFailure: raise
+        except Exception: raise MetrologyFailure('metrology_host_overhead','observation_failed') from None
+        self.samples += 1
+
+    def sample_host(self):
         processes = {}
         for path in Path('/proc').iterdir():
             if path.name.isdigit():
@@ -255,8 +316,8 @@ class Controller:
                self.cpu_origin.ru_utime-self.cpu_origin.ru_stime)
         for key,value in dict(peak_rss_bytes=rss,cpu_seconds=cpu,peak_pids=len(owned)).items():
             self.peak[key] = max(self.peak[key],value)
-            c.require(value <= self.grant['host_overhead_allowance'][key], 'host overhead allowance exceeded')
-        self.samples += 1
+            if value > self.grant['host_overhead_allowance'][key]:
+                raise MetrologyFailure('metrology_host_overhead','allowance_exceeded')
 
     def copy(self, source, destination):
         self.sample()
@@ -751,14 +812,13 @@ def main():
                 runtime_marker(args.out/'staging')
             diagnostic = receipt['phase_diagnostics'][phase] = dict(started=True)
             deadline = control.build_end if phase == 'build' else min(time.monotonic()+600,control.work_end)
-            result = control.run(g.DOCKER+['start','-a',value['Id']],deadline,check=False)
+            result = control.run(g.DOCKER+['start','-a',value['Id']],deadline,check=False,
+                native_diagnostic=diagnostic)
             diagnostic['cli_exit_code'] = result.returncode
             value = inspect_owned(control,name,image,deadline)
             c.require(value is not None, 'phase container missing')
+            stopped_exit(diagnostic,value)
             state = value['State']
-            c.require(type(state['ExitCode']) is int and -255 <= state['ExitCode'] <= 255 and
-                type(state['OOMKilled']) is bool, 'invalid phase exit state')
-            diagnostic.update(container_exit_code=state['ExitCode'],oom_killed=state['OOMKilled'])
             c.require(result.returncode == 0 and state['ExitCode'] == 0 and not state['OOMKilled'],
                 'native phase failed')
             if phase == 'build':
@@ -775,8 +835,10 @@ def main():
     except Exception as error:
         receipt.update(result='FAIL' if created else 'REFUSED_BEFORE_ATTEMPT',failure_class=type(error).__name__,
             failure_phase=phase)
-        if isinstance(error,subprocess.CalledProcessError) and phase in receipt['phase_diagnostics']:
-            receipt['phase_diagnostics'][phase]['cli_exit_code'] = error.returncode
+        if isinstance(error,MetrologyFailure):
+            receipt['metrology_failure'] = error.diagnostic
+            if phase in receipt['phase_diagnostics']:
+                receipt['phase_diagnostics'][phase]['metrology_failure'] = error.diagnostic
     finally:
         control.cleaning = True
         # Cleanup has its own exclusive reserve, still inside the 4500s wall cap.
@@ -792,8 +854,16 @@ def main():
                     control.run(g.DOCKER+['stop','--time','10',value['Id']],min(time.monotonic()+20,control.end),check=False)
                     value = inspect_owned(control,name,image,control.end)
                     if value and value['State']['Running']:
-                        control.run(g.DOCKER+['kill',value['Id']],control.end)
-                if value: control.run(g.DOCKER+['rm','-f',value['Id']],control.end)
+                        # Exit between observation and kill is benign only when
+                        # the following exact inspection confirms it stopped.
+                        control.run(g.DOCKER+['kill',value['Id']],control.end,check=False)
+                        value = inspect_owned(control,name,image,control.end)
+                if value:
+                    if phase in receipt['phase_diagnostics']:
+                        stopped_exit(receipt['phase_diagnostics'][phase],value)
+                    # Removal may race with absence; independent exit-0 identity
+                    # listings below, never CLI wording, establish cleanup.
+                    control.run(g.DOCKER+['rm','-f',value['Id']],control.end,check=False)
             c.require(not create_intent or inspect_owned(control,name,image,control.end) is None,'owned CID remains')
             cleanup['owned_cid_absent'] = dict(status='PASS',create_intent=create_intent)
             cleanup_key = 'owned_staging_removed'
@@ -874,7 +944,9 @@ def main():
                 sampling='2s and copy/phase boundaries; RSS includes conservative per-process lifetime high-water marks'),
             deadlines=dict(status='PASS' if time.monotonic() < control.end else 'FAIL',
                 wall_seconds=900 if reuse else 4500,build_seconds=0 if reuse else 3600,runtime_seconds=600,cleanup_seconds=300),
-            disk=dict(status='PASS' if control.samples else 'NOT_RUN',peak_bytes=control.peak['disk_bytes'],
+            disk=dict(status='FAIL' if receipt.get('metrology_failure',{}).get('code') in
+                ('metrology_disk_walk','metrology_backing_disk') else 'PASS' if control.samples else 'NOT_RUN',
+                peak_bytes=control.peak['disk_bytes'],
                 abort_bytes=15*GiB,minimum_free_bytes=4*GiB,mode='sampled-abort-not-quota'),
             no_oom=dict(status='PASS' if no_oom else 'NOT_RUN',counters=counters))
         receipt['wall_seconds'] = time.monotonic()-start

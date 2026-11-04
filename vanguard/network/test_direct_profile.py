@@ -119,9 +119,93 @@ class Direct(unittest.TestCase):
 
     def test_staging_high_water_abort_is_measured_without_claiming_a_quota(self):
         self.output.mkdir();controller = r.Controller(self.output,grant(self.output),time.monotonic())
-        with patch.object(controller,'run',return_value=subprocess.CompletedProcess([],0,str(15*r.GiB+1).encode()+b' path',b'')), \
+        with patch.object(controller,'run',return_value=subprocess.CompletedProcess([],0,
+                 str(15*r.GiB+1).encode()+b'\t'+os.fsencode(self.output)+b'\n',b'')), \
              self.assertRaisesRegex(ValueError,'15 GiB'):controller.sample(force=True)
         self.assertGreater(controller.peak['disk_bytes'],15*r.GiB)
+
+    def vanished_file_sample(self):
+        self.output.mkdir();(self.output/'remaining').write_bytes(b'x'*8192)
+        gone=self.output/'compiler-temporary';gone.write_bytes(b'temporary')
+        # Enumerate the real tree, then remove an entry before GNU du stats it.
+        # The extra listed operand deterministically exposes the same GNU du
+        # total+ENOENT result as deletion between its internal readdir/stat.
+        self.assertIn(gone,list(self.output.iterdir()));gone.unlink()
+        observed={}
+        def walk(argv,deadline,**kwargs):
+            self.assertEqual(argv[0],'du')
+            result=subprocess.run(argv+[str(gone)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                env={'PATH':os.environ['PATH'],'LC_ALL':'C'},timeout=10)
+            self.assertEqual(result.returncode,1);observed['result']=result
+            if kwargs.get('check',True):raise subprocess.CalledProcessError(result.returncode,argv)
+            return result
+        controller=r.Controller(self.output,grant(self.output),time.monotonic())
+        with patch.object(controller,'run',side_effect=walk):controller.sample(force=True)
+        expected=sum(p.lstat().st_blocks*512 for p in [self.output,*self.output.iterdir()])
+        self.assertEqual(controller.peak['disk_bytes'],expected)
+        self.assertEqual(controller.samples,1)
+        # A directory can also disappear between enumeration and opendir.
+        for action in (b'access',b'read directory'):
+            result=subprocess.CompletedProcess([],1,observed['result'].stdout,
+                b"du: cannot "+action+b" '"+os.fsencode(gone)+b"': No such file or directory\n")
+            with patch.object(controller,'run',return_value=result):controller.sample(force=True)
+        return observed
+
+    def test_real_du_vanished_entry_keeps_remaining_allocated_total(self):
+        self.vanished_file_sample()
+
+    def test_disk_metrology_rejects_every_non_enoent_error_and_invalid_total(self):
+        self.output.mkdir();controller=r.Controller(self.output,grant(self.output),time.monotonic())
+        total=b'4096\t'+os.fsencode(self.output)+b'\n'
+        missing=lambda path:b"du: cannot access '"+os.fsencode(path)+b"': No such file or directory\n"
+        for code,out,err,reason in [(2,total,b'','child_exit'),(1,total,b'','missing_error'),
+            (1,total,b"du: cannot read directory 'x': Permission denied\n",'unexpected_error'),
+            (1,total,missing(self.base/'outside'),'unexpected_error'),
+            (1,total,missing(self.output/'..'/'outside'),'unexpected_error'),
+            (1,total,missing(self.output),'unexpected_error'),
+            (0,total,b'PRIVATE_STDERR\n','unexpected_error'),(0,b'',b'','invalid_total'),
+            (0,b'bad\t'+os.fsencode(self.output)+b'\n',b'','invalid_total'),
+            (0,b'9'*5000+b'\t'+os.fsencode(self.output)+b'\n',b'','invalid_total'),
+            (0,total+total,b'','invalid_total'),(0,b'4096\telsewhere\n',b'','invalid_total')]:
+            with self.subTest(code=code,reason=reason),patch.object(controller,'run',
+                    return_value=subprocess.CompletedProcess([],code,out,err)),self.assertRaises(r.MetrologyFailure) as error:
+                controller.sample(force=True)
+            self.assertEqual(error.exception.diagnostic,dict(code='metrology_disk_walk',reason=reason,exit_code=code))
+            self.assertNotIn('PRIVATE_STDERR',str(error.exception))
+
+    def test_real_du_permission_denial_is_metrology_failure(self):
+        self.output.mkdir();private=self.output/'denied';private.mkdir();private.chmod(0)
+        try:
+            controller=r.Controller(self.output,grant(self.output),time.monotonic())
+            with self.assertRaises(r.MetrologyFailure) as error:controller.sample(force=True)
+            self.assertEqual(error.exception.diagnostic['reason'],'unexpected_error')
+            self.assertEqual(error.exception.diagnostic['exit_code'],1)
+        finally:private.chmod(0o700)
+
+    def test_disk_metrology_refuses_root_symlink_escape_and_never_follows_nested_links(self):
+        outside=self.base/'outside';outside.mkdir();(outside/'data').write_bytes(b'x'*65536)
+        self.output.symlink_to(outside,target_is_directory=True)
+        controller=r.Controller(self.output,grant(self.output),time.monotonic())
+        with self.assertRaises(r.MetrologyFailure) as error:controller.sample(force=True)
+        self.assertEqual(error.exception.diagnostic['reason'],'unsafe_root')
+        self.output.unlink();self.output.mkdir();(self.output/'link').symlink_to(outside,target_is_directory=True)
+        controller.sample(force=True)
+        self.assertEqual(controller.peak['disk_bytes'],sum(p.lstat().st_blocks*512 for p in
+            [self.output,self.output/'link']))
+
+    def test_real_native_child_exit_survives_sampler_failure_without_child_code_attribution(self):
+        self.output.mkdir();controller=r.Controller(self.output,grant(self.output),time.monotonic())
+        diagnostic={}
+        with patch.object(controller,'sample',side_effect=r.MetrologyFailure('metrology_disk_walk','child_exit',23)), \
+             self.assertRaises(r.MetrologyFailure):
+            controller.run([sys.executable,'-c','import time;time.sleep(30)'],time.monotonic()+10,
+                check=False,native_diagnostic=diagnostic)
+        self.assertEqual(diagnostic['cli_exit_code'],controller.children[-1][0].returncode)
+        self.assertNotEqual(diagnostic['cli_exit_code'],23)
+        diagnostic={}
+        result=controller.run([sys.executable,'-c','raise SystemExit(17)'],time.monotonic()+10,
+            check=False,monitor=False,native_diagnostic=diagnostic)
+        self.assertEqual(result.returncode,17);self.assertEqual(diagnostic,dict(cli_exit_code=17))
 
     def test_expired_positive_command_budget_never_spawns(self):
         controller = r.Controller(self.base,grant(self.output),time.monotonic())
@@ -159,7 +243,8 @@ class Direct(unittest.TestCase):
     def exercise(self, *, refuse=None, uncertain_create=False, fail_runtime=False,
                  failed_phase=None, raised_phase=None, mutate_public=None, container_exit_only=False,
                  mutate_build=None, mutate_staging=None, cleanup_failure=False,
-                 staging_retained=None, mutate_failure=None, reuse=None, stage_binary_sources=None):
+                 staging_retained=None, mutate_failure=None, reuse=None, stage_binary_sources=None,
+                 metrology_phase=None, cleanup_race=None):
         inputs = self.base/'inputs.json';inputs.write_bytes(b'{}')
         value = grant(self.output);events = [];state = {'container':None,'starts':0}
         manifest=self.build_manifest()
@@ -199,6 +284,10 @@ class Direct(unittest.TestCase):
                         state['container']['State']['Running'] = True
                         raise RuntimeError('runtime failed')
                     phase = 'build' if state['starts'] == 1 and not reuse else 'runtime'
+                    if phase == metrology_phase:
+                        state['container']['State'].update(Running=True,ExitCode=137)
+                        kwargs['native_diagnostic']['cli_exit_code']=-15
+                        raise r.MetrologyFailure('metrology_disk_walk','child_exit',23)
                     (case.output/'staging'/('resources-'+phase+'.json')).write_text(json.dumps(dict(oom=0,oom_kill=0)))
                     for filename,keys in c.REQUIRED.items():
                         produced = ('build.json',) if phase == 'build' else set(c.REQUIRED)-{'build.json','cleanup.json','resources.json'}
@@ -224,10 +313,15 @@ class Direct(unittest.TestCase):
                         (case.output/'public/runtime-diagnostics.json').write_text(json.dumps(
                             dict(step='COMPLETE',exception_class='NONE',require_label='NONE')))
                         if mutate_public:mutate_public(case.output)
-                elif cmd[0] == 'stop':state['container']['State']['Running'] = False
+                elif cmd[0] == 'stop':
+                    if cleanup_race != 'kill':state['container']['State']['Running'] = False
+                    code=1 if cleanup_race else 0
+                elif cmd[0] == 'kill':
+                    state['container']['State']['Running']=False;code=1
                 elif cmd[0] == 'rm':
                     if cleanup_failure:raise RuntimeError('fixture cleanup failure')
                     state['container'] = None
+                    if cleanup_race:code=1
                 else:raise AssertionError(cmd)
                 return subprocess.CompletedProcess(argv,code,output,error)
         def admission(image,root,grant):
@@ -272,6 +366,23 @@ class Direct(unittest.TestCase):
             for path in (self.output/'evidence').iterdir():
                 if path.is_file():self.assertNotIn('PRIVATE_WALLET_RPC_LOGIN_FRAME_ENV_STDOUT_STDERR_SENTINEL',path.read_text())
         return result,receipt,events
+
+    def test_main_metrology_abort_records_real_stopped_exit_separately_and_confirms_cleanup_races(self):
+        for race in ('stop','kill','rm'):
+            with self.subTest(race=race):
+                self.output=self.base/('metrology-'+race)
+                result,receipt,events=self.exercise(metrology_phase='build',cleanup_race=race)
+                self.assertEqual(result,1);self.assertEqual(receipt['failure_class'],'MetrologyFailure')
+                diagnostic=receipt['phase_diagnostics']['build']
+                self.assertEqual(diagnostic['cli_exit_code'],-15)
+                self.assertEqual(diagnostic['container_exit_code'],137)
+                self.assertEqual(diagnostic['metrology_failure'],dict(
+                    code='metrology_disk_walk',reason='child_exit',exit_code=23))
+                self.assertEqual(receipt['rows']['resources.json']['disk']['status'],'FAIL')
+                self.assertTrue(all(row['status']=='PASS' for row in receipt['rows']['cleanup.json'].values()))
+                self.assertEqual(receipt['rows']['build.json'],c.empty_rows()['build.json'])
+                self.assertNotIn('runtime',receipt['phase_diagnostics'])
+                self.assertEqual(events.count('start'),1)
 
     def test_two_admissions_one_container_same_container_restart_and_cleanup(self):
         result,receipt,events = self.exercise()
@@ -335,7 +446,8 @@ class Direct(unittest.TestCase):
     def test_raised_command_failure_keeps_exit_code_without_exception_transcripts(self):
         result,receipt,_ = self.exercise(raised_phase='runtime')
         self.assertEqual(result,1);self.assertEqual(receipt['failure_class'],'CalledProcessError')
-        self.assertEqual(receipt['phase_diagnostics']['runtime']['cli_exit_code'],17)
+        self.assertNotIn('cli_exit_code',receipt['phase_diagnostics']['runtime'])
+        self.assertEqual(receipt['phase_diagnostics']['runtime']['container_exit_code'],17)
         self.assertEqual(receipt['rows']['peer.json']['native_handshake']['status'],'PASS')
 
     def test_incomplete_build_evidence_prevents_runtime_start(self):
