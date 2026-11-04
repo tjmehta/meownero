@@ -130,28 +130,42 @@ class RPC:
                             chunks.append(chunk)
                         return response.status,response.headers,b''.join(chunks)
                 remaining();connection.connect();session=connection.sock
-                code,headers,payload=exchange()
-                # epee's nonce/nc belong to this socket. Never reconnect using its challenge.
-                if code==401 and auth and connection.sock is session:
-                    challenge=None
-                    for field in headers.get_all('WWW-Authenticate',[]):
-                        scheme,_,value=field.partition(' ')
-                        if scheme.lower()!='digest':continue
-                        parsed=urllib.request.parse_keqv_list(urllib.request.parse_http_list(value))
-                        if parsed.get('algorithm','MD5')=='MD5' and parsed.get('qop')=='auth':
-                            challenge=parsed;break
-                    if challenge is not None:
-                        manager=urllib.request.HTTPPasswordMgrWithDefaultRealm()
-                        manager.add_password(None,url,*auth.split(':',1))
-                        authorization=urllib.request.HTTPDigestAuthHandler(manager).get_authorization(request,challenge)
-                        if authorization is not None:
-                            code,headers,payload=exchange(authorization)
-                # A stale/rejected response ends this call. A readiness retry starts fresh.
-                if not 200<=code<300:
-                    if raw:return code,{}
-                    error=urllib.error.HTTPError(url,code,'HTTP authentication/transport failure',headers,None)
-                    error.close();raise RuntimeError('HTTP authentication/transport failure') from error
-                value=json.loads(payload)
+                expired=threading.Event()
+                def expire():
+                    # Socket timeouts alone allow indefinitely progressing HTTP headers/framing.
+                    expired.set()
+                    with contextlib.suppress(OSError):session.shutdown(socket.SHUT_RDWR)
+                timer=threading.Timer(max(0,end-time.monotonic()),expire)
+                timer.start()
+                try:
+                    code,headers,payload=exchange()
+                    # epee's nonce/nc belong to this socket. Never reconnect using its challenge.
+                    if code==401 and auth and connection.sock is session:
+                        challenge=None
+                        for field in headers.get_all('WWW-Authenticate',[]):
+                            scheme,_,value=field.partition(' ')
+                            if scheme.lower()!='digest':continue
+                            parsed=urllib.request.parse_keqv_list(urllib.request.parse_http_list(value))
+                            if parsed.get('algorithm','MD5')=='MD5' and parsed.get('qop')=='auth':
+                                challenge=parsed;break
+                        if challenge is not None:
+                            manager=urllib.request.HTTPPasswordMgrWithDefaultRealm()
+                            manager.add_password(None,url,*auth.split(':',1))
+                            authorization=urllib.request.HTTPDigestAuthHandler(manager).get_authorization(request,challenge)
+                            if authorization is not None:
+                                code,headers,payload=exchange(authorization)
+                    if expired.is_set() or time.monotonic()>=end:raise TimeoutError('RPC call deadline')
+                    # A stale/rejected response ends this call. A readiness retry starts fresh.
+                    if not 200<=code<300:
+                        if raw:return code,{}
+                        error=urllib.error.HTTPError(url,code,'HTTP authentication/transport failure',headers,None)
+                        error.close();raise RuntimeError('HTTP authentication/transport failure') from error
+                    value=json.loads(payload)
+                except Exception as error:
+                    if expired.is_set():raise TimeoutError('RPC call deadline') from error
+                    raise
+                finally:
+                    timer.cancel();timer.join();session.close()
             if raw:return code,value
             c.require('error' not in value,'native RPC returned error')
             return value.get('result',value)

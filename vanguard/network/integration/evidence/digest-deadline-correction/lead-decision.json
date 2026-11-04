@@ -1,0 +1,80 @@
+{
+  "id": "84eaf982-224b-4fbf-88c6-e76b78f77012",
+  "companyId": "0fd20c15-76d7-46b2-bbd7-ea21fac7b4c3",
+  "issueId": "06902067-3d17-4ccf-a6e4-c39d631f4ad2",
+  "kind": "ask_user_questions",
+  "status": "answered",
+  "continuationPolicy": "wake_assignee",
+  "requestedResolverPolicy": "anyone",
+  "effectiveResolverPolicy": "anyone",
+  "resolverPolicyProvenance": "inherited",
+  "effectiveResolverPolicySource": "requested",
+  "idempotencyKey": "lead-connection-nonce-decision:69d37798:43d30f45:v1",
+  "originCommentIds": [
+    "641a964a-46c9-4804-a707-a311b571b6ff"
+  ],
+  "sourceCommentId": null,
+  "sourceIdentityContextId": "41cc7936-c9bd-421a-9be7-c6199c0150f0",
+  "sourceRunId": "43d30f45-414a-42f1-8635-3a6aea2ef0d6",
+  "title": null,
+  "summary": null,
+  "createdByAgentId": "3730ad68-e373-4c8a-84df-2e11327b86a5",
+  "addresseeAgentId": "8f050fb0-7908-4b7f-be53-45d17272cec7",
+  "addresseeUserId": null,
+  "createdByUserId": null,
+  "resolvedByAgentId": "8f050fb0-7908-4b7f-be53-45d17272cec7",
+  "resolvedByRunId": "f4ee3e04-3946-4528-836f-123987733c28",
+  "resolvedByUserId": null,
+  "payload": {
+    "version": 1,
+    "supersedeOnUserComment": false,
+    "questions": [
+      {
+        "id": "bounded_digest_connection_decision",
+        "prompt": "Decision requested after consumed runtime-only grant69d37798. Exact source remains ed78cd5/treeaa359300. [Attempt report](/TJS/issues/TJS-2504#document-attempt-69d37798), revisionfc247644-7560-46f6-b263-a81c58c81bd4; [nine immutable JSON exports](/api/attachments/bc6c5b04-47f9-4093-8134-72c3cd0f22e6/content),3350bytes/SHA2565611b1b5880edc78df842d987dfaa26b6c01e5f257997bde2ed8616c84fbcc17, authenticated readback matches.\n\nBoth fresh admissions passed; prior complete PASS build reused; runtime CLI1/container1/noOOM,36.176s controller. Closed cause READINESS_RPC/TimeoutError, get_info/RuntimeError/HTTP401/228attempts before node(0) starts. All16 functional rowsNOT_RUN. Same-run local fixed-token inspection, redacted cause commentb7a2992e, independent exit0 empty exact CID/label/name checks and exact staging deletion completed15:48:58UTC. Supplemental owned cleanupPASS; immutable original nine exports/consumed marker preserved. No forbidden wallet console/seed/password/login file read. No retry or monitor.\n\nNew source-supported cause: pinned e151643c http_protocol_handler.h:197-200,237 constructs http_server_auth per connection; http_auth.cpp:361-377 checks that session nonce/nc, :790-795 generates its nonce. Actual urllib HTTP handler closes each request connection (CPython3.12.3 and host3.15.2). The previous paired-header fixture had a global fixed nonce and missed connection scope. New disposable guarded source probe uses actual ed78cd5 RPC.call against paired MD5/MD5-sess with per-connection nonce/nc: on both Python3.12.3/3.15.2 the driver gets401 (7requests/6stale, all Connection:close); a same-connection stdlib http.client control reusing urllib Digest field generation gets200. No product edits/native effects; zero protected lock touches. This supports the native401 cause but is not native wire capture or replacement acceptance.\n\nProposed bounded decision: authorize P2P from exact ed78cd5, only vanguard/network/, one implementation plus one correction <=60minutes from first production edit. Frozen-driver exception limited to RPC.call and necessary source tests/diagnostic anchors/bindings: preserve the connection through challenge/retry using stdlib/existing Digest machinery, without new crypto/dependency. Require connected session-nonce known-bad ed78cd5, positive auth, missing/wrong/old401, stale recovery, bounded retries/deadlines, close-on-error and private-export exclusion tests. Preserve exact genesis/height/pool assertions, authenticated loopback,30s/570+30s, pins/build/overlay/compiled identity, exports and all resource/cleanup limits. Platform first, then independent Security on auth boundary. Only after accepted changed source and unchanged compiled identity, a separately authenticated900s reuse grant may bind the same externally published retained root/digest1b2815e2; no local recomputation as authority. All old grants consumed.\n\nPlease answer only this saved question with the bounded decision/limits or exact alternative next owner/action. P2P retains assignment and owns consumption/implementation after decision. No formal Core re-entry; decision47234b59/count2 and later Security remain. Full matrix/independent acceptance/accepted-only lead integration unfinished. launch_ready=false/public_launch=false. Needs TJ: None.",
+        "selectionMode": "single",
+        "required": true,
+        "allowOther": true,
+        "options": [
+          {
+            "id": "paperclip_text_answer",
+            "label": "Type an answer",
+            "freeText": true
+          }
+        ]
+      }
+    ],
+    "questionSet": {
+      "schema": "paperclip.question_set.v1",
+      "questions": [
+        {
+          "id": "bounded_digest_connection_decision",
+          "prompt": "Decision requested after consumed runtime-only grant69d37798. Exact source remains ed78cd5/treeaa359300. [Attempt report](/TJS/issues/TJS-2504#document-attempt-69d37798), revisionfc247644-7560-46f6-b263-a81c58c81bd4; [nine immutable JSON exports](/api/attachments/bc6c5b04-47f9-4093-8134-72c3cd0f22e6/content),3350bytes/SHA2565611b1b5880edc78df842d987dfaa26b6c01e5f257997bde2ed8616c84fbcc17, authenticated readback matches.\n\nBoth fresh admissions passed; prior complete PASS build reused; runtime CLI1/container1/noOOM,36.176s controller. Closed cause READINESS_RPC/TimeoutError, get_info/RuntimeError/HTTP401/228attempts before node(0) starts. All16 functional rowsNOT_RUN. Same-run local fixed-token inspection, redacted cause commentb7a2992e, independent exit0 empty exact CID/label/name checks and exact staging deletion completed15:48:58UTC. Supplemental owned cleanupPASS; immutable original nine exports/consumed marker preserved. No forbidden wallet console/seed/password/login file read. No retry or monitor.\n\nNew source-supported cause: pinned e151643c http_protocol_handler.h:197-200,237 constructs http_server_auth per connection; http_auth.cpp:361-377 checks that session nonce/nc, :790-795 generates its nonce. Actual urllib HTTP handler closes each request connection (CPython3.12.3 and host3.15.2). The previous paired-header fixture had a global fixed nonce and missed connection scope. New disposable guarded source probe uses actual ed78cd5 RPC.call against paired MD5/MD5-sess with per-connection nonce/nc: on both Python3.12.3/3.15.2 the driver gets401 (7requests/6stale, all Connection:close); a same-connection stdlib http.client control reusing urllib Digest field generation gets200. No product edits/native effects; zero protected lock touches. This supports the native401 cause but is not native wire capture or replacement acceptance.\n\nProposed bounded decision: authorize P2P from exact ed78cd5, only vanguard/network/, one implementation plus one correction <=60minutes from first production edit. Frozen-driver exception limited to RPC.call and necessary source tests/diagnostic anchors/bindings: preserve the connection through challenge/retry using stdlib/existing Digest machinery, without new crypto/dependency. Require connected session-nonce known-bad ed78cd5, positive auth, missing/wrong/old401, stale recovery, bounded retries/deadlines, close-on-error and private-export exclusion tests. Preserve exact genesis/height/pool assertions, authenticated loopback,30s/570+30s, pins/build/overlay/compiled identity, exports and all resource/cleanup limits. Platform first, then independent Security on auth boundary. Only after accepted changed source and unchanged compiled identity, a separately authenticated900s reuse grant may bind the same externally published retained root/digest1b2815e2; no local recomputation as authority. All old grants consumed.\n\nPlease answer only this saved question with the bounded decision/limits or exact alternative next owner/action. P2P retains assignment and owns consumption/implementation after decision. No formal Core re-entry; decision47234b59/count2 and later Security remain. Full matrix/independent acceptance/accepted-only lead integration unfinished. launch_ready=false/public_launch=false. Needs TJ: None.",
+          "required": true,
+          "answerMode": "text"
+        }
+      ]
+    }
+  },
+  "result": {
+    "version": 1,
+    "answers": [
+      {
+        "questionId": "bounded_digest_connection_decision",
+        "optionIds": [
+          "paperclip_text_answer"
+        ],
+        "otherText": "Lead decision, TJ may reverse: adopted as proposed, with four additions.\n\n**Cause confirmed from source.** In pinned e151643c, `http_custom_handler` holds `m_auth` (an `http_server_auth`) as a per-connection member (`contrib/epee/include/net/http_protocol_handler.h:197-200, 237`). The Digest nonce and nc therefore live only as long as one TCP connection. `urllib` closes after the 401 challenge and retries on a new connection, which gets a fresh nonce, so every authenticated call returns 401. Your HTTP 401 / get_info / 228-attempt record and the per-connection-nonce probe agree with this. The 30 s budget was never the problem.\n\n**Scope.** You, from clean ed78cd5, in `vanguard/network/` only. One implementation pass and one correction pass, at most 60 minutes from the first edit. The frozen-driver exception covers only `RPC.call`, plus the tests, anchors and bindings that depend on it. Use stdlib `http.client` on one connection per call: send unauthenticated, read the 401 challenge, send the Digest-authenticated retry on the same socket, then close. Use only existing stdlib Digest computation (MD5, qop=auth), with no new dependency or hand-rolled crypto beyond what stdlib already does.\n\n**Additions.**\n1. **Wallet RPC too.** The same `RPC` class serves `monero-wallet-rpc`, which uses the same epee handler. Show the fix covers the wallet path (get_balance, the 17 restricted -7 denials and the rotated-login checks), not just the daemon.\n2. **Negative controls stay real.** Missing, wrong and old credentials must still end in a genuine 401 on that same connection, with no retry loop: at most one challenge-response per call. The raw 401 controls in `auth_controls` must still observe 401.\n3. **Bounded failure.** Close the socket on every error path. Treat a stale-nonce challenge as one fresh connection attempt within the existing per-call `budget(5)` and the 570+30 s deadlines. No new timeouts.\n4. **Known-bad check.** The ed78cd5 `RPC.call` must fail the per-connection-nonce fixture (session nonce/nc as in `http_auth.cpp:361-377`). The fixed client must pass it on Python 3.12.3 and 3.15.2. The closed readiness codes and private traceback stay unchanged, and no credential reaches any export or log.\n\nExact genesis, height and pool predicates, the 30 s/570+30 s budgets, loopback and privacy rules, compiled identity, pins, build.sh, overlay, workload and caps are all unchanged.\n\n**Review.** Platform first, then Security, because this is the authenticated client. Findings under the per-round bounds are yours to fix. A second failed round on the same finding comes back to me.\n\n**Then.** One new 900 s `--reuse-build` grant bound to the accepted commit/runner/inputs/packet and the published retained authority (receipt digest 1b2815e2\u2026, root from grant 3eedebc0's published output_root), never a recomputed manifest. Same caps, at least 48 h validity, no preparation round, the same first-admission rule, and the same-run redacted inspection and exact deletion. 69d37798 and all earlier grants stay consumed.\n\nCore decision 47234b59 (count 2) is unchanged. Native ATTEMPTED_FAIL; launch_ready=false; public_launch=false. Needs TJ: None.\n"
+      }
+    ],
+    "summaryMarkdown": "Lead decision, TJ may reverse: adopted as proposed, with four additions.\n\n**Cause confirmed from source.** In pinned e151643c, `http_custom_handler` holds `m_auth` (an `http_server_auth`) as a per-connection member (`contrib/epee/include/net/http_protocol_handler.h:197-200, 237`). The Digest nonce and nc therefore live only as long as one TCP connection. `urllib` closes after the 401 challenge and retries on a new connection, which gets a fresh nonce, so every authenticated call returns 401. Your HTTP 401 / get_info / 228-attempt record and the per-connection-nonce probe agree with this. The 30 s budget was never the problem.\n\n**Scope.** You, from clean ed78cd5, in `vanguard/network/` only. One implementation pass and one correction pass, at most 60 minutes from the first edit. The frozen-driver exception covers only `RPC.call`, plus the tests, anchors and bindings that depend on it. Use stdlib `http.client` on one connection per call: send unauthenticated, read the 401 challenge, send the Digest-authenticated retry on the same socket, then close. Use only existing stdlib Digest computation (MD5, qop=auth), with no new dependency or hand-rolled crypto beyond what stdlib already does.\n\n**Additions.**\n1. **Wallet RPC too.** The same `RPC` class serves `monero-wallet-rpc`, which uses the same epee handler. Show the fix covers the wallet path (get_balance, the 17 restricted -7 denials and the rotated-login checks), not just the daemon.\n2. **Negative controls stay real.** Missing, wrong and old credentials must still end in a genuine 401 on that same connection, with no retry loop: at most one challenge-response per call. The raw 401 controls in `auth_controls` must still observe 401.\n3. **Bounded failure.** Close the socket on every error path. Treat a stale-nonce challenge as one fresh connection attempt within the existing per-call `budget(5)` and the 570+30 s deadlines. No new timeouts.\n4. **Known-bad check.** The ed78cd5 `RPC.call` must fail the per-connection-nonce fixture (session nonce/nc as in `http_auth.cpp:361-377`). The fixed client must pass it on Python 3.12.3 and 3.15.2. The closed readiness codes and private traceback stay unchanged, and no credential reaches any export or log.\n\nExact genesis, height and pool predicates, the 30 s/570+30 s budgets, loopback and privacy rules, compiled identity, pins, build.sh, overlay, workload and caps are all unchanged.\n\n**Review.** Platform first, then Security, because this is the authenticated client. Findings under the per-round bounds are yours to fix. A second failed round on the same finding comes back to me.\n\n**Then.** One new 900 s `--reuse-build` grant bound to the accepted commit/runner/inputs/packet and the published retained authority (receipt digest 1b2815e2\u2026, root from grant 3eedebc0's published output_root), never a recomputed manifest. Same caps, at least 48 h validity, no preparation round, the same first-admission rule, and the same-run redacted inspection and exact deletion. 69d37798 and all earlier grants stay consumed.\n\nCore decision 47234b59 (count 2) is unchanged. Native ATTEMPTED_FAIL; launch_ready=false; public_launch=false. Needs TJ: None.\n"
+  },
+  "resolvedAt": "2026-11-04T16:06:06.131Z",
+  "createdAt": "2026-11-04T15:53:45.745Z",
+  "updatedAt": "2026-11-04T16:06:06.131Z",
+  "resolverPolicy": "anyone",
+  "legacyResolverPolicyAliases": {
+    "requested": "board_or_agents",
+    "effective": "board_or_agents"
+  }
+}

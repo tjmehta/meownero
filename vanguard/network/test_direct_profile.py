@@ -57,6 +57,10 @@ def digest_fixture(**options):
         def finish(self):
             try:super().finish()
             finally:self.server.closed.add(self.session)
+        def handle(self):
+            try:super().handle()
+            except ConnectionResetError:
+                if self.server.progress_stage is None:raise
         def log_message(self,*args):pass
         def do_POST(self):
             body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
@@ -96,23 +100,42 @@ def digest_fixture(**options):
                 for algorithm in self.server.algorithms:
                     self.send_header('WWW-Authenticate',f'Digest qop="{self.server.qop}", algorithm={algorithm}, realm="monero-rpc", nonce="{self.nonce}", stale='+('true' if stale else 'false'))
                 if self.server.close_challenge:self.send_header('Connection','close');self.close_connection=True
-            self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(payload)))
-            self.end_headers()
-            try:self.wfile.write(payload)
+            self.send_header('Content-Type','application/json')
+            stage=self.server.progress_stage
+            chunked=valid and stage in ('chunk_size','chunk_trailer','chunk_invalid')
+            self.send_header('Transfer-Encoding','chunked') if chunked else self.send_header('Content-Length',str(len(payload)))
+            try:
+                if stage==('response_headers' if valid else 'challenge_headers'):
+                    self.flush_headers()
+                    for _ in range(self.server.progress_count):
+                        self.wfile.write(b'X-Progress: ok\r\n');time.sleep(self.server.progress_delay)
+                self.end_headers()
+                if stage=='chunk_invalid' and valid:
+                    self.wfile.write(b'invalid\r\n');self.close_connection=True
+                elif chunked:
+                    if stage=='chunk_size':
+                        self.wfile.write(f'{len(payload):x};'.encode())
+                    else:self.wfile.write(f'{len(payload):x}\r\n'.encode()+payload+b'\r\n0\r\nX-Trailer: ')
+                    for _ in range(self.server.progress_count):
+                        self.wfile.write(b'x');time.sleep(self.server.progress_delay)
+                    self.wfile.write(b'\r\n'+payload+b'\r\n0\r\n\r\n' if stage=='chunk_size' else b'\r\n\r\n')
+                else:self.wfile.write(payload)
             except (BrokenPipeError,ConnectionResetError):pass
     class Server(ThreadingHTTPServer):
         daemon_threads=False
-        def handle_error(self,*args):raise AssertionError('unexpected disposable server error')
+        def handle_error(self,*args):self.errors.append(sys.exc_info()[1])
     server=Server(('127.0.0.1',0),Handler)
-    server.login='fixture:dummy';server.events=[];server.sessions=[];server.closed=set()
+    server.login='fixture:dummy';server.events=[];server.sessions=[];server.closed=set();server.errors=[]
     for key,default in dict(force_stale=False,delay=0,bad_json=False,close_challenge=False,
-                            algorithms=('MD5','MD5-sess'),qop='auth').items():
+                            algorithms=('MD5','MD5-sess'),qop='auth',progress_stage=None,
+                            progress_delay=.025,progress_count=12).items():
         setattr(server,key,options.get(key,default))
     thread=threading.Thread(target=server.serve_forever,kwargs={'poll_interval':.01});thread.start()
     try:yield server
     finally:
         server.shutdown();thread.join(timeout=2);server.server_close()
         assert not thread.is_alive()
+        assert not server.errors, server.errors
         assert server.closed==set(range(len(server.sessions))), 'client left session open'
 
 
@@ -244,6 +267,66 @@ class Direct(unittest.TestCase):
         timeouts=[x.args[0] for x in connection.sock.settimeout.call_args_list]
         self.assertEqual(timeouts[0],5);self.assertEqual(timeouts[-1],2)
         connection.close.assert_called_once()
+
+    def test_rpc_progressing_headers_and_chunk_framing_obey_driver_deadline(self):
+        import threading
+        driver=self.driver_fixture()
+        old=subprocess.check_output(['git','show','be242236:./vanguard/network/profile-integration.py']).decode()
+        baseline=type(sys)('baseline_progress');baseline.__file__=str(c.HERE/'profile-integration.py')
+        exec(compile(old,baseline.__file__,'exec'),baseline.__dict__)
+        for stage in ('challenge_headers','response_headers','chunk_size','chunk_trailer'):
+            for candidate in (baseline,driver):
+                with self.subTest(stage=stage,candidate=candidate.__name__),digest_fixture(progress_stage=stage) as server:
+                    candidate.DEADLINE=time.monotonic()+.12;start=time.monotonic()
+                    caught=None
+                    try:candidate.RPC(server.server_port,server.login).healthy()
+                    except (OSError,ValueError) as error:caught=error
+                    elapsed=time.monotonic()-start
+                    print(json.dumps(dict(rpc_deadline_probe=stage,candidate=candidate.__name__,elapsed_seconds=elapsed,
+                                          exception=type(caught).__name__ if caught is not None else 'NONE')))
+                    if candidate is baseline:self.assertGreater(elapsed,.25)
+                    else:
+                        self.assertIsInstance(caught,TimeoutError)
+                        self.assertLess(elapsed,.24);self.assertGreater(elapsed,.08)
+                        self.assertFalse(any(isinstance(t,threading.Timer) for t in threading.enumerate()))
+                        self.assertNotIn('PRIVATE_SECRET',json.dumps(caught.readiness))
+                    self.assertEqual(len(server.sessions),1)
+                    self.assertLessEqual(len(server.events),2)
+        with digest_fixture() as server:
+            driver.DEADLINE=time.monotonic()+20
+            self.assertEqual(driver.RPC(server.server_port,server.login).healthy()['status'],'OK')
+            self.assertEqual([x['session'] for x in server.events],[0,0])
+            self.assertFalse(any(isinstance(t,threading.Timer) for t in threading.enumerate()))
+
+    def test_rpc_invalid_chunk_framing_closes_socket_and_timer(self):
+        import threading
+        from http.client import IncompleteRead
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+20
+        with digest_fixture(progress_stage='chunk_invalid') as server:
+            with self.assertRaises(IncompleteRead) as caught:driver.RPC(server.server_port,server.login).healthy()
+            self.assertNotIn('PRIVATE_SECRET',json.dumps(caught.exception.readiness))
+            self.assertEqual(len(server.sessions),1);self.assertEqual(len(server.events),2)
+            self.assertFalse(any(isinstance(t,threading.Timer) for t in threading.enumerate()))
+
+    def test_rpc_progressing_headers_obey_original_five_second_call_budget(self):
+        import threading,http.client
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+30
+        connected=[];connect=http.client.HTTPConnection.connect
+        def capture(connection):
+            connect(connection);connected.append(connection.sock.getsockname())
+        with digest_fixture(progress_stage='response_headers',progress_delay=.25,progress_count=24) as server:
+            start=time.monotonic()
+            with patch.object(http.client.HTTPConnection,'connect',capture),self.assertRaises(TimeoutError):
+                driver.RPC(server.server_port,server.login).healthy()
+            elapsed=time.monotonic()-start
+            print(json.dumps(dict(rpc_deadline_probe='five_second_call',elapsed_seconds=elapsed,
+                owned_connects=len(connected),accepted_sessions=len(server.sessions),http_events=server.events)))
+            self.assertGreater(elapsed,4.8);self.assertLess(elapsed,5.5)
+            self.assertEqual(len(connected),1)
+            owned={h.session for h in server.sessions if h.client_address in connected}
+            self.assertEqual(len(owned),1);self.assertEqual(len(server.events),2)
+            self.assertEqual({event['session'] for event in server.events},owned)
+            self.assertFalse(any(isinstance(t,threading.Timer) for t in threading.enumerate()))
 
     def readiness_timeout(self,driver,check):
         clock=[0.0]
@@ -1257,8 +1340,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,501)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[502])
+        self.assertEqual(node.lineno,515)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[516])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
