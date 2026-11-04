@@ -101,6 +101,7 @@ def released(root):
 class RPC:
     def __init__(self,port,login): self.port,self.login=port,login
     def call(self,method,params=None,path='json_rpc',login='current',raw=False):
+        from http.client import HTTPConnection
         from integration.runtime_diagnostics import readiness_failure
         operation = {'get_info':'get_info'}.get(method, {'get_transaction_pool_hashes':'pool_hashes',
             'get_transaction_pool_stats':'pool_stats'}.get(path, 'OTHER_OPERATION'))
@@ -108,19 +109,50 @@ class RPC:
             auth=self.login if login=='current' else login
             url=f'http://127.0.0.1:{self.port}/{path}'
             body={'jsonrpc':'2.0','id':'0','method':method,'params':params or {}} if path=='json_rpc' else params or {}
-            handlers=[]
-            if auth:
-                manager=urllib.request.HTTPPasswordMgrWithDefaultRealm()
-                manager.add_password(None,url,*auth.split(':',1))
-                handlers=[urllib.request.HTTPDigestAuthHandler(manager)]
             request=urllib.request.Request(url,json.dumps(body).encode(),{'Content-Type':'application/json'})
-            try:
-                with urllib.request.build_opener(*handlers).open(request,timeout=budget(5)) as response:
-                    code=response.status;value=json.load(response)
-            except urllib.error.HTTPError as error:
-                if raw: return error.code,{}
-                raise RuntimeError('HTTP authentication/transport failure') from error
-            if raw: return code,value
+            end=time.monotonic()+budget(5)
+            with contextlib.closing(HTTPConnection('127.0.0.1',self.port,timeout=budget(5))) as connection:
+                def remaining():
+                    left=min(budget(5),end-time.monotonic())
+                    if left<=0:raise TimeoutError('RPC call deadline')
+                    connection.timeout=left
+                    if connection.sock is not None:connection.sock.settimeout(left)
+                def exchange(authorization=None):
+                    headers={'Content-Type':'application/json'}
+                    if authorization is not None:headers['Authorization']='Digest '+authorization
+                    remaining();connection.request('POST',request.selector,request.data,headers)
+                    remaining()
+                    with connection.getresponse() as response:
+                        chunks=[]
+                        while True:
+                            remaining();chunk=response.read1(65536)
+                            if not chunk:break
+                            chunks.append(chunk)
+                        return response.status,response.headers,b''.join(chunks)
+                remaining();connection.connect();session=connection.sock
+                code,headers,payload=exchange()
+                # epee's nonce/nc belong to this socket. Never reconnect using its challenge.
+                if code==401 and auth and connection.sock is session:
+                    challenge=None
+                    for field in headers.get_all('WWW-Authenticate',[]):
+                        scheme,_,value=field.partition(' ')
+                        if scheme.lower()!='digest':continue
+                        parsed=urllib.request.parse_keqv_list(urllib.request.parse_http_list(value))
+                        if parsed.get('algorithm','MD5')=='MD5' and parsed.get('qop')=='auth':
+                            challenge=parsed;break
+                    if challenge is not None:
+                        manager=urllib.request.HTTPPasswordMgrWithDefaultRealm()
+                        manager.add_password(None,url,*auth.split(':',1))
+                        authorization=urllib.request.HTTPDigestAuthHandler(manager).get_authorization(request,challenge)
+                        if authorization is not None:
+                            code,headers,payload=exchange(authorization)
+                # A stale/rejected response ends this call. A readiness retry starts fresh.
+                if not 200<=code<300:
+                    if raw:return code,{}
+                    error=urllib.error.HTTPError(url,code,'HTTP authentication/transport failure',headers,None)
+                    error.close();raise RuntimeError('HTTP authentication/transport failure') from error
+                value=json.loads(payload)
+            if raw:return code,value
             c.require('error' not in value,'native RPC returned error')
             return value.get('result',value)
         except Exception as error:

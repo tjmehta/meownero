@@ -43,6 +43,79 @@ def comment(value):
         body='```meownero-direct-profile-grant\n'+json.dumps(value)+'\n```')
 
 
+@contextlib.contextmanager
+def digest_fixture(**options):
+    """Disposable epee-shaped server: nonce and nc belong to each TCP session."""
+    import hashlib,threading,urllib.request
+    from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
+    md=lambda value:hashlib.md5(value.encode('ascii')).hexdigest()
+    class Handler(BaseHTTPRequestHandler):
+        protocol_version='HTTP/1.1'
+        def setup(self):
+            super().setup();self.session=len(self.server.sessions)
+            self.server.sessions.append(self);self.nonce='';self.counter=0
+        def finish(self):
+            try:super().finish()
+            finally:self.server.closed.add(self.session)
+        def log_message(self,*args):pass
+        def do_POST(self):
+            body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+            authorization=self.headers.get('Authorization','');valid=stale=False
+            if authorization.startswith('Digest '):
+                self.counter+=1
+                try:
+                    fields=urllib.request.parse_keqv_list(urllib.request.parse_http_list(authorization[7:]))
+                    user,password=self.server.login.split(':',1)
+                    expected=md(':'.join([md(user+':monero-rpc:'+password),fields['nonce'],fields['nc'],
+                        fields['cnonce'],'auth',md('POST:'+self.path)]))
+                    credential=(fields['username']==user and fields['realm']=='monero-rpc' and
+                        fields['algorithm']=='MD5' and fields['qop']=='auth' and fields['uri']==self.path and
+                        bool(fields['cnonce']) and fields['response']==expected)
+                    stale=credential and (fields['nonce']!=self.nonce or int(fields['nc'],16)!=self.counter)
+                    valid=credential and not stale
+                except (KeyError,ValueError):pass
+            if valid and self.server.force_stale:
+                self.server.force_stale=False;valid=False;stale=True
+            method=body.get('method','')
+            self.server.events.append(dict(session=self.session,authorized=bool(authorization),
+                accepted=valid,stale=stale,method=method,path=self.path,
+                connection_close=self.headers.get('Connection','').lower()=='close'))
+            if self.server.delay:time.sleep(self.server.delay)
+            if valid:
+                if method in c.denial_requests('dummy-address','dummy-seed'):
+                    value={'error':{'code':-7,'message':'PRIVATE_SECRET'}}
+                elif method=='get_balance':value={'result':{'balance':0,'unlocked_balance':0}}
+                elif self.path=='/get_transaction_pool_hashes':value={}
+                elif self.path=='/get_transaction_pool_stats':value={'pool_stats':{'txs_total':0}}
+                else:value={'result':dict(status='OK',height=1,top_block_hash=c.GENESIS,wide_cumulative_difficulty='0x1')}
+                payload=b'PRIVATE_SECRET' if self.server.bad_json else json.dumps(value).encode()
+                self.send_response(200)
+            else:
+                self.counter=0;self.nonce=os.urandom(16).hex();payload=b'PRIVATE_SECRET'
+                self.send_response(401)
+                for algorithm in self.server.algorithms:
+                    self.send_header('WWW-Authenticate',f'Digest qop="{self.server.qop}", algorithm={algorithm}, realm="monero-rpc", nonce="{self.nonce}", stale='+('true' if stale else 'false'))
+                if self.server.close_challenge:self.send_header('Connection','close');self.close_connection=True
+            self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(payload)))
+            self.end_headers()
+            try:self.wfile.write(payload)
+            except (BrokenPipeError,ConnectionResetError):pass
+    class Server(ThreadingHTTPServer):
+        daemon_threads=False
+        def handle_error(self,*args):raise AssertionError('unexpected disposable server error')
+    server=Server(('127.0.0.1',0),Handler)
+    server.login='fixture:dummy';server.events=[];server.sessions=[];server.closed=set()
+    for key,default in dict(force_stale=False,delay=0,bad_json=False,close_challenge=False,
+                            algorithms=('MD5','MD5-sess'),qop='auth').items():
+        setattr(server,key,options.get(key,default))
+    thread=threading.Thread(target=server.serve_forever,kwargs={'poll_interval':.01});thread.start()
+    try:yield server
+    finally:
+        server.shutdown();thread.join(timeout=2);server.server_close()
+        assert not thread.is_alive()
+        assert server.closed==set(range(len(server.sessions))), 'client left session open'
+
+
 class Direct(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
@@ -57,6 +130,120 @@ class Direct(unittest.TestCase):
         return r.grant_payload(comment(value),commit='a'*40,inputs_hash=c.digest(b'{}'),
             artifact_hash=c.digest(b'packet'),runner_hash=c.digest((c.HERE/'run-profile.py').read_bytes()),
             output=self.output,now=time.time())
+
+    def test_rpc_session_nonce_known_bad_and_daemon_snapshot(self):
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+20
+        old=subprocess.check_output(['git','show','ed78cd5:./vanguard/network/profile-integration.py']).decode()
+        baseline=type(sys)('baseline_digest');baseline.__file__=str(c.HERE/'profile-integration.py')
+        exec(compile(old,baseline.__file__,'exec'),baseline.__dict__);baseline.DEADLINE=driver.DEADLINE
+        import http.client
+        sockets=[];responses=[];connect=http.client.HTTPConnection.connect;getresponse=http.client.HTTPConnection.getresponse
+        def capture(connection):
+            connect(connection);sockets.append(connection.sock)
+        def capture_response(connection):
+            response=getresponse(connection);responses.append(response);return response
+        with digest_fixture() as server:
+            with patch.object(http.client.HTTPConnection,'connect',capture),patch.object(http.client.HTTPConnection,'getresponse',capture_response):
+                with self.assertRaises(RuntimeError) as caught:baseline.RPC(server.server_port,server.login).call('get_info')
+            self.assertEqual(caught.exception.readiness['http_status'],401)
+            pending=[caught.exception];closed=set()
+            while pending:
+                error=pending.pop()
+                if id(error) in closed:continue
+                closed.add(id(error))
+                pending.extend(x for x in (error.__cause__,error.__context__) if x is not None)
+                if hasattr(error,'close'):error.close()
+            for response in responses:response.close()
+            for sock in sockets:sock.close()
+            self.assertFalse(any(x['accepted'] for x in server.events))
+            self.assertTrue(any(x['stale'] for x in server.events))
+            self.assertTrue(all(x['connection_close'] for x in server.events))
+        with digest_fixture() as server:
+            rpc=driver.RPC(server.server_port,server.login)
+            self.assertEqual(driver.snapshot(rpc),dict(height=1,top_block_hash=c.GENESIS,work='0x1',pool_hashes=[]))
+            rpc.auth_controls()
+            self.assertTrue(any(x['accepted'] for x in server.events))
+            for session in {x['session'] for x in server.events}:
+                pair=[x for x in server.events if x['session']==session]
+                self.assertIn(len(pair),(1,2));self.assertFalse(pair[0]['authorized'])
+                if len(pair)==2:self.assertTrue(pair[1]['authorized'])
+            self.assertFalse(any(x['connection_close'] for x in server.events))
+
+    def test_rpc_session_wallet_denials_and_rotated_login(self):
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+20
+        with digest_fixture() as server:
+            rpc=driver.RPC(server.server_port,server.login);rpc.auth_controls(True)
+            self.assertEqual(rpc.healthy(True),dict(balance=0,unlocked_balance=0))
+            requests=c.denial_requests('dummy-address','dummy-seed')
+            self.assertEqual(len(requests),17)
+            for method,params in requests.items():
+                rpc.healthy(True);code,value=rpc.call(method,params,raw=True)
+                self.assertEqual((code,value['error']['code']),(200,-7));rpc.healthy(True)
+            old=rpc.login;server.login=rpc.login='fixture:rotated'
+            rpc.auth_controls(True,old)
+            refused=[x for x in server.events if x['authorized'] and not x['accepted']]
+            self.assertEqual(len(refused),3) # wrong before/after rotation, and old.
+            for login in (None,'fixture:wrong',old):
+                with self.assertRaises(RuntimeError) as caught:rpc.call('get_balance',login=login)
+                self.assertEqual(caught.exception.readiness['http_status'],401)
+                self.assertEqual(caught.exception.readiness['exception_class'],'RuntimeError')
+                self.assertNotIn('PRIVATE_SECRET',json.dumps(caught.exception.readiness))
+            self.assertEqual({x['method'] for x in server.events if x['accepted']} & requests.keys(),requests.keys())
+            self.assertTrue(all(sum(x['session']==s for x in server.events)<=2 for s in range(len(server.sessions))))
+
+    def test_rpc_session_stale_is_one_response_then_fresh_call(self):
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+20
+        with digest_fixture(force_stale=True) as server:
+            rpc=driver.RPC(server.server_port,server.login)
+            self.assertEqual(rpc.call('get_info',raw=True),(401,{}))
+            self.assertEqual(len(server.events),2);self.assertTrue(server.events[-1]['stale'])
+            self.assertEqual(rpc.healthy()['status'],'OK')
+            self.assertEqual([x['session'] for x in server.events],[0,0,1,1])
+
+    def test_rpc_session_closed_or_unsupported_challenge_never_reconnects(self):
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+20
+        for options in [dict(close_challenge=True),dict(algorithms=('MD5-sess',)),dict(qop='auth-int')]:
+            with self.subTest(options=options),digest_fixture(**options) as server:
+                self.assertEqual(driver.RPC(server.server_port,server.login).call('get_info',raw=True),(401,{}))
+                self.assertEqual(len(server.events),1);self.assertFalse(server.events[0]['authorized'])
+
+    def test_rpc_session_deadline_and_json_errors_close_without_public_text(self):
+        driver=self.driver_fixture()
+        with digest_fixture(delay=.15) as server:
+            driver.DEADLINE=time.monotonic()+.05;start=time.monotonic()
+            with self.assertRaises((OSError,ValueError)) as caught:driver.RPC(server.server_port,server.login).healthy()
+            self.assertLess(time.monotonic()-start,.12)
+            self.assertNotIn('PRIVATE_SECRET',json.dumps(caught.exception.readiness))
+        driver.DEADLINE=time.monotonic()+20
+        with digest_fixture(bad_json=True) as server:
+            with self.assertRaises(json.JSONDecodeError) as caught:driver.RPC(server.server_port,server.login).healthy()
+            self.assertEqual(caught.exception.readiness['http_status'],200)
+            self.assertNotIn('PRIVATE_SECRET',json.dumps(caught.exception.readiness))
+
+    def test_rpc_session_transport_closes_and_shares_five_second_budget(self):
+        from unittest.mock import MagicMock
+        driver=self.driver_fixture();driver.DEADLINE=time.monotonic()+20
+        for stage in ('connect','request','getresponse','read1'):
+            connection=MagicMock();response=MagicMock();response.__enter__.return_value=response
+            response.status=200;response.headers={};response.read1.side_effect=[b'{}',b'']
+            connection.getresponse.return_value=response
+            target=response if stage=='read1' else connection
+            getattr(target,stage).side_effect=ConnectionResetError('PRIVATE_SECRET')
+            with self.subTest(stage=stage),patch('http.client.HTTPConnection',return_value=connection):
+                with self.assertRaises(ConnectionResetError) as caught:driver.RPC(1,'fixture:dummy').healthy()
+                connection.close.assert_called_once()
+                self.assertNotIn('PRIVATE_SECRET',json.dumps(caught.exception.readiness))
+        driver.DEADLINE=600
+        clock=[0.0];connection=MagicMock();response=MagicMock();response.__enter__.return_value=response
+        response.status=200;response.headers={};response.read1.side_effect=[b'{}',b'']
+        connection.getresponse.return_value=response
+        def request(*args):clock[0]+=3
+        connection.request.side_effect=request
+        with patch('http.client.HTTPConnection',return_value=connection),patch.object(driver.time,'monotonic',side_effect=lambda:clock[0]):
+            self.assertEqual(driver.RPC(1,'fixture:dummy').healthy(),{})
+        timeouts=[x.args[0] for x in connection.sock.settimeout.call_args_list]
+        self.assertEqual(timeouts[0],5);self.assertEqual(timeouts[-1],2)
+        connection.close.assert_called_once()
 
     def readiness_timeout(self,driver,check):
         clock=[0.0]
@@ -123,18 +310,21 @@ class Direct(unittest.TestCase):
         for method,path,operation in [('get_info','json_rpc','get_info'),('','get_transaction_pool_hashes','pool_hashes'),('','get_transaction_pool_stats','pool_stats')]:
             for failure in (urllib.error.HTTPError('http://127.0.0.1/',503,'PRIVATE_SECRET',{},None),
                     urllib.error.URLError('PRIVATE_SECRET'),ValueError('PRIVATE_SECRET')):
-                with patch.object(driver.urllib.request,'build_opener') as opener:
-                    opener.return_value.open.side_effect=failure
+                with patch('http.client.HTTPConnection') as opener:
+                    opener.return_value.connect.side_effect=failure
                     with self.assertRaises((OSError,ValueError,RuntimeError)) as caught:driver.RPC(1,'fixture:dummy').call(method,path=path)
+                if isinstance(failure,urllib.error.HTTPError):failure.close()
                 codes=caught.exception.readiness
                 self.assertEqual(codes['operation'],operation)
                 self.assertEqual(codes['http_status'],503 if isinstance(failure,urllib.error.HTTPError) else 0)
                 self.assertNotIn('PRIVATE_SECRET',json.dumps(codes))
         for body,label,kind in [(b'{"error":{"message":"PRIVATE_SECRET"}}','NATIVE_RPC_RETURNED_ERROR','ValueError'),
                 (b'PRIVATE_SECRET','NONE','JSONDecodeError')]:
-            response=io.BytesIO(body);response.status=200
-            with patch.object(driver.urllib.request,'build_opener') as opener:
-                opener.return_value.open.return_value=response
+            from unittest.mock import MagicMock
+            response=MagicMock();response.status=200;response.headers={}
+            response.read1.side_effect=[body,b''];response.__enter__.return_value=response
+            with patch('http.client.HTTPConnection') as opener:
+                opener.return_value.getresponse.return_value=response
                 with self.assertRaises(ValueError) as caught:driver.RPC(1,'fixture:dummy').call('get_info')
             codes=caught.exception.readiness
             self.assertEqual((codes['http_status'],codes['require_label'],codes['exception_class']),(200,label,kind))
@@ -986,7 +1176,7 @@ class Direct(unittest.TestCase):
         self.assertIn('ValueError: genesis peer disagreement',(driver.PRIVATE/'failure-traceback').read_text())
         self.assertFalse((driver.PUBLIC/'failure-traceback').exists())
         self.assertEqual((driver.PRIVATE/'failure-traceback').stat().st_mode & 0o777,0o600)
-        # The lead exception allows exactly three function bodies to change.
+        # Prior instrumentation exception: exactly three bodies; this round: RPC.call only.
         baseline=subprocess.check_output(['git','show','530205f7:./vanguard/network/profile-integration.py']).decode()
         current=(c.HERE/'profile-integration.py').read_text()
         def frozen(raw):
@@ -997,6 +1187,14 @@ class Direct(unittest.TestCase):
             for item in sorted(allowed,key=lambda x:x.lineno,reverse=True):lines[item.lineno-1:item.end_lineno]=['<AUTHORIZED FUNCTION>\n']
             return ''.join(lines)
         self.assertEqual(frozen(current),frozen(baseline))
+        baseline=subprocess.check_output(['git','show','ed78cd5:./vanguard/network/profile-integration.py']).decode()
+        def outside_call(raw):
+            tree=ast.parse(raw);lines=raw.splitlines(keepends=True)
+            rpc=next(item for item in tree.body if isinstance(item,ast.ClassDef) and item.name=='RPC')
+            item=next(item for item in rpc.body if isinstance(item,ast.FunctionDef) and item.name=='call')
+            lines[item.lineno-1:item.end_lineno]=['<AUTHORIZED RPC.call>\n']
+            return ''.join(lines)
+        self.assertEqual(outside_call(current),outside_call(baseline))
 
     def test_actual_node_start_and_readiness_failure_codes(self):
         for target in (0,1,'readiness'):
@@ -1059,8 +1257,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,469)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[470])
+        self.assertEqual(node.lineno,501)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[502])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
