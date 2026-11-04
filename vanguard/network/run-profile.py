@@ -641,6 +641,13 @@ def main():
             cleanup['owned_cid_absent'] = dict(status='PASS',create_intent=create_intent)
             cleanup_key = 'owned_staging_removed'
             if receipt.get('failure_phase') == 'build' and 'runtime' not in receipt['phase_diagnostics']:
+                # A failed build can bypass the normal gate. Find its rejection
+                # before diagnostics capture and collect_public unlinks the input.
+                try: read_public_rows(args.out/'public/build.json',public_shapes())
+                except FileNotFoundError: pass
+                except Exception as error:
+                    receipt.setdefault('build_rejection_key_path',
+                        error.key_path if isinstance(error,PublicWitnessError) else 'build.json')
                 try:
                     diagnostics = build_diagnostics(args.out/'staging',public=args.out/'public',
                         rejected_key_path=receipt.get('build_rejection_key_path'))

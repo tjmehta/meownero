@@ -1,0 +1,49 @@
+test_rejected_build_retains_exact_bounded_bytes_and_trusted_key_path (test_direct_profile.Direct.test_rejected_build_retains_exact_bounded_bytes_and_trusted_key_path) ... ok
+test_nonzero_build_cli_and_container_retain_rejected_build (test_direct_profile.Direct.test_nonzero_build_cli_and_container_retain_rejected_build) ... ERROR
+test_zero_build_cli_nonzero_container_retains_rejected_build (test_direct_profile.Direct.test_zero_build_cli_nonzero_container_retains_rejected_build) ... ERROR
+test_raised_build_command_retains_rejected_build (test_direct_profile.Direct.test_raised_build_command_retains_rejected_build) ... ERROR
+
+======================================================================
+ERROR: test_nonzero_build_cli_and_container_retain_rejected_build (test_direct_profile.Direct.test_nonzero_build_cli_and_container_retain_rejected_build)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 718, in test_nonzero_build_cli_and_container_retain_rejected_build
+    self.assert_rejected_build_retained(failed_phase='build')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 706, in assert_rejected_build_retained
+    rejected = json.loads((self.output/'evidence/build-diagnostics.json').read_text())['rejected_build']
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'rejected_build'
+
+======================================================================
+ERROR: test_zero_build_cli_nonzero_container_retains_rejected_build (test_direct_profile.Direct.test_zero_build_cli_nonzero_container_retains_rejected_build)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 721, in test_zero_build_cli_nonzero_container_retains_rejected_build
+    self.assert_rejected_build_retained(failed_phase='build',container_exit_only=True)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 706, in assert_rejected_build_retained
+    rejected = json.loads((self.output/'evidence/build-diagnostics.json').read_text())['rejected_build']
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'rejected_build'
+
+======================================================================
+ERROR: test_raised_build_command_retains_rejected_build (test_direct_profile.Direct.test_raised_build_command_retains_rejected_build)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 724, in test_raised_build_command_retains_rejected_build
+    self.assert_rejected_build_retained(raised_phase='build')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 706, in assert_rejected_build_retained
+    rejected = json.loads((self.output/'evidence/build-diagnostics.json').read_text())['rejected_build']
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+KeyError: 'rejected_build'
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.231s
+
+FAILED (errors=3)
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}

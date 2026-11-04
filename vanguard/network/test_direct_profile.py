@@ -688,16 +688,40 @@ class Direct(unittest.TestCase):
             path.write_text(json.dumps(value))
             with self.assertRaises(r.PublicWitnessError):r.read_public_rows(path,r.public_shapes())
 
-    def test_rejected_build_retains_exact_bounded_bytes_and_trusted_key_path(self):
+    def assert_rejected_build_retained(self, **options):
         raw = b'{"three_production_binaries":{"status":"PASS","binaries":{}}}'
-        result,receipt,events = self.exercise(mutate_build=lambda path:path.write_bytes(raw))
+        acquire = r.acquire_lock
+        def disposable_lock():
+            self.assertEqual(r.g.LOCK,self.lock)
+            info = self.lock.stat()
+            self.assertEqual(r.g.LOCK_ID,(info.st_dev,info.st_ino))
+            return acquire()
+        with patch.object(r,'acquire_lock',disposable_lock):
+            result,receipt,events = self.exercise(mutate_build=lambda path:path.write_bytes(raw),**options)
         self.assertEqual(result,1);self.assertEqual(events.count('start'),1)
+        self.assertEqual(receipt['result'],'FAIL');self.assertEqual(receipt['failure_phase'],'build')
+        self.assertNotIn('runtime',receipt['phase_diagnostics'])
+        self.assertTrue(all(row['status'] == 'PASS' for row in receipt['rows']['cleanup.json'].values()))
+        self.assertFalse((self.output/'public/build.json').exists())
         rejected = json.loads((self.output/'evidence/build-diagnostics.json').read_text())['rejected_build']
         self.assertEqual(rejected['payload'],'RETAINED')
         self.assertEqual(rejected['key_path'],'build.json.three_production_binaries.binaries.monerod')
         self.assertEqual(rejected['size_bytes'],len(raw));self.assertEqual(rejected['sha256'],c.digest(raw))
         self.assertEqual(base64.b64decode(rejected['bytes_base64'],validate=True),raw)
         self.assertEqual(receipt['build_rejection_key_path'],rejected['key_path'])
+        self.assertEqual(receipt['rejected_key_paths']['build.json'],rejected['key_path'])
+
+    def test_rejected_build_retains_exact_bounded_bytes_and_trusted_key_path(self):
+        self.assert_rejected_build_retained()
+
+    def test_nonzero_build_cli_and_container_retain_rejected_build(self):
+        self.assert_rejected_build_retained(failed_phase='build')
+
+    def test_zero_build_cli_nonzero_container_retains_rejected_build(self):
+        self.assert_rejected_build_retained(failed_phase='build',container_exit_only=True)
+
+    def test_raised_build_command_retains_rejected_build(self):
+        self.assert_rejected_build_retained(raised_phase='build')
 
     def test_rejected_build_retention_refuses_aliases_special_files_and_oversize(self):
         for kind in ('symlink','hardlink','fifo','oversize','directory-alias'):
