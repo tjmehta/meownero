@@ -1,0 +1,107 @@
+{
+  "schema": "tjs2504-wallet-background-refusal-qualification/1",
+  "run_id": "5c57d91d-d4f0-41f7-b8e9-58d2c5f2a55a",
+  "base": "4ba03433bef62708781a7302361c23b64883eba9",
+  "authority": "7c011923-32e9-49c2-8abc-1af68a51b5ed",
+  "budget": {
+    "authority_interaction": "7c011923-32e9-49c2-8abc-1af68a51b5ed",
+    "original_round_first_edit": "2026-11-04T18:39:53.627327+00:00",
+    "correction_first_edit": "2026-11-04T19:21:45.292744+00:00",
+    "round_deadline": "2026-11-04T19:39:53.627327+00:00",
+    "implementation_passes": 1,
+    "correction_passes": 1,
+    "base": "4ba03433bef62708781a7302361c23b64883eba9",
+    "qualified_at": "2026-11-04T19:27:30.451794+00:00",
+    "elapsed_from_original_first_edit_seconds": 2856.824467,
+    "correction_status": "SOURCE_QUALIFIED_ONE_CORRECTION_PASS"
+  },
+  "checks": [
+    {
+      "tests": 382,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "wall_seconds": 74.36964780301787,
+      "original_lock_guard": "path before open; device/inode before flock",
+      "native_effects": "substituted",
+      "interpreter": "Python3.15.2",
+      "log": "full-source-qualified.log",
+      "raw_sha256": "1414fef01e8d374e1f773d6bafc94f848006cabe4898f47bac53f9e963c5dfd8",
+      "display_sha256": "1414fef01e8d374e1f773d6bafc94f848006cabe4898f47bac53f9e963c5dfd8",
+      "display_normalization": "trailing whitespace only",
+      "guard": {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 74.37177301710472
+      }
+    },
+    {
+      "tests": 103,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "wall_seconds": 21.067610969999805,
+      "original_lock_guard": "path before open; device/inode before flock",
+      "native_effects": "substituted",
+      "interpreter": "Python3.12.3",
+      "log": "direct-python312-qualified.log",
+      "raw_sha256": "a4e6b72794b482582967bcb70e4e79b7b9a02e38bccbea9bc78c66f51bc595ac",
+      "display_sha256": "a4e6b72794b482582967bcb70e4e79b7b9a02e38bccbea9bc78c66f51bc595ac",
+      "display_normalization": "trailing whitespace only",
+      "guard": {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 21.071929789846763
+      }
+    }
+  ],
+  "freeze_result": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+  "intermediate": [
+    {
+      "log": "intermediate-full-tests.log.gz",
+      "tests": 382,
+      "failures": 1,
+      "errors": 0,
+      "cause": "Two test line anchors still used the old main/PRIVATE.mkdir positions after the eight-line authorized CLI addition. Corrected to534/535; product/diagnostic tables were already correct. Final stable-input suite passes."
+    },
+    {
+      "operation": "initial freezer invocation",
+      "cause": "Omitted required --freeze flag; argparse refused with no input mutation, then corrected."
+    }
+  ],
+  "invariants": {
+    "original_lock_touches_during_source_checks": 0,
+    "protected_lock_metadata_unchanged": true,
+    "unowned_bytecode_count": 7,
+    "unowned_bytecode_hashes_unchanged": true,
+    "noncandidate_inputs_unchanged": true,
+    "actual_compiled_identity_unchanged": true,
+    "runner_freezer_build_sh_source_lock_unchanged": true,
+    "assertions_credentials_commands_rows_codes_schema_unchanged": true
+  },
+  "native_execution": "NOT_RUN_FOR_CORRECTED_CANDIDATE",
+  "prior_native_result": "93d99660 consumed at4ba03433: ATTEMPTED_FAIL9/16 functionalPASS; exact private prompt not observed",
+  "source_consultation": "Platform pending; conditional Security if changed boundary identified",
+  "launch_ready": false,
+  "public_launch": false
+}

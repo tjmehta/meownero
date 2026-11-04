@@ -416,8 +416,13 @@ def cli(root,port,create=False):
     p=launch('cli',argv,root,stdin=slave,stdout=slave);os.close(slave)
     transcript=b''
     prompt=re.compile(rb'\[wallet [1-9A-HJ-NP-Za-km-z]{6}(?: \(no daemon\)| \(out of sync\))?\]: $')
+    background_prompt=(b'The daemon is not set up to background mine.\n'
+        b'With background mining enabled, the daemon will mine when idle and not on battery.\n'
+        b'Enabling this supports the network you are using, and makes you eligible for receiving new monero\n'
+        b'Do you want to do it now? [y/N]: ')
+    background_refused=False
     def expect(label):
-        nonlocal transcript
+        nonlocal transcript,background_refused
         data=b'';end=time.monotonic()+budget(25);password_sent=False
         while time.monotonic()<end:
             if select.select([master],[],[],min(.1,budget(.1)))[0]:
@@ -438,6 +443,9 @@ def cli(root,port,create=False):
                 if clean.endswith(b'Wallet password: '):
                     c.require(not password_sent,'repeated password prompt')
                     os.write(master,password.encode()+b'\n');password_sent=True;data=b''
+                elif label=='STARTUP_WALLET_PROMPT' and not background_refused and clean.endswith(background_prompt):
+                    # Pinned check_background_mining(): decline once, never enable mining.
+                    os.write(master,b'n\n');background_refused=True;data=b''
                 elif re.search(rb'(?:\[Y/n\]: |\[y/N\]: |Confirm password: |Enter password[^\n]*: )$',clean):
                     raise ValueError('unknown CLI prompt; input refused')
             c.require(p.poll() is None,'CLI exited before expected prompt')

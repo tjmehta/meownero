@@ -15,6 +15,10 @@ RPC = COMMON | {'wallet-file', 'rpc-bind-ip', 'rpc-bind-port', 'rpc-ssl', 'restr
 CONFIG = {'daemon-login', 'daemon-ssl'}
 PROMPT = '[wallet 123ABC]: '
 PASSWORD = 'Wallet password: '
+BACKGROUND = ('The daemon is not set up to background mine.\n'
+    'With background mining enabled, the daemon will mine when idle and not on battery.\n'
+    'Enabling this supports the network you are using, and makes you eligible for receiving new monero\n'
+    'Do you want to do it now? [y/N]: ')
 
 
 def main():
@@ -42,6 +46,17 @@ def main():
         for part in (text[:4], text[4:]):
             sys.stdout.write(part); sys.stdout.flush(); time.sleep(.002)
 
+    def background(text=BACKGROUND):
+        emit(text)
+        if sys.stdin.readline().rstrip('\n') != 'n':
+            raise SystemExit(30)
+        with Path(values['log-file']).with_name('background-refused.fixture').open('a') as record:
+            record.write('n\n')
+
+    if mode in ('background-mining', 'background-repeated', 'background-altered'):
+        background(BACKGROUND.replace('The daemon', 'Another daemon') if mode=='background-altered' else BACKGROUND)
+        if mode=='background-repeated':
+            background()
     emit(PROMPT if mode != 'out-of-sync' else '[wallet 123ABC (out of sync)]: ')
     for command in expected:
         if sys.stdin.readline().rstrip('\n') != command:
@@ -64,6 +79,8 @@ def main():
             emit('Is this okay? [y/N]: ')
             sys.stdin.readline()
             return 28
+        if mode=='background-during-command':
+            background()
         emit(PROMPT)
     return 29
 

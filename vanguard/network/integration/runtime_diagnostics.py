@@ -81,17 +81,17 @@ EXCEPTIONS = frozenset(('NONE','OTHER_EXCEPTION','ValueError','RuntimeError','Ti
     'OSError','FileNotFoundError','PermissionError','ConnectionRefusedError',
     'ConnectionResetError','BrokenPipeError','KeyError','IndexError','TypeError',
     'AttributeError','StopIteration','JSONDecodeError','HTTPError','URLError','CalledProcessError'))
-MAIN_STEPS = ((528,'SETUP'),(530,'WIRE_BRIDGE'),(532,'NODE1_START'),(533,'HANDSHAKE'),
-    (535,'WIRE_BRIDGE'),(536,'HANDSHAKE'),(537,'SNAPSHOT_AGREEMENT'),
-    (538,'NATIVE_HANDSHAKE'),(539,'GENESIS_STATE'),(540,'DAEMON_FORK_TABLE'),
-    (547,'HTTP_AUTH'),(549,'DAEMON_SAVE'),(550,'UUID_GUARD'),(551,'NO_FALLBACK'),
-    (557,'DAEMON_SAVE'),(559,'DAEMON_REOPEN_RESTORE'),(568,'LAUNCHER_REFUSALS'),
-    (569,'DAEMON_REOPEN_RESTORE'),(570,'WALLET_SETUP'),(571,'PERSISTED_HEIGHT_ZERO'),
-    (572,'SEVENTEEN_DENIALS'),(573,'ROTATED_LOGIN'),(574,'WALLET_SAVE_EXIT_RELEASE'),
-    (575,'WALLET_COLD_RESTORE'),(576,'DAEMON_SAVE'))
-WALLET_STEPS = ((484,'WALLET_SETUP'),(487,'PERSISTED_HEIGHT_ZERO'),(490,'HTTP_AUTH'),
-    (491,'ADDRESS_ROUNDTRIP'),(497,'FOREIGN_PREFIX_REFUSAL'),(503,'SEVENTEEN_DENIALS'),
-    (512,'WALLET_SAVE_EXIT_RELEASE'),(514,'ROTATED_LOGIN'),(518,'WALLET_COLD_RESTORE'))
+MAIN_STEPS = ((536,'SETUP'),(538,'WIRE_BRIDGE'),(540,'NODE1_START'),(541,'HANDSHAKE'),
+    (543,'WIRE_BRIDGE'),(544,'HANDSHAKE'),(545,'SNAPSHOT_AGREEMENT'),
+    (546,'NATIVE_HANDSHAKE'),(547,'GENESIS_STATE'),(548,'DAEMON_FORK_TABLE'),
+    (555,'HTTP_AUTH'),(557,'DAEMON_SAVE'),(558,'UUID_GUARD'),(559,'NO_FALLBACK'),
+    (565,'DAEMON_SAVE'),(567,'DAEMON_REOPEN_RESTORE'),(576,'LAUNCHER_REFUSALS'),
+    (577,'DAEMON_REOPEN_RESTORE'),(578,'WALLET_SETUP'),(579,'PERSISTED_HEIGHT_ZERO'),
+    (580,'SEVENTEEN_DENIALS'),(581,'ROTATED_LOGIN'),(582,'WALLET_SAVE_EXIT_RELEASE'),
+    (583,'WALLET_COLD_RESTORE'),(584,'DAEMON_SAVE'))
+WALLET_STEPS = ((492,'WALLET_SETUP'),(495,'PERSISTED_HEIGHT_ZERO'),(498,'HTTP_AUTH'),
+    (499,'ADDRESS_ROUNDTRIP'),(505,'FOREIGN_PREFIX_REFUSAL'),(511,'SEVENTEEN_DENIALS'),
+    (520,'WALLET_SAVE_EXIT_RELEASE'),(522,'ROTATED_LOGIN'),(526,'WALLET_COLD_RESTORE'))
 STEPS = frozenset(code for _,code in MAIN_STEPS+WALLET_STEPS) | {
     'NODE0_START','NODE1_START','READINESS_RPC','CHAIN_GENESIS_GUARD','COMPLETE'}
 LABELS = frozenset(REQUIRE_CODES.values()) | {'NONE','OTHER_REQUIRE'}
@@ -168,7 +168,7 @@ def install(driver, require):
         name=frame.f_code.co_name
         if event=='line' and state['exception_class']=='NONE':
             line=frame.f_lineno
-            table=MAIN_STEPS if name=='main' and line<577 else WALLET_STEPS if name=='wallet_controls' else ()
+            table=MAIN_STEPS if name=='main' and line<585 else WALLET_STEPS if name=='wallet_controls' else ()
             for first,code in reversed(table):
                 if line>=first:state['step']=code;break
             if name=='node' and state['step'] in {'NODE0_START','NODE1_START','READINESS_RPC'}:

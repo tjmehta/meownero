@@ -1342,8 +1342,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,526)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[527])
+        self.assertEqual(node.lineno,534)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[535])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
@@ -1671,6 +1671,34 @@ class WalletCLI(unittest.TestCase):
     def test_out_of_sync_prompt_is_accepted(self):
         self.invoke(self.config(), mode='out-of-sync')
 
+    def test_background_mining_startup_is_declined_and_wallet_reopens(self):
+        root=self.config();self.invoke(root,mode='background-mining');self.invoke(root,False)
+        self.assertEqual((root/'background-refused.fixture').read_text(),'n\n')
+        self.assertEqual(self.d.PROCS['cli'][0].returncode,0)
+
+    def test_accepted_baseline_refuses_pinned_background_startup(self):
+        root=self.config();before=driver('4ba03433')
+        before.PRIVATE=self.d.PRIVATE;before.BIN=self.d.BIN
+        with patch.object(before,'released'),patch.object(before,'seal'):
+            with self.assertRaisesRegex(ValueError,'unknown CLI prompt; input refused'):
+                with patch.dict(before.ENV,WALLET_CLI_FIXTURE_MODE='background-mining'):
+                    before.cli(root,48081,True)
+        self.assertFalse((root/'background-refused.fixture').exists())
+
+    def test_repeated_background_prompt_refuses_after_one_negative_answer(self):
+        root=self.config()
+        with self.assertRaisesRegex(ValueError,'unknown CLI prompt; input refused'):
+            self.invoke(root,mode='background-repeated')
+        self.assertEqual((root/'background-refused.fixture').read_text(),'n\n')
+
+    def test_altered_or_command_background_prompt_refuses_without_answer(self):
+        root=self.config()
+        for mode in ('background-altered','background-during-command'):
+            with self.subTest(mode=mode):
+                with self.assertRaisesRegex(ValueError,'unknown CLI prompt; input refused'):
+                    self.invoke(root,mode=mode)
+                self.assertFalse((root/'background-refused.fixture').exists())
+
     def test_actual_wallet_rpc_argv_keeps_server_ssl_and_restriction(self):
         root = self.config()
         with patch.object(self.d, 'launch') as launch, patch.object(self.d, 'wait', side_effect=['fixture:synthetic', True]):
@@ -1765,6 +1793,14 @@ class WalletCLI(unittest.TestCase):
             self.assertIn(anchor, cli)
         self.assertIn('std::cout << message <<": "', source[paths[5]])
         self.assertIn('command.compare("exit")', source[paths[6]])
+        fixture=FIXTURE.read_text()
+        for anchor in ['The daemon is not set up to background mine.',
+                       'With background mining enabled, the daemon will mine when idle and not on battery.',
+                       'Enabling this supports the network you are using, and makes you eligible for receiving new monero',
+                       'Do you want to do it now?']:
+            self.assertIn(anchor,cli);self.assertIn(anchor,fixture)
+        self.assertIn('m_setup_background_mining(BackgroundMiningMaybe)',wallet)
+        self.assertIn('check_background_mining(password);',cli)
 
     def test_wallet_assertions_commands_credentials_and_rows_unchanged(self):
         before = subprocess.check_output(['git', 'show', 'b17746e6:./vanguard/network/profile-integration.py']).decode()
