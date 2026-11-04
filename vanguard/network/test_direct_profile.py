@@ -14,6 +14,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import types
 import unittest
 from unittest.mock import patch
 
@@ -1259,25 +1260,26 @@ class Direct(unittest.TestCase):
         self.assertIn('ValueError: genesis peer disagreement',(driver.PRIVATE/'failure-traceback').read_text())
         self.assertFalse((driver.PUBLIC/'failure-traceback').exists())
         self.assertEqual((driver.PRIVATE/'failure-traceback').stat().st_mode & 0o777,0o600)
-        # Prior instrumentation exception: exactly three bodies; this round: RPC.call only.
+        # Prior RPC exceptions plus lead-authorized wallet setup/prompt/read correction.
         baseline=subprocess.check_output(['git','show','530205f7:./vanguard/network/profile-integration.py']).decode()
         current=(c.HERE/'profile-integration.py').read_text()
         def frozen(raw):
             tree=ast.parse(raw);lines=raw.splitlines(keepends=True)
-            allowed=[item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name in {'wait','snapshot'}]
+            allowed=[item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name in {'wait','snapshot','cli','wallet_rpc','wallet_controls'}]
             rpc=next(item for item in tree.body if isinstance(item,ast.ClassDef) and item.name=='RPC')
             allowed.append(next(item for item in rpc.body if isinstance(item,ast.FunctionDef) and item.name=='call'))
             for item in sorted(allowed,key=lambda x:x.lineno,reverse=True):lines[item.lineno-1:item.end_lineno]=['<AUTHORIZED FUNCTION>\n']
             return ''.join(lines)
         self.assertEqual(frozen(current),frozen(baseline))
         baseline=subprocess.check_output(['git','show','ed78cd5:./vanguard/network/profile-integration.py']).decode()
-        def outside_call(raw):
+        def outside_call_and_wallet(raw):
             tree=ast.parse(raw);lines=raw.splitlines(keepends=True)
             rpc=next(item for item in tree.body if isinstance(item,ast.ClassDef) and item.name=='RPC')
             item=next(item for item in rpc.body if isinstance(item,ast.FunctionDef) and item.name=='call')
-            lines[item.lineno-1:item.end_lineno]=['<AUTHORIZED RPC.call>\n']
+            allowed=[item]+[item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name in {'cli','wallet_rpc','wallet_controls'}]
+            for item in sorted(allowed,key=lambda x:x.lineno,reverse=True):lines[item.lineno-1:item.end_lineno]=['<AUTHORIZED RPC.call OR WALLET>\n']
             return ''.join(lines)
-        self.assertEqual(outside_call(current),outside_call(baseline))
+        self.assertEqual(outside_call_and_wallet(current),outside_call_and_wallet(baseline))
 
     def test_actual_node_start_and_readiness_failure_codes(self):
         for target in (0,1,'readiness'):
@@ -1340,8 +1342,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,515)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[516])
+        self.assertEqual(node.lineno,526)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[527])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
@@ -1615,6 +1617,172 @@ class Direct(unittest.TestCase):
         self.assertEqual(receipt['rejected_key_paths']['peer.json'],'peer.json.native_handshake.<unknown>')
         for path in (self.output/'evidence').iterdir():self.assertNotIn(sentinel,path.read_text())
         self.assertFalse((self.output/'evidence/build-diagnostics.json').exists())
+
+
+UP = Path('<repo>/build/vanguard-src/monero-fcmp')
+FIXTURE = c.HERE/'integration/wallet-cli-fixture.py'
+
+
+def driver(revision=None):
+    text = subprocess.check_output(['git', 'show', revision+':./vanguard/network/profile-integration.py']).decode() if revision else (c.HERE/'profile-integration.py').read_text()
+    value = types.ModuleType('wallet_fixture_driver'); value.__file__ = str(c.HERE/'profile-integration.py')
+    exec(compile(text, value.__file__, 'exec'), value.__dict__)
+    value.DEADLINE = time.monotonic()+20
+    return value
+
+
+class WalletCLI(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory(prefix='TJS-2504-wallet-source-')
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name); self.root.chmod(0o700)
+        self.d = driver(); self.d.PRIVATE = self.root; self.d.BIN = self.root/'bin'; self.d.BIN.mkdir()
+        executable = self.d.BIN/'monero-wallet-cli'
+        executable.write_text('#!'+sys.executable+'\n'+FIXTURE.read_text()); executable.chmod(0o700)
+        for name in ('monerod', 'monero-wallet-rpc'): (self.d.BIN/name).write_text('source fixture only')
+        self.patches = [patch.object(self.d, 'released'), patch.object(self.d, 'seal'), patch.object(c, 'root_manifest')]
+        for item in self.patches: item.start(); self.addCleanup(item.stop)
+        self.d.SAVED = {str(self.root/'wallet0'): {}}
+
+    def config(self, revision=None):
+        value = driver(revision); value.PRIVATE = self.root
+        class Captured(Exception): pass
+        with patch.object(value, 'cli', side_effect=Captured):
+            with self.assertRaises(Captured):
+                value.wallet_controls(0, types.SimpleNamespace(login='fixture:synthetic', port=48081), {})
+        return self.root/'wallet0'
+
+    def invoke(self, root, create=True, mode='normal'):
+        with patch.dict(self.d.ENV, WALLET_CLI_FIXTURE_MODE=mode):
+            return self.d.cli(root, 48081, create)
+
+    def test_baseline_unknown_config_refuses_before_log_setup(self):
+        root = self.config('b17746e67e2512f1348ea05fb90f6955950d08b6')
+        with self.assertRaises(OSError) as caught: self.invoke(root)
+        self.assertFalse((root/'cli.log').exists())
+        self.assertIn('exit_status=1; expected_prompt=STARTUP_WALLET_PROMPT', '\n'.join(caught.exception.__notes__))
+        self.assertEqual(self.d.PROCS['cli'][0].returncode, 1)
+
+    def test_actual_create_and_reopen_prompt_sequences(self):
+        root = self.config(); self.invoke(root); self.invoke(root, False)
+        self.assertEqual(self.d.PROCS['cli'][0].returncode, 0)
+        self.assertEqual((root/'cli.log').read_text(), 'FIXTURE_OPTIONS_ACCEPTED\n')
+
+    def test_out_of_sync_prompt_is_accepted(self):
+        self.invoke(self.config(), mode='out-of-sync')
+
+    def test_actual_wallet_rpc_argv_keeps_server_ssl_and_restriction(self):
+        root = self.config()
+        with patch.object(self.d, 'launch') as launch, patch.object(self.d, 'wait', side_effect=['fixture:synthetic', True]):
+            rpc = self.d.wallet_rpc(root, 48081, 48083, self.root/'rpc')
+        self.assertEqual(rpc.port, 48083)
+        self.assertEqual(launch.call_args.args[1], [str(self.d.BIN/'monero-wallet-rpc'), '--testnet',
+            '--config-file', str(root/'cli.conf'), '--wallet-file', str(root/'wallet'),
+            '--password-file', str(root/'password'), '--daemon-address', '127.0.0.1:48081',
+            '--rpc-bind-ip', '127.0.0.1', '--rpc-bind-port', '48083', '--rpc-ssl', 'disabled',
+            '--restricted-rpc', '--log-file', str(self.root/'rpc/native.log')])
+
+    def test_early_eio_reaps_and_retains_status_and_label(self):
+        root = self.config()
+        with self.assertRaises(OSError) as caught: self.invoke(root, mode='early-exit')
+        self.assertIn('exit_status=23; expected_prompt=STARTUP_WALLET_PROMPT', '\n'.join(caught.exception.__notes__))
+        self.assertFalse(Path('/proc/'+str(self.d.PROCS['cli'][0].pid)).exists())
+
+    def test_command_eio_retains_expected_command(self):
+        with self.assertRaises(OSError) as caught: self.invoke(self.config(), mode='command-exit')
+        self.assertIn('exit_status=25; expected_prompt=set refresh-from-block-height 0', '\n'.join(caught.exception.__notes__))
+
+    def test_actual_main_keeps_exit_note_private_with_closed_export(self):
+        from integration import runtime_diagnostics as diagnostics
+        root = self.config(); self.d.PRIVATE = self.root/'main-private'
+        self.d.PUBLIC = self.root/'public'; self.d.PUBLIC.mkdir()
+        class Wire:
+            closed = False
+            def start(self): pass
+            def close(self): self.closed = True
+        previous = sys.gettrace()
+        try:
+            diagnostics.install(self.d.__file__, c.require)
+            with patch.object(self.d, 'Wire', Wire), patch.object(self.d, 'node', side_effect=lambda *args: self.invoke(root, mode='early-exit')):
+                self.assertEqual(self.d.main(), 1)
+        finally:
+            sys.settrace(previous)
+        private = self.d.PRIVATE/'failure-traceback'
+        self.assertIn('CLI exit_status=23; expected_prompt=STARTUP_WALLET_PROMPT', private.read_text())
+        self.assertEqual(private.stat().st_mode & 0o777, 0o600)
+        public = c.json_file(self.d.PUBLIC/'runtime-diagnostics.json')
+        self.assertEqual(public, dict(step='NODE1_START', exception_class='OSError', require_label='NONE'))
+        self.assertFalse((self.d.PUBLIC/'failure-traceback').exists())
+        for path in self.d.PUBLIC.iterdir():
+            self.assertNotIn('exit_status', path.read_text()); self.assertNotIn('expected_prompt', path.read_text())
+
+    def test_eof_reaps_and_retains_status(self):
+        root = self.config(); actual = self.d.os.read
+        def read(fd, size):
+            try: return actual(fd, size)
+            except OSError as error:
+                if error.errno == 5: return b''
+                raise
+        with patch.object(self.d.os, 'read', side_effect=read):
+            with self.assertRaises(OSError) as caught: self.invoke(root, mode='early-exit')
+        self.assertIn('exit_status=23', '\n'.join(caught.exception.__notes__))
+
+    def test_unknown_and_repeated_password_prompts_refuse(self):
+        root = self.config()
+        for mode in ('unknown-password', 'repeated-password'):
+            with self.subTest(mode=mode):
+                with self.assertRaises(ValueError): self.invoke(root, mode=mode)
+                self.assertIsNotNone(self.d.PROCS['cli'][0].returncode)
+
+    def test_pinned_confirmation_prompt_refuses_without_answer(self):
+        with self.assertRaisesRegex(ValueError, 'unknown CLI prompt; input refused'):
+            self.invoke(self.config(), mode='confirmation')
+
+    def test_pinned_options_and_prompts_match_git_objects(self):
+        reference = c.json_file(c.HERE/'integration/reference-inputs.json')
+        paths = ['src/wallet/wallet2.cpp', 'src/simplewallet/simplewallet.cpp', 'src/wallet/wallet_rpc_server.cpp',
+                 'src/rpc/rpc_args.cpp', 'src/wallet/wallet_args.cpp', 'src/common/password.cpp',
+                 'contrib/epee/include/console_handler.h']
+        source = {}
+        for path in paths:
+            raw = (UP/path).read_bytes()
+            self.assertEqual(raw, subprocess.check_output(['git', '-C', str(UP), 'show', reference['upstream']+':'+path]))
+            source[path] = raw.decode()
+        cli = source[paths[1]]; wallet = source[paths[0]]; args = source[paths[4]]
+        self.assertIn('po::parse_config_file<char>(config_path.string<std::string>().c_str(), desc_params)', args)
+        for option in ('daemon_address', 'password_file', 'daemon_login', 'daemon_ssl', 'testnet'):
+            self.assertIn('command_line::add_arg(desc_params, opts.'+option+');', wallet)
+        for option in ('arg_wallet_file', 'arg_generate_new_wallet', 'arg_mnemonic_language'):
+            self.assertIn('command_line::add_arg(desc_params, '+option+');', cli)
+        self.assertNotIn('rpc_args::init_options', cli)
+        for option in ('arg_rpc_bind_port', 'arg_restricted', 'arg_wallet_file'):
+            self.assertIn('command_line::add_arg(desc_params, '+option+');', source[paths[2]])
+        self.assertIn('cryptonote::rpc_args::init_options(desc_params);', source[paths[2]])
+        for anchor in ['tr("Wallet password")', 'set_refresh_from_block_height(height)',
+                       '"refresh-from-block-height = "', 'local_args[0] == "new"',
+                       'start_height = boost::lexical_cast<uint64_t>( args[0] )',
+                       'tr("Wallet data saved")', '.substr(0, 6)', 'prompt += "]: "']:
+            self.assertIn(anchor, cli)
+        self.assertIn('std::cout << message <<": "', source[paths[5]])
+        self.assertIn('command.compare("exit")', source[paths[6]])
+
+    def test_wallet_assertions_commands_credentials_and_rows_unchanged(self):
+        before = subprocess.check_output(['git', 'show', 'b17746e6:./vanguard/network/profile-integration.py']).decode()
+        after = (c.HERE/'profile-integration.py').read_text()
+        def contract(text):
+            tree = ast.parse(text)
+            return [ast.dump(node) for node in ast.walk(tree) if
+                    isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == 'require']
+        self.assertEqual(contract(before), contract(after))
+        def outside_cli(text):
+            node = next(item for item in ast.parse(text).body if isinstance(item, ast.FunctionDef) and item.name == 'cli')
+            lines = text.splitlines(keepends=True); lines[node.lineno-1:node.end_lineno] = ['<AUTHORIZED CLI>\n']
+            return ''.join(lines).replace('rpc-ssl=disabled\\n', 'daemon-ssl=disabled\\n')
+        self.assertEqual(outside_cli(before), outside_cli(after))
+        for anchor in ["commands=['set refresh-from-block-height 0','set','address new','refresh 0','save'] if create else ['set']",
+                       "os.write(master,password.encode()+b'\\n')", "os.write(master,b'exit\\n')"]:
+            self.assertIn(anchor, before); self.assertIn(anchor, after)
+
 
 
 if __name__ == '__main__':unittest.main()

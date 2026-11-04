@@ -416,27 +416,38 @@ def cli(root,port,create=False):
     p=launch('cli',argv,root,stdin=slave,stdout=slave);os.close(slave)
     transcript=b''
     prompt=re.compile(rb'\[wallet [1-9A-HJ-NP-Za-km-z]{6}(?: \(no daemon\)| \(out of sync\))?\]: $')
-    def expect():
+    def expect(label):
         nonlocal transcript
         data=b'';end=time.monotonic()+budget(25);password_sent=False
         while time.monotonic()<end:
             if select.select([master],[],[],min(.1,budget(.1)))[0]:
-                raw=os.read(master,65536);data+=raw;transcript+=raw
+                try:raw=os.read(master,65536)
+                except OSError as error:
+                    if error.errno!=5:raise  # Linux PTY EIO when the slave closes.
+                    status=p.wait(timeout=budget(5))
+                    error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
+                    raise
+                if not raw:
+                    error=OSError(5,'CLI PTY EOF')
+                    status=p.wait(timeout=budget(5))
+                    error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
+                    raise error
+                data+=raw;transcript+=raw
                 clean=re.sub(rb'\x1b\[[0-9;]*[A-Za-z]',b'',data).replace(b'\r',b'')
                 if prompt.search(clean):return clean
                 if clean.endswith(b'Wallet password: '):
                     c.require(not password_sent,'repeated password prompt')
                     os.write(master,password.encode()+b'\n');password_sent=True;data=b''
-                elif re.search(rb'(?:\[Y/n\]|\[y/N\]|Confirm password: |Enter password[^\n]*: )$',clean):
+                elif re.search(rb'(?:\[Y/n\]: |\[y/N\]: |Confirm password: |Enter password[^\n]*: )$',clean):
                     raise ValueError('unknown CLI prompt; input refused')
             c.require(p.poll() is None,'CLI exited before expected prompt')
         raise TimeoutError('exact CLI prompt not observed')
     try:
-        expect()
+        expect('STARTUP_WALLET_PROMPT')
         commands=['set refresh-from-block-height 0','set','address new','refresh 0','save'] if create else ['set']
         height=False
         for command in commands:
-            os.write(master,command.encode()+b'\n');answer=expect()
+            os.write(master,command.encode()+b'\n');answer=expect(command)
             if command=='set':height=bool(re.search(rb'refresh-from-block-height = 0(?:\n|$)',answer))
         c.require(height,'persisted CLI refresh height differs')
         os.write(master,b'exit\n');p.wait(timeout=budget(20))
@@ -472,7 +483,7 @@ def wallet_identity(rpc):
 def wallet_controls(index,daemon_rpc,binaries):
     root=PRIVATE/f'wallet{index}';root.mkdir(mode=0o700)
     (root/'password').write_text(secrets.token_hex(32)+'\n');os.chmod(root/'password',0o600)
-    (root/'cli.conf').write_text('daemon-login='+daemon_rpc.login+'\nrpc-ssl=disabled\n');os.chmod(root/'cli.conf',0o600)
+    (root/'cli.conf').write_text('daemon-login='+daemon_rpc.login+'\ndaemon-ssl=disabled\n');os.chmod(root/'cli.conf',0o600)
     cli(root,daemon_rpc.port,True);cli(root,daemon_rpc.port)
     port=48083+index*100
     rpc=wallet_rpc(root,daemon_rpc.port,port,PRIVATE/f'wallet{index}-rpc1')
