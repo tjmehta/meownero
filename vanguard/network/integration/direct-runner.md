@@ -119,6 +119,35 @@ Controller phase history also prevents export if a runtime marker is later remov
 Native/RPC/wallet/frame/environment transcripts and all runtime output remain private.
 Security must review this changed boundary before a new grant.
 
+ELF-witness correction authority: lead answer to interaction
+`81de4466-14e3-4d2a-bfa3-d8eaebcc50dd`, from baseline `bf6acfba`.
+The dependency allowlist retains its existing lib*.so grammar and 32-entry cap,
+and additionally accepts exactly `ld-linux-x86-64.so.2`. The loader stays in the
+public build inventory. The connected test copies the three existing September18
+selected-policy ELFs, authenticates their hashes and the retained compiler log,
+and runs unchanged `built()` with actual readelf, followed by the actual reader
+and main build gate. The RPC object is explicitly a layout stand-in. Historical
+ELFs and substituted Docker effects do not establish current native acceptance.
+`evidence/elf-witness-correction/runtime-field-audit.md` maps every runtime field
+to its validator, including upstream difficulty encoding; no runtime mismatch was
+found and the frozen driver is unchanged.
+
+Rejected evidence reports a trusted schema key path. Unknown producer keys use
+the fixed `<unknown>` token. Runtime rejections export no rejected values. Only
+an eligible failed pre-runtime build, after confirmed container absence, can add
+`rejected_build` to `build-diagnostics.json`: the failing key path and exact
+build.json bytes encoded as base64, with byte count and SHA256. The raw payload
+is capped at64 KiB; base64 expands that representation to at most87,384 bytes.
+The existing bounded reader now returns stable bounded bytes before JSON parsing,
+checking owned single-link regular-file metadata and no-follow/nonblocking opens.
+Retention anchors build.json to a no-follow public directory FD. Unsafe, missing,
+changing or oversized files report payload REFUSED with no bytes. Existing
+pre-runtime marker/history restrictions also apply to retained build payloads.
+Platform reviews this source first; Security then reviews the allowlist and
+rejected-payload boundary before a fresh exact Platform grant. All three prior
+grants remain consumed. See the evidence directory's isolation-incident receipt
+for an evidence-helper lock error; no native workload ran in this correction.
+
 Platform must read the changed source and issue one new authenticated comment on
 TJS-2504 containing exactly one fenced `meownero-direct-profile-grant` JSON block:
 

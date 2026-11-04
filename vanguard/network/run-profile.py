@@ -6,6 +6,7 @@ Host staging is measured and abort bounded; only the container has kernel limits
 No native work is permitted without a fresh exact Platform grant.
 """
 import argparse
+import base64
 import fcntl
 import importlib.util
 import json
@@ -319,21 +320,28 @@ def verify_limits(value):
         value['Config']['User'] == f'{os.getuid()}:{os.getgid()}', 'container limit mismatch')
 
 
-def bounded_json(path, maximum=64*1024):
+def bounded_bytes(path, maximum=64*1024, *, dir_fd=None):
     """Read only an owned, single-link regular file, without following aliases."""
-    fd = os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+    fd = os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|os.O_CLOEXEC,dir_fd=dir_fd)
     try:
         info = os.fstat(fd)
         c.require(stat.S_ISREG(info.st_mode) and info.st_uid == os.getuid() and
             info.st_nlink == 1 and info.st_size <= maximum, 'invalid evidence file')
         raw = os.read(fd,maximum+1)
-        c.require(len(raw) <= maximum, 'oversized evidence')
-        def unique(pairs):
-            value = dict(pairs)
-            c.require(len(value) == len(pairs), 'duplicate evidence key')
-            return value
-        return json.loads(raw,object_pairs_hook=unique)
+        after = os.fstat(fd)
+        stable = ('st_dev','st_ino','st_mode','st_uid','st_nlink','st_size','st_mtime_ns','st_ctime_ns')
+        c.require(len(raw) == info.st_size and len(raw) <= maximum and
+            all(getattr(info,key) == getattr(after,key) for key in stable), 'changed or oversized evidence')
+        return raw
     finally: os.close(fd)
+
+
+def bounded_json(path, maximum=64*1024):
+    def unique(pairs):
+        value = dict(pairs)
+        c.require(len(value) == len(pairs), 'duplicate evidence key')
+        return value
+    return json.loads(bounded_bytes(path,maximum),object_pairs_hook=unique)
 
 
 def exclusive_write(directory_fd, filename, raw):
@@ -358,7 +366,7 @@ BUILD_LOG_MAX = 16*1024*1024
 BUILD_LOG_TAIL = 256*1024
 
 
-def build_diagnostics(staging):
+def build_diagnostics(staging, *, public=None, rejected_key_path=None):
     """Fixed pre-runtime compiler files only, after confirmed container absence."""
     directory = os.open(staging,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
     def no_marker():
@@ -387,9 +395,20 @@ def build_diagnostics(staging):
                 files[name] = dict(present=True,size_bytes=info.st_size,tail_bytes=count,
                     text=raw.decode('utf-8',errors='replace'))
             finally: os.close(fd)
-        no_marker()
-        return dict(schema='meownero-pre-runtime-build-diagnostics/1',log_max_bytes=BUILD_LOG_MAX,
+        result = dict(schema='meownero-pre-runtime-build-diagnostics/1',log_max_bytes=BUILD_LOG_MAX,
             log_tail_bytes=BUILD_LOG_TAIL,files=files)
+        if rejected_key_path is not None:
+            rejected = dict(key_path=rejected_key_path,payload='REFUSED')
+            result['rejected_build'] = rejected
+            try:
+                public_fd = os.open(public,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+                try: raw = bounded_bytes('build.json',dir_fd=public_fd)
+                finally: os.close(public_fd)
+                rejected.update(payload='RETAINED',size_bytes=len(raw),sha256=c.digest(raw),
+                    encoding='base64',bytes_base64=base64.b64encode(raw).decode('ascii'))
+            except (OSError,ValueError): pass  # Unsafe/oversized aliases never reach the export.
+        no_marker()
+        return result
     finally: os.close(directory)
 
 
@@ -411,13 +430,26 @@ def publish_evidence(root, rows, receipt, diagnostics=None):
     finally: os.close(root_fd)
 
 
-def witness_matches(value, shape, *, complete=False):
+class PublicWitnessError(ValueError):
+    def __init__(self, key_path):
+        self.key_path = key_path
+        super().__init__('invalid public witness: '+key_path)
+
+
+def witness_failure(value, shape, path, *, complete=False):
+    """Return only trusted schema keys; producer keys and values stay private."""
     if isinstance(shape,dict):
-        return isinstance(value,dict) and (value.keys() == shape.keys() if complete else
-            value.keys() <= shape.keys()) and all(
-            witness_matches(item,shape[key],complete=complete) for key,item in value.items())
-    if callable(shape): return shape(value)
-    return type(value) is type(shape) and value == shape
+        if not isinstance(value,dict): return path
+        if value.keys()-shape.keys(): return path+'.<unknown>'
+        for key,item_shape in shape.items():
+            if key not in value:
+                if complete: return path+'.'+key
+                continue
+            failed = witness_failure(value[key],item_shape,path+'.'+key,complete=complete)
+            if failed: return failed
+        return None
+    valid = shape(value) if callable(shape) else type(value) is type(shape) and value == shape
+    return None if valid else path
 
 
 def public_shapes():
@@ -426,7 +458,8 @@ def public_shapes():
     state = dict(height=1,top_block_hash=c.GENESIS,pool_hashes=[],
         work=lambda x: isinstance(x,str) and re.fullmatch(r'(?:0x)?[0-9a-fA-F]{1,32}',x) is not None)
     needed = lambda x: isinstance(x,list) and len(x) <= 32 and all(isinstance(v,str) and
-        re.fullmatch(r'lib[A-Za-z0-9_+.-]{1,96}\.so(?:\.[0-9]+)*',v) for v in x)
+        (v == 'ld-linux-x86-64.so.2' or
+         re.fullmatch(r'lib[A-Za-z0-9_+.-]{1,96}\.so(?:\.[0-9]+)*',v)) for v in x)
     return dict(
         three_production_binaries=dict(binaries={name:dict(sha256=sha,needed=needed)
             for name in ('monerod','monero-wallet-cli','monero-wallet-rpc')}),
@@ -450,17 +483,22 @@ def public_shapes():
 
 
 def read_public_rows(path, shapes):
-    value = bounded_json(path)
-    c.require(isinstance(value,dict) and value.keys() <= set(c.REQUIRED[path.name]), 'unknown public row')
+    try: value = bounded_json(path)
+    except FileNotFoundError: raise
+    except Exception: raise PublicWitnessError(path.name) from None
+    if not isinstance(value,dict): raise PublicWitnessError(path.name)
+    if value.keys()-set(c.REQUIRED[path.name]): raise PublicWitnessError(path.name+'.<unknown>')
     for key,item in value.items():
-        c.require(isinstance(item,dict) and item.get('status') in ('PASS','FAIL','NOT_RUN') and
-            witness_matches({k:v for k,v in item.items() if k != 'status'},shapes[key],
-                complete=item['status'] == 'PASS'),
-            'invalid public witness')
+        prefix = path.name+'.'+key
+        if not isinstance(item,dict): raise PublicWitnessError(prefix)
+        if item.get('status') not in ('PASS','FAIL','NOT_RUN'): raise PublicWitnessError(prefix+'.status')
+        failed = witness_failure({k:v for k,v in item.items() if k != 'status'},shapes[key],prefix,
+            complete=item['status'] == 'PASS')
+        if failed: raise PublicWitnessError(failed)
     return value
 
 
-def collect_public(root, rows):
+def collect_public(root, rows, rejection_paths=None):
     """Snapshot validated partial rows after the container stops, before cleanup."""
     rejected = []
     shapes = public_shapes()
@@ -471,7 +509,10 @@ def collect_public(root, rows):
         try:
             rows[filename].update(read_public_rows(public/filename,shapes))
         except FileNotFoundError: pass  # Unreached rows stay NOT_RUN.
-        except Exception: rejected.append(filename)
+        except Exception as error:
+            rejected.append(filename)
+            if rejection_paths is not None:
+                rejection_paths[filename] = error.key_path if isinstance(error,PublicWitnessError) else filename
     # Clear untrusted input when possible; failure leaves it quarantined.
     # Final publication never writes into this container-mounted directory.
     for path in public.iterdir():
@@ -565,9 +606,13 @@ def main():
             c.require(result.returncode == 0 and state['ExitCode'] == 0 and not state['OOMKilled'],
                 'native phase failed')
             if phase == 'build':
-                rows['build.json'].update(read_public_rows(args.out/'public/build.json',public_shapes()))
-                c.require(all(row['status'] == 'PASS' for row in rows['build.json'].values()),
-                    'complete build evidence required before runtime')
+                try:
+                    rows['build.json'].update(read_public_rows(args.out/'public/build.json',public_shapes()))
+                    for key,row in rows['build.json'].items():
+                        if row['status'] != 'PASS': raise PublicWitnessError('build.json.'+key+'.status')
+                except Exception as error:
+                    receipt['build_rejection_key_path'] = error.key_path if isinstance(error,PublicWitnessError) else 'build.json'
+                    raise
         control.sample(force=True)
         receipt['work_complete'] = True
     except Exception as error:
@@ -597,12 +642,15 @@ def main():
             cleanup_key = 'owned_staging_removed'
             if receipt.get('failure_phase') == 'build' and 'runtime' not in receipt['phase_diagnostics']:
                 try:
-                    diagnostics = build_diagnostics(args.out/'staging')
+                    diagnostics = build_diagnostics(args.out/'staging',public=args.out/'public',
+                        rejected_key_path=receipt.get('build_rejection_key_path'))
                     receipt['build_diagnostics'] = 'EXPORTED'
                 except Exception:
                     receipt['build_diagnostics'] = 'REFUSED'
             if created:
-                rejected = collect_public(args.out,rows)
+                rejection_paths = {}
+                rejected = collect_public(args.out,rows,rejection_paths)
+                if rejection_paths: receipt['rejected_key_paths'] = rejection_paths
                 if rejected: receipt.update(result='FAIL',rejected_evidence=rejected)
             if created:
                 for phase in ('build','runtime'):

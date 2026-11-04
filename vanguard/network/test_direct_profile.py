@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Direct controller tests. Docker/native execution is replaced; host children are real."""
 import ast
+import base64
 import contextlib
 import copy
 import fcntl
@@ -8,6 +9,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -620,6 +622,113 @@ class Direct(unittest.TestCase):
         self.assertEqual(receipt['result'],'FAIL');self.assertEqual(receipt['rejected_evidence'],['peer.json'])
         self.assertEqual(receipt['rows']['peer.json'],c.empty_rows()['peer.json'])
         self.assertEqual(receipt['rows']['wallet.json']['address_roundtrip']['status'],'PASS')
+
+    def test_historical_real_elf_freezer_reader_and_actual_main_build_gate(self):
+        # Historical selected-policy ELFs, never executed; not current-lineage acceptance.
+        evidence = c.HERE/'integration/evidence/elf-witness-correction'
+        inventory = json.loads((evidence/'historical-inputs.json').read_text())
+        layout = self.base/'historical';out = layout/'out';public = layout/'public'
+        build = out/'build';(build/'bin').mkdir(parents=True);public.mkdir()
+        for name,expected in inventory['binaries'].items():
+            source = Path(inventory['source_directory'])/name
+            self.assertEqual(c.digest(source.read_bytes()),expected)
+            shutil.copy2(source,build/'bin'/name)
+        log = (evidence/'retained-build.log').read_bytes()
+        self.assertEqual(c.digest(log),inventory['compile_log_sha256'])
+        (out/'build.log').write_bytes(log)
+        obj = build/'src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o'
+        obj.parent.mkdir(parents=True);obj.write_bytes(b'explicit real-layout object stand-in')
+        inputs = json.loads((c.HERE/'integration/inputs.json').read_text())
+        (out/'inputs.json').write_text(json.dumps(inputs))
+        (out/'rustc.txt').write_text(inputs['builder_rustc']+'\n')
+        spec = importlib.util.spec_from_file_location('unchanged_freezer',c.HERE/'freeze-profile.py')
+        freezer = importlib.util.module_from_spec(spec);spec.loader.exec_module(freezer)
+        def mapped(name):
+            path = Path(name)
+            return layout/str(path).lstrip('/') if path.is_absolute() else path
+        readelf = subprocess.check_output
+        commands = []
+        def inspect(argv,**kwargs):
+            self.assertEqual(argv[:2],['readelf','-d']);commands.append(argv)
+            return readelf(argv,**kwargs)
+        with patch.object(freezer,'Path',side_effect=mapped), \
+             patch.object(freezer.c,'json_file',side_effect=lambda name:json.loads(mapped(name).read_text())), \
+             patch.object(freezer.subprocess,'check_output',side_effect=inspect):
+            freezer.built(build)
+        self.assertEqual(len(commands),3)
+        emitted = (public/'build.json').read_bytes()
+        value = r.read_public_rows(public/'build.json',r.public_shapes())
+        for name,expected in inventory['binaries'].items():
+            row = value['three_production_binaries']['binaries'][name]
+            self.assertEqual(row['sha256'],expected)
+            self.assertIn('ld-linux-x86-64.so.2',row['needed'])
+        result,receipt,events = self.exercise(mutate_build=lambda path:path.write_bytes(emitted))
+        self.assertEqual(result,0);self.assertEqual(events.count('start'),2)
+        self.assertEqual(receipt['rows']['build.json'],value)
+        self.assertNotIn('build_rejection_key_path',receipt)
+
+    def test_needed_exact_loader_and_existing_grammar_and_32_entry_bound(self):
+        path = self.base/'build.json'
+        for dependencies in (['ld-linux-x86-64.so.2'],['libc.so.6']*31+['ld-linux-x86-64.so.2']):
+            value = self.producer_rows()['build.json']
+            value['three_production_binaries']['binaries']['monerod']['needed'] = dependencies
+            path.write_text(json.dumps(value));self.assertEqual(r.read_public_rows(path,r.public_shapes()),value)
+        for bad in ('ld-linux.so.2','ld-linux-x86-64.so.3','ld-linux-x86-64.so.2.extra',
+                    '/lib64/ld-linux-x86-64.so.2','../ld-linux-x86-64.so.2',
+                    'ld-linux-x86-64.so.2\n','ld-linux-x86-64.so.2\x00',
+                    'libc.so.6\n','libc.so.6/extra','libc.so.bad',32,None,True):
+            value = self.producer_rows()['build.json']
+            value['three_production_binaries']['binaries']['monerod']['needed'] = [bad]
+            path.write_text(json.dumps(value))
+            with self.subTest(bad=repr(bad)),self.assertRaises(r.PublicWitnessError) as error:
+                r.read_public_rows(path,r.public_shapes())
+            self.assertEqual(error.exception.key_path,'build.json.three_production_binaries.binaries.monerod.needed')
+        for bad in (['libc.so.6']*32+['ld-linux-x86-64.so.2'],'ld-linux-x86-64.so.2',None,{}):
+            value['three_production_binaries']['binaries']['monerod']['needed'] = bad
+            path.write_text(json.dumps(value))
+            with self.assertRaises(r.PublicWitnessError):r.read_public_rows(path,r.public_shapes())
+
+    def test_rejected_build_retains_exact_bounded_bytes_and_trusted_key_path(self):
+        raw = b'{"three_production_binaries":{"status":"PASS","binaries":{}}}'
+        result,receipt,events = self.exercise(mutate_build=lambda path:path.write_bytes(raw))
+        self.assertEqual(result,1);self.assertEqual(events.count('start'),1)
+        rejected = json.loads((self.output/'evidence/build-diagnostics.json').read_text())['rejected_build']
+        self.assertEqual(rejected['payload'],'RETAINED')
+        self.assertEqual(rejected['key_path'],'build.json.three_production_binaries.binaries.monerod')
+        self.assertEqual(rejected['size_bytes'],len(raw));self.assertEqual(rejected['sha256'],c.digest(raw))
+        self.assertEqual(base64.b64decode(rejected['bytes_base64'],validate=True),raw)
+        self.assertEqual(receipt['build_rejection_key_path'],rejected['key_path'])
+
+    def test_rejected_build_retention_refuses_aliases_special_files_and_oversize(self):
+        for kind in ('symlink','hardlink','fifo','oversize','directory-alias'):
+            with self.subTest(kind=kind),tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp);staging = root/'staging';staging.mkdir()
+                public = root/'public';public.mkdir();path = public/'build.json'
+                if kind == 'symlink':path.symlink_to(staging/'secret')
+                elif kind == 'fifo':os.mkfifo(path)
+                else:
+                    path.write_bytes(b'x'*(65537 if kind == 'oversize' else 1))
+                    if kind == 'hardlink':os.link(path,root/'alias')
+                    if kind == 'directory-alias':
+                        public.rename(root/'real-public');public.symlink_to(root/'real-public',target_is_directory=True)
+                value = r.build_diagnostics(staging,public=public,rejected_key_path='build.json')
+                self.assertEqual(value['rejected_build'],dict(key_path='build.json',payload='REFUSED'))
+
+    def test_malformed_build_64k_retention_and_runtime_rejection_exports_no_values(self):
+        staging = self.base/'staging';staging.mkdir();public = self.base/'public';public.mkdir()
+        raw = b'\xff' + b'x'*65535;(public/'build.json').write_bytes(raw)
+        value = r.build_diagnostics(staging,public=public,rejected_key_path='build.json')
+        self.assertEqual(base64.b64decode(value['rejected_build']['bytes_base64']),raw)
+        sentinel = 'PRIVATE_RUNTIME_VALUE_AND_KEY'
+        def mutate(root):
+            path = root/'public/peer.json';value = json.loads(path.read_text())
+            value['genesis_state']['work'] = sentinel
+            value['native_handshake'][sentinel] = sentinel
+            path.write_text(json.dumps(value))
+        _,receipt,_ = self.exercise(mutate_public=mutate)
+        self.assertEqual(receipt['rejected_key_paths']['peer.json'],'peer.json.native_handshake.<unknown>')
+        for path in (self.output/'evidence').iterdir():self.assertNotIn(sentinel,path.read_text())
+        self.assertFalse((self.output/'evidence/build-diagnostics.json').exists())
 
 
 if __name__ == '__main__':unittest.main()
