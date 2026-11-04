@@ -68,7 +68,8 @@ def main():
             background()
     if mode == 'skeleton-failure':
         emit('abbey abducts ability\n'+Path(values['password-file']).read_text()+
-             'Q' * 95+'\n'+'0123456789abcdef' * 4+'\n')
+             'Q' * 95+'\n'+'0123456789abcdef' * 4+'\n'+
+             'abbey\rready\nabbey\bx\naces\x00acidic\n[wallet 123ABC]: \x1b[?2004h\n')
         emit('Is this okay? [y/N]: ')
         sys.stdin.readline()
         return 31

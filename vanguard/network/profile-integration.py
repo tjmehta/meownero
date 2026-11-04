@@ -536,6 +536,7 @@ def _cli_skeleton(root, transcript, password):
         yacht yahoo yanks yard yawning yearbook yellow yesterday yeti yields yodel yoga younger yoyo zapped zeal
         zebra zero zesty zigzags zinger zippers zodiac zombie zones zoom
     """.split())
+    prefixes = {word[:3] for word in words}
     # Discard an incomplete first line rather than expose a truncated secret.
     tail = transcript[-8192:]
     if len(transcript)>8192 and transcript[-8193:-8192]!=b'\n':
@@ -545,13 +546,14 @@ def _cli_skeleton(root, transcript, password):
     for line in tail.split(b'\n'):
         # A lexical view ignores terminal formatting, retaining original offsets.
         # Redacted spans still render every original control/escape byte visibly.
-        views = []
+        # Include original words separated or overwritten by terminal controls.
+        views = [(line,list(range(len(line))))]
         for displayed in (False,True):
             positions = []; index = 0
             while index<len(line):
-                escape = re.match(rb'\x1b\[[0-?]*[ -/]*[@-~]',line[index:])
+                escape = re.match(rb'(?:\x1b\[|\x9b)[0-?]*[ -/]*[@-~]',line[index:])
                 if not escape and displayed:
-                    escape = re.match(rb'\x1b\][\s\S]*?(?:\x07|\x1b\\)',line[index:])
+                    escape = re.match(rb'(?:\x1b\]|\x9d)[\s\S]*?(?:\x07|\x1b\\|\x9c)',line[index:])
                 if escape:
                     index += escape.end(); continue
                 byte = line[index]
@@ -568,8 +570,8 @@ def _cli_skeleton(root, transcript, password):
         for lexical,positions in views:
             found = [(m.start(),m.end(),'<hex>') for m in re.finditer(rb'[0-9A-Fa-f]{16,}',lexical)]
             found += [(m.start(),m.end(),'<b58>') for m in re.finditer(rb'[1-9A-HJ-NP-Za-km-z]{12,}',lexical)]
-            found += [(m.start(),m.end(),'<w>') for m in re.finditer(rb'[A-Za-z]+',lexical)
-                      if m.group().decode().lower() in words]
+            found += [(m.start(),m.end(),'<w>') for m in re.finditer(rb'[A-Za-z]{3,}',lexical)
+                      if m.group()[:3].decode().lower() in prefixes]
             matches += [(positions[first],positions[last-1]+1,token) for first,last,token in found]
         spans = []
         for first,last,token in sorted(matches,key=lambda item:(item[0],-(item[1]-item[0]),

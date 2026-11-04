@@ -1358,8 +1358,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,741)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[742])
+        self.assertEqual(node.lineno,743)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[744])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
@@ -1738,10 +1738,67 @@ class WalletCLI(unittest.TestCase):
             self.invoke(root,mode='readline-skeleton-failure')
         skeleton=(root/'cli-skeleton.private').read_bytes()
         for secret in [b'abbey',b'abducts',b'ability',b'Q'*95,b'0123456789abcdef'*4,
-                       (root/'password').read_bytes().strip()]:
+                       b'aces',b'acidic',b'abbex',(root/'password').read_bytes().strip()]:
             self.assertNotIn(secret,skeleton)
         self.assertIn(b'<0x1B>[?2004',skeleton)
+        for structure in (b'[<w> 123ABZ<0x08>C]:',b'<0x0D>',b'<0x08>',b'<0x00>'):
+            self.assertIn(structure,skeleton)
         self.assertIn(b'<w>',skeleton);self.assertIn(b'<b58>',skeleton);self.assertIn(b'<hex>',skeleton)
+
+    def test_skeleton_original_control_boundary_f1_known_bad(self):
+        root=self.config();before=driver('19c0401ae2ff79c36f26b4917173ffc12156deb0')
+        for raw,leak in ((b'abbey\rready',b'abbey'),(b'abbey\bx',b'abbey'),
+                         (b'aces\x00acidic',b'aces')):
+            with self.subTest(raw=raw):
+                self.assertIn(leak,before._cli_skeleton(root,raw,''))
+                value=self.d._cli_skeleton(root,raw,'')
+                self.assertNotIn(leak,value);self.assertIn(b'<w>',value)
+
+    def test_skeleton_mnemonic_prefixes_overwrites_and_split_controls(self):
+        root=self.config()
+        for raw in (b'abb',b'ABBridged',b'abbey\bx',b'abb\x7fey',
+                    b'ab\x1b[31mbey',b'ab\x1b]0;title\x07bey',
+                    b'ab\x80bey',b'ab\x9b31mbey',b'ab\x9d0;title\x9cbey'):
+            with self.subTest(raw=raw):
+                value=self.d._cli_skeleton(root,raw,'')
+                self.assertIn(b'<w>',value)
+                self.assertNotIn(b'abb',value.lower())
+        for control in list(range(32))+list(range(127,160)):
+            with self.subTest(control=control):
+                value=self.d._cli_skeleton(root,b'abbey'+bytes([control])+b'xyz','')
+                self.assertNotIn(b'abb',value)
+                self.assertIn(f'<0x{control:02X}>'.encode(),value)
+
+    def test_skeleton_interleaved_full_seed_has_no_mnemonic_prefix(self):
+        import re
+        root=self.config()
+        header=(UP/'src/mnemonics/english.h').read_bytes()
+        self.assertIn(b'Base("English", "English", {}, 3)',header)
+        words=re.findall(rb'^\s*"([a-z]+)",?\s*$',header,re.M)
+        prefixes={word[:3] for word in words};self.assertEqual(len(prefixes),1626)
+        source=(UP/'tests/functional_tests/wallet.py').read_text()
+        seed=re.search(r"seed = '([^']+)'",source)[1].encode().split()
+        self.assertEqual(len(seed),25)
+        controls=[bytes([b]) for b in list(range(32))+list(range(127,160))]
+        controls += [b'\x1b[31m',b'\x1b]0;title\x07',b'\x1b]0;title\x1b\\',
+                     b'\x9b31m',b'\x9d0;title\x9c']
+        for control in controls:
+            with self.subTest(control=control):
+                raw=b' '.join(control.join(bytes([b]) for b in word) for word in seed)
+                value=self.d._cli_skeleton(root,raw,'')
+                self.assertFalse({m.group()[:3].lower() for m in re.finditer(rb'[A-Za-z]{3,}',value)} & prefixes)
+        for first in range(0,len(words),200):
+            value=self.d._cli_skeleton(root,b' '.join(word[:3].upper() for word in words[first:first+200]),'')
+            self.assertFalse(re.search(rb'[A-Za-z]{3,}',value))
+
+    def test_skeleton_correction_preserves_every_other_driver_byte(self):
+        before=subprocess.check_output(['git','show','19c0401a:./vanguard/network/profile-integration.py']).decode()
+        after=(c.HERE/'profile-integration.py').read_text()
+        def frozen(raw):
+            node=next(v for v in ast.parse(raw).body if isinstance(v,ast.FunctionDef) and v.name=='_cli_skeleton')
+            lines=raw.splitlines(keepends=True);lines[node.lineno-1:node.end_lineno]=['<AUTHORIZED REDACTOR>\n']
+            return ''.join(lines)
+        self.assertEqual(frozen(before),frozen(after))
 
     def test_skeleton_redacts_pinned_seed_address_types_and_keys(self):
         import re
@@ -1805,7 +1862,7 @@ class WalletCLI(unittest.TestCase):
         self.assertEqual(self.d._cli_skeleton(root,b'abbey\b',''),b'<w><0x08>')
         self.assertEqual(self.d._cli_skeleton(root,b'\x1b]0;abbey\x07',''),b'<0x1B>]0;<w><0x07>')
         self.assertEqual(self.d._cli_skeleton(root,b'pa\x1b]0;title\x07ssword: SENSITIVE',''),b'')
-        self.assertEqual(self.d._cli_skeleton(root,b'x'*9000+b'\n[wallet 123ABC]: ',''),b'[wallet 123ABC]: ')
+        self.assertEqual(self.d._cli_skeleton(root,b'x'*9000+b'\n[wallet 123ABC]: ',''),b'[<w> 123ABC]: ')
         self.assertEqual(self.d._cli_skeleton(root,b'x'*9000,''),b'')
         self.assertFalse(list(root.glob('.cli-skeleton-*.private')))
 

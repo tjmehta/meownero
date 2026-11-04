@@ -1,0 +1,44 @@
+test_accepted_baseline_refuses_pinned_background_startup (test_direct_profile.WalletCLI.test_accepted_baseline_refuses_pinned_background_startup) ... ok
+test_actual_create_and_reopen_prompt_sequences (test_direct_profile.WalletCLI.test_actual_create_and_reopen_prompt_sequences) ... ok
+test_actual_main_keeps_exit_note_private_with_closed_export (test_direct_profile.WalletCLI.test_actual_main_keeps_exit_note_private_with_closed_export) ... ok
+test_actual_wallet_rpc_argv_keeps_server_ssl_and_restriction (test_direct_profile.WalletCLI.test_actual_wallet_rpc_argv_keeps_server_ssl_and_restriction) ... ok
+test_altered_or_command_background_prompt_refuses_without_answer (test_direct_profile.WalletCLI.test_altered_or_command_background_prompt_refuses_without_answer) ... ok
+test_background_mining_startup_is_declined_and_wallet_reopens (test_direct_profile.WalletCLI.test_background_mining_startup_is_declined_and_wallet_reopens) ... ok
+test_baseline_unknown_config_refuses_before_log_setup (test_direct_profile.WalletCLI.test_baseline_unknown_config_refuses_before_log_setup) ... ok
+test_command_eio_retains_expected_command (test_direct_profile.WalletCLI.test_command_eio_retains_expected_command) ... ok
+test_early_eio_reaps_and_retains_status_and_label (test_direct_profile.WalletCLI.test_early_eio_reaps_and_retains_status_and_label) ... ok
+test_eof_reaps_and_retains_status (test_direct_profile.WalletCLI.test_eof_reaps_and_retains_status) ... ok
+test_exact_818a4fc_readline_controls_fail_before_commands (test_direct_profile.WalletCLI.test_exact_818a4fc_readline_controls_fail_before_commands) ... ok
+test_out_of_sync_prompt_is_accepted (test_direct_profile.WalletCLI.test_out_of_sync_prompt_is_accepted) ... ok
+test_pinned_confirmation_prompt_refuses_without_answer (test_direct_profile.WalletCLI.test_pinned_confirmation_prompt_refuses_without_answer) ... ok
+test_pinned_options_and_prompts_match_git_objects (test_direct_profile.WalletCLI.test_pinned_options_and_prompts_match_git_objects) ... ok
+test_readline_adverse_prompts_still_refuse_and_reap (test_direct_profile.WalletCLI.test_readline_adverse_prompts_still_refuse_and_reap) ... ok
+test_readline_background_question_is_declined_once (test_direct_profile.WalletCLI.test_readline_background_question_is_declined_once) ... ok
+test_readline_two_phase_csi_osc_markers_and_backspace_create_reopen (test_direct_profile.WalletCLI.test_readline_two_phase_csi_osc_markers_and_backspace_create_reopen) ... ok
+test_repeated_background_prompt_refuses_after_one_negative_answer (test_direct_profile.WalletCLI.test_repeated_background_prompt_refuses_after_one_negative_answer) ... ok
+test_skeleton_connected_failure_redacts_fixture_password_and_secrets (test_direct_profile.WalletCLI.test_skeleton_connected_failure_redacts_fixture_password_and_secrets) ... FAIL
+test_skeleton_controls_formatting_tail_and_atomic_private_replacement (test_direct_profile.WalletCLI.test_skeleton_controls_formatting_tail_and_atomic_private_replacement) ... ok
+test_skeleton_correction_preserves_every_other_driver_byte (test_direct_profile.WalletCLI.test_skeleton_correction_preserves_every_other_driver_byte) ... ok
+test_skeleton_dictionary_all_1626_words_binds_pinned_header (test_direct_profile.WalletCLI.test_skeleton_dictionary_all_1626_words_binds_pinned_header) ... ok
+test_skeleton_interleaved_full_seed_has_no_mnemonic_prefix (test_direct_profile.WalletCLI.test_skeleton_interleaved_full_seed_has_no_mnemonic_prefix) ... ok
+test_skeleton_mnemonic_prefixes_overwrites_and_split_controls (test_direct_profile.WalletCLI.test_skeleton_mnemonic_prefixes_overwrites_and_split_controls) ... ok
+test_skeleton_original_control_boundary_f1_known_bad (test_direct_profile.WalletCLI.test_skeleton_original_control_boundary_f1_known_bad) ... ok
+test_skeleton_redacts_pinned_seed_address_types_and_keys (test_direct_profile.WalletCLI.test_skeleton_redacts_pinned_seed_address_types_and_keys) ... ok
+test_unknown_and_repeated_password_prompts_refuse (test_direct_profile.WalletCLI.test_unknown_and_repeated_password_prompts_refuse) ... ok
+test_wallet_assertions_commands_credentials_and_rows_unchanged (test_direct_profile.WalletCLI.test_wallet_assertions_commands_credentials_and_rows_unchanged) ... ok
+
+======================================================================
+FAIL: test_skeleton_connected_failure_redacts_fixture_password_and_secrets (test_direct_profile.WalletCLI.test_skeleton_connected_failure_redacts_fixture_password_and_secrets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 1745, in test_skeleton_connected_failure_redacts_fixture_password_and_secrets
+    self.assertIn(structure,skeleton)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'[<w> 123ABC]:' not found in b'<0x1B>]0;<w> <w><0x07><0x1B>[?2004h<0x0D><0x01><0x1B>[1;33m<0x02><0x0D><0x1B>]0;<w> <w><0x1B>\\<0x01><0x1B>[1;33m<0x02><w> <w> <w><0x0D><0x0A>\n<b58><0x0D><0x0A>\n<hex><0x0D><0x0A>\n<w><0x0D><0x0D><0x0A>\n<w><0x08><0x0D><0x0A>\n<w><0x00><0x0D><0x0A>\n[<w> 123ABZ<0x08>C]: <0x1B>[?2004h<0x0D><0x0A>\n<0x01><0x1B>[0m<0x02><0x1B>[?2004l<0x1B>]0;<w> <w><0x07><0x1B>[?2004h<0x0D><0x01><0x1B>[1;33m<0x02><0x0D><0x1B>]0;<w> <w><0x1B>\\<0x01><0x1B>[1;33m<0x02>Is <w> <w>? [y/N]: <0x01><0x1B>[0m<0x02><0x1B>[?2004l'
+
+----------------------------------------------------------------------
+Ran 28 tests in 6.712s
+
+FAILED (failures=1)
+{"tests": 28, "failures": 1, "errors": 0, "skipped": 0, "wall_seconds": 6.934069745009765, "original_lock_guard": "path before open; device/inode before flock", "native_effects": "substituted"}
+{"protected_lock_metadata_unchanged": true, "protected_lock_metadata": [66306, 657237, 1000, 33152, 0, 1792398177544654975, 1792398177544654975], "blocked_original_lock_touches": [], "guard": "builtins/io/os open before call by exact path and device/inode; flock before call", "wrapper_seconds": 6.934955312870443}
