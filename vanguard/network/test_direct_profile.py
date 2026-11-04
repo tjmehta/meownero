@@ -686,6 +686,56 @@ class Direct(unittest.TestCase):
         exact=self.output/'staging';shutil.rmtree(exact)
         self.assertFalse(exact.exists())
 
+    def test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse(self):
+        sentinel='DISPOSABLE_TRACEBACK_NATIVE_WALLET_SENTINEL'
+        for mode in ('full','reuse'):
+            reuse=self.retained_fixture() if mode == 'reuse' else None
+            for scenario in ('diagnostic','witness','fail-row','missing-row','oom-counter','missing-counter'):
+                with self.subTest(mode=mode,scenario=scenario):
+                    self.output=self.base/('attempt-'+mode+'-'+scenario)
+                    def mutate(root):
+                        private=root/'staging/private'
+                        for name in ('failure-traceback','native.log','wallet.log'):
+                            (private/name).write_text(sentinel)
+                        if scenario == 'diagnostic':
+                            path=root/'public/runtime-diagnostics.json'
+                            value=json.loads(path.read_text());value['unexpected']=sentinel
+                            path.write_text(json.dumps(value))
+                        elif scenario in ('witness','fail-row','missing-row'):
+                            path=root/'public/peer.json';value=json.loads(path.read_text())
+                            if scenario == 'witness':del value['native_handshake']['request_sha256']
+                            elif scenario == 'fail-row':value['native_handshake']['status']='FAIL'
+                            else:del value['native_handshake']
+                            path.write_text(json.dumps(value))
+                        else:
+                            path=root/'staging/resources-runtime.json'
+                            if scenario == 'missing-counter':path.unlink()
+                            else:path.write_text(json.dumps(dict(oom=1,oom_kill=1)))
+                    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                    self.assertEqual(result,1);self.assertEqual(receipt['result'],'FAIL')
+                    self.assertEqual(receipt['phase_diagnostics']['runtime']['container_exit_code'],0)
+                    self.assertNotIn('failure_phase',receipt)
+                    self.assertEqual(events.count('start'),1 if reuse else 2)
+                    self.assertEqual(receipt['rows']['cleanup.json']['owned_cid_absent']['status'],'PASS')
+                    self.assertEqual(receipt['rows']['cleanup.json']['owned_staging_removed']['status'],'NOT_RUN')
+                    self.assertTrue(receipt['rows']['cleanup.json']['owned_staging_removed']['retained_for_private_inspection'])
+                    self.assertEqual(receipt['private_staging'],'RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION')
+                    self.assertEqual((self.output/'staging').stat().st_mode & 0o777,0o700)
+                    self.assertEqual((self.output/'staging').stat().st_uid,os.getuid())
+                    self.assertEqual(set(p.name for p in (self.output/'evidence').iterdir()),set(c.REQUIRED)|{'receipt.json'})
+                    for path in (self.output/'evidence').iterdir():self.assertNotIn(sentinel,path.read_text())
+                    # Inspect and remove only disposable private fixture data.
+                    self.assertEqual((self.output/'staging/private/native.log').read_text(),sentinel)
+                    shutil.rmtree(self.output/'staging')
+                    self.assertFalse((self.output/'staging').exists())
+
+    def test_nonzero_runtime_reuse_retains_private_staging(self):
+        result,receipt,events=self.exercise(reuse=self.retained_fixture(),failed_phase='runtime')
+        self.assertEqual(result,1);self.assertEqual(receipt['failure_phase'],'runtime')
+        self.assertEqual(events.count('start'),1)
+        self.assertEqual(receipt['private_staging'],'RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION')
+        self.assertEqual(receipt['rows']['cleanup.json']['owned_staging_removed']['status'],'NOT_RUN')
+
     def driver_fixture(self):
         spec=importlib.util.spec_from_file_location('diagnostic_driver',c.HERE/'profile-integration.py')
         driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
@@ -924,11 +974,12 @@ class Direct(unittest.TestCase):
             path = root/'public/peer.json';value = json.loads(path.read_text())
             del value['native_handshake']['request_sha256']
             path.write_text(json.dumps(value))
-        result,receipt,events = self.exercise(mutate_public=mutate)
+        result,receipt,events = self.exercise(mutate_public=mutate,staging_retained=True)
         self.assertEqual(result,1);self.assertEqual(events.count('start'),2)
         self.assertEqual(receipt['result'],'FAIL');self.assertEqual(receipt['rejected_evidence'],['peer.json'])
         self.assertEqual(receipt['rows']['peer.json'],c.empty_rows()['peer.json'])
         self.assertEqual(receipt['rows']['wallet.json']['address_roundtrip']['status'],'PASS')
+        self.assertEqual(receipt['rows']['cleanup.json']['owned_staging_removed']['status'],'NOT_RUN')
 
     def test_historical_real_elf_freezer_reader_and_actual_main_build_gate(self):
         # Historical selected-policy ELFs, never executed; not current-lineage acceptance.
@@ -1056,7 +1107,7 @@ class Direct(unittest.TestCase):
             value['genesis_state']['work'] = sentinel
             value['native_handshake'][sentinel] = sentinel
             path.write_text(json.dumps(value))
-        _,receipt,_ = self.exercise(mutate_public=mutate)
+        _,receipt,_ = self.exercise(mutate_public=mutate,staging_retained=True)
         self.assertEqual(receipt['rejected_key_paths']['peer.json'],'peer.json.native_handshake.<unknown>')
         for path in (self.output/'evidence').iterdir():self.assertNotIn(sentinel,path.read_text())
         self.assertFalse((self.output/'evidence/build-diagnostics.json').exists())

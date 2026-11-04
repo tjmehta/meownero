@@ -252,8 +252,12 @@ enter the controller evidence directory or an attachment.
 
 After any started runtime failure, the runner first confirms owned CID absence,
 imports validated rows/counters, retains staging with mode0700/owned checks, and
-records private_staging=RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION. The staging-removal
-row remains NOT_RUN with a retention flag; the attempt remains FAIL. Before leaving
+records private_staging=RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION. The retention
+decision includes zero-exit diagnostic/witness rejection, failed or missing required
+runtime rows, and failed or missing runtime OOM counters. It excludes the unfinished
+cleanup rows themselves. Successful runtime evidence still removes staging.
+The staging-removal row remains NOT_RUN with a retention flag; the attempt remains
+FAIL. Before leaving
 the SAME authorized execution run, P2P must read only the needed traceback/native.log/
 wallet logs locally, post a redacted cause summary on this issue, independently
 reconfirm exact CID/label/name absence, and remove only that attempt's exact staging

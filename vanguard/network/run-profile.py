@@ -830,9 +830,17 @@ def main():
                     except Exception:
                         receipt['result'] = 'FAIL'
                         receipt.setdefault('rejected_evidence',[]).append('resources-'+phase+'.json')
-            retained = created and receipt.get('failure_phase') == 'runtime' and 'runtime' in receipt['phase_diagnostics']
+            # Runtime exit zero can still leave rejected, failed or missing
+            # witnesses. Decide before deletion, excluding unfinished cleanup.
+            runtime_failed = receipt['result'] == 'FAIL' or any(
+                rows[filename][key]['status'] != 'PASS'
+                for filename,keys in c.REQUIRED.items()
+                if filename not in ('build.json','resources.json','cleanup.json') for key in keys) or any(
+                counters.get('runtime',{}).get(key) != 0 for key in ('oom','oom_kill'))
+            retained = created and 'runtime' in receipt['phase_diagnostics'] and runtime_failed
             if retained:
                 staging_fd=private_directory(args.out/'staging');os.close(staging_fd)
+                receipt['result']='FAIL'
                 receipt['private_staging']='RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION'
                 cleanup['owned_staging_removed']=dict(status='NOT_RUN',retained_for_private_inspection=True)
             else:
