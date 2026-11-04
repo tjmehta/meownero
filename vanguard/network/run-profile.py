@@ -25,6 +25,7 @@ import urllib.request
 import network as n
 import policy
 import profile_contract as c
+from integration import runtime_diagnostics as runtime_codes
 
 spec = importlib.util.spec_from_file_location('genesis', c.HERE / 'run-genesis.py')
 g = importlib.util.module_from_spec(spec)
@@ -83,23 +84,30 @@ CONTAINER_FLAGS = ['--pull=never', '--network=none', '--cap-drop=ALL',
 GiB = 1024**3
 
 
-def grant_payload(comment, *, commit, inputs_hash, artifact_hash, runner_hash, output, now):
+def grant_payload(comment, *, commit, inputs_hash, artifact_hash, runner_hash, output, now, reuse=None):
     """The direct grant deliberately cannot be confused with a legacy v2 grant."""
     c.require(comment['issueId'] == c.ISSUE and comment.get('authorAgentId') == c.PLATFORM
               and comment.get('authorUserId') is None, 'Platform-authored grant required')
     blocks = re.findall(r'```meownero-direct-profile-grant\s*\n(.*?)\n```', comment['body'], re.S)
     c.require(len(blocks) == 1, 'one direct grant block required')
     value = json.loads(blocks[0])
+    wall = 900 if reuse else 4500
     expected = dict(schema='meownero-direct-profile-grant/1', authorized=True,
         candidate_commit=commit, inputs_sha256=inputs_hash, artifact_sha256=artifact_hash,
         runner_sha256=runner_hash, output_root=str(output), attempts=1, retry=False,
-        wall_seconds=4500, build_seconds=3600, runtime_seconds=600, cleanup_seconds=300,
+        wall_seconds=wall, build_seconds=0 if reuse else 3600, runtime_seconds=600, cleanup_seconds=300,
         container_flags=CONTAINER_FLAGS, workload='three-production-binaries-genesis-only',
         non_genesis_blocks=0, transactions=0)
+    if reuse:
+        expected.update(mode='runtime-only',reuse_build_root=str(reuse['root']),
+            retained_build_sha256=reuse['manifest_sha256'])
+    else:
+        c.require('mode' not in value and 'reuse_build_root' not in value and
+            'retained_build_sha256' not in value, 'unexpected reuse grant')
     c.require(all(type(value.get(k)) is type(v) and value[k] == v for k,v in expected.items()),
               'direct grant binding mismatch')
     c.require(value['valid_from_unix'] <= now < value['valid_until_unix']
-              and now+4500 <= value['valid_until_unix'], 'grant validity window')
+              and now+wall <= value['valid_until_unix'], 'grant validity window')
     c.require(re.fullmatch(r'[0-9a-f-]{36}', value['artifact_attachment_id']), 'artifact attachment ID')
     rule = value['load_rule']
     c.require(rule['metric'] == 'host-load-1-5-15' and len(rule['maximum']) == 3 and
@@ -146,7 +154,9 @@ def admit(image, root, grant):
 class Controller:
     def __init__(self, root, grant, start):
         self.root,self.grant,self.start = root,grant,start
-        self.build_end,self.work_end,self.end = start+3600,start+4200,start+4500
+        reuse = grant.get('mode') == 'runtime-only'
+        self.build_end,self.work_end,self.end = ((start+600,start+600,start+900) if reuse else
+            (start+3600,start+4200,start+4500))
         self.children = []
         self.last_sample = 0
         self.peak = dict(peak_rss_bytes=0,cpu_seconds=0,peak_pids=0,disk_bytes=0)
@@ -412,6 +422,145 @@ def build_diagnostics(staging, *, public=None, rejected_key_path=None):
     finally: os.close(directory)
 
 
+BINARIES = ('monerod','monero-wallet-cli','monero-wallet-rpc')
+
+
+def private_directory(path):
+    c.require(path.is_absolute() and path == path.resolve(), 'private directory alias')
+    fd=os.open(path,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    info=os.fstat(fd)
+    if info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
+        os.close(fd);raise ValueError('unsafe private directory')
+    return fd
+
+
+def build_identity(manifest):
+    # Runtime/controller/test edits do not change compiled native inputs.
+    return dict(builder_image=manifest['builder_image'],builder_rustc=manifest['builder_rustc'],
+        source_lock_sha256=c.digest((n.HERE.parent/'source-lock.json').read_bytes()),
+        reference=manifest['reference'],cargo_inputs=manifest['cargo_inputs'],rust_inputs=manifest['rust_inputs'],
+        build_sh_sha256=c.digest((c.HERE/'integration/build.sh').read_bytes()),
+        freezer_sha256=c.digest((c.HERE/'freeze-profile.py').read_bytes()))
+
+
+def binary_copy(source_fd, name, expected, destination_fd=None, control=None):
+    """Stream an owned executable, verify stable metadata/hash; never follow aliases."""
+    fd=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|os.O_CLOEXEC,dir_fd=source_fd)
+    output=None
+    try:
+        info=os.fstat(fd)
+        c.require(stat.S_ISREG(info.st_mode) and info.st_uid==os.getuid() and info.st_nlink==1 and
+            info.st_mode & 0o111 and 0<info.st_size<=256*1024**2, 'unsafe retained binary')
+        import hashlib
+        digest=hashlib.sha256();count=0
+        if destination_fd is not None:
+            output=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o700,
+                dir_fd=destination_fd)
+        while True:
+            raw=os.read(fd,1024*1024)
+            if not raw:break
+            digest.update(raw);count+=len(raw)
+            c.require(count<=info.st_size, 'binary grew during copy')
+            if output is not None:
+                view=memoryview(raw)
+                while view:view=view[os.write(output,view):]
+            if control:control.sample()
+        after=os.fstat(fd)
+        c.require(count==info.st_size and digest.hexdigest()==expected and all(
+            getattr(info,k)==getattr(after,k) for k in
+            ('st_dev','st_ino','st_mode','st_uid','st_nlink','st_size','st_mtime_ns','st_ctime_ns')),
+            'retained binary mismatch')
+        if output is not None:os.fsync(output)
+    finally:
+        if output is not None:os.close(output)
+        os.close(fd)
+
+
+def retain_build(control, manifest, rows, commit):
+    root=control.root
+    directory=root/'retained-build';directory.mkdir(mode=0o700)
+    target=private_directory(directory)
+    try:
+        staging=private_directory(root/'staging')
+        try:
+            build=os.open('build',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=staging)
+            try:source=os.open('bin',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=build)
+            finally:os.close(build)
+        finally:os.close(staging)
+        try:
+            hashes={name:rows['three_production_binaries']['binaries'][name]['sha256'] for name in BINARIES}
+            for name in BINARIES:binary_copy(source,name,hashes[name],target,control)
+            record=dict(schema='meownero-retained-build/1',candidate_commit=commit,
+                identity=build_identity(manifest),binaries=hashes,
+                build_evidence_sha256=c.digest((json.dumps(rows,indent=2)+'\n').encode()))
+            raw=(json.dumps(record,indent=2)+'\n').encode()
+            exclusive_write(target,'manifest.json',raw);os.fsync(target)
+            return c.digest(raw)
+        finally:os.close(source)
+    finally:os.close(target)
+
+
+def reuse_build(root, manifest):
+    fd=private_directory(root);os.close(fd)
+    directory=root/'retained-build';fd=private_directory(directory)
+    try:evidence=private_directory(root/'evidence')
+    except BaseException:
+        os.close(fd);raise
+    try:
+        c.require(set(os.listdir(fd))==set(BINARIES)|{'manifest.json'}, 'retained build names mismatch')
+        raw=bounded_bytes('manifest.json',maximum=1024*1024,dir_fd=fd)
+        record=json.loads(raw)
+        c.require(record['schema']=='meownero-retained-build/1' and
+            record['identity']==build_identity(manifest), 'retained build input mismatch')
+        raw_build=bounded_bytes('build.json',dir_fd=evidence)
+        c.require(c.digest(raw_build)==record['build_evidence_sha256'], 'prior build evidence changed')
+        rows=read_public_rows(root/'evidence/build.json',public_shapes())
+        c.require(raw_build==(json.dumps(rows,indent=2)+'\n').encode(), 'prior build evidence changed')
+        c.require(all(rows.get(key,{}).get('status')=='PASS' for key in c.REQUIRED['build.json']),
+            'prior PASS build required')
+        hashes={name:rows['three_production_binaries']['binaries'][name]['sha256'] for name in BINARIES}
+        c.require(record['binaries']==hashes, 'retained hash inventory mismatch')
+        for name in BINARIES:binary_copy(fd,name,hashes[name])
+        return dict(root=root,manifest_sha256=c.digest(raw),rows=rows,binaries=hashes)
+    finally:os.close(fd);os.close(evidence)
+
+
+def stage_reuse(control, inputs, manifest, reuse):
+    out=control.root/'staging';out.mkdir(mode=0o700);(out/'tmp').mkdir(mode=0o700)
+    # The unchanged runtime only needs this pinned public fixture from native source.
+    fixture='tests/functional_tests/wallet.py'
+    source=out/'source'/fixture;source.parent.mkdir(parents=True,mode=0o700)
+    control.copy(g.BASE/'monero-fcmp'/fixture,source)
+    c.require(c.digest(source.read_bytes())==manifest['reference']['upstream_files'][fixture], 'runtime fixture drift')
+    shutil.copytree(c.HERE,out/'harness',copy_function=control.copy,
+        ignore=shutil.ignore_patterns('evidence','__pycache__','core-review'))
+    control.copy(inputs,out/'inputs.json')
+    binaries=out/'build/bin';binaries.mkdir(parents=True,mode=0o700)
+    source_fd=private_directory(reuse['root']/'retained-build')
+    target=private_directory(binaries)
+    try:
+        for name in BINARIES:binary_copy(source_fd,name,reuse['binaries'][name],target,control)
+    finally:os.close(source_fd);os.close(target)
+    runtime_marker(out);control.sample(force=True)
+
+
+def collect_runtime_diagnostics(root, receipt):
+    try:
+        value=bounded_json(root/'public/runtime-diagnostics.json',4096)
+        c.require(runtime_codes.checked(value), 'invalid runtime diagnostic codes')
+        receipt['runtime_diagnostics']=value
+    except FileNotFoundError:
+        receipt['runtime_diagnostics_state']='NOT_OBSERVED'
+    except Exception:
+        receipt['runtime_diagnostics_state']='REFUSED'
+        receipt['result']='FAIL'
+    finally:
+        path=root/'public/runtime-diagnostics.json'
+        if path.is_symlink() or path.exists():
+            if path.is_dir() and not path.is_symlink():shutil.rmtree(path)
+            else:path.unlink()
+
+
 def publish_evidence(root, rows, receipt, diagnostics=None):
     """The container never mounts this fresh controller-only directory."""
     root_fd = os.open(root,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
@@ -528,6 +677,7 @@ def main():
     parser.add_argument('--grant-comment',required=True)
     parser.add_argument('--artifact-sha256',required=True)
     parser.add_argument('--out',type=Path,required=True)
+    parser.add_argument('--reuse-build',type=Path)
     args = parser.parse_args()
     os.umask(0o077)
     c.require(re.fullmatch(r'[0-9a-f-]{36}',args.grant_comment) and
@@ -539,11 +689,12 @@ def main():
     c.require(not subprocess.check_output(['git','-C',str(n.ROOT),'status','--porcelain'],text=True,timeout=10).strip(),
               'commit exact candidate first')
     manifest = check_inputs(args.inputs)
+    reuse = reuse_build(args.reuse_build,manifest) if args.reuse_build else None
     comment = json.loads(api('/api/issues/'+c.ISSUE+'/comments/'+args.grant_comment))
     c.require(comment['id'] == args.grant_comment, 'grant comment identity')
     grant = grant_payload(comment,commit=commit,inputs_hash=c.digest(args.inputs.read_bytes()),
         artifact_hash=args.artifact_sha256,runner_hash=c.digest(Path(__file__).read_bytes()),
-        output=args.out,now=time.time())
+        output=args.out,now=time.time(),reuse=reuse)
     c.require(c.digest(api('/api/attachments/'+grant['artifact_attachment_id']+'/content')) == args.artifact_sha256,
               'authenticated artifact digest mismatch')
     fd,lock = acquire_lock()
@@ -555,6 +706,10 @@ def main():
     receipt = dict(schema='meownero-direct-profile-attempt/1',result='INCOMPLETE',launch_ready=False,
         grant=args.grant_comment,candidate_commit=commit,runner_sha256=c.digest(Path(__file__).read_bytes()),
         lock=lock,phase_diagnostics={},exclusions={key:'NOT_RUN' for key in c.EXCLUDED})
+    if reuse:
+        rows['build.json']=reuse['rows']
+        receipt['build_reuse']=dict(prior_attempt_root=str(reuse['root']),
+            prior_build_evidence='evidence/build.json',retained_build_sha256=reuse['manifest_sha256'])
     phase = 'admission'
     created = False
     create_intent = False
@@ -565,7 +720,7 @@ def main():
     try:
         for sig in (signal.SIGALRM,signal.SIGINT,signal.SIGTERM,signal.SIGHUP):
             prior[sig] = signal.signal(sig,interrupted)
-        signal.setitimer(signal.ITIMER_REAL,4200)
+        signal.setitimer(signal.ITIMER_REAL,600 if reuse else 4200)
         receipt['first_admission'] = admit(image,args.out.parent,grant)
         # mkdir is the durable one-use marker. The grant binds this exact path;
         # even a crash before receipt publication leaves it non-reusable.
@@ -576,7 +731,8 @@ def main():
         (args.out/'public').mkdir(mode=0o700)
         n.write_json(args.out/'consumed.json',dict(grant=args.grant_comment,commit=commit))
         phase = 'staging'
-        stage_inputs(control,args.inputs,manifest)
+        if reuse:stage_reuse(control,args.inputs,manifest,reuse)
+        else:stage_inputs(control,args.inputs,manifest)
         info = control.run(g.DOCKER+['image','inspect',image],control.build_end)
         c.require(json.loads(info.stdout)[0]['Id'] == image, 'local pinned image required')
         control.sample(force=True)
@@ -589,12 +745,12 @@ def main():
         value = inspect_owned(control,name,image,control.build_end)
         c.require(value is not None, 'created container missing');verify_limits(value)
         receipt['container_id'] = value['Id']
-        for phase in ('build','runtime'):
-            if phase == 'runtime':
+        for phase in (('runtime',) if reuse else ('build','runtime')):
+            if phase == 'runtime' and not reuse:
                 c.require(time.monotonic()+600 <= control.work_end, 'full runtime allowance unavailable')
                 runtime_marker(args.out/'staging')
             diagnostic = receipt['phase_diagnostics'][phase] = dict(started=True)
-            deadline = control.build_end if phase == 'build' else time.monotonic()+600
+            deadline = control.build_end if phase == 'build' else min(time.monotonic()+600,control.work_end)
             result = control.run(g.DOCKER+['start','-a',value['Id']],deadline,check=False)
             diagnostic['cli_exit_code'] = result.returncode
             value = inspect_owned(control,name,image,deadline)
@@ -613,6 +769,7 @@ def main():
                 except Exception as error:
                     receipt['build_rejection_key_path'] = error.key_path if isinstance(error,PublicWitnessError) else 'build.json'
                     raise
+                receipt['retained_build_sha256']=retain_build(control,manifest,rows['build.json'],commit)
         control.sample(force=True)
         receipt['work_complete'] = True
     except Exception as error:
@@ -655,6 +812,7 @@ def main():
                 except Exception:
                     receipt['build_diagnostics'] = 'REFUSED'
             if created:
+                if 'runtime' in receipt['phase_diagnostics']:collect_runtime_diagnostics(args.out,receipt)
                 rejection_paths = {}
                 rejected = collect_public(args.out,rows,rejection_paths)
                 if rejection_paths: receipt['rejected_key_paths'] = rejection_paths
@@ -672,8 +830,14 @@ def main():
                     except Exception:
                         receipt['result'] = 'FAIL'
                         receipt.setdefault('rejected_evidence',[]).append('resources-'+phase+'.json')
-            if created and (args.out/'staging').exists(): shutil.rmtree(args.out/'staging')
-            cleanup['owned_staging_removed'] = dict(status='PASS' if created else 'NOT_RUN')
+            retained = created and receipt.get('failure_phase') == 'runtime' and 'runtime' in receipt['phase_diagnostics']
+            if retained:
+                staging_fd=private_directory(args.out/'staging');os.close(staging_fd)
+                receipt['private_staging']='RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION'
+                cleanup['owned_staging_removed']=dict(status='NOT_RUN',retained_for_private_inspection=True)
+            else:
+                if created and (args.out/'staging').exists():shutil.rmtree(args.out/'staging')
+                cleanup['owned_staging_removed'] = dict(status='PASS' if created else 'NOT_RUN')
         except Exception as error:
             cleanup[cleanup_key] = dict(status='FAIL')
             receipt.update(result='FAIL',cleanup_failure_class=type(error).__name__)
@@ -694,14 +858,14 @@ def main():
         measured = dict(control.peak)
         for row in cleanup.values(): row.update(measured=measured,samples=control.samples)
         receipt['container_counters'] = counters
-        no_oom = len(counters) == 2 and all(x['oom_kill'] == x['oom'] == 0 for x in counters.values())
+        no_oom = set(counters) == ({'runtime'} if reuse else {'build','runtime'}) and all(x['oom_kill'] == x['oom'] == 0 for x in counters.values())
         rows['resources.json'] = dict(
             parent_enclosure=dict(status='PASS' if 'container_id' in receipt else 'NOT_RUN',
                 mode='container-kernel-limits; host-overhead-measured-only',flags=CONTAINER_FLAGS,
                 host_overhead_allowance=grant['host_overhead_allowance'],measured=measured,samples=control.samples,
                 sampling='2s and copy/phase boundaries; RSS includes conservative per-process lifetime high-water marks'),
             deadlines=dict(status='PASS' if time.monotonic() < control.end else 'FAIL',
-                wall_seconds=4500,build_seconds=3600,runtime_seconds=600,cleanup_seconds=300),
+                wall_seconds=900 if reuse else 4500,build_seconds=0 if reuse else 3600,runtime_seconds=600,cleanup_seconds=300),
             disk=dict(status='PASS' if control.samples else 'NOT_RUN',peak_bytes=control.peak['disk_bytes'],
                 abort_bytes=15*GiB,minimum_free_bytes=4*GiB,mode='sampled-abort-not-quota'),
             no_oom=dict(status='PASS' if no_oom else 'NOT_RUN',counters=counters))

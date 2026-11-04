@@ -19,7 +19,7 @@ head; its clock/pass receipt is `evidence/direct-runner-f3/implementation-budget
 observations and pinned Docker endpoint. It imports no retired manager, outer,
 bootstrap, constructor, ingress, handoff or helper module. Those modules remain
 committed for historical evidence. The unused `controller_create` receipt validator
-remains only for the old dispatch tests. The native integration driver is unchanged.
+remains only for the old dispatch tests. The native driver differs only by the authorized private traceback write in its except block.
 
 The controller obtains the original nonblocking lock for the entire attempt. An
 absent lock can be exclusively created with mode 0600; an existing lock must retain
@@ -35,7 +35,8 @@ archives and public evidence live below one fresh, grant-bound output directory.
 Its durable creation consumes this attempt; an existing directory is refused.
 Keep `consumed.json` and controller-written `evidence/` after cleanup. Do not delete or reuse
 this directory to replay a grant. Staging is removed only after the owned container
-is confirmed absent. Unconfirmed cleanup is a failure and retains staging evidence.
+is confirmed absent. Started runtime failures retain owned mode0700 staging for the
+authorized same-run local inspection described below. Unconfirmed cleanup is a failure and retains staging evidence.
 
 The one task-named container uses the exact flags in `CONTAINER_FLAGS`, current
 uid/gid, the pinned local image, no published ports and a read-only pinned Rust
@@ -116,7 +117,7 @@ files, opened no-follow/nonblocking through a no-follow staging directory FD.
 Metadata/size changes during the bounded positional read refuse publication. Any
 BUILD_COMPLETE entry, including a planted alias or FIFO, suppresses diagnostics.
 Controller phase history also prevents export if a runtime marker is later removed.
-Native/RPC/wallet/frame/environment transcripts and all runtime output remain private.
+Native/RPC/wallet/frame/environment transcripts and runtime free text remain private.
 Security must review this changed boundary before a new grant.
 
 ELF-witness correction authority: lead answer to interaction
@@ -227,3 +228,101 @@ links for every final filename. These are disposable source fixtures with substi
 Docker/native effects, not native execution. Python3.15 descriptor/flag semantics:
 https://docs.python.org/3.15/library/os.html#os.open and
 https://docs.python.org/3.15/library/os.html#os.mkdir .
+
+
+Runtime diagnostics and retained-build authority: [lead decision 4d2ed941](/TJS/issues/TJS-2504#comment-4d2ed941-d494-4460-8be2-cc2e8af19688), baseline16024ec4.
+One implementation and one correction pass, <=90 minutes from first production edit.
+The frozen driver adds exactly one except-block line writing traceback.format_exc()
+to private/failure-traceback. No other driver line changes; build.sh/freezer/profile,
+overlay/pins, workload/private RPC and caps remain unchanged.
+
+The existing profile_contract import installs a main-thread observer only when
+sys.argv[0] resolves to that exact driver. integration/runtime_diagnostics.py has
+fixed source-line step tables, fixed exception names and a literal require-label
+table. It observes the actual driver without changing calls, arguments or results.
+Setup, both node starts, readiness/RPC, bridge, handshake, snapshot and each later
+row block have fixed codes. Unknown exception classes/require labels map to fixed
+OTHER_EXCEPTION/OTHER_REQUIRE tokens. Native bridge-thread failures still propagate
+through the existing main-thread guard. An intermediate untrusted public file is
+bounded to4KiB, validated against the exact three-key allowlist, then removed.
+Only its fixed values enter receipt.json. No extra final export is added.
+Missing diagnostics are explicitly NOT_OBSERVED; malformed diagnostics fail the
+attempt and export only REFUSED. Tracebacks, native logs, wallets and frames never
+enter the controller evidence directory or an attachment.
+
+After any started runtime failure, the runner first confirms owned CID absence,
+imports validated rows/counters, retains staging with mode0700/owned checks, and
+records private_staging=RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION. The staging-removal
+row remains NOT_RUN with a retention flag; the attempt remains FAIL. Before leaving
+the SAME authorized execution run, P2P must read only the needed traceback/native.log/
+wallet logs locally, post a redacted cause summary on this issue, independently
+reconfirm exact CID/label/name absence, and remove only that attempt's exact staging
+path. The summary includes fixed step/exception, failing call or condition and a
+relevant redacted log line. Remove all credentials, login, seed, key, address, frame
+bytes and environment values. Raw files never leave this host. Record deletion in
+an owned private-inspection-cleanup.json under that attempt root (not an additional
+export), with exact staging path, absence-check/deletion times and the redacted
+summary comment ID; also record deletion in the issue. Keep consumed.json, evidence/
+and retained-build/. Do not rewrite the immutable original nine evidence files or
+remove another attempt. If inspection or deletion fails, record the exact failure
+and retain the owned root; never claim cleanup PASS. A source-only fixture is not
+an inspection of the consumed historical attempt, whose private files are gone.
+
+After the complete build gate passes, the stopped container's three executables
+are copied through no-follow descriptors, with owned/single-link/regular/executable,
+256MiB/file bounds, stable metadata and streaming SHA256 verification, to fresh
+controller-owned0700 retained-build/ beneath that attempt. Files are0700; its
+exclusive0600 manifest records exact compiled-input identity, candidate, binary
+hashes and the canonical controller build.json byte hash. This directory is never
+mounted and none of its files is an export. The pinned source-lock/upstream/overlay/
+reference inputs, image/rustc, Cargo/toolchain fingerprints, build.sh and freezer
+must match on reuse. Runtime/controller/test source changes can have separate exact
+candidate/packet grants without changing native compiled input identity.
+
+--reuse-build requires a prior owned0700 absolute unaliased attempt root, its
+owned0700 retained-build/evidence directories, exactly the three expected binary
+names plus manifest, matching stable binary hashes, unchanged compiled inputs and
+matching complete PASS controller build.json evidence. Tampered, missing, renamed,
+non-executable, linked or special binaries refuse. Preflight runs before lock
+acquisition or output creation. Copies are checked again while staging. A prior
+runtime failure may supply a PASS build; a failed or incomplete build cannot.
+
+For runtime-only execution, Platform's fresh grant uses the same schema1 and exact
+current candidate/runner/inputs/packet/output bindings, plus:
+
+```json
+{
+  "mode": "runtime-only",
+  "reuse_build_root": "<exact prior absolute attempt root>",
+  "retained_build_sha256": "<prior retained-build/manifest.json SHA256>",
+  "wall_seconds": 900,
+  "build_seconds": 0,
+  "runtime_seconds": 600,
+  "cleanup_seconds": 300
+}
+```
+
+All other required grant values/flags/caps remain as above. Full grants reject
+reuse fields; reuse grants reject wrong root/digest/mode/budgets. Both fresh
+admissions and the original nonblocking lock remain required. Reuse staging copies
+only the current bound harness/inputs, pinned public wallet.py fixture and verified
+binaries plus the exclusive BUILD_COMPLETE marker; it performs no compilation or
+Cargo copy. One container starts once. Its600-second work window includes admission
+and staging, and runtime is bounded by the remaining work window;300 seconds remain
+exclusively for cleanup within900 total. The existing driver's570-second workload
+still fails closed if preparation leaves insufficient time. Build rows are the
+validated prior PASS evidence and receipt.build_reuse names their prior root/path
+and manifest digest. Runtime-only no_oom covers its actual runtime counter only.
+The original build's counters remain in the original attempt; none are fabricated.
+
+Platform reviews first; Security then reviews items2-5. No fresh grant request or
+native execution before both source dispositions. All old grants stay consumed.
+Keep Core decision47234b59/count2 and the later formal Security stage unchanged;
+no formal re-entry. Native runtime ATTEMPTED_FAIL;launch_ready=false;public_launch=false.
+
+API references for the observer and private traceback:
+[Python3.15 sys.settrace](https://docs.python.org/3.15/library/sys.html#sys.settrace)
+(thread-local line/exception/return events; CPython instrumentation, not a sandbox),
+[traceback.format_exc](https://docs.python.org/3.15/library/traceback.html#traceback.format_exc)
+(returns formatted text rather than printing it). The installed source tests use
+Python3.15.2; installed builder-interpreter behavior remains a future native claim.

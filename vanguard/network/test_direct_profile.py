@@ -159,9 +159,14 @@ class Direct(unittest.TestCase):
     def exercise(self, *, refuse=None, uncertain_create=False, fail_runtime=False,
                  failed_phase=None, raised_phase=None, mutate_public=None, container_exit_only=False,
                  mutate_build=None, mutate_staging=None, cleanup_failure=False,
-                 staging_retained=False, mutate_failure=None):
+                 staging_retained=None, mutate_failure=None, reuse=None, stage_binary_sources=None):
         inputs = self.base/'inputs.json';inputs.write_bytes(b'{}')
         value = grant(self.output);events = [];state = {'container':None,'starts':0}
+        manifest=self.build_manifest()
+        if reuse:
+            cached=r.reuse_build(reuse,manifest)
+            value.update(mode='runtime-only',reuse_build_root=str(reuse),retained_build_sha256=cached['manifest_sha256'],
+                wall_seconds=900,build_seconds=0)
         case = self
         class FakeController(r.Controller):
             def sample(self,force=False):
@@ -193,7 +198,7 @@ class Direct(unittest.TestCase):
                     if state['starts'] == 2 and fail_runtime:
                         state['container']['State']['Running'] = True
                         raise RuntimeError('runtime failed')
-                    phase = 'build' if state['starts'] == 1 else 'runtime'
+                    phase = 'build' if state['starts'] == 1 and not reuse else 'runtime'
                     (case.output/'staging'/('resources-'+phase+'.json')).write_text(json.dumps(dict(oom=0,oom_kill=0)))
                     for filename,keys in c.REQUIRED.items():
                         produced = ('build.json',) if phase == 'build' else set(c.REQUIRED)-{'build.json','cleanup.json','resources.json'}
@@ -215,7 +220,10 @@ class Direct(unittest.TestCase):
                             raise subprocess.CalledProcessError(17,argv,output=secret.encode(),stderr=secret.encode())
                         code = 0 if container_exit_only else 17
                         output = error = secret.encode()
-                    if phase == 'runtime' and mutate_public:mutate_public(case.output)
+                    if phase == 'runtime':
+                        (case.output/'public/runtime-diagnostics.json').write_text(json.dumps(
+                            dict(step='COMPLETE',exception_class='NONE',require_label='NONE')))
+                        if mutate_public:mutate_public(case.output)
                 elif cmd[0] == 'stop':state['container']['State']['Running'] = False
                 elif cmd[0] == 'rm':
                     if cleanup_failure:raise RuntimeError('fixture cleanup failure')
@@ -235,15 +243,26 @@ class Direct(unittest.TestCase):
         def stage(control,inputs,manifest):
             events.append('stage');(case.output/'staging').mkdir();(case.output/'staging/private').mkdir()
             (case.output/'staging/private/secret').write_text('never export')
+            (case.output/'staging').chmod(0o700)
+            target=case.output/'staging/build/bin';target.mkdir(parents=True,mode=0o700)
+            for name in r.BINARIES:
+                path=target/name
+                if stage_binary_sources:shutil.copy2(stage_binary_sources/name,path)
+                else:path.write_bytes(case.binary_bytes(name))
+                path.chmod(0o700)
+            if reuse:r.runtime_marker(case.output/'staging')
         def api(path):return json.dumps(comment(value)).encode() if '/comments/' in path else b'packet'
         with patch.object(r,'Controller',FakeController),patch.object(r,'stage_inputs',stage), \
+             patch.object(r,'stage_reuse',side_effect=lambda control,inputs,manifest,reuse:stage(control,inputs,manifest)), \
              patch.object(r,'admit',admission),patch.object(r,'api',api), \
-             patch.object(r,'check_inputs',return_value={'builder_image':IMAGE}), \
+             patch.object(r,'check_inputs',return_value=manifest), \
              patch.object(r.subprocess,'check_output',side_effect=['a'*40+'\n','']), \
              patch.object(sys,'argv',['run-profile.py','--inputs',str(inputs),'--grant-comment',GRANT,
-                 '--artifact-sha256',c.digest(b'packet'),'--out',str(self.output)]):
+                 '--artifact-sha256',c.digest(b'packet'),'--out',str(self.output)]+(['--reuse-build',str(reuse)] if reuse else [])):
             result = r.main()
         if not cleanup_failure:self.assertIsNone(state['container'])
+        if staging_retained is None:
+            staging_retained=bool(fail_runtime or failed_phase=='runtime' or raised_phase=='runtime')
         self.assertEqual((self.output/'staging').exists(),staging_retained)
         fd,_ = r.acquire_lock();os.close(fd)
         receipt = json.loads((self.output/'evidence/receipt.json').read_text()) if self.output.exists() else None
@@ -286,7 +305,7 @@ class Direct(unittest.TestCase):
         self.assertEqual(result,1);self.assertIn('rm',events);self.assertNotIn('start',events)
         self.assertEqual(receipt['rows']['cleanup.json']['owned_cid_absent']['status'],'PASS')
 
-    def test_runtime_failure_removes_owned_container_and_private_staging(self):
+    def test_runtime_failure_removes_container_and_retains_private_staging(self):
         result,receipt,events = self.exercise(fail_runtime=True)
         self.assertEqual(result,1);self.assertEqual(events.count('create'),1)
         self.assertLess(events.index('stop'),events.index('rm'))
@@ -540,6 +559,294 @@ class Direct(unittest.TestCase):
         (self.base/'alias').unlink();path.write_text('{"status":"PASS","status":"FAIL"}')
         with self.assertRaises(ValueError):r.bounded_json(path)
 
+    @staticmethod
+    def binary_bytes(name):return b'owned executable source fixture '+name.encode()
+
+    @staticmethod
+    def build_manifest():
+        return dict(builder_image=IMAGE,builder_rustc='rustc fixture',reference={'upstream_files':{
+            'tests/functional_tests/wallet.py':c.digest(b'public pinned wallet fixture')}},
+            cargo_inputs={'registry':'fixture'},rust_inputs={'tree_sha256':'fixture'})
+
+    def retained_fixture(self):
+        root=self.base/'prior';root.mkdir(mode=0o700)
+        binary=root/'staging/build/bin';binary.mkdir(parents=True,mode=0o700)
+        (root/'staging').chmod(0o700)
+        for name in r.BINARIES:
+            path=binary/name;path.write_bytes(self.binary_bytes(name));path.chmod(0o700)
+        control=r.Controller(root,grant(root),time.monotonic())
+        rows=self.producer_rows()['build.json']
+        with patch.object(control,'sample'):r.retain_build(control,self.build_manifest(),rows,'a'*40)
+        evidence=root/'evidence';evidence.mkdir(mode=0o700)
+        (evidence/'build.json').write_text(json.dumps(rows,indent=2)+'\n')
+        return root
+
+    def test_retained_build_is_unmounted_and_reuse_checks_exact_hashes(self):
+        root=self.retained_fixture();reuse=r.reuse_build(root,self.build_manifest())
+        self.assertEqual(reuse['rows'],self.producer_rows()['build.json'])
+        self.assertEqual((root/'retained-build').stat().st_mode & 0o777,0o700)
+        cmd=r.container_command(self.output,'fixture',IMAGE)
+        self.assertFalse(any('retained-build' in part or str(root) in part for part in cmd))
+        for name in r.BINARIES:
+            self.assertEqual((root/'retained-build'/name).stat().st_mode & 0o777,0o700)
+
+    def test_reuse_tamper_missing_rename_and_unsafe_files_refuse_before_output(self):
+        root=self.retained_fixture();directory=root/'retained-build';path=directory/'monerod'
+        original=path.read_bytes()
+        for case in ('tamper','missing','rename','symlink','hardlink','fifo','nonexecutable'):
+            with self.subTest(case=case):
+                if case=='tamper':path.write_bytes(b'changed')
+                elif case=='missing':path.unlink()
+                elif case=='rename':path.rename(directory/'renamed')
+                elif case=='symlink':path.unlink();path.symlink_to(root/'staging/build/bin/monerod')
+                elif case=='hardlink':os.link(path,directory/'alias')
+                elif case=='fifo':path.unlink();os.mkfifo(path)
+                elif case=='nonexecutable':path.chmod(0o600)
+                with self.assertRaises((ValueError,OSError)):r.reuse_build(root,self.build_manifest())
+                self.assertFalse(self.output.exists())
+                for other in ('alias','renamed'):(directory/other).unlink(missing_ok=True)
+                path.unlink(missing_ok=True);path.write_bytes(original);path.chmod(0o700)
+
+    def test_changed_inputs_and_prior_nonpass_or_changed_evidence_refuse(self):
+        root=self.retained_fixture();manifest=self.build_manifest()
+        for key in manifest:
+            changed=copy.deepcopy(manifest);changed[key]='changed'
+            with self.subTest(key=key),self.assertRaises((ValueError,TypeError)):r.reuse_build(root,changed)
+        evidence=root/'evidence/build.json';rows=json.loads(evidence.read_text())
+        rows['rpc_translation_unit']['status']='NOT_RUN';evidence.write_text(json.dumps(rows))
+        with self.assertRaisesRegex(ValueError,'evidence changed'):r.reuse_build(root,manifest)
+        self.assertFalse(self.output.exists())
+
+    def test_reuse_grant_binds_root_digest_and_900_seconds(self):
+        root=self.retained_fixture();reuse=r.reuse_build(root,self.build_manifest());value=grant(self.output)
+        value.update(mode='runtime-only',reuse_build_root=str(root),retained_build_sha256=reuse['manifest_sha256'],
+            wall_seconds=900,build_seconds=0)
+        kwargs=dict(commit='a'*40,inputs_hash=c.digest(b'{}'),artifact_hash=c.digest(b'packet'),
+            runner_hash=c.digest((c.HERE/'run-profile.py').read_bytes()),output=self.output,now=time.time(),reuse=reuse)
+        r.grant_payload(comment(value),**kwargs)
+        control=r.Controller(self.output,value,10)
+        self.assertEqual((control.build_end,control.work_end,control.end),(610,610,910))
+        for key,bad in [('reuse_build_root',str(self.base/'wrong')),('retained_build_sha256','0'*64),
+                        ('mode','full'),('wall_seconds',4500),('build_seconds',3600)]:
+            with self.subTest(key=key),self.assertRaises(ValueError):
+                r.grant_payload(comment(dict(value,**{key:bad})),**kwargs)
+        with self.assertRaises(ValueError):r.grant_payload(comment(value),**dict(kwargs,reuse=None))
+
+    def test_runtime_only_main_keeps_two_admissions_one_start_and_prior_build_rows(self):
+        root=self.retained_fixture();result,receipt,events=self.exercise(reuse=root)
+        self.assertEqual(result,0);self.assertEqual(events.count('admit'),2);self.assertEqual(events.count('start'),1)
+        self.assertEqual(receipt['rows']['build.json'],self.producer_rows()['build.json'])
+        self.assertEqual(receipt['build_reuse']['prior_attempt_root'],str(root))
+        self.assertEqual(receipt['rows']['resources.json']['deadlines']['wall_seconds'],900)
+        self.assertEqual(receipt['rows']['resources.json']['no_oom']['status'],'PASS')
+        self.assertEqual(receipt['runtime_diagnostics'],dict(step='COMPLETE',exception_class='NONE',require_label='NONE'))
+        self.assertFalse((self.output/'retained-build').exists())
+
+    def test_reuse_input_mismatch_main_never_acquires_lock_or_creates_output(self):
+        root=self.retained_fixture();(root/'retained-build/monerod').write_bytes(b'tampered')
+        with patch.object(r,'check_inputs',return_value=self.build_manifest()), \
+             patch.object(r.subprocess,'check_output',side_effect=['a'*40+'\n','']), \
+             patch.object(r,'acquire_lock') as lock,patch.object(r,'api') as api, \
+             patch.object(sys,'argv',['run-profile.py','--grant-comment',GRANT,'--artifact-sha256',c.digest(b'packet'),
+                 '--out',str(self.output),'--reuse-build',str(root)]),self.assertRaises(ValueError):r.main()
+        lock.assert_not_called();api.assert_not_called();self.assertFalse(self.output.exists())
+
+    def test_actual_reuse_staging_copies_only_runtime_inputs_and_marker(self):
+        root=self.retained_fixture();reuse=r.reuse_build(root,self.build_manifest());self.output.mkdir(mode=0o700)
+        native=self.base/'source-cache';fixture=native/'monero-fcmp/tests/functional_tests/wallet.py'
+        fixture.parent.mkdir(parents=True);fixture.write_bytes(b'public pinned wallet fixture')
+        inputs=self.base/'runtime-inputs';inputs.write_bytes(b'{}')
+        control=r.Controller(self.output,grant(self.output),time.monotonic())
+        with patch.object(r.g,'BASE',native),patch.object(control,'sample'):
+            r.stage_reuse(control,inputs,self.build_manifest(),reuse)
+        self.assertEqual((self.output/'staging/BUILD_COMPLETE').read_bytes(),b'runtime\n')
+        self.assertFalse((self.output/'staging/cargo-home').exists())
+        self.assertFalse((self.output/'staging/private').exists())
+        for name in r.BINARIES:self.assertEqual((self.output/'staging/build/bin'/name).read_bytes(),self.binary_bytes(name))
+
+    def test_diagnostics_reject_all_free_text_and_never_export_private_files(self):
+        from integration import runtime_diagnostics as d
+        valid=dict(step='HANDSHAKE',exception_class='TimeoutError',require_label='NONE')
+        self.assertTrue(d.checked(valid))
+        for key in valid:
+            self.assertFalse(d.checked(dict(valid,**{key:'PRIVATE_SECRET'})))
+        def mutate(root):
+            (root/'public/runtime-diagnostics.json').write_text(json.dumps(dict(valid,login='PRIVATE_SECRET')))
+            (root/'staging/private/failure-traceback').write_text('PRIVATE_SECRET')
+            (root/'staging/private/native.log').write_text('PRIVATE_SECRET')
+        _,receipt,_=self.exercise(failed_phase='runtime',mutate_public=mutate)
+        self.assertEqual(receipt['runtime_diagnostics_state'],'REFUSED')
+        self.assertNotIn('PRIVATE_SECRET',json.dumps(receipt))
+        self.assertEqual(receipt['private_staging'],'RETAINED_FOR_AUTHORIZED_LOCAL_INSPECTION')
+        self.assertTrue((self.output/'staging/private/failure-traceback').is_file())
+        self.assertEqual(set(path.name for path in (self.output/'evidence').iterdir()),set(c.REQUIRED)|{'receipt.json'})
+        self.assertEqual((self.output/'staging').stat().st_mode & 0o777,0o700)
+        # Same-run local inspection uses only disposable fixture private bytes.
+        self.assertEqual((self.output/'staging/private/native.log').read_text(),'PRIVATE_SECRET')
+        exact=self.output/'staging';shutil.rmtree(exact)
+        self.assertFalse(exact.exists())
+
+    def driver_fixture(self):
+        spec=importlib.util.spec_from_file_location('diagnostic_driver',c.HERE/'profile-integration.py')
+        driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+        driver.PRIVATE=self.base/'private';driver.PUBLIC=self.base/'public';driver.PUBLIC.mkdir()
+        driver.BIN=self.base/'bin';driver.BIN.mkdir()
+        for name in r.BINARIES:(driver.BIN/name).write_bytes(self.binary_bytes(name))
+        class Wire:
+            closed=False;error=None;frames=[('request',1001,b'fixture'),('response',1001,b'fixture')]
+            def start(self):pass
+            def close(self):self.closed=True
+        driver.Wire=Wire
+        return driver
+
+    def traced_main(self,driver):
+        from integration import runtime_diagnostics as d
+        previous=sys.gettrace()
+        try:
+            d.install(c.HERE/'profile-integration.py',c.require)
+            result=driver.main()
+        finally:sys.settrace(previous)
+        value=json.loads((driver.PUBLIC/'runtime-diagnostics.json').read_text())
+        self.assertTrue(d.checked(value));self.assertNotIn('PRIVATE_SECRET',json.dumps(value))
+        return result,value
+
+    def test_frozen_driver_exception_traceback_is_private_and_codes_are_fixed(self):
+        driver=self.driver_fixture()
+        def fail(*args):c.require(False,'genesis peer disagreement')
+        with patch.object(driver,'node',side_effect=fail):result,value=self.traced_main(driver)
+        self.assertEqual(result,1)
+        self.assertEqual(value,dict(step='NODE1_START',exception_class='ValueError',require_label='GENESIS_PEER_DISAGREEMENT'))
+        self.assertIn('ValueError: genesis peer disagreement',(driver.PRIVATE/'failure-traceback').read_text())
+        self.assertFalse((driver.PUBLIC/'failure-traceback').exists())
+        self.assertEqual((driver.PRIVATE/'failure-traceback').stat().st_mode & 0o777,0o600)
+        # Only the one authorized except-block line differs from frozen baseline.
+        baseline=subprocess.check_output(['git','show','16024ec4:./vanguard/network/profile-integration.py']).decode()
+        current=(c.HERE/'profile-integration.py').read_text()
+        added="        (PRIVATE/'failure-traceback').write_text(__import__('traceback').format_exc())\n"
+        self.assertEqual(current.replace(added,''),baseline)
+
+    def test_actual_node_start_and_readiness_failure_codes(self):
+        for target in (0,1,'readiness'):
+            with self.subTest(target=target):
+                if (self.base/'public').exists():shutil.rmtree(self.base/'public')
+                if (self.base/'private').exists():shutil.rmtree(self.base/'private')
+                if (self.base/'bin').exists():shutil.rmtree(self.base/'bin')
+                driver=self.driver_fixture()
+                def launch(name,*args):
+                    if name=='node'+str(target):raise OSError('PRIVATE_SECRET login seed frame')
+                def wait(*args):
+                    if target=='readiness':raise TimeoutError('PRIVATE_SECRET native response')
+                    return True
+                with patch.object(driver,'creation',return_value={}),patch.object(driver,'launch',side_effect=launch),patch.object(driver,'wait',side_effect=wait):
+                    result,value=self.traced_main(driver)
+                self.assertEqual(result,1)
+                self.assertEqual(value['step'],'READINESS_RPC' if target=='readiness' else 'NODE'+str(target)+'_START')
+                self.assertIn('PRIVATE_SECRET',(driver.PRIVATE/'failure-traceback').read_text())
+                self.assertNotIn('PRIVATE_SECRET',(driver.PUBLIC/'runtime-diagnostics.json').read_text())
+
+    def test_handshake_and_snapshot_codes_and_complete_driver_path(self):
+        for scenario in ('handshake','snapshot','complete'):
+            for name in ('public','private','bin'):
+                path=self.base/name
+                if path.exists():shutil.rmtree(path)
+            driver=self.driver_fixture();state=dict(height=1,top_block_hash=c.GENESIS,pool_hashes=[],work='0x1')
+            class RPC:
+                def auth_controls(self):pass
+                def call(self,method,*args):
+                    return {'hard_forks':[{'hf_version':18,'height':1}]} if method=='get_version' else {'earliest_height':1}
+            def node(index,binaries,root=None,reopen=False):
+                driver.PROCS['node'+str(index)]=(type('P',(),{'poll':lambda self:0})(),object())
+                return RPC(),root or driver.PRIVATE/('node'+str(index))
+            def wait(*args):
+                if scenario=='handshake':raise TimeoutError('PRIVATE_SECRET')
+                return True
+            snapshots=iter([state,dict(state,height=2)])
+            with patch.object(driver,'node',side_effect=node),patch.object(driver,'wait',side_effect=wait), \
+                 patch.object(driver,'snapshot',side_effect=(lambda rpc:next(snapshots)) if scenario=='snapshot' else lambda rpc:state), \
+                 patch.object(driver,'save_node'),patch.object(driver,'isolation'),patch.object(driver,'census'), \
+                 patch.object(driver,'copy_stopped'),patch.object(driver,'launcher_adverse'), \
+                 patch.object(driver,'wallet_controls'),patch.object(driver.time,'sleep'):
+                result,value=self.traced_main(driver)
+            expected={'handshake':('HANDSHAKE','TimeoutError'),
+                'snapshot':('SNAPSHOT_AGREEMENT','ValueError'),'complete':('COMPLETE','NONE')}[scenario]
+            self.assertEqual((value['step'],value['exception_class']),expected)
+            self.assertEqual(result,0 if scenario=='complete' else 1)
+
+    def test_unknown_exception_and_require_message_map_to_fixed_tokens(self):
+        from integration import runtime_diagnostics as d
+        for error in (type('PRIVATE_SECRET',(Exception,),{})('PRIVATE_SECRET'),ValueError('PRIVATE_SECRET')):
+            result=d.exception_codes(error,c.require)
+            self.assertNotIn('PRIVATE_SECRET',json.dumps(result))
+        try:c.require(False,'PRIVATE_SECRET')
+        except ValueError as error:
+            self.assertEqual(d.exception_codes(error,c.require),dict(exception_class='ValueError',require_label='OTHER_REQUIRE'))
+        # Every literal driver guard is in the fixed table; no runtime extraction is used.
+        tree=ast.parse((c.HERE/'profile-integration.py').read_text())
+        for call in ast.walk(tree):
+            if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
+               len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
+        node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
+        self.assertEqual(node.lineno,444)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[445])
+
+    def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
+        script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
+        subprocess.run([sys.executable,'-B','-c',script,str(c.HERE),str(c.HERE/'profile-integration.py')],
+            check=True,timeout=10,env={'PATH':os.environ['PATH'],'LC_ALL':'C'})
+        self.assertNotEqual(getattr(sys.gettrace(),'__module__',None),'integration.runtime_diagnostics')
+
+    def test_source_input_file_hashes_and_nonpass_build_are_rejected(self):
+        root=self.retained_fixture();manifest=self.build_manifest();original=r.build_identity(manifest)
+        for key in ('source_lock_sha256','build_sh_sha256','freezer_sha256'):
+            altered=dict(original,**{key:'0'*64})
+            with self.subTest(key=key),patch.object(r,'build_identity',return_value=altered),self.assertRaises(ValueError):
+                r.reuse_build(root,manifest)
+        rows=self.producer_rows()['build.json'];rows['rpc_translation_unit']['status']='FAIL'
+        raw=(json.dumps(rows,indent=2)+'\n').encode();(root/'evidence/build.json').write_bytes(raw)
+        record_path=root/'retained-build/manifest.json';record=json.loads(record_path.read_text())
+        record['build_evidence_sha256']=c.digest(raw);record_path.write_text(json.dumps(record))
+        with self.assertRaisesRegex(ValueError,'prior PASS'):r.reuse_build(root,manifest)
+        self.assertFalse(self.output.exists())
+
+    def test_retain_build_refuses_symlinked_build_directory(self):
+        root=self.base/'linked';root.mkdir(mode=0o700);(root/'staging').mkdir(mode=0o700)
+        source=self.base/'elsewhere';(source/'bin').mkdir(parents=True)
+        (root/'staging/build').symlink_to(source,target_is_directory=True)
+        control=r.Controller(root,grant(root),time.monotonic())
+        with self.assertRaises(OSError):r.retain_build(control,self.build_manifest(),self.producer_rows()['build.json'],'a'*40)
+        self.assertEqual(list((root/'retained-build').iterdir()),[])
+
+    def test_runtime_setup_code_and_deletion_record_for_local_fixture_inspection(self):
+        driver=self.driver_fixture();shutil.rmtree(driver.BIN)
+        from integration import runtime_diagnostics as d
+        previous=sys.gettrace()
+        try:
+            d.install(c.HERE/'profile-integration.py',c.require)
+            with self.assertRaises(FileNotFoundError):driver.main()
+        finally:sys.settrace(previous)
+        value=json.loads((driver.PUBLIC/'runtime-diagnostics.json').read_text())
+        self.assertEqual(value,dict(step='SETUP',exception_class='FileNotFoundError',require_label='NONE'))
+        # Exception predates the frozen try; no unauthorized extra traceback line.
+        self.assertFalse((driver.PRIVATE/'failure-traceback').exists())
+        exact=driver.PRIVATE;shutil.rmtree(exact)
+        record=self.base/'private-inspection-cleanup.json'
+        record.write_text(json.dumps(dict(path=str(exact),deleted=not exact.exists(),scope='disposable-source-fixture')))
+        self.assertTrue(json.loads(record.read_text())['deleted'])
+        self.assertNotIn(record.name,[path.name for path in driver.PUBLIC.iterdir()])
+
+    def test_rejected_retention_and_missing_evidence_close_all_descriptors(self):
+        before=len(list(Path('/proc/self/fd').iterdir()))
+        for index in range(5):
+            root=self.base/('bad-retain-'+str(index));root.mkdir(mode=0o700)
+            (root/'staging').mkdir(mode=0o700)
+            control=r.Controller(root,grant(root),time.monotonic())
+            with self.assertRaises(OSError):r.retain_build(control,self.build_manifest(),self.producer_rows()['build.json'],'a'*40)
+        self.assertEqual(len(list(Path('/proc/self/fd').iterdir())),before)
+        root=self.retained_fixture();shutil.rmtree(root/'evidence')
+        for _ in range(5):
+            with self.assertRaises(OSError):r.reuse_build(root,self.build_manifest())
+        self.assertEqual(len(list(Path('/proc/self/fd').iterdir())),before)
+
     def producer_rows(self):
         # Evaluate only the producer's row(...) expressions, with public fixture
         # inputs. No RPC, sockets, wallets, frames or native children are run.
@@ -554,7 +861,7 @@ class Direct(unittest.TestCase):
                 keys = c.REQUIRED['wallet.json'] if isinstance(node.args[1],ast.Name) else [None]
                 for key in keys:
                     eval(compile(ast.Expression(node),'<frozen public row>','eval'),dict(scope,key=key))
-        driver.ROWS['build.json'] = dict(three_production_binaries=dict(status='PASS',binaries={name:dict(sha256='a'*64,
+        driver.ROWS['build.json'] = dict(three_production_binaries=dict(status='PASS',binaries={name:dict(sha256=c.digest(self.binary_bytes(name)),
             needed=['libc.so.6','libstdc++.so.6','libwallet-crypto.so']) for name in
             ('monerod','monero-wallet-cli','monero-wallet-rpc')}),
             rpc_translation_unit=dict(status='PASS',object_sha256='b'*64))
@@ -662,7 +969,7 @@ class Direct(unittest.TestCase):
             row = value['three_production_binaries']['binaries'][name]
             self.assertEqual(row['sha256'],expected)
             self.assertIn('ld-linux-x86-64.so.2',row['needed'])
-        result,receipt,events = self.exercise(mutate_build=lambda path:path.write_bytes(emitted))
+        result,receipt,events = self.exercise(mutate_build=lambda path:path.write_bytes(emitted),stage_binary_sources=build/'bin')
         self.assertEqual(result,0);self.assertEqual(events.count('start'),2)
         self.assertEqual(receipt['rows']['build.json'],value)
         self.assertNotIn('build_rejection_key_path',receipt)

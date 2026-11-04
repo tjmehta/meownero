@@ -495,6 +495,7 @@ def main():
     except Exception as error:
         # Keep exception details private. Rows not reached retain NOT_RUN.
         (PRIVATE/'failure-class').write_text(type(error).__name__+'\n')
+        (PRIVATE/'failure-traceback').write_text(__import__('traceback').format_exc())
         return 1
     finally:
         DEADLINE=HARD_END
