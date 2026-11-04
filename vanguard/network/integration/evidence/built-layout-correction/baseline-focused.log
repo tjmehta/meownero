@@ -1,0 +1,43 @@
+..F.FE
+======================================================================
+ERROR: test_real_cmake_layout_and_log_line (test_profile.BuiltLayoutTests.test_real_cmake_layout_and_log_line)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_profile.py", line 57, in test_real_cmake_layout_and_log_line
+    self.built();result=json.loads((self.root/'public/build.json').read_text())
+    ~~~~~~~~~~^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_profile.py", line 50, in built
+    freezer.built(self.build)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/freeze-profile.py", line 189, in built
+    c.require(obj.is_file() and 'core_rpc_server.cpp.o' in Path('/out/build.log').read_text(),'RPC object missing')
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: RPC object missing
+
+======================================================================
+FAIL: test_freezer_failure_appends_stdout_and_stderr_to_build_log (test_profile.BuiltLayoutTests.test_freezer_failure_appends_stdout_and_stderr_to_build_log)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_profile.py", line 98, in test_freezer_failure_appends_stdout_and_stderr_to_build_log
+    self.assertIn(witness,log)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^
+AssertionError: 'freezer stdout' not found in '[ 87%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o\n'
+
+======================================================================
+FAIL: test_old_rpc_dir_only_is_refused (test_profile.BuiltLayoutTests.test_old_rpc_dir_only_is_refused)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_profile.py", line 67, in test_old_rpc_dir_only_is_refused
+    old.parent.mkdir(parents=True);self.obj.rename(old);self.refused()
+                                                        ~~~~~~~~~~~~^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_profile.py", line 53, in refused
+    with self.assertRaisesRegex(ValueError,'RPC object missing'):self.built()
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.104s
+
+FAILED (failures=2, errors=1)

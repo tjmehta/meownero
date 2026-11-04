@@ -1,0 +1,7 @@
+# Bounded post-compile verifier correction
+
+Authority: authenticated lead answer to interaction `2595d07a-3629-441d-a090-15139dad9ade`, resolved by lead `8f050fb0-7908-4b7f-be53-45d17272cec7` in run `6a0b544e-ef69-4744-8458-ae968985beee`; [decision comment](<private-tracker>/TJS/issues/TJS-2504#comment-2a577467-22f4-40db-aeba-2e6236c4bca6). P2P authenticated both the interaction and comment before editing and recorded the adopted decision in the owning brief.
+
+Baseline: `6ae26eb759425df15399e973631dbc45e79cbacc`. One implementation pass and at most one correction pass, within 45 minutes from first edit. Network paths only. Frozen-file exception is limited to the RPC object path/complete compile-line witness in `built()` and redirection of the final freezer call to the existing pre-runtime build.log. Runtime driver, controller, overlay, profile, source lock, caps and workload stay byte-identical.
+
+Platform reviews this source packet. Security is next only if Platform finds an auth, isolation, credential or export-surface change. Native runtime is NOT_RUN, launch_ready=false, public_launch=false. Both d9a6559b and365fa3e9 are consumed. Fresh native work requires an independently accepted exact candidate and a fresh Platform authenticated grant binding commit/runner/inputs/packet: load<=9; sampled host abort caps1GiB/1800CPU-s/32PIDs; >=48h validity; fresh output root; no preparation round; unchanged first-admission retry rule. Core stagebab7a7aa/decision47234b59/changes_requested count2 remains unchanged. Needs TJ: None.

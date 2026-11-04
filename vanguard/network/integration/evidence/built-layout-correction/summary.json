@@ -1,0 +1,82 @@
+{
+  "schema": "meownero-built-layout-source-correction/1",
+  "run_id": "23528b41-7644-4297-8f9d-741b2297372b",
+  "base_commit": "6ae26eb759425df15399e973631dbc45e79cbacc",
+  "authorization_comment": "2a577467-22f4-40db-aeba-2e6236c4bca6",
+  "authorization_interaction": "2595d07a-3629-441d-a090-15139dad9ade",
+  "changes": [
+    "RPC object path obj_rpc.dir; exact compile-line witness with optional CMake progress prefix",
+    "Only final freezer call appends stdout/stderr to existing build.log",
+    "Six connected layout/log/redirection fixtures; refresh four input hashes and two overlapping manager hashes"
+  ],
+  "focused_tests": 47,
+  "full_source_tests": 283,
+  "focused": {
+    "command": [
+      "python3",
+      "-B",
+      "-W",
+      "error::ResourceWarning",
+      "-m",
+      "unittest",
+      "test_profile.BuiltLayoutTests",
+      "test_direct_profile"
+    ],
+    "exit_code": 0,
+    "seconds": 2.8639655839651823
+  },
+  "full": {
+    "command": [
+      "python3",
+      "-B",
+      "-W",
+      "error::ResourceWarning",
+      "-m",
+      "unittest",
+      "test_bootstrap",
+      "test_constructor",
+      "test_deadlines",
+      "test_direct_profile",
+      "test_dispatch",
+      "test_executor",
+      "test_handoff",
+      "test_ingress",
+      "test_installation",
+      "test_lifecycle_source",
+      "test_manager",
+      "test_outer",
+      "test_profile",
+      "test_receiver",
+      "test_supervisor"
+    ],
+    "exit_code": 0,
+    "seconds": 49.993938982952386
+  },
+  "first_failures": {
+    "baseline": "6 tests: 2 failures,1 error",
+    "first_full": "283 tests: 1 stale overlapping manager hash; corrected only two manifest hashes then refroze"
+  },
+  "budget": {
+    "first_edit_utc": "2026-11-04T01:36:05.350601+00:00",
+    "deadline_utc": "2026-11-04T02:21:05.350601+00:00",
+    "max_implementation_passes": 1,
+    "max_correction_passes": 1,
+    "implementation_pass": 1,
+    "correction_passes_used": 1,
+    "correction_reason": "Full suite exposed stale overlapping manager-source-manifest hashes for changed freezer/test_profile. Refresh only those hashes and refreeze inputs; no additional production code change.",
+    "correction_started_utc": "2026-11-04T01:38:54.011231+00:00",
+    "completed_utc": "2026-11-04T01:40:34.546994+00:00",
+    "elapsed_minutes": 4.48660655
+  },
+  "post_compile_path_audit": "path-audit.md; no frozen driver path defect found",
+  "limits": [
+    "ELF stand-ins inspected by host readelf; no newly built production binary executed",
+    "Image readelf availability and old exact freezer exception not independently observed",
+    "No native build/admission, original heavy lock, Docker operation or capacity probe",
+    "Native runtime NOT_RUN; candidate remains independently unaccepted"
+  ],
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "review_required": "Platform source assessment; Security only if Platform finds a changed auth/isolation/credential/export surface"
+}

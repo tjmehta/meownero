@@ -185,8 +185,9 @@ def built(build):
         dynamic=subprocess.check_output(['readelf','-d',str(path)],text=True,timeout=5)
         binaries[name]=dict(sha256=c.digest(path.read_bytes()),
             needed=re.findall(r'\(NEEDED\).*?\[(.*?)\]',dynamic))
-    obj=build/'src/rpc/CMakeFiles/rpc.dir/core_rpc_server.cpp.o'
-    c.require(obj.is_file() and 'core_rpc_server.cpp.o' in Path('/out/build.log').read_text(),'RPC object missing')
+    obj=build/'src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o'
+    c.require(obj.is_file() and any(re.fullmatch(r'(?:\[\s*\d+%\] )?Building CXX object src/rpc/CMakeFiles/obj_rpc\.dir/core_rpc_server\.cpp\.o',line)
+              for line in Path('/out/build.log').read_text().splitlines()),'RPC object missing')
     c.require(inputs['reference']['overlay_sha256']=='32c40224dcd618995ef4d846cab411a85783314da79a803ed16074241780312c','overlay')
     result=dict(three_production_binaries=dict(status='PASS',binaries=binaries),
                 rpc_translation_unit=dict(status='PASS',object_sha256=c.digest(obj.read_bytes())))

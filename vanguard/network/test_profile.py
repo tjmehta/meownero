@@ -17,6 +17,86 @@ import profile_contract as c
 
 spec=importlib.util.spec_from_file_location('native_driver',c.HERE/'profile-integration.py')
 driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+spec=importlib.util.spec_from_file_location('profile_freezer',c.HERE/'freeze-profile.py')
+freezer=importlib.util.module_from_spec(spec);spec.loader.exec_module(freezer)
+
+
+class BuiltLayoutTests(unittest.TestCase):
+    # Exact retained d9a6559b compiler line; ELF stand-ins are inspected, never run.
+    compile_line='[ 87%] Building CXX object src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o'
+    object_name='src/rpc/CMakeFiles/obj_rpc.dir/core_rpc_server.cpp.o'
+
+    def setUp(self):
+        self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
+        self.root=Path(self.temp.name);self.out=self.root/'out';self.out.mkdir()
+        (self.root/'public').mkdir();self.build=self.out/'build'
+        (self.build/'bin').mkdir(parents=True)
+        for name in ('monerod','monero-wallet-cli','monero-wallet-rpc'):
+            path=self.build/'bin'/name;path.write_bytes(Path('/bin/true').read_bytes());path.chmod(0o700)
+        self.obj=self.build/self.object_name;self.obj.parent.mkdir(parents=True)
+        self.obj.write_bytes(b'disposable RPC object fixture')
+        (self.out/'build.log').write_text(self.compile_line+'\n')
+        (self.out/'rustc.txt').write_text('fixture rustc\n')
+        (self.out/'inputs.json').write_text(json.dumps(dict(builder_rustc='fixture rustc',reference=dict(
+            overlay_sha256='32c40224dcd618995ef4d846cab411a85783314da79a803ed16074241780312c'))))
+
+    def mapped(self,name):
+        path=Path(name)
+        return self.root/str(path).lstrip('/') if path.is_absolute() else path
+
+    def built(self):
+        with patch.object(freezer,'Path',side_effect=self.mapped),patch.object(freezer.c,'json_file',
+                side_effect=lambda name:json.loads(self.mapped(name).read_text())):
+            freezer.built(self.build)
+
+    def refused(self):
+        with self.assertRaisesRegex(ValueError,'RPC object missing'):self.built()
+        self.assertFalse((self.root/'public/build.json').exists())
+
+    def test_real_cmake_layout_and_log_line(self):
+        self.built();result=json.loads((self.root/'public/build.json').read_text())
+        self.assertEqual(result['rpc_translation_unit'],dict(status='PASS',object_sha256=c.digest(self.obj.read_bytes())))
+        self.assertEqual(set(result['three_production_binaries']['binaries']),
+                         {'monerod','monero-wallet-cli','monero-wallet-rpc'})
+        for value in result['three_production_binaries']['binaries'].values():
+            self.assertEqual(value['sha256'],c.digest(Path('/bin/true').read_bytes()))
+            self.assertIsInstance(value['needed'],list)
+
+    def test_old_rpc_dir_only_is_refused(self):
+        old=self.build/'src/rpc/CMakeFiles/rpc.dir/core_rpc_server.cpp.o'
+        old.parent.mkdir(parents=True);self.obj.rename(old);self.refused()
+
+    def test_object_without_exact_compile_line_is_refused(self):
+        for line in ('','core_rpc_server.cpp.o',self.compile_line+' trailing',
+                     'unrelated '+self.compile_line,self.compile_line.replace('Building','Removing'),
+                     self.compile_line.replace('obj_rpc.dir','rpc.dir')):
+            with self.subTest(line=line):
+                (self.out/'build.log').write_text(line+'\n');self.refused()
+
+    def test_compile_line_without_object_is_refused(self):
+        self.obj.unlink();self.refused()
+
+    def test_each_production_binary_is_required(self):
+        for name in ('monerod','monero-wallet-cli','monero-wallet-rpc'):
+            with self.subTest(name=name):
+                path=self.build/'bin'/name;path.chmod(0o600)
+                with self.assertRaisesRegex(ValueError,'missing production binary'):self.built()
+                path.chmod(0o700)
+
+    def test_freezer_failure_appends_stdout_and_stderr_to_build_log(self):
+        harness=self.out/'harness';harness.mkdir()
+        # Only dependency paths are redirected; execute the actual final shell call.
+        (harness/'freeze-profile.py').write_text(
+            'import sys\nprint("freezer stdout",flush=True)\nprint("freezer stderr",file=sys.stderr,flush=True)\nraise RuntimeError("fixture freezer failure")\n')
+        command=(c.HERE/'integration/build.sh').read_text().splitlines()[-1]
+        command=command.replace('/out/',str(self.out)+'/')
+        result=subprocess.run(['bash','-eu','-c',command],capture_output=True,text=True,timeout=5)
+        self.assertNotEqual(result.returncode,0)
+        log=(self.out/'build.log').read_text()
+        self.assertTrue(log.startswith(self.compile_line+'\n'))
+        for witness in ('freezer stdout','freezer stderr','RuntimeError: fixture freezer failure'):
+            self.assertIn(witness,log)
+        self.assertEqual(result.stdout,'');self.assertEqual(result.stderr,'')
 
 
 def grant():
