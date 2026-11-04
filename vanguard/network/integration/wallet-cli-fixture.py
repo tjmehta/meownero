@@ -5,6 +5,8 @@ Only options used by the audited driver are modeled. Like wallet_args.cpp:167,
 unknown config keys refuse before log setup. No native binary/data is accessed.
 """
 import os
+import fcntl
+import json
 from pathlib import Path
 import sys
 import time
@@ -22,9 +24,12 @@ BACKGROUND = ('The daemon is not set up to background mine.\n'
 
 
 def main():
-    args = iter(sys.argv[1:]); values = {}
+    args = iter(sys.argv[1:]); values = {}; command = []
     for arg in args:
-        if not arg.startswith('--') or arg[2:] not in CLI:
+        if not arg.startswith('--'):
+            command = [arg]+list(args)
+            break
+        if arg[2:] not in CLI:
             return 1
         key = arg[2:]
         values[key] = True if key == 'testnet' else next(args)
@@ -61,6 +66,53 @@ def main():
             raise SystemExit(30)
         with Path(values['log-file']).with_name('background-refused.fixture').open('a') as record:
             record.write('n\n')
+
+    if command or mode.startswith('one-shot'):
+        # Pinned main: init -> process_command -> stop -> deinit. No run()/prompt.
+        if not command:
+            emit('Wallet initialization complete\n')
+            time.sleep(10)
+            return 33
+        command=' '.join(command)
+        root=Path(values['log-file']).parent
+        with (root/'invocations.fixture').open('a') as record:
+            record.write(json.dumps({'pid':os.getpid(),'command':command,'create':create,
+                                     'argv':sys.argv[1:]})+'\n')
+        if mode=='command-exit':return 25
+        if mode=='one-shot-ordinary-colon':
+            emit('Wallet status: ');emit('ready\n')
+        wallet=root/'wallet'
+        with wallet.open('a+') as handle:
+            fcntl.flock(handle,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            handle.seek(0);state=json.loads(handle.read() or '{"height":99,"addresses":1}')
+            if mode=='skeleton-failure':
+                emit('abbey abducts ability\n'+Path(values['password-file']).read_text()+
+                     'Q'*95+'\n'+'0123456789abcdef'*4+'\n'+
+                     'abbey\rready\nabbey\bx\naces\x00acidic\n[wallet 123ABC]: \x1b[?2004h\n')
+                emit('Is this okay? [y/N]: ');sys.stdin.readline();return 31
+            if mode in ('background-mining','background-repeated','background-altered','background-during-command'):
+                background(BACKGROUND.replace('The daemon','Another daemon') if mode=='background-altered' else BACKGROUND)
+                return 34
+            if mode in ('confirmation','confirmation-upper','unknown-prompt','altered-wallet'):
+                emit({'confirmation':'Is this okay? [y/N]: ',
+                      'confirmation-upper':'Is this okay? [Y/n]: ',
+                      'unknown-prompt':'Unexpected input: ',
+                      'altered-wallet':'[wallet 123ABC altered]: '}[mode])
+                sys.stdin.readline();return 28
+            if command=='set refresh-from-block-height 0' or mode=='one-shot-password-each':
+                emit(PASSWORD if mode!='unknown-password' else 'Enter password (unexpected): ')
+                if sys.stdin.readline().rstrip('\n')!=Path(values['password-file']).read_text().strip():return 26
+                if mode=='repeated-password':
+                    emit(PASSWORD);sys.stdin.readline();return 27
+                if mode=='extra-prompt':
+                    emit('Confirm password: ');sys.stdin.readline();return 35
+                if command=='set refresh-from-block-height 0':state['height']=0
+            if command=='address new':state['addresses']+=1
+            if command=='set':
+                emit('refresh-from-block-height = '+str(1 if mode=='missing-readback' else state['height'])+'\n')
+            elif command not in ('set refresh-from-block-height 0','address new','refresh 0','save'):return 36
+            handle.seek(0);handle.truncate();json.dump(state,handle);handle.flush()
+        return 0
 
     if mode in ('background-mining', 'background-repeated', 'background-altered'):
         background(BACKGROUND.replace('The daemon', 'Another daemon') if mode=='background-altered' else BACKGROUND)

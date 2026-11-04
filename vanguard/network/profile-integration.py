@@ -605,16 +605,6 @@ def cli(root,port,create=False):
         argv=[str(BIN/'monero-wallet-cli'),'--testnet','--config-file',str(root/'cli.conf'),
               '--password-file',str(root/'password'),'--daemon-address',f'127.0.0.1:{port}',
               '--log-file',str(root/'cli.log')]
-        argv+=['--generate-new-wallet',str(root/'wallet'),'--mnemonic-language','English'] if create else ['--wallet-file',str(root/'wallet')]
-        master,slave=pty.openpty()
-        attrs=termios.tcgetattr(slave);attrs[3]&=~termios.ECHO;termios.tcsetattr(slave,termios.TCSANOW,attrs)
-        p=launch('cli',argv,root,stdin=slave,stdout=slave);os.close(slave)
-        prompt=re.compile(rb'\[wallet [1-9A-HJ-NP-Za-km-z]{6}(?: \(no daemon\)| \(out of sync\))?\]: $')
-        background_prompt=(b'The daemon is not set up to background mine.\n'
-            b'With background mining enabled, the daemon will mine when idle and not on battery.\n'
-            b'Enabling this supports the network you are using, and makes you eligible for receiving new monero\n'
-            b'Do you want to do it now? [y/N]: ')
-        background_refused=False
         def normalize(data):
             data=re.sub(rb'\x1b\][\s\S]*?(?:\x07|\x1b\\)',b'',data)
             data=re.sub(rb'\x1b\[[0-?]*[ -/]*[@-~]',b'',data)
@@ -628,49 +618,47 @@ def cli(root,port,create=False):
                 else:current.append(byte)
             return b'\n'.join(lines+[bytes(current)])
         def expect(label):
-            nonlocal transcript,background_refused
+            nonlocal transcript
             data=b'';end=time.monotonic()+budget(25);password_sent=False
             while time.monotonic()<end:
                 if select.select([master],[],[],min(.1,budget(.1)))[0]:
                     try:raw=os.read(master,65536)
                     except OSError as error:
                         if error.errno!=5:raise  # Linux PTY EIO when the slave closes.
-                        status=p.wait(timeout=budget(5))
-                        error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
-                        raise
+                        raw=b''
                     if not raw:
-                        error=OSError(5,'CLI PTY EOF')
-                        status=p.wait(timeout=budget(5))
-                        error.add_note(f'CLI exit_status={status}; expected_prompt={label}')
-                        raise error
+                        p.wait(timeout=budget(5))
+                        return normalize(data)
                     data+=raw;transcript+=raw
                     clean=normalize(data)
-                    if prompt.search(clean):return clean
-                    if clean.endswith(b'Wallet password: '):
+                    if clean.rsplit(b'\n',1)[-1]==b'Wallet password: ':
                         c.require(not password_sent,'repeated password prompt')
                         os.write(master,password.encode()+b'\n');password_sent=True;data=b''
-                    elif label=='STARTUP_WALLET_PROMPT' and not background_refused and clean.endswith(background_prompt):
-                        # Pinned check_background_mining(): decline once, never enable mining.
-                        os.write(master,b'n\n');background_refused=True;data=b''
-                    elif re.search(rb'(?:\[Y/n\]: |\[y/N\]: |Confirm password: |Enter password[^\n]*: )$',clean):
+                    elif re.search(rb'(?:\[[Yy]/[Nn]\]|[Cc]onfirm[^\n]*:|[Ee]nter password[^\n]*:)',clean):
                         raise ValueError('unknown CLI prompt; input refused')
-                c.require(p.poll() is None,'CLI exited before expected prompt')
-            raise TimeoutError('exact CLI prompt not observed')
-        try:
-            expect('STARTUP_WALLET_PROMPT')
-            commands=['set refresh-from-block-height 0','set','address new','refresh 0','save'] if create else ['set']
-            height=False
-            for command in commands:
-                os.write(master,command.encode()+b'\n');answer=expect(command)
+            raise TimeoutError('one-shot CLI did not exit')
+        commands=['set refresh-from-block-height 0','address new','refresh 0','save','set'] if create else ['set']
+        height=False
+        for index,command in enumerate(commands):
+            wallet_args=['--generate-new-wallet',str(root/'wallet'),'--mnemonic-language','English'] if create and index==0 else ['--wallet-file',str(root/'wallet')]
+            master,slave=pty.openpty();p=None
+            try:
+                try:
+                    attrs=termios.tcgetattr(slave);attrs[3]&=~termios.ECHO;termios.tcsetattr(slave,termios.TCSANOW,attrs)
+                    p=launch('cli',argv+wallet_args+command.split(),root,stdin=slave,stdout=slave)
+                finally:os.close(slave)
+                answer=expect(command)
+                c.require(p.returncode==0,'CLI normal save/exit')
+                c.require(not Path(f'/proc/{p.pid}').exists(),'CLI remains')
+                absent(port+2);released(root)
                 if command=='set':height=bool(re.search(rb'refresh-from-block-height = 0(?:\n|$)',answer))
-            c.require(height,'persisted CLI refresh height differs')
-            os.write(master,b'exit\n');p.wait(timeout=budget(20))
-            c.require(p.returncode==0,'CLI normal save/exit')
-            c.require(not Path(f'/proc/{p.pid}').exists(),'CLI remains')
-        finally:
-            (root/'cli-transcript.private').write_bytes(transcript);os.close(master)
-            if p.poll() is None:stop('cli',graceful=False)
-        released(root)
+            except BaseException as error:
+                if p is not None:error.add_note(f'CLI exit_status={p.poll()}; expected_prompt={command}')
+                raise
+            finally:
+                (root/'cli-transcript.private').write_bytes(transcript);os.close(master)
+                if p is not None and p.poll() is None:stop('cli',graceful=False)
+        c.require(height,'persisted CLI refresh height differs')
         seal(root,'wallet',{name:c.digest((BIN/name).read_bytes()) for name in ['monerod','monero-wallet-cli','monero-wallet-rpc']})
     except BaseException:
         _cli_skeleton(root,transcript,password)

@@ -1358,8 +1358,8 @@ class Direct(unittest.TestCase):
             if isinstance(call,ast.Call) and isinstance(call.func,ast.Attribute) and call.func.attr=='require' and \
                len(call.args)>1 and isinstance(call.args[1],ast.Constant):self.assertIn(call.args[1].value,d.REQUIRE_CODES)
         node=next(item for item in tree.body if isinstance(item,ast.FunctionDef) and item.name=='main')
-        self.assertEqual(node.lineno,743)
-        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[744])
+        self.assertEqual(node.lineno,731)
+        self.assertIn('PRIVATE.mkdir',(c.HERE/'profile-integration.py').read_text().splitlines()[732])
 
     def test_actual_contract_import_installs_observer_only_for_driver_entry(self):
         script="import sys;sys.path.insert(0,sys.argv[1]);sys.argv=[sys.argv[2]];import profile_contract;assert sys.gettrace() is not None"
@@ -1661,7 +1661,7 @@ class WalletCLI(unittest.TestCase):
         executable = self.d.BIN/'monero-wallet-cli'
         executable.write_text('#!'+sys.executable+'\n'+FIXTURE.read_text()); executable.chmod(0o700)
         for name in ('monerod', 'monero-wallet-rpc'): (self.d.BIN/name).write_text('source fixture only')
-        self.patches = [patch.object(self.d, 'released'), patch.object(self.d, 'seal'), patch.object(c, 'root_manifest')]
+        self.patches = [patch.object(self.d, 'released'), patch.object(self.d, 'absent'), patch.object(self.d, 'seal'), patch.object(c, 'root_manifest')]
         for item in self.patches: item.start(); self.addCleanup(item.stop)
         self.d.SAVED = {str(self.root/'wallet0'): {}}
 
@@ -1679,9 +1679,9 @@ class WalletCLI(unittest.TestCase):
 
     def test_baseline_unknown_config_refuses_before_log_setup(self):
         root = self.config('b17746e67e2512f1348ea05fb90f6955950d08b6')
-        with self.assertRaises(OSError) as caught: self.invoke(root)
+        with self.assertRaisesRegex(ValueError,'CLI normal save/exit') as caught: self.invoke(root)
         self.assertFalse((root/'cli.log').exists())
-        self.assertIn('exit_status=1; expected_prompt=STARTUP_WALLET_PROMPT', '\n'.join(caught.exception.__notes__))
+        self.assertIn('exit_status=1; expected_prompt=set refresh-from-block-height 0', '\n'.join(caught.exception.__notes__))
         self.assertEqual(self.d.PROCS['cli'][0].returncode, 1)
 
     def test_actual_create_and_reopen_prompt_sequences(self):
@@ -1689,13 +1689,54 @@ class WalletCLI(unittest.TestCase):
         self.assertEqual(self.d.PROCS['cli'][0].returncode, 0)
         self.assertEqual((root/'cli.log').read_text(), 'FIXTURE_OPTIONS_ACCEPTED\n')
 
-    def test_out_of_sync_prompt_is_accepted(self):
-        self.invoke(self.config(), mode='out-of-sync')
+    def test_one_shot_does_not_require_a_wallet_prompt(self):
+        self.invoke(self.config(), mode='one-shot')
 
-    def test_background_mining_startup_is_declined_and_wallet_reopens(self):
-        root=self.config();self.invoke(root,mode='background-mining');self.invoke(root,False)
-        self.assertEqual((root/'background-refused.fixture').read_text(),'n\n')
-        self.assertEqual(self.d.PROCS['cli'][0].returncode,0)
+    def test_partial_ordinary_colon_output_is_not_treated_as_a_prompt(self):
+        self.invoke(self.config(),mode='one-shot-ordinary-colon')
+
+    def test_one_shot_commands_use_separate_processes_and_fresh_reopen_getter(self):
+        root=self.config();self.invoke(root);self.invoke(root,False)
+        records=[json.loads(line) for line in (root/'invocations.fixture').read_text().splitlines()]
+        self.assertEqual([r['command'] for r in records],
+                         ['set refresh-from-block-height 0','address new','refresh 0','save','set','set'])
+        self.assertEqual([r['create'] for r in records],[True,False,False,False,False,False])
+        self.assertEqual(len({r['pid'] for r in records}),6)
+        self.assertTrue(all(not Path('/proc/'+str(r['pid'])).exists() for r in records))
+        self.assertEqual(json.loads((root/'wallet').read_text()),{'height':0,'addresses':2})
+        self.assertFalse((root/'background-refused.fixture').exists())
+        self.assertEqual(self.d.absent.call_args_list,[unittest.mock.call(48083)]*6)
+        for record in records:
+            args=record['argv']
+            self.assertEqual(args[:11],[ '--testnet','--config-file',str(root/'cli.conf'),
+                '--password-file',str(root/'password'),'--daemon-address','127.0.0.1:48081',
+                '--log-file',str(root/'cli.log')]+(['--generate-new-wallet',str(root/'wallet')] if record['create'] else ['--wallet-file',str(root/'wallet')]))
+
+    def test_process_exit_listener_and_file_release_precede_next_launch(self):
+        root=self.config();events=[];launch=self.d.launch
+        def start(*args,**kwargs):
+            if any(event[0]=='launch' for event in events):
+                self.assertEqual(events[-2:],[('absent',48083),('released',root)])
+                self.assertIsNotNone(self.d.PROCS['cli'][0].returncode)
+            events.append(('launch',args[1][-1]));return launch(*args,**kwargs)
+        self.d.absent.side_effect=lambda port:events.append(('absent',port))
+        self.d.released.side_effect=lambda path:events.append(('released',path))
+        with patch.object(self.d,'launch',side_effect=start):
+            # The initial release guard precedes the first launch.
+            events.append(('absent',48083));self.invoke(root)
+        self.assertEqual(sum(event[0]=='launch' for event in events),5)
+
+    def test_release_or_listener_failure_prevents_next_invocation(self):
+        for label in ('listener remains','wallet/data file still open'):
+            with self.subTest(label=label),tempfile.TemporaryDirectory() as tmp:
+                root=Path(tmp);(root/'password').write_text('synthetic\n')
+                (root/'cli.conf').write_text('daemon-ssl=disabled\n')
+                if label=='listener remains':self.d.absent.side_effect=ValueError(label)
+                else:self.d.released.side_effect=[None,ValueError(label)]
+                with self.assertRaisesRegex(ValueError,label):self.invoke(root)
+                self.assertEqual(len((root/'invocations.fixture').read_text().splitlines()),1)
+                self.assertIsNotNone(self.d.PROCS['cli'][0].returncode)
+                self.d.absent.side_effect=None;self.d.released.side_effect=None
 
     def test_readline_two_phase_csi_osc_markers_and_backspace_create_reopen(self):
         root=self.config()
@@ -1703,26 +1744,33 @@ class WalletCLI(unittest.TestCase):
         self.assertEqual(self.d.PROCS['cli'][0].returncode,0)
         self.assertFalse((root/'cli-skeleton.private').exists())
 
-    def test_readline_background_question_is_declined_once(self):
-        root=self.config();self.invoke(root,mode='readline-background-mining')
-        self.invoke(root,False,mode='readline-normal')
-        self.assertEqual((root/'background-refused.fixture').read_text(),'n\n')
+    def test_password_answer_budget_is_per_invocation(self):
+        root=self.config();self.invoke(root,mode='one-shot-password-each')
+        self.invoke(root,False,mode='one-shot-password-each')
+        self.assertEqual(self.d.PROCS['cli'][0].returncode,0)
 
-    def test_exact_818a4fc_readline_controls_fail_before_commands(self):
-        root=self.config();before=driver('818a4fc646d74b177f2981045b1c1eb125998a9b')
+    def test_exact_200955e7_times_out_without_an_interactive_prompt(self):
+        root=self.config();before=driver('200955e76942d1f4971030505de74e0e047c7b75')
         before.PRIVATE=self.d.PRIVATE;before.BIN=self.d.BIN
         with patch.object(before,'released'),patch.object(before,'seal'),patch.object(before,'budget',return_value=.5):
-            for mode in ('readline-normal','readline-background-mining'):
-                with self.subTest(mode=mode),patch.dict(before.ENV,WALLET_CLI_FIXTURE_MODE=mode):
-                    with self.assertRaises((TimeoutError,ValueError)):before.cli(root,48081,True)
-                    self.assertIsNotNone(before.PROCS['cli'][0].returncode)
-                    self.assertFalse((root/'background-refused.fixture').exists())
+            with patch.dict(before.ENV,WALLET_CLI_FIXTURE_MODE='one-shot'):
+                with self.assertRaisesRegex(TimeoutError,'exact CLI prompt not observed'):before.cli(root,48081,True)
+        self.assertIsNotNone(before.PROCS['cli'][0].returncode)
+        self.assertFalse((root/'invocations.fixture').exists())
+
+    def test_nonzero_extra_prompt_and_missing_fresh_readback_fail(self):
+        root=self.config()
+        for mode,label in [('command-exit','CLI normal save/exit'),('extra-prompt','unknown CLI prompt'),
+                           ('missing-readback','persisted CLI refresh height differs')]:
+            with self.subTest(mode=mode),self.assertRaisesRegex(ValueError,label):self.invoke(root,mode=mode)
+            self.assertIsNotNone(self.d.PROCS['cli'][0].returncode)
+            self.assertEqual((root/'cli-skeleton.private').stat().st_mode & 0o777,0o600)
 
     def test_readline_adverse_prompts_still_refuse_and_reap(self):
         root=self.config()
         with patch.object(self.d,'budget',return_value=.5):
             for mode in ('background-altered','background-during-command','confirmation',
-                         'unknown-password','repeated-password','altered-wallet','background-repeated'):
+                         'unknown-password','repeated-password','altered-wallet','background-repeated','confirmation-upper','unknown-prompt'):
                 with self.subTest(mode=mode),self.assertRaises((ValueError,TimeoutError)):
                     self.invoke(root,mode='readline-'+mode)
                 self.assertIsNotNone(self.d.PROCS['cli'][0].returncode)
@@ -1730,7 +1778,7 @@ class WalletCLI(unittest.TestCase):
                 self.assertEqual(skeleton.stat().st_mode & 0o777,0o600)
                 answered=root/'background-refused.fixture'
                 self.assertEqual(answered.read_text() if answered.exists() else '',
-                                 'n\n' if mode=='background-repeated' else '')
+                                 '')
 
     def test_skeleton_connected_failure_redacts_fixture_password_and_secrets(self):
         root=self.config()
@@ -1791,14 +1839,15 @@ class WalletCLI(unittest.TestCase):
             value=self.d._cli_skeleton(root,b' '.join(word[:3].upper() for word in words[first:first+200]),'')
             self.assertFalse(re.search(rb'[A-Za-z]{3,}',value))
 
-    def test_skeleton_correction_preserves_every_other_driver_byte(self):
-        before=subprocess.check_output(['git','show','19c0401a:./vanguard/network/profile-integration.py']).decode()
+    def test_one_shot_scope_keeps_redactor_normalizer_and_outside_driver_exact(self):
+        before=subprocess.check_output(['git','show','200955e7:./vanguard/network/profile-integration.py']).decode()
         after=(c.HERE/'profile-integration.py').read_text()
-        def frozen(raw):
-            node=next(v for v in ast.parse(raw).body if isinstance(v,ast.FunctionDef) and v.name=='_cli_skeleton')
-            lines=raw.splitlines(keepends=True);lines[node.lineno-1:node.end_lineno]=['<AUTHORIZED REDACTOR>\n']
-            return ''.join(lines)
-        self.assertEqual(frozen(before),frozen(after))
+        def parts(raw):
+            tree=ast.parse(raw);cli=next(v for v in tree.body if isinstance(v,ast.FunctionDef) and v.name=='cli')
+            normalize=next(v for v in ast.walk(cli) if isinstance(v,ast.FunctionDef) and v.name=='normalize')
+            lines=raw.splitlines(keepends=True);lines[cli.lineno-1:cli.end_lineno]=['<AUTHORIZED CLI>\n']
+            return ''.join(lines),ast.dump(normalize)
+        self.assertEqual(parts(before),parts(after))
 
     def test_skeleton_redacts_pinned_seed_address_types_and_keys(self):
         import re
@@ -1875,11 +1924,11 @@ class WalletCLI(unittest.TestCase):
                     before.cli(root,48081,True)
         self.assertFalse((root/'background-refused.fixture').exists())
 
-    def test_repeated_background_prompt_refuses_after_one_negative_answer(self):
+    def test_background_prompt_refuses_without_any_mining_answer(self):
         root=self.config()
         with self.assertRaisesRegex(ValueError,'unknown CLI prompt; input refused'):
             self.invoke(root,mode='background-repeated')
-        self.assertEqual((root/'background-refused.fixture').read_text(),'n\n')
+        self.assertFalse((root/'background-refused.fixture').exists())
 
     def test_altered_or_command_background_prompt_refuses_without_answer(self):
         root=self.config()
@@ -1902,12 +1951,12 @@ class WalletCLI(unittest.TestCase):
 
     def test_early_eio_reaps_and_retains_status_and_label(self):
         root = self.config()
-        with self.assertRaises(OSError) as caught: self.invoke(root, mode='early-exit')
-        self.assertIn('exit_status=23; expected_prompt=STARTUP_WALLET_PROMPT', '\n'.join(caught.exception.__notes__))
+        with self.assertRaisesRegex(ValueError,'CLI normal save/exit') as caught: self.invoke(root, mode='early-exit')
+        self.assertIn('exit_status=23; expected_prompt=set refresh-from-block-height 0', '\n'.join(caught.exception.__notes__))
         self.assertFalse(Path('/proc/'+str(self.d.PROCS['cli'][0].pid)).exists())
 
     def test_command_eio_retains_expected_command(self):
-        with self.assertRaises(OSError) as caught: self.invoke(self.config(), mode='command-exit')
+        with self.assertRaisesRegex(ValueError,'CLI normal save/exit') as caught: self.invoke(self.config(), mode='command-exit')
         self.assertIn('exit_status=25; expected_prompt=set refresh-from-block-height 0', '\n'.join(caught.exception.__notes__))
 
     def test_actual_main_keeps_exit_note_private_with_closed_export(self):
@@ -1926,10 +1975,10 @@ class WalletCLI(unittest.TestCase):
         finally:
             sys.settrace(previous)
         private = self.d.PRIVATE/'failure-traceback'
-        self.assertIn('CLI exit_status=23; expected_prompt=STARTUP_WALLET_PROMPT', private.read_text())
+        self.assertIn('CLI exit_status=23; expected_prompt=set refresh-from-block-height 0', private.read_text())
         self.assertEqual(private.stat().st_mode & 0o777, 0o600)
         public = c.json_file(self.d.PUBLIC/'runtime-diagnostics.json')
-        self.assertEqual(public, dict(step='NODE1_START', exception_class='OSError', require_label='NONE'))
+        self.assertEqual(public, dict(step='NODE1_START', exception_class='ValueError', require_label='CLI_NORMAL_SAVE_EXIT'))
         self.assertFalse((self.d.PUBLIC/'failure-traceback').exists())
         for path in self.d.PUBLIC.iterdir():
             self.assertNotIn('exit_status', path.read_text()); self.assertNotIn('expected_prompt', path.read_text())
@@ -1942,7 +1991,7 @@ class WalletCLI(unittest.TestCase):
                 if error.errno == 5: return b''
                 raise
         with patch.object(self.d.os, 'read', side_effect=read):
-            with self.assertRaises(OSError) as caught: self.invoke(root, mode='early-exit')
+            with self.assertRaisesRegex(ValueError,'CLI normal save/exit') as caught: self.invoke(root, mode='early-exit')
         self.assertIn('exit_status=23', '\n'.join(caught.exception.__notes__))
 
     def test_unknown_and_repeated_password_prompts_refuse(self):
@@ -1993,23 +2042,21 @@ class WalletCLI(unittest.TestCase):
         self.assertIn('check_background_mining(password);',cli)
 
     def test_wallet_assertions_commands_credentials_and_rows_unchanged(self):
-        before = subprocess.check_output(['git', 'show', 'b17746e6:./vanguard/network/profile-integration.py']).decode()
+        before = subprocess.check_output(['git', 'show', '200955e7:./vanguard/network/profile-integration.py']).decode()
         after = (c.HERE/'profile-integration.py').read_text()
-        def contract(text):
-            tree = ast.parse(text)
-            return [ast.dump(node) for node in ast.walk(tree) if
-                    isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == 'require']
-        # Wrapping cli in the authorized failure boundary changes AST walk order.
-        self.assertEqual(sorted(contract(before)), sorted(contract(after)))
         def outside_cli(text):
-            tree=ast.parse(text.replace('rpc-ssl=disabled\\n', 'daemon-ssl=disabled\\n'))
-            tree.body=[item for item in tree.body if not isinstance(item,ast.FunctionDef) or
-                       item.name not in ('cli','_cli_skeleton')]
+            tree=ast.parse(text)
+            tree.body=[item for item in tree.body if not isinstance(item,ast.FunctionDef) or item.name!='cli']
             return ast.dump(tree)
-        self.assertEqual(outside_cli(before), outside_cli(after))
-        for anchor in ["commands=['set refresh-from-block-height 0','set','address new','refresh 0','save'] if create else ['set']",
-                       "os.write(master,password.encode()+b'\\n')", "os.write(master,b'exit\\n')"]:
-            self.assertIn(anchor, before); self.assertIn(anchor, after)
+        self.assertEqual(outside_cli(before),outside_cli(after))
+        for anchor in ["os.write(master,password.encode()+b'\\n')", "'persisted CLI refresh height differs'",
+                       "'CLI normal save/exit'", "'CLI remains'", "'repeated password prompt'"]:
+            self.assertIn(anchor,before);self.assertIn(anchor,after)
+        self.assertIn("commands=['set refresh-from-block-height 0','address new','refresh 0','save','set'] if create else ['set']",after)
+        self.assertNotIn('STARTUP_WALLET_PROMPT',after)
+        self.assertNotIn("os.write(master,b'n",after)
+        self.assertNotIn("os.write(master,b'exit",after)
+
 
 
 
