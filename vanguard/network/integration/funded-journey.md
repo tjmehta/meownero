@@ -1,10 +1,13 @@
 # F1 funded two-peer journey — source candidate
 
-Authority: lead interaction `058ab9ae-b3ed-4e00-bd75-14f4d8f28df0`, resolved by
-Meownero lead `8f050fb0` in run `6f632a7a`, report comment `7e618588`.
-This is one implementation and at most one correction pass, 7,200 seconds from
-the first edit in `evidence/funded-two-peer-source/edit-budget.json`, starting
-from `b6f543268556d1c87d93efeafdde0d52bb3bc29c`. Only `vanguard/network/` is owned.
+Current correction authority: lead interaction `47e4e350-879c-40c0-b330-a41c82652b6c`,
+resolved by Meownero lead `8f050fb0` in run `c7989f95` on 2026-11-05.
+One implementation plus at most one correction, 2,700 seconds from the first edit
+in `evidence/funded-core-correction/edit-budget.json`, from clean `68963718`;
+only the funded driver/contract, connected tests, bindings/audit, affected
+operator/item-5 docs and required inventories/evidence in `vanguard/network/`.
+Original F1 authority `058ab9ae` and its unchanged workload/resource constraints
+remain binding. Its earlier implementation allowance is spent.
 
 The observable outcome is two native peers at real difficulty, a b1 coinbase
 spend across its maturity boundary, a cross-peer payment, private seed restoration
@@ -19,7 +22,9 @@ flags remain false. The genesis driver, its evidence, the compiled source/overla
 Only A mines. It uses native `--start-mining <public wallet address>
 --mining-threads 1`, never a restricted mining RPC, accelerated block generator,
 fixed difficulty, changed timestamp, premine or external funding. RandomX's
-existing light mode remains unchanged. Each mining phase stops A gracefully and
+light mode is enforced by `MONERO_RANDOMX_UMASK=4` in every funded daemon child,
+including B's restart. Missing/ineffective masks refuse before launch; the final
+light-mode witness derives from every successful daemon launch environment. Each mining phase stops A gracefully and
 reopens its same sealed data root without mining. If the observed target was
 overshot the attempt fails; it never truncates or rewinds the chain to pass.
 
@@ -27,9 +32,9 @@ overshot the attempt fails; it never truncates or rewinds the chain to pass.
 | --- | --- |
 | N1 | Fresh private CLI wallets A/B, each setter/store and separate-process getter at height0; authenticated private signer processes |
 | N≥3 then at least two more blocks, below60 | Stop B, continue A mining, restart B from its same sealed root while A mines, match count/hash/cumulative work; changed process identity. Initial low-difficulty blocks need no exact N3 stop |
-| N60 | b1 reward9 MEOW, unlock61, native wallet marks locked, actual transfer refused with -37 and empty unchanged pools |
+| N60 | b1 reward9 MEOW, unlock61, exact received unspent output, positive total balance and zero unlocked balance; identical transfer request refused with active CARROT -4 and no result, empty pools before/after, unchanged count/hash/work on both peers |
 | N60 | Foreign-network payment refused with native -2 before signing/relay, pools unchanged |
-| N61 | Same b1 output/key image now unlocked; native-estimator A→B payment1 MEOW consumes it |
+| N61 | Same exact b1 output/pubkey/index/key image/amount/height/spent lineage now unlocked; identical native transfer request A→B for1 MEOW succeeds and consumes it |
 | N62 | Payment included at b61, exact transaction and block membership/confirmation on both peers; wallet marks b1 spent |
 | N62, mining stopped | B's original signer stores/exits/releases; fresh wallet-directory signer restores private mnemonic with restore_height0; refreshed output/pubkey/index/key image/amount/height match. Store/exit, separate CLI getter verifies persisted0, then reopen restored signer |
 | N71 | Restored B spends0.1 MEOW, native fee below its remaining1 MEOW funding; response key image must equal the received output |
@@ -39,6 +44,10 @@ overshot the attempt fails; it never truncates or rewinds the chain to pass.
 Both confirmations require identical native decoded transaction data, main-chain
 block hashes/membership, FCMP++ RingCT type7, CARROT outputs, unlock0, empty ring
 offsets and exact fee/input-key-image agreement with the native transfer response.
+The N60 and N61 transfer RPC bodies are identical (including `do_not_relay=false`):
+N60 must return an error without a transaction result; an early successful transfer
+is an immediate failure. No extra dry-run or retry is inserted. The N61 success
+then receives native confirmation and exact spent-input lineage checks.
 Only SHA256 digests of transaction IDs, outputs and key images are exported.
 No seed, address, authentication, request body, native response or console text
 is a public witness. Ordinary unlock negatives and independent proof assurance
@@ -63,7 +72,8 @@ claim that restricted wallets can sign. Wallets never share a file owner.
 
 Mnemonic query/restore bodies and the generated wallet password stay in memory
 or private0600 files. Each child has the accepted allowlisted environment;
-only daemon children receive RPC_LOGIN. Private wallet configs hold only their
+only daemon children receive RPC_LOGIN and the funded FULL_MEM-disable mask.
+The accepted genesis environment and shared launch helper remain byte-unchanged. Private wallet configs hold only their
 intended daemon login. Native login files are read with the accepted no-follow,
 owner/mode/single-link check. They never enter argv, comments or public JSON.
 
@@ -81,11 +91,12 @@ The packet contains original Git-object snapshots and byte hashes.
 
 | Behavior | Exact source locator / disposition |
 | --- | --- |
-| Native mining options | `src/cryptonote_basic/miner.cpp:96-97`, OK; no full-memory mining option is supplied |
+| Native mining options | `src/cryptonote_basic/miner.cpp:96-97,580-583`, OK; miner-thread dataset allocation requires the explicit environment mask below |
 | Coinbase window | `src/cryptonote_config.h` CRYPTONOTE_MINED_MONEY_UNLOCK_WINDOW=60; accepted overlay retains it |
 | Block count versus last locked index | `cryptonote_format_utils.cpp:2102-2117` subtracts1 from explicit block unlock; `wallet2.cpp:7651-7676` compares N≥L+1 and retains ordinary age10; no conversion edit |
 | Transfer native estimator and restriction | `wallet_rpc_server.cpp:1261-1320`, unrestricted signer required; priority0/ring_size0 use native adjustment/create_transactions_2; nonzero unlock remains refused |
-| Native refusal codes | `wallet_rpc_server_error_codes.h:35,70` (-2/-37); `wallet_rpc_server.cpp:3875-3885` maps insufficient unlocked funds to -37 |
+| Native refusal codes | `wallet2.cpp:10684-10701` selects active CARROT; `wallet/tx_builder.cpp:77-95,628-635` filters locked input then throws `carrot::not_enough_usable_money`; `carrot_core/exceptions.h:60-64` derives from std::runtime_error; `wallet_rpc_server.cpp:1324,3925-3928` maps to generic transfer -4. Legacy -37 catch at3881 is inapplicable. -4 alone is never a maturity proof; surrounding balance/output/pool/chain and later exact-input success are required |
+| RandomX light-mode enforcement | `rx-slow-hash.c:102-132,230-239,278-309,330,549-560`: UMASK disables FULL_MEM before miner-thread allocation despite ignore_env=1; pinned RandomX submodule `aaafe71322df6602c21a5c72937ac284724ae561`, `src/randomx.h:46`, FULL_MEM=4. Every funded launch passes exactly string4; no compiled change |
 | Input lineage | `wallet_rpc_server.cpp:1184-1217` fill_response exposes spent key images; `2278-2329` incoming_transfers exposes exact output/key image/index/height/spent/unlocked state |
 | Private recovery | `wallet_rpc_server.cpp:2333-2385` mnemonic query; `4133-4342` wallet-dir restore validates seed and sets/re-writes req.restore_height; password/seed are RPC data, never child argv |
 | Wallet server options | `wallet_rpc_server.cpp:5201-5212` registers wallet-file, wallet-dir and RPC options; `5039-5043` rejects wallet-dir with password-file, so the empty restore server omits password-file and receives its password only in the private restore body. Later file reopen uses password-file. daemon-ssl belongs to wallet2 options; accepted CLI option audit is reused |

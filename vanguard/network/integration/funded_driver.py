@@ -40,6 +40,7 @@ class Journey:
         self.nodes = {}
         self.wallets = {}
         self.auth = {}
+        self.daemon_light_modes = []
         self.binaries = {name: c.digest((d.BIN/name).read_bytes()) for name in
                          ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc')}
 
@@ -73,6 +74,11 @@ class Journey:
             time.sleep(d.budget(.1))
         raise TimeoutError('funded milestone deadline')
 
+    def launch_daemon(self, name, argv, root, env):
+        c.require(env.get('MONERO_RANDOMX_UMASK') == '4', 'funded RandomX light mode required')
+        d.launch(name, argv, root, env)
+        self.daemon_light_modes.append(env['MONERO_RANDOMX_UMASK'] == '4')
+
     def node(self, index, mining=None):
         port = 48080 + index*100
         root = d.PRIVATE/f'node{index}'
@@ -96,7 +102,8 @@ class Journey:
             argv += ['--start-mining', mining, '--mining-threads', '1']
         (root/'creation.json').write_bytes(c.canonical(dict(d.creation('daemon', self.binaries), stopped_saved=False)))
         os.chmod(root/'creation.json', 0o600)
-        d.launch(f'node{index}', argv, root, dict(d.ENV, RPC_LOGIN=login))
+        self.launch_daemon(f'node{index}', argv, root,
+            dict(d.ENV, RPC_LOGIN=login, MONERO_RANDOMX_UMASK='4'))
         rpc = d.RPC(port+1, login)
         d.wait(lambda: rpc.call('get_info'), 30)
         self.nodes[index] = (rpc, root)
@@ -174,7 +181,7 @@ class Journey:
     def transfer(self, rpc, address, amount, *, refusal=None, fee_ceiling=None):
         params = dict(destinations=[dict(amount=amount, address=address)], account_index=0,
             subaddr_indices=[], subtract_fee_from_outputs=[], priority=0, ring_size=0,
-            unlock_time=0, payment_id='', get_tx_key=False, do_not_relay=refusal is not None,
+            unlock_time=0, payment_id='', get_tx_key=False, do_not_relay=False,
             get_tx_hex=False, get_tx_metadata=False)
         code, value = rpc.call('transfer', params, raw=True)
         c.require(code == 200, 'transfer transport')
@@ -275,12 +282,20 @@ class Journey:
         c.require(coinbase['unlock_time'] == 61 and sum(x['amount'] for x in coinbase['vout']) == 9*f.ATOMIC,
                   'native b1 reward/unlock')
         self.refresh(a)
+        balance = a.call('get_balance', dict(account_index=0, address_indices=[]))
+        c.require(type(balance['balance']) is int and balance['balance'] > 0 and
+            type(balance['unlocked_balance']) is int and balance['unlocked_balance'] == 0,
+            'N60 received balance must be positive and locked')
         original = self.output(a, coinbase_id, 9*f.ATOMIC)
-        c.require(original['block_height'] == 1 and original['unlocked'] is False,
+        c.require(original['block_height'] == 1 and original['unlocked'] is False and
+                  original['spent'] is False,
                   'N60 coinbase unexpectedly unlocked')
-        self.transfer(a, addresses[1], f.ATOMIC, refusal=-37)
+        locked_state = self.agree(60)
+        c.require(locked_state is not None and self.pool() == [[], []], 'N60 chain/pool context')
+        self.transfer(a, addresses[1], f.ATOMIC, refusal=-4)
         pool = self.pool()
         c.require(pool == [[], []], 'early spend changed pool')
+        c.require(self.agree(60) == locked_state, 'early spend changed chain')
         self.transfer(a, d.FOREIGN, f.ATOMIC, refusal=-2)
         c.require(self.pool() == pool, 'wrong-network payment changed pool')
         self.row('auth.json', 'wrong_network_payment_refusal', code=-2, unchanged_pool=True)
@@ -288,7 +303,8 @@ class Journey:
         self.mine_to(61, addresses[0])
         self.refresh(a)
         eligible = self.output(a, coinbase_id, 9*f.ATOMIC)
-        c.require(eligible['unlocked'] is True and eligible['key_image'] == original['key_image'],
+        lineage = ('amount', 'tx_hash', 'pubkey', 'key_image', 'global_index', 'block_height', 'spent')
+        c.require(eligible['unlocked'] is True and all(eligible[k] == original[k] for k in lineage),
                   'N61 coinbase eligibility')
         payment = self.transfer(a, addresses[1], f.ATOMIC, fee_ceiling=8*f.ATOMIC)
         c.require(payment['spent_key_images']['key_images'] == [original['key_image']],
@@ -303,7 +319,9 @@ class Journey:
         self.row('peer.json', 'non_genesis_agreement', count=62,
             tip_sha256=fingerprint(self.state(0)[1]), peers=2)
         self.row('wallet.json', 'coinbase_maturity', block_index=1, amount_atomic=9*f.ATOMIC,
-            unlock_time=61, early_count=60, early_refusal_code=-37, eligible_count=61,
+            unlock_time=61, early_count=60, early_refusal_code=-4, eligible_count=61,
+            early_balance_positive=True, early_unlocked_balance=0, early_no_tx_result=True,
+            early_unchanged_pool=True, early_unchanged_chain=True, output_lineage_matches=True,
             after_count=62, payment_block_index=61, txid_sha256=fingerprint(payment['tx_hash']),
             fee_atomic=payment['fee'], confirmations=1, peers=2, input_matches_coinbase=True)
 
@@ -363,8 +381,11 @@ class Journey:
         c.require(sorted(txids) == sorted([payment['tx_hash'], spend['tx_hash']]),
                   'unexpected native transaction inventory')
         d.census()
+        c.require(bool(self.daemon_light_modes) and all(self.daemon_light_modes),
+                  'funded launch light-mode history')
         self.row('isolation.json', 'native_mining_bounds', count=73, transaction_count=2,
-            max_count=f.MAX_COUNT, max_transactions=f.MAX_TRANSACTIONS, threads=1, light_mode=True,
+            max_count=f.MAX_COUNT, max_transactions=f.MAX_TRANSACTIONS, threads=1,
+            light_mode=all(self.daemon_light_modes),
             external_funding=False, loopback_only=True)
         self.stop_wallet('signer-a')
         self.stop_wallet('signer-restored')

@@ -51,11 +51,19 @@ setsid python3 -B vanguard/network/run-profile.py \
 ```
 
 A/B start fresh. Only A mines through native startup flags, one thread in existing
-RandomX light mode. Both peers use only each other's explicit loopback endpoints
+RandomX light mode. Every funded daemon start, including B restart, explicitly
+passes MONERO_RANDOMX_UMASK=4; the driver refuses a missing/ineffective mask before
+launch and derives its light-mode witness from the actual launch history. An
+outer environment or absent full-memory CLI flag is insufficient. Both peers use only each other's explicit loopback endpoints
 in a network-none container. RPC stays loopback and authenticated. Signer wallets
 are private full-key contexts with generated per-process login files; they are
 never offered as observer services. Do not disable authentication or put a wallet
 password, mnemonic, login or key in argv, public evidence or model context.
+
+At N60, require the received b1/unlock61 output, positive total and zero unlocked
+balance, active CARROT error -4 without a transaction result, unchanged empty
+pools and unchanged peer chain state. At N61 the identical request must succeed
+with the same output/key-image lineage. A generic -4 alone cannot pass maturity.
 
 The driver creates disposable wallets using the accepted native one-shot CLI
 setter/store/separate getter. For funded recovery it stops/stores/releases B,

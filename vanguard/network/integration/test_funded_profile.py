@@ -1,5 +1,6 @@
 """Connected F1 source checks; native effects are explicitly substituted."""
 import contextlib
+import ast
 import copy
 import importlib.util
 import json
@@ -117,7 +118,8 @@ class NativeFixture:
             if path == 'get_transaction_pool_hashes': return dict(tx_hashes=list(self.pending))
             if method == 'get_block':
                 height = params['height']
-                data = dict(miner_tx=dict(unlock_time=height+60, vout=[dict(amount=9*f.ATOMIC)]),
+                unlock = 62 if height == 1 and self.adverse == 'wrong_coinbase_unlock' else height+60
+                data = dict(miner_tx=dict(unlock_time=unlock, vout=[dict(amount=9*f.ATOMIC)]),
                     tx_hashes=[k for k, tx in self.txs.items() if tx.get('block') == height])
                 return dict(json=json.dumps(data), miner_tx_hash=self.coinbase,
                     block_header=dict(height=height, hash=f'{height+100:064x}', orphan_status=False))
@@ -135,7 +137,14 @@ class NativeFixture:
             is_a = port == 48083
             if method == 'get_version': return dict(version=1)
             if method in ('store', 'refresh'): return {}
-            if method == 'get_balance': return dict(balance=f.ATOMIC, unlocked_balance=f.ATOMIC)
+            if method == 'get_balance':
+                balance, unlocked = f.ATOMIC, 0 if is_a and self.count == 60 else f.ATOMIC
+                if is_a and self.count == 60:
+                    if self.adverse == 'zero_balance': balance = 0
+                    if self.adverse == 'boolean_balance': balance = True
+                    if self.adverse == 'early_unlocked_balance': unlocked = 1
+                    if self.adverse == 'boolean_unlocked_balance': unlocked = False
+                return dict(balance=balance, unlocked_balance=unlocked)
             if method == 'get_address': return dict(address='A_ADDRESS' if is_a else 'B_ADDRESS')
             if method == 'query_key': return dict(key=' '.join(['synthetic']*25))
             if method == 'restore_deterministic_wallet':
@@ -143,17 +152,26 @@ class NativeFixture:
                 return dict(address='B_ADDRESS', seed='PRIVATE_RECOVERY_SEED')
             if method == 'incoming_transfers':
                 if is_a:
-                    return dict(transfers=[self.output(self.coinbase, 9*f.ATOMIC, self.coinbase_key, 1)])
+                    value = self.output(self.coinbase, 9*f.ATOMIC, self.coinbase_key, 1)
+                    if self.count == 61 and self.adverse == 'eligible_lineage': value['pubkey'] = 'f'*64
+                    return dict(transfers=[value])
                 found = [(k, tx) for k, tx in self.txs.items() if tx['amount'] == f.ATOMIC and 'block' in tx]
                 key = 'f'*64 if self.restored and self.adverse == 'restored_lineage' else self.received_key
                 return dict(transfers=[self.output(k, f.ATOMIC, key, tx['block']) for k, tx in found])
             if method == 'transfer':
                 address = params['destinations'][0]['address']
-                refusal = -2 if address == driver.d.FOREIGN else -37 if self.count == 60 else None
+                refusal = -2 if address == driver.d.FOREIGN else -4 if self.count == 60 else None
                 if refusal and self.adverse != ('wrong_network_accepted' if refusal == -2 else 'early_spend_accepted'):
+                    if refusal == -4:
+                        if self.adverse in ('early_wrong_code', 'baseline_legacy_refusal'): refusal = -37
+                        if self.adverse == 'early_pool_change': self.pending.append('f'*64)
+                        if self.adverse == 'early_chain_change': self.count += 1; self.b_count += 1
+                        if self.adverse == 'early_error_with_result':
+                            return 200, dict(error=dict(code=-4), result={})
                     return 200, dict(error=dict(code=refusal, message='PRIVATE_NATIVE_ERROR'))
                 txid = str(len(self.txs)+5)*64
                 key = self.coinbase_key if is_a else self.received_key
+                if is_a and self.adverse == 'wrong_coinbase_input': key = 'f'*64
                 if not is_a and self.adverse == 'wrong_spent_input': key = 'f'*64
                 tx = dict(tx_hash=txid, amount=params['destinations'][0]['amount'], fee=1000,
                     spent_key_images=dict(key_images=[key]))
@@ -204,6 +222,8 @@ class FundedDriver(unittest.TestCase):
                     self.assertNotIn('--disable-rpc-login', argv)
                     self.assertNotIn('--fixed-difficulty', argv)
                     self.assertNotIn('--regtest', argv)
+                    if event[1].startswith('node'):
+                        self.assertEqual(env['MONERO_RANDOMX_UMASK'], '4')
                     if not event[1].startswith('node'):
                         self.assertNotIn('--restricted-rpc', argv)
                         self.assertNotIn('RPC_LOGIN', env)
@@ -216,16 +236,100 @@ class FundedDriver(unittest.TestCase):
                 for key in keys:
                     witness = {k:v for k,v in journey.rows[file][key].items() if k != 'status'}
                     self.assertIsNone(r.witness_failure(witness, f.shapes()[key], key, complete=True))
+            requests = [e[3] for e in fixture.events if e[:3] == ('rpc', 48083, 'transfer')
+                        and e[3]['destinations'][0]['address'] == 'B_ADDRESS']
+            self.assertEqual(requests[0], requests[1])
+            self.assertEqual(len(journey.daemon_light_modes),
+                sum(e[0] == 'launch' and e[1].startswith('node') for e in fixture.events))
 
     def test_actual_journey_refuses_adverse_native_effects(self):
         for adverse in ('early_spend_accepted', 'wrong_network_accepted', 'missing_confirmation',
-                        'restored_lineage', 'wrong_spent_input', 'legacy_transaction', 'wrong_genesis'):
+                        'restored_lineage', 'wrong_spent_input', 'legacy_transaction', 'wrong_genesis',
+                        'zero_balance', 'boolean_balance', 'early_unlocked_balance',
+                        'boolean_unlocked_balance', 'wrong_coinbase_unlock', 'eligible_lineage',
+                        'early_wrong_code', 'early_error_with_result', 'early_pool_change',
+                        'early_chain_change', 'wrong_coinbase_input'):
             with self.subTest(adverse=adverse), tempfile.TemporaryDirectory() as temp:
                 fixture = NativeFixture(Path(temp), adverse)
                 with fixture.installed():
                     journey = driver.Journey()
                     with self.assertRaises(ValueError): journey.run()
                     self.assertNotEqual(f.verdict(journey.rows), 'PASS_FUNDED_TWO_PEER_JOURNEY_ONLY')
+
+    def test_missing_or_ineffective_mask_refuses_before_each_daemon_start(self):
+        for index in (0, 1):
+            for mask in (None, '0', '2', 4, '4extra'):
+                with self.subTest(index=index, mask=mask), tempfile.TemporaryDirectory() as temp:
+                    fixture = NativeFixture(Path(temp))
+                    with fixture.installed():
+                        journey = driver.Journey()
+                        original = journey.launch_daemon
+                        def altered(name, argv, root, env):
+                            if mask is None: env.pop('MONERO_RANDOMX_UMASK')
+                            else: env['MONERO_RANDOMX_UMASK'] = mask
+                            return original(name, argv, root, env)
+                        with patch.object(journey, 'launch_daemon', altered):
+                            with self.assertRaisesRegex(ValueError, 'light mode required'):
+                                journey.node(index)
+                        self.assertFalse(any(e[0] == 'launch' for e in fixture.events))
+
+    def test_light_mode_witness_requires_complete_launch_history(self):
+        with tempfile.TemporaryDirectory() as temp:
+            fixture = NativeFixture(Path(temp))
+            with fixture.installed():
+                journey = driver.Journey()
+                original = journey.launch_daemon
+                def corrupted(*args):
+                    original(*args)
+                    journey.daemon_light_modes[-1] = False
+                with patch.object(journey, 'launch_daemon', corrupted):
+                    with self.assertRaisesRegex(ValueError, 'light-mode history'): journey.run()
+                self.assertEqual(journey.rows['isolation.json']['native_mining_bounds']['status'], 'NOT_RUN')
+
+    def test_b_restart_missing_mask_never_starts_second_process(self):
+        with tempfile.TemporaryDirectory() as temp:
+            fixture = NativeFixture(Path(temp))
+            with fixture.installed():
+                journey = driver.Journey()
+                journey.node(1)
+                journey.stop_node(1)
+                original = journey.launch_daemon
+                def altered(name, argv, root, env):
+                    env.pop('MONERO_RANDOMX_UMASK')
+                    return original(name, argv, root, env)
+                with patch.object(journey, 'launch_daemon', altered):
+                    with self.assertRaisesRegex(ValueError, 'light mode required'): journey.node(1)
+            self.assertEqual(sum(e[:2] == ('launch', 'node1') for e in fixture.events), 1)
+
+    def baseline_journey(self):
+        raw = subprocess.check_output(['git', '-C', str(c.HERE.parents[1]), 'show',
+            '68963718f5b96b0e1b3cba668f748ee7ac24b4a4:vanguard/network/integration/funded_driver.py'])
+        cls = next(x for x in ast.parse(raw).body if isinstance(x, ast.ClassDef) and x.name == 'Journey')
+        namespace = dict(vars(driver))
+        exec(compile(ast.Module(body=[cls], type_ignores=[]), '<exact-68963718-Journey>', 'exec'), namespace)
+        return namespace['Journey']
+
+    def test_known_bad_68963718_rejects_active_carrot_refusal(self):
+        baseline = self.baseline_journey()
+        with tempfile.TemporaryDirectory() as temp:
+            fixture = NativeFixture(Path(temp))
+            with fixture.installed():
+                with self.assertRaisesRegex(ValueError, 'expected native transfer refusal'):
+                    baseline().run()
+            self.assertEqual(fixture.count, 60)
+            self.assertEqual(fixture.txs, {})
+
+    def test_known_bad_68963718_claims_light_mode_without_mask(self):
+        baseline = self.baseline_journey()
+        with tempfile.TemporaryDirectory() as temp:
+            fixture = NativeFixture(Path(temp), 'baseline_legacy_refusal')
+            with fixture.installed():
+                journey = baseline()
+                journey.run()
+            self.assertTrue(journey.rows['isolation.json']['native_mining_bounds']['light_mode'])
+            launches = [e for e in fixture.events if e[0] == 'launch' and e[1].startswith('node')]
+            self.assertGreater(len(launches), 2)
+            self.assertTrue(all('MONERO_RANDOMX_UMASK' not in e[3] for e in launches))
 
     def test_ceiling_deadline_and_overshoot_abort(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -273,6 +377,16 @@ class FundedContract(unittest.TestCase):
             self.assertEqual(c.digest(raw), binding['sha256'])
             self.assertEqual(raw, subprocess.check_output(['git', '-C', str(r.g.BASE/'monero-fcmp'),
                 'show', value['upstream']+':'+name], timeout=10))
+        for name, submodule in value['submodules'].items():
+            source = r.g.BASE/'monero-fcmp'
+            entry = subprocess.check_output(['git', '-C', str(source), 'ls-tree', value['upstream'], name], text=True)
+            self.assertEqual(entry.split()[2], submodule['commit'])
+            for path, binding in submodule['files'].items():
+                raw = (source/name/path).read_bytes()
+                self.assertEqual(len(raw), binding['bytes'])
+                self.assertEqual(c.digest(raw), binding['sha256'])
+                self.assertEqual(raw, subprocess.check_output(['git', '-C', str(source/name),
+                    'show', submodule['commit']+':'+path], timeout=10))
 
     def grant(self, root):
         return dict(schema='meownero-direct-profile-grant/1', authorized=True,
