@@ -26,6 +26,9 @@ import network as n
 import policy
 import profile_contract as c
 from integration import runtime_diagnostics as runtime_codes
+from integration import funded_contract as funded
+
+GENESIS_WORKLOAD = 'three-production-binaries-genesis-only'
 
 spec = importlib.util.spec_from_file_location('genesis', c.HERE / 'run-genesis.py')
 g = importlib.util.module_from_spec(spec)
@@ -84,20 +87,26 @@ CONTAINER_FLAGS = ['--pull=never', '--network=none', '--cap-drop=ALL',
 GiB = 1024**3
 
 
-def grant_payload(comment, *, commit, inputs_hash, artifact_hash, runner_hash, output, now, reuse=None):
+def grant_payload(comment, *, commit, inputs_hash, artifact_hash, runner_hash, output, now, reuse=None,
+                  workload=GENESIS_WORKLOAD):
     """The direct grant deliberately cannot be confused with a legacy v2 grant."""
     c.require(comment['issueId'] == c.ISSUE and comment.get('authorAgentId') == c.PLATFORM
               and comment.get('authorUserId') is None, 'Platform-authored grant required')
     blocks = re.findall(r'```meownero-direct-profile-grant\s*\n(.*?)\n```', comment['body'], re.S)
     c.require(len(blocks) == 1, 'one direct grant block required')
     value = json.loads(blocks[0])
-    wall = 900 if reuse else 4500
+    is_funded = workload == funded.WORKLOAD
+    c.require(workload in (GENESIS_WORKLOAD, funded.WORKLOAD) and (not is_funded or reuse is not None),
+              'funded workload requires runtime-only reuse')
+    wall = funded.WALL_SECONDS if is_funded else 900 if reuse else 4500
     expected = dict(schema='meownero-direct-profile-grant/1', authorized=True,
         candidate_commit=commit, inputs_sha256=inputs_hash, artifact_sha256=artifact_hash,
         runner_sha256=runner_hash, output_root=str(output), attempts=1, retry=False,
-        wall_seconds=wall, build_seconds=0 if reuse else 3600, runtime_seconds=600, cleanup_seconds=300,
-        container_flags=CONTAINER_FLAGS, workload='three-production-binaries-genesis-only',
-        non_genesis_blocks=0, transactions=0)
+        wall_seconds=wall, build_seconds=0 if reuse else 3600,
+        runtime_seconds=funded.WORK_SECONDS if is_funded else 600, cleanup_seconds=300,
+        container_flags=CONTAINER_FLAGS, workload=workload,
+        non_genesis_blocks=funded.MAX_COUNT-1 if is_funded else 0,
+        transactions=funded.MAX_TRANSACTIONS if is_funded else 0)
     if reuse:
         expected.update(mode='runtime-only',reuse_build_root=str(reuse['root']),
             retained_build_sha256=reuse['manifest_sha256'])
@@ -106,6 +115,18 @@ def grant_payload(comment, *, commit, inputs_hash, artifact_hash, runner_hash, o
             'retained_build_sha256' not in value, 'unexpected reuse grant')
     c.require(all(type(value.get(k)) is type(v) and value[k] == v for k,v in expected.items()),
               'direct grant binding mismatch')
+    if is_funded:
+        fixed = dict(detached_session=True, no_other_heavy_lock_workload_scheduled=True,
+            coordination_window_seconds=funded.WALL_SECONDS, main_chain_count_max=funded.MAX_COUNT,
+            retained_build_authority_comment=funded.AUTHORITY_COMMENT)
+        c.require(all(type(value.get(k)) is type(v) and value[k] == v for k,v in fixed.items()) and
+            str(reuse['root']) == funded.RETAINED_ROOT and reuse['manifest_sha256'] == funded.RETAINED_SHA256,
+            'funded detached window and published retained authority required')
+        c.require(value['valid_until_unix']-value['valid_from_unix'] >= 48*3600 and
+            value['load_rule'] == dict(metric='host-load-1-5-15',maximum=[9,9,9]) and
+            value['host_overhead_allowance'] == dict(
+                mode='measured-controller-and-descendants-not-kernel-enforced',
+                peak_rss_bytes=GiB,cpu_seconds=4000,peak_pids=32), 'funded exact allocation')
     c.require(value['valid_from_unix'] <= now < value['valid_until_unix']
               and now+wall <= value['valid_until_unix'], 'grant validity window')
     c.require(re.fullmatch(r'[0-9a-f-]{36}', value['artifact_attachment_id']), 'artifact attachment ID')
@@ -172,6 +193,9 @@ class Controller:
         reuse = grant.get('mode') == 'runtime-only'
         self.build_end,self.work_end,self.end = ((start+600,start+600,start+900) if reuse else
             (start+3600,start+4200,start+4500))
+        if grant.get('workload') == funded.WORKLOAD:
+            self.build_end = self.work_end = start+funded.WORK_SECONDS
+            self.end = start+funded.WALL_SECONDS
         self.children = []
         self.last_sample = 0
         self.peak = dict(peak_rss_bytes=0,cpu_seconds=0,peak_pids=0,disk_bytes=0)
@@ -349,13 +373,13 @@ def stage_inputs(control, inputs, manifest):
     control.copy(inputs,out/'inputs.json');control.sample(force=True)
 
 
-def container_command(root, name, image):
+def container_command(root, name, image, workload=GENESIS_WORKLOAD):
     out = root/'staging'
     return g.DOCKER+['create','--name',name,'--label','meownero.profile.attempt='+name,
         '--cidfile',str(root/'container.cid'),*CONTAINER_FLAGS,'--user',f'{os.getuid()}:{os.getgid()}',
         '-v',str(out)+':/out','-v',str(root/'public')+':/public',
         '-v',str(g.RUST)+':/opt/rust:ro','--workdir','/out',image,
-        '/bin/bash','/out/harness/integration/build.sh']
+        '/bin/bash','/out/harness/integration/'+('funded-runtime.sh' if workload == funded.WORKLOAD else 'build.sh')]
 
 
 def inspect_owned(control, name, image, deadline):
@@ -662,7 +686,7 @@ def witness_failure(value, shape, path, *, complete=False):
     return None if valid else path
 
 
-def public_shapes():
+def public_shapes(workload=GENESIS_WORKLOAD):
     # Only fields emitted by the frozen driver/freezer. No arbitrary text fields.
     sha = lambda x: isinstance(x,str) and re.fullmatch('[0-9a-f]{64}',x) is not None
     state = dict(height=1,top_block_hash=c.GENESIS,pool_hashes=[],
@@ -670,7 +694,7 @@ def public_shapes():
     needed = lambda x: isinstance(x,list) and len(x) <= 32 and all(isinstance(v,str) and
         (v == 'ld-linux-x86-64.so.2' or
          re.fullmatch(r'lib[A-Za-z0-9_+.-]{1,96}\.so(?:\.[0-9]+)*',v)) for v in x)
-    return dict(
+    shapes = dict(
         three_production_binaries=dict(binaries={name:dict(sha256=sha,needed=needed)
             for name in ('monerod','monero-wallet-cli','monero-wallet-rpc')}),
         rpc_translation_unit=dict(object_sha256=sha),
@@ -690,14 +714,17 @@ def public_shapes():
         wallet_save_exit_release=dict(wallets=2,forced_kill=False),
         wallet_cold_restore=dict(wallets=2,height=0),
         daemon_reopen_restore=dict(genesis_only=True,counterpart_stopped=True))
+    if workload == funded.WORKLOAD:
+        shapes.update(funded.shapes())
+    return shapes
 
 
-def read_public_rows(path, shapes):
+def read_public_rows(path, shapes, required=None):
     try: value = bounded_json(path)
     except FileNotFoundError: raise
     except Exception: raise PublicWitnessError(path.name) from None
     if not isinstance(value,dict): raise PublicWitnessError(path.name)
-    if value.keys()-set(c.REQUIRED[path.name]): raise PublicWitnessError(path.name+'.<unknown>')
+    if value.keys()-set((required or c.REQUIRED)[path.name]): raise PublicWitnessError(path.name+'.<unknown>')
     for key,item in value.items():
         prefix = path.name+'.'+key
         if not isinstance(item,dict): raise PublicWitnessError(prefix)
@@ -708,16 +735,17 @@ def read_public_rows(path, shapes):
     return value
 
 
-def collect_public(root, rows, rejection_paths=None):
+def collect_public(root, rows, rejection_paths=None, workload=GENESIS_WORKLOAD):
     """Snapshot validated partial rows after the container stops, before cleanup."""
     rejected = []
-    shapes = public_shapes()
-    allowed = set(c.REQUIRED)-{'resources.json','cleanup.json'}
+    shapes = public_shapes(workload)
+    contract = funded if workload == funded.WORKLOAD else c
+    allowed = set(contract.REQUIRED)-{'resources.json','cleanup.json'}
     public = root/'public'
     c.require(public.is_dir() and not public.is_symlink(), 'invalid public directory')
     for filename in sorted(allowed):
         try:
-            rows[filename].update(read_public_rows(public/filename,shapes))
+            rows[filename].update(read_public_rows(public/filename,shapes,contract.REQUIRED))
         except FileNotFoundError: pass  # Unreached rows stay NOT_RUN.
         except Exception as error:
             rejected.append(filename)
@@ -739,8 +767,14 @@ def main():
     parser.add_argument('--artifact-sha256',required=True)
     parser.add_argument('--out',type=Path,required=True)
     parser.add_argument('--reuse-build',type=Path)
+    parser.add_argument('--workload',choices=(GENESIS_WORKLOAD,funded.WORKLOAD),default=GENESIS_WORKLOAD)
     args = parser.parse_args()
     os.umask(0o077)
+    is_funded = args.workload == funded.WORKLOAD
+    contract = funded if is_funded else c
+    runtime_seconds = funded.WORK_SECONDS if is_funded else 600
+    c.require(not is_funded or args.reuse_build is not None and os.getsid(0) == os.getpid(),
+              'funded runner requires reuse and detached session leader')
     c.require(re.fullmatch(r'[0-9a-f-]{36}',args.grant_comment) and
         args.grant_comment not in c.CONSUMED and re.fullmatch('[0-9a-f]{64}',args.artifact_sha256),
         'new exact grant and artifact digest required')
@@ -753,9 +787,11 @@ def main():
     reuse = reuse_build(args.reuse_build,manifest) if args.reuse_build else None
     comment = json.loads(api('/api/issues/'+c.ISSUE+'/comments/'+args.grant_comment))
     c.require(comment['id'] == args.grant_comment, 'grant comment identity')
-    grant = grant_payload(comment,commit=commit,inputs_hash=c.digest(args.inputs.read_bytes()),
+    grant_args = dict(commit=commit,inputs_hash=c.digest(args.inputs.read_bytes()),
         artifact_hash=args.artifact_sha256,runner_hash=c.digest(Path(__file__).read_bytes()),
         output=args.out,now=time.time(),reuse=reuse)
+    if is_funded: grant_args['workload'] = args.workload
+    grant = grant_payload(comment,**grant_args)
     c.require(c.digest(api('/api/attachments/'+grant['artifact_attachment_id']+'/content')) == args.artifact_sha256,
               'authenticated artifact digest mismatch')
     fd,lock = acquire_lock()
@@ -763,10 +799,14 @@ def main():
     control = Controller(args.out,grant,start)
     image = manifest['builder_image']
     name = 'meownero-profile-'+args.grant_comment
-    rows = c.empty_rows()
+    rows = contract.empty_rows()
     receipt = dict(schema='meownero-direct-profile-attempt/1',result='INCOMPLETE',launch_ready=False,
         grant=args.grant_comment,candidate_commit=commit,runner_sha256=c.digest(Path(__file__).read_bytes()),
-        lock=lock,phase_diagnostics={},exclusions={key:'NOT_RUN' for key in c.EXCLUDED})
+        lock=lock,phase_diagnostics={},exclusions={key:'NOT_RUN' for key in contract.EXCLUDED})
+    if is_funded:
+        receipt.update(workload=args.workload,public_launch=False,
+            source_limits=dict(checkpoints='SOURCE_NOT_APPLICABLE_TESTNET',
+                foreign_database_identity='UPSTREAM_LIMITATION_LAUNCHER_MANIFEST_MITIGATION'))
     if reuse:
         rows['build.json']=reuse['rows']
         receipt['build_reuse']=dict(prior_attempt_root=str(reuse['root']),
@@ -781,7 +821,7 @@ def main():
     try:
         for sig in (signal.SIGALRM,signal.SIGINT,signal.SIGTERM,signal.SIGHUP):
             prior[sig] = signal.signal(sig,interrupted)
-        signal.setitimer(signal.ITIMER_REAL,600 if reuse else 4200)
+        signal.setitimer(signal.ITIMER_REAL,runtime_seconds if reuse else 4200)
         receipt['first_admission'] = admit(image,args.out.parent,grant)
         # mkdir is the durable one-use marker. The grant binds this exact path;
         # even a crash before receipt publication leaves it non-reusable.
@@ -802,7 +842,8 @@ def main():
         receipt['second_admission'] = admit(image,args.out,grant)
         phase = 'create'
         create_intent = True
-        control.run(container_command(args.out,name,image),min(time.monotonic()+30,control.build_end))
+        command = container_command(args.out,name,image,args.workload) if is_funded else container_command(args.out,name,image)
+        control.run(command,min(time.monotonic()+30,control.build_end))
         value = inspect_owned(control,name,image,control.build_end)
         c.require(value is not None, 'created container missing');verify_limits(value)
         receipt['container_id'] = value['Id']
@@ -811,7 +852,7 @@ def main():
                 c.require(time.monotonic()+600 <= control.work_end, 'full runtime allowance unavailable')
                 runtime_marker(args.out/'staging')
             diagnostic = receipt['phase_diagnostics'][phase] = dict(started=True)
-            deadline = control.build_end if phase == 'build' else min(time.monotonic()+600,control.work_end)
+            deadline = control.build_end if phase == 'build' else min(time.monotonic()+runtime_seconds,control.work_end)
             result = control.run(g.DOCKER+['start','-a',value['Id']],deadline,check=False,
                 native_diagnostic=diagnostic)
             diagnostic['cli_exit_code'] = result.returncode
@@ -884,7 +925,7 @@ def main():
             if created:
                 if 'runtime' in receipt['phase_diagnostics']:collect_runtime_diagnostics(args.out,receipt)
                 rejection_paths = {}
-                rejected = collect_public(args.out,rows,rejection_paths)
+                rejected = collect_public(args.out,rows,rejection_paths,args.workload) if is_funded else collect_public(args.out,rows,rejection_paths)
                 if rejection_paths: receipt['rejected_key_paths'] = rejection_paths
                 if rejected: receipt.update(result='FAIL',rejected_evidence=rejected)
             if created:
@@ -904,7 +945,7 @@ def main():
             # witnesses. Decide before deletion, excluding unfinished cleanup.
             runtime_failed = receipt['result'] == 'FAIL' or any(
                 rows[filename][key]['status'] != 'PASS'
-                for filename,keys in c.REQUIRED.items()
+                for filename,keys in contract.REQUIRED.items()
                 if filename not in ('build.json','resources.json','cleanup.json') for key in keys) or any(
                 counters.get('runtime',{}).get(key) != 0 for key in ('oom','oom_kill'))
             retained = created and 'runtime' in receipt['phase_diagnostics'] and runtime_failed
@@ -943,7 +984,8 @@ def main():
                 host_overhead_allowance=grant['host_overhead_allowance'],measured=measured,samples=control.samples,
                 sampling='2s and copy/phase boundaries; RSS includes conservative per-process lifetime high-water marks'),
             deadlines=dict(status='PASS' if time.monotonic() < control.end else 'FAIL',
-                wall_seconds=900 if reuse else 4500,build_seconds=0 if reuse else 3600,runtime_seconds=600,cleanup_seconds=300),
+                wall_seconds=funded.WALL_SECONDS if is_funded else 900 if reuse else 4500,
+                build_seconds=0 if reuse else 3600,runtime_seconds=runtime_seconds,cleanup_seconds=300),
             disk=dict(status='FAIL' if receipt.get('metrology_failure',{}).get('code') in
                 ('metrology_disk_walk','metrology_backing_disk') else 'PASS' if control.samples else 'NOT_RUN',
                 peak_bytes=control.peak['disk_bytes'],
@@ -951,7 +993,7 @@ def main():
             no_oom=dict(status='PASS' if no_oom else 'NOT_RUN',counters=counters))
         receipt['wall_seconds'] = time.monotonic()-start
         receipt['rows'] = rows
-        if receipt['result'] == 'INCOMPLETE': receipt['result'] = c.verdict(rows)
+        if receipt['result'] == 'INCOMPLETE': receipt['result'] = contract.verdict(rows)
         if created:
             publish_evidence(args.out,rows,receipt,diagnostics)
         print(json.dumps(dict(result=receipt['result'],launch_ready=False,consumed=created)))
