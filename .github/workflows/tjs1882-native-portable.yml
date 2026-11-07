@@ -1,4 +1,4 @@
-name: TJS-1882 accepted Intel and ARM64 native checks
+name: TJS-1882 ARM64 preflight diagnosis
 on:
   push:
     branches: [tjs1882-native-windows-preflight]
@@ -15,10 +15,6 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - target: macos-x86_64
-            runner: macos-15-intel
-            python_arch: x64
-            timeout: 30
           - target: windows-aarch64
             runner: windows-11-arm
             python_arch: arm64
@@ -103,6 +99,29 @@ jobs:
           Expand-Archive -LiteralPath $bundle -DestinationPath (Join-Path $env:RUNNER_TEMP 'tjs1882-arm/extract')
           python -B (Join-Path $env:RUNNER_TEMP 'tjs1882-arm/extract/meownero-windows-test/windows-test-bundle.py')
           exit $LASTEXITCODE
+      - name: Project fixed preflight failure diagnostics
+        if: always() && matrix.target == 'windows-aarch64'
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, re
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'tjs1882-arm'
+          rows = []
+          for log in root.glob('extract/meownero-windows-test/run-*/output/preflight.log'):
+              assert log.is_file() and not log.is_symlink() and log.stat().st_size <= 1024**2
+              raw = log.read_bytes()
+              text = raw.decode('utf-8', errors='replace')
+              row = {'phase': 'PREFLIGHT', 'log_bytes': len(raw), 'log_sha256': hashlib.sha256(raw).hexdigest(), 'reason': 'UNCLASSIFIED'}
+              for name in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc'):
+                  if 'program startup failed: ' + name in text: row.update(reason='PROGRAM_STARTUP_FAILED', program=name)
+              for phrase, reason in (('package file set mismatch', 'PACKAGE_FILE_SET_MISMATCH'), ('package hash mismatch:', 'PACKAGE_HASH_MISMATCH'), ('wrong architecture', 'WRONG_ARCHITECTURE'), ('wrong binary format or target', 'WRONG_BINARY_TARGET')):
+                  if phrase in text: row['reason'] = reason
+              errors = re.findall(r'\[WinError (\d+)\]', text)
+              if errors: row['winerror'] = int(errors[-1])
+              for kind in ('AssertionError', 'OSError', 'PermissionError', 'Refused', 'RuntimeError', 'TimeoutExpired', 'AttributeError', 'TypeError'):
+                  if kind + ':' in text: row['exception_type'] = kind
+              rows.append(row)
+          root.mkdir(exist_ok=True)
+          (root / 'preflight-diagnostic.json').write_text(json.dumps({'schema': 'tjs1882-fixed-preflight-diagnostic/1', 'rows': rows}, indent=2))
       - name: Bound public evidence upload
         id: evidence
         if: always()
@@ -110,7 +129,7 @@ jobs:
         run: |
           import os, pathlib
           root = pathlib.Path(os.environ['RUNNER_TEMP'])
-          files = list(root.glob('tjs1882-native/public/*.json')) + list(root.glob('tjs1882-arm/qualification.json')) + list(root.glob('tjs1882-arm/extract/meownero-windows-test/run-*/report.zip'))
+          files = list(root.glob('tjs1882-native/public/*.json')) + list(root.glob('tjs1882-arm/qualification.json')) + list(root.glob('tjs1882-arm/preflight-diagnostic.json')) + list(root.glob('tjs1882-arm/extract/meownero-windows-test/run-*/report.zip'))
           assert all(p.is_file() and not p.is_symlink() for p in files)
           assert sum(p.stat().st_size for p in files) <= 10 * 1024**2
           with open(os.environ['GITHUB_OUTPUT'], 'a') as stream: stream.write('safe=true\n')
@@ -121,6 +140,7 @@ jobs:
           path: |
             ${{ runner.temp }}/tjs1882-native/public/*.json
             ${{ runner.temp }}/tjs1882-arm/qualification.json
+            ${{ runner.temp }}/tjs1882-arm/preflight-diagnostic.json
             ${{ runner.temp }}/tjs1882-arm/extract/meownero-windows-test/run-*/report.zip
           if-no-files-found: warn
           retention-days: 3
