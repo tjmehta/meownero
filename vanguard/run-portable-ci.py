@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 """Check hash-bound private CI payloads; export only allowlisted public receipts."""
 import argparse
+import ctypes
 import hashlib
 import importlib.util
 import json
 import datetime
 import math
 import ntpath
-import xml.etree.ElementTree as ET
 import os
 from pathlib import Path, PurePosixPath
 import platform
 import shutil
+import shlex
 import signal
 import stat
 import subprocess
@@ -19,6 +20,7 @@ import sys
 import tarfile
 import time
 import zipfile
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -52,6 +54,7 @@ def public_cli_event(value):
         result['image_sha256'] = value['image_sha256']
     return result
 
+
 def public_diagnostic(value):
     phases = {'VERIFY_BOUND_TESTER', 'CALL_BOUND_JOURNEY', 'OUTPUT_GUARD', 'ACQUIRE_TESTER_LOCK',
         'PREFLIGHT', 'CAPACITY_GUARD', 'PREPARE_PRIVATE_OUTPUT', 'INITIALIZE_OWNED_JOB',
@@ -84,7 +87,7 @@ def public_diagnostic(value):
             'TARGET_MISMATCH', 'OS_MISMATCH', 'SOURCE_PIN_MISMATCH', 'PACKAGE_FILE_SET', 'SYMLINK_PATH_REFUSED',
             'UNSAFE_LOCK', 'JOURNEY_INTERRUPTED', 'WINDOWS_DEADLINE', 'NATIVE_CLI_RESTORED_WALLET_FAILED', 'NATIVE_CLI_WAIT_TIMEOUT',
             'PACKAGE_HASH_MISMATCH', 'VERSION_CHILD_FAILED', 'JOURNEY_CHILD_EXITED', 'NATIVE_STARTUP_TIMEOUT',
-            'RPC_FAILURE', 'EXCEPTION_UNCLASSIFIED'}
+            'RPC_FAILURE', 'FUNDING_RPC_TIMEOUT', 'EXCEPTION_UNCLASSIFIED'}
         assert first['exception_type'] in {'RuntimeError', 'TimeoutError', 'OSError', 'PermissionError',
             'FileExistsError', 'FileNotFoundError', 'AssertionError', 'JourneyInterrupted', 'KeyboardInterrupt',
             'ValueError', 'KeyError', 'TypeError', 'URLError', 'HTTPError', 'TimeoutExpired', 'OTHER_EXCEPTION'}
@@ -93,7 +96,49 @@ def public_diagnostic(value):
             if key in first:
                 assert type(first[key]) is int
                 result['first_failure'][key] = first[key]
+        if 'operation' in first:
+            assert first['phase'] == 'FUND_WALLET' and first['operation'] in {'generateblocks', 'refresh', 'get_balance'}
+            result['first_failure']['operation'] = first['operation']
+    if 'funding_operations' in value:
+        operations = value['funding_operations']
+        assert type(operations) is list and len(operations) <= 3
+        result['funding_operations'] = []
+        for index, operation in enumerate(operations):
+            assert operation['operation'] == ('generateblocks', 'refresh', 'get_balance')[index]
+            assert operation['outcome'] in {'RUNNING', 'PASS', 'TIMEOUT', 'ERROR'}
+            row = {k: operation[k] for k in ('operation', 'outcome')}
+            for key in ('elapsed_seconds', 'socket_timeout_seconds', 'journey_deadline_seconds',
+                        'journey_elapsed_at_start_seconds', 'journey_remaining_at_start_seconds'):
+                number = operation[key]
+                assert type(number) in (int, float) and math.isfinite(number) and number >= 0
+                row[key] = number
+            assert row['socket_timeout_seconds'] == 90 and 1 <= row['journey_deadline_seconds'] <= 1200
+            assert row['journey_remaining_at_start_seconds'] <= row['journey_deadline_seconds']
+            result['funding_operations'].append(row)
     return result
+
+
+def control_coverage(controls):
+    """Validate all ten outcomes; one unavailable fixture cannot grant PASS."""
+    names = ['wrong-pin', 'wrong-target', 'changed-binary', 'unlisted-private-file',
+             'symlink-directory', 'hardlink', 'collision-preservation', 'busy-lock',
+             'cancelled-owned-cleanup', 'deadline-owned-cleanup']
+    assert [row['case'] for row in controls['cases']] == names
+    incomplete = False
+    for row in controls['cases']:
+        if row.get('status') == 'NOT_EXECUTED':
+            assert row == {'case': 'symlink-directory', 'status': 'NOT_EXECUTED',
+                           'reason_enum': 'SYMLINK_PRIVILEGE_NOT_HELD', 'winerror': 1314}
+            incomplete = True
+        elif row['case'].endswith('-owned-cleanup'):
+            assert row['removed'] is True and type(row['process_count']) is int and row['process_count'] > 0
+        else:
+            assert row['refused'] is True
+            if row['case'] == 'collision-preservation':
+                assert row['sentinel_preserved'] is True
+    assert controls['result'] == ('INCOMPLETE_REFUSALS' if incomplete else 'PASS_REFUSALS')
+    return incomplete
+
 
 def matching_cli_events(data, cli, image, image_sha256, system_directory, query_end):
     """Match private Application Error XML to owned PID, creation time and image."""
@@ -136,6 +181,7 @@ def matching_cli_events(data, cli, image, image_sha256, system_directory, query_
                         'fault_offset': offset, 'module_class': kind,
                         'image_sha256': image_sha256, 'cause': 'UNKNOWN'})
     return matches[0] if len(matches) == 1 else {'status': 'AMBIGUOUS_MATCH' if matches else 'NO_MATCHING_EVENT', 'cause': 'UNKNOWN'}
+
 
 def native_cli_event(package, out, row, backend, job):
     """Read at most 32 local events in a suspended/registered owned child."""
@@ -199,89 +245,11 @@ def native_cli_event(package, out, row, backend, job):
     return evidence
 
 
-def public_capacity(value):
-    assert value['status'] in {'WAITING', 'READY', 'CAPACITY_UNAVAILABLE',
-        'CAPACITY_WINDOW_EXPIRED', 'CANCELLED', 'JOB_DEADLINE'}
-    result = {'status': value['status']}
-    for key in ('window_seconds', 'elapsed_seconds', 'sample_count', 'reserve_bytes'):
-        assert type(value[key]) in (int, float) and math.isfinite(value[key]) and value[key] >= 0
-        result[key] = value[key]
-    assert value['reserve_bytes'] == 5 * 1024**3 and value['window_seconds'] <= 60
-    assert type(value['samples']) is list and len(value['samples']) <= 61
-    result['samples'] = []
-    for sample in value['samples']:
-        row = {}
-        for key in ('elapsed_seconds', 'available_memory_bytes', 'disk_free_bytes'):
-            assert type(sample[key]) in (int, float) and math.isfinite(sample[key]) and sample[key] >= 0
-            row[key] = sample[key]
-        result['samples'].append(row)
-    return result
-
-
-def wait_journey_capacity(backend, out, job, began, receipt):
-    """One bounded admission window; the shipped journey still checks its reserve."""
-    start = time.monotonic()
-    deadline = min(start + 60, began + 1500)
-    evidence = {'status': 'WAITING', 'window_seconds': max(0, deadline - start),
-                'elapsed_seconds': 0, 'sample_count': 0, 'reserve_bytes': 5 * 1024**3,
-                'samples': []}
-    receipt['capacity_admission'] = evidence
-    pending, handlers = [], {}
-    try:
-        for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGBREAK):
-            handlers[sig] = signal.signal(sig, lambda number, frame: pending.append(number))
-        while True:
-            now = time.monotonic()
-            evidence['elapsed_seconds'] = round(now - start, 6)
-            if pending:
-                evidence['status'] = 'CANCELLED'
-                raise RuntimeError('capacity admission cancelled')
-            if job.expired or now >= began + 1500:
-                evidence['status'] = 'JOB_DEADLINE'
-                raise RuntimeError('owned Job budget exhausted during admission')
-            if now >= deadline or evidence['sample_count'] >= 61:
-                evidence['status'] = 'CAPACITY_WINDOW_EXPIRED'
-                raise RuntimeError('capacity admission window exhausted')
-            try:
-                memory = backend.available_memory()
-                disk = shutil.disk_usage((out / 'journey').parent).free
-                assert type(memory) is int and memory >= 0 and type(disk) is int and disk >= 0
-            except (OSError, ValueError, AssertionError):
-                evidence['status'] = 'CAPACITY_UNAVAILABLE'
-                raise RuntimeError('capacity measurement unavailable') from None
-            now = time.monotonic()
-            evidence['elapsed_seconds'] = round(now - start, 6)
-            evidence['sample_count'] += 1
-            evidence['samples'].append({'elapsed_seconds': evidence['elapsed_seconds'],
-                'available_memory_bytes': memory, 'disk_free_bytes': disk})
-            # Recheck cancellation and the same absolute budget after measurement.
-            if pending:
-                evidence['status'] = 'CANCELLED'
-                raise RuntimeError('capacity admission cancelled')
-            if job.expired or now >= began + 1500:
-                evidence['status'] = 'JOB_DEADLINE'
-                raise RuntimeError('owned Job budget exhausted during admission')
-            if now >= deadline:
-                evidence['status'] = 'CAPACITY_WINDOW_EXPIRED'
-                raise RuntimeError('capacity admission window exhausted')
-            if memory >= evidence['reserve_bytes'] and disk >= evidence['reserve_bytes']:
-                evidence['status'] = 'READY'
-                break
-            time.sleep(min(1, deadline - now))
-    finally:
-        for sig, handler in handlers.items():
-            signal.signal(sig, handler)
-    # Retain admission cancellation until every caller handler is restored.
-    if pending:
-        evidence['status'] = 'CANCELLED'
-        raise RuntimeError('capacity admission cancelled')
-
-
 def public_check(value):
     """Project fixed check evidence; execution argv and paths remain private."""
     enums = {
         'schema': {'meownero-native-windows-ci-check/1', 'meownero-portable-native-mac-check/1'},
-        'result': {'FAIL', 'PASS_NATIVE_ARCHIVE_JOURNEY', 'PASS_TRANSLATED_ARCHIVE_JOURNEY'},
+        'result': {'FAIL', 'PASS_NATIVE_ARCHIVE_JOURNEY', 'PASS_TRANSLATED_ARCHIVE_JOURNEY', 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS'},
         'native_architecture': {'i686', 'x86_64', 'aarch64'},
         'package_architecture': {'i686', 'x86_64', 'aarch64'},
         'execution_substrate': {'NATIVE', 'NATIVE_WINDOWS_WOW64', 'ROSETTA_TRANSLATED_MACOS_X86_64'},
@@ -328,28 +296,264 @@ def public_check(value):
         result['native_exception_probe'] = projected
     if 'native_cli_event' in value:
         result['native_cli_event'] = public_cli_event(value['native_cli_event'])
-    if 'capacity_admission' in value:
-        result['capacity_admission'] = public_capacity(value['capacity_admission'])
     return result
 
 
+def snapshot_output(argv, *, timeout, receipt, context):
+    """Time only the owned observer; discard incomplete output as authority."""
+    began, observer = time.monotonic(), None
+    cost = {'operation': 'OWNED_PROCESS_SNAPSHOT', 'context': context,
+            'timeout_seconds': timeout, 'result': 'FAIL'}
+    try:
+        observer = subprocess.Popen(argv, stdout=subprocess.PIPE, text=True)
+        cost.update(observer_pid=observer.pid, spawn_seconds=round(time.monotonic() - began, 6))
+        waiting = time.monotonic()
+        try:
+            output, _ = observer.communicate(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            cost['result'] = 'TIMEOUT'
+            raise
+        finally:
+            cost['communicate_seconds'] = round(time.monotonic() - waiting, 6)
+        if observer.returncode:
+            raise subprocess.CalledProcessError(observer.returncode, argv)
+        cost.update(result='PASS', output_bytes=len(output.encode()), process_rows=len(output.splitlines()))
+        return output
+    finally:
+        first_error = sys.exc_info()[1]
+        reaping = time.monotonic()
+        try:
+            if observer is not None:
+                if observer.poll() is None:
+                    observer.kill()  # Only our exact Popen child, never an observed PID.
+                try:
+                    observer.communicate(timeout=5)
+                except subprocess.TimeoutExpired:
+                    observer.stdout.close()
+                    observer.wait(timeout=5)
+                cost['observer_reaped'] = observer.poll() is not None
+                cost['numeric_pid_absent'] = False
+                try:
+                    os.kill(observer.pid, 0)
+                except ProcessLookupError:
+                    cost['numeric_pid_absent'] = True
+                except PermissionError:
+                    pass
+                assert cost['observer_reaped'] and cost['numeric_pid_absent'], 'owned observer disappearance unproven'
+        except BaseException:
+            cost['result'] = 'FAIL'
+            receipt.setdefault('cleanup_failure_type', 'OBSERVER_DISAPPEARANCE_UNPROVEN')
+            if first_error is None:
+                raise
+        finally:
+            cost.update(reap_seconds=round(time.monotonic() - reaping, 6),
+                        elapsed_seconds=round(time.monotonic() - began, 6))
+            summary = receipt.setdefault('snapshot_cost', {'calls': 0, 'max_elapsed_seconds': 0, 'recent': []})
+            summary['calls'] += 1
+            summary['max_elapsed_seconds'] = max(summary['max_elapsed_seconds'], cost['elapsed_seconds'])
+            summary['recent'] = (summary['recent'] + [cost])[-8:]
 
 
-def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
+def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
+              supervision_schema='meownero-native-mac-ci-supervision/1',
+              failure_label='native Intel archive check'):
     """Allow wrapper cleanup before escalating only recorded, verified children."""
-    receipt = {'schema': 'meownero-native-mac-ci-supervision/1', 'result': 'FAIL',
-               'wrapper_reaped': False, 'cleanup': [], 'signals': []}
-    known, pending = {}, []
+    receipt = {'schema': supervision_schema, 'result': 'FAIL',
+               'wrapper_reaped': False, 'cleanup': [], 'signals': [],
+               'observer_ruid': os.getuid(), 'observer_euid': os.geteuid(), 'helper_observations': [],
+               'unverified_observations': []}
+    known, pending, helper_bindings, states, unverified_zombies = {}, [], {}, {}, set()
+    rejected_live = {}
     process = None
+    snapshot_context = 'INITIAL_OBSERVATION'
     began = time.monotonic()
+
+    def reject(reason, observation=None):
+        receipt.setdefault('failure_reason', reason)
+        if observation is not None:
+            receipt.setdefault('failure_observation', observation)
+            if observation['pid'] in rejected_live and observation not in receipt['unverified_observations']:
+                receipt['unverified_observations'].append(observation)
+        raise AssertionError(reason)
+
+    def helper_file_binding():
+        path = Path('/bin/ps')
+        info = path.lstat()
+        if not (stat.S_ISREG(info.st_mode) and info.st_uid == 0 and
+                info.st_mode & stat.S_ISUID and not info.st_mode & 0o022):
+            reject('HELPER_SYSTEM_FILE_BINDING_MISMATCH')
+        return (info.st_dev, info.st_ino, info.st_mode, sha(path))
+
+    def helper_binding(pid):
+        # Darwin ps has its existing setuid bit; never change runner privileges.
+        library = ctypes.CDLL('/usr/lib/libproc.dylib', use_errno=True)
+        pidpath = library.proc_pidpath
+        pidpath.argtypes = [ctypes.c_int, ctypes.c_void_p, ctypes.c_uint32]
+        pidpath.restype = ctypes.c_int
+        buffer = ctypes.create_string_buffer(4096)
+        if pidpath(pid, buffer, len(buffer)) <= 0:
+            try:
+                os.kill(pid, 0)
+            except ProcessLookupError:
+                return None  # ps snapshot raced an already exited helper.
+            reject('HELPER_KERNEL_EXECUTABLE_QUERY_FAILED')
+        if buffer.value != b'/bin/ps':
+            reject('HELPER_KERNEL_EXECUTABLE_MISMATCH')
+        return helper_file_binding()
+
+    def remember_identity(pid, row):
+        observation = {'pid': pid, 'ppid': row[0], 'ruid': row[1], 'euid': row[2],
+                       'role': 'OWNED_WRAPPER' if pid == process.pid else 'OWNED_DESCENDANT'}
+        # Account for every first observation before validation can reject it.
+        # Quarantined identities are never authority for a cleanup signal.
+        first_candidate = pid not in known and pid not in rejected_live
+        if first_candidate:
+            rejected_live[pid] = row
+        observation['state_class'] = 'ZOMBIE' if states.get(pid, '').startswith('Z') else 'LIVE'
+        if not first_candidate and pid in rejected_live:
+            # A previous unverified observation is never ownership authority.
+            # Preserve its initial ancestry/UID/start even across PID reuse or
+            # privilege changes; only independently proven absence resolves it.
+            observation['role'] = 'PERMANENTLY_QUARANTINED_OBSERVATION'
+            observation['identity_state'] = ('INITIAL_IDENTITY_UNCHANGED' if row[:4] == rejected_live[pid][:4]
+                                             else 'INITIAL_ANCESTRY_UID_OR_START_CHANGED')
+            if observation not in receipt['unverified_observations']:
+                receipt['unverified_observations'].append(observation)
+            return False
+        # These immutable fields must pass before every role/euid/state branch.
+        # An observed helper cannot escape its binding by dropping privileges.
+        if pid in known and row[1:4] != known[pid][:3]:
+            reject('REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED', observation)
+        if pid in helper_bindings and helper_file_binding() != helper_bindings[pid]:
+            reject('REMEMBERED_HELPER_SYSTEM_FILE_CHANGED', observation)
+        if row[1] != os.getuid():
+            reject('REAL_UID_MISMATCH', observation)
+        absent = False
+        if pid not in known and (states.get(pid, '').startswith('Z') or row[4] == '(ps)'):
+            absent = pid_absent(pid, {})
+            if not absent and platform.system() == 'Linux' and states.get(pid, '').startswith('Z'):
+                # Timed Popen.wait can sleep before reaping an exited child.
+                # https://docs.python.org/3.13/library/subprocess.html#subprocess.Popen.wait
+                # Wait read-only for actual absence; infer no executable or
+                # ownership, and never extend the phase's existing deadline.
+                reaping_began = time.monotonic()
+                reaping_end = min(reaping_began + 0.25, began + timeout)
+                while not absent and time.monotonic() < reaping_end:
+                    time.sleep(min(0.005, max(0, reaping_end - time.monotonic())))
+                    absent = pid_absent(pid, {})
+                observation['reaping_grace_seconds'] = round(time.monotonic() - reaping_began, 6)
+        if absent:
+            # A snapshot may precede reaping while inspection follows it. Prove
+            # numeric PID absence independently; infer no executable or role.
+            observation['role'] = 'ALREADY_ABSENT_UNVERIFIED_SNAPSHOT'
+            observation['argv_role'] = 'PS_EXIT_DISPLAY' if row[4] == '(ps)' else 'UNVERIFIED_ZOMBIE'
+            observation['absence_proof'] = 'ACTUAL_PID_ABSENCE'
+            receipt['unverified_observations'].append(observation)
+            return False
+        if states.get(pid, '').startswith('Z'):
+            # A verified helper may become a zombie before its parent reaps it.
+            # Keep its original executable identity and wait for actual absence.
+            if pid not in known:
+                # Never infer an executable or privileged role from a zombie.
+                # Account for its PID until actual absence, but never signal it.
+                known[pid] = row[1:]
+                unverified_zombies.add(pid)
+                observation['role'] = 'UNVERIFIED_OWNED_ZOMBIE'
+                receipt['unverified_observations'].append(observation)
+                reject('UNVERIFIED_FIRST_ZOMBIE', observation)
+            return False
+        if pid in unverified_zombies:
+            reject('UNVERIFIED_ZOMBIE_BECAME_LIVE', observation)
+        if row[2] != os.geteuid():
+            try:
+                words = shlex.split(row[4])
+            except ValueError:
+                words = []
+            arguments = words[1:]
+            ps_arguments = arguments == ['-axo', 'pid=,ppid=,rss='] or (
+                len(arguments) in (2, 4) and arguments[0] == '-p' and arguments[1].isdigit() and
+                (len(arguments) == 2 or arguments[2:] == ['-o', 'command=']))
+            # Darwin can discard argv before exposing the zombie state. Accept
+            # its exit display only for this already kernel-bound helper, with
+            # unchanged real/effective UID and start identity; bind it again below.
+            exit_display = (pid in helper_bindings and row[4] == '(ps)' and
+                            row[1:4] == known[pid][:3])
+            observation['argv_role'] = ('EXACT_PS_OBSERVER' if words and words[0] in ('ps', '/bin/ps') and ps_arguments
+                                        else 'PS_EXIT_DISPLAY' if row[4] == '(ps)' else 'NOT_ALLOWLISTED')
+            observation['direct_wrapper_parent'] = row[0] == process.pid
+            observation['previously_bound_helper'] = pid in helper_bindings
+            if not (platform.system() == 'Darwin' and row[2] == 0 and row[0] == process.pid and
+                    ((words and words[0] in ('ps', '/bin/ps') and ps_arguments) or exit_display)):
+                # Query only the already descendant-bound UID501/root candidate,
+                # for static diagnostics; this never authorizes it or a signal.
+                if platform.system() == 'Darwin' and row[2] == 0 and row[0] == process.pid:
+                    original_reason = receipt.get('failure_reason')
+                    try:
+                        diagnostic_binding = helper_binding(pid)
+                        observation['kernel_file_role'] = ('ROOT_SUID_SYSTEM_PS' if diagnostic_binding else 'ALREADY_ABSENT')
+                        if diagnostic_binding is None and row[4] == '(ps)':
+                            # The live ps text snapshot can race argv destruction
+                            # and reaping. This proves absence, not helper authority.
+                            # Preserve accounting; never register or signal it.
+                            observation['role'] = 'ALREADY_ABSENT_UNVERIFIED_PS_EXIT_DISPLAY'
+                            receipt['unverified_observations'].append(observation)
+                            return False
+                    except AssertionError:
+                        observation['kernel_file_role'] = 'NOT_VERIFIED_SYSTEM_PS'
+                    if original_reason is None:
+                        receipt.pop('failure_reason', None)
+                    else:
+                        receipt['failure_reason'] = original_reason
+                reject('EFFECTIVE_UID_NOT_ALLOWLISTED', observation)
+            temporary_observation = 'failure_reason' not in receipt
+            if temporary_observation:
+                receipt['failure_observation'] = observation
+            binding = helper_binding(pid)
+            if binding is None:
+                if temporary_observation:
+                    receipt.pop('failure_observation', None)
+                return False
+            if pid in helper_bindings and (binding != helper_bindings[pid] or row[1:4] != known[pid][:3]):
+                reject('REMEMBERED_HELPER_IDENTITY_CHANGED', observation)
+            helper_bindings[pid] = binding
+            observation['role'] = 'DARWIN_WRAPPER_PS_OBSERVER'
+            observation['executable_sha256'] = binding[3]
+            if len(receipt['helper_observations']) < 64 and observation not in receipt['helper_observations']:
+                receipt['helper_observations'].append(observation)
+            if temporary_observation:
+                receipt.pop('failure_observation', None)
+        known[pid] = row[1:]
+        rejected_live.pop(pid, None)
+        return True
 
     def snapshot():
         rows = {}
-        for line in subprocess.check_output(['/bin/ps', '-axo', 'pid=,ppid=,uid=,lstart=,command='],
-                                            text=True, timeout=5).splitlines():
-            fields = line.split(None, 8)
-            if len(fields) == 9:
-                rows[int(fields[0])] = (int(fields[1]), int(fields[2]), tuple(fields[3:8]), fields[8])
+        states.clear()
+        snapshot_began = time.monotonic()
+        try:
+            output = snapshot_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
+                                     timeout=5, receipt=receipt, context=snapshot_context)
+        except subprocess.TimeoutExpired:
+            # check_output kills/reaps only its own helper before raising.
+            # Preserve the first failed call without exporting argv or stderr.
+            elapsed = round(time.monotonic() - snapshot_began, 3)
+            event = {'operation': 'OWNED_PROCESS_SNAPSHOT', 'context': snapshot_context,
+                     'timeout_seconds': 5, 'elapsed_seconds': elapsed}
+            events = receipt.setdefault('snapshot_timeouts', [])
+            if len(events) < 64:
+                events.append(event)
+            if 'failure_type' not in receipt and 'failure_operation' not in receipt:
+                receipt['failure_operation'] = event['operation']
+                receipt['failure_context'] = snapshot_context
+                receipt['failure_timeout_seconds'] = 5
+                receipt['failure_elapsed_seconds'] = elapsed
+                receipt.setdefault('failure_reason', 'PROCESS_SNAPSHOT_DEADLINE')
+            raise
+        for line in output.splitlines():
+            fields = line.split(None, 10)
+            if len(fields) == 11:
+                rows[int(fields[0])] = (int(fields[1]), int(fields[2]), int(fields[3]), tuple(fields[4:9]), fields[10])
+                states[int(fields[0])] = fields[9]
         return rows
 
     def remember():
@@ -368,16 +572,48 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
                 owned |= children
             for pid in owned & rows.keys():
                 row = rows[pid]
-                assert row[1] == os.getuid(), 'owned child UID changed'
-                known[pid] = row[1:]
+                remember_identity(pid, row)
         return rows
+
+    def pid_absent(pid, rows):
+        if pid in rows:
+            return False
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            return True
+        except PermissionError:
+            return False
+        return False
 
     def remaining():
         rows = remember()
         alive = []
         for pid, identity in known.items():
+            if pid in rejected_live or pid in unverified_zombies:
+                if not pid_absent(pid, rows):
+                    alive.append(pid)
+                continue
             if pid in rows:
-                assert rows[pid][1:] == identity, 'remembered PID identity changed; preserve process'
+                if states.get(pid, '').startswith('Z'):
+                    if rows[pid][1:4] != identity[:3]:
+                        reject('REMEMBERED_ZOMBIE_IDENTITY_CHANGED')
+                    alive.append(pid)
+                    continue
+                if pid in unverified_zombies:
+                    reject('UNVERIFIED_ZOMBIE_BECAME_LIVE')
+                if rows[pid][1:] != identity:
+                    reject('REMEMBERED_PROCESS_IDENTITY_CHANGED', {'pid': pid, 'ppid': rows[pid][0],
+                        'ruid': rows[pid][1], 'euid': rows[pid][2], 'role': 'REMEMBERED_DESCENDANT'})
+                if pid in helper_bindings:
+                    binding = helper_binding(pid)
+                    if binding is None:
+                        continue
+                    if binding != helper_bindings[pid]:
+                        reject('REMEMBERED_HELPER_EXECUTABLE_CHANGED')
+                alive.append(pid)
+        for pid in rejected_live.keys() - known.keys():
+            if not pid_absent(pid, rows):
                 alive.append(pid)
         return alive
 
@@ -390,25 +626,40 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
                 stderr=subprocess.STDOUT, start_new_session=True,
                 preexec_fn=lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask))
             receipt['wrapper_pid'] = process.pid
+            receipt['failure_stage'] = 'OBSERVE_OWNED_DESCENDANTS'
             remember()
+            snapshot_context = 'LIVE_OBSERVATION'
             signal.pthread_sigmask(signal.SIG_SETMASK, mask)
             while process.poll() is None:
                 remember()
                 if pending:
+                    receipt['failure_reason'] = 'CI_CANCELLATION'
                     raise RuntimeError('CI cancelled; forward to owned Mac wrapper')
                 if time.monotonic() - began >= timeout:
+                    receipt['failure_reason'] = 'WRAPPER_DEADLINE'
                     raise subprocess.TimeoutExpired(argv, timeout)
                 try:
                     process.wait(timeout=0.25)
                 except subprocess.TimeoutExpired:
                     pass
-            assert process.returncode == 0 and not pending, 'native Intel archive check failed'
+            if process.returncode != 0 or pending:
+                reject('WRAPPER_NONZERO_OR_CANCELLED')
             receipt['result'] = 'PASS_WRAPPER_AND_OWNED_CLEANUP'
+            receipt.pop('failure_stage', None)
     except BaseException as error:
         receipt['failure_type'] = type(error).__name__
+        receipt.setdefault('failure_reason', 'OWNED_SUPERVISION_ERROR')
+        receipt['wrapper_exit_before_cleanup'] = process.poll() if process is not None else None
+        # Read only the wrapper's already public phase names; never private logs.
+        check = out / 'native-check/check-receipt.json'
+        if check.is_file() and not check.is_symlink():
+            phases = json.loads(check.read_text()).get('phases', [])
+            if phases and phases[-1].get('name') in ('preflight', 'journey', 'controls'):
+                receipt['failure_phase'] = phases[-1]['name']
         raise
     finally:
         # Repeated cancellation cannot interrupt the bounded cleanup interval.
+        snapshot_context = 'OWNED_CLEANUP'
         signal.pthread_sigmask(signal.SIG_BLOCK, set(handlers))
         try:
             if process is not None:
@@ -433,10 +684,25 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
                         break
                     receipt['result'] = 'FAIL'
                     for pid in alive:
+                        if pid in rejected_live or pid in unverified_zombies:
+                            continue  # Wait for absence; never signal an unverified PID.
                         # Re-read identity immediately before each individual signal.
                         rows = snapshot()
                         if pid in rows:
-                            assert rows[pid][1:] == known[pid], 'PID reused; preserve process'
+                            if states.get(pid, '').startswith('Z'):
+                                if rows[pid][1:4] != known[pid][:3]:
+                                    reject('ZOMBIE_IDENTITY_CHANGED_BEFORE_REAP')
+                                continue  # Already exited; only its parent can reap it.
+                            if pid in unverified_zombies:
+                                reject('UNVERIFIED_ZOMBIE_BECAME_LIVE_BEFORE_SIGNAL')
+                            if rows[pid][1:] != known[pid]:
+                                reject('PROCESS_IDENTITY_CHANGED_BEFORE_SIGNAL')
+                            if pid in helper_bindings:
+                                binding = helper_binding(pid)
+                                if binding is None:
+                                    continue
+                                if binding != helper_bindings[pid]:
+                                    reject('HELPER_EXECUTABLE_CHANGED_BEFORE_SIGNAL')
                             try:
                                 os.kill(pid, sig)
                                 receipt['signals'].append({'pid': pid, 'signal': int(sig)})
@@ -450,6 +716,9 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
                 receipt['wrapper_reaped'] = True
                 alive = remaining()
                 receipt['cleanup'] = [{'pid': pid, 'removed': pid not in alive} for pid in sorted(known)]
+                receipt['rejected_observation_cleanup'] = [{'pid': pid, 'removed': pid not in alive,
+                    'proof': 'ACTUAL_PID_ABSENCE' if pid not in alive else 'PRESENT_UNVERIFIED_NEVER_SIGNALLED'}
+                    for pid in sorted(rejected_live)]
                 assert not alive, 'known owned Mac descendants remain'
                 if 'failure_type' not in receipt:
                     assert receipt['result'] == 'PASS_WRAPPER_AND_OWNED_CLEANUP', 'native Mac supervision failed'
@@ -464,12 +733,27 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240):
             receipt['wrapper_reaped'] = process is not None and process.poll() is not None
             raise
         finally:
-            receipt['wall_seconds'] = round(time.monotonic() - began, 3)
-            receipt['cancellation_signals'] = pending
-            signal.pthread_sigmask(signal.SIG_SETMASK, mask)
-            write(public / 'supervision.json', receipt)
-            for sig, handler in handlers.items():
-                signal.signal(sig, handler)
+            try:
+                receipt['wall_seconds'] = round(time.monotonic() - began, 3)
+                receipt['cancellation_signals'] = pending
+                deferred = signal.sigpending() & set(handlers)
+                if deferred:
+                    receipt['result'] = 'FAIL'
+                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
+                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
+                write(public / 'supervision.json', receipt)
+                deferred = signal.sigpending() & set(handlers)
+                if deferred:
+                    receipt['result'] = 'FAIL'
+                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
+                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
+                    write(public / 'supervision.json', receipt)
+            finally:
+                try:
+                    for number, handler in handlers.items():
+                        signal.signal(number, handler)
+                finally:
+                    signal.pthread_sigmask(signal.SIG_SETMASK, mask)
 
 
 def windows_check(package, out, row):
@@ -537,7 +821,7 @@ def windows_check(package, out, row):
                 raise RuntimeError('CI cancelled after owned child registration')
             row['exit'] = child.wait(timeout=min(timeout, max(1, 1500 - (time.monotonic() - began))))
             row['reaped'] = child.poll() is not None
-            assert row['exit'] == 0 and not job.expired, name + ' failed'
+            assert row['exit'] in ((0, 2) if name == 'controls' else (0,)) and not job.expired, name + ' failed'
         return row
 
     try:
@@ -575,15 +859,16 @@ def windows_check(package, out, row):
                 'cleanup_count_asserted_by_bound_fixture': 1}
         phase('preflight', [sys.executable, '-B', package / 'tester.py', 'preflight'])
         if row['architecture'] == 'i686':
-            wait_journey_capacity(backend, out, job, began, receipt)
             phase('journey', [sys.executable, '-B', ROOT / 'vanguard/run-portable-journey-diagnostic.py',
                 '--tester', package / 'tester.py', '--tester-sha256', row['package_helpers']['tester.py'],
                 '--diagnostic', out / 'journey-diagnostic.json', '--out', out / 'journey'])
         else:
             phase('journey', [sys.executable, '-B', package / 'tester.py', 'run', '--out', out / 'journey'])
-        phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
+        control_phase = phase('controls', [sys.executable, '-B', ROOT / 'vanguard/test-portable-refusals.py',
                            '--package', package, '--out', out / 'controls'])
-        receipt['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY'
+        incomplete = control_coverage(json.loads((out / 'controls/controls.json').read_text()))
+        assert control_phase['exit'] == (2 if incomplete else 0)
+        receipt['result'] = 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS' if incomplete else 'PASS_NATIVE_ARCHIVE_JOURNEY'
     finally:
         try:
             if job is not None:
@@ -606,7 +891,6 @@ def windows_check(package, out, row):
                     receipt['result'] = 'FAIL'
             write(out / 'check-receipt.json', receipt)
             assert not allocated or receipt['owned_console_freed'], 'owned console cleanup failed'
-
 
 
 def main():
@@ -693,12 +977,22 @@ def main():
                     '--archive', archive, '--sha256', row['archive_sha256'], '--target', 'macos-x86_64',
                     '--out', check_root], out, public)
             finally:
-                supervision = json.loads((public / 'supervision.json').read_text())
-                assert supervision['wrapper_reaped'] and all(p['removed'] for p in supervision['cleanup'])
-                assert 'cleanup_failure_type' not in supervision, 'preserve lock until owned cleanup is verified'
-                assert not lock.is_symlink() and lock.stat().st_uid == os.getuid() and lock.stat().st_ino == lock_identity
-                lock.unlink()
-                proof['owned_lock_removed'] = True
+                lock_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
+                lock_handlers = {number: signal.getsignal(number) for number in (signal.SIGTERM, signal.SIGINT)}
+                try:
+                    supervision = json.loads((public / 'supervision.json').read_text())
+                    assert supervision['wrapper_reaped'] and all(p['removed'] for p in supervision['cleanup'])
+                    assert all(p['removed'] for p in supervision.get('rejected_observation_cleanup', [])), 'unverified observation remains; preserve lock'
+                    assert 'cleanup_failure_type' not in supervision, 'preserve lock until owned cleanup is verified'
+                    assert not lock.is_symlink() and lock.stat().st_uid == os.getuid() and lock.stat().st_ino == lock_identity
+                    lock.unlink()
+                    proof['owned_lock_removed'] = True
+                finally:
+                    try:
+                        for number, handler in lock_handlers.items():
+                            signal.signal(number, handler)
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, lock_mask)
         journey = json.loads((check_root / 'journey/result.json').read_text())
         controls = json.loads((check_root / 'controls/controls.json').read_text())
         check = json.loads((check_root / 'check-receipt.json').read_text())
@@ -710,9 +1004,10 @@ def main():
         assert journey['receive_atomic'] == 5000000000000 and journey['subsequent_spend_atomic'] == 2000000000000
         assert journey['restore_matches'] and journey['cli_open_restored_wallet']
         assert len(journey['payments']) == 2 and all(x['rct_type'] == 7 and x['carrot_outputs'] for x in journey['payments'])
-        assert controls['result'] == 'PASS_REFUSALS' and len(controls['cases']) == 10
+        incomplete = control_coverage(controls)
+        assert not incomplete or args.target.startswith('windows-')
         assert controls['release_manifest_sha256'] == row['release_manifest_sha256']
-        assert check['result'] == 'PASS_NATIVE_ARCHIVE_JOURNEY'
+        assert check['result'] == ('INCOMPLETE_NATIVE_ARCHIVE_CONTROLS' if incomplete else 'PASS_NATIVE_ARCHIVE_JOURNEY')
         if args.target == 'windows-i686':
             assert journey['execution_substrate'] == check['execution_substrate'] == 'NATIVE_WINDOWS_WOW64'
             assert check['native_architecture'] == 'x86_64' and check['windows_32bit_os_execution'] == 'UNTESTED'
@@ -724,26 +1019,52 @@ def main():
             proof['execution_substrate'] = 'NATIVE_WINDOWS_WOW64'
             proof['windows_32bit_os_execution'] = 'UNTESTED'
         for name, value in [('journey.json', journey), ('controls.json', controls), ('check.json', check)]:
-            write(public / name, public_check(value) if name == 'check.json' else public_diagnostic(value) if name == 'journey-diagnostic.json' else value)
-        proof['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
+            write(public / name, public_check(value) if name == 'check.json' else value)
+        proof['result'] = 'INCOMPLETE_NATIVE_ARCHIVE_CONTROLS' if incomplete else 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
     except BaseException as error:
         proof['failure_type'] = type(error).__name__
         raise
     finally:
-        # These are the same explicit public receipts, including honest failure
-        # and owned-cleanup evidence. Private phase logs are never exported.
-        if check_root is not None:
-            for source, name in [('journey-diagnostic.json', 'journey-diagnostic.json'),
-                                 ('journey/result.json', 'journey.json'),
-                                 ('controls/controls.json', 'controls.json'),
-                                 ('check-receipt.json', 'check.json')]:
-                path = check_root / source
-                if path.is_file() and not path.is_symlink():
-                    value = json.loads(path.read_text())
-                    write(public / name, public_check(value) if name == 'check.json' else public_diagnostic(value) if name == 'journey-diagnostic.json' else value)
-        write(public / 'ci-receipt.json', proof)
-        print(proof['result'])
+        receipt_mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT}) if os.name == 'posix' else None
+        receipt_handlers = {number: signal.getsignal(number) for number in (signal.SIGTERM, signal.SIGINT)} if os.name == 'posix' else {}
+        try:
+            # These are the same explicit public receipts, including honest failure
+            # and owned-cleanup evidence. Private phase logs are never exported.
+            if check_root is not None:
+                for source, name in [('journey-diagnostic.json', 'journey-diagnostic.json'),
+                                     ('journey/result.json', 'journey.json'),
+                                     ('controls/controls.json', 'controls.json'),
+                                     ('check-receipt.json', 'check.json')]:
+                    path = check_root / source
+                    if path.is_file() and not path.is_symlink():
+                        value = json.loads(path.read_text())
+                        write(public / name, public_check(value) if name == 'check.json' else
+                              public_diagnostic(value) if name == 'journey-diagnostic.json' else value)
+            deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
+            if deferred:
+                proof['result'] = 'FAIL'
+                proof['failure_reason'] = 'CANCELLATION_DURING_PUBLIC_RECEIPTS'
+            write(public / 'ci-receipt.json', proof)
+            deferred = signal.sigpending() & set(receipt_handlers) if receipt_handlers else set()
+            if deferred:
+                proof['result'] = 'FAIL'
+                proof['failure_reason'] = 'CANCELLATION_DURING_PUBLIC_RECEIPTS'
+                write(public / 'ci-receipt.json', proof)
+            print(proof['result'])
+        finally:
+            try:
+                for number, handler in receipt_handlers.items():
+                    signal.signal(number, handler)
+            finally:
+                if receipt_mask is not None:
+                    signal.pthread_sigmask(signal.SIG_SETMASK, receipt_mask)
+
 
 
 if __name__ == '__main__':
+    if os.name == 'posix':
+        def cancelled(number, frame):
+            raise RuntimeError('native CI cancelled; preserve owned cleanup receipts')
+        signal.signal(signal.SIGTERM, cancelled)
+        signal.signal(signal.SIGINT, cancelled)
     main()
