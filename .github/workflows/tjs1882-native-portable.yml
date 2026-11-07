@@ -1,4 +1,4 @@
-name: TJS-1882 ARM64 preflight diagnosis
+name: TJS-1882 ARM64 owned-lock native qualification
 on:
   push:
     branches: [tjs1882-native-windows-preflight]
@@ -97,6 +97,23 @@ jobs:
           if ((Get-Item $bundle).Length -ne 164120029) { throw 'Bundle length mismatch' }
           if ((Get-FileHash $bundle -Algorithm SHA256).Hash.ToLowerInvariant() -ne 'bedd371bc042ec2b893e45693083eae64637ca1a1f496933f2f90a5bf6f38034') { throw 'Bundle hash mismatch' }
           Expand-Archive -LiteralPath $bundle -DestinationPath (Join-Path $env:RUNNER_TEMP 'tjs1882-arm/extract')
+          # A hosted elevated token can default new file ownership to a group.
+          # Create only an absent shared lock, with the exact current token user.
+          $lockRoot = (python -B -c 'import tempfile; print(tempfile.gettempdir())').Trim()
+          if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve CPython lock directory' }
+          $lockFile = [System.IO.FileInfo]::new((Join-Path $lockRoot 'meownero-vanguard-tester-windows.lock'))
+          $sid = [System.Security.Principal.WindowsIdentity]::GetCurrent().User
+          $security = [System.Security.AccessControl.FileSecurity]::new()
+          $security.SetOwner($sid)
+          $security.SetAccessRuleProtection($true, $false)
+          $security.AddAccessRule([System.Security.AccessControl.FileSystemAccessRule]::new($sid, [System.Security.AccessControl.FileSystemRights]::FullControl, [System.Security.AccessControl.AccessControlType]::Allow))
+          $stream = [System.IO.FileSystemAclExtensions]::Create($lockFile, [System.IO.FileMode]::CreateNew, [System.Security.AccessControl.FileSystemRights]::FullControl, [System.IO.FileShare]::None, 4096, [System.IO.FileOptions]::None, $security)
+          try {
+            $actual = [System.IO.FileSystemAclExtensions]::GetAccessControl($stream)
+            if ($actual.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne $sid.Value) { throw 'New lock owner mismatch' }
+            if (-not $actual.AreAccessRulesProtected) { throw 'New lock ACL is not private' }
+            @{schema='tjs1882-runner-lock-provision/1'; result='PASS_NEW_CURRENT_USER_OWNED_LOCK'; create_new_only=$true; owner_matches_token_user=$true; protected_acl=$true; accepted_bundle_unchanged=$true; existing_file_modified=$false; lifetime='DISPOSABLE_HOSTED_JOB'} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $env:RUNNER_TEMP 'tjs1882-arm/lock-provision.json')
+          } finally { $stream.Dispose() }
           python -B (Join-Path $env:RUNNER_TEMP 'tjs1882-arm/extract/meownero-windows-test/windows-test-bundle.py')
           exit $LASTEXITCODE
       - name: Project fixed preflight failure diagnostics
@@ -119,6 +136,7 @@ jobs:
                   if phrase in text: row['reason'] = reason
               frames = re.findall(r'File "[^"\n]*(tester\.py|portable_windows\.py)", line (\d+), in ([a-zA-Z_][a-zA-Z_0-9]*)', text)
               row['fixed_stack'] = [{'file': name, 'line': int(line), 'function': function} for name, line, function in frames if function in ('<module>', 'preflight', 'require', 'native_architecture', 'check', 'spawn', 'close', 'owned_file', 'safe', 'sha', 'fresh', 'child_environment')]
+              if 'unsafe tester lock owner' in text: row['reason'] = 'UNSAFE_LOCK_OWNER'
               errors = re.findall(r'\[WinError (\d+)\]', text)
               if errors: row['winerror'] = int(errors[-1])
               for kind in ('AssertionError', 'OSError', 'PermissionError', 'Refused', 'RuntimeError', 'TimeoutExpired', 'AttributeError', 'TypeError'):
@@ -133,7 +151,7 @@ jobs:
         run: |
           import os, pathlib
           root = pathlib.Path(os.environ['RUNNER_TEMP'])
-          files = list(root.glob('tjs1882-native/public/*.json')) + list(root.glob('tjs1882-arm/qualification.json')) + list(root.glob('tjs1882-arm/preflight-diagnostic.json')) + list(root.glob('tjs1882-arm/extract/meownero-windows-test/run-*/report.zip'))
+          files = list(root.glob('tjs1882-native/public/*.json')) + list(root.glob('tjs1882-arm/qualification.json')) + list(root.glob('tjs1882-arm/preflight-diagnostic.json')) + list(root.glob('tjs1882-arm/lock-provision.json')) + list(root.glob('tjs1882-arm/extract/meownero-windows-test/run-*/report.zip'))
           assert all(p.is_file() and not p.is_symlink() for p in files)
           assert sum(p.stat().st_size for p in files) <= 10 * 1024**2
           with open(os.environ['GITHUB_OUTPUT'], 'a') as stream: stream.write('safe=true\n')
@@ -145,6 +163,7 @@ jobs:
             ${{ runner.temp }}/tjs1882-native/public/*.json
             ${{ runner.temp }}/tjs1882-arm/qualification.json
             ${{ runner.temp }}/tjs1882-arm/preflight-diagnostic.json
+            ${{ runner.temp }}/tjs1882-arm/lock-provision.json
             ${{ runner.temp }}/tjs1882-arm/extract/meownero-windows-test/run-*/report.zip
           if-no-files-found: warn
           retention-days: 3
