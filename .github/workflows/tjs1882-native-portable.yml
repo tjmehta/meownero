@@ -76,6 +76,16 @@ jobs:
               process, native = wintypes.USHORT(), wintypes.USHORT()
               assert query(current(), ctypes.byref(process), ctypes.byref(native))
               proof.update(process_machine=process.value, native_machine=native.value)
+              class Memory(ctypes.Structure):
+                  _fields_ = [('length', wintypes.DWORD), ('load', wintypes.DWORD), ('total', ctypes.c_uint64), ('available', ctypes.c_uint64), ('total_page', ctypes.c_uint64), ('available_page', ctypes.c_uint64), ('total_virtual', ctypes.c_uint64), ('available_virtual', ctypes.c_uint64), ('extended', ctypes.c_uint64)]
+              memory = Memory()
+              memory.length = ctypes.sizeof(memory)
+              query_memory = kernel.GlobalMemoryStatusEx
+              query_memory.restype, query_memory.argtypes = wintypes.BOOL, (ctypes.POINTER(Memory),)
+              assert query_memory(ctypes.byref(memory))
+              import shutil
+              proof.update(total_physical_bytes=memory.total, available_physical_bytes_before_bundle=memory.available, disk_free_bytes_before_bundle=shutil.disk_usage(root).free)
+
               assert process.value == 0 and native.value == 0xaa64
               target.mkdir()
               os.symlink(target, link, target_is_directory=True)
@@ -123,19 +133,21 @@ jobs:
           import hashlib, json, os, pathlib, re
           root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'tjs1882-arm'
           rows = []
-          for log in root.glob('extract/meownero-windows-test/run-*/output/preflight.log'):
+          for log in [p for phase in ('preflight', 'journey') for p in root.glob('extract/meownero-windows-test/run-*/output/' + phase + '.log')]:
               assert log.is_file() and not log.is_symlink() and log.stat().st_size <= 1024**2
               raw = log.read_bytes()
               text = raw.decode('utf-8', errors='replace')
-              row = {'phase': 'PREFLIGHT', 'log_bytes': len(raw), 'log_sha256': hashlib.sha256(raw).hexdigest(), 'reason': 'UNCLASSIFIED'}
+              row = {'phase': log.stem.upper(), 'log_bytes': len(raw), 'log_sha256': hashlib.sha256(raw).hexdigest(), 'reason': 'UNCLASSIFIED'}
               for name in ('monerod', 'monero-wallet-cli', 'monero-wallet-rpc'):
                   if 'program startup failed: ' + name in text: row.update(reason='PROGRAM_STARTUP_FAILED', program=name)
               for phrase, reason in (('package file set mismatch', 'PACKAGE_FILE_SET_MISMATCH'), ('package hash mismatch:', 'PACKAGE_HASH_MISMATCH'), ('wrong architecture', 'WRONG_ARCHITECTURE'), ('wrong binary format or target', 'WRONG_BINARY_TARGET')):
                   if phrase in text: row['reason'] = reason
               for phrase, reason in (('wrong source pin', 'WRONG_SOURCE_PIN'), ('wrong operating system', 'WRONG_OS'), ('Windows requires Python 3.13', 'PYTHON_TOO_OLD'), ('Windows 10 version 1709', 'WINDOWS_TOO_OLD'), ('64-bit Windows programs require', 'PYTHON_WRONG_BITNESS'), ('package symlink refused', 'PACKAGE_SYMLINK_REFUSED'), ('invalid package path', 'INVALID_PACKAGE_PATH'), ('binary is not executable', 'BINARY_NOT_EXECUTABLE'), ('unsafe tester lock owner', 'UNSAFE_LOCK_OWNER'), ('tester busy; no processes started', 'LOCK_BUSY'), ('unsafe tester lock', 'UNSAFE_LOCK'), ('owned Windows journey deadline reached', 'JOB_DEADLINE'), ('owned Windows job cleanup timeout', 'JOB_CLEANUP_TIMEOUT'), ('native module inventory overflow', 'MODULE_INVENTORY_OVERFLOW')):
                   if phrase in text: row['reason'] = reason
+              for phrase, reason in (('requires five GiB available memory and disk', 'CAPACITY_RESERVE_NOT_MET'), ('symlink path refused', 'SYMLINK_PATH_REFUSED'), ('nonregular or hard-linked input refused', 'NONREGULAR_OR_HARDLINK_INPUT')):
+                  if phrase in text: row['reason'] = reason
               frames = re.findall(r'File "[^"\n]*(tester\.py|portable_windows\.py)", line (\d+), in ([a-zA-Z_][a-zA-Z_0-9]*)', text)
-              row['fixed_stack'] = [{'file': name, 'line': int(line), 'function': function} for name, line, function in frames if function in ('<module>', 'preflight', 'require', 'native_architecture', 'check', 'spawn', 'close', 'owned_file', 'safe', 'sha', 'fresh', 'child_environment')]
+              row['fixed_stack'] = [{'file': name, 'line': int(line), 'function': function} for name, line, function in frames if function in ('<module>', 'preflight', 'require', 'native_architecture', 'check', 'spawn', 'close', 'owned_file', 'safe', 'sha', 'fresh', 'child_environment', 'run', 'available_memory')]
               if 'unsafe tester lock owner' in text: row['reason'] = 'UNSAFE_LOCK_OWNER'
               errors = re.findall(r'\[WinError (\d+)\]', text)
               if errors: row['winerror'] = int(errors[-1])
