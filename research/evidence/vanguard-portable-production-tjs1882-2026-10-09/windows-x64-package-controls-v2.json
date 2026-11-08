@@ -1,0 +1,48 @@
+{
+  "result": "PASS_WINDOWS_CROSS_PACKAGE_CONTROLS",
+  "archive_sha256": "859d4644815b4c990cca093c6d74bb077e6ab74f267236ed84746d5b6cf690d0",
+  "native_execution": "UNTESTED",
+  "controls": [
+    {
+      "case": "actual-zip-hashes-current-starter-and-MSVCRT",
+      "result": "PASS",
+      "file_count": 289
+    },
+    {
+      "case": "wrong-pe-machine",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "PE architecture mismatch"
+    },
+    {
+      "case": "program-hash-tamper",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "built program hash mismatch"
+    },
+    {
+      "case": "incomplete-build",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "receipt['result'] == 'BUILT_UNTESTED'"
+    },
+    {
+      "case": "delayed-import-directory",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "unmapped delayed-import dependency"
+    },
+    {
+      "case": "missing-runtime-dll",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "missing or ambiguous same-target DLL: absent.dll"
+    },
+    {
+      "case": "wrong-crt-closure",
+      "result": "PASS_REFUSAL",
+      "exit": 1,
+      "refusal": "GNU target requires the pinned MSVCRT closure"
+    }
+  ]
+}

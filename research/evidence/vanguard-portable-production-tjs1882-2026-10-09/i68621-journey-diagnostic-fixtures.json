@@ -1,0 +1,111 @@
+{
+  "schema": "meownero-i68621-public-journey-diagnostic-fixtures/1",
+  "result": "PASS_ENTRY_CAPACITY_JOB_FAILURE_PHASES_AND_PRIVATE_TEXT_EXCLUSION",
+  "diagnostic_sha256": "9a3ee5ffcc2a2e72f521cc2342c62c3e26310bc72c0696312cd763889cd9dcfd",
+  "packaged_tester_sha256": "17835eafcb740ba1e65030df01c58505e96742dc33f439d9824977e089460ad0",
+  "archive_sha256": "3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745",
+  "cases": [
+    {
+      "case": "collision",
+      "first_failure": {
+        "phase": "OUTPUT_GUARD",
+        "reason": "OUTPUT_COLLISION_OR_PARENT",
+        "exception_type": "RuntimeError"
+      },
+      "completed_phases": [
+        "CALL_BOUND_JOURNEY"
+      ],
+      "privacy": "PASS",
+      "actual_native_journey": "NOT_EXECUTED",
+      "fixture": "REAL_BOUND_SOURCE_GUARDS"
+    },
+    {
+      "case": "actual-wrong-os",
+      "first_failure": {
+        "phase": "PREFLIGHT",
+        "reason": "OS_MISMATCH",
+        "exception_type": "RuntimeError"
+      },
+      "completed_phases": [
+        "CALL_BOUND_JOURNEY",
+        "OUTPUT_GUARD",
+        "ACQUIRE_TESTER_LOCK"
+      ],
+      "privacy": "PASS",
+      "actual_native_journey": "NOT_EXECUTED",
+      "fixture": "REAL_BOUND_SOURCE_GUARDS"
+    },
+    {
+      "case": "capacity",
+      "first_failure": {
+        "phase": "CAPACITY_GUARD",
+        "reason": "CAPACITY_RESERVE_NOT_MET",
+        "exception_type": "RuntimeError"
+      },
+      "completed_phases": [
+        "CALL_BOUND_JOURNEY",
+        "OUTPUT_GUARD",
+        "ACQUIRE_TESTER_LOCK",
+        "PREFLIGHT"
+      ],
+      "privacy": "PASS",
+      "actual_native_journey": "NOT_EXECUTED",
+      "fixture": "INJECTED_PRE_RECEIPT_FAILURE"
+    },
+    {
+      "case": "owned-job-error",
+      "first_failure": {
+        "phase": "INITIALIZE_OWNED_JOB",
+        "reason": "EXCEPTION_UNCLASSIFIED",
+        "exception_type": "PermissionError",
+        "errno": 13
+      },
+      "completed_phases": [
+        "CALL_BOUND_JOURNEY",
+        "OUTPUT_GUARD",
+        "ACQUIRE_TESTER_LOCK",
+        "PREFLIGHT",
+        "CAPACITY_GUARD",
+        "PREPARE_PRIVATE_OUTPUT"
+      ],
+      "privacy": "PASS",
+      "actual_native_journey": "NOT_EXECUTED",
+      "fixture": "INJECTED_PRE_RECEIPT_FAILURE"
+    },
+    {
+      "case": "private-exception",
+      "first_failure": {
+        "phase": "PREFLIGHT",
+        "reason": "EXCEPTION_UNCLASSIFIED",
+        "exception_type": "RuntimeError"
+      },
+      "completed_phases": [
+        "CALL_BOUND_JOURNEY",
+        "OUTPUT_GUARD",
+        "ACQUIRE_TESTER_LOCK"
+      ],
+      "privacy": "PASS",
+      "actual_native_journey": "NOT_EXECUTED",
+      "fixture": "INJECTED_PRE_RECEIPT_FAILURE"
+    },
+    {
+      "case": "successful-final-preflight-transition",
+      "static_first_failure": null,
+      "completed_phases": [
+        "FINAL_PREFLIGHT"
+      ],
+      "fixture": "ACTUAL_TRACE_AST_BOUND_RUN_CODE_IDENTITY_AND_CLEANUP_LINE_NO_NATIVE_JOURNEY"
+    },
+    {
+      "case": "interrupted-cleanup-transition",
+      "static_first_failure": {
+        "phase": "FINAL_PREFLIGHT",
+        "reason": "JOURNEY_INTERRUPTED",
+        "exception_type": "JourneyInterrupted"
+      },
+      "completed_phases": [],
+      "fixture": "ACTUAL_TRACE_AST_BOUND_RUN_CODE_IDENTITY_AND_CLEANUP_LINE_NO_NATIVE_JOURNEY"
+    }
+  ],
+  "native_acceptance": "UNTESTED_BY_FIXTURES"
+}

@@ -1,0 +1,60 @@
+name: TJS-1882 physical Intel observer correction
+on:
+  push:
+    branches: [tjs1882-native-windows-preflight]
+    paths: [.github/workflows/tjs1882-native-portable.yml]
+permissions:
+  contents: read
+concurrency:
+  group: tjs1882-native-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - target: macos-x86_64
+            runner: macos-15-intel
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        env:
+          GIT_CONFIG_COUNT: '1'
+          GIT_CONFIG_KEY_0: core.autocrlf
+          GIT_CONFIG_VALUE_0: 'false'
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /ci/tjs1882/packages/
+            /vanguard/run-portable-ci.py
+            /vanguard/ci-inputs.json
+            /vanguard/test-portable-refusals.py
+            /vanguard/run-portable-mac-check.py
+            /vanguard/tester.py
+            /vanguard/source-lock.json
+            /vanguard/tester-profile.json
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.13'
+          architecture: x64
+      - name: Exact archive native journey and ten controls
+        shell: bash
+        run: >-
+          python -B vanguard/run-portable-ci.py
+          --inputs vanguard/ci-inputs.json
+          --inputs-sha256 1a320545aa91e816f1b71fe9f33a55eeace503d627da62e01eaf7aacc26c98ca
+          --target '${{ matrix.target }}'
+          --out "$RUNNER_TEMP/tjs1882-native"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: tjs1882-${{ matrix.target }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/tjs1882-native/public/*.json
+          if-no-files-found: warn
+          retention-days: 3

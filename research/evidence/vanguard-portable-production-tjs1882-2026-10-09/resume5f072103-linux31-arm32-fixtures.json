@@ -1,0 +1,154 @@
+{
+  "schema": "meownero-linux31-arm32-package-diagnostic-fixtures/1",
+  "result": "PASS",
+  "source_sha256": {
+    "31": "477c59838c8f52abec0f2babd97e7abbf5d475b07a7eb5c3ab3ea069da974532",
+    "32": "4a1236a781af0110f09bf5b00ffe73bd214cf2f0a7af06a09e8ceedc7f6b1f72"
+  },
+  "fixture_source_sha256": "6cb39125713eac402cb1bddcb5543dd0e792d4c855bccca7c840a6f142bb457e",
+  "cases": [
+    {
+      "controller": 31,
+      "case": "exact-preserved-package-source-pin-refusal",
+      "source_line": 35,
+      "primary_error_preserved": true,
+      "package_not_created": true,
+      "bound_public_source_context": true,
+      "scope": "ACTUAL_PRESERVED_PACKAGE_MAIN"
+    },
+    {
+      "controller": 31,
+      "case": "license-assertion",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 31,
+      "case": "process-error",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 31,
+      "case": "OS-error",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 31,
+      "case": "cancel",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 31,
+      "case": "unknown-private-frame",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 31,
+      "case": "secondary-export-failure",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 31,
+      "case": "unrelated-prepare-error",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 0,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 31,
+      "case": "success",
+      "diagnostic_created": false
+    },
+    {
+      "controller": 32,
+      "case": "exact-preserved-package-source-pin-refusal",
+      "source_line": 35,
+      "primary_error_preserved": true,
+      "package_not_created": true,
+      "bound_public_source_context": true,
+      "scope": "ACTUAL_PRESERVED_PACKAGE_MAIN"
+    },
+    {
+      "controller": 32,
+      "case": "license-assertion",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 32,
+      "case": "process-error",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 32,
+      "case": "OS-error",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 32,
+      "case": "cancel",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 32,
+      "case": "unknown-private-frame",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 32,
+      "case": "secondary-export-failure",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 1,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 32,
+      "case": "unrelated-prepare-error",
+      "primary_error_identity_retained": true,
+      "public_diagnostic_writes": 0,
+      "private_exception_argv_path_exported": false,
+      "scope": "EXACT_WORKER_WITH_SYNTHETIC_EXCEPTION_SEAM"
+    },
+    {
+      "controller": 32,
+      "case": "success",
+      "diagnostic_created": false
+    }
+  ],
+  "all_other_functions_including_controller_main_finalizers": "AST_UNCHANGED",
+  "actual_native_package_failure_cause": "UNKNOWN",
+  "native_build_or_retry_started": false
+}

@@ -1,0 +1,137 @@
+{
+  "schema": "meownero-portable-native-mac-check/1",
+  "archive_sha256": "dc1c38777b1b475e70376be9a85927e296ad12043688bfcea0e338766b23162e",
+  "result": "PASS_TRANSLATED_ARCHIVE_JOURNEY",
+  "phases": [
+    {
+      "name": "preflight",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "~/Developer/tjs1882-3175/mac-intel-translated-check01/extract/meownero-vanguard-macos-x86_64/tester.py",
+        "preflight",
+        "--translated-macos-x86_64"
+      ],
+      "reaped": true,
+      "pid": 82847,
+      "exit": 0
+    },
+    {
+      "name": "journey",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "~/Developer/tjs1882-3175/mac-intel-translated-check01/extract/meownero-vanguard-macos-x86_64/tester.py",
+        "run",
+        "--out",
+        "~/Developer/tjs1882-3175/mac-intel-translated-check01/journey",
+        "--translated-macos-x86_64"
+      ],
+      "reaped": true,
+      "pid": 84584,
+      "exit": 0
+    },
+    {
+      "name": "controls",
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "~/Developer/tjs1882-3175/kit04/vanguard/test-portable-refusals.py",
+        "--package",
+        "~/Developer/tjs1882-3175/mac-intel-translated-check01/extract/meownero-vanguard-macos-x86_64",
+        "--out",
+        "~/Developer/tjs1882-3175/mac-intel-translated-check01/controls",
+        "--translated-macos-x86_64"
+      ],
+      "reaped": true,
+      "pid": 87293,
+      "exit": 0
+    }
+  ],
+  "resident_limit_bytes": 4294967296,
+  "peak_resident_bytes": 782258176,
+  "cleanup": [
+    {
+      "pid": 82847,
+      "removed": true
+    },
+    {
+      "pid": 83065,
+      "removed": true
+    },
+    {
+      "pid": 84126,
+      "removed": true
+    },
+    {
+      "pid": 84145,
+      "removed": true
+    },
+    {
+      "pid": 84584,
+      "removed": true
+    },
+    {
+      "pid": 84594,
+      "removed": true
+    },
+    {
+      "pid": 84602,
+      "removed": true
+    },
+    {
+      "pid": 84609,
+      "removed": true
+    },
+    {
+      "pid": 85070,
+      "removed": true
+    },
+    {
+      "pid": 85150,
+      "removed": true
+    },
+    {
+      "pid": 87251,
+      "removed": true
+    },
+    {
+      "pid": 87258,
+      "removed": true
+    },
+    {
+      "pid": 87293,
+      "removed": true
+    },
+    {
+      "pid": 87296,
+      "removed": true
+    },
+    {
+      "pid": 87334,
+      "removed": true
+    },
+    {
+      "pid": 87882,
+      "removed": true
+    },
+    {
+      "pid": 87943,
+      "removed": true
+    },
+    {
+      "pid": 87999,
+      "removed": true
+    },
+    {
+      "pid": 88008,
+      "removed": true
+    },
+    {
+      "pid": 88029,
+      "removed": true
+    }
+  ],
+  "execution_substrate": "ROSETTA_TRANSLATED_MACOS_X86_64",
+  "wall_seconds": 35.106
+}

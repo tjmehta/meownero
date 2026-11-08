@@ -1,0 +1,379 @@
+{
+  "schema": "meownero-pinned-linker-inventory-fixtures/1",
+  "result": "PASS",
+  "source_sha256": "10aa313a12277f76013b70f170eb49751bd518fcfd4297c18909a0db57919089",
+  "controllers": {
+    "33": "216ece126fb745d383975cbacd7f1bcae2f112d12d11848fed3df28d3e5f0d70",
+    "34": "77844913c6833b533f6af36f882134dc6d924d4bc48819a6ed27b509a7a61839",
+    "current-x86_64": "3b06bc8a496c00cf98455d13a2a43244b8ba6182b7f5c66ad4bb6db4ae67e251",
+    "current-aarch64": "3b06bc8a496c00cf98455d13a2a43244b8ba6182b7f5c66ad4bb6db4ae67e251"
+  },
+  "fixture_source_sha256": "d23fa0b9130fb2854b43c120b5591adb8e30115d5724d36e473f7941dbf9d121",
+  "cases": [
+    {
+      "case": "absolute-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "relative-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "container-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "mixed-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "response-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "response-absolute-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "response-container-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "wrong-depends-host",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "wrong-depends-library-directory",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "non-pinned-contrib",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-pinned-basename-before-pinned-arguments",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-pinned-basename-before-pinned-arguments",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "outside-project-src",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "absolute-untrusted-pinned-basename",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libboost_filesystem.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libboost_filesystem.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libboost_filesystem.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libssl.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libssl.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libssl.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libcrypto.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libcrypto.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libcrypto.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libsodium.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libsodium.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libsodium.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libunbound.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libunbound.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libunbound.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libzmq.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libzmq.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libzmq.a-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libcrypto.so.3-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libcrypto.so.3-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libcrypto.so.3-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-libssl.so.3-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-libssl.so.3-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "external-libssl.so.3-origin-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "libcrypto.so.3-pinned-origin-still-recognized",
+      "result": "PASS"
+    },
+    {
+      "case": "libssl.so.3-pinned-origin-still-recognized",
+      "result": "PASS"
+    },
+    {
+      "case": "pinned-openssl-symlink-to-project-still-refused",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "mixed-pinned-and-untrusted-basename",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-escape",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-container-escape",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-cycle",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-file-symlink",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-parent-symlink",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "absolute-full-missing-component-guard-positive",
+      "result": "PASS",
+      "scope": "NOTICE_AND_RUST_SEAMS"
+    },
+    {
+      "case": "relative-full-missing-component-guard-positive",
+      "result": "PASS",
+      "scope": "NOTICE_AND_RUST_SEAMS"
+    },
+    {
+      "case": "src-full-coverage-pinned-basename-refusal",
+      "result": "PASS_REFUSAL",
+      "scope": "NOTICE_AND_RUST_SEAMS"
+    },
+    {
+      "case": "contrib/epee-full-coverage-pinned-basename-refusal",
+      "result": "PASS_REFUSAL",
+      "scope": "NOTICE_AND_RUST_SEAMS"
+    },
+    {
+      "case": "coverage-mixed-bundled-origin-refusal",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "static-closure-refusal-retained",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "controller": 33,
+      "case": "missing-component-and-safe-source-bound-diagnostic",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "worker-primary-error-secondary-export-False",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 33,
+      "case": "worker-primary-error-secondary-export-True",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 33,
+      "case": "spoofed-private-context-refusal",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "missing-component-and-safe-source-bound-diagnostic",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "worker-primary-error-secondary-export-False",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 34,
+      "case": "worker-primary-error-secondary-export-True",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 34,
+      "case": "spoofed-private-context-refusal",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-x86_64",
+      "case": "missing-component-and-safe-source-bound-diagnostic",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-x86_64",
+      "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-x86_64",
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-x86_64",
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-x86_64",
+      "case": "worker-primary-error-secondary-export-False",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": "current-x86_64",
+      "case": "worker-primary-error-secondary-export-True",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": "current-x86_64",
+      "case": "spoofed-private-context-refusal",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-aarch64",
+      "case": "missing-component-and-safe-source-bound-diagnostic",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-aarch64",
+      "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-aarch64",
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-aarch64",
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": "current-aarch64",
+      "case": "worker-primary-error-secondary-export-False",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": "current-aarch64",
+      "case": "worker-primary-error-secondary-export-True",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": "current-aarch64",
+      "case": "spoofed-private-context-refusal",
+      "result": "PASS"
+    }
+  ],
+  "native_archive_or_runtime_acceptance": false
+}

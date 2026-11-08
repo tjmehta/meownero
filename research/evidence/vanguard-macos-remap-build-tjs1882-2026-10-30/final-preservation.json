@@ -1,0 +1,36 @@
+{
+  "result": "SIX_UNCHANGED_ONE_GENERATED_CACHE_REFRESHED",
+  "files": {
+    "research/current-evidence.md": {
+      "expected_sha256": "825d71dafd7030602e7b7b52b2b998cfc36b9922e1b2eaacd91152d8c911a137",
+      "actual_sha256": "825d71dafd7030602e7b7b52b2b998cfc36b9922e1b2eaacd91152d8c911a137"
+    },
+    "research/evidence/vanguard-portable-production-tjs1882-2026-10-09/arm17-review-packet-staging.json": {
+      "expected_sha256": "60aa1bd076e5b8d389da5dcd1379b7a587fc856f2233a620aefd65ece5a8a6be",
+      "actual_sha256": "60aa1bd076e5b8d389da5dcd1379b7a587fc856f2233a620aefd65ece5a8a6be"
+    },
+    "research/evidence/vanguard-portable-production-tjs1882-2026-10-09/docker-website-publication-adoption-2026-10-10.json": {
+      "expected_sha256": "b47461a35f62fe38736a831005b4bb3581d292fded1be3f6d53e08239c8dcc2f",
+      "actual_sha256": "b47461a35f62fe38736a831005b4bb3581d292fded1be3f6d53e08239c8dcc2f"
+    },
+    "research/evidence/vanguard-portable-production-tjs1882-2026-10-09/parent-windows-arm-native-runner-eligibility.json": {
+      "expected_sha256": "bfad838018c7bdbeeef9abbec65141cb1869c8183ddafd2f353271e47ef4034e",
+      "actual_sha256": "bfad838018c7bdbeeef9abbec65141cb1869c8183ddafd2f353271e47ef4034e"
+    },
+    "research/vanguard-docker-publication-handoff-2026-10-10.md": {
+      "expected_sha256": "2232db0dcff74cdb94af4940d46e48eccc614a0b77d2dbd5d9ebeb743b91397a",
+      "actual_sha256": "2232db0dcff74cdb94af4940d46e48eccc614a0b77d2dbd5d9ebeb743b91397a"
+    },
+    "vanguard/__pycache__/portable_provenance.cpython-314.pyc": {
+      "expected_sha256": "6baf48420339d04c864720b2994b693f33d479e9ce24113bfe2767ad63ba6e99",
+      "actual_sha256": "c89bf83365eb50fe4c95be95ce1ae16323f6f0f93b5702e67bd77fae013c565d"
+    },
+    "vanguard/docker/__pycache__/docker_support.cpython-314.pyc": {
+      "expected_sha256": "1f306f4103c02a57246a991d27a63cdb0f323e8db41bbbd4c6f2b435b717991f",
+      "actual_sha256": "1f306f4103c02a57246a991d27a63cdb0f323e8db41bbbd4c6f2b435b717991f"
+    }
+  },
+  "changed_file": "vanguard/__pycache__/portable_provenance.cpython-314.pyc",
+  "cause": "A local inspection imported the existing source without disabling bytecode writes. The source itself remains byte-identical; the interpreter regenerated this pre-existing cache. Original cache bytes were not backed up, so exact cache preservation cannot be claimed. Cache is left uncommitted; no user source/evidence file was changed.",
+  "correction": "Subsequent Python inspection uses -B. Initial passing seven-file check remains historical only."
+}

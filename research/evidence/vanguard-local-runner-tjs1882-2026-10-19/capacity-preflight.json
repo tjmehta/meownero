@@ -1,0 +1,36 @@
+{
+  "schema": "tjs1882-resource-capacity-preflight/1",
+  "utc": "2026-10-19T07:38:27.269810+00:00",
+  "checks": {
+    "host": {
+      "exit": 0,
+      "stdout": "Linux 6.8.0-146-generic x86_64\n",
+      "stderr": ""
+    },
+    "memory": {
+      "exit": 0,
+      "stdout": "               total        used        free      shared  buff/cache   available\nMem:     67350827008 58201964544  9097867264   269811712  5744545792  9148862464\nSwap:    508696715264 25881214976 482815500288\n",
+      "stderr": ""
+    },
+    "disk": {
+      "exit": 0,
+      "stdout": "Filesystem         1B-blocks         Used     Available Use% Mounted on\n/dev/nvme0n1p2 1967331160064 697223806976 1185106890752  38% /\n/dev/nvme0n1p2 1967331160064 697223806976 1185106890752  38% /\n",
+      "stderr": ""
+    },
+    "docker": {
+      "exit": 0,
+      "stdout": "linux x86_64 /var/lib/docker\n",
+      "stderr": ""
+    },
+    "active_actions": {
+      "exit": 0,
+      "stdout": "[]\n",
+      "stderr": ""
+    }
+  },
+  "included_actions_capacity": {
+    "state": "UNCONFIRMED_NO_DISPATCH",
+    "http_status": 404,
+    "reason": "Installed GitHub token lacks user scope; usage/actions/shared-storage billing endpoints inaccessible; no credential refresh attempted."
+  }
+}

@@ -1,0 +1,11 @@
+--- build/tjs1882-3175-native-ci-payload16/vanguard/run-portable-ci.py
++++ build/tjs1882-3175-i68619-supervisor.py
+@@ -465,7 +465,7 @@
+             proof['execution_substrate'] = 'NATIVE_WINDOWS_WOW64'
+             proof['windows_32bit_os_execution'] = 'UNTESTED'
+         for name, value in [('journey.json', journey), ('controls.json', controls), ('check.json', check)]:
+-            write(public / name, value)
++            write(public / name, public_check(value) if name == 'check.json' else value)
+         proof['result'] = 'PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS'
+     except BaseException as error:
+         proof['failure_type'] = type(error).__name__

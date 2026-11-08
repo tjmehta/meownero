@@ -1,0 +1,33 @@
+{
+  "schema": "meownero-arm08-Rust-host-ELF-guards/1",
+  "result": "PASS_AMD64_ROLE_AND_FOUR_EARLY_REFUSALS",
+  "source_sha256": "42e9cbad356c56cd6ed3bc7f911b58dc4fc1de411633663f5506af1294b91fdf",
+  "cases": [
+    {
+      "case": "amd64",
+      "accepted_header": true,
+      "no_workload_or_output_created": true
+    },
+    {
+      "case": "arm64",
+      "accepted_header": false,
+      "no_workload_or_output_created": true
+    },
+    {
+      "case": "i686",
+      "accepted_header": false,
+      "no_workload_or_output_created": true
+    },
+    {
+      "case": "wrong-endian",
+      "accepted_header": false,
+      "no_workload_or_output_created": true
+    },
+    {
+      "case": "not-ELF",
+      "accepted_header": false,
+      "no_workload_or_output_created": true
+    }
+  ],
+  "qualification": "Injected header guard fixture only; actual compiler source separately byte-bound to06; not complete executable validation or native target proof"
+}

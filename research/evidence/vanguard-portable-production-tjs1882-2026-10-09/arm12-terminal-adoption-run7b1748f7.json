@@ -1,0 +1,36 @@
+{
+  "schema": "meownero-arm12-terminal-adoption/1",
+  "result": "FAILED_ATTEMPT_NO_ARCHIVE",
+  "kit_sha256": "e4d193223545354d3383e19268c1addc134e647e3c3d1239e06afc579fdeee03",
+  "build_receipt_sha256": "626f90f521fb5a1efab579c12a7abe0b6ba8eb89c60e7ddb34cfaba1232041c6",
+  "build_log_sha256": "3273ce9665fcc998245507eddd221aa39df8fa8c505d6ecbc5ac12c597f78278",
+  "failure": {
+    "phase": "COMPILE",
+    "source": "src/crypto/slow-hash.c",
+    "line": 1021,
+    "reason": "WINDOWS_ARM64_POSIX_SYS_MMAN_HEADER_UNAVAILABLE",
+    "exit": 2
+  },
+  "commands_reaped": true,
+  "owned_container_cleanup_recorded": true,
+  "fresh_exact_absence": {
+    "docker_list_exit": 0,
+    "container_ids": [],
+    "pid_query_exit": 1,
+    "process_rows": [],
+    "observed_utc": "2026-10-10T17:15:12.555960+00:00",
+    "owned_cids_absent": [
+      "1809b06413455ef128017b5b0b0deedfd7f121759d9d0a34f2d72b642491c047",
+      "23b1bdb2b2a4eeae2f553dbd372dda96d8a7cdc1713ce9225aa22e16d317aac2",
+      "dc33e1271b8695b63f1ead5dbf6cb625a54217bb244515a5db15ad0918ad8ac9"
+    ],
+    "worker_observer_pids_absent": [
+      3540,
+      8151
+    ],
+    "scope": "FRESH_EXACT_OWNED_ABSENCE_ONLY_NO_BUILD_OR_GLOBAL_CLEANUP"
+  },
+  "owned_scratch_cleanup": "DEFERRED_IOS_CLEANUP_IN_USE_GATE",
+  "next_native_build": "PAUSED_BY_OWNER_DOCKER_PRIORITY",
+  "native_archive_journey_acceptance": false
+}

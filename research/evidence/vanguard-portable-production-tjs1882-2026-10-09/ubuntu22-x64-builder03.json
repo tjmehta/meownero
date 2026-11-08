@@ -1,0 +1,89 @@
+{
+  "schema": "meownero-older-linux-builder/1",
+  "base_manifest": "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde",
+  "target": "linux-x86_64",
+  "compiler_execution_substrate": "PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64",
+  "distribution": "Ubuntu 22.04",
+  "commands": [
+    {
+      "label": "pull-pinned-base",
+      "argv": [
+        "docker",
+        "--config",
+        "~/Developer/tjs1882-3175/ubuntu22-x64-builder03/anonymous-docker-client",
+        "--host",
+        "unix://~/.colima/default/docker.sock",
+        "pull",
+        "--platform=linux/amd64",
+        "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde"
+      ],
+      "exit": 0,
+      "wall_seconds": 1.9959382920060307
+    },
+    {
+      "label": "prepare",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "run",
+        "--platform=linux/amd64",
+        "--pull=never",
+        "--name",
+        "tjs1882-3175-old-builder-0f27ee4ebfa64e43bf1feb4b80f347dc",
+        "--cidfile",
+        "~/Developer/tjs1882-3175/ubuntu22-x64-builder03/container.id",
+        "--label",
+        "meownero.invocation=0f27ee4ebfa64e43bf1feb4b80f347dc",
+        "--cpus=2",
+        "--memory=768m",
+        "--memory-swap=768m",
+        "--pids-limit=128",
+        "--security-opt=no-new-privileges",
+        "--ulimit",
+        "core=0",
+        "-v",
+        "~/Developer/tjs1882-3175/ubuntu22-x64-builder03:/out",
+        "sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde",
+        "bash",
+        "-ec",
+        "set -e\ntest \"$(. /etc/os-release; echo \"$VERSION_ID\")\" = 22.04\ntrap 'cat /sys/fs/cgroup/memory.peak > /out/preparation.memory; cat /sys/fs/cgroup/memory.events > /out/preparation.memory-events; chown -R 501:20 /out' EXIT\napt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=30 update\nDEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends build-essential cmake pkg-config python3 git ca-certificates curl bzip2 xz-utils autoconf automake libtool gettext unzip libboost-chrono-dev libboost-filesystem-dev libboost-program-options-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libboost-test-dev libboost-locale-dev libssl-dev libsodium-dev libunbound-dev libzmq3-dev liblzma-dev libexpat1-dev libunwind-dev zlib1g-dev\ndpkg-query -W -f='${binary:Package}=${Version}\\n' | sort > /out/dependencies.txt\nldd --version > /out/glibc.txt\ngcc --version > /out/compiler.txt\ncmake --version >> /out/compiler.txt\npython3 --version >> /out/compiler.txt\n"
+      ],
+      "exit": 0,
+      "wall_seconds": 70.88388162490446
+    },
+    {
+      "label": "commit-builder",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "commit",
+        "9af1bb6c03fd2aabe664072d8a0af3e3386fb2b2d72406274e032c5f1f4f21f9"
+      ],
+      "exit": 0,
+      "wall_seconds": 15.895697832922451
+    },
+    {
+      "label": "cleanup",
+      "argv": [
+        "docker",
+        "--context",
+        "colima",
+        "rm",
+        "-f",
+        "9af1bb6c03fd2aabe664072d8a0af3e3386fb2b2d72406274e032c5f1f4f21f9"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.18724366708192974
+    }
+  ],
+  "result": "PREPARED_OLDER_BUILDER",
+  "registry_access": "Anonymous official public image, explicit empty Hub record and no helper in task-owned client",
+  "base_image": "sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde",
+  "builder_image": "sha256:fc4ac8affffac58bf235636d51c921a90736047453b82a13d74ba4cf709fa24f",
+  "cleanup": {
+    "id": "9af1bb6c03fd2aabe664072d8a0af3e3386fb2b2d72406274e032c5f1f4f21f9",
+    "removed": true
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "normal",
+      "expected_exception": null,
+      "observed_exception": null,
+      "wrapper_reaped": true,
+      "owned_children_removed": true,
+      "unrelated_preserved": true,
+      "result": "PASS"
+    },
+    {
+      "case": "deadline",
+      "expected_exception": "TimeoutExpired",
+      "observed_exception": "TimeoutExpired",
+      "wrapper_reaped": true,
+      "owned_children_removed": true,
+      "unrelated_preserved": true,
+      "result": "PASS"
+    },
+    {
+      "case": "cancellation",
+      "expected_exception": "RuntimeError",
+      "observed_exception": "RuntimeError",
+      "wrapper_reaped": true,
+      "owned_children_removed": true,
+      "unrelated_preserved": true,
+      "result": "PASS"
+    }
+  ],
+  "unrelated_fixture_reaped": true,
+  "docker_execution": "NONE",
+  "native_meownero_journey": "UNTESTED"
+}

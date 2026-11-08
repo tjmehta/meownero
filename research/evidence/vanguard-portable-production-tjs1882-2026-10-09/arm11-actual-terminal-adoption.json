@@ -1,0 +1,400 @@
+{
+  "schema": "meownero-arm11-owned-observation/1",
+  "observed_utc": "2026-10-10T10:17:04.431980+00:00",
+  "run_id": "32610e37-e6ab-4aea-8fa2-71a39c30a7b9",
+  "result": "FAILED_ATTEMPT",
+  "worker_pid": 38316,
+  "worker_live": false,
+  "worker_identity_matches": false,
+  "receipt_bytes": 27766,
+  "receipt_sha256": "e30cca761b70edd6fe9e28cf199f0fa779f7f176a802bc477b897d47e1df2aed",
+  "commands": [
+    {
+      "label": "archive-upstream",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.13059104199055582,
+      "process_group": 38571
+    },
+    {
+      "label": "archive-external-gtest",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.040793374995701015,
+      "process_group": 38589
+    },
+    {
+      "label": "archive-external-mx25519",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.020769124967046082,
+      "process_group": 38597
+    },
+    {
+      "label": "archive-external-randomx",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.020704333088360727,
+      "process_group": 38599
+    },
+    {
+      "label": "archive-external-rapidjson",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04067504103295505,
+      "process_group": 38601
+    },
+    {
+      "label": "archive-external-supercop",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.02093204203993082,
+      "process_group": 38603
+    },
+    {
+      "label": "toolchain",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 23.018038665992208,
+      "process_group": 41692
+    },
+    {
+      "label": "toolchain-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04194670799188316,
+      "process_group": 43450
+    },
+    {
+      "label": "randomx-arm64-allocator",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.00847045797854662,
+      "process_group": 43453
+    },
+    {
+      "label": "randomx-arm64-hidden",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.007538459030911326,
+      "process_group": 43454
+    },
+    {
+      "label": "download-depends",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 29.99171795800794,
+      "process_group": 43455
+    },
+    {
+      "label": "download-depends-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.02269695803988725,
+      "process_group": 46224
+    },
+    {
+      "label": "build",
+      "exit": 2,
+      "reaped": true,
+      "wall_seconds": 2733.9246763340198,
+      "process_group": 46226
+    },
+    {
+      "label": "build-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04311654204502702,
+      "process_group": 28898
+    }
+  ],
+  "containers": [
+    {
+      "phase": "toolchain",
+      "cid": "c9cd70ee31f5ab1eec480a558167dfae3e977b64d2a83a86895925eed3fe5b75",
+      "name": "tjs1882-3175-8a3f680f5b6f4c62989faaf77f906773",
+      "image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+      "invocation": "8a3f680f5b6f4c62989faaf77f906773",
+      "cidfile_uid_singlelink_regular": true,
+      "recorded_removed": true,
+      "fresh_absence": "EXACT_INSPECT_AND_ID_FILTER_PASS"
+    },
+    {
+      "phase": "download-depends",
+      "cid": "2df974dc440033fb8c7355eff78ab6c5f40a1202e90cb812ad2d5631d2e07d83",
+      "name": "tjs1882-3175-50e1de9717c842748e37b92b297a0ac3",
+      "image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+      "invocation": "50e1de9717c842748e37b92b297a0ac3",
+      "cidfile_uid_singlelink_regular": true,
+      "recorded_removed": true,
+      "fresh_absence": "EXACT_INSPECT_AND_ID_FILTER_PASS"
+    },
+    {
+      "phase": "build",
+      "cid": "5154fdeb9d03febf18437c33f6c1b6f77474898b70e31209515c2c4027405160",
+      "name": "tjs1882-3175-c8207ebdeea546b4a8ad09de71ecdc4d",
+      "image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+      "invocation": "c8207ebdeea546b4a8ad09de71ecdc4d",
+      "cidfile_uid_singlelink_regular": true,
+      "recorded_removed": true,
+      "fresh_absence": "EXACT_INSPECT_AND_ID_FILTER_PASS"
+    }
+  ],
+  "binaries": {},
+  "signals_sent": 0,
+  "heavy_lock_state": "CLAIMABLE",
+  "heavy_lock_inode": 219261381,
+  "recorded_pid_numeric_absence": [
+    {
+      "pid": 28898,
+      "absent": true
+    },
+    {
+      "pid": 38316,
+      "absent": true
+    },
+    {
+      "pid": 38571,
+      "absent": true
+    },
+    {
+      "pid": 38589,
+      "absent": true
+    },
+    {
+      "pid": 38597,
+      "absent": true
+    },
+    {
+      "pid": 38599,
+      "absent": true
+    },
+    {
+      "pid": 38601,
+      "absent": true
+    },
+    {
+      "pid": 38603,
+      "absent": true
+    },
+    {
+      "pid": 41692,
+      "absent": true
+    },
+    {
+      "pid": 43450,
+      "absent": true
+    },
+    {
+      "pid": 43453,
+      "absent": true
+    },
+    {
+      "pid": 43454,
+      "absent": true
+    },
+    {
+      "pid": 43455,
+      "absent": true
+    },
+    {
+      "pid": 46224,
+      "absent": true
+    },
+    {
+      "pid": 46226,
+      "absent": true
+    }
+  ],
+  "failure_type": "FAILED_ATTEMPT",
+  "compile_memory_peak_bytes": 1486491648,
+  "compile_memory_events": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0
+  },
+  "primary_compiler_diagnostic": {
+    "failure_type": "UNDECLARED_FUNCTION",
+    "module": "src/crypto/random.c",
+    "lines": [
+      55,
+      56,
+      57
+    ],
+    "macro_line": 51,
+    "function": "_exit",
+    "pinned_source_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+    "source_sha256": "a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6",
+    "private_log_lines": [
+      8264,
+      8270,
+      8276
+    ],
+    "message": "ISO C99 and later do not support implicit function declarations"
+  },
+  "private_exports": [
+    {
+      "name": "arm11-build-receipt.json",
+      "bytes": 27766,
+      "sha256": "e30cca761b70edd6fe9e28cf199f0fa779f7f176a802bc477b897d47e1df2aed"
+    },
+    {
+      "name": "arm11-build.log",
+      "bytes": 1674224,
+      "sha256": "8918709f5d6ebcc6052cc8520f37e0bd4c0298d998c3e1e7d0c0e256d4889828"
+    },
+    {
+      "name": "arm11-build.memory",
+      "bytes": 11,
+      "sha256": "dc0bc17e99eb42080a7f70a12d94cedaab84e1117c0f0880b473a0d23855b782"
+    },
+    {
+      "name": "arm11-build.memory-events",
+      "bytes": 53,
+      "sha256": "28fe05a1d7b8467a03fb54454f7b6a130fab752864d0454f5f6c4a4b6ce307f2"
+    },
+    {
+      "name": "arm11-worker-private.log",
+      "bytes": 1336,
+      "sha256": "9c4b372c4151ec14a5e44dd238f494bea79b55c16d21de918b949ae7df2df001"
+    },
+    {
+      "name": "arm11-launch-proof.json",
+      "bytes": 3474,
+      "sha256": "f6a4963e09b53055efdf65fbb65106f2e34bb368734ecaa7507ca6fcf2bb9e2f"
+    }
+  ],
+  "pinned_source_and_header_readback": {
+    "pinned_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+    "git_blob_random_bytes": 6281,
+    "git_blob_random_sha256": "a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6",
+    "owned_copy_matches_git": true,
+    "process_headers": [
+      {
+        "relative": "llvm/i686-w64-mingw32/include/process.h",
+        "sha256": "ed58e781fbc5f7e3a3500ac0c70d383e074debe2dcbde0b56aa4a4c25915530b",
+        "bytes": 8822,
+        "has_exit_declaration": true,
+        "exit_lines": [
+          "void __cdecl __MINGW_NOTHROW _exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW quick_exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW _c_exit(void);"
+        ]
+      },
+      {
+        "relative": "llvm/armv7-w64-mingw32/include/process.h",
+        "sha256": "ed58e781fbc5f7e3a3500ac0c70d383e074debe2dcbde0b56aa4a4c25915530b",
+        "bytes": 8822,
+        "has_exit_declaration": true,
+        "exit_lines": [
+          "void __cdecl __MINGW_NOTHROW _exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW quick_exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW _c_exit(void);"
+        ]
+      },
+      {
+        "relative": "llvm/aarch64-w64-mingw32/include/process.h",
+        "sha256": "ed58e781fbc5f7e3a3500ac0c70d383e074debe2dcbde0b56aa4a4c25915530b",
+        "bytes": 8822,
+        "has_exit_declaration": true,
+        "exit_lines": [
+          "void __cdecl __MINGW_NOTHROW _exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW quick_exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW _c_exit(void);"
+        ]
+      },
+      {
+        "relative": "llvm/generic-w64-mingw32/include/process.h",
+        "sha256": "ed58e781fbc5f7e3a3500ac0c70d383e074debe2dcbde0b56aa4a4c25915530b",
+        "bytes": 8822,
+        "has_exit_declaration": true,
+        "exit_lines": [
+          "void __cdecl __MINGW_NOTHROW _exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW quick_exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW _c_exit(void);"
+        ]
+      },
+      {
+        "relative": "llvm/x86_64-w64-mingw32/include/process.h",
+        "sha256": "ed58e781fbc5f7e3a3500ac0c70d383e074debe2dcbde0b56aa4a4c25915530b",
+        "bytes": 8822,
+        "has_exit_declaration": true,
+        "exit_lines": [
+          "void __cdecl __MINGW_NOTHROW _exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW quick_exit(int _Code) __MINGW_ATTRIB_NORETURN;",
+          "void __cdecl __MINGW_NOTHROW _c_exit(void);"
+        ]
+      }
+    ]
+  },
+  "earlier_08_09_10_histories_preserved": true,
+  "native_Windows_execution": "NOT_REACHED",
+  "archive_runtime_journey_controls": "NOT_REACHED",
+  "cleanup_scope": "exact three owned CIDs and fifteen recorded PIDs only; no global machine/process-tree absence claim",
+  "observer_terminal_fix": "ps exit1 with empty stdout is accepted as absent and then independently checked by os.kill(pid,0); no build source or signals changed",
+  "no_duplicate_build": true,
+  "proposed_successor": {
+    "schema": "meownero-windows-arm-cross-kit18/1",
+    "result": "FROZEN_AWAITING_PARENT_EXACT_SOURCE_REVIEW",
+    "kit_path": "build/tjs1882-32610-arm18-review/kit18.tar",
+    "kit_bytes": 133120,
+    "kit_sha256": "e4d193223545354d3383e19268c1addc134e647e3c3d1239e06afc579fdeee03",
+    "prior_kit17_sha256": "d466b93cb9622c7d291e15cf35dbba0e3e44d331d9bc34cea874c2a5e97b070a",
+    "changed_members": [
+      "vanguard/portable-cross-build.py"
+    ],
+    "unchanged_member_count": 7,
+    "historical_portable_build_sha256": "5c14a985f24885d1df50886bfe73251ad56a7596cb7146c5548c36153de95167",
+    "tar_headers_mode": "0600",
+    "preimage_sha256": "a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6",
+    "postimage_sha256": "9574e279b64cc3566c02b6dea77570319482c3056e19c49810442dffdb4ab213",
+    "files": [
+      {
+        "path": "vanguard/patches/randomx-aaafe713-windows-arm64-aligned-allocator.patch",
+        "bytes": 746,
+        "sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82"
+      },
+      {
+        "path": "vanguard/patches/randomx-aaafe713-windows-arm64-hidden.patch",
+        "bytes": 438,
+        "sha256": "742daffebed9f21f73ced606accecf4bd44d08d2ce25699d45a9c7e2ed349f72"
+      },
+      {
+        "path": "vanguard/portable-build.py",
+        "bytes": 19747,
+        "sha256": "5c14a985f24885d1df50886bfe73251ad56a7596cb7146c5548c36153de95167"
+      },
+      {
+        "path": "vanguard/portable-cross-build.py",
+        "bytes": 35179,
+        "sha256": "ef5f13981efdad4a34e5236051c1725bf03c0389a803af32a56e048b4bd84f4d"
+      },
+      {
+        "path": "vanguard/portable_licenses.py",
+        "bytes": 15950,
+        "sha256": "286d438f35d352a0465d7e7d87a8cbc451e464646e597a100a45715c0e41d9c7"
+      },
+      {
+        "path": "vanguard/source-lock.json",
+        "bytes": 6950,
+        "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001"
+      },
+      {
+        "path": "vanguard/tester-profile.json",
+        "bytes": 989,
+        "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c"
+      },
+      {
+        "path": "vanguard/tester.py",
+        "bytes": 38818,
+        "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f"
+      }
+    ],
+    "full_build_started": false,
+    "native_Windows_acceptance": false,
+    "preserved_resource_gates": "fresh original >=5GiB available +10GiB host/Docker;2CPU/3GiB memoryANDswap/256PID/offline/3600s/heavylock/owned CID/private-copy checks"
+  }
+}

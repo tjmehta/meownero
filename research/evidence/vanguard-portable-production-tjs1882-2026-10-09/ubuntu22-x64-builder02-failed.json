@@ -1,0 +1,27 @@
+{
+  "schema": "meownero-older-linux-builder/1",
+  "result": "FAILED_ATTEMPT",
+  "target": "linux-x86_64",
+  "base_manifest": "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde",
+  "compiler_execution_substrate": "PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64",
+  "distribution": "Ubuntu 22.04",
+  "registry_access": "Anonymous official public image, task-owned empty client configuration",
+  "commands": [
+    {
+      "label": "pull-pinned-base",
+      "argv": [
+        "docker",
+        "--config",
+        "~/Developer/tjs1882-3175/ubuntu22-x64-builder02/anonymous-docker-client",
+        "--host",
+        "unix://~/.colima/default/docker.sock",
+        "pull",
+        "--platform=linux/amd64",
+        "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde"
+      ],
+      "exit": 1,
+      "wall_seconds": 0.04001250001601875
+    }
+  ],
+  "failure": "pull-pinned-base failed; preserve diagnostics"
+}

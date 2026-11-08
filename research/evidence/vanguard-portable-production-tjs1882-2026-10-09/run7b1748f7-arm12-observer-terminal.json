@@ -1,0 +1,144 @@
+{
+  "schema": "meownero-arm12-detached-observation/1",
+  "observed_utc": "2026-10-10T17:04:23.848742+00:00",
+  "observer_pid": 8151,
+  "observer_uid": 501,
+  "worker_pid": 3540,
+  "observer_scope": "READ_ONLY_EXISTING_WORKER_NO_BUILD_OR_CLEANUP_CONTROL",
+  "compile_timeout_seconds": 3600,
+  "exact_worker_present": false,
+  "result": "FAILED_ATTEMPT",
+  "receipt_sha256": "626f90f521fb5a1efab579c12a7abe0b6ba8eb89c60e7ddb34cfaba1232041c6",
+  "commands": [
+    {
+      "label": "archive-upstream",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.18495662498753518
+    },
+    {
+      "label": "archive-external-gtest",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.08540995803195983
+    },
+    {
+      "label": "archive-external-mx25519",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.05166583403479308
+    },
+    {
+      "label": "archive-external-randomx",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04530591703951359
+    },
+    {
+      "label": "archive-external-rapidjson",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.08126050001010299
+    },
+    {
+      "label": "archive-external-supercop",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.05354187497869134
+    },
+    {
+      "label": "toolchain",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 53.88250974996481
+    },
+    {
+      "label": "toolchain-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.03947275003883988
+    },
+    {
+      "label": "randomx-arm64-allocator",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.0152355000609532
+    },
+    {
+      "label": "randomx-arm64-hidden",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.008997582946904004
+    },
+    {
+      "label": "download-depends",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 41.967286041006446
+    },
+    {
+      "label": "download-depends-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.05403691693209112
+    },
+    {
+      "label": "build",
+      "exit": 2,
+      "reaped": true,
+      "wall_seconds": 3592.2337368329754
+    },
+    {
+      "label": "build-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04321954201441258
+    }
+  ],
+  "containers": [
+    {
+      "label": "toolchain",
+      "invocation": "5eed3ccdb16d4004990f41357bfd48d4",
+      "removed": true,
+      "id": "1809b06413455ef128017b5b0b0deedfd7f121759d9d0a34f2d72b642491c047"
+    },
+    {
+      "label": "download-depends",
+      "invocation": "a65d3a5fbebb41cf9da2652b73cd94c9",
+      "removed": true,
+      "id": "23b1bdb2b2a4eeae2f553dbd372dda96d8a7cdc1713ce9225aa22e16d317aac2"
+    },
+    {
+      "label": "build",
+      "invocation": "59b090619f59495f89f3d7b8f37fe0f1",
+      "removed": true,
+      "id": "dc33e1271b8695b63f1ead5dbf6cb625a54217bb244515a5db15ad0918ad8ac9"
+    }
+  ],
+  "binaries": {},
+  "container_observations": [
+    {
+      "cid": "1809b06413455ef128017b5b0b0deedfd7f121759d9d0a34f2d72b642491c047",
+      "present": "UNKNOWN"
+    },
+    {
+      "cid": "23b1bdb2b2a4eeae2f553dbd372dda96d8a7cdc1713ce9225aa22e16d317aac2",
+      "present": "UNKNOWN"
+    },
+    {
+      "cid": "dc33e1271b8695b63f1ead5dbf6cb625a54217bb244515a5db15ad0918ad8ac9",
+      "present": "UNKNOWN"
+    }
+  ],
+  "observer_terminal_reason": "WORKER_EXIT_OBSERVED",
+  "terminal_files": {
+    "build.log": {
+      "bytes": 1672907,
+      "sha256": "3273ce9665fcc998245507eddd221aa39df8fa8c505d6ecbc5ac12c597f78278"
+    },
+    "build-receipt.json": {
+      "bytes": 28329,
+      "sha256": "626f90f521fb5a1efab579c12a7abe0b6ba8eb89c60e7ddb34cfaba1232041c6"
+    }
+  }
+}

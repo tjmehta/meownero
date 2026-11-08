@@ -1,0 +1,172 @@
+{
+  "schema": "meownero-portable-build/1",
+  "target": "linux-x86_64",
+  "builder_image": "sha256:985912788f7ae47c5d64b05e22ee99fddaf9cf9610fdf13434c3f88fba62c128",
+  "source_lock": {
+    "schema": "meownero-vanguard-source-lock/1",
+    "issue": "TJS-356",
+    "pinned_on": "2026-09-23",
+    "scope": "Isolated, valueless harness. It compiles and executes the upstream FCMP++ and CARROT primitives at the pins below. It is not a node, not a network, and not an audit.",
+    "upstream": {
+      "url": "https://github.com/seraphis-migration/monero.git",
+      "branch": "fcmp++-stage",
+      "commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+      "commit_date": "2026-09-23T09:13:54-05:00",
+      "commit_subject": "Merge pull request #473 from j-berman/fix-genesis-torsion-check",
+      "license": "BSD-3-Clause (LICENSE: Copyright (c) 2014-2024, The Monero Project)",
+      "rebase_risk": "fcmp++-stage is a moving integration branch. This pin is a commit hash, not a branch name. Evidence records upstream-head.txt and the vector hashes so a later rebase is detectable.",
+      "submodules": {
+        "external/gtest": "52eb8108c5bdec04579160ae17225d66034bd723",
+        "external/mx25519": "420ccc2f5012ee1f8e02c1976e89620e1b0959f6",
+        "external/randomx": "aaafe71322df6602c21a5c72937ac284724ae561",
+        "external/rapidjson": "24b5e7a8b27f42fa16b96fc70aade9106cf7102f",
+        "external/supercop": "e887b2fb4bfcfcc454b2005472ad1df6f2191f52"
+      },
+      "primitives_used": [
+        "src/fcmp_pp (prove.h: prove_membership, verify_membership, prove_sal, verify_sal, verify)",
+        "src/fcmp_pp/fcmp_pp_rust (FFI staticlib over monero-oxide crates)",
+        "src/carrot_core (account_secrets, destination, payment_proposal, scan)",
+        "src/cryptonote_basic (address base58 encode/decode used by CARROT destinations)",
+        "tests/unit_tests/curve_trees.cpp (upstream test-tree helpers, compiled unchanged)",
+        "tests/data/fcmp_pp_verify_inputs_{1,2,4,8,128}in.bin (upstream fixed FCMP++ verify vectors)"
+      ],
+      "alternatives_rejected": {
+        "v0.19.0.0-beta.2.0 (8ed2f782)": "pins monero-oxide 0e438aed (2026-04-23), which predates the Trail of Bits fix commit 066229801a18bb11679113c93971c4f19fde0cd0 included at 31c26d96",
+        "beta-stressnet-v3 (5288ee13cbea1c584056995baa88b03d43901bc2)": "same monero-oxide pin; stress-net branch, not the integration head",
+        "monero-project/monero master (d02c7c57)": "contains only the early FCMP++ integration phases",
+        "monero-project/monero PR #9436 (head 23b1b35b)": "stale draft"
+      }
+    },
+    "rust": {
+      "cargo_lock_path": "src/fcmp_pp/fcmp_pp_rust/Cargo.lock",
+      "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+      "monero_oxide_url": "https://github.com/monero-oxide/monero-oxide",
+      "monero_oxide_rev": "31c26d96eaadbba910ffe3613ad8b4cf9c598a93",
+      "crypto_bigint_url": "https://github.com/kayabaNerve/crypto-bigint (branch c-repr)",
+      "crypto_bigint_rev": "78352771313f1e9b8e48abe5ce30d50d6bdd291d",
+      "crate_licenses": "MIT (crypto/fcmps, crypto/generalized-bulletproofs, crypto/divisors, crypto/helioselene LICENSE files at 31c26d96)",
+      "fetch": "cargo fetch --locked on the host into the gitignored build/vanguard-src/cargo-home; the container build runs with CARGO_NET_OFFLINE=true and --network=none"
+    },
+    "builder": {
+      "image_id": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+      "image_note": "The accepted testnet v0 builder image, used read-only by image ID with --pull=never. It is not retagged or modified. It carries no Rust, so the host toolchain below is mounted read-only.",
+      "rustc": "rustc 1.93.0 (254b59607 2026-01-19)",
+      "rustc_note": "Upstream CI (.github/workflows/build.yml at the pin) installs toolchain 1.93 via rustup-init 1.29.0"
+    },
+    "public_review_references": {
+      "caveat": "These are third-party reviews of upstream components, cited only as references. None of them is an audit of Meownero, of this harness, or of the pinned integration commit as a whole. Agent review is not external audit.",
+      "items": [
+        {
+          "component": "FCMP++ C++ integration (monero-project/monero)",
+          "reference": "Trail of Bits security review, trailofbits/publications@73e52c96cef59d42201ff5546090b76ca67a8014 reviews/2026-07-magicgrants-monerofcmp++crypto-securityreview.pdf (sha256 4f649fe0e63a8870ae3930ea142eb405345ff07a1b5f3e2ff7741deed6dce540), linked from the description of monero-project/monero PR #10360 'FCMP++: CurveTrees class & implementation of ed25519 outputs -> curve tree leaves function'. The same description links Cypher Stack cypherstack/fcmp-impl-audit@d7de33d08c48a3c249629e47f71ea72c938a3404 FCMP_Code_Implementation_Audit.pdf section 12 (not read for this harness)",
+          "scope_caveat": "Per the PR description, both reviewed an earlier state of that PR. The ToB report covers the crypto integration phases only and lists 6 informational findings: 5 resolved, and #6 (TOB-MAGIC-FCMP-6, the Rust FFI function selene_scalar_from_bytes depends on fragile memory layout) partially resolved."
+        },
+        {
+          "component": "full-chain-membership-proofs, circuit-abstraction, ec-gadgets",
+          "reference": "Veridise audit 2025-06-03 (monero-oxide audits/fcmps/README.md @ 31c26d96); non-interactive gadgets formally verified with Picus",
+          "scope_caveat": "Covers the crates at the audited revision, not this integration."
+        },
+        {
+          "component": "generalized-bulletproofs",
+          "reference": "Cypher Stack security proofs, Goodell review, Cypher Stack audit, then the flaw and fixed protocol, then the zkSecurity re-audit (monero-oxide audits/generalized-bulletproofs/ @ 31c26d96)",
+          "scope_caveat": "Finding 02 (zeroization) is deferred to monero-oxide#200. The Lean proofs are not claimed to correspond to the implementation."
+        },
+        {
+          "component": "ec-divisors",
+          "reference": "Veridise proofs, Cypher Stack reviews, SLVer Bullet equivalence (monero-project/meta#1244), zkSecurity notes on divisor incompleteness (monero-oxide audits/divisors/README.md @ 31c26d96)",
+          "scope_caveat": "The ec-divisors prover library itself is unaudited."
+        },
+        {
+          "component": "helioselene",
+          "reference": "Veridise Security Assessment for the Helios-Selene Curve Cycle, with partial formal verification (monero-oxide audits/helioselene/ @ 31c26d96)",
+          "scope_caveat": "Curve-cycle assessment; implementation coverage is partial."
+        },
+        {
+          "component": "FCMP++ composition",
+          "reference": "Cypher Stack FCMP++ review (cypherstack/fcmp-review; monero-oxide audits/fcmp++/Review.pdf @ 31c26d96)",
+          "scope_caveat": "Protocol composition review, not a code audit of this integration."
+        },
+        {
+          "component": "CARROT",
+          "reference": "Cypher Stack CARROT specification audits 2024-11-22 and 2025-09-10 follow-up (spec scope dbb04d91d40b68b2a8b82b895acf762c864b4cbc)",
+          "scope_caveat": "Specification only. No code audit of carrot_core or carrot_impl was found."
+        }
+      ]
+    }
+  },
+  "patches": [],
+  "result": "FAILED_ATTEMPT",
+  "started_utc": "2026-10-10T00:23:51.384646+00:00",
+  "finished_utc": "2026-10-10T00:53:05.880338+00:00",
+  "compiler_execution_substrate": "NATIVE",
+  "distribution": "Ubuntu 22.04",
+  "older_builder_preparation_sha256": "06253abb643db57f602b4f71917af9d0da6cab1bae0a196715fe9e011ac00fbe",
+  "depends_static_dependencies": true,
+  "rustc_sha256": "d32249a7c3bfcfc67b471460386e46323accae7125e344567a12d5664d99bb57",
+  "cargo_sha256": "9548937d530bf439ff1ba47a3b2bd26eeb9c3aff1961c20c01798613de922578",
+  "cleanup": {
+    "id": "ec598b8a8593238c502712300cee272b024359f5da5ed06630d84115fdfd6625",
+    "removed": true,
+    "ownership": "proven"
+  },
+  "commands": [
+    {
+      "label": "archive-upstream",
+      "exit": 0,
+      "wall_seconds": 0.1644861869999943
+    },
+    {
+      "label": "archive-external-gtest",
+      "exit": 0,
+      "wall_seconds": 0.03236340600000176
+    },
+    {
+      "label": "archive-external-mx25519",
+      "exit": 0,
+      "wall_seconds": 0.009198870000005854
+    },
+    {
+      "label": "archive-external-randomx",
+      "exit": 0,
+      "wall_seconds": 0.01625397800000883
+    },
+    {
+      "label": "archive-external-rapidjson",
+      "exit": 0,
+      "wall_seconds": 0.03237352799999371
+    },
+    {
+      "label": "archive-external-supercop",
+      "exit": 0,
+      "wall_seconds": 0.016295253999999204
+    },
+    {
+      "label": "build",
+      "exit": 2,
+      "wall_seconds": 1747.545048
+    },
+    {
+      "label": "cleanup",
+      "exit": 0,
+      "wall_seconds": 0.03259278999985327
+    }
+  ],
+  "failure_type": "RuntimeError",
+  "build_diagnostic": {
+    "phase": "COMPILE",
+    "reason": "COMPILER_PROCESS_KILLED",
+    "peak_memory_bytes": 3221225472,
+    "cgroup_oom_kill_observed": true,
+    "owned_container_oom_killed": true,
+    "owned_container_exit": 2,
+    "owned_container_running_at_inspection": false,
+    "memory_events": {
+      "low": 0,
+      "high": 0,
+      "max": 2688,
+      "oom": 1,
+      "oom_kill": 1,
+      "oom_group_kill": 0
+    }
+  }
+}

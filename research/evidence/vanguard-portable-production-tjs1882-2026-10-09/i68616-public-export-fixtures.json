@@ -1,0 +1,21 @@
+{
+  "schema": "meownero-i68616-public-projection-negative-fixtures/1",
+  "result": "PASS_OLD_PRIVATE_ARGV_LEAK_REPRODUCED_NEW_ALLOWLIST_NO_PRIVATE_TEXT",
+  "cases": [
+    {
+      "case": "original12",
+      "actual_finalizer_executed": true,
+      "private_sentinel_exported": true,
+      "source_sha256": "0a95705e00e4082a8dad46185dc34d468778937b191bba78b86ada813b9fc1f9",
+      "original_private_execution_receipt_preserved": true
+    },
+    {
+      "case": "corrected16",
+      "actual_finalizer_executed": true,
+      "private_sentinel_exported": false,
+      "source_sha256": "91348c5e616d6b2f0dce5909d2a29f4b6e30e91ec0e7094e2e71a2b56dbfaeac",
+      "original_private_execution_receipt_preserved": true
+    }
+  ],
+  "native_execution": "UNTESTED_BY_FIXTURES"
+}

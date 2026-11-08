@@ -1,0 +1,114 @@
+{
+  "schema": "meownero-native-x64-ubuntu22-docker-build-and-journey/1",
+  "result": "PASS_NATIVE_X64_UBUNTU22_USERLAND_JOURNEY_TEN_CONTROLS_PENDING_REVIEW",
+  "target": "linux-x86_64",
+  "architecture": "x86_64",
+  "inputs_sha256": "2382d8a2327e5e84ae8ee951909b4d6ef7648801f7e96311d19e052374368211",
+  "phases": [
+    {
+      "phase": "fetch",
+      "resources": {
+        "available_memory_bytes": 9753550848,
+        "free_disk_bytes": 1051083300864,
+        "docker_free_disk_bytes": 1051083300864,
+        "cgroup_enforcement": "PASS_64M_ZERO_SWAP_ONE_CPU_16_PIDS",
+        "probe_image": "sha256:e8df6c74f650ad385efe2e20103eca9b0ad50690fb3c63d49fa00762412bbf55",
+        "owned_probe_removed": true,
+        "unrelated_container_count": 52
+      },
+      "result": "PASS"
+    },
+    {
+      "phase": "prepare",
+      "resources": {
+        "available_memory_bytes": 10450776064,
+        "free_disk_bytes": 1049587912704,
+        "docker_free_disk_bytes": 1049587912704,
+        "cgroup_enforcement": "PASS_64M_ZERO_SWAP_ONE_CPU_16_PIDS",
+        "probe_image": "sha256:e8df6c74f650ad385efe2e20103eca9b0ad50690fb3c63d49fa00762412bbf55",
+        "owned_probe_removed": true,
+        "unrelated_container_count": 52
+      },
+      "result": "PASS"
+    },
+    {
+      "phase": "build",
+      "resources": {
+        "available_memory_bytes": 10106454016,
+        "free_disk_bytes": 1048819445760,
+        "docker_free_disk_bytes": 1048819445760,
+        "cgroup_enforcement": "PASS_64M_ZERO_SWAP_ONE_CPU_16_PIDS",
+        "probe_image": "sha256:e8df6c74f650ad385efe2e20103eca9b0ad50690fb3c63d49fa00762412bbf55",
+        "owned_probe_removed": true,
+        "unrelated_container_count": 52
+      },
+      "result": "PASS"
+    },
+    {
+      "phase": "package",
+      "resources": {
+        "available_memory_bytes": 10023071744,
+        "free_disk_bytes": 1046530367488,
+        "docker_free_disk_bytes": 1046530367488,
+        "cgroup_enforcement": "PASS_64M_ZERO_SWAP_ONE_CPU_16_PIDS",
+        "probe_image": "sha256:e8df6c74f650ad385efe2e20103eca9b0ad50690fb3c63d49fa00762412bbf55",
+        "owned_probe_removed": true,
+        "unrelated_container_count": 52
+      },
+      "result": "PASS"
+    },
+    {
+      "phase": "runtime",
+      "resources": {
+        "available_memory_bytes": 12419747840,
+        "free_disk_bytes": 1046311170048,
+        "docker_free_disk_bytes": 1046311170048,
+        "cgroup_enforcement": "PASS_64M_ZERO_SWAP_ONE_CPU_16_PIDS",
+        "probe_image": "sha256:e8df6c74f650ad385efe2e20103eca9b0ad50690fb3c63d49fa00762412bbf55",
+        "owned_probe_removed": true,
+        "unrelated_container_count": 52
+      },
+      "result": "PASS"
+    }
+  ],
+  "debian12_execution": "UNTESTED",
+  "independent_release_acceptance": "PENDING_ORIGINAL_REVIEWER",
+  "local_runner": {
+    "execution_provider": "NATIVE_X64_UBUNTU22_DOCKER_USERLAND",
+    "provenance_sha256": "75fa7cdc4a6981de7f440cf5caafffda9c0586ba1f788b7ad4af62030ae178f7",
+    "qualification_evidence_sha256": "b5d8bdb90a101ec1818dfd6e5edc2a148184980bf9166987b1ab3bbdb8f400ef",
+    "machine_id_sha256": "f01c193f2f882f060cb65a260de8d8aa0d3a8df76671a96c944b75d84b0eb00d",
+    "boot_id_sha256": "82c6de48ac5f9794ec45d60ab6a0d1a61b060886a44983ca7c4895a84c1924e8",
+    "docker_id_sha256": "46f96da6ef57d87eede09fca8cd88c3f28c758ee2c5c457c793d24ac1ebda0fe",
+    "host_kernel": "6.8.0-146-generic",
+    "controller_os": "Ubuntu24.04",
+    "controller_glibc": "2.39",
+    "worker_userland": "Ubuntu22.04",
+    "worker_glibc": "2.35",
+    "physical_host_architecture": "x86_64"
+  },
+  "native_runner": {
+    "system": "Linux",
+    "architecture": "x86_64",
+    "os": "Ubuntu24.04",
+    "glibc": "glibc 2.39",
+    "kernel": "6.8.0-146-generic",
+    "worker_userland": "Ubuntu22.04/glibc2.35",
+    "resources": {
+      "available_memory_bytes": 9834131456,
+      "free_disk_bytes": 1051083595776,
+      "docker_free_disk_bytes": 1051083595776,
+      "cgroup_enforcement": "PASS_64M_ZERO_SWAP_ONE_CPU_16_PIDS",
+      "probe_image": "sha256:e8df6c74f650ad385efe2e20103eca9b0ad50690fb3c63d49fa00762412bbf55",
+      "owned_probe_removed": true,
+      "unrelated_container_count": 52
+    }
+  },
+  "archive_sha256": "fc4bde3b0a665bebcd22140fbc67fad2f15b5c841252a18dff0d5c5d79d56743",
+  "archive_bytes": 76582444,
+  "release_manifest_sha256": "b49a7dc4d0bdf54a32d3b39ff22c92b6066a20ec92ed5b5bdc70807be3d97b12",
+  "minimum_glibc": "2.35",
+  "canonical_shared_lock_preserved": true,
+  "unrelated_container_count": 52,
+  "wall_seconds": 2075.124
+}

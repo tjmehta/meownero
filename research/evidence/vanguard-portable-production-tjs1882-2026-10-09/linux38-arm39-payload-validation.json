@@ -1,0 +1,68 @@
+{
+  "schema": "meownero-current-linux-payload-validation/1",
+  "result": "PASS",
+  "frozen_files_verified": 36,
+  "cases": [
+    {
+      "candidate": 38,
+      "target": "linux-x86_64",
+      "case": "valid",
+      "result": "PASS_ALLOWLIST_ONLY"
+    },
+    {
+      "candidate": 38,
+      "target": "linux-x86_64",
+      "case": "stale-source",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    },
+    {
+      "candidate": 38,
+      "target": "linux-x86_64",
+      "case": "wrong-runner",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    },
+    {
+      "candidate": 38,
+      "target": "linux-x86_64",
+      "case": "cross-target-policy",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    },
+    {
+      "candidate": 38,
+      "target": "linux-x86_64",
+      "case": "lower-memory",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    },
+    {
+      "candidate": 39,
+      "target": "linux-aarch64",
+      "case": "valid",
+      "result": "PASS_ALLOWLIST_ONLY"
+    },
+    {
+      "candidate": 39,
+      "target": "linux-aarch64",
+      "case": "stale-source",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    },
+    {
+      "candidate": 39,
+      "target": "linux-aarch64",
+      "case": "wrong-runner",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    },
+    {
+      "candidate": 39,
+      "target": "linux-aarch64",
+      "case": "cross-target-policy",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    },
+    {
+      "candidate": 39,
+      "target": "linux-aarch64",
+      "case": "lower-memory",
+      "result": "PASS_REFUSAL_BEFORE_OUTPUT"
+    }
+  ],
+  "native_build_runtime_acceptance": false
+}

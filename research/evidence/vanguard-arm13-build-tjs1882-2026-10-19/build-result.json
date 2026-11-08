@@ -1,0 +1,30 @@
+{
+  "result": "PASS_NATIVE_X64_COMPILER_CROSS_BUILD_AND_EXACT_CONTAINER_CLEANUP",
+  "target": "windows-aarch64",
+  "native_windows_execution": "UNTESTED",
+  "all_commands_reaped": true,
+  "all_owned_containers_absent": true,
+  "canonical_shared_lock_preserved_and_available": true,
+  "lock_inode": 657237,
+  "memory_peak_bytes": 1797853184,
+  "memory_events": {
+    "low": "0",
+    "high": "0",
+    "max": "0",
+    "oom": "0",
+    "oom_kill": "0",
+    "oom_group_kill": "0"
+  },
+  "build_seconds": 1937.4046918009408,
+  "binaries": {
+    "monerod": {
+      "sha256": "353e7bf56ea605de42e2149585f233e346d12cb83446474f1a98f3af6ac2747c"
+    },
+    "monero-wallet-cli": {
+      "sha256": "7b97e875a50a09c5286b64eb59bd88019821f1f73ec20ca61f5ac338e87aaece"
+    },
+    "monero-wallet-rpc": {
+      "sha256": "6ff5befa8cbf0fd357aa4959e2fadab2894d9d8226ec5e936f4e39d511f98b49"
+    }
+  }
+}

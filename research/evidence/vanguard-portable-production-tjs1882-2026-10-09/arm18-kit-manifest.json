@@ -1,0 +1,61 @@
+{
+  "schema": "meownero-windows-arm-cross-kit18/1",
+  "result": "FROZEN_AWAITING_PARENT_EXACT_SOURCE_REVIEW",
+  "kit_path": "build/tjs1882-32610-arm18-review/kit18.tar",
+  "kit_bytes": 133120,
+  "kit_sha256": "e4d193223545354d3383e19268c1addc134e647e3c3d1239e06afc579fdeee03",
+  "prior_kit17_sha256": "d466b93cb9622c7d291e15cf35dbba0e3e44d331d9bc34cea874c2a5e97b070a",
+  "changed_members": [
+    "vanguard/portable-cross-build.py"
+  ],
+  "unchanged_member_count": 7,
+  "historical_portable_build_sha256": "5c14a985f24885d1df50886bfe73251ad56a7596cb7146c5548c36153de95167",
+  "tar_headers_mode": "0600",
+  "preimage_sha256": "a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6",
+  "postimage_sha256": "9574e279b64cc3566c02b6dea77570319482c3056e19c49810442dffdb4ab213",
+  "files": [
+    {
+      "path": "vanguard/patches/randomx-aaafe713-windows-arm64-aligned-allocator.patch",
+      "bytes": 746,
+      "sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82"
+    },
+    {
+      "path": "vanguard/patches/randomx-aaafe713-windows-arm64-hidden.patch",
+      "bytes": 438,
+      "sha256": "742daffebed9f21f73ced606accecf4bd44d08d2ce25699d45a9c7e2ed349f72"
+    },
+    {
+      "path": "vanguard/portable-build.py",
+      "bytes": 19747,
+      "sha256": "5c14a985f24885d1df50886bfe73251ad56a7596cb7146c5548c36153de95167"
+    },
+    {
+      "path": "vanguard/portable-cross-build.py",
+      "bytes": 35179,
+      "sha256": "ef5f13981efdad4a34e5236051c1725bf03c0389a803af32a56e048b4bd84f4d"
+    },
+    {
+      "path": "vanguard/portable_licenses.py",
+      "bytes": 15950,
+      "sha256": "286d438f35d352a0465d7e7d87a8cbc451e464646e597a100a45715c0e41d9c7"
+    },
+    {
+      "path": "vanguard/source-lock.json",
+      "bytes": 6950,
+      "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001"
+    },
+    {
+      "path": "vanguard/tester-profile.json",
+      "bytes": 989,
+      "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c"
+    },
+    {
+      "path": "vanguard/tester.py",
+      "bytes": 38818,
+      "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f"
+    }
+  ],
+  "full_build_started": false,
+  "native_Windows_acceptance": false,
+  "preserved_resource_gates": "fresh original >=5GiB available +10GiB host/Docker;2CPU/3GiB memoryANDswap/256PID/offline/3600s/heavylock/owned CID/private-copy checks"
+}

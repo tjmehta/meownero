@@ -1,0 +1,15 @@
+test_same_boot_shared_provenance_private_lock_refused_even_when_host_busy (__main__.Topology.test_same_boot_shared_provenance_private_lock_refused_even_when_host_busy) ... FAIL
+
+======================================================================
+FAIL: test_same_boot_shared_provenance_private_lock_refused_even_when_host_busy (__main__.Topology.test_same_boot_shared_provenance_private_lock_refused_even_when_host_busy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "vanguard/test-linux38-topology.py", line 119, in test_same_boot_shared_provenance_private_lock_refused_even_when_host_busy
+    with self.assertRaises(subprocess.CalledProcessError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: CalledProcessError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (failures=1)

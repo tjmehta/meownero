@@ -1,0 +1,23 @@
+{
+  "schema": "meownero-arm13-private-native-stage/1",
+  "publication": "NOT_PUBLISHED",
+  "native_execution": "UNTESTED",
+  "capacity": "REQUIRES_PARENT_FRESH_INCLUDED_MINUTES_AND_STORAGE_CONFIRMATION",
+  "source_base_commit": "6fb3c3ec4a8e6a13dcbec7b638525556d4f84568",
+  "controller_patch": "vanguard/patches/portable-ci-windows-arm64.patch",
+  "controller_patch_sha256": "2eb26c132a95d40a4bfb1d568b886fd3b291ca758a6bdba37dce1a189e59c1d1",
+  "input_sha256": "1e7cf3b77c719eb9f04172b2a994616601f20d38a29090791ae7d9397bfb0802",
+  "workflow_sha256": "d97a2fe3606a0f9a11a348abaa5fc0505f57ae8fe2f36be18b6b8310ccca0acc",
+  "source_files": {
+    "vanguard/run-portable-ci.py": "7a04b1ff20735ecae4d8ec14bef6e84a017b758020d06a68d77eadd8bafdc382",
+    "vanguard/test-portable-refusals.py": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4"
+  },
+  "archive_sha256": "fff26ea94928d2756cbf4b4b59bd2277a685e980d482cf389c8be405617ae15d",
+  "primary_contracts": [
+    "https://learn.microsoft.com/en-us/windows/win32/api/wow64apiset/nf-wow64apiset-iswow64process2",
+    "https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent",
+    "https://docs.github.com/en/actions/reference/runners/github-hosted-runners",
+    "https://raw.githubusercontent.com/actions/setup-python/ece7cb06caefa5fff74198d8649806c4678c61a1/action.yml"
+  ],
+  "resource_contract": "Unchanged suspended registration and owned Job; 4GiB memory, 25min controller, 20min journey; 40min CI timeout; no private logs exported"
+}

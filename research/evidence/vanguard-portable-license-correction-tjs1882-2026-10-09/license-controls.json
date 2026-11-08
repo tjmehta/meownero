@@ -1,0 +1,10 @@
+{
+  "result": "PASS_LICENSE_CONTROLS",
+  "cases": [
+    "missing_library_notice_refused",
+    "missing_referenced_common_text_refused",
+    "unknown_shipped_library_refused",
+    "depends_archive_checksum_mismatch_refused"
+  ],
+  "command": "python3 -B vanguard/test-portable-licenses.py --build build/tjs1882-linux64-attempt02 --package build/tjs1882-c0cf-linux-x64-package02/meownero-vanguard-x86_64"
+}

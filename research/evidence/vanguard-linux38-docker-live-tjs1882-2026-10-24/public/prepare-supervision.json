@@ -1,0 +1,162 @@
+{
+  "schema": "meownero-native-linux-ci-owned-supervision/1",
+  "result": "PASS_WRAPPER_AND_OWNED_CLEANUP",
+  "wrapper_reaped": true,
+  "cleanup": [
+    {
+      "pid": 1736037,
+      "removed": true
+    },
+    {
+      "pid": 1736834,
+      "removed": true
+    },
+    {
+      "pid": 1737139,
+      "removed": true
+    },
+    {
+      "pid": 1774061,
+      "removed": true
+    },
+    {
+      "pid": 1779313,
+      "removed": true
+    }
+  ],
+  "signals": [],
+  "observer_ruid": 1000,
+  "observer_euid": 1000,
+  "helper_observations": [],
+  "unverified_observations": [],
+  "wrapper_pid": 1736037,
+  "snapshot_cost": {
+    "calls": 147,
+    "max_elapsed_seconds": 0.12645,
+    "recent": [
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1778268,
+        "spawn_seconds": 0.00033,
+        "communicate_seconds": 0.085864,
+        "output_bytes": 147695,
+        "process_rows": 1193,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000113,
+        "elapsed_seconds": 0.086582
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1778567,
+        "spawn_seconds": 0.000329,
+        "communicate_seconds": 0.075626,
+        "output_bytes": 147746,
+        "process_rows": 1193,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000122,
+        "elapsed_seconds": 0.076262
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1778826,
+        "spawn_seconds": 0.000324,
+        "communicate_seconds": 0.078676,
+        "output_bytes": 147698,
+        "process_rows": 1193,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000146,
+        "elapsed_seconds": 0.07943
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1779243,
+        "spawn_seconds": 0.000303,
+        "communicate_seconds": 0.109701,
+        "output_bytes": 148353,
+        "process_rows": 1197,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000115,
+        "elapsed_seconds": 0.110389
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1779679,
+        "spawn_seconds": 0.000406,
+        "communicate_seconds": 0.122801,
+        "output_bytes": 149169,
+        "process_rows": 1197,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000203,
+        "elapsed_seconds": 0.123714
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1780062,
+        "spawn_seconds": 0.000649,
+        "communicate_seconds": 0.124164,
+        "output_bytes": 150059,
+        "process_rows": 1200,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.001022,
+        "elapsed_seconds": 0.126271
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "OWNED_CLEANUP",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1780174,
+        "spawn_seconds": 0.000373,
+        "communicate_seconds": 0.110488,
+        "output_bytes": 147316,
+        "process_rows": 1197,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000149,
+        "elapsed_seconds": 0.111298
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "OWNED_CLEANUP",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 1780227,
+        "spawn_seconds": 0.000307,
+        "communicate_seconds": 0.086975,
+        "output_bytes": 147316,
+        "process_rows": 1197,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000187,
+        "elapsed_seconds": 0.087779
+      }
+    ]
+  },
+  "rejected_observation_cleanup": [],
+  "wall_seconds": 48.422,
+  "cancellation_signals": []
+}

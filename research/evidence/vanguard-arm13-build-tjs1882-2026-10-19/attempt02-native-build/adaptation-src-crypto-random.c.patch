@@ -1,0 +1,10 @@
+--- src/crypto/random.c
++++ src/crypto/random.c
+@@ -44,6 +44,7 @@
+ #include <windows.h>
+ #include <wincrypt.h>
+ #include <stdio.h>
++#include <process.h>
+ 
+ static void generate_system_random_bytes(size_t n, void *result) {
+   HCRYPTPROV prov;

@@ -1,0 +1,98 @@
+{
+  "schema": "meownero-arm09-arm10-fresh-cleanup/1",
+  "observed_utc": "2026-10-10T09:10:57.357815+00:00",
+  "run_id": "32610e37-e6ab-4aea-8fa2-71a39c30a7b9",
+  "checks": [
+    {
+      "attempt": "windows-arm-attempt09",
+      "receipt_bytes": 8314,
+      "receipt_sha256": "8bf504362425e60ef015a0200f0df0f1d85be184c8f62836b055b1f8ebcedfed",
+      "container_count": 0,
+      "command_count": 0,
+      "containers": [],
+      "recorded_pids": [
+        {
+          "pid": 88154,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        }
+      ]
+    },
+    {
+      "attempt": "windows-arm-attempt10",
+      "receipt_bytes": 21518,
+      "receipt_sha256": "1b92d8bc27f6aaa0654b6e09f3a602050fe08d9f32e7fb9a2eed58bf73dd24ec",
+      "container_count": 1,
+      "command_count": 10,
+      "containers": [
+        {
+          "id": "5252b6e61c163fbceb200297af424e35dfb798d6d09d6557441ec3e6d93cf553",
+          "name": "tjs1882-3175-41498e98f53444019951ebc96fa1578c",
+          "image": "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+          "invocation": "41498e98f53444019951ebc96fa1578c",
+          "cidfile_bound": true,
+          "recorded_removed": true,
+          "fresh_exact_inspect_absence": true,
+          "fresh_ID_filter_absence": true
+        }
+      ],
+      "recorded_pids": [
+        {
+          "pid": 6727,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 7198,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 7234,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 7240,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 7242,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 7249,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 7252,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 9620,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 11861,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 11864,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        },
+        {
+          "pid": 11865,
+          "fresh_numeric_check": "NUMERIC_PID_ABSENT"
+        }
+      ]
+    }
+  ],
+  "signals_sent": 0,
+  "new_build_started": false,
+  "lock": {
+    "inode": 219261381,
+    "uid": 501,
+    "links": 1,
+    "no_symlink": true,
+    "nonblocking_claim_and_release": "PASS",
+    "original_inode_preserved": true,
+    "removed": false
+  },
+  "matching_live_ARM_workers": 0
+}

@@ -1,0 +1,76 @@
+{
+  "lock_created_exclusively": true,
+  "target": "WINDOWS_ARM64_CROSS_COMPILE_DIAGNOSTIC_ONLY",
+  "compiler_execution": "PREEXISTING_QEMU_AMD64_IN_COLIMA_AARCH64",
+  "commands": [
+    [
+      "/usr/local/bin/docker",
+      "--context",
+      "colima",
+      "run",
+      "--detach",
+      "--platform=linux/amd64",
+      "--pull=never",
+      "--name",
+      "tjs1882-fa9479bf-arm13-diagnostic01",
+      "--label",
+      "meownero.invocation=fa9479bf-arm13-diagnostic01",
+      "--network=none",
+      "--read-only",
+      "--cpus=1",
+      "--memory=768m",
+      "--memory-swap=768m",
+      "--pids-limit=64",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "--tmpfs",
+      "/tmp:rw,nosuid,nodev,size=64m",
+      "--ulimit",
+      "core=0",
+      "-u",
+      "501:20",
+      "-v",
+      "~/Developer/ios-builds/tjs1882-fa9479bf-arm13:/input:ro",
+      "-v",
+      "~/Developer/ios-builds/tjs1882-fa9479bf-arm13/llvm-unpack/llvm-mingw-20261006-ucrt-ubuntu-22.04-x86_64:/llvm:ro",
+      "-v",
+      "~/Developer/ios-builds/tjs1882-fa9479bf-arm13/pinned-source:/source:ro",
+      "-v",
+      "~/Developer/ios-builds/tjs1882-fa9479bf-arm13/diagnostic:/out",
+      "sha256:d0d9ff472379e2cc7a1f9b046fc6bc031ef98c36dcf08614b307d59323b6cb4c",
+      "python3",
+      "/input/compiler-diagnostic.py"
+    ]
+  ],
+  "available_bytes": 5727178752,
+  "container_exit": "1",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-10-19T15:35:24.24309936Z",
+    "FinishedAt": "2026-10-19T15:35:27.43242956Z"
+  },
+  "resources": {
+    "Memory": 805306368,
+    "MemorySwap": 805306368,
+    "NanoCpus": 1000000000,
+    "PidsLimit": 64,
+    "NetworkMode": "none",
+    "ReadonlyRootfs": true,
+    "CapDrop": [
+      "ALL"
+    ],
+    "SecurityOpt": [
+      "no-new-privileges"
+    ]
+  },
+  "exact_container_removed": true,
+  "owned_lock_removed": true
+}

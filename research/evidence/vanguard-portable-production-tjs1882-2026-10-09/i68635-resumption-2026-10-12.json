@@ -1,0 +1,130 @@
+{
+  "schema": "meownero-i68635-native-resumption/1",
+  "issue": "TJS-1882",
+  "run_id": "2fb8c59d-5a38-48a7-b426-a2a315cfa690",
+  "observed_utc": "2026-10-12T16:40:32.999669+00:00",
+  "wake_comment": "883b0bab-443f-4df5-af2a-1f74ff40f9f1",
+  "native_ci_pause": "LIFTED_ONLY_TEMPORARY_DOCKER_PRIORITY_PAUSE",
+  "source_clearance": {
+    "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+    "existing_stage": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+    "comment": "774ef8bf-2ea0-4ec5-a829-857185f1c97e",
+    "reviewed_head": "051262dbf55a63b36c0fb8a8a6883e156628777f",
+    "source_packet_sha256": "f0e147f8827ba150c005c4f8e386823e1cc4cf2fb2484ea21014832367357556",
+    "adopted_for_exact_unchanged_i68635": true
+  },
+  "preservation": {
+    "worktree_head": "96aa5a836648153db7f2c3ef1e949b35b2f4bdff",
+    "tracked_evidence_edit_and_all_five_untracked_entries": "BYTE_PRESERVED",
+    "preserved_files_checked": 6,
+    "native_product_source_changed": false
+  },
+  "candidate": {
+    "name": "i68635",
+    "full_payload": "/storage/data/meownero-tjs1882-resume-5df99f48/native-i686-payload35",
+    "handoff_sha256": "3894e6bb8aaf6edb06d30314fbeca016fc5be4c3dab80e685c536691bd44bd3e",
+    "publication_sha256": "e36be81198c67511307c84842f4b6f31ad68e1f3a731c24b385536ed188a6b2b",
+    "frozen_file_sha256_size_checks": 21,
+    "local_git_carrier_checks": 9,
+    "predecessor_git_blob_checks": 12,
+    "archive": {
+      "bytes": 97173058,
+      "sha256": "3a0a34d874184165a83f9025cdabd18b67b19fa862c57cfac5b04d21d736e745"
+    },
+    "prepare_only": "PASS_INPUT_BYTES_ONLY_NATIVE_EXECUTION_UNTESTED",
+    "native_acceptance": false
+  },
+  "private_execution": {
+    "repository": "tjmehta/meownero",
+    "private": true,
+    "branch": "refs/heads/tjs1882-native-windows-preflight",
+    "actual_head": "d9a90cbc1b26a1833930607224cf07cc38eb526a",
+    "branch_run_count": 19,
+    "active_branch_runs": 0,
+    "latest_run": {
+      "id": 38066379446,
+      "head_sha": "d9a90cbc1b26a1833930607224cf07cc38eb526a",
+      "name": "TJS-1882 exact i686 WoW64 archive check",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-10-10T16:07:32Z"
+    },
+    "remote_tree_file_comparisons": 21,
+    "exact_changed_paths": [
+      ".github/workflows/tjs1882-native-portable.yml",
+      "vanguard/ci-inputs.json",
+      "vanguard/run-portable-journey-diagnostic.py",
+      "vanguard/test-portable-refusals.py"
+    ],
+    "unchanged_predecessors": 17,
+    "installed_gh_version": "2.101.0",
+    "installed_token_workflow_scope": true,
+    "repository_push_permission": true,
+    "self_hosted_runners": 0,
+    "publication_capability": "AVAILABLE_TOKEN_SCOPE_AND_REPO_PERMISSION; no mutation probe required"
+  },
+  "resource_gates": {
+    "available_memory_and_disk_reserve_bytes": 5368709120,
+    "readiness_wait_seconds": 60,
+    "cancel_exit_wait_seconds": 60,
+    "windows_timer_seconds": 5,
+    "timer_exit_wait_seconds": 120,
+    "supervisor_Job_seconds": 1500,
+    "supervisor_Job_memory_bytes": 4294967296,
+    "workflow_minutes": 30,
+    "process_group_flags_and_exact_cleanup_finalizers": "AST_UNCHANGED"
+  },
+  "capacity": {
+    "observed_utc": "2026-10-12T16:36:50.274Z",
+    "source_url": "https://github.com/settings/billing",
+    "account": "tjmehta",
+    "plan": "GitHub Free",
+    "included_minutes_used": 2000,
+    "included_minutes_total": 2000,
+    "included_minutes_remaining": 0,
+    "storage_used_GB_displayed": 0.1,
+    "storage_included_GB_displayed": 0.5,
+    "storage_display_is_rounded": true,
+    "budget_alert": "You've used 100% of your Actions budget. Additional usage will be stopped.",
+    "displayed_actions_billable_spend_usd": 10.0,
+    "displayed_reset_in_days": 20,
+    "expected_reset_month": "2026-11",
+    "publication_resource_gate": "REFUSED_ZERO_INCLUDED_MINUTES",
+    "billing_api_read": "404_MISSING_USER_SCOPE_BROWSER_FALLBACK_SUCCEEDED",
+    "owned_billing_tabs_closed": true,
+    "documentation": "https://docs.github.com/en/billing/concepts/product-billing/github-actions",
+    "billing_screenshot_sha256": "71ac0564a12b1834948125cb53f2a3e719fe5501124892ad05780daec44c9ec3"
+  },
+  "disposition": "BLOCKED_INCLUDED_ACTIONS_MINUTES_EXHAUSTED",
+  "handoff_packet": {
+    "path": "build/tjs1882-run2fb8c59d-i68635-publication-handoff/i68635-executable-publication-handoff.zip",
+    "bytes": 102711,
+    "sha256": "1b9809eccd24d9e0f17bc834647e0c7cd9f0c664d3daf58792efb79e936805ba",
+    "members": 14,
+    "id": "03d24579-ca7a-49b1-91d9-c87835d4102f",
+    "upload_status": 201,
+    "readback_status": 200,
+    "authenticated_exact_bytes": true
+  },
+  "handoff_owner": {
+    "agent_id": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+    "role": "studio lead",
+    "action": "Dispatch the staged exact i68635 publication action through the existing outside-Paperclip parent route once fresh included capacity permits the full bounded suite. Recheck allowance and active runs; inputs-FIRST/all20 independent readback/workflow-LAST/all21 final readback; one windows-2025 WoW64 suite. No paid capacity or budget changes.",
+    "acknowledgement": "PENDING_NOT_CLAIMED"
+  },
+  "publication_requests_staged": 4,
+  "github_mutations": 0,
+  "native_runs_started": 0,
+  "runner": "windows-2025",
+  "windows_x86_scope": "WoW64 on x64 Windows; standalone 32-bit Windows UNTESTED",
+  "required_native_outcome": "receive5, type7 CARROT payments, restore, later spend2, nativeCLI, tencontrols including live cancellation, exactownedcleanup",
+  "remaining_release": {
+    "original_seven_target_release": "OPEN",
+    "historical_scoped_acceptance": "3_OF_7_UNCHANGED",
+    "docker_website_leaf": "ACCEPTED_AND_PUBLISHED_UNCHANGED",
+    "Linux36_37": "current exact helper rebinding and original review needed if bytes differ; no duplicate build started",
+    "ARM12": "TERMINAL_FAILED slow-hash.c:1021 missing POSIX sys/mman.h; not active compile",
+    "TJS2018_TJS2066": "CLOSED_UNCHANGED"
+  },
+  "needs_TJ": "None"
+}

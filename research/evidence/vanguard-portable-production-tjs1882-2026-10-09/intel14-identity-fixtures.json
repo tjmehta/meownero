@@ -1,0 +1,124 @@
+{
+  "schema": "meownero-intel14-immutable-identity-fixtures/1",
+  "result": "PASS_BEFORE_BRANCH_IDENTITY_AND_FIRST_ZOMBIE_ACCOUNTING",
+  "source_sha256": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974",
+  "cases": [
+    {
+      "case": "exact-observer",
+      "observed": "PASS",
+      "expected": "PASS",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "exact-process-query",
+      "observed": "PASS",
+      "expected": "PASS",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "exact-command-query",
+      "observed": "PASS",
+      "expected": "PASS",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "ordinary-owned-descendant",
+      "observed": "PASS",
+      "expected": "PASS",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "foreign-real-uid",
+      "observed": "REAL_UID_MISMATCH",
+      "expected": "REAL_UID_MISMATCH",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "other-effective-uid",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "wrong-parent",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "wrong-helper",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "wrong-arguments",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "unknown-exit-display",
+      "observed": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "expected": "EFFECTIVE_UID_NOT_ALLOWLISTED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "known-exit-display",
+      "observed": "PASS",
+      "expected": "PASS",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "reused-helper-start",
+      "observed": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "expected": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "changed-helper-kernel-file",
+      "observed": "REMEMBERED_HELPER_SYSTEM_FILE_CHANGED",
+      "expected": "REMEMBERED_HELPER_SYSTEM_FILE_CHANGED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "known-zombie",
+      "observed": "PASS",
+      "expected": "PASS",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "zombie-reused-start",
+      "observed": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "expected": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "root-to-normal-euid-reuse",
+      "observed": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "expected": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "root-to-normal-euid-same-start",
+      "observed": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "expected": "REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED",
+      "first_zombie_accounted_for_cleanup": false
+    },
+    {
+      "case": "first-unverified-root-zombie",
+      "observed": "UNVERIFIED_FIRST_ZOMBIE",
+      "expected": "UNVERIFIED_FIRST_ZOMBIE",
+      "first_zombie_accounted_for_cleanup": true
+    },
+    {
+      "case": "first-unverified-normal-zombie",
+      "observed": "UNVERIFIED_FIRST_ZOMBIE",
+      "expected": "UNVERIFIED_FIRST_ZOMBIE",
+      "first_zombie_accounted_for_cleanup": true
+    }
+  ],
+  "allow_case_count": 6,
+  "reject_case_count": 13,
+  "native_Intel_journey": "UNTESTED_BY_FIXTURES"
+}

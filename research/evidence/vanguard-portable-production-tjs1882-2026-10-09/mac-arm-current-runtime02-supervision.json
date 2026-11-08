@@ -1,0 +1,136 @@
+{
+  "schema": "meownero-native-mac-ci-supervision/1",
+  "result": "PASS_WRAPPER_AND_OWNED_CLEANUP",
+  "wrapper_reaped": true,
+  "cleanup": [
+    {
+      "pid": 24685,
+      "removed": true
+    },
+    {
+      "pid": 24704,
+      "removed": true
+    },
+    {
+      "pid": 24710,
+      "removed": true
+    },
+    {
+      "pid": 24725,
+      "removed": true
+    },
+    {
+      "pid": 24730,
+      "removed": true
+    },
+    {
+      "pid": 24733,
+      "removed": true
+    },
+    {
+      "pid": 24742,
+      "removed": true
+    },
+    {
+      "pid": 24746,
+      "removed": true
+    },
+    {
+      "pid": 25173,
+      "removed": true
+    },
+    {
+      "pid": 25182,
+      "removed": true
+    },
+    {
+      "pid": 25693,
+      "removed": true
+    },
+    {
+      "pid": 26122,
+      "removed": true
+    },
+    {
+      "pid": 26124,
+      "removed": true
+    },
+    {
+      "pid": 26136,
+      "removed": true
+    },
+    {
+      "pid": 26167,
+      "removed": true
+    },
+    {
+      "pid": 26172,
+      "removed": true
+    },
+    {
+      "pid": 26179,
+      "removed": true
+    },
+    {
+      "pid": 26324,
+      "removed": true
+    },
+    {
+      "pid": 26353,
+      "removed": true
+    }
+  ],
+  "signals": [],
+  "observer_ruid": 501,
+  "observer_euid": 501,
+  "helper_observations": [],
+  "unverified_observations": [
+    {
+      "pid": 25204,
+      "ppid": 24685,
+      "ruid": 501,
+      "euid": 0,
+      "role": "ALREADY_ABSENT_UNVERIFIED_SNAPSHOT",
+      "state_class": "LIVE",
+      "argv_role": "PS_EXIT_DISPLAY"
+    },
+    {
+      "pid": 25242,
+      "ppid": 24685,
+      "ruid": 501,
+      "euid": 0,
+      "role": "ALREADY_ABSENT_UNVERIFIED_SNAPSHOT",
+      "state_class": "LIVE",
+      "argv_role": "PS_EXIT_DISPLAY"
+    },
+    {
+      "pid": 26453,
+      "ppid": 24685,
+      "ruid": 501,
+      "euid": 0,
+      "role": "ALREADY_ABSENT_UNVERIFIED_SNAPSHOT",
+      "state_class": "LIVE",
+      "argv_role": "PS_EXIT_DISPLAY"
+    }
+  ],
+  "wrapper_pid": 24685,
+  "rejected_observation_cleanup": [
+    {
+      "pid": 25204,
+      "removed": true,
+      "proof": "ACTUAL_PID_ABSENCE"
+    },
+    {
+      "pid": 25242,
+      "removed": true,
+      "proof": "ACTUAL_PID_ABSENCE"
+    },
+    {
+      "pid": 26453,
+      "removed": true,
+      "proof": "ACTUAL_PID_ABSENCE"
+    }
+  ],
+  "wall_seconds": 19.627,
+  "cancellation_signals": []
+}

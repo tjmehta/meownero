@@ -1,0 +1,26 @@
+{
+  "schema": "meownero-intel11-rejected-live-cleanup-fixtures/1",
+  "result": "PASS_REJECT_ACCOUNT_NO_SIGNAL_VERIFIED_ABSENCE_OR_RETAIN_LOCK",
+  "source_sha256": "b0363fbd074d4a8ba43d7da7554a32ac404f62b06b17371211accf56cf05825b",
+  "cases": [
+    {
+      "case": "rejected-live-reaped",
+      "unverified_pid_signals": [],
+      "actual_absence": true,
+      "lock_removed": true,
+      "wrapper_reaped": true,
+      "cleanup_failure_recorded": false
+    },
+    {
+      "case": "rejected-live-remains",
+      "unverified_pid_signals": [],
+      "actual_absence": false,
+      "lock_removed": false,
+      "wrapper_reaped": true,
+      "cleanup_failure_recorded": true
+    }
+  ],
+  "ps_metadata": "INJECTED_ADVERSE_UID_AND_ANCESTRY_ONLY",
+  "unverified_pid": "ACTUAL_OWNED_PROCESS_INDEPENDENTLY_REAPED",
+  "native_Intel_journey": "UNTESTED"
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "meownero-ci-supervision-regression/1",
+  "result": "PASS_POSIX_FIXTURES_NOT_NATIVE_PACKAGE_EVIDENCE",
+  "ci_helper_sha256": "1171928f4b5ad611e1f33466a4ac8dce118ff5faf8fa4f64a152729553771c05",
+  "cases": [
+    {
+      "case": "actual_windows_phase_path_receipt",
+      "result": "PASS_SERIALIZATION_ONLY"
+    },
+    {
+      "case": "success",
+      "result": "PASS_FIXTURE_ONLY",
+      "failure_type": null,
+      "reaped": true,
+      "owned_cleanup": [
+        {
+          "pid": 86800,
+          "removed": true
+        },
+        {
+          "pid": 86821,
+          "removed": true
+        }
+      ],
+      "unrelated_preserved": true,
+      "wall_seconds": 0.828
+    },
+    {
+      "case": "deadline",
+      "result": "PASS_FIXTURE_ONLY",
+      "failure_type": "TimeoutExpired",
+      "reaped": true,
+      "owned_cleanup": [
+        {
+          "pid": 86965,
+          "removed": true
+        },
+        {
+          "pid": 86967,
+          "removed": true
+        }
+      ],
+      "unrelated_preserved": true,
+      "wall_seconds": 1.555
+    },
+    {
+      "case": "sigterm",
+      "result": "PASS_FIXTURE_ONLY",
+      "failure_type": "RuntimeError",
+      "reaped": true,
+      "owned_cleanup": [
+        {
+          "pid": 87905,
+          "removed": true
+        },
+        {
+          "pid": 87909,
+          "removed": true
+        }
+      ],
+      "unrelated_preserved": true,
+      "wall_seconds": 1.58
+    },
+    {
+      "case": "sigint",
+      "result": "PASS_FIXTURE_ONLY",
+      "failure_type": "RuntimeError",
+      "reaped": true,
+      "owned_cleanup": [
+        {
+          "pid": 88004,
+          "removed": true
+        },
+        {
+          "pid": 88006,
+          "removed": true
+        }
+      ],
+      "unrelated_preserved": true,
+      "wall_seconds": 1.383
+    },
+    {
+      "case": "stubborn",
+      "result": "PASS_FIXTURE_ONLY",
+      "failure_type": "TimeoutExpired",
+      "reaped": true,
+      "owned_cleanup": [
+        {
+          "pid": 88021,
+          "removed": true
+        }
+      ],
+      "unrelated_preserved": true,
+      "wall_seconds": 15.075
+    },
+    {
+      "case": "observation",
+      "result": "PASS_FIXTURE_ONLY",
+      "failure_type": "OSError",
+      "reaped": true,
+      "owned_cleanup": [
+        {
+          "pid": 90918,
+          "removed": true
+        }
+      ],
+      "unrelated_preserved": true,
+      "wall_seconds": 0.751
+    }
+  ]
+}

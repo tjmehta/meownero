@@ -1,0 +1,86 @@
+{
+  "schema": "meownero-native-mac-ci-supervision/1",
+  "result": "FAIL",
+  "wrapper_reaped": true,
+  "cleanup": [
+    {
+      "pid": 36185,
+      "removed": true
+    },
+    {
+      "pid": 36248,
+      "removed": true
+    },
+    {
+      "pid": 36254,
+      "removed": true
+    },
+    {
+      "pid": 36266,
+      "removed": true
+    },
+    {
+      "pid": 36267,
+      "removed": true
+    },
+    {
+      "pid": 36269,
+      "removed": true
+    },
+    {
+      "pid": 36273,
+      "removed": true
+    },
+    {
+      "pid": 36295,
+      "removed": true
+    },
+    {
+      "pid": 36301,
+      "removed": true
+    }
+  ],
+  "signals": [],
+  "observer_ruid": 501,
+  "observer_euid": 501,
+  "helper_observations": [],
+  "unverified_observations": [
+    {
+      "pid": 36292,
+      "ppid": 36185,
+      "ruid": 501,
+      "euid": 0,
+      "role": "ALREADY_ABSENT_UNVERIFIED_SNAPSHOT",
+      "state_class": "LIVE",
+      "argv_role": "PS_EXIT_DISPLAY"
+    }
+  ],
+  "wrapper_pid": 36185,
+  "failure_stage": "OBSERVE_OWNED_DESCENDANTS",
+  "snapshot_timeouts": [
+    {
+      "operation": "OWNED_PROCESS_SNAPSHOT",
+      "context": "LIVE_OBSERVATION",
+      "timeout_seconds": 5,
+      "elapsed_seconds": 7.099
+    }
+  ],
+  "failure_operation": "OWNED_PROCESS_SNAPSHOT",
+  "failure_context": "LIVE_OBSERVATION",
+  "failure_timeout_seconds": 5,
+  "failure_elapsed_seconds": 7.099,
+  "failure_reason": "PROCESS_SNAPSHOT_DEADLINE",
+  "failure_type": "TimeoutExpired",
+  "wrapper_exit_before_cleanup": null,
+  "failure_phase": "journey",
+  "forwarded_sigterm": true,
+  "rejected_observation_cleanup": [
+    {
+      "pid": 36292,
+      "removed": true,
+      "proof": "ACTUAL_PID_ABSENCE"
+    }
+  ],
+  "wall_seconds": 15.447,
+  "cancellation_signals": []
+}

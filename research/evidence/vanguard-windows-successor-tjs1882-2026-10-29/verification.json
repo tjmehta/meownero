@@ -1,0 +1,78 @@
+{
+  "schema": "meownero-windows-successor-verification/1",
+  "source_revision": "c5eecb4f9b4a349991acf47145a62627cfa8759d",
+  "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [GCC 13.3.0]",
+  "bundle": {
+    "bytes": 164091051,
+    "sha256": "eb6b76d387f26e5b4a9f849d8e7de2fbf11e9ce06a221cb16b3f5dbd0502da46"
+  },
+  "lanes": {
+    "windows-i686": {
+      "archive": "meownero-vanguard-windows-i686-sanitized-v1.zip",
+      "bytes": 97175736,
+      "sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "changed_members": [
+        "BUILD.json",
+        "build-evidence/cached-build-receipt.json",
+        "build-evidence/i686-exception-probe-cross-receipt.json",
+        "build-evidence/i686-exception-probe-cross.py",
+        "build-evidence/i686-exception-probe-input.json",
+        "build-evidence/pre-exception-probe-build-receipt.json",
+        "release.json"
+      ],
+      "unchanged_members": 301,
+      "all_other_member_bytes": "IDENTICAL",
+      "release_input_part_bindings": "PASS"
+    },
+    "windows-aarch64": {
+      "archive": "meownero-vanguard-windows-aarch64-sanitized-v1.zip",
+      "bytes": 66636938,
+      "sha256": "eed161eff71038e0ca37034e195d4943870c4c10cca6fd07c52b7311c1dc8484",
+      "changed_members": [
+        "BUILD.json",
+        "release.json"
+      ],
+      "unchanged_members": 293,
+      "all_other_member_bytes": "IDENTICAL",
+      "release_input_part_bindings": "PASS"
+    }
+  },
+  "checks": [
+    {
+      "check": "windows-i686",
+      "exit": 0,
+      "result": "PASS_INPUT_BYTES_ONLY_NATIVE_EXECUTION_UNTESTED",
+      "reason": null,
+      "report_sha256": "5a74551c3b211016031d120b3659bf34113f63e78905fd94464053cf24ae557e"
+    },
+    {
+      "check": "windows-aarch64",
+      "exit": 0,
+      "result": "PASS_INPUT_BYTES_ONLY_NATIVE_EXECUTION_UNTESTED",
+      "reason": null,
+      "report_sha256": "1b081a7967414179f73083bfcb9ef8095207ccd9c3674b9c3125bca6e4ce6166"
+    },
+    {
+      "check": "non-windows-refusal",
+      "exit": 1,
+      "result": "NOT_RUN",
+      "reason": "REQUIRES_WINDOWS_CPYTHON",
+      "report_sha256": "8fc420e3469835d9303d528def9dd319e245c015927d97386b849ebd5e090364"
+    },
+    {
+      "check": "tampered-input-refusal",
+      "exit": 1,
+      "result": "NOT_RUN",
+      "reason": "BUNDLE_HASH_MISMATCH",
+      "report_sha256": "af90ebb0dc8353891d9b1a590435daf1ee8dd2d8d86377f16ca93736c7eec205"
+    }
+  ],
+  "safe_regular_outer_members": 14,
+  "outer_file_bindings": 13,
+  "private_home_scan": "ABSENT",
+  "current_credential_values_checked": 2,
+  "current_credential_values_found": false,
+  "scanned_items": 1235,
+  "windows_execution": "NOT_RUN_NO_QUALIFIED_WINDOWS_RUNTIME",
+  "duration_seconds": 19.11750133987516
+}

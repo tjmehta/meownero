@@ -1,0 +1,294 @@
+{
+  "schema": "parent-returned-windows-report-verification/1",
+  "reports": [
+    {
+      "filename": "arm-report-v2.zip",
+      "source_message_id": "<message-id>",
+      "source_timestamp": "2026-10-30T19:06:13Z",
+      "zip_sha256": "394294d5dc1465f2eae52e256bdce9281d72ab3f31c4ab33f3e095c01fa8f2ea",
+      "zip_bytes": 3326,
+      "target": "windows-aarch64",
+      "result": "INCOMPLETE_NATIVE_ARCHIVE_CONTROLS",
+      "bundle_manifest_sha256": "46489d0ac6cea2e023506f4c893176d4d6d7de68580b19aa0c2c5d52bc364c65",
+      "archive_sha256": "eed161eff71038e0ca37034e195d4943870c4c10cca6fd07c52b7311c1dc8484",
+      "controller_sha256": "7776dfeef443b41ad61e1664871ec364504a97da55b9beaa5120ad18aac97d64",
+      "inputs_sha256": "d4300012ec5ee44e17550e83ef00ffe64ea5aa347da92fa44140302f883fe18c",
+      "json_members": [
+        "bundle-receipt.json",
+        "public/ci-receipt.json",
+        "public/check.json",
+        "public/journey.json",
+        "public/controls.json"
+      ],
+      "native_architecture": "aarch64",
+      "package_architecture": "aarch64",
+      "execution_substrate": null,
+      "journey_result": "PASS_NATIVE_JOURNEY",
+      "control_result": "INCOMPLETE_REFUSALS",
+      "cases": [
+        {
+          "case": "wrong-pin",
+          "refused": true
+        },
+        {
+          "case": "wrong-target",
+          "refused": true
+        },
+        {
+          "case": "changed-binary",
+          "refused": true
+        },
+        {
+          "case": "unlisted-private-file",
+          "refused": true
+        },
+        {
+          "case": "symlink-directory",
+          "status": "NOT_EXECUTED",
+          "reason_enum": "SYMLINK_PRIVILEGE_NOT_HELD",
+          "winerror": 1314
+        },
+        {
+          "case": "hardlink",
+          "refused": true
+        },
+        {
+          "case": "collision-preservation",
+          "refused": true,
+          "sentinel_preserved": true
+        },
+        {
+          "case": "busy-lock",
+          "refused": true
+        },
+        {
+          "case": "cancelled-owned-cleanup",
+          "signal": "CTRL_BREAK_EVENT",
+          "removed": true,
+          "process_count": 2
+        },
+        {
+          "case": "deadline-owned-cleanup",
+          "signal": "WINDOWS_JOB_TIMER",
+          "removed": true,
+          "process_count": 4
+        }
+      ],
+      "funding_operations": null,
+      "owned_active_processes": 0,
+      "bindings_verified": true,
+      "independent_native_acceptance": "NOT_GRANTED_BY_PARENT"
+    },
+    {
+      "filename": "intel-report-v2.zip",
+      "source_message_id": "<message-id>",
+      "source_timestamp": "2026-10-30T19:11:25Z",
+      "zip_sha256": "0e31a52562f6d771c05480aa170b487f7f141ddbaae9f8b2f7064366341740af",
+      "zip_bytes": 4498,
+      "target": "windows-i686",
+      "result": "PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS",
+      "bundle_manifest_sha256": "46489d0ac6cea2e023506f4c893176d4d6d7de68580b19aa0c2c5d52bc364c65",
+      "archive_sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "controller_sha256": "90d3aba06f20d92d408b639b48d63f465930fdb83c8ec8895badf83c4d7a9c54",
+      "inputs_sha256": "4b2fc274e3352466c0cf28d5f23adf0c6e40ec19b4b5f81608a4165eb1248822",
+      "json_members": [
+        "bundle-receipt.json",
+        "public/ci-receipt.json",
+        "public/check.json",
+        "public/journey.json",
+        "public/controls.json",
+        "public/journey-diagnostic.json"
+      ],
+      "native_architecture": "x86_64",
+      "package_architecture": "i686",
+      "execution_substrate": "NATIVE_WINDOWS_WOW64",
+      "journey_result": "PASS_NATIVE_JOURNEY",
+      "control_result": "PASS_REFUSALS",
+      "cases": [
+        {
+          "case": "wrong-pin",
+          "refused": true
+        },
+        {
+          "case": "wrong-target",
+          "refused": true
+        },
+        {
+          "case": "changed-binary",
+          "refused": true
+        },
+        {
+          "case": "unlisted-private-file",
+          "refused": true
+        },
+        {
+          "case": "symlink-directory",
+          "refused": true
+        },
+        {
+          "case": "hardlink",
+          "refused": true
+        },
+        {
+          "case": "collision-preservation",
+          "refused": true,
+          "sentinel_preserved": true
+        },
+        {
+          "case": "busy-lock",
+          "refused": true
+        },
+        {
+          "case": "cancelled-owned-cleanup",
+          "signal": "CTRL_BREAK_EVENT",
+          "removed": true,
+          "process_count": 2
+        },
+        {
+          "case": "deadline-owned-cleanup",
+          "signal": "WINDOWS_JOB_TIMER",
+          "removed": true,
+          "process_count": 2
+        }
+      ],
+      "funding_operations": [
+        {
+          "operation": "generateblocks",
+          "outcome": "PASS",
+          "elapsed_seconds": 71.229059,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 75.289201,
+          "journey_remaining_at_start_seconds": 1124.710799
+        },
+        {
+          "operation": "refresh",
+          "outcome": "PASS",
+          "elapsed_seconds": 2.743025,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 146.53202,
+          "journey_remaining_at_start_seconds": 1053.46798
+        },
+        {
+          "operation": "get_balance",
+          "outcome": "PASS",
+          "elapsed_seconds": 0.029417,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 149.284036,
+          "journey_remaining_at_start_seconds": 1050.715964
+        }
+      ],
+      "owned_active_processes": 0,
+      "bindings_verified": true,
+      "independent_native_acceptance": "NOT_GRANTED_BY_PARENT"
+    },
+    {
+      "filename": "intel-report3-v2.zip",
+      "source_message_id": "<message-id>",
+      "source_timestamp": "2026-10-30T19:30:04Z",
+      "zip_sha256": "e2ade0040cc727141850971990b566651c720db272227c5e79dee3518410173c",
+      "zip_bytes": 4487,
+      "target": "windows-i686",
+      "result": "PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS",
+      "bundle_manifest_sha256": "46489d0ac6cea2e023506f4c893176d4d6d7de68580b19aa0c2c5d52bc364c65",
+      "archive_sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "controller_sha256": "90d3aba06f20d92d408b639b48d63f465930fdb83c8ec8895badf83c4d7a9c54",
+      "inputs_sha256": "4b2fc274e3352466c0cf28d5f23adf0c6e40ec19b4b5f81608a4165eb1248822",
+      "json_members": [
+        "bundle-receipt.json",
+        "public/ci-receipt.json",
+        "public/check.json",
+        "public/journey.json",
+        "public/controls.json",
+        "public/journey-diagnostic.json"
+      ],
+      "native_architecture": "x86_64",
+      "package_architecture": "i686",
+      "execution_substrate": "NATIVE_WINDOWS_WOW64",
+      "journey_result": "PASS_NATIVE_JOURNEY",
+      "control_result": "PASS_REFUSALS",
+      "cases": [
+        {
+          "case": "wrong-pin",
+          "refused": true
+        },
+        {
+          "case": "wrong-target",
+          "refused": true
+        },
+        {
+          "case": "changed-binary",
+          "refused": true
+        },
+        {
+          "case": "unlisted-private-file",
+          "refused": true
+        },
+        {
+          "case": "symlink-directory",
+          "refused": true
+        },
+        {
+          "case": "hardlink",
+          "refused": true
+        },
+        {
+          "case": "collision-preservation",
+          "refused": true,
+          "sentinel_preserved": true
+        },
+        {
+          "case": "busy-lock",
+          "refused": true
+        },
+        {
+          "case": "cancelled-owned-cleanup",
+          "signal": "CTRL_BREAK_EVENT",
+          "removed": true,
+          "process_count": 2
+        },
+        {
+          "case": "deadline-owned-cleanup",
+          "signal": "WINDOWS_JOB_TIMER",
+          "removed": true,
+          "process_count": 2
+        }
+      ],
+      "funding_operations": [
+        {
+          "operation": "generateblocks",
+          "outcome": "PASS",
+          "elapsed_seconds": 70.170385,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 70.486149,
+          "journey_remaining_at_start_seconds": 1129.513851
+        },
+        {
+          "operation": "refresh",
+          "outcome": "PASS",
+          "elapsed_seconds": 0.069358,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 140.665814,
+          "journey_remaining_at_start_seconds": 1059.334186
+        },
+        {
+          "operation": "get_balance",
+          "outcome": "PASS",
+          "elapsed_seconds": 0.032981,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 140.74523,
+          "journey_remaining_at_start_seconds": 1059.25477
+        }
+      ],
+      "owned_active_processes": 0,
+      "bindings_verified": true,
+      "independent_native_acceptance": "NOT_GRANTED_BY_PARENT"
+    }
+  ],
+  "note": "Tester-produced evidence matched to exact published bundle/controller/input/nested release/program bytes. Not independent native acceptance or diagnosis of the prior Intel timeout."
+}

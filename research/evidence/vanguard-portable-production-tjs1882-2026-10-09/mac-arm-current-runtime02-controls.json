@@ -1,0 +1,52 @@
+{
+  "schema": "meownero-portable-controls/2",
+  "result": "PASS_REFUSALS",
+  "release_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e",
+  "cases": [
+    {
+      "case": "wrong-pin",
+      "refused": true
+    },
+    {
+      "case": "wrong-target",
+      "refused": true
+    },
+    {
+      "case": "changed-binary",
+      "refused": true
+    },
+    {
+      "case": "unlisted-private-file",
+      "refused": true
+    },
+    {
+      "case": "symlink-directory",
+      "refused": true
+    },
+    {
+      "case": "hardlink",
+      "refused": true
+    },
+    {
+      "case": "collision-preservation",
+      "refused": true,
+      "sentinel_preserved": true
+    },
+    {
+      "case": "busy-lock",
+      "refused": true
+    },
+    {
+      "case": "cancelled-owned-cleanup",
+      "signal": "SIGTERM",
+      "removed": true,
+      "process_count": 2
+    },
+    {
+      "case": "deadline-owned-cleanup",
+      "signal": "SIGALRM",
+      "removed": true,
+      "process_count": 2
+    }
+  ]
+}

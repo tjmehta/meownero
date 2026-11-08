@@ -1,0 +1,17 @@
+{
+  "result": "PASS_BOTH_PRIVATE_DELTAS_EXACT_BASE_APPLICATION",
+  "base_commit": "6fb3c3ec4a8e6a13dcbec7b638525556d4f84568",
+  "patches": [
+    {
+      "patch": "portable-licenses-windows-coff-lib.patch",
+      "result": "PASS_ZERO_FUZZ_NO_OFFSET_EXACT_STAGED_OUTPUT",
+      "output_sha256": "10aa313a12277f76013b70f170eb49751bd518fcfd4297c18909a0db57919089"
+    },
+    {
+      "patch": "portable-ci-windows-arm64.patch",
+      "result": "PASS_ZERO_FUZZ_NO_OFFSET_EXACT_STAGED_OUTPUT",
+      "output_sha256": "7a04b1ff20735ecae4d8ec14bef6e84a017b758020d06a68d77eadd8bafdc382"
+    }
+  ],
+  "repository_frozen_helpers": "UNCHANGED"
+}

@@ -1,0 +1,44 @@
+{
+  "observed_utc": "2026-10-19T15:30:40.139238+00:00",
+  "dispatch": false,
+  "new_spend_authority": false,
+  "checks": [
+    {
+      "check": "billing",
+      "exit": 1,
+      "result": {
+        "message": "Not Found",
+        "documentation_url": "https://docs.github.com/rest/billing/billing#get-github-actions-billing-for-a-user",
+        "status": "404"
+      },
+      "diagnostic": "gh: Not Found (HTTP 404)\ngh: This API operation needs the \"user\" scope. To request it, run:  gh auth refresh -h github.com -s user\n"
+    },
+    {
+      "check": "active-runs",
+      "exit": 0,
+      "result": {
+        "total_count": 0,
+        "runs": []
+      },
+      "diagnostic": ""
+    },
+    {
+      "check": "queued-runs",
+      "exit": 0,
+      "result": {
+        "total_count": 0,
+        "runs": []
+      },
+      "diagnostic": ""
+    },
+    {
+      "check": "self-hosted-runners",
+      "exit": 0,
+      "result": {
+        "total_count": 0,
+        "runners": []
+      },
+      "diagnostic": ""
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "macos-aarch64": {
+    "archive_sha256": "70697083bec51c1af70de97b3cb8e02c9d6dcca78b4f4f8c500cb8f64bde2d80",
+    "exit": 0,
+    "stdout": "PASS_PREFLIGHT\n",
+    "stderr": ""
+  },
+  "linux-aarch64": {
+    "archive_sha256": "36f76bb6ae68d0e4574ccb57d9fb2dbfad38789e84d63ea0ad4a100f2835cc2f",
+    "image": "sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b",
+    "argv": [
+      "docker",
+      "--context",
+      "colima",
+      "run",
+      "--pull=never",
+      "--name",
+      "tjs1882-c0cf-2cd394f96eb4463c88e6a4bbd94ecea4-preflight",
+      "--label",
+      "meownero.invocation=2cd394f96eb4463c88e6a4bbd94ecea4",
+      "--network=none",
+      "--read-only",
+      "--tmpfs",
+      "/tmp:rw,size=64m,mode=1777",
+      "--tmpfs",
+      "/package:rw,exec,size=512m,mode=1777",
+      "--memory=768m",
+      "--memory-swap=768m",
+      "--cpus=1",
+      "--pids-limit=64",
+      "--cap-drop=ALL",
+      "--security-opt=no-new-privileges",
+      "-v",
+      "~/Developer/tjs1882-a6abe690/c0cf-linux-arm-candidate.tar.gz:/archive.tar.gz:ro",
+      "--user",
+      "1000:1000",
+      "--entrypoint",
+      "sh",
+      "sha256:345b4ccbee39f1231271234eddcc38e9e7c492114744ca21796b517913ee544b",
+      "-ec",
+      "tar -xzf /archive.tar.gz -C /package; cd /package/meownero-vanguard-aarch64; python3 -B tester.py preflight"
+    ],
+    "cleanup": true,
+    "exit": 0,
+    "stdout": "PASS_PREFLIGHT\n",
+    "stderr": ""
+  }
+}

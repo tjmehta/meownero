@@ -1,0 +1,56 @@
+{
+  "schema": "meownero-exact-mac-checkpoint-status/1",
+  "issue": "TJS-1882",
+  "generated_utc": "2026-10-10T01:43:27.303602+00:00",
+  "scope": "EXACT_CURRENT_MACOS_AARCH64_ARCHIVE_AND_RECORDED_MACOS_26_5_1_NATIVE_WITNESS_ONLY",
+  "archive": {
+    "name": "mac-arm-starter-package01.tar.gz",
+    "bytes": 63060519,
+    "sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+    "internal_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e"
+  },
+  "source_evidence_commit": "1afe36b97752f9b820ae8f7c36da59ac721d5718",
+  "native_witness": {
+    "system": "macOS26.5.1",
+    "kernel": "Darwin25.5.0 arm64",
+    "python": "3.14.7",
+    "execution_substrate": "NATIVE",
+    "full_journey": "PASS_NATIVE_JOURNEY",
+    "ten_controls": "PASS_REFUSALS",
+    "owned_cleanup": "PASS_WRAPPER_AND_OWNED_CLEANUP",
+    "program_sha256": {
+      "monerod": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+      "monero-wallet-cli": "eea8a6e59a8b6b1439c97d03001736af5cbbdc7610106d4f189ce76c571827d3",
+      "monero-wallet-rpc": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142"
+    }
+  },
+  "original_reviewer_decision": {
+    "result": "ACCEPTED_SCOPED_CHECKPOINT",
+    "reviewer_agent_id": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+    "comment_id": "03ba5237-db67-43de-bd90-060745e520fc",
+    "run_id": "dd1deb13-4d62-4896-853e-1aabbd509443",
+    "audit_sha256": "6a2a3ad4ab7fa7e8f096ab102208867090168f8c5bd4d061158c00c9cb1c22b4",
+    "evidence_packet_sha256": "37503ffd7441465b08f0088ee50ef4daad2629cd3ae5f80c3d69ab821359216e"
+  },
+  "qualification": {
+    "formal_execution_stage_acceptance": "UNRECORDED",
+    "full_seven_target_release": "OPEN",
+    "other_Mac_versions": "UNTESTED",
+    "declared_macos11_execution": "UNTESTED",
+    "independent_native_rerun": "NOT_PERFORMED_THIS_RUN",
+    "independent_rebuild": "NOT_PERFORMED",
+    "signing_notarization_download_handling": "UNCONFIRMED",
+    "group_artifact_delivery": "NOT_PERFORMED",
+    "network": "DISPOSABLE_VALUELESS_LOCAL_REGTEST",
+    "immutable_archive_modified": false,
+    "historical_status_supplements_rewritten": false
+  },
+  "prior_Windows_only_supplement_sha256": "809444dfb88fc79f828c92780abec09755c3771094d27c36e377891575ec9f08",
+  "scoped_checkpoints_accepted_by_original_reviewer": [
+    "windows-x86_64",
+    "macos-aarch64"
+  ],
+  "platform_checkpoints_accepted": 2,
+  "platform_checkpoints_total": 7,
+  "source_delivery": "NEW_CANDIDATE_BOUND_SUPPLEMENT_NOT_FORMAL_RELEASE_MATRIX"
+}

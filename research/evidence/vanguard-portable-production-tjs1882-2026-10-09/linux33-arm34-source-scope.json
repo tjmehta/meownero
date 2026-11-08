@@ -1,0 +1,29 @@
+{
+  "schema": "meownero-linux33-arm34-source-scope/1",
+  "result": "PASS_SOURCE_SCOPE_ONLY",
+  "added_license_function": "link_inventory",
+  "changed_existing_license_functions": [
+    "coverage"
+  ],
+  "unchanged_license_functions": [
+    "retain_depends",
+    "rust_coverage",
+    "sha"
+  ],
+  "controllers": "ONLY_package_failure_CHANGED_ALL_WORKER_MAIN_FINALIZERS_AST_UNCHANGED",
+  "native_acceptance": false,
+  "source_sha256": "b4ea8c1c38e217bc4ce025a1ca2860149c5d7a39dab22b69b84055309685438a",
+  "fixture_sha256": "e7159d12caf6552bcfaba1319bf2828120118ab52030340782c41cca9f59ac78",
+  "known_defect": "Relative pinned depends paths were silently treated as project contrib libraries",
+  "actual_31_32_causality": "UNPROVEN_LINK_COMMANDS_NOT_EXPORTED",
+  "guard_preservation": "Missing-component and static dependency assertions retained",
+  "parent_early_findings": [
+    "8cb4d473-df17-4fa8-8a6d-e06d5e38be3b",
+    "c6c9297e-55a9-4887-886e-a5a02e420b6b"
+  ],
+  "additional_corrections": [
+    "Pinned dependency names require exact pinned origin; mixed or bundled collisions refuse",
+    "Absolute and relative response files share checked alias normalization; file/parent symlinks refuse",
+    "Allowlisted refusal context set before inventory errors"
+  ]
+}

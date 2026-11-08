@@ -1,0 +1,23 @@
+{
+  "schema": "meownero-arm13-private-packaging-adaptation/1",
+  "base_commit": "6fb3c3ec4a8e6a13dcbec7b638525556d4f84568",
+  "files": {
+    "vanguard/package-portable-windows.py": "dc2c3ef1d7943b28d612613424880a82a662ac79ed06777802261b9979321ea0",
+    "vanguard/portable_licenses.py": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+    "vanguard/portable-tester.py": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+    "vanguard/portable_windows.py": "38ad44758c9a9469dbf17ef581369ac3abe1fe4ed0045a383f5fe4b6b8e7db6c",
+    "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+    "docs/vanguard-portable-tester.md": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+    "vanguard/licenses/easyloggingpp-9.96.7/LICENSE": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+    "vanguard/licenses/easyloggingpp-9.96.7/provenance.json": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+    "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c"
+  },
+  "patch_path": "vanguard/patches/portable-licenses-windows-coff-lib.patch",
+  "patch_sha256": "14c6cf74969c91377a2fe95bd9f643c4201d34beada8e68f82a4415326935d5c",
+  "original_inventory_sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+  "windows_inventory_sha256": "10aa313a12277f76013b70f170eb49751bd518fcfd4297c18909a0db57919089",
+  "application": "PRIVATE_WINDOWS_PACKAGING_KIT_ONLY_FROZEN_REPOSITORY_HELPERS_UNCHANGED",
+  "reason": "Actual LLVM Boost link-response inputs are libboost_*.lib. Original parser ignored them, then correctly failed required dependency coverage.",
+  "native_windows_runtime": "UNTESTED",
+  "primary_contract": "https://learn.microsoft.com/en-us/cpp/build/reference/lib-reference?view=msvc-170"
+}

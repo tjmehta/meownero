@@ -1,0 +1,32 @@
+{
+  "schema": "meownero-arm08-source-bound-assembler-gates/1",
+  "result": "PASS_EXACT_ONLY_FOUR_NEGATIVES_BEFORE_PATCH",
+  "helper_sha256": "505d322a85b5e332680a5b40263c18ef21d4cb8b0191a3e59f81e810ad6bed66",
+  "cases": [
+    {
+      "case": "exact",
+      "result": "APPLIED",
+      "patch_invocations": 1
+    },
+    {
+      "case": "wrong_target",
+      "result": "REFUSED",
+      "patch_invocations": 0
+    },
+    {
+      "case": "wrong_pin",
+      "result": "REFUSED",
+      "patch_invocations": 0
+    },
+    {
+      "case": "changed_source",
+      "result": "REFUSED",
+      "patch_invocations": 0
+    },
+    {
+      "case": "changed_patch",
+      "result": "REFUSED",
+      "patch_invocations": 0
+    }
+  ]
+}

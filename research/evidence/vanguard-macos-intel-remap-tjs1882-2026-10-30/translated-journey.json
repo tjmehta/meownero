@@ -1,0 +1,90 @@
+{
+  "schema": "meownero-portable-journey/1",
+  "result": "PASS_TRANSLATED_JOURNEY",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "architecture": "x86_64",
+  "release_manifest_sha256": "2afab24bc379d72ed1e9e86ff4838830dfa68cce47782038da1f5309e3bf9af9",
+  "program_sha256": {
+    "monerod": "e82e283f0743b244e7ff2b4fbf203d107c6c91c3af61a3440d46f827a4763d36",
+    "monero-wallet-cli": "996b4a946f79d7c960b2ca45e6981fbe9b16ac72d16bae9b3ed65eee1f47c6fb",
+    "monero-wallet-rpc": "c48d8a38285d0dfb5b3b8345eb688a9b8183d66f31ffe59052856f5c0372757d"
+  },
+  "cleanup": [
+    {
+      "name": "cli",
+      "pid": 49183,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "restored",
+      "pid": 47260,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "receiver",
+      "pid": 47249,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "sender",
+      "pid": 47233,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "daemon",
+      "pid": 47229,
+      "exit": 0,
+      "removed": true
+    }
+  ],
+  "payments": [
+    {
+      "tx_hash": "402ebe945628b7f6bfadfc8d997c9b8183f229cf1c26dd83fa6f39ca1e59bfeb",
+      "amount_atomic": 5000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    },
+    {
+      "tx_hash": "3dd451a0ac897e212fb26f16fa65d140d218ceb5805d7bf6d7579d91b99c6dde",
+      "amount_atomic": 2000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    }
+  ],
+  "native_processes": [
+    {
+      "name": "daemon",
+      "pid": 47229,
+      "binary_sha256": "e82e283f0743b244e7ff2b4fbf203d107c6c91c3af61a3440d46f827a4763d36",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "sender",
+      "pid": 47233,
+      "binary_sha256": "c48d8a38285d0dfb5b3b8345eb688a9b8183d66f31ffe59052856f5c0372757d",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "receiver",
+      "pid": 47249,
+      "binary_sha256": "c48d8a38285d0dfb5b3b8345eb688a9b8183d66f31ffe59052856f5c0372757d",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "restored",
+      "pid": 47260,
+      "binary_sha256": "c48d8a38285d0dfb5b3b8345eb688a9b8183d66f31ffe59052856f5c0372757d",
+      "bundled_library_sha256": {}
+    }
+  ],
+  "execution_substrate": "ROSETTA_TRANSLATED_MACOS_X86_64",
+  "receive_atomic": 5000000000000,
+  "restore_matches": true,
+  "subsequent_spend_atomic": 2000000000000,
+  "cli_open_restored_wallet": true,
+  "wall_seconds": 25.444
+}

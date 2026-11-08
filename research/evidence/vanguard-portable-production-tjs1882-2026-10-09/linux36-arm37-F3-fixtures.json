@@ -1,0 +1,185 @@
+{
+  "schema": "meownero-pinned-linker-inventory-fixtures/1",
+  "result": "PASS",
+  "source_sha256": "a3bbe381600b7826bbecbc63d0463f435abf7da922feb49ba58f2e8b4c94411a",
+  "controllers": {
+    "33": "216ece126fb745d383975cbacd7f1bcae2f112d12d11848fed3df28d3e5f0d70",
+    "34": "77844913c6833b533f6af36f882134dc6d924d4bc48819a6ed27b509a7a61839"
+  },
+  "fixture_source_sha256": "f4b060c9ef51cc4881b64eece01e0a81560f321f7dd9125ba6b1a6548cd11e3d",
+  "cases": [
+    {
+      "case": "absolute-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "relative-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "container-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "mixed-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "response-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "response-absolute-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "response-container-equivalence",
+      "result": "PASS"
+    },
+    {
+      "case": "wrong-depends-host",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "wrong-depends-library-directory",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "non-pinned-contrib",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "src-pinned-basename-before-pinned-arguments",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "contrib/epee-pinned-basename-before-pinned-arguments",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "outside-project-src",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "absolute-untrusted-pinned-basename",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "mixed-pinned-and-untrusted-basename",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-escape",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-container-escape",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-cycle",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-file-symlink",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "response-parent-symlink",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "absolute-full-missing-component-guard-positive",
+      "result": "PASS",
+      "scope": "NOTICE_AND_RUST_SEAMS"
+    },
+    {
+      "case": "relative-full-missing-component-guard-positive",
+      "result": "PASS",
+      "scope": "NOTICE_AND_RUST_SEAMS"
+    },
+    {
+      "case": "coverage-mixed-bundled-origin-refusal",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "static-closure-refusal-retained",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "controller": 33,
+      "case": "missing-component-and-safe-source-bound-diagnostic",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 33,
+      "case": "worker-primary-error-secondary-export-False",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 33,
+      "case": "worker-primary-error-secondary-export-True",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 33,
+      "case": "spoofed-private-context-refusal",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "missing-component-and-safe-source-bound-diagnostic",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-response-file-hash-context",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "safe-origin-refusal-context-non_pinned_depends",
+      "result": "PASS"
+    },
+    {
+      "controller": 34,
+      "case": "worker-primary-error-secondary-export-False",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 34,
+      "case": "worker-primary-error-secondary-export-True",
+      "result": "PASS",
+      "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+    },
+    {
+      "controller": 34,
+      "case": "spoofed-private-context-refusal",
+      "result": "PASS"
+    }
+  ],
+  "native_archive_or_runtime_acceptance": false
+}

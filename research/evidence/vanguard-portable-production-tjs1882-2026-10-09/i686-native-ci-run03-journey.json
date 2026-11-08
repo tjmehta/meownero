@@ -1,0 +1,119 @@
+{
+  "schema": "meownero-portable-journey/1",
+  "result": "PASS_NATIVE_JOURNEY",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "architecture": "i686",
+  "release_manifest_sha256": "0ddca8155c906bbccc1d80487dd6c37c0e194cdf2e3b67fcf32c3bf0e3b67102",
+  "program_sha256": {
+    "monerod": "a14a6c6ea6f2f1a544de60670a423ce77f64c38cd545eacbe8fcf440fca7c7e6",
+    "monero-wallet-cli": "7d5a834028f9bc15df7b6074ef8c91970d1a2ebc7b716fa07534c4b3d81b9825",
+    "monero-wallet-rpc": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3"
+  },
+  "cleanup": [
+    {
+      "name": "cli",
+      "pid": 3240,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "restored",
+      "pid": 9996,
+      "exit": 1,
+      "removed": true
+    },
+    {
+      "name": "receiver",
+      "pid": 6552,
+      "exit": 1,
+      "removed": true
+    },
+    {
+      "name": "sender",
+      "pid": 8384,
+      "exit": 1,
+      "removed": true
+    },
+    {
+      "name": "daemon",
+      "pid": 7080,
+      "exit": 1,
+      "removed": true
+    }
+  ],
+  "payments": [
+    {
+      "tx_hash": "878c50232e271d9fa79b35ae8faba59d1b09385b3ef37386b250d3e28e3a16df",
+      "amount_atomic": 5000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    },
+    {
+      "tx_hash": "221c177d285a266b29786cdbae76cc03dd69161619172f77bd94a1a05d0502c5",
+      "amount_atomic": 2000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    }
+  ],
+  "native_processes": [
+    {
+      "name": "daemon",
+      "pid": 7080,
+      "binary_sha256": "a14a6c6ea6f2f1a544de60670a423ce77f64c38cd545eacbe8fcf440fca7c7e6",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "sender",
+      "pid": 8384,
+      "binary_sha256": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "receiver",
+      "pid": 6552,
+      "binary_sha256": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3",
+      "bundled_library_sha256": {}
+    },
+    {
+      "name": "restored",
+      "pid": 9996,
+      "binary_sha256": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3",
+      "bundled_library_sha256": {}
+    }
+  ],
+  "execution_substrate": "NATIVE_WINDOWS_WOW64",
+  "receive_atomic": 5000000000000,
+  "restore_matches": true,
+  "subsequent_spend_atomic": 2000000000000,
+  "cli_open_restored_wallet": true,
+  "owned_job_cleanup": true,
+  "owned_job": {
+    "active_processes": 0,
+    "total_processes": 10,
+    "peak_committed_bytes": 503144448,
+    "memory_limit_bytes": 4294967296,
+    "children": [
+      {
+        "pid": 7080,
+        "exit": 1
+      },
+      {
+        "pid": 8384,
+        "exit": 1
+      },
+      {
+        "pid": 6552,
+        "exit": 1
+      },
+      {
+        "pid": 9996,
+        "exit": 1
+      },
+      {
+        "pid": 3240,
+        "exit": 0
+      }
+    ]
+  },
+  "wall_seconds": 120.373
+}

@@ -1,0 +1,56 @@
+{
+  "latest_commands": [
+    {
+      "label": "archive-external-supercop",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.020593750057742
+    },
+    {
+      "label": "toolchain",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 22.013469707919285
+    },
+    {
+      "label": "toolchain-cleanup",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.04492704104632139
+    },
+    {
+      "label": "randomx-arm64-allocator",
+      "exit": 0,
+      "reaped": true,
+      "wall_seconds": 0.007718916051089764
+    },
+    {
+      "label": "randomx-arm64-hidden",
+      "exit": 1,
+      "reaped": true,
+      "wall_seconds": 0.005997166037559509
+    }
+  ],
+  "receipt_sha256": "1b92d8bc27f6aaa0654b6e09f3a602050fe08d9f32e7fb9a2eed58bf73dd24ec",
+  "receipt_bytes": 21518,
+  "owned_containers": [
+    {
+      "label": "toolchain",
+      "invocation": "41498e98f53444019951ebc96fa1578c",
+      "removed": true,
+      "id": "5252b6e61c163fbceb200297af424e35dfb798d6d09d6557441ec3e6d93cf553"
+    }
+  ],
+  "schema": "meownero-arm10-actual-patch-failure-adoption/1",
+  "result": "FAILED_AT_HOST_PATCH_BEFORE_DEPENDENCY_DOWNLOAD_AND_COMPILE",
+  "run_id": "d67e7482-4ab3-47e5-8ed7-04c04e4cd1e5",
+  "attempt": "windows-arm-attempt10",
+  "reason": "MACOS_PATCH_MINIMAL_HUNK_FAILED_EXACT_PINNED_PREIMAGE",
+  "source_pin": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "kit_sha256": "b0336ef43eb927c650f24c34828460b64fd7aa36f982aec12f21fa3b4b3bb8ec",
+  "owned_toolchain_container_removed": true,
+  "actual_exact_inspect_and_ID_filter_absence": "PASS",
+  "compiler_or_archive_or_native_Windows_runtime_reached": false,
+  "new_patch_context_correction": "SAME_PREIMAGE_AND_POSTIMAGE_BSD_ZERO_FUZZ_APPLY_AND_REVERSE_PASS",
+  "prior09_prerequisite_refusal_and08_compiler_failure": "PRESERVED_SEPARATELY"
+}

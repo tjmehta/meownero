@@ -1,0 +1,253 @@
+{
+  "schema": "meownero-returned-windows-report-validation/1",
+  "result": "PASS_THREE_RETURNED_REPORT_VALIDATIONS",
+  "bundle_bytes": 164120029,
+  "bundle_sha256": "bedd371bc042ec2b893e45693083eae64637ca1a1f496933f2f90a5bf6f38034",
+  "bundle_manifest_sha256": "46489d0ac6cea2e023506f4c893176d4d6d7de68580b19aa0c2c5d52bc364c65",
+  "candidate_source_revision": "6836e5e1b14e66292cb0393b9f8ba0d1b8ab0dec",
+  "parent_verification_sha256": "d9c29f3a1551587595db86e16451c9e0a99cc8df916395a8f3af4c60e860e07b",
+  "reports": [
+    {
+      "filename": "arm-report-v2.zip",
+      "source_message_id": "<message-id>",
+      "source_timestamp": "2026-10-30T19:06:13Z",
+      "zip_bytes": 3326,
+      "zip_sha256": "394294d5dc1465f2eae52e256bdce9281d72ab3f31c4ab33f3e095c01fa8f2ea",
+      "target": "windows-aarch64",
+      "result": "INCOMPLETE_NATIVE_ARCHIVE_CONTROLS",
+      "native_architecture": "aarch64",
+      "package_architecture": "aarch64",
+      "execution_substrate": "NATIVE",
+      "release_manifest_sha256": "c0cc65a405cb7c4c276cd738d6ba907d7380160125913397b19244fb4f6a34a4",
+      "program_sha256": {
+        "monerod": "353e7bf56ea605de42e2149585f233e346d12cb83446474f1a98f3af6ac2747c",
+        "monero-wallet-cli": "7b97e875a50a09c5286b64eb59bd88019821f1f73ec20ca61f5ac338e87aaece",
+        "monero-wallet-rpc": "6ff5befa8cbf0fd357aa4959e2fadab2894d9d8226ec5e936f4e39d511f98b49"
+      },
+      "controller_sha256": "7776dfeef443b41ad61e1664871ec364504a97da55b9beaa5120ad18aac97d64",
+      "inputs_sha256": "d4300012ec5ee44e17550e83ef00ffe64ea5aa347da92fa44140302f883fe18c",
+      "nested_archive_sha256": "eed161eff71038e0ca37034e195d4943870c4c10cca6fd07c52b7311c1dc8484",
+      "json_members": [
+        "bundle-receipt.json",
+        "public/ci-receipt.json",
+        "public/check.json",
+        "public/journey.json",
+        "public/controls.json"
+      ],
+      "completed_controls": 9,
+      "unexecuted_controls": [
+        "symlink-directory"
+      ],
+      "control_phase_exit": 2,
+      "cleanup_active_processes": 0,
+      "funding_operations": null,
+      "private_data_exported": false,
+      "validation": "PASS_EXACT_BINDINGS_OUTCOMES_PUBLIC_SCHEMA_AND_REPORTED_CLEANUP",
+      "independent_acceptance": "PENDING_EXISTING_REVIEWER"
+    },
+    {
+      "filename": "intel-report-v2.zip",
+      "source_message_id": "<message-id>",
+      "source_timestamp": "2026-10-30T19:11:25Z",
+      "zip_bytes": 4498,
+      "zip_sha256": "0e31a52562f6d771c05480aa170b487f7f141ddbaae9f8b2f7064366341740af",
+      "target": "windows-i686",
+      "result": "PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS",
+      "native_architecture": "x86_64",
+      "package_architecture": "i686",
+      "execution_substrate": "NATIVE_WINDOWS_WOW64",
+      "release_manifest_sha256": "0c707d10fab98caeb35fbe9172bf5e82124814e5fd74e36fabc8131f0c75c5d3",
+      "program_sha256": {
+        "monerod": "a14a6c6ea6f2f1a544de60670a423ce77f64c38cd545eacbe8fcf440fca7c7e6",
+        "monero-wallet-cli": "7d5a834028f9bc15df7b6074ef8c91970d1a2ebc7b716fa07534c4b3d81b9825",
+        "monero-wallet-rpc": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3"
+      },
+      "controller_sha256": "90d3aba06f20d92d408b639b48d63f465930fdb83c8ec8895badf83c4d7a9c54",
+      "inputs_sha256": "4b2fc274e3352466c0cf28d5f23adf0c6e40ec19b4b5f81608a4165eb1248822",
+      "nested_archive_sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "json_members": [
+        "bundle-receipt.json",
+        "public/ci-receipt.json",
+        "public/check.json",
+        "public/journey.json",
+        "public/controls.json",
+        "public/journey-diagnostic.json"
+      ],
+      "completed_controls": 10,
+      "unexecuted_controls": [],
+      "control_phase_exit": 0,
+      "cleanup_active_processes": 0,
+      "funding_operations": [
+        {
+          "operation": "generateblocks",
+          "outcome": "PASS",
+          "elapsed_seconds": 71.229059,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 75.289201,
+          "journey_remaining_at_start_seconds": 1124.710799
+        },
+        {
+          "operation": "refresh",
+          "outcome": "PASS",
+          "elapsed_seconds": 2.743025,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 146.53202,
+          "journey_remaining_at_start_seconds": 1053.46798
+        },
+        {
+          "operation": "get_balance",
+          "outcome": "PASS",
+          "elapsed_seconds": 0.029417,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 149.284036,
+          "journey_remaining_at_start_seconds": 1050.715964
+        }
+      ],
+      "private_data_exported": false,
+      "validation": "PASS_EXACT_BINDINGS_OUTCOMES_PUBLIC_SCHEMA_AND_REPORTED_CLEANUP",
+      "independent_acceptance": "PENDING_EXISTING_REVIEWER"
+    },
+    {
+      "filename": "intel-report3-v2.zip",
+      "source_message_id": "<message-id>",
+      "source_timestamp": "2026-10-30T19:30:04Z",
+      "zip_bytes": 4487,
+      "zip_sha256": "e2ade0040cc727141850971990b566651c720db272227c5e79dee3518410173c",
+      "target": "windows-i686",
+      "result": "PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS",
+      "native_architecture": "x86_64",
+      "package_architecture": "i686",
+      "execution_substrate": "NATIVE_WINDOWS_WOW64",
+      "release_manifest_sha256": "0c707d10fab98caeb35fbe9172bf5e82124814e5fd74e36fabc8131f0c75c5d3",
+      "program_sha256": {
+        "monerod": "a14a6c6ea6f2f1a544de60670a423ce77f64c38cd545eacbe8fcf440fca7c7e6",
+        "monero-wallet-cli": "7d5a834028f9bc15df7b6074ef8c91970d1a2ebc7b716fa07534c4b3d81b9825",
+        "monero-wallet-rpc": "ab4a93c521dbf6a78392982d82f52a712fc3e09f849ccfc7e94c88dc6f0741c3"
+      },
+      "controller_sha256": "90d3aba06f20d92d408b639b48d63f465930fdb83c8ec8895badf83c4d7a9c54",
+      "inputs_sha256": "4b2fc274e3352466c0cf28d5f23adf0c6e40ec19b4b5f81608a4165eb1248822",
+      "nested_archive_sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "json_members": [
+        "bundle-receipt.json",
+        "public/ci-receipt.json",
+        "public/check.json",
+        "public/journey.json",
+        "public/controls.json",
+        "public/journey-diagnostic.json"
+      ],
+      "completed_controls": 10,
+      "unexecuted_controls": [],
+      "control_phase_exit": 0,
+      "cleanup_active_processes": 0,
+      "funding_operations": [
+        {
+          "operation": "generateblocks",
+          "outcome": "PASS",
+          "elapsed_seconds": 70.170385,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 70.486149,
+          "journey_remaining_at_start_seconds": 1129.513851
+        },
+        {
+          "operation": "refresh",
+          "outcome": "PASS",
+          "elapsed_seconds": 0.069358,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 140.665814,
+          "journey_remaining_at_start_seconds": 1059.334186
+        },
+        {
+          "operation": "get_balance",
+          "outcome": "PASS",
+          "elapsed_seconds": 0.032981,
+          "socket_timeout_seconds": 90,
+          "journey_deadline_seconds": 1200,
+          "journey_elapsed_at_start_seconds": 140.74523,
+          "journey_remaining_at_start_seconds": 1059.25477
+        }
+      ],
+      "private_data_exported": false,
+      "validation": "PASS_EXACT_BINDINGS_OUTCOMES_PUBLIC_SCHEMA_AND_REPORTED_CLEANUP",
+      "independent_acceptance": "PENDING_EXISTING_REVIEWER"
+    }
+  ],
+  "sensitivity_checks": [
+    {
+      "report": "arm-report-v2.zip",
+      "mutation": "wrong-manifest",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "arm-report-v2.zip",
+      "mutation": "active-owned-process",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "arm-report-v2.zip",
+      "mutation": "wrong-program-architecture",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "arm-report-v2.zip",
+      "mutation": "false-full-pass",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "arm-report-v2.zip",
+      "mutation": "false-refused-skip",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report-v2.zip",
+      "mutation": "wrong-manifest",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report-v2.zip",
+      "mutation": "active-owned-process",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report-v2.zip",
+      "mutation": "wrong-program-architecture",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report-v2.zip",
+      "mutation": "private-diagnostic-field",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report3-v2.zip",
+      "mutation": "wrong-manifest",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report3-v2.zip",
+      "mutation": "active-owned-process",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report3-v2.zip",
+      "mutation": "wrong-program-architecture",
+      "result": "REJECTED_EXPECTED"
+    },
+    {
+      "report": "intel-report3-v2.zip",
+      "mutation": "private-diagnostic-field",
+      "result": "REJECTED_EXPECTED"
+    }
+  ],
+  "privacy_scope": "Exact public fields, pure-projector equality, bounded value scan; no private member. Not a universal secret detector.",
+  "evidence_scope": "Tester-produced reports; writer inspected bytes on Linux. No fresh native execution or independent acceptance.",
+  "host_independence": "UNKNOWN_NOT_ATTESTED",
+  "intel_original_timeout_root_cause": "UNKNOWN",
+  "standalone_32bit_windows": "UNTESTED_BY_THESE_REPORTS",
+  "native_x64_programs": "UNTESTED_BY_THESE_REPORTS",
+  "seven_target_release": "OPEN"
+}

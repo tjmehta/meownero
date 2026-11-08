@@ -1,0 +1,37 @@
+{
+  "schema": "meownero-arm08-coff-assembler-correction/1",
+  "result": "PASS_OLD_FAILS_NEW_COFF_ASSEMBLES_OTHER_PLATFORMS_IDENTICAL",
+  "old_source_sha256": "f31e68e4325bb5be41eaeaf63975bf760ff158be80f0ce800e43497e9d9f693f",
+  "new_source_sha256": "158033e0e3c552b201581ea1c427c4989abc65a462b05b5c72d9faf34c9438a1",
+  "compiler_sha256": "1220c0afafa12a6ae599d097ee7cf8b87c6b4d8e3fbb9783cee6b319a80683ba",
+  "compiler_version": "Apple clang version 21.0.0 (clang-2100.1.1.101)",
+  "cases": [
+    {
+      "target": "ELF",
+      "preprocessed_bytes_identical": true,
+      "sha256": "30e9932505aac5b7440b7b6c02277c16b3517fb9f77a9bf1084907294beccee1"
+    },
+    {
+      "target": "MACHO",
+      "preprocessed_bytes_identical": true,
+      "sha256": "defc74bed099f04a74441d79dabda3e6ade91fb0351f8ae054e54307a859bc0b"
+    },
+    {
+      "target": "WINDOWS_COFF",
+      "source": "original",
+      "exit": 1,
+      "unknown_directive": true
+    },
+    {
+      "target": "WINDOWS_COFF",
+      "source": "corrected",
+      "exit": 0,
+      "unknown_directive": false,
+      "machine": 43620,
+      "object_bytes": 24251,
+      "object_sha256": "991ea3d7d620487f2a27697d5c6a8717b40854e76b8c83ad953651e67601c71e"
+    }
+  ],
+  "full_build": "UNTESTED",
+  "native_Windows_runtime": "UNTESTED"
+}

@@ -1,0 +1,13 @@
+# Reviewed Linux31/ARM32 publication handoff
+
+Parent review `build/tjs1882-32610-parent-review14/LINUX31-ARM32-SOURCE-REVIEW.json`,33757bytes,SHA983632f0f448daf46c7f8d0b82cd702e0374a670573c695f7339a1e4223adba1 is independently read back and adopted: source CLEAR,36 file bindings,10 unique Git evidence objects,18 fixtures PASS. Native acceptance is not granted.
+
+Use exact frozen payload31/32 bytes and allowlists listed in the JSON sidecar. Source/evidence4a594b0cf76c3ae893ba2fd903bf45732230d75d binds committed controller carriers and explicit evidence objects. It does not assert that workflow/input/controller outputs are already published at whole-product-tree paths. The independent review observes13/18 same-path Git matches per candidate.
+
+Current delta is three files per candidate: controller, source-input controller digest, and workflow input digest. Other15 bytes equal27/28. Inherited empty delta_from_preserved_base, handoff_only_delta and historical all18-byte proof-closure statements remain immutable historical metadata; they do not describe31/32. The sidecar records the actual current delta without mutating the reviewed manifests.
+
+Parent/TJ must first read fresh actual included-minute and storage allowance. Quota is UNVERIFIED. After that gate passes, parent alone publishes17 exact input files FIRST, independently reads back all17 SHA/size bindings, publishes the exact one-target workflow LAST, and reads back all18 before adopting the actual run/head SHA/artifact bytes. Neither workflow was published or dispatched by this writer. Source clearance alone is not permission to infer current quota or native success.
+
+Linux27/run38015278854 and ARM28/run38015490152 compiled and executed versions successfully under4GiB memory-and-swap/6GiB host policy. Both failed PACKAGE with AssertionError; inner cause remains UNKNOWN. Archive/runtime/journey/ten controls were not reached.31/32 preserve source/hash/ABI/license assertions and privacy/cleanup/resource/native gates; their added diagnostic reports only a static failure type and whitelisted source module/numeric line/input-bound SHA, re-raising the original error. This is a reviewed instrumented attempt, not an established package fix.
+
+Existing full diagnostic packet: attachment06f3d7a4-f544-4f2f-9322-f7257b1e5c91,56members,199918bytes,SHA b6a7d9e1f12a68b481566903e904a42940237991b09a914fd5efee67710bee88; authenticated exact readback PASS. Actual27/28 attachmentda09e124-697c-411e-9d9a-5502c48ee858 remains retained. ARM11 is the sole reviewed kit17 build; the same writer observes it. Parent owns i68630 CI publication, integration and final group delivery. Sole Intel requestdfdec761 and accepted Windowsx64/MacARM scopes remain preserved; full release OPEN.

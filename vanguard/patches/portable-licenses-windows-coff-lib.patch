@@ -1,0 +1,13 @@
+--- a/vanguard/portable_licenses.py
++++ b/vanguard/portable_licenses.py
+@@ -190,7 +190,9 @@
+                                 '-lkernel32', '-luser32', '-lshell32', '-lole32', '-lversion', '-lrpcrt4', '-lntdll', '-ldbghelp'}
+                     allowed |= {'-lsynchronization', '-lgdi32', '-lwinspool', '-loleaut32', '-luuid', '-lcomdlg32'}
+                 assert token in allowed, 'unmapped linker library: ' + token
+-            if not re.search(r'\.(?:a|so(?:\.\d+)*)$', token):
++            # Windows LLVM/Boost archives also use the COFF .lib suffix.
++            pattern = r'\.(?:a|lib|so(?:\.\d+)*)$' if windows else r'\.(?:a|so(?:\.\d+)*)$'
++            if not re.search(pattern, token):
+                 continue
+             path = Path(token)
+             normalized = input_path(path).resolve()

@@ -1,0 +1,109 @@
+{
+  "schema": "meownero-private-native-linux-build-inputs/1",
+  "issue": "TJS-1882",
+  "status": "PARENT_DELTA_REVIEW_PENDING_NATIVE_BUILD_AND_JOURNEY_UNTESTED",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+  "submodule_urls": {
+    "external/gtest": "https://github.com/google/googletest.git",
+    "external/mx25519": "https://github.com/tevador/mx25519",
+    "external/randomx": "https://github.com/tevador/RandomX",
+    "external/rapidjson": "https://github.com/Tencent/rapidjson",
+    "external/supercop": "https://github.com/monero-project/supercop"
+  },
+  "rust": {
+    "url": "https://static.rust-lang.org/dist/rust-1.93.0-x86_64-unknown-linux-gnu.tar.xz",
+    "sha256": "b9d9f01a96a2542852ccfddd82194276ba1c86bc76353309ff636b737fc0a772",
+    "rustc_sha256": "d32249a7c3bfcfc67b471460386e46323accae7125e344567a12d5664d99bb57",
+    "cargo_sha256": "9548937d530bf439ff1ba47a3b2bd26eeb9c3aff1961c20c01798613de922578"
+  },
+  "depends": {
+    "boost": {
+      "file": "boost-1.91.0-1-b2-nodocs.tar.gz",
+      "url": "https://github.com/boostorg/boost/releases/download/boost-1.91.0-1/boost-1.91.0-1-b2-nodocs.tar.gz",
+      "sha256": "b5a3d1490118e012f8b12688240d981bcdfcd009fd35bc70d120fbc907df4f7c",
+      "recipe_sha256": "fe6b57564c038aa044edb916074d36e5fa52ac7015354ffb29866b7099d15341",
+      "version": "1.91.0-1"
+    },
+    "openssl": {
+      "file": "openssl-3.5.8.tar.gz",
+      "url": "https://github.com/openssl/openssl/releases/download/openssl-3.5.8/openssl-3.5.8.tar.gz",
+      "sha256": "a8f84a39918ec6415ce765d9b429d313ba97b8143169c172e734b9514464f5b2",
+      "recipe_sha256": "56a68cf10b97c777b71ea717f0b0b9c5bae3d4dcf7a607b708069e97c2494c09",
+      "version": "3.5.8"
+    },
+    "sodium": {
+      "file": "libsodium-1.0.18.tar.gz",
+      "url": "https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz",
+      "sha256": "6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1",
+      "recipe_sha256": "11ae81dc602e4f4b7a2c0b6257214f7ef5a06971d1f63c5d583d855d7646893f",
+      "version": "1.0.18"
+    },
+    "unbound": {
+      "file": "unbound-1.25.2.tar.gz",
+      "url": "https://www.nlnetlabs.nl/downloads/unbound/unbound-1.25.2.tar.gz",
+      "sha256": "0d92275c703d5f5f8baba3dab22117dd8c29b495588a5c229768ed6581566600",
+      "recipe_sha256": "7c15922828907c0fe064b0245c0f7cd7710144fca2349e01c7e2556a202358b4",
+      "version": "1.25.2"
+    },
+    "zeromq": {
+      "file": "zeromq-4.3.5.tar.gz",
+      "url": "https://github.com/zeromq/libzmq/releases/download/v4.3.5/zeromq-4.3.5.tar.gz",
+      "sha256": "6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43",
+      "recipe_sha256": "9903f96d13be682904d330a08232854e663f1a42126148bb8ee73dc4f9dd7ebb",
+      "version": "4.3.5"
+    }
+  },
+  "source_files": {
+    "vanguard/run-portable-linux-ci.py": "216ece126fb745d383975cbacd7f1bcae2f112d12d11848fed3df28d3e5f0d70",
+    "vanguard/run-portable-ci.py": "3859b2684f5c5d70877616bc95ed25d25b5f0ff2f2712382aaf0ed6d12071105",
+    "vanguard/portable-build.py": "3f6bf984102c61da14652f18332a67b01d1912c4234506c21e57f63d7bf88279",
+    "vanguard/portable-prepare-old-linux.py": "b05132bcbb2ca7601f4d5bdde121cacb6ed7e1403842d70ac20609de72b9d1e6",
+    "vanguard/package-portable.py": "01a5e8c40c143b0ec5c1fbc2bc17182615cf5031d9c95b4fd8bc0c1476b24cbb",
+    "vanguard/portable_licenses.py": "b4ea8c1c38e217bc4ce025a1ca2860149c5d7a39dab22b69b84055309685438a",
+    "vanguard/run-portable-check.py": "8d7dafdb20783c8d1be6fd29c77a8b88979465552dc13bf7ca649200acac359d",
+    "vanguard/portable-tester.py": "b4c9a18753bc0bccbdb65c9b3006790b650b85013a9e11711b5b460e7d332658",
+    "vanguard/test-portable-refusals.py": "de67d8ac0daec0146b0002f7bc3f6e420ea1525787f217b28485b06e82e4c40c",
+    "vanguard/tester.py": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+    "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+    "vanguard/tester-profile.json": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+    "docs/vanguard-portable-tester.md": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+    "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+    "vanguard/licenses/easyloggingpp-9.96.7/LICENSE": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+    "vanguard/licenses/easyloggingpp-9.96.7/provenance.json": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7"
+  },
+  "target": "linux-x86_64",
+  "builder_base": "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde",
+  "source_patches": [],
+  "generated_toolchain_adaptation": "Existing portable-build.py static pinned five-dependency closure with generated STATIC OFF for system libc/C++ ABI; exact OpenSSL static library paths. No source/crypto/consensus changes.",
+  "runner": "ubuntu-22.04",
+  "qualification": "Actual job must require GitHub Linux/X64, Ubuntu22.04/glibc2.35/native Dockerx64,>=6GiB available memory and10GiB disk before build; fail closed.",
+  "bounds": {
+    "job_minutes": 120,
+    "controller_seconds": 6900,
+    "supervisor_cleanup_seconds": 180,
+    "fetch_seconds": 900,
+    "builder_preparation_seconds": 1200,
+    "compile_seconds": 3600,
+    "package_seconds": 180,
+    "native_runtime_seconds": 1500,
+    "compile_cpus": 2,
+    "compile_memory_bytes": 4294967296,
+    "compile_pids": 256,
+    "runtime_memory_bytes": 2147483648
+  },
+  "coverage": "Only actual nativeUbuntu22.04x64 build+archive+journey/10controls; Debian12/olderARM/otherdistros remain UNTESTED",
+  "published_runner_documents": [
+    "https://docs.github.com/en/actions/reference/runners/github-hosted-runners",
+    "https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md"
+  ],
+  "runner_document_snapshot": "20261004.315.1 Ubuntu22.04.5/GCC11.4; PRIVATE standard2CPU/8GB/14GB; actual runtime gates take precedence over advertised resources",
+  "replaced_blocker": "Preserved older-linux-x64-attempt01 failed GCC11 collect2 under pre-existing QEMU; this route uses native x64. No local gate lower/retry/settings/interrupt.",
+  "compile_resource_policy": {
+    "scope": "FRESH_NATIVE_UBUNTU22_ONLY",
+    "target": "linux-x86_64",
+    "container_memory_bytes": 4294967296,
+    "container_memory_swap_bytes": 4294967296,
+    "host_minimum_available_bytes": 6442450944
+  }
+}

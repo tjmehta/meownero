@@ -1,0 +1,45 @@
+{
+  "issue": "TJS-1882",
+  "reviewer_agent_id": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "run_id": "c1cbce6f-f228-45e6-b752-bfc978f196f8",
+  "stage_id": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+  "return_writer_agent_id": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+  "formal_decision": "changes_requested",
+  "overall_release_evidence": "insufficient_evidence",
+  "seven_target_release": "OPEN",
+  "source_and_bundle_acceptance": "PRESERVED",
+  "evidence_commit": "8d0570d96f75488753ec124f0a4b9f50ff63c906",
+  "accepted_implementation_commit": "6836e5e1b14e66292cb0393b9f8ba0d1b8ab0dec",
+  "reports": [
+    {
+      "report": "arm-report-v2.zip",
+      "result": "INCOMPLETE_NATIVE_ARCHIVE_CONTROLS",
+      "completed_controls": 9,
+      "package_architecture": "aarch64",
+      "execution_substrate": "NATIVE"
+    },
+    {
+      "report": "intel-report-v2.zip",
+      "result": "PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS",
+      "completed_controls": 10,
+      "package_architecture": "i686",
+      "execution_substrate": "NATIVE_WINDOWS_WOW64"
+    },
+    {
+      "report": "intel-report3-v2.zip",
+      "result": "PASS_NATIVE_ARCHIVE_JOURNEY_AND_TEN_CONTROLS",
+      "completed_controls": 10,
+      "package_architecture": "i686",
+      "execution_substrate": "NATIVE_WINDOWS_WOW64"
+    }
+  ],
+  "native_arm_full_controls": "INCOMPLETE",
+  "standalone_32bit_windows": "UNTESTED_BY_THESE_REPORTS",
+  "native_x64_programs": "UNTESTED_BY_THESE_REPORTS",
+  "host_independence": "NOT_ATTESTED",
+  "intel_original_funding_timeout_cause": "UNKNOWN",
+  "reviewer_windows_execution": "not_run: Linux reviewer host has no Windows runtime",
+  "group_contact_owner": "parent",
+  "bha_fresh_rerun": "NOT_REQUESTED",
+  "needs_tj": "None"
+}

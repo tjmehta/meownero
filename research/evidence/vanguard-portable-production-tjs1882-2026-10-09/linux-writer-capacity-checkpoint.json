@@ -1,0 +1,8 @@
+{
+  "result": "OBSERVED_RESOURCE_CONSTRAINT",
+  "linux_writer_root_available_bytes": 10805202944,
+  "owned_storage_available_bytes": 645542182912,
+  "required_reserve_bytes": 10737418240,
+  "effect": "Preserve the remaining root reserve. Older x64 image preparation and additional root-backed gateway media staging need capacity for their growth as well as the ten-GiB reserve. No unrelated cleanup or daemon relocation is authorized. Existing Colima native ARM route has ample separate reserve.",
+  "parent_action": "Coordinate free memory and sufficient root-backed disk capacity on existing writer host; no new generic build approval needed."
+}

@@ -1,0 +1,139 @@
+{
+  "schema": "meownero-seven-target-status/1",
+  "captured_utc": "2026-10-30T07:49:29.633623+00:00",
+  "issue": "TJS-1882",
+  "run": "17cc847e-82c5-4ed9-ba79-95c6aa6510f5",
+  "release_status": "OPEN",
+  "current_native_accepted_targets": 4,
+  "historical_native_behavioral_acceptances": 5,
+  "requested_targets": 7,
+  "native_gaps": [
+    "macos-x86_64",
+    "windows-i686",
+    "windows-aarch64"
+  ],
+  "targets": {
+    "windows-x86_64": {
+      "archive": "meownero-vanguard-windows-x86_64-sanitized-v1.zip",
+      "archive_bytes": 71356211,
+      "archive_sha256": "bc5829dadaae0a84271a7993d9440a6210353567a6cf9b7caddb2a545695c19e",
+      "release_manifest_sha256": "00d4aa4d1d8f91a4dd5eb9f596c1c27f4f4b0b37db5984fbe0bbcfc2361fdbab",
+      "status": "ACCEPT_SCOPED_WINDOWS_X64_PROVENANCE_SUCCESSOR",
+      "witness": "Windows Server2025 x64 only; other Windows versions UNTESTED",
+      "successor_review_revision": "5adf41ec-f2b6-43fb-a608-451fcb15ce9e",
+      "native_acceptance": "ACCEPTED_WITH_RECORDED_ENVIRONMENT_LIMITS"
+    },
+    "macos-aarch64": {
+      "archive": "meownero-vanguard-macos-aarch64-remapped-v1.tar.gz",
+      "archive_bytes": 63055195,
+      "archive_sha256": "c02e656ae0fe0e8ffc774392dd535f12efec89b04a7fc400b4398124505eda00",
+      "release_manifest_sha256": "2cbefbae0203c3219ee16fb1941e7d819578de0b55c2582e6ef6ac403437408a",
+      "status": "ACCEPT_SCOPED_REMAPPED_APPLE_SILICON_SUCCESSOR",
+      "witness": "Native macOS26.5.1 Apple Silicon; other OS versions UNTESTED",
+      "minimum_os_declared": "macOS11.0; older than26.5.1 not executed",
+      "signing": "ad hoc; no Developer ID; not notarized",
+      "successor_review_revision": "cddb02d7-0648-4af2-8b76-9b75a6100ffc",
+      "native_acceptance": "ACCEPTED_WITH_RECORDED_ENVIRONMENT_LIMITS"
+    },
+    "macos-x86_64": {
+      "archive": "meownero-vanguard-macos-x86_64-remapped-v1.tar.gz",
+      "archive_bytes": 64389695,
+      "archive_sha256": "54912e0c7f181f5cc100f17c66ced27c5ccb829fffae003b37dd9b91f50d4229",
+      "release_manifest_sha256": "2afab24bc379d72ed1e9e86ff4838830dfa68cce47782038da1f5309e3bf9af9",
+      "status": "ACCEPT_SCOPED_MACOS_INTEL_REMAPPED_TRANSLATED_ARCHIVE",
+      "witness": "macOS26.5.1 Apple Silicon using existing Rosetta; no physical Intel witness",
+      "native_acceptance": "UNTESTED",
+      "successor_review_revision": "da8a8788-a6b5-412a-89c9-40d3518a5e04",
+      "translated_journey": "PASS_INDEPENDENT_FULL_5_2_JOURNEY_AND_TEN_CONTROLS",
+      "execution_substrate": "ROSETTA_TRANSLATED_MACOS_X86_64",
+      "distribution": "REVIEW_TRANSPORT_ONLY_UNTIL_NATIVE_INTEL_ACCEPTANCE",
+      "next_action": "Qualify native Intel Mac or verified included Actions capacity, execute exact archive and independently review native evidence."
+    },
+    "linux-aarch64": {
+      "archive": "meownero-vanguard-aarch64.tar.gz",
+      "archive_bytes": 72731614,
+      "archive_sha256": "b9f06ea78cf7da5c2272b998b48eed5a46dc404b721f32db7f09dc39407de1dc",
+      "release_manifest_sha256": "d0b3c2d7a405d2ede1d07227ab90feb6d142afd6b3b15468af353d8800449d58",
+      "status": "ACCEPT_SCOPED_EXACT_ARM39_ARTIFACT",
+      "coverage": [
+        "Ubuntu22.04 native aarch64 owned VZ guest with HWE6.8; contained Ubuntu22 builder/runtime",
+        "Debian12 glibc2.36 native aarch64 container userland on same guest; not a Debian kernel/bare-metal witness",
+        "Independent reviewer Ubuntu24.04.4 native aarch64 Colima container; same exact archive, full journey and ten controls"
+      ],
+      "minimum_glibc": "2.35",
+      "signing": "unsigned",
+      "acceptance_document_revision": "79710ac3-4e44-4175-9af8-70236f654ed6",
+      "native_acceptance": "ACCEPTED_WITH_RECORDED_ENVIRONMENT_LIMITS"
+    },
+    "linux-x86_64": {
+      "archive": "meownero-vanguard-linux38-x86_64.tar.gz",
+      "archive_bytes": 76582444,
+      "archive_sha256": "fc4bde3b0a665bebcd22140fbc67fad2f15b5c841252a18dff0d5c5d79d56743",
+      "release_manifest_sha256": "b49a7dc4d0bdf54a32d3b39ff22c92b6066a20ec92ed5b5bdc70807be3d97b12",
+      "status": "ACCEPT_SCOPED_LINUX38_NATIVE_ARCHIVE",
+      "coverage": [
+        "Native x64 Ubuntu24 host/kernel with pinned Ubuntu22 Docker userland/glibc2.35; independent exact-archive receive5/type7/CARROT/restore/spend2/receipt/native CLI and ten controls"
+      ],
+      "minimum_glibc": "2.35",
+      "signing": "unsigned",
+      "acceptance_document_revision": "704b24bf-ed6a-4a06-837e-7c8facbd6ac1",
+      "native_acceptance": "ACCEPTED_WITH_RECORDED_ENVIRONMENT_LIMITS"
+    },
+    "windows-i686": {
+      "archive": "meownero-vanguard-windows-i686-sanitized-v1.zip",
+      "archive_bytes": 97175736,
+      "archive_sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "release_manifest_sha256": "0c707d10fab98caeb35fbe9172bf5e82124814e5fd74e36fabc8131f0c75c5d3",
+      "status": "TEST_AND_REPORT_BUNDLE_ACCEPTED_AND_DELIVERED_PROGRAMS_BUILT_UNTESTED",
+      "successor_review_revision": "902494fe-55e9-4645-9d6e-30bacc38adb8",
+      "native_acceptance": "INSUFFICIENT_EVIDENCE",
+      "next_action": "Adopt exact safe report.zip when a tester returns it; retain native architecture guards and require independent acceptance."
+    },
+    "windows-aarch64": {
+      "archive": "meownero-vanguard-windows-aarch64-sanitized-v1.zip",
+      "archive_bytes": 66636938,
+      "archive_sha256": "eed161eff71038e0ca37034e195d4943870c4c10cca6fd07c52b7311c1dc8484",
+      "release_manifest_sha256": "c0cc65a405cb7c4c276cd738d6ba907d7380160125913397b19244fb4f6a34a4",
+      "status": "TEST_AND_REPORT_BUNDLE_ACCEPTED_AND_DELIVERED_PROGRAMS_BUILT_UNTESTED",
+      "minimum_os": "Declared Windows10v1709+; native runtime floor UNTESTED",
+      "signing": "UNSIGNED",
+      "source_review": "ACCEPT_SCOPED_ARM13_SOURCE_FOR_BOUNDED_BUILD",
+      "successor_review_revision": "902494fe-55e9-4645-9d6e-30bacc38adb8",
+      "native_acceptance": "INSUFFICIENT_EVIDENCE",
+      "next_action": "Adopt exact safe report.zip when a tester returns it; retain native architecture guards and require independent acceptance."
+    }
+  },
+  "prior_checkpoint": {
+    "path": "research/evidence/vanguard-macos-intel-remap-tjs1882-2026-10-30/seven-target-manifest.json",
+    "sha256": "875bed8a6a1332880d967a5c694635c510915257009d6568555e52a3b88f984a",
+    "unchanged": true
+  },
+  "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "final_stage": {
+    "id": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+    "status": "DORMANT"
+  },
+  "old_mac_archives": "DO_NOT_PUBLISH_OR_REDISTRIBUTE",
+  "distribution_limits": {
+    "Ubuntu22.04_ARM64": "PASS_EXACT_CURRENT_ARCHIVE",
+    "Debian12_ARM64": "PASS_EXACT_CURRENT_ARCHIVE_NATIVE_CONTAINER_USERLAND_ONLY",
+    "Ubuntu24_Debian13": "Historical other-archive witnesses retained; current Ubuntu24 ARM64 acceptance separately recorded, current Debian13 UNTESTED",
+    "Fedora_RHEL_Arch_openSUSE": "UNTESTED_EXACT_CURRENT_ARCHIVE",
+    "glibc_below_2_35": "OUTSIDE_RECORDED_ABI_FLOOR",
+    "x64_distributions": "SCOPED_INDEPENDENT_PASS_UBUNTU22_DOCKER_USERLAND_ON_NATIVE_UBUNTU24_KERNEL_ONLY",
+    "Ubuntu24_ARM64": "INDEPENDENT_PASS_EXACT_ARCHIVE_NATIVE_CONTAINER",
+    "Ubuntu22_x64_bare_metal": "UNVERIFIED",
+    "Debian12_x64": "UNTESTED_EXACT_CURRENT_ARCHIVE"
+  },
+  "actions_spend": "HELD; LATEST_AUTHENTICATED_2026_10_29_BUDGET_STOP_NOT_SUPERSEDED",
+  "scheduled_monitor": null,
+  "windows_bundle_delivery": "RECORDED_PARENT_MESSAGE_<message-id>; NOT_NATIVE_EXECUTION",
+  "windows_vm_dependency": "TJS-3090_EXISTING_ENTITLEMENT_LANE_ONLY",
+  "source_integration": "PARENT_AFTER_FINAL_REVIEW_AND_PRESERVATION_CHECKS",
+  "fresh_runtime_started": false,
+  "source_pin": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+  "rust_toolchain": "1.93.0",
+  "fresh_builds": 0,
+  "fresh_journeys": 0
+}

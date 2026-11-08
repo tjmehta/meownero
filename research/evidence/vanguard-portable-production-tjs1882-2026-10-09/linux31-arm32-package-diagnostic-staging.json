@@ -1,0 +1,47 @@
+{
+  "schema": "meownero-linux31-arm32-immutable-package-diagnostic-handoff/1",
+  "result": "READY_PARENT_EXACT_SOURCE_DELTA_REVIEW",
+  "cases": [
+    {
+      "number": 31,
+      "payload": "build/tjs1882-32610-native-linux-ci-payload31",
+      "source_evidence_commit": "4a594b0cf76c3ae893ba2fd903bf45732230d75d",
+      "publication_sha256": "715c13cca36f895dc437806171548ec90fd05532589751f64ffa569901400641",
+      "input_sha256": "d68f8f8779c6a40ba02ea24493bc9ccaee90d0e0e0c0a10a64adc6e8bed84f34",
+      "workflow_sha256": "de15205374d9b9b2b6f1eb282cba0a2c37be24dc58dcfe07696032e9ab1aba04",
+      "controller_sha256": "477c59838c8f52abec0f2babd97e7abbf5d475b07a7eb5c3ab3ea069da974532",
+      "file_count": 18,
+      "changed_files": [
+        ".github/workflows/tjs1882-native-linux.yml",
+        "ci/tjs1882/linux-build-inputs.json",
+        "vanguard/run-portable-linux-ci.py"
+      ],
+      "original_other15_repository_files": "EXACT_EQUAL",
+      "controller_main_finalizers_and_all_runtime_resource_gates": "AST_UNCHANGED",
+      "native_retry_started": false,
+      "validate_only": "PASS"
+    },
+    {
+      "number": 32,
+      "payload": "build/tjs1882-32610-native-linux-arm-ci-payload32",
+      "source_evidence_commit": "4a594b0cf76c3ae893ba2fd903bf45732230d75d",
+      "publication_sha256": "2b72c4ee86e7b4e33db0cce9fed894ed8c904b7814a40b249c9e49ccfd575513",
+      "input_sha256": "1392b76278c016cd9218633503e2d86d5dd0deaa4826be488ab67c68056df850",
+      "workflow_sha256": "f244ad6f728cfafadc2a34174da4ea683e031fd243ee3b48c48d2f097e94a7e5",
+      "controller_sha256": "4a1236a781af0110f09bf5b00ffe73bd214cf2f0a7af06a09e8ceedc7f6b1f72",
+      "file_count": 18,
+      "changed_files": [
+        ".github/workflows/tjs1882-native-linux-arm.yml",
+        "ci/tjs1882/linux-arm-build-inputs.json",
+        "vanguard/run-portable-linux-ci.py"
+      ],
+      "original_other15_repository_files": "EXACT_EQUAL",
+      "controller_main_finalizers_and_all_runtime_resource_gates": "AST_UNCHANGED",
+      "native_retry_started": false,
+      "validate_only": "PASS"
+    }
+  ],
+  "package_diagnostic_fixture_cases": 18,
+  "actual_native_package_failure_cause": "UNKNOWN",
+  "publication_or_build_started": false
+}

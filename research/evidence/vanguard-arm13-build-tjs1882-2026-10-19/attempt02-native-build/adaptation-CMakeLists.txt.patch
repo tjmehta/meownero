@@ -1,0 +1,15 @@
+--- CMakeLists.txt
++++ CMakeLists.txt
+@@ -754,7 +754,11 @@
+     set(USE_LTO_DEFAULT false)
+     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,10485760")
+     # TryAcquireSRWLock* requires Windows 7 or later.
+-    add_definitions(-DWINVER=0x0601 -D_WIN32_WINNT=0x0601)
++    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64" AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
++      add_definitions(-DWINVER=0x0A00 -D_WIN32_WINNT=0x0A00 -DBOOST_USE_WINAPI_VERSION=0x0A00)
++    else()
++      add_definitions(-DWINVER=0x0601 -D_WIN32_WINNT=0x0601)
++    endif()
+   endif()
+   set(C_WARNINGS "-Waggregate-return -Wnested-externs -Wold-style-definition -Wstrict-prototypes")
+   set(CXX_WARNINGS "-Wno-reorder -Wno-missing-field-initializers")

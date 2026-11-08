@@ -1,0 +1,72 @@
+{
+  "schema": "meownero-private-native-ci-inputs/1",
+  "issue": "TJS-1882",
+  "status": "STAGED_SOURCE_REVIEW_AND_FRESH_CAPACITY_REQUIRED_NATIVE_EXECUTION_UNTESTED",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "rust_version": "1.93.0",
+  "source_files": {
+    "vanguard/run-portable-ci.py": "7a04b1ff20735ecae4d8ec14bef6e84a017b758020d06a68d77eadd8bafdc382",
+    "vanguard/test-portable-refusals.py": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4"
+  },
+  "targets": {
+    "windows-aarch64": {
+      "architecture": "aarch64",
+      "archive_name": "meownero-vanguard-windows-aarch64.zip",
+      "archive_sha256": "fff26ea94928d2756cbf4b4b59bd2277a685e980d482cf389c8be405617ae15d",
+      "archive_bytes": 66636343,
+      "parts": [
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0001",
+          "bytes": 8388608,
+          "sha256": "34d34f70120832629cc5a7ef218652338324fadc6222398929531e9958614351"
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0002",
+          "bytes": 8388608,
+          "sha256": "031298e0a0a7e0e73581659b54cb976dedace5e7aed2357a83cccf9a405c9365"
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0003",
+          "bytes": 8388608,
+          "sha256": "e9feb0bc49f994a96e358c71b846e6485af16c331c901b71dd40c1dff9f3f299"
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0004",
+          "bytes": 8388608,
+          "sha256": "f54b633cf9f55c4a4ad2268905c0e7eb4ee3452f9cd84980633174c6c0e3bee7"
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0005",
+          "bytes": 8388608,
+          "sha256": "dbfa4ff3ed723d69a552f54fd0a4f52153f8185fbc1ef88f315f612b6baf188c"
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0006",
+          "bytes": 8388608,
+          "sha256": "c5cbabe734b9aa71c584761dcd82aa108d8d52a9dd47821f82a555abdd9058c8"
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0007",
+          "bytes": 8388608,
+          "sha256": "3377a6dde050233993a2137d9e2b5c1c249e2d5e3b5e400ec9921a031298613e"
+        },
+        {
+          "path": "ci/tjs1882/packages/windows-aarch64/meownero-vanguard-windows-aarch64.zip.part-0008",
+          "bytes": 7916087,
+          "sha256": "a22c673109b51fbe5e9596d019c1f93b8aa412465e9aeee59899852645d837a6"
+        }
+      ],
+      "package_name": "meownero-vanguard-windows-aarch64",
+      "release_manifest_sha256": "676994c2752e419d50cb5b3a74a98304f2f6819e60d2e9b0fa2ef6461958c5a0",
+      "package_helpers": {
+        "tester.py": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+        "portable_windows.py": "38ad44758c9a9469dbf17ef581369ac3abe1fe4ed0045a383f5fe4b6b8e7db6c"
+      },
+      "program_sha256": {
+        "monerod": "353e7bf56ea605de42e2149585f233e346d12cb83446474f1a98f3af6ac2747c",
+        "monero-wallet-cli": "7b97e875a50a09c5286b64eb59bd88019821f1f73ec20ca61f5ac338e87aaece",
+        "monero-wallet-rpc": "6ff5befa8cbf0fd357aa4959e2fadab2894d9d8226ec5e936f4e39d511f98b49"
+      }
+    }
+  }
+}

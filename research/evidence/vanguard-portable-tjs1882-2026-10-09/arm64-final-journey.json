@@ -1,0 +1,169 @@
+{
+  "schema": "meownero-portable-journey/1",
+  "result": "PASS_NATIVE_JOURNEY",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "architecture": "aarch64",
+  "release_manifest_sha256": "08637b0f532f05a033fc28f44ce642266152ee17c47935f0a53c5f0d4e648048",
+  "program_sha256": {
+    "monerod": "cd12e96d121fe45b76ca16e77a14ee56fb9dcdac744c3310a60fe0f07ba7b29e",
+    "monero-wallet-cli": "f8122f1f181b0a005cfa12c0af6a41cd87ee3d84b3cbd9fd62b782d7d6715cd2",
+    "monero-wallet-rpc": "4bd92c24b0715d3480394757c871980af6ef77cb2a9cd9bd37cde88a8c0ed551"
+  },
+  "cleanup": [
+    {
+      "name": "cli",
+      "pid": 44,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "restored",
+      "pid": 42,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "receiver",
+      "pid": 40,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "sender",
+      "pid": 38,
+      "exit": 0,
+      "removed": true
+    },
+    {
+      "name": "daemon",
+      "pid": 21,
+      "exit": 0,
+      "removed": true
+    }
+  ],
+  "payments": [
+    {
+      "tx_hash": "6ec723ea41da4ca70514d163db27b1b971e90573212b4797ae889f7dbc17f05b",
+      "amount_atomic": 5000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    },
+    {
+      "tx_hash": "65663a3834a875aa120299deb38769963317e437fdf28e238a8f1ecb6c365bea",
+      "amount_atomic": 2000000000000,
+      "rct_type": 7,
+      "carrot_outputs": true
+    }
+  ],
+  "native_processes": [
+    {
+      "name": "daemon",
+      "pid": 21,
+      "binary_sha256": "cd12e96d121fe45b76ca16e77a14ee56fb9dcdac744c3310a60fe0f07ba7b29e",
+      "bundled_library_sha256": {
+        "libcap.so.2": "1b6d3932cf8b60b2f27f80cdd26d9a296b8a9608fc02b4eccb8fb2fdab73fea2",
+        "libresolv.so.2": "92890287859788043628489a25fa39a623119328f6c0ac8e91f9ca60ab90650e",
+        "libkeyutils.so.1": "a58e06275e8e2010be20f367b7f2263e56130c04cb83523f29ae94555705ea59",
+        "libudev.so.1": "8bc3e61d93877d05dd4efc8a4b36a2c8559afbd1d154c7b95a662b5e83e1f740",
+        "libkrb5support.so.0": "6f4ce70567c2c953510bfa5c839f0ce7136330b127cb1746f7ce0ff6f4d4d4f5",
+        "libcom_err.so.2": "6a9d07af8817ed06466027a77fc7f2e8972a4a0e68895738d9acdc35470f416e",
+        "libk5crypto.so.3": "c6a2380d979bb168328b6dc35ec0d96f50338a7be23fb14f8444497dd8148e05",
+        "libkrb5.so.3": "af6c2e7313dbea842a1912a22f14daab2ea24877dd30e576a525b6becc5c029e",
+        "libmd.so.0": "30d117046ce9405745e0d0d4722cff121f532913180bbb9425b38d076319ac08",
+        "libevent-2.1.so.7": "a087342455367b3e29b641fe556a6a1a57773302954e25ee973b4da7c92a9b8c",
+        "libusb-1.0.so.0": "050cbd6c30a5d55905ba1bce5b26f9b4f364cd310b5396ef5700513829d4b71d",
+        "libgssapi_krb5.so.2": "bc7d5e3ea14504c76dc71d9f7466dd3ac2589910d472412689de1d296722b086",
+        "libnorm.so.1": "31ec03ead2addce2d5e017e641750bd9612a9250faac2b408b669de1182428b7",
+        "libpgm-5.3.so.0": "bd9cf5ac5a861376c67579b8b62357df29722242aa3b47c849ae1faec24e4e92",
+        "libbsd.so.0": "6c5348ee0e1777f13e148b7492fa311b6f65adb0dc21a001a67ebc18948e6b3e",
+        "libgcc_s.so.1": "f2d3ad2bf0b61f6bc944cc37d7b6ab7f88d2582b41ff989ca164803f56cc5f20",
+        "libstdc++.so.6": "6e3112d35cfc86db7ee85b27e1746f67408e2837ff8628b46386c3eabd5682a4",
+        "libboost_chrono.so.1.83.0": "08e0c3d563aba3798aecccdee6752ccf64a5ad1facce95bc8db7863f523ded89",
+        "libcrypto.so.3": "60076983c2ea0d6b73cc64fb39cafa0a0f90f220ef000f6effb4aaac47500949",
+        "libssl.so.3": "4ba43e4182c8fe8813fef851e43b3cc09cd90d418760c0a94b13d1bf5d91cc09",
+        "libboost_thread.so.1.83.0": "3e96786c0958227791966d25f2a1289da77922172bf09c09a9f2b418abbe964c",
+        "libboost_filesystem.so.1.83.0": "8c90582a3f32cf5164da45951a83285db960da362cb4707f07215bc0dfb0d7f6",
+        "libsodium.so.23": "3b72f199720e9382acdc372a944fdee980dac2f7fe2e8f6b1eed38843bc6544f",
+        "libboost_serialization.so.1.83.0": "a8fbe7c28b0911bef354052e3851f6afc380a175aa8acb594499277506dd1e99",
+        "libboost_program_options.so.1.83.0": "1683ee66213dc2df1e2f595eafba2c41f89e19ad75b0ffd867171fc3b01d27c7",
+        "libunbound.so.8": "0c67bc01d1c80d4b504dcd4cd6acd1fe8e92e88e75f0175d464bc61f84bb985e",
+        "libhidapi-libusb.so.0": "a67080f8a0b473e32a5197d119f3e50f5795952b6b5a6371bc20f3fab22bf4dd",
+        "libzmq.so.5": "1d986e7d5a45493b6adce97808ec5307d6c625ea4921e074023481521c2af4d9"
+      }
+    },
+    {
+      "name": "sender",
+      "pid": 38,
+      "binary_sha256": "4bd92c24b0715d3480394757c871980af6ef77cb2a9cd9bd37cde88a8c0ed551",
+      "bundled_library_sha256": {
+        "libcap.so.2": "1b6d3932cf8b60b2f27f80cdd26d9a296b8a9608fc02b4eccb8fb2fdab73fea2",
+        "libudev.so.1": "8bc3e61d93877d05dd4efc8a4b36a2c8559afbd1d154c7b95a662b5e83e1f740",
+        "libevent-2.1.so.7": "a087342455367b3e29b641fe556a6a1a57773302954e25ee973b4da7c92a9b8c",
+        "libusb-1.0.so.0": "050cbd6c30a5d55905ba1bce5b26f9b4f364cd310b5396ef5700513829d4b71d",
+        "libgcc_s.so.1": "f2d3ad2bf0b61f6bc944cc37d7b6ab7f88d2582b41ff989ca164803f56cc5f20",
+        "libstdc++.so.6": "6e3112d35cfc86db7ee85b27e1746f67408e2837ff8628b46386c3eabd5682a4",
+        "libboost_filesystem.so.1.83.0": "8c90582a3f32cf5164da45951a83285db960da362cb4707f07215bc0dfb0d7f6",
+        "libboost_program_options.so.1.83.0": "1683ee66213dc2df1e2f595eafba2c41f89e19ad75b0ffd867171fc3b01d27c7",
+        "libcrypto.so.3": "60076983c2ea0d6b73cc64fb39cafa0a0f90f220ef000f6effb4aaac47500949",
+        "libssl.so.3": "4ba43e4182c8fe8813fef851e43b3cc09cd90d418760c0a94b13d1bf5d91cc09",
+        "libunbound.so.8": "0c67bc01d1c80d4b504dcd4cd6acd1fe8e92e88e75f0175d464bc61f84bb985e",
+        "libboost_thread.so.1.83.0": "3e96786c0958227791966d25f2a1289da77922172bf09c09a9f2b418abbe964c",
+        "libsodium.so.23": "3b72f199720e9382acdc372a944fdee980dac2f7fe2e8f6b1eed38843bc6544f",
+        "libboost_chrono.so.1.83.0": "08e0c3d563aba3798aecccdee6752ccf64a5ad1facce95bc8db7863f523ded89",
+        "libboost_serialization.so.1.83.0": "a8fbe7c28b0911bef354052e3851f6afc380a175aa8acb594499277506dd1e99",
+        "libhidapi-libusb.so.0": "a67080f8a0b473e32a5197d119f3e50f5795952b6b5a6371bc20f3fab22bf4dd"
+      }
+    },
+    {
+      "name": "receiver",
+      "pid": 40,
+      "binary_sha256": "4bd92c24b0715d3480394757c871980af6ef77cb2a9cd9bd37cde88a8c0ed551",
+      "bundled_library_sha256": {
+        "libcap.so.2": "1b6d3932cf8b60b2f27f80cdd26d9a296b8a9608fc02b4eccb8fb2fdab73fea2",
+        "libudev.so.1": "8bc3e61d93877d05dd4efc8a4b36a2c8559afbd1d154c7b95a662b5e83e1f740",
+        "libevent-2.1.so.7": "a087342455367b3e29b641fe556a6a1a57773302954e25ee973b4da7c92a9b8c",
+        "libusb-1.0.so.0": "050cbd6c30a5d55905ba1bce5b26f9b4f364cd310b5396ef5700513829d4b71d",
+        "libgcc_s.so.1": "f2d3ad2bf0b61f6bc944cc37d7b6ab7f88d2582b41ff989ca164803f56cc5f20",
+        "libstdc++.so.6": "6e3112d35cfc86db7ee85b27e1746f67408e2837ff8628b46386c3eabd5682a4",
+        "libboost_filesystem.so.1.83.0": "8c90582a3f32cf5164da45951a83285db960da362cb4707f07215bc0dfb0d7f6",
+        "libboost_program_options.so.1.83.0": "1683ee66213dc2df1e2f595eafba2c41f89e19ad75b0ffd867171fc3b01d27c7",
+        "libcrypto.so.3": "60076983c2ea0d6b73cc64fb39cafa0a0f90f220ef000f6effb4aaac47500949",
+        "libssl.so.3": "4ba43e4182c8fe8813fef851e43b3cc09cd90d418760c0a94b13d1bf5d91cc09",
+        "libunbound.so.8": "0c67bc01d1c80d4b504dcd4cd6acd1fe8e92e88e75f0175d464bc61f84bb985e",
+        "libboost_thread.so.1.83.0": "3e96786c0958227791966d25f2a1289da77922172bf09c09a9f2b418abbe964c",
+        "libsodium.so.23": "3b72f199720e9382acdc372a944fdee980dac2f7fe2e8f6b1eed38843bc6544f",
+        "libboost_chrono.so.1.83.0": "08e0c3d563aba3798aecccdee6752ccf64a5ad1facce95bc8db7863f523ded89",
+        "libboost_serialization.so.1.83.0": "a8fbe7c28b0911bef354052e3851f6afc380a175aa8acb594499277506dd1e99",
+        "libhidapi-libusb.so.0": "a67080f8a0b473e32a5197d119f3e50f5795952b6b5a6371bc20f3fab22bf4dd"
+      }
+    },
+    {
+      "name": "restored",
+      "pid": 42,
+      "binary_sha256": "4bd92c24b0715d3480394757c871980af6ef77cb2a9cd9bd37cde88a8c0ed551",
+      "bundled_library_sha256": {
+        "libcap.so.2": "1b6d3932cf8b60b2f27f80cdd26d9a296b8a9608fc02b4eccb8fb2fdab73fea2",
+        "libudev.so.1": "8bc3e61d93877d05dd4efc8a4b36a2c8559afbd1d154c7b95a662b5e83e1f740",
+        "libevent-2.1.so.7": "a087342455367b3e29b641fe556a6a1a57773302954e25ee973b4da7c92a9b8c",
+        "libusb-1.0.so.0": "050cbd6c30a5d55905ba1bce5b26f9b4f364cd310b5396ef5700513829d4b71d",
+        "libgcc_s.so.1": "f2d3ad2bf0b61f6bc944cc37d7b6ab7f88d2582b41ff989ca164803f56cc5f20",
+        "libstdc++.so.6": "6e3112d35cfc86db7ee85b27e1746f67408e2837ff8628b46386c3eabd5682a4",
+        "libboost_filesystem.so.1.83.0": "8c90582a3f32cf5164da45951a83285db960da362cb4707f07215bc0dfb0d7f6",
+        "libboost_program_options.so.1.83.0": "1683ee66213dc2df1e2f595eafba2c41f89e19ad75b0ffd867171fc3b01d27c7",
+        "libcrypto.so.3": "60076983c2ea0d6b73cc64fb39cafa0a0f90f220ef000f6effb4aaac47500949",
+        "libssl.so.3": "4ba43e4182c8fe8813fef851e43b3cc09cd90d418760c0a94b13d1bf5d91cc09",
+        "libunbound.so.8": "0c67bc01d1c80d4b504dcd4cd6acd1fe8e92e88e75f0175d464bc61f84bb985e",
+        "libboost_thread.so.1.83.0": "3e96786c0958227791966d25f2a1289da77922172bf09c09a9f2b418abbe964c",
+        "libsodium.so.23": "3b72f199720e9382acdc372a944fdee980dac2f7fe2e8f6b1eed38843bc6544f",
+        "libboost_chrono.so.1.83.0": "08e0c3d563aba3798aecccdee6752ccf64a5ad1facce95bc8db7863f523ded89",
+        "libboost_serialization.so.1.83.0": "a8fbe7c28b0911bef354052e3851f6afc380a175aa8acb594499277506dd1e99",
+        "libhidapi-libusb.so.0": "a67080f8a0b473e32a5197d119f3e50f5795952b6b5a6371bc20f3fab22bf4dd"
+      }
+    }
+  ],
+  "receive_atomic": 5000000000000,
+  "restore_matches": true,
+  "subsequent_spend_atomic": 2000000000000,
+  "cli_open_restored_wallet": true,
+  "wall_seconds": 22.15
+}

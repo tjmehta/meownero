@@ -1,0 +1,131 @@
+{
+  "schema": "meownero-native-guards-regression/1",
+  "result": "PASS_GUARD_AND_API_FIXTURES_NATIVE_ACCEPTANCE_UNTESTED",
+  "cases": [
+    {
+      "case": "apple-native",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": "aarch64",
+      "refused": false
+    },
+    {
+      "case": "apple-translated-process",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": "aarch64",
+      "refused": false
+    },
+    {
+      "case": "intel-present",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": "x86_64",
+      "refused": false
+    },
+    {
+      "case": "intel-absent",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": "x86_64",
+      "refused": false
+    },
+    {
+      "case": "missing-alone",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": null,
+      "refused": true
+    },
+    {
+      "case": "rosetta-reject",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": null,
+      "refused": true
+    },
+    {
+      "case": "process-conflict",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": null,
+      "refused": true
+    },
+    {
+      "case": "kernel-conflict",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": null,
+      "refused": true
+    },
+    {
+      "case": "invalid-arm",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": null,
+      "refused": true
+    },
+    {
+      "case": "permission-reject",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": null,
+      "refused": true
+    },
+    {
+      "case": "translated-query-error",
+      "result": "PASS_GUARD_FIXTURE_ONLY",
+      "architecture": null,
+      "refused": true
+    },
+    {
+      "case": "console-attached",
+      "result": "PASS_API_FIXTURE_ONLY_NOT_WINDOWS_EXECUTION",
+      "failure_type": null,
+      "calls": [
+        "GetConsoleProcessList",
+        "ResumeThread",
+        "ResumeThread",
+        "ResumeThread",
+        "owned-job-close"
+      ]
+    },
+    {
+      "case": "console-detached",
+      "result": "PASS_API_FIXTURE_ONLY_NOT_WINDOWS_EXECUTION",
+      "failure_type": null,
+      "calls": [
+        "GetConsoleProcessList",
+        "GetFileType",
+        "GetFileType",
+        "FreeConsole",
+        "AllocConsole",
+        "SetStdHandle",
+        "SetStdHandle",
+        "SetStdHandle",
+        "GetConsoleProcessList",
+        "ResumeThread",
+        "ResumeThread",
+        "ResumeThread",
+        "owned-job-close",
+        "FreeConsole"
+      ]
+    },
+    {
+      "case": "console-denied",
+      "result": "PASS_API_FIXTURE_ONLY_NOT_WINDOWS_EXECUTION",
+      "failure_type": "PermissionError",
+      "calls": [
+        "GetConsoleProcessList",
+        "GetFileType",
+        "GetFileType",
+        "FreeConsole",
+        "AllocConsole"
+      ]
+    },
+    {
+      "case": "console-char-output",
+      "result": "PASS_API_FIXTURE_ONLY_NOT_WINDOWS_EXECUTION",
+      "failure_type": "AssertionError",
+      "calls": [
+        "GetConsoleProcessList",
+        "GetFileType"
+      ]
+    }
+  ],
+  "source_sha256": {
+    "portable-tester.py": "b4c9a18753bc0bccbdb65c9b3006790b650b85013a9e11711b5b460e7d332658",
+    "run-portable-ci.py": "b439ef12253567d9a6d72a6b5755437c3e04556a51bb048f989eb906af94226a",
+    "run-portable-mac-check.py": "65becf8448c890b1c09fe1a05c0582c9ebe38d02d59bbb9a2206dab4caa0f1b7"
+  }
+}

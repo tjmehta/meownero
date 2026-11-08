@@ -1,0 +1,28 @@
+{
+  "result": "PASS",
+  "source_sha256": "195637f7b20ec12464a5351a58a911f389a991531d8285dc4080f809d299472d",
+  "cases": [
+    {
+      "case": "success",
+      "bounded_recent_samples": 8,
+      "snapshot_calls": 11,
+      "owned_observer_reaped": true,
+      "no_partial_output_as_authority": true
+    },
+    {
+      "case": "timeout",
+      "bounded_recent_samples": 1,
+      "snapshot_calls": 1,
+      "owned_observer_reaped": true,
+      "no_partial_output_as_authority": true
+    },
+    {
+      "case": "absence-unproven",
+      "bounded_recent_samples": 1,
+      "snapshot_calls": 1,
+      "owned_observer_reaped": true,
+      "no_partial_output_as_authority": true
+    }
+  ],
+  "native_Intel_execution": "UNTESTED_BY_LINUX_FIXTURES"
+}

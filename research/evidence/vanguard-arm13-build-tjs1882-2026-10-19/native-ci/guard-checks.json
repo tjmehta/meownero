@@ -1,0 +1,97 @@
+{
+  "result": "PASS_MOCKED_ARM64_ADMISSION_GUARDS",
+  "count": 22,
+  "cases": [
+    {
+      "case": "native-arm64-synthetic-admission-and-public-projection",
+      "result": "PASS"
+    },
+    {
+      "case": "x64-python-process",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "x86-python-process",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "wrong-native-machine",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "wrong-backend-native",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "crypto-unavailable",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "machine-query-fails",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "python-x64-pe",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "python-arm64ec-pe",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "python-pe32",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "python-invalid-dos",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "python-pe-offset-outside-file",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "old-python",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "non-cpython",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "wrong-process-platform",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "non-windows",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "monerod-hash",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "monerod-machine",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "monero-wallet-cli-hash",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "monero-wallet-cli-machine",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "monero-wallet-rpc-hash",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "monero-wallet-rpc-machine",
+      "result": "PASS_REFUSAL"
+    }
+  ],
+  "controller_sha256": "7a04b1ff20735ecae4d8ec14bef6e84a017b758020d06a68d77eadd8bafdc382",
+  "native_windows_execution": "UNTESTED",
+  "scope": "SYNTHETIC_FILES_AND_MOCKED_APIS_ONLY"
+}

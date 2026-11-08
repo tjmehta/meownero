@@ -1,0 +1,63 @@
+{
+  "schema": "meownero-linux25-arm26-exact-controller-refusals/1",
+  "result": "PASS_FOUR_EXACT_MAIN_CAP_REFUSALS_BEFORE_OUTPUT_LOCK_WORKLOAD",
+  "cases": [
+    {
+      "target": "linux-x86_64",
+      "field": "container_memory_bytes",
+      "controller_sha256": "6e3bed13d192396523b2ebc9214c4896a9d5da136ecb1cee8cf72181b40ca12b",
+      "preserved_controller_sha256": "6e3bed13d192396523b2ebc9214c4896a9d5da136ecb1cee8cf72181b40ca12b",
+      "fixture_inputs_sha256": "e45518da781b4460b901ed52e8078ab8a0f0bdd80401fd9c7bb636b8f333e0ef",
+      "fixture_source_pins_verified": 16,
+      "specific_policy_assertion_line": 209,
+      "output_absent": true,
+      "public_absent": true,
+      "lock_open_calls": 0,
+      "docker_or_workload_calls": 0,
+      "result": "REFUSED_AT_POLICY_BEFORE_OUTPUT"
+    },
+    {
+      "target": "linux-x86_64",
+      "field": "container_memory_swap_bytes",
+      "controller_sha256": "6e3bed13d192396523b2ebc9214c4896a9d5da136ecb1cee8cf72181b40ca12b",
+      "preserved_controller_sha256": "6e3bed13d192396523b2ebc9214c4896a9d5da136ecb1cee8cf72181b40ca12b",
+      "fixture_inputs_sha256": "df6a5e5f354fc91150dfa31c892944128c6030b24239a3ff69a20f828ca0c9aa",
+      "fixture_source_pins_verified": 16,
+      "specific_policy_assertion_line": 209,
+      "output_absent": true,
+      "public_absent": true,
+      "lock_open_calls": 0,
+      "docker_or_workload_calls": 0,
+      "result": "REFUSED_AT_POLICY_BEFORE_OUTPUT"
+    },
+    {
+      "target": "linux-aarch64",
+      "field": "container_memory_bytes",
+      "controller_sha256": "236a3ff3b9ebec6af77dc46081736abe220ba596f140cb0a7a8321eacb7f7ad7",
+      "preserved_controller_sha256": "236a3ff3b9ebec6af77dc46081736abe220ba596f140cb0a7a8321eacb7f7ad7",
+      "fixture_inputs_sha256": "43aee14b4cd4075c98a0797d7bfaa20c4a18d3ed83047322b6cf8d8d862ca694",
+      "fixture_source_pins_verified": 16,
+      "specific_policy_assertion_line": 216,
+      "output_absent": true,
+      "public_absent": true,
+      "lock_open_calls": 0,
+      "docker_or_workload_calls": 0,
+      "result": "REFUSED_AT_POLICY_BEFORE_OUTPUT"
+    },
+    {
+      "target": "linux-aarch64",
+      "field": "container_memory_swap_bytes",
+      "controller_sha256": "236a3ff3b9ebec6af77dc46081736abe220ba596f140cb0a7a8321eacb7f7ad7",
+      "preserved_controller_sha256": "236a3ff3b9ebec6af77dc46081736abe220ba596f140cb0a7a8321eacb7f7ad7",
+      "fixture_inputs_sha256": "959429be052ae8594176d6784e02f7b2f10cb9c9b562562d8690606c4f02b0c2",
+      "fixture_source_pins_verified": 16,
+      "specific_policy_assertion_line": 216,
+      "output_absent": true,
+      "public_absent": true,
+      "lock_open_calls": 0,
+      "docker_or_workload_calls": 0,
+      "result": "REFUSED_AT_POLICY_BEFORE_OUTPUT"
+    }
+  ],
+  "native_build": "NOT_STARTED"
+}

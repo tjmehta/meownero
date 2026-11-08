@@ -1,0 +1,78 @@
+--- a/vanguard/run-portable-linux-ci.py
++++ b/vanguard/run-portable-linux-ci.py
+@@ -35,14 +35,16 @@
+     return module
+ 
+ 
+-def resources(parent, reserve=10):
++def resources(parent, reserve=10, minimum_available=5 * 1024**3):
+     available = int(next(line.split()[1] for line in Path('/proc/meminfo').read_text().splitlines()
+                          if line.startswith('MemAvailable:'))) * 1024
+     free = shutil.disk_usage(parent).free
+     docker_free = shutil.disk_usage('/var/lib/docker').free
+-    assert available >= 5 * 1024**3, 'five GiB available memory gate'
++    assert minimum_available in (5 * 1024**3, 6 * 1024**3)
++    assert available >= minimum_available, 'available memory gate'
+     assert min(free, docker_free) >= reserve * 1024**3, 'disk reserve gate'
+     return {'available_memory_bytes': available, 'free_disk_bytes': free, 'docker_free_disk_bytes': docker_free}
++
+ 
+ 
+ def fetch(inputs, out):
+@@ -123,6 +125,14 @@
+             'registry_access', 'cleanup', 'binaries')
+     result = {key: value[key] for key in keys if key in value}
+     result['commands'] = []
++    if 'native_compile_resources' in value:
++        policy = value['native_compile_resources']
++        assert policy['scope'] == 'FRESH_NATIVE_UBUNTU22_ONLY'
++        safe = {'scope': policy['scope']}
++        for key in ('container_memory_bytes', 'container_memory_swap_bytes', 'host_minimum_available_bytes', 'measured_available_bytes'):
++            assert type(policy[key]) is int and policy[key] >= 0
++            safe[key] = policy[key]
++        result['native_compile_resources'] = safe
+     for row in value.get('commands', []):
+         label = row.get('label')
+         allowed = ('archive-upstream', 'archive-external-gtest', 'archive-external-mx25519',
+@@ -158,6 +168,7 @@
+ 
+ 
+ 
++
+ def worker(phase, inputs, out):
+     if phase == 'fetch':
+         fetch(inputs, out)
+@@ -167,7 +178,7 @@
+         'prepare': ['--out', str(out / 'builder'), '--target', 'linux-x86_64'],
+         'build': ['--cache', str(cache), '--rust', str(out / 'rust'), '--out', str(out / 'build'),
+                   '--target', 'linux-x86_64', '--older-builder-receipt', str(out / 'builder/preparation.json'),
+-                  '--depends-sources', str(cache / 'depends-sources')],
++                  '--depends-sources', str(cache / 'depends-sources'), '--native-ubuntu22-memory-policy'],
+         'package': ['--build', str(out / 'build'), '--out', str(out / 'package')],
+     }
+     scripts = {'prepare': 'portable-prepare-old-linux.py', 'build': 'portable-build.py', 'package': 'package-portable.py'}
+@@ -194,6 +205,8 @@
+     assert sha(args.inputs) == args.inputs_sha256
+     inputs = json.loads(args.inputs.read_text())
+     assert inputs['schema'] == 'meownero-private-native-linux-build-inputs/1'
++    policy = {'scope': 'FRESH_NATIVE_UBUNTU22_ONLY', 'target': 'linux-x86_64', 'container_memory_bytes': 4 * 1024**3, 'container_memory_swap_bytes': 4 * 1024**3, 'host_minimum_available_bytes': 6 * 1024**3}
++    assert inputs['compile_resource_policy'] == policy, 'architecture-bound compile resource policy mismatch'
+     for name, digest in inputs['source_files'].items():
+         assert sha(ROOT / name) == digest, 'CI source input mismatch: ' + name
+     out = args.out.absolute()
+@@ -225,13 +238,13 @@
+         assert subprocess.check_output(['docker', 'info', '--format', '{{.OSType}} {{.Architecture}}'], text=True, timeout=15).strip() == 'linux x86_64'
+         assert not subprocess.check_output(['docker', 'ps', '-q'], text=True, timeout=15).strip(), 'preserve other workloads'
+         proof['native_runner'] = {'system': platform.system(), 'architecture': platform.machine(),
+-            'os': 'Ubuntu22.04', 'glibc': glibc, 'resources': resources(out.parent)}
++            'os': 'Ubuntu22.04', 'glibc': glibc, 'resources': resources(out.parent, minimum_available=policy['host_minimum_available_bytes'])}
+         with lock.open('xb') as stream:
+             os.chmod(lock, 0o600)
+             lock_identity = lock.stat().st_ino
+         supervisor = load('run-portable-ci.py')
+         for name, seconds in [('fetch', 900), ('prepare', 1200), ('build', 3600), ('package', 180), ('runtime', 1500)]:
+-            row = {'phase': name, 'resources': resources(out.parent, 5 if name == 'runtime' else 10)}
++            row = {'phase': name, 'resources': resources(out.parent, 5 if name == 'runtime' else 10, policy['host_minimum_available_bytes'])}
+             proof['phases'].append(row)
+             write(public / 'ci-receipt.json', proof)
+             private = out / ('supervise-' + name)

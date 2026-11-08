@@ -1,0 +1,76 @@
+{
+  "schema": "meownero-contained-capacity-fixtures/1",
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "two-GiB-cgroup-with-separate-host-reserve",
+      "result": "PASS"
+    },
+    {
+      "case": "cgroup-headroom",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "unlimited-memory",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "oversized-memory",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "swap-enabled",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "host-reserve",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "output-reserve",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "private-space",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "public-network",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "pid-cap",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "unlimited-CPU",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "oversized-CPU",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "root-user",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "writable-image",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "persistent-private-state",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "native-default-five-GiB-refusal-before-output-or-spawn",
+      "result": "PASS_REFUSAL"
+    }
+  ],
+  "source_sha256": {
+    "entrypoint.py": "0f89c17df5e957d41f7b68da54a07335188ebaae567b7d9ab73ebdba42a08a48",
+    "portable-tester.py": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33"
+  },
+  "seams": "Temporary proc/cgroup/mount files, UID and disk scalars; native preflight stub only for original reserve refusal.",
+  "native_or_container_runtime_acceptance": false
+}

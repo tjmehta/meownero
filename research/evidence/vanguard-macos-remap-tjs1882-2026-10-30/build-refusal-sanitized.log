@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/BUILD_HOME/Developer/tjs1882-86f8883b/vanguard/portable-mac-build.py", line 189, in <module>
+    main()
+    ~~~~^^
+  File "/BUILD_HOME/Developer/tjs1882-86f8883b/vanguard/portable-mac-build.py", line 34, in main
+    with tester.heavy_lock():
+         ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/BUILD_HOME/Developer/tjs1882-86f8883b/vanguard/tester.py", line 111, in heavy_lock
+    regular(LOCK)
+    ~~~~~~~^^^^^^
+  File "/BUILD_HOME/Developer/tjs1882-86f8883b/vanguard/tester.py", line 78, in regular
+    require(stat.S_ISREG(path.stat().st_mode), f'regular file required: {path.name}')
+                         ~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/pathlib/__init__.py", line 654, in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/meownero-swarm-20260912-heavy.lock'

@@ -1,0 +1,10 @@
+{
+  "result": "PASS",
+  "test_methods": 7,
+  "controller_sha256": "3b06bc8a496c00cf98455d13a2a43244b8ba6182b7f5c66ad4bb6db4ae67e251",
+  "test_source_sha256": "078e25fa5ea09ebeecdc1d97b0f8ecf0c196f8ff0945d9fe2dabf22ec1511b5a",
+  "command": "PAPERCLIP_RUN_SCRATCH_DIR=<run-owned-scratch> python3 -B vanguard/test-portable-local-runner.py -v",
+  "output": "test_binding_changes_refused (__main__.Admission.test_binding_changes_refused) ... ok\ntest_full_local_controller_uses_supervisor_and_truthful_receipt (__main__.Admission.test_full_local_controller_uses_supervisor_and_truthful_receipt) ... ok\ntest_hosted_identity_and_docker_redirects_refused (__main__.Admission.test_hosted_identity_and_docker_redirects_refused) ... ok\ntest_native_arm_and_x64_admitted_with_private_ids_excluded (__main__.Admission.test_native_arm_and_x64_admitted_with_private_ids_excluded) ... ok\ntest_shared_or_redirected_daemon_refused (__main__.Admission.test_shared_or_redirected_daemon_refused) ... ok\ntest_wrong_os_libc_arch_python_and_container_refused (__main__.Admission.test_wrong_os_libc_arch_python_and_container_refused) ... ok\ntest_real_host_refuses_before_output_or_worker_start (__main__.LocalCli.test_real_host_refuses_before_output_or_worker_start) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.361s\n\nOK\n",
+  "fixture_boundaries": "OS, hardware and Docker observations are mocked for positive admission; full-controller fixture stops in a mocked supervisor before fetch. Actual Ubuntu24 subprocess refusals and separate real owned-process supervision fixtures remain distinct.",
+  "native_build_and_journey": "UNTESTED"
+}

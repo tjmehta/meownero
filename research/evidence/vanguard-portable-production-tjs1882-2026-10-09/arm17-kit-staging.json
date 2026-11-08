@@ -1,0 +1,62 @@
+{
+  "schema": "meownero-windows-arm-cross-kit17/1",
+  "result": "READY_PARENT_EXACT_PATCH_CONTEXT_DELTA_REVIEW",
+  "kit_sha256": "d466b93cb9622c7d291e15cf35dbba0e3e44d331d9bc34cea874c2a5e97b070a",
+  "kit_bytes": 133120,
+  "prior_kit16_sha256": "b0336ef43eb927c650f24c34828460b64fd7aa36f982aec12f21fa3b4b3bb8ec",
+  "changed_members": [
+    "vanguard/portable-cross-build.py",
+    "vanguard/patches/randomx-aaafe713-windows-arm64-hidden.patch"
+  ],
+  "unchanged_member_count": 6,
+  "source_preimage_sha256": "f31e68e4325bb5be41eaeaf63975bf760ff158be80f0ce800e43497e9d9f693f",
+  "identical_corrected_postimage_sha256": "158033e0e3c552b201581ea1c427c4989abc65a462b05b5c72d9faf34c9438a1",
+  "all_protected_finalizers_AST_unchanged": 10,
+  "tar_headers_mode": "0600",
+  "mandatory_private_copy_gate": "0700_owned_directory_AND_0600_regular_UID_single_link_no_symlink_exact_SHA_size_before_import",
+  "files": [
+    {
+      "path": "vanguard/patches/randomx-aaafe713-windows-arm64-aligned-allocator.patch",
+      "bytes": 746,
+      "sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82"
+    },
+    {
+      "path": "vanguard/patches/randomx-aaafe713-windows-arm64-hidden.patch",
+      "bytes": 438,
+      "sha256": "742daffebed9f21f73ced606accecf4bd44d08d2ce25699d45a9c7e2ed349f72"
+    },
+    {
+      "path": "vanguard/portable-build.py",
+      "bytes": 19747,
+      "sha256": "5c14a985f24885d1df50886bfe73251ad56a7596cb7146c5548c36153de95167"
+    },
+    {
+      "path": "vanguard/portable-cross-build.py",
+      "bytes": 34038,
+      "sha256": "161d06bc0d7a6c9a90627061d84a361ab7bf68ee27c86b9b3f8f3e606ee82c47"
+    },
+    {
+      "path": "vanguard/portable_licenses.py",
+      "bytes": 15950,
+      "sha256": "286d438f35d352a0465d7e7d87a8cbc451e464646e597a100a45715c0e41d9c7"
+    },
+    {
+      "path": "vanguard/source-lock.json",
+      "bytes": 6950,
+      "sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001"
+    },
+    {
+      "path": "vanguard/tester-profile.json",
+      "bytes": 989,
+      "sha256": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c"
+    },
+    {
+      "path": "vanguard/tester.py",
+      "bytes": 38818,
+      "sha256": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f"
+    }
+  ],
+  "actual_native_BSD_patch_old_failure_new_apply_and_reverse": "PASS",
+  "native_Windows_compile_runtime": "UNTESTED",
+  "replacement_build_started": false
+}

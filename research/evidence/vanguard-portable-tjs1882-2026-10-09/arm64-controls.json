@@ -1,0 +1,44 @@
+{
+  "result": "PASS_REFUSALS",
+  "release_manifest_sha256": "e2cacfb8a653d2bd62f215045b45dd2de49864847fe45b33c766aad6ff13e96a",
+  "cases": [
+    {
+      "case": "wrong-pin",
+      "refused": true
+    },
+    {
+      "case": "wrong-target",
+      "refused": true
+    },
+    {
+      "case": "changed-binary",
+      "refused": true
+    },
+    {
+      "case": "unlisted-private-file",
+      "refused": true
+    },
+    {
+      "case": "symlink-directory",
+      "refused": true
+    },
+    {
+      "case": "hardlink",
+      "refused": true
+    },
+    {
+      "case": "collision-preservation",
+      "refused": true,
+      "sentinel_preserved": true
+    },
+    {
+      "case": "busy-lock",
+      "refused": true
+    },
+    {
+      "case": "cancelled-owned-cleanup",
+      "removed": true,
+      "process_count": 2
+    }
+  ]
+}

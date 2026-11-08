@@ -1,0 +1,60 @@
+name: TJS-1882 native Ubuntu22 ARM baseline build and check
+on:
+  push:
+    branches: [tjs1882-native-windows-preflight]
+    paths: [.github/workflows/tjs1882-native-linux-arm.yml]
+permissions:
+  contents: read
+concurrency:
+  group: tjs1882-native-linux-arm-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-22.04-arm
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /vanguard/run-portable-linux-ci.py
+            /vanguard/run-portable-ci.py
+            /vanguard/portable-build.py
+            /vanguard/portable-prepare-old-linux.py
+            /vanguard/package-portable.py
+            /vanguard/portable_licenses.py
+            /vanguard/run-portable-check.py
+            /vanguard/portable-tester.py
+            /vanguard/test-portable-refusals.py
+            /vanguard/tester.py
+            /vanguard/source-lock.json
+            /vanguard/tester-profile.json
+            /docs/vanguard-portable-tester.md
+            /vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt
+            /vanguard/licenses/easyloggingpp-9.96.7/LICENSE
+            /vanguard/licenses/easyloggingpp-9.96.7/provenance.json
+            /ci/tjs1882/linux-arm-build-inputs.json
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.13'
+          architecture: arm64
+      - name: Locked native old-glibc build and Ubuntu22 journey with ten controls
+        shell: bash
+        run: >-
+          python -B vanguard/run-portable-linux-ci.py
+          --inputs ci/tjs1882/linux-arm-build-inputs.json
+          --inputs-sha256 684c737cb1b4b8fa9a66911eeca79743e5532fb9d7704bb744d08f557e043b8d
+          --out "$RUNNER_TEMP/tjs1882-old-linux-arm"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: tjs1882-ubuntu22-arm64-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/tjs1882-old-linux-arm/public/*.json
+            ${{ runner.temp }}/tjs1882-old-linux-arm/artifacts/meownero-vanguard-aarch64.tar.gz
+            ${{ runner.temp }}/tjs1882-old-linux-arm/artifacts/SHA256SUMS
+          if-no-files-found: warn
+          retention-days: 3

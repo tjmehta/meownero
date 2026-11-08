@@ -1,0 +1,150 @@
+{
+  "schema": "meownero-linux-reaping-regression/1",
+  "result": "FAIL",
+  "wrapper_reaped": true,
+  "cleanup": [
+    {
+      "pid": 13895,
+      "removed": true
+    },
+    {
+      "pid": 13898,
+      "removed": true
+    }
+  ],
+  "signals": [],
+  "observer_ruid": 0,
+  "observer_euid": 0,
+  "helper_observations": [],
+  "unverified_observations": [
+    {
+      "pid": 13898,
+      "ppid": 13895,
+      "ruid": 0,
+      "euid": 0,
+      "role": "UNVERIFIED_OWNED_ZOMBIE",
+      "state_class": "ZOMBIE",
+      "reaping_grace_seconds": 0.250182
+    }
+  ],
+  "wrapper_pid": 13895,
+  "failure_stage": "OBSERVE_OWNED_DESCENDANTS",
+  "snapshot_cost": {
+    "calls": 6,
+    "max_elapsed_seconds": 0.005895,
+    "recent": [
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "INITIAL_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 13896,
+        "spawn_seconds": 0.000639,
+        "communicate_seconds": 0.004289,
+        "output_bytes": 8138,
+        "process_rows": 100,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 3.1e-05,
+        "elapsed_seconds": 0.005013
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 13897,
+        "spawn_seconds": 0.000152,
+        "communicate_seconds": 0.004011,
+        "output_bytes": 8138,
+        "process_rows": 100,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 0.000119,
+        "elapsed_seconds": 0.004307
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "LIVE_OBSERVATION",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 13899,
+        "spawn_seconds": 0.000496,
+        "communicate_seconds": 0.005285,
+        "output_bytes": 8224,
+        "process_rows": 101,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 3.4e-05,
+        "elapsed_seconds": 0.005858
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "OWNED_CLEANUP",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 13900,
+        "spawn_seconds": 0.000288,
+        "communicate_seconds": 0.005546,
+        "output_bytes": 8146,
+        "process_rows": 100,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 3.1e-05,
+        "elapsed_seconds": 0.005895
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "OWNED_CLEANUP",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 13901,
+        "spawn_seconds": 0.000238,
+        "communicate_seconds": 0.003742,
+        "output_bytes": 8000,
+        "process_rows": 99,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 1.8e-05,
+        "elapsed_seconds": 0.004019
+      },
+      {
+        "operation": "OWNED_PROCESS_SNAPSHOT",
+        "context": "OWNED_CLEANUP",
+        "timeout_seconds": 5,
+        "result": "PASS",
+        "observer_pid": 13902,
+        "spawn_seconds": 0.000172,
+        "communicate_seconds": 0.003567,
+        "output_bytes": 8000,
+        "process_rows": 99,
+        "observer_reaped": true,
+        "numeric_pid_absent": true,
+        "reap_seconds": 1.8e-05,
+        "elapsed_seconds": 0.003776
+      }
+    ]
+  },
+  "failure_reason": "UNVERIFIED_FIRST_ZOMBIE",
+  "failure_observation": {
+    "pid": 13898,
+    "ppid": 13895,
+    "ruid": 0,
+    "euid": 0,
+    "role": "UNVERIFIED_OWNED_ZOMBIE",
+    "state_class": "ZOMBIE",
+    "reaping_grace_seconds": 0.250182
+  },
+  "failure_type": "AssertionError",
+  "wrapper_exit_before_cleanup": null,
+  "forwarded_sigterm": true,
+  "rejected_observation_cleanup": [
+    {
+      "pid": 13898,
+      "removed": true,
+      "proof": "ACTUAL_PID_ABSENCE"
+    }
+  ],
+  "wall_seconds": 0.537,
+  "cancellation_signals": []
+}

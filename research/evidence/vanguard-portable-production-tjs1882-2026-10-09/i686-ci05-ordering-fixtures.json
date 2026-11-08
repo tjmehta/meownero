@@ -1,0 +1,68 @@
+{
+  "schema": "meownero-i686-ci-ordering-fixtures/1",
+  "result": "PASS_LOCAL_MOCK_CONTROL_FLOW_NOT_NATIVE_EXECUTION",
+  "ci_helper_sha256": "81c6da7b73e59ea744b99e44fd845558e1bf3f2485be255f54655450f295164b",
+  "cases": [
+    {
+      "case": "exact-LF",
+      "result": "PASS_FIXTURE",
+      "wallet_started": true,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "exact-CRLF",
+      "result": "PASS_FIXTURE",
+      "wallet_started": true,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "nonzero-exit",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "timeout",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "wrong-marker",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "duplicate-marker",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "extra-output",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "empty-output",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "oversize-output",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    },
+    {
+      "case": "changed-fixture-hash",
+      "result": "PASS_FIXTURE",
+      "wallet_started": false,
+      "owned_cleanup_called": true
+    }
+  ],
+  "native_exception_and_journey": "UNTESTED"
+}

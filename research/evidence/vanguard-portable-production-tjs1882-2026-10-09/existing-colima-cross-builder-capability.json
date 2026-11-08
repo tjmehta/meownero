@@ -1,0 +1,18 @@
+{
+  "result": "OBSERVED_EXISTING_CAPABILITY_NOT_YET_BUILT",
+  "compiler_host": "Existing build-mac Apple Silicon / native ARM64 Colima VM",
+  "native_vm_available_memory_KiB": 5634440,
+  "minimum_available_memory_bytes": 5368709120,
+  "qemu_x86_64_binfmt": {
+    "enabled": true,
+    "interpreter": "/usr/bin/qemu-x86_64",
+    "flags": "POCF"
+  },
+  "runtime_configuration_changed": false,
+  "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "builder_transfer_tar_sha256": "01a5bd95b757995fb4d1f2212cb44805c8173217e94d58e3fb6d2ee6a4630ca2",
+  "linux_x64_rust193_tar_sha256": "904d1d88fe6d050e18f9ce4b3c3cc002ab673d884255e4be268a93275b7ccecd",
+  "compiler_execution_substrate": "PREEXISTING_QEMU_AMD64_ON_COLIMA_ARM64",
+  "windows_native_execution": "UNTESTED",
+  "serial_constraint": "Launch only after Intel Mac attempt releases existing native Mac heavy lock. Preserve five-GiB memory, ten-GiB host+Docker reserve,3GiB cgroup and3600s build deadline."
+}

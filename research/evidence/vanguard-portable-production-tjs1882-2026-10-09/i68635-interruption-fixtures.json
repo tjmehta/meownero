@@ -1,0 +1,89 @@
+{
+  "schema": "meownero-i68635-interruption-diagnostic-fixtures/1",
+  "result": "PASS",
+  "source_sha256": {
+    "test-portable-refusals.py": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4",
+    "run-portable-journey-diagnostic.py": "21bf9c9072e27135e6267192276e4bb401a46073a82b071c72ee7b6e867cb774"
+  },
+  "fixture_source_sha256": "d568505462f07bafe4a6cb46020d6f0760ec9c358b8bda85b384f63c365c8a6f",
+  "cases": [
+    {
+      "case": "registration-group-signal-wait-and-finalizers-preserved",
+      "result": "PASS_AST"
+    },
+    {
+      "case": "collision",
+      "result": "PASS",
+      "scope": "ACTUAL_PINNED_SOURCE_GUARDS_WITH_DECLARED_CAPACITY_JOB_SEAMS"
+    },
+    {
+      "case": "wrong-os",
+      "result": "PASS",
+      "scope": "ACTUAL_PINNED_SOURCE_GUARDS_WITH_DECLARED_CAPACITY_JOB_SEAMS"
+    },
+    {
+      "case": "capacity",
+      "result": "PASS",
+      "scope": "ACTUAL_PINNED_SOURCE_GUARDS_WITH_DECLARED_CAPACITY_JOB_SEAMS"
+    },
+    {
+      "case": "deadline-forwarding",
+      "result": "PASS",
+      "scope": "ACTUAL_PINNED_SOURCE_GUARDS_WITH_DECLARED_CAPACITY_JOB_SEAMS"
+    },
+    {
+      "case": "invalid-deadline-0",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "invalid-deadline-1201",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "private-or-invalid-phase",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "private-or-invalid-reason",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "private-or-invalid-wrong-binding",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "private-or-invalid-invalid-scalar",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "bounded-diagnostic-size",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "diagnostic-symlink",
+      "result": "PASS_REFUSAL"
+    },
+    {
+      "case": "early-exit",
+      "result": "PASS_CONTROLLED_LOOP",
+      "scope": "EXACT_LOOP_WITH_CONTROLLED_POPEN_WINAPI_SEAMS"
+    },
+    {
+      "case": "live-cancel",
+      "result": "PASS_CONTROLLED_LOOP",
+      "scope": "EXACT_LOOP_WITH_CONTROLLED_POPEN_WINAPI_SEAMS"
+    },
+    {
+      "case": "live-deadline",
+      "result": "PASS_CONTROLLED_LOOP",
+      "scope": "EXACT_LOOP_WITH_CONTROLLED_POPEN_WINAPI_SEAMS"
+    },
+    {
+      "case": "not-ready-owned-stop",
+      "result": "PASS_CONTROLLED_LOOP",
+      "scope": "EXACT_LOOP_WITH_CONTROLLED_POPEN_WINAPI_SEAMS"
+    }
+  ],
+  "packaged_tester_sha256": "17835eafcb740ba1e65030df01c58505e96742dc33f439d9824977e089460ad0",
+  "native_acceptance": false
+}

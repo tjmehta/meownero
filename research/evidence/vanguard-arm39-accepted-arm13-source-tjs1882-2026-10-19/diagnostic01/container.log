@@ -1,0 +1,67 @@
+{
+  "compiler": "clang version 23.1.3 (https://github.com/llvm/llvm-project.git 0d261d1ca552c95a8f007e061c787ac7132fbcbc)\nTarget: aarch64-w64-windows-gnu\nThread model: posix\nInstalledDir: /llvm/bin\nConfiguration file: /llvm/bin/aarch64-w64-windows-gnu.cfg\n",
+  "compiler_exit": 0,
+  "cases": [
+    {
+      "case": "baseline",
+      "argv": [
+        "/llvm/bin/aarch64-w64-mingw32-clang",
+        "-std=c11",
+        "-O2",
+        "-march=armv8-a+crypto",
+        "-DWINVER=0x0A00",
+        "-D_WIN32_WINNT=0x0A00",
+        "-I/source/src/crypto",
+        "-I/source/contrib/epee/include",
+        "-c",
+        "/input/slow-hash.original.c",
+        "-o",
+        "/out/baseline.o"
+      ],
+      "exit": 1,
+      "seconds": 0.7655248350929469,
+      "log_sha256": "41a9e425ac573dcd2ab3e5cabc160cc3ee08be29a5b3fdc5f1c5377d9f9f8f43"
+    },
+    {
+      "case": "candidate-crypto",
+      "argv": [
+        "/llvm/bin/aarch64-w64-mingw32-clang",
+        "-std=c11",
+        "-O2",
+        "-march=armv8-a+crypto",
+        "-DWINVER=0x0A00",
+        "-D_WIN32_WINNT=0x0A00",
+        "-I/source/src/crypto",
+        "-I/source/contrib/epee/include",
+        "-c",
+        "/input/slow-hash.candidate.c",
+        "-o",
+        "/out/candidate-crypto.o"
+      ],
+      "exit": 1,
+      "seconds": 1.088133972021751,
+      "log_sha256": "26f64647b22e09b6f5f12cafa2dc6bc207c24ec0f565c6ab7aea555c14b2dfec"
+    },
+    {
+      "case": "candidate-no-crypto",
+      "argv": [
+        "/llvm/bin/aarch64-w64-mingw32-clang",
+        "-std=c11",
+        "-O2",
+        "-march=armv8-a",
+        "-DWINVER=0x0A00",
+        "-D_WIN32_WINNT=0x0A00",
+        "-I/source/src/crypto",
+        "-I/source/contrib/epee/include",
+        "-c",
+        "/input/slow-hash.candidate.c",
+        "-o",
+        "/out/candidate-no-crypto.o"
+      ],
+      "exit": 1,
+      "seconds": 0.7833571400260553,
+      "log_sha256": "26f64647b22e09b6f5f12cafa2dc6bc207c24ec0f565c6ab7aea555c14b2dfec"
+    }
+  ],
+  "scope": "CROSS_COMPILE_DIAGNOSTIC_ONLY_NO_NATIVE_WINDOWS_EXECUTION"
+}

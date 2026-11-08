@@ -1,0 +1,14 @@
+...F.
+======================================================================
+FAIL: test_tar_scan_refuses_compressed_program_and_pax_metadata_paths (__main__.ProvenanceTests.test_tar_scan_refuses_compressed_program_and_pax_metadata_paths)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-1882-meownero-vanguard-cross-platform-tester-binaries-and-verified-group-download-packages/vanguard/test-portable-provenance.py", line 29, in test_tar_scan_refuses_compressed_program_and_pax_metadata_paths
+    with self.assertRaisesRegex(ValueError, 'PRIVATE_HOME_PREFIX'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.023s
+
+FAILED (failures=1)

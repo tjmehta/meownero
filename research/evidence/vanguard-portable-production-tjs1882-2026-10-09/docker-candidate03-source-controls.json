@@ -1,0 +1,654 @@
+{
+  "scope": "SOURCE_AND_RETAINED_PACKAGE_CONTROLS_NO_NEW_PROGRAM_BUILD_OR_JOURNEY",
+  "result": "PASS",
+  "controls": {
+    "linker_privacy": {
+      "receipt_sha256": "eb3093e41ce07509a48e996d4d43ef38dbdde26b6b873df5c2c7826195b957f4",
+      "receipt": {
+        "schema": "meownero-pinned-linker-inventory-fixtures/1",
+        "result": "PASS",
+        "source_sha256": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+        "controllers": {
+          "33": "216ece126fb745d383975cbacd7f1bcae2f112d12d11848fed3df28d3e5f0d70",
+          "34": "77844913c6833b533f6af36f882134dc6d924d4bc48819a6ed27b509a7a61839"
+        },
+        "fixture_source_sha256": "d4a1055621ff47263bb8837bbe8d1a6667ffe16baccc2c3febd59b16fe8aa69c",
+        "cases": [
+          {
+            "case": "absolute-equivalence",
+            "result": "PASS"
+          },
+          {
+            "case": "relative-equivalence",
+            "result": "PASS"
+          },
+          {
+            "case": "container-equivalence",
+            "result": "PASS"
+          },
+          {
+            "case": "mixed-equivalence",
+            "result": "PASS"
+          },
+          {
+            "case": "response-equivalence",
+            "result": "PASS"
+          },
+          {
+            "case": "response-absolute-equivalence",
+            "result": "PASS"
+          },
+          {
+            "case": "response-container-equivalence",
+            "result": "PASS"
+          },
+          {
+            "case": "wrong-depends-host",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "wrong-depends-library-directory",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "non-pinned-contrib",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-pinned-basename-before-pinned-arguments",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-pinned-basename-before-pinned-arguments",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "outside-project-src",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "absolute-untrusted-pinned-basename",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libboost_filesystem.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libboost_filesystem.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libboost_filesystem.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libssl.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libssl.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libssl.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libcrypto.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libcrypto.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libcrypto.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libsodium.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libsodium.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libsodium.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libunbound.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libunbound.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libunbound.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libzmq.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libzmq.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libzmq.a-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libcrypto.so.3-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libcrypto.so.3-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libcrypto.so.3-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "src-libssl.so.3-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "contrib/epee-libssl.so.3-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "external-libssl.so.3-origin-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "libcrypto.so.3-pinned-origin-still-recognized",
+            "result": "PASS"
+          },
+          {
+            "case": "libssl.so.3-pinned-origin-still-recognized",
+            "result": "PASS"
+          },
+          {
+            "case": "pinned-openssl-symlink-to-project-still-refused",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "mixed-pinned-and-untrusted-basename",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "response-escape",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "response-container-escape",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "response-cycle",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "response-file-symlink",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "response-parent-symlink",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "absolute-full-missing-component-guard-positive",
+            "result": "PASS",
+            "scope": "NOTICE_AND_RUST_SEAMS"
+          },
+          {
+            "case": "relative-full-missing-component-guard-positive",
+            "result": "PASS",
+            "scope": "NOTICE_AND_RUST_SEAMS"
+          },
+          {
+            "case": "src-full-coverage-pinned-basename-refusal",
+            "result": "PASS_REFUSAL",
+            "scope": "NOTICE_AND_RUST_SEAMS"
+          },
+          {
+            "case": "contrib/epee-full-coverage-pinned-basename-refusal",
+            "result": "PASS_REFUSAL",
+            "scope": "NOTICE_AND_RUST_SEAMS"
+          },
+          {
+            "case": "coverage-mixed-bundled-origin-refusal",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "static-closure-refusal-retained",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "controller": 33,
+            "case": "missing-component-and-safe-source-bound-diagnostic",
+            "result": "PASS"
+          },
+          {
+            "controller": 33,
+            "case": "safe-response-file-hash-context",
+            "result": "PASS"
+          },
+          {
+            "controller": 33,
+            "case": "safe-origin-refusal-context-non_pinned_depends",
+            "result": "PASS"
+          },
+          {
+            "controller": 33,
+            "case": "safe-origin-refusal-context-non_pinned_depends",
+            "result": "PASS"
+          },
+          {
+            "controller": 33,
+            "case": "worker-primary-error-secondary-export-False",
+            "result": "PASS",
+            "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+          },
+          {
+            "controller": 33,
+            "case": "worker-primary-error-secondary-export-True",
+            "result": "PASS",
+            "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+          },
+          {
+            "controller": 33,
+            "case": "spoofed-private-context-refusal",
+            "result": "PASS"
+          },
+          {
+            "controller": 34,
+            "case": "missing-component-and-safe-source-bound-diagnostic",
+            "result": "PASS"
+          },
+          {
+            "controller": 34,
+            "case": "safe-response-file-hash-context",
+            "result": "PASS"
+          },
+          {
+            "controller": 34,
+            "case": "safe-origin-refusal-context-non_pinned_depends",
+            "result": "PASS"
+          },
+          {
+            "controller": 34,
+            "case": "safe-origin-refusal-context-non_pinned_depends",
+            "result": "PASS"
+          },
+          {
+            "controller": 34,
+            "case": "worker-primary-error-secondary-export-False",
+            "result": "PASS",
+            "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+          },
+          {
+            "controller": 34,
+            "case": "worker-primary-error-secondary-export-True",
+            "result": "PASS",
+            "scope": "REAL_LICENSE_FAILURE_WITH_PACKAGE_LOAD_SEAM"
+          },
+          {
+            "controller": 34,
+            "case": "spoofed-private-context-refusal",
+            "result": "PASS"
+          }
+        ],
+        "native_archive_or_runtime_acceptance": false
+      }
+    },
+    "early_audit": {
+      "receipt_sha256": "1ae86db21db87356075551c0c9d346d567a06bc5ffa2ff043f750c22ef9efc80",
+      "receipt": {
+        "result": "PASS",
+        "cases": [
+          {
+            "case": "valid-project-and-pinned-actual-main-order-and-safe-receipt",
+            "result": "PASS"
+          },
+          {
+            "case": "project-disguised-openssl-actual-main-order-and-safe-receipt",
+            "result": "PASS"
+          },
+          {
+            "case": "wrong-host-openssl-actual-main-order-and-safe-receipt",
+            "result": "PASS"
+          },
+          {
+            "case": "private-source-openssl-actual-main-order-and-safe-receipt",
+            "result": "PASS"
+          },
+          {
+            "case": "private-foreign-openssl-actual-main-order-and-safe-receipt",
+            "result": "PASS"
+          },
+          {
+            "case": "missing-sodium-early-closure-refusal",
+            "result": "PASS"
+          },
+          {
+            "case": "shared-openssl-early-closure-refusal",
+            "result": "PASS"
+          },
+          {
+            "case": "secondary-diagnostic-write-does-not-mask-origin-refusal",
+            "result": "PASS"
+          },
+          {
+            "case": "valid-identity-verified-receipt-copy",
+            "result": "PASS"
+          },
+          {
+            "case": "wrong-identity-identity-verified-receipt-copy",
+            "result": "PASS"
+          },
+          {
+            "case": "copy-failure-identity-verified-receipt-copy",
+            "result": "PASS"
+          },
+          {
+            "case": "failed-compile-export-True-before-cleanup-and-lock-release",
+            "result": "PASS"
+          },
+          {
+            "case": "failed-compile-export-False-before-cleanup-and-lock-release",
+            "result": "PASS"
+          }
+        ],
+        "source_sha256": {
+          "vanguard/docker/test-link-audit.py": "43ad163e07d9c9aaefa315cff83a0c3b914a77320e3215c04a22062063c114c3",
+          "vanguard/portable_licenses.py": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+          "vanguard/docker/compile.py": "734d032cbbf0738a3c014c403939055b82d9a4fc847983c1de1c74d9b064a83a",
+          "vanguard/docker/build.py": "9a50707afeeb760258ef01ca126d36997662e80ae193ca85e9e54abdf9a7fba1"
+        },
+        "seams": "Generated link fixtures, fake depends/CMake command runner, cgroup/network scalars, fake Docker queries. Actual compile.main audit ordering and ownership-checked receipt copy execute.",
+        "program_compile_image_or_runtime_acceptance": false
+      }
+    },
+    "lifecycle": {
+      "receipt_sha256": "4efc9dd57c24723e175bafc7990cb1dcd46bebc668b10407fe052fc4e4546c7e",
+      "receipt": {
+        "schema": "meownero-docker-source-hold-fixtures/1",
+        "result": "PASS",
+        "cases": [
+          {
+            "case": "ordinary-successful-create-start-result-and-owned-cleanup",
+            "result": "PASS"
+          },
+          {
+            "case": "create-interrupt-registered-by-exact-name-and-finalized",
+            "result": "PASS"
+          },
+          {
+            "case": "create-timeout-registered-by-exact-name-and-finalized",
+            "result": "PASS"
+          },
+          {
+            "case": "failed-runtime-inspection-still-finalizes-honest-receipt",
+            "result": "PASS"
+          },
+          {
+            "case": "inspect-transient-honest-bounded-result",
+            "result": "PASS"
+          },
+          {
+            "case": "inspect-timeout-honest-bounded-result",
+            "result": "PASS"
+          },
+          {
+            "case": "discover-timeout-honest-bounded-result",
+            "result": "PASS"
+          },
+          {
+            "case": "remove-timeout-honest-bounded-result",
+            "result": "PASS"
+          },
+          {
+            "case": "identity-mismatch-honest-bounded-result",
+            "result": "PASS"
+          },
+          {
+            "case": "owned-cleanup-honest-bounded-result",
+            "result": "PASS"
+          },
+          {
+            "case": "cleanup-continues-after-independent-resource-failures",
+            "result": "PASS"
+          },
+          {
+            "case": "complete-copied-notices-docs-and-input-binding",
+            "result": "PASS"
+          },
+          {
+            "case": "verification-independent-of-live-source-root",
+            "result": "PASS"
+          },
+          {
+            "case": "changed-frozen-Dockerfile-refused",
+            "result": "PASS"
+          },
+          {
+            "case": "changed-frozen-inputs.json-refused",
+            "result": "PASS"
+          },
+          {
+            "case": "changed-frozen-LICENSE-refused",
+            "result": "PASS"
+          },
+          {
+            "case": "same-kernel-daemon-host-capacity-witness",
+            "result": "PASS"
+          },
+          {
+            "case": "different-daemon-kernel-refused",
+            "result": "PASS"
+          },
+          {
+            "case": "daemon-memory-reserve-refused",
+            "result": "PASS"
+          },
+          {
+            "case": "daemon-data-disk-reserve-refused",
+            "result": "PASS"
+          },
+          {
+            "case": "daemon-architecture-refused",
+            "result": "PASS"
+          },
+          {
+            "case": "remote-context-refused-before-work",
+            "result": "PASS"
+          },
+          {
+            "case": "failed-cleanup-always-writes-terminal-receipt-and-closes-lock",
+            "result": "PASS"
+          }
+        ],
+        "source_sha256": {
+          "test-lifecycle.py": "fbf4c6898a79c5853366313b8bcbae900d0d41e3d2fb16bd1704eeed6f6cd3d2",
+          "build.py": "9a50707afeeb760258ef01ca126d36997662e80ae193ca85e9e54abdf9a7fba1",
+          "run.py": "373d7808c42de133f6439dd14c81534c8436d42ff2b9f9c71684d489fa9a77c6",
+          "docker_support.py": "1e604a6027b8c9adf17d2ead18a5337fdbb486c97700dc49a8fcf3dcb1b59622",
+          "host_capacity.py": "c80881df87d7c536752a1e5122fb90b851b6e9743c9bb4411aa81512a463c362",
+          "Dockerfile": "ccb3347fdd48715cca9537bb08a4407793523811cf6fcc705b754269070df830",
+          "inputs.json": "e9666c6ee7e46df0d6b62a7c866ecc1099dc3cd21771d287e4832d09f71c104e"
+        },
+        "seams": "Fake Docker query engine and ordinary-start public protocol result, UID/disk admission, lost-create responses, bounded query failures, private lock inode, fake completed subprocess and temporary copied context; host capacity scalars. Actual run.main/ownership/cleanup/receipt logic executes. No native process, Docker container or image.",
+        "native_build_or_runtime_acceptance": false
+      }
+    },
+    "capacity": {
+      "receipt_sha256": "a27d7bb6a1c4f261549e82dab473311acb8f9eb19ccb864b23e809ec5a5d4b4d",
+      "receipt": {
+        "schema": "meownero-contained-capacity-fixtures/1",
+        "result": "PASS",
+        "cases": [
+          {
+            "case": "two-GiB-cgroup-with-separate-host-reserve",
+            "result": "PASS"
+          },
+          {
+            "case": "cgroup-headroom",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "unlimited-memory",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "oversized-memory",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "swap-enabled",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "host-reserve",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "output-reserve",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "private-space",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "public-network",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "pid-cap",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "unlimited-CPU",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "oversized-CPU",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "root-user",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "writable-image",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "persistent-private-state",
+            "result": "PASS_REFUSAL"
+          },
+          {
+            "case": "native-default-five-GiB-refusal-before-output-or-spawn",
+            "result": "PASS_REFUSAL"
+          }
+        ],
+        "source_sha256": {
+          "entrypoint.py": "0f89c17df5e957d41f7b68da54a07335188ebaae567b7d9ab73ebdba42a08a48",
+          "portable-tester.py": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33"
+        },
+        "seams": "Temporary proc/cgroup/mount files, UID and disk scalars; native preflight stub only for original reserve refusal.",
+        "native_or_container_runtime_acceptance": false
+      }
+    },
+    "retained_package_licenses": {
+      "receipt_sha256": "c9ed5972aec0fd581850f8cb49c7d7a1ff4ba9ffbaeab9d0519ce37620b85f56",
+      "receipt": {
+        "exit": 0,
+        "wall_seconds": 14.210925717001373,
+        "argv": [
+          "python3",
+          "-B",
+          "vanguard/test-portable-licenses.py",
+          "--build",
+          "build/tjs1882-linux64-attempt02",
+          "--package",
+          "build/tjs1882-c0cf-linux-x64-package02/meownero-vanguard-x86_64"
+        ],
+        "result": "PASS",
+        "scope": "RETAINED_CORRECTED_NATIVE_PACKAGE_LICENSE_CONTROLS_NO_NEW_PROGRAM_COMPILE_OR_RUNTIME"
+      }
+    }
+  },
+  "control_count": 131,
+  "first_diagnostic": {
+    "result": "FAILED_EVIDENCE_BIND_WRITE_AFTER_CMAKE_GENERATION",
+    "cleanup": {
+      "scope": "CONFIGURE_ONLY",
+      "image": "sha256:5aa720dea62bf7dc2019141589844b9e5bc5f2110a797b788dd8358b53edbcd4",
+      "invocation": "78b7bc4c853f44e4a50be4f4ec636806",
+      "name": "meownero-tjs1882-configure-78b7bc4c853f44e4a50be4f4ec636806",
+      "pid": 1399086,
+      "result": "FAILED_DIAGNOSTIC",
+      "lock_closed": true,
+      "host_capacity": [
+        {
+          "phase": "configure-diagnostic",
+          "result": "READY",
+          "endpoint_sha256": "13c4025c96f36e94b3481db3214765a35981f4e484bc53b1524d51c1ecaad5c6",
+          "image": "sha256:5aa720dea62bf7dc2019141589844b9e5bc5f2110a797b788dd8358b53edbcd4",
+          "cleanup": {
+            "name": "meownero-tjs1882-capacity-78b7bc4c853f44e4a50be4f4ec636806-configure-diagnostic",
+            "removed": true,
+            "discovery_complete": true,
+            "cid": "2518db29d7a52ccdf089a5f64230da271a635cdf2bd2739ae2182e771d911c7a",
+            "identity_verified": true,
+            "exit": 0,
+            "oom_killed": false
+          },
+          "host_available_bytes": 8429625344,
+          "docker_data_free_bytes": 1445447065600,
+          "same_kernel_boot_id_sha256": "683d9c70c7815bfa3db8293459dca256345c26d6aa94f91f33edfbdab568a65a"
+        }
+      ],
+      "cid": "0ae3675797f2eab84be4665d3f0b38489e868a376c7cf7b451ad84ba9176fc3d",
+      "client_pid": 1400588,
+      "exit": 1,
+      "client_exit": 1,
+      "oom_killed": false,
+      "cleanup": {
+        "name": "meownero-tjs1882-configure-78b7bc4c853f44e4a50be4f4ec636806",
+        "removed": true,
+        "discovery_complete": true,
+        "cid": "0ae3675797f2eab84be4665d3f0b38489e868a376c7cf7b451ad84ba9176fc3d",
+        "identity_verified": true,
+        "exit": 1,
+        "oom_killed": false
+      },
+      "wall_seconds": 468.2507568200017
+    },
+    "log_sha256": "ab5ac3d95d3c0fb8964059cede177badb9cea9c6d4fbb6d9cc11b2dfa1870fae"
+  },
+  "predecessor": {
+    "predecessor": "598296e0a68ccedf32657bee05c8b6beb35f47dd",
+    "retained_builder_receipt_sha256": "7a52a711edaa959b83b2f8435aa6b3c7825e47d4fa6301c886e3e51b1d38d2f9",
+    "source_bindings_pass": 21,
+    "original_untracked_sha256": {
+      "research/evidence/vanguard-portable-production-tjs1882-2026-10-09/arm17-review-packet-staging.json": "60aa1bd076e5b8d389da5dcd1379b7a587fc856f2233a620aefd65ece5a8a6be",
+      "research/evidence/vanguard-portable-production-tjs1882-2026-10-09/parent-windows-arm-native-runner-eligibility.json": "bfad838018c7bdbeeef9abbec65141cb1869c8183ddafd2f353271e47ef4034e"
+    },
+    "untracked_preservation": "PASS",
+    "runtime_image_created": false,
+    "journey_executed": false
+  },
+  "program_compile_image_journey_acceptance": false,
+  "native_ci": "PAUSED",
+  "original_review_stage": "82aa96f6-a7bf-422f-afe7-8d1cb3b2626a",
+  "retained_package_license_log_sha256": "8f93eb4f093637ac5b8eb2f4954df195208c7db47c1f8eba2fa8c7f377b3bd5d"
+}

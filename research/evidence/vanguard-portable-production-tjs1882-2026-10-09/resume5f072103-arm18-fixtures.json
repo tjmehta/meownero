@@ -1,0 +1,44 @@
+{
+  "schema": "meownero-arm18-random-declaration-fixtures/1",
+  "result": "PASS",
+  "helper_sha256": "ef5f13981efdad4a34e5236051c1725bf03c0389a803af32a56e048b4bd84f4d",
+  "kit17_sha256": "d466b93cb9622c7d291e15cf35dbba0e3e44d331d9bc34cea874c2a5e97b070a",
+  "preimage_sha256": "a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6",
+  "postimage_sha256": "9574e279b64cc3566c02b6dea77570319482c3056e19c49810442dffdb4ab213",
+  "entire_existing_helper_AST_unchanged_after_removing_six_new_statements": true,
+  "existing_finally_blocks_unchanged": 10,
+  "cases": [
+    {
+      "case": "exact",
+      "result": "PASS",
+      "patch": {
+        "file": "src/crypto/random.c",
+        "before_sha256": "a600a0a54df08eff9be89335daea5299d961fa43dc024c488eceb5a610ec93c6",
+        "after_sha256": "9574e279b64cc3566c02b6dea77570319482c3056e19c49810442dffdb4ab213",
+        "patch_sha256": "0aca1108c62f6c26bddde932d8e322df0a42cb83c3b199b497590597be3cb5f4",
+        "reference": "https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/exit-exit-exit",
+        "scope": "Windows ARM64 declaration include only: process.h declares existing _exit; random generation, failure path, source pin and other targets unchanged."
+      }
+    },
+    {
+      "case": "changed-source",
+      "result": "PASS",
+      "source_untouched": true,
+      "patch_receipt_absent": true
+    },
+    {
+      "case": "wrong-target",
+      "result": "PASS",
+      "source_untouched": true,
+      "patch_receipt_absent": true
+    },
+    {
+      "case": "wrong-pin",
+      "result": "PASS",
+      "source_untouched": true,
+      "patch_receipt_absent": true
+    }
+  ],
+  "compiler_or_native_execution": "NOT_RUN",
+  "new_full_build_started": false
+}

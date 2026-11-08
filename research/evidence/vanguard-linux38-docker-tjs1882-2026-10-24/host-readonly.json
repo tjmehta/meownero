@@ -1,0 +1,26 @@
+{
+  "schema": "meownero-linux38-readonly-host-observation/1",
+  "result": "READONLY_ONLY_NOT_RUNTIME_QUALIFICATION",
+  "time": "2026-10-24T05:01:22.871197+00:00",
+  "kernel": "6.8.0-146-generic",
+  "architecture": "x86_64",
+  "os": "Ubuntu 24.04.4 LTS",
+  "docker_version": "29.5.3",
+  "cgroup_version": "2",
+  "resource_capability_flags": {
+    "MemoryLimit": true,
+    "SwapLimit": true,
+    "PidsLimit": true,
+    "CpuCfsQuota": true
+  },
+  "preexisting_container_count": 52,
+  "available_memory_bytes": 7848546304,
+  "output_free_bytes": 1052876374016,
+  "daemon_free_bytes": 1052876374016,
+  "docker_id_sha256": "46f96da6ef57d87eede09fca8cd88c3f28c758ee2c5c457c793d24ac1ebda0fe",
+  "endpoint": "LOCAL_DEFAULT_UNIX_SOCKET",
+  "workloads_launched": 0,
+  "requires_fresh_qualification_after_source_review": true,
+  "pinned_ubuntu22_base_cached": false,
+  "cache_remedy": "After source clearance and fresh native headroom check, use existing anonymous local Docker pull path with exact pinned Ubuntu22 digest and 180s deadline, then run topology/cgroup probes. No image was pulled this heartbeat."
+}

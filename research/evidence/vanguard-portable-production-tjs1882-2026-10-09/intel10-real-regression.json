@@ -1,0 +1,28 @@
+{
+  "schema": "meownero-mac-observer07-real-helper-regression/1",
+  "result": "PASS_ACTUAL_DARWIN_OWNED_PS_OLD_REFUSAL_NEW_SUCCESS",
+  "real_uid": 501,
+  "effective_uid": 501,
+  "cases": [
+    {
+      "case": "old",
+      "outcome": "FAIL",
+      "failure_type": "AssertionError",
+      "failure_reason": null,
+      "observed_privileged_helpers": 0,
+      "wrapper_reaped": true,
+      "known_children_removed": true
+    },
+    {
+      "case": "corrected",
+      "outcome": "PASS_WRAPPER_AND_OWNED_CLEANUP",
+      "failure_type": null,
+      "failure_reason": null,
+      "observed_privileged_helpers": 5,
+      "wrapper_reaped": true,
+      "known_children_removed": true
+    }
+  ],
+  "actual_failed_intel_run_uid_branch": "INFERENCE_SUPPORTED_BY_REPRODUCER_NOT_RECORDED_IN_ORIGINAL_INTEL_RECEIPT",
+  "archive_journey_acceptance": "UNTESTED_BY_THIS_FIXTURE"
+}

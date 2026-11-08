@@ -1,0 +1,129 @@
+{
+  "schema": "meownero-private-native-linux-build-inputs/1",
+  "issue": "TJS-1882",
+  "status": "PENDING_INDEPENDENT_SOURCE_REVIEW_NO_LIVE_USE",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "cargo_lock_sha256": "6a8e9217b94169e26a8f595cb528d72c19dc2f5484e903c57328c594d62f8239",
+  "submodule_urls": {
+    "external/gtest": "https://github.com/google/googletest.git",
+    "external/mx25519": "https://github.com/tevador/mx25519",
+    "external/randomx": "https://github.com/tevador/RandomX",
+    "external/rapidjson": "https://github.com/Tencent/rapidjson",
+    "external/supercop": "https://github.com/monero-project/supercop"
+  },
+  "rust": {
+    "url": "https://static.rust-lang.org/dist/rust-1.93.0-x86_64-unknown-linux-gnu.tar.xz",
+    "sha256": "b9d9f01a96a2542852ccfddd82194276ba1c86bc76353309ff636b737fc0a772",
+    "rustc_sha256": "d32249a7c3bfcfc67b471460386e46323accae7125e344567a12d5664d99bb57",
+    "cargo_sha256": "9548937d530bf439ff1ba47a3b2bd26eeb9c3aff1961c20c01798613de922578"
+  },
+  "depends": {
+    "boost": {
+      "file": "boost-1.91.0-1-b2-nodocs.tar.gz",
+      "url": "https://github.com/boostorg/boost/releases/download/boost-1.91.0-1/boost-1.91.0-1-b2-nodocs.tar.gz",
+      "sha256": "b5a3d1490118e012f8b12688240d981bcdfcd009fd35bc70d120fbc907df4f7c",
+      "recipe_sha256": "fe6b57564c038aa044edb916074d36e5fa52ac7015354ffb29866b7099d15341",
+      "version": "1.91.0-1"
+    },
+    "openssl": {
+      "file": "openssl-3.5.8.tar.gz",
+      "url": "https://github.com/openssl/openssl/releases/download/openssl-3.5.8/openssl-3.5.8.tar.gz",
+      "sha256": "a8f84a39918ec6415ce765d9b429d313ba97b8143169c172e734b9514464f5b2",
+      "recipe_sha256": "56a68cf10b97c777b71ea717f0b0b9c5bae3d4dcf7a607b708069e97c2494c09",
+      "version": "3.5.8"
+    },
+    "sodium": {
+      "file": "libsodium-1.0.18.tar.gz",
+      "url": "https://github.com/jedisct1/libsodium/releases/download/1.0.18-RELEASE/libsodium-1.0.18.tar.gz",
+      "sha256": "6f504490b342a4f8a4c4a02fc9b866cbef8622d5df4e5452b46be121e46636c1",
+      "recipe_sha256": "11ae81dc602e4f4b7a2c0b6257214f7ef5a06971d1f63c5d583d855d7646893f",
+      "version": "1.0.18"
+    },
+    "unbound": {
+      "file": "unbound-1.25.2.tar.gz",
+      "url": "https://www.nlnetlabs.nl/downloads/unbound/unbound-1.25.2.tar.gz",
+      "sha256": "0d92275c703d5f5f8baba3dab22117dd8c29b495588a5c229768ed6581566600",
+      "recipe_sha256": "7c15922828907c0fe064b0245c0f7cd7710144fca2349e01c7e2556a202358b4",
+      "version": "1.25.2"
+    },
+    "zeromq": {
+      "file": "zeromq-4.3.5.tar.gz",
+      "url": "https://github.com/zeromq/libzmq/releases/download/v4.3.5/zeromq-4.3.5.tar.gz",
+      "sha256": "6653ef5910f17954861fe72332e68b03ca6e4d9c7160eb3a8de5a5a913bfab43",
+      "recipe_sha256": "9903f96d13be682904d330a08232854e663f1a42126148bb8ee73dc4f9dd7ebb",
+      "version": "4.3.5"
+    }
+  },
+  "source_files": {
+    "vanguard/run-portable-ci.py": "1d658ac27d5171b0ccd884ed6f308cb32effa8a92aa4eb081087371a66d56e41",
+    "vanguard/portable-build.py": "d2782a0828e2344a706083884840c2851ac9b41ecdf8fc5bebafe4d3e2d8f150",
+    "vanguard/portable-prepare-old-linux.py": "86a5d0a724bad9a368e07e8758a6f3b5398d80bf95aef5c2033389877d1b23a2",
+    "vanguard/package-portable.py": "4b0352401987274e85ef874425f71f84b517ae4719363b1669eaee0769e0be59",
+    "vanguard/portable_licenses.py": "a6fb7da6cc4d36d09b9e447dd86f5c7d3621cd07a5cae1f72a1dc3d5f143c55c",
+    "vanguard/run-portable-check.py": "23dc50314aaf8000650c1c52444bf35bebfba5921ba872215bed6ad4b9bfc2ba",
+    "vanguard/portable-tester.py": "12106e7e0c518b4dcc96ef4c9b33d0b36049f27c0eec7784f30e499627a63e33",
+    "vanguard/test-portable-refusals.py": "613887419d07eb967faad688786012a99683d497589b2cbe497ba95de34906c4",
+    "vanguard/tester.py": "f8a8570fe64ccc95752a39dbdb91e03e5015552a96f21b0f4b2f611b6e6f2e4f",
+    "vanguard/source-lock.json": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+    "vanguard/tester-profile.json": "6c099f6d1d49a4bf128458277409351e264c78283a9e17a65473f9125f6da03c",
+    "docs/vanguard-portable-tester.md": "6cd3e31ba215cc29516b73af985cd232af62dae0a0762a33c64c7fa0fb4d38c6",
+    "vanguard/licenses/easyloggingpp-9.96.7/COPYRIGHT-header.txt": "054b7ad8c74432f058675381be60cbda35ee59a7e29f71707833bb71f91c281c",
+    "vanguard/licenses/easyloggingpp-9.96.7/LICENSE": "bd30b865b9808a6637145bf02df92c06b0c21307e170f4bdf30b2e277f6cda35",
+    "vanguard/licenses/easyloggingpp-9.96.7/provenance.json": "4de6b236227529a03ac2c7c868979986d413051ffa7c36ea6db18602a9a893e7",
+    "vanguard/run-portable-linux-docker.py": "b1caa7f6732786a7f404dacbc25a9c9ace2d1b4ad9a7cb84c866a8bab003409e",
+    "vanguard/linux38_docker.py": "4ddd218811d58f43235ed46af8a377f3108caea66fd2af2b85f88ded12a9b04f",
+    "vanguard/stage-linux38-docker.py": "acab88f7eb0557573fcf801e871d939c77b9893c73a6b1ca7e53de4ce56c0771",
+    "vanguard/docker/docker_support.py": "1e604a6027b8c9adf17d2ead18a5337fdbb486c97700dc49a8fcf3dcb1b59622"
+  },
+  "target": "linux-x86_64",
+  "builder_base": "ubuntu@sha256:08ea48a03a3e78ebc7cd526e6a275053223aadd88bfc09cc49b06d5281525fde",
+  "source_patches": [],
+  "generated_toolchain_adaptation": "Existing portable-build.py static pinned five-dependency closure with generated STATIC OFF for system libc/C++ ABI; exact OpenSSL static library paths. No source/crypto/consensus changes.",
+  "runner": "ubuntu-22.04",
+  "qualification": "Native x64 existing Ubuntu24 kernel/controller with separately pinned Ubuntu22/glibc2.35 container userland; exact daemon/boot/mount/cgroup and fresh six-GiB available, ten-GiB disk witnesses before every phase. No emulation or VM claim.",
+  "bounds": {
+    "job_minutes": 120,
+    "controller_seconds": 6900,
+    "supervisor_cleanup_seconds": 180,
+    "fetch_seconds": 900,
+    "builder_preparation_seconds": 1200,
+    "compile_seconds": 3600,
+    "package_seconds": 180,
+    "native_runtime_seconds": 1500,
+    "compile_cpus": 2,
+    "compile_memory_bytes": 4294967296,
+    "compile_pids": 256,
+    "runtime_memory_bytes": 2147483648
+  },
+  "coverage": "Native x64 kernel and Ubuntu22 container userland only; no whole-release or other-distribution acceptance.",
+  "published_runner_documents": [
+    "https://docs.github.com/en/actions/reference/runners/github-hosted-runners",
+    "https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md"
+  ],
+  "runner_document_snapshot": "20261004.315.1 Ubuntu22.04.5/GCC11.4; PRIVATE standard2CPU/8GB/14GB; actual runtime gates take precedence over advertised resources",
+  "replaced_blocker": "Preserved older-linux-x64-attempt01 failed GCC11 collect2 under pre-existing QEMU; this route uses native x64. No local gate lower/retry/settings/interrupt.",
+  "compile_resource_policy": {
+    "scope": "NATIVE_X64_UBUNTU22_DOCKER_USERLAND",
+    "target": "linux-x86_64",
+    "container_memory_bytes": 4294967296,
+    "container_memory_swap_bytes": 4294967296,
+    "host_minimum_available_bytes": 6442450944
+  },
+  "local_origin": {
+    "frozen_candidate": 38,
+    "frozen_inputs_sha256": "4cf6de02805fd2adfa67b0cef5ced7efa29a655ae1da13bc2dbd42557e2bd2b3",
+    "frozen_source_commit": "3071ff1276aae8cb96ef13619b3fcbb11a6adb8d",
+    "change": "Separate local successor binds the Linux read-only reaping grace in the shared supervisor. Frozen hosted and first local admission inputs remain intact. Original reviewer source clearance is required before a full controller run.",
+    "admission_source_commit": "630f6fbcd84e8475816da823a1c15197226ff4d4",
+    "admission_inputs_sha256": "0d85fa9f95f1792e6ebb41934c6c7a452adfab6c446fc9f89dc807b7613ebe83"
+  },
+  "docker_successor_origin": {
+    "base_inputs": "research/evidence/vanguard-linux-reaping-tjs1882-2026-10-19/local-38-reaping-inputs.json",
+    "base_inputs_sha256": "493349d9748160ad9dcee26cd0369f5725db568505abeb1c489b9bfb77e6bf0e",
+    "patch": "vanguard/patches/linux38-native-docker.patch",
+    "patch_sha256": "556dc9fb4f9b4e47a0515d0cda2939b68de600109dd238cc4523cb38ad73c28e",
+    "capacity_decision_revision": "7d23df43-8e7b-497d-bf0a-8beca2e98b2f",
+    "candidate_number": 1,
+    "correction_round": 0
+  }
+}

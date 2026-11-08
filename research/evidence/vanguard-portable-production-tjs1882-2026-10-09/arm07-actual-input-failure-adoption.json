@@ -1,0 +1,21 @@
+{
+  "schema": "meownero-arm07-input-failure-adoption/1",
+  "result": "FAILED_ATTEMPT",
+  "failure_reason": "SUPPLIED_ARM64_RUST_TO_AMD64_COMPILER_CONTAINER",
+  "stage": "TOOLCHAIN_PREPARATION",
+  "dependencies_and_program_build": "NOT_REACHED",
+  "private_original_receipt_sha256": "b4f60003bc739ab313c17017b15b61a54032f0a28fb8be2dbaba85843853a190",
+  "owned_cleanup": [
+    {
+      "id": "a0bf87d7095090df9f6801c5284c91a66538a16c6fcd937aff7447daa1214547",
+      "label": "toolchain",
+      "removed": true,
+      "independent_exact_absence": true
+    }
+  ],
+  "verified_successor_amd64_Rust_source": {
+    "rustc": "d32249a7c3bfcfc67b471460386e46323accae7125e344567a12d5664d99bb57",
+    "cargo": "9548937d530bf439ff1ba47a3b2bd26eeb9c3aff1961c20c01798613de922578"
+  },
+  "native_Windows_ARM": "UNTESTED"
+}

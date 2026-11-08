@@ -1,0 +1,43 @@
+{
+  "schema": "meownero-current-macos-arm-native-checkpoint/1",
+  "result": "PASS_CURRENT_ARCHIVE_NATIVE_JOURNEY_TEN_CONTROLS_REVIEW_PENDING",
+  "archive": {
+    "name": "mac-arm-starter-package01.tar.gz",
+    "bytes": 63060519,
+    "sha256": "fe920a54de9941ea2782df6f7aa5cfc10842f46279a0d2c47959b2b1fcdebb35",
+    "release_manifest_sha256": "60f54a7a5cd4d2769056c0aafc8076fed666c52ef0e82ac7211f2283478dcd2e",
+    "safe_regular_members": 266,
+    "all_internal_bindings_verified": true
+  },
+  "supervisor_sha256": "f2fcd4cbf104b85b6b28bc95dde5fe3420bd4e16d1d2b3b1afe0189d9dafd974",
+  "wrapper_sha256": "b72e05335d8d959f5bfa619790409d46c3aa5d74be294de3af4b65d8bcc9b650",
+  "execution": "PHYSICAL_APPLE_SILICON_DARWIN_ARM64",
+  "program_sha256": {
+    "monerod": "f250efc57797740932bdbff1ce1ce966a352adcdc2da68f57758741f8d4290ab",
+    "monero-wallet-cli": "eea8a6e59a8b6b1439c97d03001736af5cbbdc7610106d4f189ce76c571827d3",
+    "monero-wallet-rpc": "b1b3dc23cd4abdc5d057a470902002be82140bf291d1b186b49f62ed9df5a142"
+  },
+  "full_journey": "PASS",
+  "ten_controls": "PASS",
+  "receive_atomic": 5000000000000,
+  "subsequent_spend_atomic": 2000000000000,
+  "restored_wallet_and_native_CLI": "PASS",
+  "owned_cleanup": "PASS",
+  "existing_heavy_lock_inode_preserved": true,
+  "translation": false,
+  "original_reviewer": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "independent_acceptance": "PENDING",
+  "full_release": "OPEN",
+  "public_receipts": {
+    "check": "0779540c0b746d520c0ae5521137eebed0e30629e807797ce8a026268ce2cdcc",
+    "journey": "53dc9400d7d98967e58f4f1b7378303004b17a20aca5bb219b201e5be6949a9c",
+    "controls": "013cde3f95e1476220041b676e15d6d9a0b9ddb4db44599021b27fdd86c7d8ce",
+    "supervision": "e02796d61dbf52f7fa2502dc995c7d801c9e7361ce4419dc4035b530222b6545"
+  },
+  "actual_environment": {
+    "macos": "26.5.1",
+    "kernel": "Darwin25.5.0",
+    "architecture": "arm64",
+    "python": "3.14.7"
+  }
+}

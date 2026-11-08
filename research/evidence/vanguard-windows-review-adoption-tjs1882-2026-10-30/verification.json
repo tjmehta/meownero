@@ -1,0 +1,88 @@
+{
+  "schema": "meownero-windows-review-adoption-verification/1",
+  "observed_at": "2026-10-30T20:02:35.036467+00:00",
+  "run_id": "d7b40435-c9c9-4d69-960d-2f0a3873b2ea",
+  "result": "PASS",
+  "evidence_commit": "8d0570d96f75488753ec124f0a4b9f50ff63c906",
+  "implementation_commit": "6836e5e1b14e66292cb0393b9f8ba0d1b8ab0dec",
+  "review_document": {
+    "key": "windows-returned-independent-review-2026-10-30",
+    "revision": "04f52059-7791-464a-a5a7-a0c82d79956c",
+    "body_sha256": "64476dd2090a60e19ae5812656229d91bff15ed28681bc4182a93c07109dc48c"
+  },
+  "review_packet": {
+    "attachment_id": "e4757ae4-eb43-42d7-bf0d-403389ba3349",
+    "bytes": 72846,
+    "sha256": "2c91b8fcfc75f364a9c2f6f4ff2ce5696b960c4432810444c5a11f572d823de5",
+    "members": 13,
+    "manifest_bindings": 12
+  },
+  "submitted_packet": {
+    "members": 13,
+    "manifest_bindings": 12,
+    "git_and_current_file_bindings": [
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/arm-report-v2.zip",
+        "bytes": 3326,
+        "sha256": "394294d5dc1465f2eae52e256bdce9281d72ab3f31c4ab33f3e095c01fa8f2ea"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/intel-report-v2.zip",
+        "bytes": 4498,
+        "sha256": "0e31a52562f6d771c05480aa170b487f7f141ddbaae9f8b2f7064366341740af"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/intel-report3-v2.zip",
+        "bytes": 4487,
+        "sha256": "e2ade0040cc727141850971990b566651c720db272227c5e79dee3518410173c"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/parent-report-verification.json",
+        "bytes": 9514,
+        "sha256": "d9c29f3a1551587595db86e16451c9e0a99cc8df916395a8f3af4c60e860e07b"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/preservation.json",
+        "bytes": 1966,
+        "sha256": "49fc1b95db9687967c2702006a80139fbd73739d97823d81a0540b8ce49f367a"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/release-status.json",
+        "bytes": 4075,
+        "sha256": "498107260e12bd895a1a96fa0bf790ca958e3e9284867e9520f5c8ca8b94aa29"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/validation-first.log",
+        "bytes": 82,
+        "sha256": "97fcae5607673f5746aaeb4afc9f9e5ffd7b81f053729147d801186295e977f3"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/verification.json",
+        "bytes": 10047,
+        "sha256": "694adc7ab978e575325878f68bbc28be5c0a3f393da9db9db3dd985781f4537f"
+      },
+      {
+        "path": "research/evidence/vanguard-windows-returned-reports-tjs1882-2026-10-30/verify.py",
+        "bytes": 19470,
+        "sha256": "a33640fb532dea49ed34a1b54a1315a7260f7284380f55df710c6c6edf6df7e0"
+      },
+      {
+        "path": "research/vanguard-windows-returned-reports-2026-10-30.md",
+        "bytes": 7836,
+        "sha256": "77655fb2c1ffb5cf03544773a9acfc09bfd802f3fe0497beaa9b846241da35e8"
+      }
+    ]
+  },
+  "reviewer_replay_equals_committed_receipt": true,
+  "fresh_adoption_checks": "Authenticated reviewer packet, bounded ZIP inventories, manifests, decision, current/Git bytes and replay-receipt equality. No report content executed.",
+  "reused_review_checks": {
+    "nested_file_hashes": 601,
+    "program_pe_headers": 6,
+    "report_validations": 3,
+    "negative_rejections": 13,
+    "reason": "Evidence-only adoption; programs, helpers, reports and source/bundle inputs unchanged."
+  },
+  "fresh_windows_execution": "NOT_RUN_NO_QUALIFIED_WINDOWS_RUNTIME",
+  "group_messages": 0,
+  "new_tester_rerun_requested": false
+}

@@ -1,0 +1,102 @@
+{
+  "schema": "meownero-32610-linux27-arm28-actual-terminal-adoption/1",
+  "result": "EXACT_RUN_ARTIFACT_BINDINGS_AND_BUILD_PASS_PACKAGE_FAIL_VERIFIED",
+  "cases": [
+    {
+      "target": "linux-x86_64",
+      "run_id": "38015278854",
+      "github_sha": "eae1c095f388ba359625463e2c357e14321b1c2a",
+      "github_conclusion": "failure",
+      "actual_build": "BUILT_VERSION_EXECUTED_JOURNEY_UNTESTED",
+      "compiler_substrate": "NATIVE",
+      "distribution": "Ubuntu22.04",
+      "build_exit": 0,
+      "build_wall_seconds": 1445.476250095,
+      "binary_bindings": {
+        "monerod": {
+          "sha256": "4a4f08ea01d9c6d3508ff3a16e199cdff3af4296aac93ae221aa8072dd138429",
+          "bytes": 39924840
+        },
+        "monero-wallet-cli": {
+          "sha256": "885d2a15fd2bd71ea28e9f4c3f374bec4dd1d272aa302d9fb06354d475d9069f",
+          "bytes": 42474800
+        },
+        "monero-wallet-rpc": {
+          "sha256": "ea7da6f368631aaf9198852db55cc24ae6cfadc1ed28f99c1ce2fbcf928da984",
+          "bytes": 43090376
+        }
+      },
+      "native_compile_resources": {
+        "scope": "FRESH_NATIVE_UBUNTU22_ONLY",
+        "container_memory_bytes": 4294967296,
+        "container_memory_swap_bytes": 4294967296,
+        "host_minimum_available_bytes": 6442450944,
+        "measured_available_bytes": 7281942528
+      },
+      "failure_phase": "PACKAGE",
+      "recorded_failure_type": "AssertionError",
+      "inner_package_failure_reason": "UNKNOWN_NOT_EXPORTED_BY_EXISTING_CONTROLLER",
+      "archive_journey_controls": "NOT_REACHED",
+      "recorded_containers_removed": true,
+      "recorded_phase_wrappers_reaped_and_cleanup_removed": true,
+      "recorded_ephemeral_lock_removed": true,
+      "fresh_host_kernel_absence": "NOT_CHECKED_EPHEMERAL_RUNNER",
+      "artifact_id": 11656801973,
+      "artifact_zip_bytes": 8277,
+      "artifact_zip_sha256": "ddd1809a2629712787cf45267e56fed92bf95e7ca724c267b2c76dd6a4b0f9bb",
+      "public_JSON_members": 8,
+      "actual_receipts_bound": true,
+      "native_acceptance": false
+    },
+    {
+      "target": "linux-aarch64",
+      "run_id": "38015490152",
+      "github_sha": "6de6a26e63ba29708e3e7e2ca0d91ca3c64071d7",
+      "github_conclusion": "failure",
+      "actual_build": "BUILT_VERSION_EXECUTED_JOURNEY_UNTESTED",
+      "compiler_substrate": "NATIVE",
+      "distribution": "Ubuntu22.04",
+      "build_exit": 0,
+      "build_wall_seconds": 1646.961026606,
+      "binary_bindings": {
+        "monerod": {
+          "sha256": "179baad7a1109e2c5b5167796e38e9f4a0bc4d61ea044b9f27b113021a8f616c",
+          "bytes": 36017120
+        },
+        "monero-wallet-cli": {
+          "sha256": "494f237a371891397fc22c406023300c56469a1238e2408a1203899fdc52375f",
+          "bytes": 38252416
+        },
+        "monero-wallet-rpc": {
+          "sha256": "df6a1d7bc88a5d59214833827f46fff3da43db33fce7fa3bc08bd81e17d485b7",
+          "bytes": 38893344
+        }
+      },
+      "native_compile_resources": {
+        "scope": "FRESH_NATIVE_UBUNTU22_ONLY",
+        "container_memory_bytes": 4294967296,
+        "container_memory_swap_bytes": 4294967296,
+        "host_minimum_available_bytes": 6442450944,
+        "measured_available_bytes": 7116120064
+      },
+      "failure_phase": "PACKAGE",
+      "recorded_failure_type": "AssertionError",
+      "inner_package_failure_reason": "UNKNOWN_NOT_EXPORTED_BY_EXISTING_CONTROLLER",
+      "archive_journey_controls": "NOT_REACHED",
+      "recorded_containers_removed": true,
+      "recorded_phase_wrappers_reaped_and_cleanup_removed": true,
+      "recorded_ephemeral_lock_removed": true,
+      "fresh_host_kernel_absence": "NOT_CHECKED_EPHEMERAL_RUNNER",
+      "artifact_id": 11656469049,
+      "artifact_zip_bytes": 8320,
+      "artifact_zip_sha256": "44deaa87c0b312e16dd86348eb3e4ffea25e4eb2b589d30a89e95656af94dc99",
+      "public_JSON_members": 8,
+      "actual_receipts_bound": true,
+      "native_acceptance": false
+    }
+  ],
+  "new_build_or_CI_retry": false,
+  "unchanged_4GiB_memory_and_swap_6GiB_host_policy": true,
+  "historical17_18_OOM_AND08_unknown_failures": "PRESERVED_DISTINCT",
+  "all_seven_release": "OPEN"
+}

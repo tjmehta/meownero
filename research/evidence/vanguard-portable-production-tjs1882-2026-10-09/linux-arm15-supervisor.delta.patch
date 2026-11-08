@@ -1,0 +1,36 @@
+--- a/vanguard/run-portable-ci.py
++++ b/vanguard/run-portable-ci.py
+@@ -159,12 +159,27 @@
+             receipt['wrapper_reaped'] = process is not None and process.poll() is not None
+             raise
+         finally:
+-            receipt['wall_seconds'] = round(time.monotonic() - began, 3)
+-            receipt['cancellation_signals'] = pending
+-            signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+-            write(public / 'supervision.json', receipt)
+-            for sig, handler in handlers.items():
+-                signal.signal(sig, handler)
++            try:
++                receipt['wall_seconds'] = round(time.monotonic() - began, 3)
++                receipt['cancellation_signals'] = pending
++                deferred = signal.sigpending() & set(handlers)
++                if deferred:
++                    receipt['result'] = 'FAIL'
++                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
++                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
++                write(public / 'supervision.json', receipt)
++                deferred = signal.sigpending() & set(handlers)
++                if deferred:
++                    receipt['result'] = 'FAIL'
++                    receipt.setdefault('failure_reason', 'CANCELLATION_DURING_OWNED_CLEANUP')
++                    receipt['deferred_cancellation_signals'] = sorted(int(s) for s in deferred)
++                    write(public / 'supervision.json', receipt)
++            finally:
++                try:
++                    for number, handler in handlers.items():
++                        signal.signal(number, handler)
++                finally:
++                    signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+ 
+ 
+ def windows_check(package, out, row):

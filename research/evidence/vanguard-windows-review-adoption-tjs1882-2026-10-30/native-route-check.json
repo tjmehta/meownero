@@ -1,0 +1,63 @@
+{
+  "schema": "meownero-windows-review-adoption-route-check/1",
+  "local_and_build-mac": {
+    "observed_at": "2026-10-30T20:01:36.718208+00:00",
+    "host": {
+      "system": "Linux",
+      "machine": "x86_64",
+      "dev_kvm": false,
+      "qemu_system_x86_64": null,
+      "qemu_system_aarch64": null
+    },
+    "build-mac": {
+      "command": "ssh -o BatchMode=yes -o ConnectTimeout=10 build-mac uname -sm; sw_vers -productVersion",
+      "exit": 0,
+      "stdout": "Darwin arm64\n26.5.1\n",
+      "stderr": ""
+    },
+    "workload_started": false
+  },
+  "github": {
+    "observed_at": "2026-10-30T20:01:33.969742+00:00",
+    "github": [
+      {
+        "endpoint": "repos/tjmehta/meownero/actions/runners",
+        "exit": 0,
+        "total_count": 0,
+        "runner_names": [],
+        "runs": []
+      },
+      {
+        "endpoint": "repos/tjmehta/meownero/actions/runs?status=in_progress&per_page=10",
+        "exit": 0,
+        "total_count": 0,
+        "runner_names": [],
+        "runs": []
+      },
+      {
+        "endpoint": "repos/tjmehta/meownero/actions/runs?status=queued&per_page=10",
+        "exit": 0,
+        "total_count": 0,
+        "runner_names": [],
+        "runs": []
+      }
+    ]
+  },
+  "vm_lane": {
+    "issue": "TJS-3090",
+    "id": "51debcd2-e972-48e2-b948-0c9236f86f85",
+    "status": "blocked",
+    "read_at": "2026-10-30T20:02:35.037249+00:00",
+    "record_updated_at": "2026-10-30T07:24:05.981Z",
+    "cause": "Existing lane records no Windows license found, purchase decision unanswered; prepared guest not installed. This run did not inspect or alter the guest.",
+    "owner": "studio lead for existing entitlement answer; platform engineer for subsequent guest and symlink-capability qualification"
+  },
+  "actions_spend": "Existing hold retained; October29 authenticated budget-stop evidence reused. No new quota/storage availability established. Five-attempt monitor remains exhausted.",
+  "native_arm_symlink_route": "NOT_AVAILABLE_IN_CHECKED_ROUTES",
+  "native_intel_mac_route": "NOT_AVAILABLE_IN_CHECKED_ROUTES",
+  "standalone_32bit_windows_route": "NOT_AVAILABLE_IN_CHECKED_ROUTES",
+  "next_owner": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+  "next_action": "On actual supply of an existing qualified route or verified included compute/storage, qualify native architecture and symlink fixture capability, execute exact accepted artifacts and preserve the existing independent-review stage. Guest entitlement alone is not symlink qualification.",
+  "dispatches": 0,
+  "workloads_started": 0
+}

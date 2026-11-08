@@ -1,0 +1,35 @@
+{
+  "result": "PASS",
+  "controller_sha256": "3b06bc8a496c00cf98455d13a2a43244b8ba6182b7f5c66ad4bb6db4ae67e251",
+  "unchanged_functions": [
+    "sha",
+    "write",
+    "load",
+    "resources",
+    "fetch",
+    "public_worker_receipt",
+    "package_failure",
+    "worker"
+  ],
+  "modified_existing_functions": [
+    "main"
+  ],
+  "new_function": "local_runner",
+  "supervisor_byte_preserved": true,
+  "targets": [
+    {
+      "candidate": 38,
+      "inputs_sha256": "0d85fa9f95f1792e6ebb41934c6c7a452adfab6c446fc9f89dc807b7613ebe83",
+      "result": "PASS_ALLOWLIST_ONLY_RUNNER_BUILD_NATIVE_JOURNEY_UNTESTED",
+      "source_bindings": 16,
+      "only_controller_binding_and_origin_differ": true
+    },
+    {
+      "candidate": 39,
+      "inputs_sha256": "e6a66a1bad8287aced76956da4a03f7e401e64336967bff1a7f3c3b1e44a51e9",
+      "result": "PASS_ALLOWLIST_ONLY_RUNNER_BUILD_NATIVE_JOURNEY_UNTESTED",
+      "source_bindings": 16,
+      "only_controller_binding_and_origin_differ": true
+    }
+  ]
+}

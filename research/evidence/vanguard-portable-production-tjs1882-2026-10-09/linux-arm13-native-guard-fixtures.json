@@ -1,0 +1,79 @@
+{
+  "schema": "meownero-linux-arm13-native-guard-fixtures/1",
+  "result": "PASS_TEN_ADVERSE_NATIVE_ABI_CPU_CAPACITY_WORKLOAD_REFUSALS",
+  "controller_sha256": "375f792ab82ce0999c9a46afe4a620ee88d419488d5a5ce8071bfeb2ce92f7ae",
+  "inputs_sha256": "a8e7220524b3bad88489c193dc5b5c24178b054486da632d0db7df9cf1f8ddbe",
+  "cases": [
+    {
+      "case": "not-github",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 0,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "runner-x64",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 0,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "process-x64",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 0,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "wrong-glibc",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 1,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "wrong-distro",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 1,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "docker-x64",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 2,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "other-container",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 3,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "missing-cpu-crypto",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 3,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "low-memory",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 3,
+      "build_or_remove_commands": 0
+    },
+    {
+      "case": "low-disk",
+      "result": "REFUSED_BEFORE_BUILD_OR_LOCK",
+      "actual_runner_qualification": "NOT_PROBED_METADATA_INJECTED",
+      "allowed_read_command_count": 3,
+      "build_or_remove_commands": 0
+    }
+  ],
+  "actual_ARM_runner_qualification": "UNTESTED"
+}

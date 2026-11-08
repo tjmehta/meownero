@@ -1,0 +1,71 @@
+{
+  "schema": "meownero-native-windows-ci-check/1",
+  "result": "PASS_NATIVE_ARCHIVE_JOURNEY",
+  "native_architecture": "x86_64",
+  "phases": [
+    {
+      "name": "preflight",
+      "argv": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.13.15\\x64\\python.exe",
+        "-B",
+        "D:\\a\\_temp\\tjs1882-native\\binding-extract\\meownero-vanguard-windows-x86_64\\tester.py",
+        "preflight"
+      ],
+      "reaped": true,
+      "pid": 2860,
+      "exit": 0
+    },
+    {
+      "name": "journey",
+      "argv": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.13.15\\x64\\python.exe",
+        "-B",
+        "D:\\a\\_temp\\tjs1882-native\\binding-extract\\meownero-vanguard-windows-x86_64\\tester.py",
+        "run",
+        "--out",
+        "D:\\a\\_temp\\tjs1882-native\\journey"
+      ],
+      "reaped": true,
+      "pid": 6140,
+      "exit": 0
+    },
+    {
+      "name": "controls",
+      "argv": [
+        "C:\\hostedtoolcache\\windows\\Python\\3.13.15\\x64\\python.exe",
+        "-B",
+        "D:\\a\\meownero\\meownero\\vanguard\\test-portable-refusals.py",
+        "--package",
+        "D:\\a\\_temp\\tjs1882-native\\binding-extract\\meownero-vanguard-windows-x86_64",
+        "--out",
+        "D:\\a\\_temp\\tjs1882-native\\controls"
+      ],
+      "reaped": true,
+      "pid": 980,
+      "exit": 0
+    }
+  ],
+  "initial_console_process_count": 5,
+  "console_mode": "EXISTING_ATTACHED_CONSOLE",
+  "owned_job": {
+    "active_processes": 0,
+    "total_processes": 68,
+    "peak_committed_bytes": 588226560,
+    "memory_limit_bytes": 4294967296,
+    "children": [
+      {
+        "pid": 2860,
+        "exit": 0
+      },
+      {
+        "pid": 6140,
+        "exit": 0
+      },
+      {
+        "pid": 980,
+        "exit": 0
+      }
+    ]
+  },
+  "wall_seconds": 50.181
+}

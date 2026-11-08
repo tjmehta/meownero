@@ -1,0 +1,26 @@
+--- a/src/crypto/slow-hash.c
++++ b/src/crypto/slow-hash.c
+@@ -1020,0 +1021,3 @@
++#ifdef _WIN32
++#include <windows.h>
++#else
+@@ -1021,0 +1025 @@
++#endif
+@@ -1029,0 +1034,3 @@
++#ifdef _WIN32
++    hp_state = (uint8_t *) VirtualAlloc(NULL, MEMORY, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
++#else
+@@ -1037,0 +1045 @@
++#endif
+@@ -1052,0 +1061,3 @@
++#ifdef _WIN32
++        VirtualFree(hp_state, 0, MEM_RELEASE);
++#else
+@@ -1053,0 +1065 @@
++#endif
+@@ -1108 +1120 @@
+-#ifndef __APPLE__
++#if !defined(__APPLE__) && !defined(_WIN32)
+@@ -1116,0 +1129,2 @@
++#elif defined(_WIN32)
++    return IsProcessorFeaturePresent(PF_ARM_V8_CRYPTO_INSTRUCTIONS_AVAILABLE);

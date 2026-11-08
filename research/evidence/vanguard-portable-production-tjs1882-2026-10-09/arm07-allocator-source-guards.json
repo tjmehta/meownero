@@ -1,0 +1,41 @@
+{
+  "schema": "meownero-arm07-allocator-source-guards/1",
+  "result": "PASS_EXACT_PLATFORM_PATCH_AND_FOUR_PRE_MUTATION_REFUSALS",
+  "helper_sha256": "42e9cbad356c56cd6ed3bc7f911b58dc4fc1de411633663f5506af1294b91fdf",
+  "cases": [
+    {
+      "case": "exact-pins",
+      "refused_before_mutation": false,
+      "owned_patch_invocations": 1,
+      "recorded_patch_rows": 1
+    },
+    {
+      "case": "changed-header",
+      "refused_before_mutation": true,
+      "owned_patch_invocations": 0,
+      "recorded_patch_rows": 0
+    },
+    {
+      "case": "changed-patch",
+      "refused_before_mutation": true,
+      "owned_patch_invocations": 0,
+      "recorded_patch_rows": 0
+    },
+    {
+      "case": "wrong-target",
+      "refused_before_mutation": true,
+      "owned_patch_invocations": 0,
+      "recorded_patch_rows": 0
+    },
+    {
+      "case": "wrong-submodule-pin",
+      "refused_before_mutation": true,
+      "owned_patch_invocations": 0,
+      "recorded_patch_rows": 0
+    }
+  ],
+  "all_existing_finalizers_AST_unchanged": true,
+  "preserved_prior_commit": "6ad9f26144f2a968c953f554f77d33ff92b459c1",
+  "patch_sha256": "175fc5e0344b3e8e1932eebbf39a3c23314c401ad9bc20a588cd8fe6e5052b82",
+  "native_Windows_ARM_execution": "UNTESTED"
+}

@@ -1,0 +1,43 @@
+{
+  "schema": "meownero-ci21-22-all-public-check-write-fixtures/1",
+  "result": "PASS_OLD_SUCCESS_WRITE_LEAK_REPRODUCED_EVERY_NEW_WRITE_PROJECTED",
+  "cases": [
+    {
+      "case": "original16",
+      "actual_finalizer_executed": true,
+      "private_sentinel_exported": false,
+      "all_public_check_writes": [
+        true,
+        false
+      ],
+      "actual_success_export_region_executed": true,
+      "source_sha256": "91348c5e616d6b2f0dce5909d2a29f4b6e30e91ec0e7094e2e71a2b56dbfaeac",
+      "original_private_execution_receipt_preserved": true
+    },
+    {
+      "case": "corrected21",
+      "actual_finalizer_executed": true,
+      "private_sentinel_exported": false,
+      "all_public_check_writes": [
+        false,
+        false
+      ],
+      "actual_success_export_region_executed": true,
+      "source_sha256": "24b5bde679622f199330a28b034a1fc669bb825690c0c9f8521e1fdba0c53ddb",
+      "original_private_execution_receipt_preserved": true
+    },
+    {
+      "case": "corrected22",
+      "actual_finalizer_executed": true,
+      "private_sentinel_exported": false,
+      "all_public_check_writes": [
+        false,
+        false
+      ],
+      "actual_success_export_region_executed": true,
+      "source_sha256": "195637f7b20ec12464a5351a58a911f389a991531d8285dc4080f809d299472d",
+      "original_private_execution_receipt_preserved": true
+    }
+  ],
+  "native_execution": "UNTESTED_BY_FIXTURES"
+}

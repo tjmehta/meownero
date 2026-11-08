@@ -1,0 +1,90 @@
+{
+  "schema": "meownero-i68621-cli-diagnostic-fixtures/1",
+  "result": "PASS",
+  "cases": [
+    {
+      "case": "bound-cli-0",
+      "exit_class": "SUCCESS",
+      "actual_trace_code_and_packaged_run_identity": true
+    },
+    {
+      "case": "bound-cli-3221225477",
+      "exit_class": "ACCESS_VIOLATION_STATUS",
+      "actual_trace_code_and_packaged_run_identity": true
+    },
+    {
+      "case": "bound-cli-1",
+      "exit_class": "OTHER_NONZERO_STATUS",
+      "actual_trace_code_and_packaged_run_identity": true
+    },
+    {
+      "case": "bound-cli-timeout",
+      "exit_class": "WAIT_TIMEOUT",
+      "actual_trace_code_and_packaged_run_identity": true
+    },
+    {
+      "case": "match",
+      "status": "MATCHED_BOUND_CLI_EVENT"
+    },
+    {
+      "case": "wrong-pid",
+      "status": "NO_MATCHING_EVENT"
+    },
+    {
+      "case": "reused-pid",
+      "status": "NO_MATCHING_EVENT"
+    },
+    {
+      "case": "wrong-image",
+      "status": "NO_MATCHING_EVENT"
+    },
+    {
+      "case": "wrong-status",
+      "status": "NO_MATCHING_EVENT"
+    },
+    {
+      "case": "unknown-module",
+      "status": "MATCHED_BOUND_CLI_EVENT"
+    },
+    {
+      "case": "owned-query-match",
+      "status": "MATCHED_BOUND_CLI_EVENT",
+      "actual_child_reaped_and_absent": true
+    },
+    {
+      "case": "owned-query-empty",
+      "status": "NO_MATCHING_EVENT",
+      "actual_child_reaped_and_absent": true
+    },
+    {
+      "case": "owned-query-failure",
+      "status": "QUERY_FAILED",
+      "actual_child_reaped_and_absent": true
+    },
+    {
+      "case": "owned-query-timeout",
+      "status": "QUERY_TIMEOUT",
+      "actual_child_reaped_and_absent": true
+    },
+    {
+      "case": "all-public-writes-SUCCESS",
+      "private_receipt_unchanged": true
+    },
+    {
+      "case": "all-public-writes-ACCESS_VIOLATION_STATUS",
+      "private_receipt_unchanged": true
+    },
+    {
+      "case": "all-public-writes-OTHER_NONZERO_STATUS",
+      "private_receipt_unchanged": true
+    },
+    {
+      "case": "all-public-writes-WAIT_TIMEOUT",
+      "private_receipt_unchanged": true
+    }
+  ],
+  "helper_sha256": "9a3ee5ffcc2a2e72f521cc2342c62c3e26310bc72c0696312cd763889cd9dcfd",
+  "supervisor_sha256": "24b5bde679622f199330a28b034a1fc669bb825690c0c9f8521e1fdba0c53ddb",
+  "native_Windows_event_query": "UNTESTED_BY_LINUX_FIXTURES",
+  "native_acceptance": false
+}

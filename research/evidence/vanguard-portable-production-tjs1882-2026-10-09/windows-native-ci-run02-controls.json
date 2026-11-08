@@ -1,0 +1,51 @@
+{
+  "result": "PASS_REFUSALS",
+  "release_manifest_sha256": "3729d8a2aa6fd798115ddf70991c4049fec6ad1bffdf3b4759281b97b5248c6e",
+  "cases": [
+    {
+      "case": "wrong-pin",
+      "refused": true
+    },
+    {
+      "case": "wrong-target",
+      "refused": true
+    },
+    {
+      "case": "changed-binary",
+      "refused": true
+    },
+    {
+      "case": "unlisted-private-file",
+      "refused": true
+    },
+    {
+      "case": "symlink-directory",
+      "refused": true
+    },
+    {
+      "case": "hardlink",
+      "refused": true
+    },
+    {
+      "case": "collision-preservation",
+      "refused": true,
+      "sentinel_preserved": true
+    },
+    {
+      "case": "busy-lock",
+      "refused": true
+    },
+    {
+      "case": "cancelled-owned-cleanup",
+      "signal": "CTRL_BREAK_EVENT",
+      "removed": true,
+      "process_count": 2
+    },
+    {
+      "case": "deadline-owned-cleanup",
+      "signal": "WINDOWS_JOB_TIMER",
+      "removed": true,
+      "process_count": 2
+    }
+  ]
+}

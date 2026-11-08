@@ -1,0 +1,29 @@
+{
+  "schema": "meownero-intel20-finalizer-repeated-cancel-fixtures/1",
+  "result": "PASS_REAL_CANCEL_LOCK_RECEIPT_PROTECTION_AND_RESTORATION",
+  "source_sha256": "6483de6671752cb0342902f7875216f7e30cdac7253d5b2d7eff65c48e03a7d7",
+  "cases": [
+    {
+      "case": "verified-lock",
+      "actual_repeated_TERM_INT": true,
+      "protected_finalizer_completed": true,
+      "identity_failure_preserves_lock": false,
+      "original_caller_handlers_and_mask_restored": true
+    },
+    {
+      "case": "identity-refused-lock",
+      "actual_repeated_TERM_INT": true,
+      "protected_finalizer_completed": true,
+      "identity_failure_preserves_lock": true,
+      "original_caller_handlers_and_mask_restored": true
+    },
+    {
+      "case": "public-receipts",
+      "actual_repeated_TERM_INT": true,
+      "protected_finalizer_completed": true,
+      "identity_failure_preserves_lock": false,
+      "original_caller_handlers_and_mask_restored": true
+    }
+  ],
+  "native_journeys": "UNTESTED_BY_FIXTURES"
+}
