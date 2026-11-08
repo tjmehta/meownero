@@ -227,6 +227,7 @@ def substituted(ledger, *, uptime=3000, sample=300):
         mock.patch.object(driver, 'time', clock),
         mock.patch.object(driver.Topology, 'edges', lambda self: ledger.edges()),
         mock.patch.object(t, 'UPTIME_SECONDS', uptime),
+        mock.patch.object(t, 'MODES', {uptime: t.WALL_SECONDS, t.REHEARSAL_UPTIME_SECONDS: t.REHEARSAL_WALL_SECONDS}),
         mock.patch.object(t, 'SAMPLE_SECONDS', sample),
         mock.patch.dict(d.PROCS, clear=True),
         mock.patch.dict(d.SAVED, clear=True),
@@ -312,6 +313,21 @@ class Driver(unittest.TestCase):
             self.assertFalse((Path(tmp)/'private/adverse').exists())
             mode = stat.S_IMODE((Path(tmp)/'private/salt').stat().st_mode)
             self.assertEqual(mode, 0o600)
+
+    def test_rehearsal_mode_leaves_uptime_row_not_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            control = Path(tmp)/'uptime-seconds'
+            control.write_text(str(t.REHEARSAL_UPTIME_SECONDS))
+            with mock.patch.object(driver, 'UPTIME_FILE', control):
+                ledger, top = self.journey(Path(tmp)/'j' if (Path(tmp)/'j').mkdir(mode=0o700) is None else None,
+                                           steady_shape=True)
+            rows = top.state['rows']
+            self.assertEqual(rows['uptime.json']['uptime_24h'], {'status': 'NOT_RUN'})
+            self.assertEqual(top.state['steady']['samples'], 12)
+            for file in t.DRIVER_FILES:
+                for key, row in rows[file].items():
+                    if key != 'uptime_24h':
+                        self.assertEqual(row['status'], 'PASS', key)
 
     def test_offline_mining_never_produces_blocks(self):
         # Known-bad design control: an isolated --offline --start-mining side stalls.
@@ -505,6 +521,12 @@ class Contract(unittest.TestCase):
         self.assertEqual(t.verdict(rows), 'PASS_PERSISTENT_ISOLATED_TOPOLOGY_ONLY')
         rows['uptime.json']['uptime_24h']['status'] = 'FAIL'
         self.assertEqual(t.verdict(rows), 'FAIL')
+        # A rehearsal can never satisfy, or claim, the 24 h row.
+        rows['uptime.json']['uptime_24h']['status'] = 'NOT_RUN'
+        self.assertEqual(t.verdict(rows), 'INCOMPLETE')
+        self.assertEqual(t.verdict(rows, t.REHEARSAL_UPTIME_SECONDS), 'REHEARSAL_PASS_UPTIME_NOT_RUN')
+        rows['uptime.json']['uptime_24h']['status'] = 'PASS'
+        self.assertEqual(t.verdict(rows, t.REHEARSAL_UPTIME_SECONDS), 'FAIL')
 
 
 class Manager(unittest.TestCase):
@@ -515,7 +537,7 @@ class Manager(unittest.TestCase):
         value = dict(schema='meownero-topology-grant/1', authorized=True, workload=t.WORKLOAD,
             candidate_commit='c'*40, inputs_sha256='i'*64, artifact_sha256='a'*64, runner_sha256='r'*64,
             driver_sha256='d'*64, output_root=str(out), attempts=1, retry=False, wall_seconds=t.WALL_SECONDS,
-            uptime_seconds=t.UPTIME_SECONDS, container_flags=m.r.CONTAINER_FLAGS, mode='runtime-only',
+            verdict_label='full', uptime_seconds=t.UPTIME_SECONDS, container_flags=m.r.CONTAINER_FLAGS, mode='runtime-only',
             reuse_build_root=m.r.funded.RETAINED_ROOT, retained_build_sha256=m.r.funded.RETAINED_SHA256,
             retained_build_authority_comment=m.r.funded.AUTHORITY_COMMENT, main_chain_count_max=t.MAX_COUNT,
             mining_threads=1, transactions=0, heavy_lock='keeper-held-for-wall', detached_session=True,
@@ -537,9 +559,13 @@ class Manager(unittest.TestCase):
     def test_grant_binds_issue_platform_candidate_wall_and_lock(self):
         out = Path('/tmp/never-created-tjs3920')
         self.assertTrue(self.parse(self.grant(out), out)['authorized'])
+        rehearsal = self.parse(self.grant(out, uptime_seconds=3600, wall_seconds=14400, verdict_label='rehearsal'), out)
+        self.assertEqual(rehearsal['verdict_label'], 'rehearsal')
         bad = [dict(public_launch=True), dict(wall_seconds=200000), dict(heavy_lock='none'), dict(mining_threads=2),
                dict(listeners='0.0.0.0'), dict(retry=True), dict(valid_until_unix=1000+24*3600),
-               dict(container_flags=['--network=host']), dict(main_chain_count_max=10**6)]
+               dict(container_flags=['--network=host']), dict(main_chain_count_max=10**6),
+               dict(uptime_seconds=3600), dict(uptime_seconds=3600, wall_seconds=14400),
+               dict(verdict_label='rehearsal'), dict(uptime_seconds=60, wall_seconds=60, verdict_label='rehearsal')]
         for change in bad:
             with self.assertRaises(ValueError):
                 self.parse(self.grant(out, **change), out)
@@ -610,7 +636,7 @@ class Manager(unittest.TestCase):
 
     def observe(self, tmp, states, beats):
         root = Path(tmp)
-        state = dict(end_unix=time.time()+3600, keeper=[1, '1'], managers=[dict(identity=[2, '2'])],
+        state = dict(end_unix=time.time()+3600, uptime=t.UPTIME_SECONDS, keeper=[1, '1'], managers=[dict(identity=[2, '2'])],
                      rows=t.empty_rows(), receipt={})
         control = types.SimpleNamespace(sample=lambda force=False: None)
         args = types.SimpleNamespace(out=root)
@@ -667,6 +693,226 @@ class Manager(unittest.TestCase):
             with mock.patch.object(m.os, 'getsid', lambda x: m.os.getpid()):
                 with self.assertRaisesRegex(ValueError, 'exact granted candidate'):
                     m.resume(args)
+
+
+class FakeDocker:
+    """Docker CLI substitute bound to the manager's real argv; the container replays driver output."""
+    def __init__(self, out, image, outputs, fail=False):
+        self.out, self.image, self.outputs, self.fail = out, image, outputs, fail
+        self.container = None
+        self.starts = 0
+        self.calls = []
+        self.armed = 0  # Inspections left before the steady container completes.
+
+    def value(self):
+        info = self.container
+        mounts = [dict(Source=src, Destination=dst) for src, dst in info['mounts']]
+        return dict(Id=info['id'], Name='/'+info['name'], Image=self.image, Mounts=mounts,
+            Config=dict(Labels={'meownero.topology.attempt': info['name']}, User=f'{os.getuid()}:{os.getgid()}'),
+            HostConfig=dict(NetworkMode='none', NanoCpus=2_000_000_000, Memory=4*1024**3, MemorySwap=4*1024**3,
+                PidsLimit=256, CapDrop=['ALL'], SecurityOpt=['no-new-privileges'], Privileged=False,
+                PortBindings={}, Ulimits=[dict(Name='core', Soft=0, Hard=0)]),
+            State=dict(info['state']))
+
+    def replay(self, stage):
+        public = self.out/'public'
+        for path in public.iterdir():
+            path.unlink()
+        for name, raw in self.outputs[stage].items():
+            (public/name).write_bytes(raw)
+        control = self.out/'staging/control'
+        (control/f'resources-{self.starts}.json').write_text(json.dumps(dict(oom=0, oom_kill=0,
+            memory_peak_bytes=3*1024**3, cpu_usage_usec=10**9)))
+
+    def run(self, control, argv, deadline, check=True, monitor=True, **kwargs):
+        self.calls.append(list(argv))
+        done = lambda out='', code=0: subprocess.CompletedProcess(argv, code, out.encode(), b'')  # Real run() is bytes.
+        if argv[0] == 'du':
+            return done(f'4096\t{argv[-1]}\n')
+        verb = argv[3]
+        if argv[3:5] == ['image', 'inspect']:
+            return done(json.dumps([dict(Id=self.image)]))
+        if verb == 'create':
+            name = argv[argv.index('--name')+1]
+            mounts = [tuple(argv[i+1].split(':')[:2]) for i, x in enumerate(argv) if x == '-v']
+            self.container = dict(id='e'*64, name=name, mounts=mounts,
+                                  state=dict(Running=False, ExitCode=0, OOMKilled=False, StartedAt='', FinishedAt=''))
+            (self.out/'container.cid').write_text('e'*64)
+            return done()
+        if verb == 'inspect':
+            if self.armed:
+                self.armed -= 1
+                if not self.armed:
+                    self.complete()
+            return done(json.dumps([self.value()])) if self.container else done('', 1)
+        if verb == 'ps':
+            return done('e'*64+'\n' if self.container else '')
+        if verb == 'start':
+            self.starts += 1
+            state = self.container['state']
+            if self.starts == 1:  # Rows phase, then the planned cycle exit.
+                self.replay('cycle')
+                state.update(Running=False, ExitCode=0, StartedAt='s1', FinishedAt='f1')
+            else:                  # Steady phase keeps running until the manager-only restart.
+                self.replay('steady')
+                state.update(Running=True, StartedAt='s2')
+            return done()
+        if verb == 'stop':
+            self.container['state'].update(Running=False)
+            return done()
+        if verb == 'rm':
+            self.container = None
+            return done()
+        raise AssertionError(argv)
+
+    def complete(self):
+        self.replay('failed' if self.fail else 'complete')
+        self.container['state'].update(Running=False, ExitCode=1 if self.fail else 0, FinishedAt='f2')
+
+
+class ManagerIntegration(unittest.TestCase):
+    def outputs(self, base):
+        """Real driver public files from the substituted native journey, captured per stage."""
+        ledger = prepare(base)
+        captured = {}
+        snap = lambda: {p.name: p.read_bytes() for p in (base/'public').iterdir()}
+        with substituted(ledger, uptime=t.UPTIME_SECONDS):
+            first = driver.Topology()
+            first.run()
+            first.publish('cycle')
+            captured['cycle'] = snap()
+            d.PROCS.clear(); d.SAVED.clear()
+            second = driver.Topology()
+            beat = dict(phase='steady', generation=2, count=50, samples=12, unix=1)
+            captured['steady'] = dict(captured['cycle'], **{'heartbeat.json': json.dumps(beat).encode()})
+            second.run()
+            second.publish('complete')
+            captured['complete'] = snap()
+            failed = dict(captured['complete'])
+            failed['heartbeat.json'] = json.dumps(dict(beat, phase='failed')).encode()
+            captured['failed'] = failed
+        return captured
+
+    def drive(self, fail=False, early=False):
+        tmp = tempfile.TemporaryDirectory()
+        base = Path(tmp.name)
+        (base/'journey').mkdir(mode=0o700)
+        outputs = self.outputs(base/'journey')
+        retained = base/'retained'
+        (retained/'retained-build').mkdir(parents=True, mode=0o700)
+        os.chmod(retained, 0o700)
+        binaries = {}
+        for name in m.r.BINARIES:
+            path = retained/'retained-build'/name
+            path.write_bytes(name.encode()*10)
+            os.chmod(path, 0o700)
+            binaries[name] = c.digest(path.read_bytes())
+        parent = base/'runs'
+        parent.mkdir(mode=0o700)
+        out = parent/'attempt'
+        image = 'sha256:'+'1'*64
+        reuse = dict(root=retained, manifest_sha256=m.r.funded.RETAINED_SHA256, binaries=binaries)
+        grant = Manager().grant(out, reuse_build_root=str(retained), candidate_commit='c'*40,
+                                runner_sha256=c.digest((c.HERE/'run-topology.py').read_bytes()),
+                                driver_sha256=c.digest((c.HERE/'integration/topology_driver.py').read_bytes()),
+                                inputs_sha256=c.digest((c.HERE/'integration/inputs.json').read_bytes()),
+                                valid_from_unix=int(time.time())-60, valid_until_unix=int(time.time())+49*3600)
+        grant.update(id='12345678-0000-0000-0000-000000000000')
+        artifact = b'packet'
+        grant['body'] = grant['body'].replace('a'*64, c.digest(artifact))
+        docker = FakeDocker(out, image, outputs, fail)
+        lock = dict(held=False)
+        keeper_identity = [999999, '1']
+        def api(path):
+            return json.dumps(grant).encode() if '/comments/' in path else artifact
+        def spawn(root, until):
+            lock['held'] = True
+            m.write_private(root/'keeper.json', dict(pid=keeper_identity, lock=dict(device=m.g.LOCK_ID[0],
+                inode=m.g.LOCK_ID[1], created=False, mode='0600'), until=until))
+            return types.SimpleNamespace(pid=keeper_identity[0], poll=lambda: None)
+        def alive(owned):
+            if owned == keeper_identity:
+                if (out/'release').exists():
+                    lock['held'] = False
+                return lock['held']
+            return False
+        def git(argv, **kwargs):
+            return 'c'*40+'\n' if 'rev-parse' in argv else ''
+        patches = [mock.patch.object(m.r, 'api', api), mock.patch.object(m.r, 'check_inputs', lambda p: INPUTS),
+            mock.patch.object(m.r, 'reuse_build', lambda root, manifest: reuse),
+            mock.patch.object(m.r, 'admit', lambda image, root, grant: dict(load=[1, 1, 1])),
+            mock.patch.object(m.r.funded, 'RETAINED_ROOT', str(retained)),
+            mock.patch.object(m, 'spawn_keeper', spawn), mock.patch.object(m, 'alive', alive),
+            mock.patch.object(m, 'lock_held_elsewhere', lambda: lock['held']),
+            mock.patch.object(m, 'identity', lambda pid: keeper_identity if pid == keeper_identity[0] else [pid, 'x']),
+            mock.patch.object(m.subprocess, 'check_output', git),
+            mock.patch.object(m.os, 'getsid', lambda x: os.getpid()),
+            mock.patch.object(m.Manager, 'run', lambda control, argv, deadline, **k: docker.run(control, argv, deadline, **k)),
+            mock.patch.object(m.time, 'sleep', lambda s: None)]
+        INPUTS['builder_image'] = image
+        try:
+            for p in patches:
+                p.start()
+            args = types.SimpleNamespace(command='start', inputs=c.HERE/'integration/inputs.json',
+                grant_comment=grant['id'], artifact_sha256=c.digest(artifact), reuse_build=retained, out=out)
+            codes = [m.start(args)]
+            again = types.SimpleNamespace(command='resume', out=out)
+            codes.append(m.resume(again))
+            if early:
+                docker.complete()  # Known-bad: container stopped while the manager was down.
+            else:
+                docker.armed = 3  # Still running at the manager-only resume, then completes.
+            codes.append(m.resume(again))
+            return tmp, out, docker, codes
+        finally:
+            for p in reversed(patches):
+                p.stop()
+            INPUTS['builder_image'] = json.loads((c.HERE/'integration/inputs.json').read_text())['builder_image']
+
+    def test_start_cycle_restart_complete_publishes_closed_evidence(self):
+        tmp, out, docker, codes = self.drive()
+        with tmp:
+            self.assertEqual(codes, [m.CYCLE, m.RESTART, 0])
+            self.assertEqual((out/'evidence').stat().st_mode & 0o777, 0o700)
+            receipt = json.loads((out/'evidence/receipt.json').read_text())
+            self.assertEqual(receipt['result'], 'PASS_PERSISTENT_ISOLATED_TOPOLOGY_ONLY', receipt.get('rows'))
+            self.assertIs(receipt['public_launch'], False)
+            self.assertEqual([x['reason'] for x in receipt['manager_generations']],
+                             ['start', 'full-cycle', 'manager-only'])
+            names = sorted(p.name for p in (out/'evidence').iterdir())
+            self.assertEqual(names, sorted(list(t.REQUIRED)+['receipt.json']))
+            for path in (out/'evidence').iterdir():
+                self.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o600)
+            self.assertIsNone(docker.container)
+            self.assertFalse((out/'staging').exists())
+            self.assertTrue((out/'persistent').is_dir())
+            self.assertTrue((out/'release').exists())
+            creates = [x for x in docker.calls if x[3:4] == ['create']]
+            self.assertEqual(len(creates), 1)
+            for flag in m.r.CONTAINER_FLAGS:
+                self.assertIn(flag, creates[0])
+            self.assertEqual(docker.starts, 2)
+
+    def test_manager_restart_requires_a_continuous_container(self):
+        tmp, out, docker, codes = self.drive(early=True)
+        with tmp:
+            rows = json.loads((out/'evidence/persistence.json').read_text())
+            self.assertEqual(rows['manager_restart']['status'], 'FAIL')
+            self.assertIs(rows['manager_restart']['container_continuous'], False)
+            self.assertEqual(json.loads((out/'evidence/receipt.json').read_text())['result'], 'FAIL')
+
+    def test_native_failure_fails_closed_and_still_cleans(self):
+        tmp, out, docker, codes = self.drive(fail=True)
+        with tmp:
+            self.assertEqual(codes[-1], 1)
+            receipt = json.loads((out/'evidence/receipt.json').read_text())
+            self.assertEqual(receipt['result'], 'FAIL')
+            self.assertEqual(receipt['failure_class'], 'native_exit')
+            cleanup = json.loads((out/'evidence/cleanup.json').read_text())
+            for key in ('owned_cid_absent', 'owned_staging_removed', 'lock_released', 'persistent_root_owner_only'):
+                self.assertEqual(cleanup[key]['status'], 'PASS', key)
+            self.assertIsNone(docker.container)
+            self.assertTrue((out/'persistent').is_dir())
 
 
 if __name__ == '__main__':

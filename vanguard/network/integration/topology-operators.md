@@ -84,23 +84,33 @@ The grant is a Platform-authored comment on TJS-3920 with one
 candidate commit, `integration/inputs.json`, runner and driver hashes, the source
 packet attachment and digest, the output root, the retained build authority
 (`3eedebc0`, root `401698da…/native-profile-attempt`, manifest `1b2815e2…`), the
-container flags, the 100,800 s wall, the 86,400 s uptime, the 2,400-block
-ceiling, one mining thread, zero transactions, a keeper-held heavy lock, the
-load rule and the host-overhead allowance, with at least 48 h validity.
+container flags, the uptime mode, the 2,400-block ceiling, one mining thread,
+zero transactions, a keeper-held heavy lock, the load rule and the host-overhead
+allowance (1 GiB RSS, 4,000 CPU-s, 32 PIDs, measured not enforced), with at least
+48 h validity. Two uptime modes exist and the grant picks one:
+
+| Mode | `uptime_seconds` | `wall_seconds` | `verdict_label` | Best verdict |
+| --- | --- | --- | --- | --- |
+| full | 86,400 | 100,800 | `full` | `PASS_PERSISTENT_ISOLATED_TOPOLOGY_ONLY` |
+| rehearsal | 3,600 | 14,400 | `rehearsal` | `REHEARSAL_PASS_UPTIME_NOT_RUN` (never satisfies the 24 h row) |
+
+A rehearsal runs the same code and every other row, including the full cycle and
+the manager-only restart (after 30 steady minutes instead of 60).
 
 Run from a clean exact checkout of the candidate (a temporary `/tmp` worktree, so
 later edits to the managed worktree cannot change the running source). The
-wrapper restarts the manager on the two planned exits.
+wrapper restarts the manager on the two planned exits. Each manager runs as its
+own session leader (`setsid -w`); the manager refuses otherwise.
 
 ```sh
 umask 077
 setsid bash -c '
-  python3 -B vanguard/network/run-topology.py start --grant-comment "$GRANT" \
+  setsid -w python3 -B vanguard/network/run-topology.py start --grant-comment "$GRANT" \
     --artifact-sha256 "$PACKET_SHA256" --reuse-build "$RETAINED_ROOT" --out "$ROOT"
   rc=$?
   while [ "$rc" -eq 10 ] || [ "$rc" -eq 11 ]; do
     sleep 60
-    python3 -B vanguard/network/run-topology.py resume --out "$ROOT"
+    setsid -w python3 -B vanguard/network/run-topology.py resume --out "$ROOT"
     rc=$?
   done
   echo "$rc" > "$ROOT.wrapper-exit"
@@ -163,7 +173,10 @@ and exactly one planned restart is pending.
 
 Public rows carry counts, booleans and salted tips only (L3). The manager adds
 `manager_cycle`, `manager_restart`, resources and cleanup rows and writes the
-closed evidence set with 0600 files under a controller-only `evidence/`.
+closed evidence set with 0600 files under a controller-only `evidence/`. After
+collection it removes the exact container and `staging/` (public harness and
+binary copies, counters); `persistent/` is retained owner-only on every path,
+including failure, for the recovery recipe and private diagnosis.
 
 ## Recovery recipe
 

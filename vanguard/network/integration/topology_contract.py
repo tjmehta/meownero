@@ -13,6 +13,11 @@ ISSUE = '2f885568-8394-4bb1-a590-9dea32971ce2'  # TJS-3920
 UPTIME_SECONDS = 86400
 SAMPLE_SECONDS = 300
 WALL_SECONDS = 100800  # 28 h: about 45 min of rows, the cycle, 24 h steady, slack.
+# Lead-selectable rehearsal: same code and rows, 1 h steady inside a 4 h wall. Its
+# verdict is labelled rehearsal and can never satisfy the 24 h row.
+REHEARSAL_UPTIME_SECONDS = 3600
+REHEARSAL_WALL_SECONDS = 14400
+MODES = {UPTIME_SECONDS: WALL_SECONDS, REHEARSAL_UPTIME_SECONDS: REHEARSAL_WALL_SECONDS}
 MAX_COUNT = 2400       # Chain block count N including genesis; ~90 s blocks for 28 h is ~1120.
 MAX_SPREAD = 2         # Steady samples: node heights may differ by at most this many blocks.
 ATOMIC = 10**12
@@ -122,7 +127,8 @@ REQUIRED = {
     'uptime.json': ['uptime_24h'],
     'isolation.json': ['launcher_policy', 'auth_controls', 'native_mining_bounds'],
     'resources.json': ['parent_enclosure', 'deadlines', 'disk', 'no_oom'],
-    'cleanup.json': ['owned_pids_absent', 'owned_cid_absent', 'lock_released', 'persistent_root_owner_only'],
+    'cleanup.json': ['owned_pids_absent', 'owned_cid_absent', 'owned_staging_removed', 'lock_released',
+                     'persistent_root_owner_only'],
 }
 DRIVER_FILES = ('topology.json', 'recovery.json', 'backup.json', 'reorg.json', 'uptime.json', 'isolation.json')
 DRIVER_PERSISTENCE = ('full_cycle',)
@@ -134,7 +140,17 @@ def empty_rows():
     return {file: {key: {'status': 'NOT_RUN'} for key in keys} for file, keys in REQUIRED.items()}
 
 
-def verdict(rows):
+def verdict(rows, uptime=UPTIME_SECONDS):
+    if uptime == REHEARSAL_UPTIME_SECONDS:
+        rest = [rows.get(file, {}).get(key, {}).get('status', 'NOT_RUN')
+                for file, keys in REQUIRED.items() for key in keys if key != 'uptime_24h']
+        if 'FAIL' in rest or rows['uptime.json']['uptime_24h'].get('status') != 'NOT_RUN':
+            return 'FAIL'
+        return 'REHEARSAL_PASS_UPTIME_NOT_RUN' if all(x == 'PASS' for x in rest) else 'INCOMPLETE'
+    return _full_verdict(rows)
+
+
+def _full_verdict(rows):
     states = [rows.get(file, {}).get(key, {}).get('status', 'NOT_RUN')
               for file, keys in REQUIRED.items() for key in keys]
     if 'FAIL' in states:
@@ -173,7 +189,7 @@ def shapes():
             faults=0, retried_samples=integer(0, 1000), max_spread=integer(0, MAX_SPREAD), blocks=integer(100, MAX_COUNT),
             node_restarts=0, final_agreement=3, tip_salted=sha),
         launcher_policy=dict(launches=integer(10, 400), refused_before_start=0, loopback_only=True,
-            restricted_daemon_rpc=True, adverse_argv_refused=integer(10, 64), census_samples=integer(280, 2000)),
+            restricted_daemon_rpc=True, adverse_argv_refused=integer(10, 64), census_samples=integer(280, 50000)),
         auth_controls=dict(daemons=3, missing_wrong_rejected=True, fresh_login_per_launch=True),
         native_mining_bounds=dict(threads=1, light_mode=True, max_count=MAX_COUNT, final_count=count,
             external_funding=False, loopback_only=True, transactions=0),

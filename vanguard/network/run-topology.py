@@ -35,7 +35,7 @@ g = r.g
 GiB = r.GiB
 STATE = 'manager-state.json'
 CYCLE, RESTART = 10, 11
-MANAGER_RESTART_AFTER_SAMPLES = 12  # One steady hour.
+MANAGER_RESTART_AFTER_SAMPLES = {t.UPTIME_SECONDS: 12, t.REHEARSAL_UPTIME_SECONDS: 6}  # 1 h / 30 min steady.
 SAMPLE_SECONDS = 60
 OVERHEAD = dict(mode='measured-controller-and-descendants-not-kernel-enforced',
                 peak_rss_bytes=GiB, cpu_seconds=4000, peak_pids=32)
@@ -50,21 +50,24 @@ def grant_payload(comment, *, commit, inputs_hash, artifact_hash, runner_hash, d
     expected = dict(schema='meownero-topology-grant/1', authorized=True, workload=t.WORKLOAD,
         candidate_commit=commit, inputs_sha256=inputs_hash, artifact_sha256=artifact_hash,
         runner_sha256=runner_hash, driver_sha256=driver_hash, output_root=str(output), attempts=1,
-        retry=False, wall_seconds=t.WALL_SECONDS, uptime_seconds=t.UPTIME_SECONDS,
-        container_flags=r.CONTAINER_FLAGS, mode='runtime-only', reuse_build_root=str(reuse['root']),
+        retry=False, container_flags=r.CONTAINER_FLAGS, mode='runtime-only', reuse_build_root=str(reuse['root']),
         retained_build_sha256=reuse['manifest_sha256'], retained_build_authority_comment=r.funded.AUTHORITY_COMMENT,
         main_chain_count_max=t.MAX_COUNT, mining_threads=1, transactions=0,
         heavy_lock='keeper-held-for-wall', detached_session=True, no_other_heavy_lock_workload_scheduled=True,
         host_overhead_allowance=OVERHEAD, listeners='loopback-only-network-none', public_launch=False)
     c.require(all(type(value.get(k)) is type(v) and value[k] == v for k, v in expected.items()),
               'topology grant binding mismatch')
+    c.require(type(value.get('uptime_seconds')) is int and value['uptime_seconds'] in t.MODES and
+              value.get('wall_seconds') == t.MODES[value['uptime_seconds']] and
+              value.get('verdict_label') == ('full' if value['uptime_seconds'] == t.UPTIME_SECONDS else 'rehearsal'),
+              'grant uptime mode/wall/label')
     c.require(str(reuse['root']) == r.funded.RETAINED_ROOT and reuse['manifest_sha256'] == r.funded.RETAINED_SHA256,
               'published retained build authority required')
     rule = value['load_rule']
     c.require(rule['metric'] == 'host-load-1-5-15' and len(rule['maximum']) == 3 and
               all(type(x) in (int, float) and 0 < x < 1000 for x in rule['maximum']), 'explicit load rule')
     c.require(value['valid_until_unix']-value['valid_from_unix'] >= 48*3600 and
-              value['valid_from_unix'] <= now and now+t.WALL_SECONDS <= value['valid_until_unix'],
+              value['valid_from_unix'] <= now and now+value['wall_seconds'] <= value['valid_until_unix'],
               'grant validity window')
     c.require(re.fullmatch(r'[0-9a-f-]{36}', value['artifact_attachment_id']) is not None, 'artifact attachment ID')
     return value
@@ -262,8 +265,15 @@ def finish(args, state, control, name, image, result_code):
             control.run(g.DOCKER+['rm', '-f', value['Id']], time.monotonic()+60, check=False, monitor=False)
         c.require(inspect(control, name, image, time.monotonic()+60) is None, 'owned CID remains')
         rows['cleanup.json']['owned_cid_absent'] = dict(status='PASS')
+        # Staging holds only public harness/binary copies and counters; private state is in persistent/.
+        if (args.out/'staging').exists():
+            os.close(r.private_directory(args.out/'staging'))  # Owner-only, non-alias root.
+            shutil.rmtree(args.out/'staging')
+        rows['cleanup.json']['owned_staging_removed'] = dict(status='PASS')
     except Exception as error:
-        rows['cleanup.json']['owned_cid_absent'] = dict(status='FAIL')
+        for key in ('owned_cid_absent', 'owned_staging_removed'):
+            if rows['cleanup.json'][key]['status'] != 'PASS':
+                rows['cleanup.json'][key] = dict(status='FAIL')
         receipt.update(result='FAIL', cleanup_failure_class=type(error).__name__)
     try:
         for child in control.children:
@@ -290,13 +300,13 @@ def finish(args, state, control, name, image, result_code):
         parent_enclosure=dict(status='PASS' if state.get('container_id') else 'NOT_RUN',
             mode='container-kernel-limits; host-overhead-measured-only', flags=r.CONTAINER_FLAGS,
             host_overhead_allowance=OVERHEAD, measured=dict(control.peak), samples=control.samples),
-        deadlines=dict(status='PASS' if time.time() < state['end_unix'] else 'FAIL', wall_seconds=t.WALL_SECONDS,
-            uptime_seconds=t.UPTIME_SECONDS),
+        deadlines=dict(status='PASS' if time.time() < state['end_unix'] else 'FAIL',
+            wall_seconds=t.MODES[state['uptime']], uptime_seconds=state['uptime']),
         disk=dict(status='PASS' if control.samples else 'NOT_RUN', peak_bytes=control.peak['disk_bytes'],
             abort_bytes=15*GiB, minimum_free_bytes=4*GiB, mode='sampled-abort-not-quota'),
         no_oom=dict(status='PASS' if no_oom else 'FAIL', generations=len(state.get('counters', []))))
     if receipt['result'] == 'INCOMPLETE':
-        receipt['result'] = t.verdict(rows)
+        receipt['result'] = t.verdict(rows, state['uptime'])
     receipt['rows'] = rows
     receipt['manager_generations'] = state['managers']
     write_private(args.out/STATE, state)
@@ -318,7 +328,7 @@ def observe(args, state, control, name, image):
         c.require(value is not None, 'owned container missing')
         beat = heartbeat(args.out)
         if value['State']['Running']:
-            if (beat and beat['phase'] == 'steady' and beat['samples'] >= MANAGER_RESTART_AFTER_SAMPLES and
+            if (beat and beat['phase'] == 'steady' and beat['samples'] >= MANAGER_RESTART_AFTER_SAMPLES[state['uptime']] and
                     'manager_restart' not in state):
                 state['manager_restart'] = dict(before=me['identity'], container_started=value['State']['StartedAt'],
                                                 samples=beat['samples'])
@@ -360,11 +370,12 @@ def start(args):
     first = r.admit(image, args.out.parent, grant)
     c.require(not lock_held_elsewhere(), 'heavy lock busy')
     n.fresh_directory(args.out)  # Durable one-use marker; a crash after this consumes the grant.
-    end_unix = int(time.time())+t.WALL_SECONDS
+    end_unix = int(time.time())+grant['wall_seconds']
     state = dict(schema='meownero-topology-manager/1', grant=args.grant_comment, commit=commit,
+        uptime=grant['uptime_seconds'],
         runner_sha256=runner, driver_sha256=driver, end_unix=end_unix, managers=[], rows=t.empty_rows(),
         receipt=dict(schema='meownero-topology-attempt/1', result='INCOMPLETE', public_launch=False,
-            launch_ready=False, grant=args.grant_comment, candidate_commit=commit, runner_sha256=runner,
+            launch_ready=False, mode=grant['verdict_label'], grant=args.grant_comment, candidate_commit=commit, runner_sha256=runner,
             driver_sha256=driver, first_admission=first, exclusions={k: 'NOT_RUN' for k in t.EXCLUDED},
             build_reuse=dict(prior_attempt_root=str(reuse['root']), retained_build_sha256=reuse['manifest_sha256'])))
     holder = {}
@@ -379,11 +390,15 @@ def start(args):
                       image, 'manager_'+type(error).__name__)
 
 
-def launch(args, state, grant, reuse, image, end_unix, holder):
-    keeper = subprocess.Popen([sys.executable, '-I', '-B', str(Path(__file__).resolve()), 'keep-lock',
-        '--out', str(args.out), '--until', str(end_unix+600)], start_new_session=True, close_fds=True,
+def spawn_keeper(out, until):
+    return subprocess.Popen([sys.executable, '-I', '-B', str(Path(__file__).resolve()), 'keep-lock',
+        '--out', str(out), '--until', str(until)], start_new_session=True, close_fds=True,
         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         env=dict(PATH=os.environ['PATH'], LC_ALL='C'))
+
+
+def launch(args, state, grant, reuse, image, end_unix, holder):
+    keeper = spawn_keeper(args.out, end_unix+600)
     deadline = time.time()+30
     while not (args.out/'keeper.json').exists() and keeper.poll() is None and time.time() < deadline:
         time.sleep(.2)
@@ -416,6 +431,7 @@ def launch(args, state, grant, reuse, image, end_unix, holder):
         os.close(source)
         os.close(target)
     (staging/'control/end-unix').write_text(str(end_unix)+'\n')
+    (staging/'control/uptime-seconds').write_text(str(grant['uptime_seconds'])+'\n')
     state['receipt']['second_admission'] = r.admit(image, args.out, grant)
     name = 'meownero-topology-'+args.grant_comment
     state['name'], state['image'] = name, image

@@ -30,6 +30,7 @@ spec.loader.exec_module(d)
 
 STATE = 'topology-state.json'
 END_FILE = Path('/out/control/end-unix')
+UPTIME_FILE = Path('/out/control/uptime-seconds')
 
 
 def hex64(value):
@@ -552,8 +553,8 @@ class Topology:
         # inbound and dials only C; C dials only B. A's exclusive peer B refuses it.
         self.stop('C')
         self.stop('B')
+        self.start('C', peers=('B',))  # Up first, so B's only exclusive dial finds it.
         self.start('B', peers=('C',), in_peers=0, mining=True)
-        self.start('C', peers=('B',))
         isolated = self.wait(lambda: (lambda a: a if a[0] >= fork[0]+2 else None)(self.info('A')), 2400)
         self.stop('A')
         self.start('A')  # Not synchronized, not mining: frozen isolated tip.
@@ -613,7 +614,9 @@ class Topology:
         generations = {n: d.PROCS[f'node{n}'][1] for n in t.NODES}
         samples, spread, last = 0, 0, None
         gaps = 0
-        while time.time()-steady['start_unix'] < t.UPTIME_SECONDS:
+        uptime = int(UPTIME_FILE.read_text()) if UPTIME_FILE.exists() else t.UPTIME_SECONDS
+        c.require(uptime in t.MODES, 'grant-bound uptime mode')
+        while time.time()-steady['start_unix'] < uptime:
             for attempt in range(4):
                 # A transient reconnect or in-flight block is retried for 30 s, then it is a fault.
                 c.require(all(d.PROCS[f'node{n}'][1] == generations[n] and d.PROCS[f'node{n}'][0].poll() is None
@@ -632,14 +635,15 @@ class Topology:
             self.heartbeat('steady', last, samples)
             self.state['steady'].update(samples=samples, spread=spread, last=last, gaps=gaps)
             self.save()
-            remaining = t.UPTIME_SECONDS-(time.time()-steady['start_unix'])
+            remaining = uptime-(time.time()-steady['start_unix'])
             time.sleep(d.budget(max(1, min(t.SAMPLE_SECONDS, remaining))))
         final = self.wait(lambda: self.agree(), 600)
         blocks = final[0]-steady['start_count']
-        c.require(blocks >= 100, 'steady chain did not advance')
-        self.row('uptime.json', 'uptime_24h', seconds=int(time.time()-steady['start_unix']), samples=samples,
-                 faults=0, retried_samples=gaps, max_spread=spread, blocks=blocks, node_restarts=0, final_agreement=3,
-                 tip_salted=self.tip(final[1]))
+        c.require(blocks >= (100 if uptime == t.UPTIME_SECONDS else 10), 'steady chain did not advance')
+        if uptime == t.UPTIME_SECONDS:  # A rehearsal leaves the 24 h row NOT_RUN.
+            self.row('uptime.json', 'uptime_24h', seconds=int(time.time()-steady['start_unix']), samples=samples,
+                     faults=0, retried_samples=gaps, max_spread=spread, blocks=blocks, node_restarts=0,
+                     final_agreement=3, tip_salted=self.tip(final[1]))
         for name in ('A', 'C', 'B'):
             self.stop(name)
         c.require(self.light and all(self.light), 'light-mode launch history')
