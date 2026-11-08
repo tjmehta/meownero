@@ -1,0 +1,8 @@
+2026-10-19 initial tooling-check invocation: exit 1 before any test ran.
+The class decorator referenced SOURCE before argument parsing assigned it:
+
+NameError: name 'SOURCE' is not defined
+
+Corrected by moving the optional-source skip into each affected test body.
+The subsequent complete run executed all 11 tests without skips or failures.
+No native daemon, wallet, build or network workload was attempted in either run.

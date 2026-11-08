@@ -1,0 +1,39 @@
+{
+  "source_tests": [
+    {
+      "tests": 353,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "wall_seconds": 70.02041747304611,
+      "original_lock_guard": "path before open; device/inode before flock",
+      "native_effects": "substituted"
+    },
+    {
+      "protected_lock_metadata_unchanged": true,
+      "protected_lock_metadata": [
+        66306,
+        657237,
+        1000,
+        33152,
+        0,
+        1792398177544654975,
+        1792398177544654975
+      ],
+      "blocked_original_lock_touches": [],
+      "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+      "wrapper_seconds": 70.0223800081294
+    }
+  ],
+  "direct_tests_in_full_suite": 74,
+  "first_edit": "2026-11-04T10:36:58.250046+00:00",
+  "qualification_finished": "2026-11-04T10:45:05.256554+00:00",
+  "minutes": 8.116775133333332,
+  "limit_minutes": 45,
+  "implementation_passes": 1,
+  "correction_passes": 1,
+  "runner_sha256": "16780ff7cb9f9417c6a5183de1fd5419a5f929f09ab754e318fb9821d18d481c",
+  "inputs_sha256": "163455cca545b0e309fa33b0359d8d097d072e6c045a4ba37b910f0bac70e047",
+  "native_effects": "Docker/admission/container outcomes substituted; real du/filesystem and host child controls",
+  "known_bad": "Exact1b033ea2 sampler detects vanished entry via CalledProcessError"
+}

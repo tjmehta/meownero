@@ -1,0 +1,85 @@
+test_default_registry_refuses_even_filled_source_before_bootstrap_or_OS (test_bootstrap.GeneratedEntryTests.test_default_registry_refuses_even_filled_source_before_bootstrap_or_OS) ... ok
+test_generated_first_activation_once_then_independent_recovery_original_deadlines (test_bootstrap.GeneratedEntryTests.test_generated_first_activation_once_then_independent_recovery_original_deadlines) ... FAIL
+test_generated_prepare_main_systemexit_numeric_sanitized_success_and_replay (test_bootstrap.GeneratedEntryTests.test_generated_prepare_main_systemexit_numeric_sanitized_success_and_replay) ... FAIL
+test_main_failure_sanitizes_exception_and_burns_capability (test_bootstrap.GeneratedEntryTests.test_main_failure_sanitizes_exception_and_burns_capability) ... FAIL
+test_missing_wrong_kind_extra_unsealed_truncated_credentials_and_start_refuse (test_bootstrap.GeneratedEntryTests.test_missing_wrong_kind_extra_unsealed_truncated_credentials_and_start_refuse) ... ok
+test_real_default_process_exits_three_without_raw_receipt (test_bootstrap.GeneratedEntryTests.test_real_default_process_exits_three_without_raw_receipt) ... ok
+test_separate_deadline_and_observer_namespace_before_private_read (test_bootstrap.GeneratedEntryTests.test_separate_deadline_and_observer_namespace_before_private_read) ... FAIL
+test_seven_calls_supported_slices_hierarchy_and_render_consistency (test_bootstrap.GeneratedEntryTests.test_seven_calls_supported_slices_hierarchy_and_render_consistency) ... FAIL
+test_wrong_role_invocation_source_deadline_contract_refuse (test_bootstrap.GeneratedEntryTests.test_wrong_role_invocation_source_deadline_contract_refuse) ... ok
+
+======================================================================
+FAIL: test_generated_first_activation_once_then_independent_recovery_original_deadlines (test_bootstrap.GeneratedEntryTests.test_generated_first_activation_once_then_independent_recovery_original_deadlines)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_bootstrap.py", line 191, in test_generated_first_activation_once_then_independent_recovery_original_deadlines
+    self.assertEqual(self.invoke('keeper')[0],0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 0
+
+======================================================================
+FAIL: test_generated_prepare_main_systemexit_numeric_sanitized_success_and_replay (test_bootstrap.GeneratedEntryTests.test_generated_prepare_main_systemexit_numeric_sanitized_success_and_replay)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_bootstrap.py", line 185, in test_generated_prepare_main_systemexit_numeric_sanitized_success_and_replay
+    self.assertEqual(self.invoke('prepare'),(0,dict(result='PREPARED_UNACTIVATED',native_execution='NOT_RUN',launch_ready=False)))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (3, {'result': 'REFUSED_BEFORE_HOST_OPERAT[87 chars]lse}) != (0, {'result': 'PREPARED_UNACTIVATED', 'na[46 chars]lse})
+
+First differing element 0:
+3
+0
+
++ (0,
+- (3,
+-  {'failure_class': 'ValueError',
+-   'launch_ready': False,
+?  ^
+
++  {'launch_ready': False,
+?  ^
+
+    'native_execution': 'NOT_RUN',
+-   'result': 'REFUSED_BEFORE_HOST_OPERATIONS'})
++   'result': 'PREPARED_UNACTIVATED'})
+
+======================================================================
+FAIL: test_main_failure_sanitizes_exception_and_burns_capability (test_bootstrap.GeneratedEntryTests.test_main_failure_sanitizes_exception_and_burns_capability)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_bootstrap.py", line 229, in test_main_failure_sanitizes_exception_and_burns_capability
+    self.assertEqual(status,3);self.assertEqual(result['failure_class'],'OSError')
+                               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'ValueError' != 'OSError'
+- ValueError
++ OSError
+
+
+======================================================================
+FAIL: test_separate_deadline_and_observer_namespace_before_private_read (test_bootstrap.GeneratedEntryTests.test_separate_deadline_and_observer_namespace_before_private_read)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_bootstrap.py", line 203, in test_separate_deadline_and_observer_namespace_before_private_read
+    self.assertEqual(status,0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^
+AssertionError: 3 != 0
+
+======================================================================
+FAIL: test_seven_calls_supported_slices_hierarchy_and_render_consistency (test_bootstrap.GeneratedEntryTests.test_seven_calls_supported_slices_hierarchy_and_render_consistency)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_bootstrap.py", line 248, in test_seven_calls_supported_slices_hierarchy_and_render_consistency
+    self.assertEqual(calls,records)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'st[1295 chars]e': 'activation', 'bus': 'org.freedesktop.syst[8248 chars]D'}}] != [{'st[1295 chars]e': 'preparation_supervisor', 'bus': 'org.free[8248 chars]D'}}]
+
+First differing element 3:
+{'stage': 'activation', 'bus': 'org.freedesktop.syst[2158 chars]ED'}}
+{'stage': 'preparation_supervisor', 'bus': 'org.free[2068 chars]ED'}}
+
+Diff is 18553 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.228s
+
+FAILED (failures=5)

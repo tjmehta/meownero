@@ -1,0 +1,47 @@
+{
+  "schema": "meownero-vanguard-testnet-admission-attempt/1",
+  "result": "FAILED_BOUNDED_ATTEMPT",
+  "launch_ready": false,
+  "testnet_admission": "NOT_RUN",
+  "native_two_peer": "NOT_RUN",
+  "slot_comment": "15414082-2a53-4872-8d19-b87f302f0bae",
+  "candidate_commit": "b6012ab22ed860f6ff3ee4a963e7a6c185dea0a6",
+  "driver_sha256": "50820a1e3b6ba73e8fde4c2df2586577cf4c9d795289373546c5c7505bea1b33",
+  "limits": {
+    "wall_seconds": 900,
+    "execution_seconds": 880,
+    "cleanup_reserve_seconds": 20,
+    "cpus": 2,
+    "memory_bytes": 4294967296,
+    "swap_bytes": 0,
+    "pids": 256,
+    "compile_jobs": 1,
+    "network": "none",
+    "published_ports": []
+  },
+  "lock": {
+    "device": 66306,
+    "inode": 657237,
+    "nonblocking": true
+  },
+  "admission": {
+    "available_memory_bytes": 7358144512,
+    "free_disk_bytes": 1139221217280,
+    "native_processes": [],
+    "native_containers": [],
+    "load_average": [
+      8.880859375,
+      12.2109375,
+      12.6708984375
+    ],
+    "logical_cpus": 12
+  },
+  "source_lock_sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+  "profile_sha256": "56a25f173448b3caa34ae9bb29761f5d467376df4470902fd89824ddc11fe4e8",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "builder_image": "sha256:10a15debf7142412a29cb4cd77fd1bdfa6081b24b94a867b3c19e62ec7061c3e",
+  "rustc": "rustc 1.93.0 (254b59607 2026-01-19)",
+  "error": "ValueError: JSON exceeds 64 KiB",
+  "shared_source_recheck": "PASS_PINNED_SOURCE_PATHS",
+  "wall_seconds": 0.276
+}

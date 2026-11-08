@@ -1,0 +1,255 @@
+{
+  "status": "SOURCE_CHECKS_PASS_PENDING_INDEPENDENT_CONSULTATION",
+  "baseline_commit": "b6f543268556d1c87d93efeafdde0d52bb3bc29c",
+  "source_edit_budget": {
+    "first_edit_unix": 1793840036.868165,
+    "first_edit_utc": "2026-11-05T00:53:56.868168+00:00",
+    "limit_seconds": 7200,
+    "implementation_passes": 1,
+    "correction_passes_max": 1,
+    "baseline_commit": "b6f543268556d1c87d93efeafdde0d52bb3bc29c",
+    "authority_interaction": "058ab9ae-b3ed-4e00-bd75-14f4d8f28df0",
+    "authority_run": "6f632a7a-1d01-4af2-8869-532af3ba6156",
+    "scope": "vanguard/network/ only",
+    "correction_passes_used": 1,
+    "finished_source_utc": "2026-11-05T01:16:40.218001+00:00",
+    "elapsed_seconds": 1363.3498446941376,
+    "correction": "After the first full suite, bind the changed controller in the existing source manifest and assert genesis explicitly; test wrapper setup and temporary-directory cleanup corrected. No further implementation correction is authorized in this round."
+  },
+  "full_suite": {
+    "tests": 408,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 86.08064857311547,
+    "protected_lock_touches": [],
+    "protected_lock_metadata_unchanged": true,
+    "native": "NOT_RUN",
+    "result": "PASS"
+  },
+  "focused_suite": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 0.21560486895032227,
+    "protected_lock_touches": [],
+    "protected_lock_metadata_unchanged": true,
+    "native": "NOT_RUN",
+    "result": "PASS"
+  },
+  "freeze_check": {
+    "result": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+    "native_execution": "NOT_RUN",
+    "overlay_files": 10,
+    "repository_bindings": 32,
+    "upstream_bindings": 63,
+    "denial_request_bindings": {
+      "transfer": {
+        "handler": "on_transfer",
+        "schema": "COMMAND_RPC_TRANSFER",
+        "required_fields": [
+          "account_index",
+          "destinations",
+          "get_tx_key",
+          "payment_id",
+          "priority",
+          "subaddr_indices",
+          "unlock_time"
+        ]
+      },
+      "transfer_split": {
+        "handler": "on_transfer_split",
+        "schema": "COMMAND_RPC_TRANSFER_SPLIT",
+        "required_fields": [
+          "account_index",
+          "destinations",
+          "get_tx_keys",
+          "payment_id",
+          "priority",
+          "subaddr_indices",
+          "unlock_time"
+        ]
+      },
+      "sweep_all": {
+        "handler": "on_sweep_all",
+        "schema": "COMMAND_RPC_SWEEP_ALL",
+        "required_fields": [
+          "account_index",
+          "address",
+          "below_amount",
+          "get_tx_keys",
+          "payment_id",
+          "priority",
+          "subaddr_indices",
+          "unlock_time"
+        ]
+      },
+      "sweep_single": {
+        "handler": "on_sweep_single",
+        "schema": "COMMAND_RPC_SWEEP_SINGLE",
+        "required_fields": [
+          "address",
+          "get_tx_key",
+          "key_image",
+          "payment_id",
+          "priority",
+          "unlock_time"
+        ]
+      },
+      "sign": {
+        "handler": "on_sign",
+        "schema": "COMMAND_RPC_SIGN",
+        "required_fields": [
+          "data",
+          "signature_type"
+        ]
+      },
+      "sign_transfer": {
+        "handler": "on_sign_transfer",
+        "schema": "COMMAND_RPC_SIGN_TRANSFER",
+        "required_fields": [
+          "unsigned_txset"
+        ]
+      },
+      "query_key": {
+        "handler": "on_query_key",
+        "schema": "COMMAND_RPC_QUERY_KEY",
+        "required_fields": [
+          "key_type"
+        ]
+      },
+      "set_daemon": {
+        "handler": "on_set_daemon",
+        "schema": "COMMAND_RPC_SET_DAEMON",
+        "required_fields": [
+          "address",
+          "password",
+          "ssl_allowed_fingerprints",
+          "ssl_ca_file",
+          "ssl_certificate_path",
+          "ssl_private_key_path",
+          "username"
+        ]
+      },
+      "store": {
+        "handler": "on_store",
+        "schema": "COMMAND_RPC_STORE",
+        "required_fields": []
+      },
+      "stop_wallet": {
+        "handler": "on_stop_wallet",
+        "schema": "COMMAND_RPC_STOP_WALLET",
+        "required_fields": []
+      },
+      "close_wallet": {
+        "handler": "on_close_wallet",
+        "schema": "COMMAND_RPC_CLOSE_WALLET",
+        "required_fields": []
+      },
+      "create_address": {
+        "handler": "on_create_address",
+        "schema": "COMMAND_RPC_CREATE_ADDRESS",
+        "required_fields": [
+          "account_index",
+          "label"
+        ]
+      },
+      "create_account": {
+        "handler": "on_create_account",
+        "schema": "COMMAND_RPC_CREATE_ACCOUNT",
+        "required_fields": [
+          "label"
+        ]
+      },
+      "create_wallet": {
+        "handler": "on_create_wallet",
+        "schema": "COMMAND_RPC_CREATE_WALLET",
+        "required_fields": [
+          "filename",
+          "language",
+          "password"
+        ]
+      },
+      "open_wallet": {
+        "handler": "on_open_wallet",
+        "schema": "COMMAND_RPC_OPEN_WALLET",
+        "required_fields": [
+          "filename",
+          "password"
+        ]
+      },
+      "restore_deterministic_wallet": {
+        "handler": "on_restore_deterministic_wallet",
+        "schema": "COMMAND_RPC_RESTORE_DETERMINISTIC_WALLET",
+        "required_fields": [
+          "filename",
+          "language",
+          "password",
+          "seed",
+          "seed_offset"
+        ]
+      },
+      "refresh": {
+        "handler": "on_refresh",
+        "schema": "COMMAND_RPC_REFRESH",
+        "required_fields": []
+      }
+    },
+    "source_candidate_sha256": "faf1e1854c9b083f6674385abd70cb31adaa97edefadd2412a9928a485320b5e",
+    "inputs_file_sha256": "9618b6c164add0ed68e8823de5f6fba723532e70bd8b4d67c22261fe7139d897",
+    "public_launch": false,
+    "limitations": [
+      "No native schema parser, prompt, daemon, wallet, guard, build, resource enclosure or cleanup was executed."
+    ]
+  },
+  "syntax": "bash -n integration/funded-runtime.sh PASS",
+  "protected_access_guards": "In-process audit hook installed before imports refuses original heavy-lock path/inode opens/flocks, retained-native reads, and real native/Docker spawning. Child source tools operate on disposable fixture roots; no native workload is launched.",
+  "intermediate": [
+    {
+      "log": "funded-focused-connected.log",
+      "cause": "Two new controller fixture subtests misclassified Docker create as image inspect because the target image was literally image; fixed the test classifier."
+    },
+    {
+      "log": "full-source-implementation.log",
+      "cause": "Existing CLI test modules needed explicit SOURCE/SCRATCH fixtures (24 errors); existing manager-source-manifest bound the previous controller (one failure). Configured source fixtures and rebound only that candidate digest."
+    },
+    {
+      "log": "full-source-qualified.log",
+      "cause": "All408 passed, but the wrapper implicitly cleaned its scratch at shutdown under ResourceWarning=error. Added explicit wrapper cleanup; final full run is clean."
+    }
+  ],
+  "known_adverse": [
+    "native early spend accepted",
+    "wrong-network payment accepted",
+    "missing native confirmation",
+    "restored output/key-image mismatch",
+    "wrong later input",
+    "legacy transaction format",
+    "wrong genesis",
+    "N80/N81 ceiling",
+    "height overshoot",
+    "deadline",
+    "wallet-dir/password-file known bad options",
+    "missing closed row retains private staging",
+    "attached/non-reuse funded entry refuses before effects"
+  ],
+  "native_execution": "NOT_RUN",
+  "prior_native": "b6f54326 zero-funding genesis/peer/wallet boundary PASS only; archive df4b39c2",
+  "checkpoint_rejection": "Source-established N/A: core defaults MAINNET only and non-MAINNET update returns immediately; TESTNET table entries exist but are not initialized by this core path. Formal Core concurrence pending.",
+  "foreign_database_identity": "Upstream nonempty-DB genesis comparison absent; accepted launcher-manifest guards plus one-profile/one-data-dir operator rule; formal Core disposition pending.",
+  "review_order": [
+    "Platform source",
+    "Core source F1 semantics only",
+    "Security signer/credential/export source",
+    "fresh Platform runtime-only grant",
+    "one native F1 attempt",
+    "formal Core after F1 PASS",
+    "formal Security",
+    "accepted-only lead integration"
+  ],
+  "formal_core_changes_requested_count": 2,
+  "launch_ready": false,
+  "public_launch": false,
+  "needs_tj": "None"
+}

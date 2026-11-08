@@ -1,0 +1,36 @@
+test_nonchild_echild_and_substituted_start_are_not_status_zero (test_receiver.ChildTests.test_nonchild_echild_and_substituted_start_are_not_status_zero) ... ERROR
+test_persistence_failure_retains_waitable_event_and_no_witness (test_receiver.ChildTests.test_persistence_failure_retains_waitable_event_and_no_witness) ... ok
+test_stopped_continued_missing_and_impossible_status_are_rejected (test_receiver.ChildTests.test_stopped_continued_missing_and_impossible_status_are_rejected) ... ok
+test_terminal_signal_is_abnormal_and_cannot_decode_as_zero (test_receiver.ChildTests.test_terminal_signal_is_abnormal_and_cannot_decode_as_zero) ... ok
+test_waitid_pins_child_persists_before_reap_and_decodes_exit9 (test_receiver.ChildTests.test_waitid_pins_child_persists_before_reap_and_decodes_exit9) ... ok
+test_absence_success_and_nonterminal_events_are_not_exit_witnesses (test_receiver.ManagerTests.test_absence_success_and_nonterminal_events_are_not_exit_witnesses) ... ok
+test_bound_bus_is_independent_of_destination_and_fixed_receiver (test_receiver.ManagerTests.test_bound_bus_is_independent_of_destination_and_fixed_receiver) ... ok
+test_bus_epoch_boot_and_connection_changes_refuse (test_receiver.ManagerTests.test_bus_epoch_boot_and_connection_changes_refuse) ... ok
+test_changed_scope_and_unconfirmed_receipts_cannot_release (test_receiver.ManagerTests.test_changed_scope_and_unconfirmed_receipts_cannot_release) ... ok
+test_lost_start_reply_burns_receiver_name_and_record54_refuses (test_receiver.ManagerTests.test_lost_start_reply_burns_receiver_name_and_record54_refuses) ... ok
+test_normal_nonzero_and_signal_terminal_events (test_receiver.ManagerTests.test_normal_nonzero_and_signal_terminal_events) ... ok
+test_original_unit_invocation_pid_start_and_timestamp_are_pinned (test_receiver.ManagerTests.test_original_unit_invocation_pid_start_and_timestamp_are_pinned) ... ok
+test_persistence_failure_late_read_and_retained_property_change_refuse_release (test_receiver.ManagerTests.test_persistence_failure_late_read_and_retained_property_change_refuse_release) ... ok
+
+======================================================================
+ERROR: test_nonchild_echild_and_substituted_start_are_not_status_zero (test_receiver.ChildTests.test_nonchild_echild_and_substituted_start_are_not_status_zero)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_receiver.py", line 227, in test_nonchild_echild_and_substituted_start_are_not_status_zero
+    with self.assertRaises(ChildProcessError):witness.observe(lambda row:None,deadline=time.monotonic()+5)
+                                              ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 79, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.068s
+
+FAILED (errors=1)

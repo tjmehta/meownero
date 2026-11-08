@@ -1,0 +1,81 @@
+{
+  "schema": "meownero-direct-profile-f1-f2-source-evidence/1",
+  "base_commit": "cc5718f625c59ecc31518d4e54d8ed6e36d347fd",
+  "authority_interaction": "b4df75a6-ad2c-4007-8675-e9da8376905e",
+  "candidate_commit": "bound by packet manifest; not self-referential",
+  "source_state": "PASS_SOURCE_CHECKS_PENDING_INDEPENDENT_REVIEWS",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "findings": {
+    "F1": "corrected; actual stage prefix -> frozen main -> missing-binary sentinel, no child",
+    "F2": "corrected; actual main preserves sanitized phase exits and validated partial witnesses, overall FAIL, cleanup verified"
+  },
+  "runner_sha256": "9826254646a81a73fb3c145f65d2164926bf05084094abc8c003b8f25bd84a11",
+  "inputs_sha256": "e4c315b4943366c36001d30e1e581a4c977c258dd66d25d9bbecbb06323aa2cb",
+  "source_tests": 259,
+  "direct_controller_tests": 23,
+  "budget": {
+    "first_production_edit_utc": "2026-11-01T07:15:36.870642+00:00",
+    "budget_minutes": 45,
+    "passes": "one implementation plus one correction",
+    "authority_interaction": "b4df75a6-ad2c-4007-8675-e9da8376905e",
+    "base_commit": "cc5718f625c59ecc31518d4e54d8ed6e36d347fd",
+    "correction_pass_utc": "2026-11-01T07:17:05.907677+00:00",
+    "correction_reason": "Review preserved build-evidence validation before runtime and added frozen-producer witness compatibility coverage.",
+    "source_pass_finished_utc": "2026-11-01T07:19:57.530863+00:00",
+    "implementation_passes": 1,
+    "correction_passes": 1,
+    "elapsed_minutes": 4.344337016666667
+  },
+  "preserved": [
+    "frozen native driver",
+    "source/profile/overlay/Cargo/toolchain pins",
+    "daemon/simplewallet/wallet_rpc_server targets",
+    "wire/CLI fixtures",
+    "zero funding and transactions",
+    "private RPC",
+    "Core stage bab7a7aa/decision47234b59/count2"
+  ],
+  "checks": {
+    "implementation-tests.log": {
+      "sha256": "93194a0632444a383028d1bfa646d8e88a76499f80c89130aa00dc5062270dbf",
+      "bytes": 4349,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "correction-tests.log": {
+      "sha256": "0f01df9f467939ee62f1681523a6a39155c3a72a4ad131aaca9dcb5974d7196c",
+      "bytes": 4709,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "source-tests.log": {
+      "sha256": "82057521eff809c24a990acdf84ca04f5d8f44093c036dac2f9fde1dd7202a7a",
+      "bytes": 40427,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "freeze.log": {
+      "sha256": "25675966128bc4cb38421d36c269e6446d5b20fd63be41aedce4d443e72a07e3",
+      "bytes": 4100,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "final-freeze.log": {
+      "sha256": "29af380b1b15e07023102718a7b3588f550d9e311f03a8c700090b93301d74b9",
+      "bytes": 4100,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "freeze-check.log": {
+      "sha256": "29af380b1b15e07023102718a7b3588f550d9e311f03a8c700090b93301d74b9",
+      "bytes": 4100,
+      "result": "PASS_SOURCE_ONLY"
+    }
+  },
+  "reuse": {
+    "prior_legacy_cli_suites": "6+17+14 passed on cc5718f, unchanged; original direct-runner/summary.json attribution retained"
+  },
+  "unconfirmed": [
+    "independent changed-source Platform verdict and exact direct runtime grant",
+    "independent Security loopback/auth/operator review",
+    "all native build/runtime acceptance",
+    "remaining full launch matrix and accepted-only integration"
+  ]
+}

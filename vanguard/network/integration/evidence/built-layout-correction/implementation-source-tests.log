@@ -1,0 +1,44 @@
+........................................................................................................................................................F..................................................................................................................................
+======================================================================
+FAIL: test_frozen_source_command_proposal_bindings_agree (test_installation.InstallationTests.test_frozen_source_command_proposal_bindings_agree)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_installation.py", line 188, in test_frozen_source_command_proposal_bindings_agree
+    self.assertEqual(hashlib.sha256((source/name).read_bytes()).hexdigest(),sha,name)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '4b761fbca1f2a9a579010f5d9e157e471a9d0c2b84ebfb13602d6cb49fcec463' != 'ab13a837004d54af40e58e6b8e22b6a7170d58ed48e2511da5597969f20c946f'
+- 4b761fbca1f2a9a579010f5d9e157e471a9d0c2b84ebfb13602d6cb49fcec463
++ ab13a837004d54af40e58e6b8e22b6a7170d58ed48e2511da5597969f20c946f
+ : vanguard/network/test_profile.py
+
+----------------------------------------------------------------------
+Ran 283 tests in 52.076s
+
+FAILED (failures=1)
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "REFUSED_BEFORE_ATTEMPT", "launch_ready": false, "consumed": false}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "PASS_COMPLETE_BINARIES_GENESIS_PEER_WALLET_BOUNDARY_ONLY", "launch_ready": false, "consumed": true}
+{"result": "REFUSED_BEFORE_ATTEMPT", "launch_ready": false, "consumed": false}

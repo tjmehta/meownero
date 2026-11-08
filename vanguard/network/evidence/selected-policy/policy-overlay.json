@@ -1,0 +1,69 @@
+{
+  "schema": "meownero-vanguard-selected-policy-overlay/1",
+  "result": "PREPARED_NOT_NATIVE_VERIFIED",
+  "launch_ready": false,
+  "profile_sha256": "56a25f173448b3caa34ae9bb29761f5d467376df4470902fd89824ddc11fe4e8",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "source_lock_sha256": "f70160e8b7de56bfaed50ed6d29155ea0fcb41789f0c2cfcd15019085c82d001",
+  "overlay_id": "0f971c34e3401f2faf85fa98862f7f28698af3b5ee28765c17657f8bee5eb044",
+  "files": {
+    "src/cryptonote_basic/cryptonote_basic_impl.cpp": {
+      "original_sha256": "34c2c2e487f4d8d37ab81f3b68bc9c0e8144834f1752e6d32d05bfcb5a3035e1",
+      "changed_sha256": "c1175cabf88d10b47bb7f5a4ca6c1bbd9407a43fed0eb0c646dbaba04c49bb55"
+    },
+    "src/cryptonote_basic/cryptonote_basic_impl.h": {
+      "original_sha256": "b97767e585a743b7ff8a92312198e1eb319568bb87e303607a00b0c23f1aa738",
+      "changed_sha256": "ba57439c69170e4170df140d5a076b013638e05378de01f1ad1f472d287755f0"
+    },
+    "src/cryptonote_config.h": {
+      "original_sha256": "1b372c5a49b913928bc6c85793d0c4befce4ad45f596d6c7fd3b0ada9d8cdc18",
+      "changed_sha256": "88b9cb16053993e5741493fc34a60770009c3ca4703c03572ed1d314a88288ea"
+    },
+    "src/cryptonote_core/blockchain.cpp": {
+      "original_sha256": "55ad1760d739419bda3477b486b39b58dd8decdd700ad2ce25e139c54d27a005",
+      "changed_sha256": "772079c22114a9db7b8be37e0229984da24c1b8ed3640814e23386e7bf874c26"
+    },
+    "src/cryptonote_core/blockchain.h": {
+      "original_sha256": "7e1434dda2cc75f777827e76753d610291d31b6a4609d35fa70e2d4230b9bc38",
+      "changed_sha256": "181c5acab76e047c845e7a02fc34b8e2175410af70f11780319f3afaa885b307"
+    },
+    "src/cryptonote_core/cryptonote_tx_utils.cpp": {
+      "original_sha256": "a220042d0f36a925ad15ce6873fe8478734e8ee611c1b4c1f21b0d2c1ec0301e",
+      "changed_sha256": "1d2cea84ded72aec56395edbd27c2de7e92dc73f147f7808aa69a945516fa709"
+    },
+    "src/cryptonote_core/cryptonote_tx_utils.h": {
+      "original_sha256": "8124e9327e11674907558faf493930198dd51208f944b36186f0d861521ad46c",
+      "changed_sha256": "357dc86dd89ff0ec867b649a8ea8b097cab68d51720735bc7492e8ed4ceb2273"
+    },
+    "src/cryptonote_core/tx_pool.cpp": {
+      "original_sha256": "d825def5f8c813d59202119d3fb522d352991c0613713155f5e1fe0edf8f9ddc",
+      "changed_sha256": "df1c59aa5c4a10dcfb96dff541acc5a2e04fdd44097d05949b77597504582542"
+    },
+    "src/hardforks/hardforks.cpp": {
+      "original_sha256": "1e5e8645150b6162df3e10af0c910966a2a56912d8d19c3e79cfdd9acbe6362b",
+      "changed_sha256": "08f645f982252a8caac4068a2534a9ae9c054b3a21ef04961af01d4b5d0dd31d"
+    },
+    "src/rpc/core_rpc_server.cpp": {
+      "original_sha256": "2fcd4ce46c146f27e367c53d4e61d4cafa4448ee580c000cebe6ac409e38fbf2",
+      "changed_sha256": "fec05d7494d04fc30c97a68a726e1e93c163724b35f3314c29029a59f52bb3c1"
+    }
+  },
+  "policy": {
+    "selector": "TESTNET",
+    "reward_atomic": 9000000000000,
+    "target_seconds": 90,
+    "fallback_enabled": false,
+    "genesis_height": 0,
+    "genesis_reward_atomic": 0
+  },
+  "native_policy": "NOT_RUN",
+  "native_network_separation": "NOT_RUN",
+  "remaining": [
+    "native-policy-construction-and-validation",
+    "native-height-one-maturity-payment",
+    "timestamp-lock-conversion-review",
+    "wallet-target-and-fork-integration",
+    "native-peer-bootstrap-persistence-recovery",
+    "independent-core-security-acceptance"
+  ]
+}

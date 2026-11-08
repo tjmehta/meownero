@@ -1,0 +1,1015 @@
+[
+  {
+    "stage": "install",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT.slice",
+      "fail",
+      [
+        [
+          "CPUQuotaPerSecUSec",
+          "t",
+          1950000
+        ],
+        [
+          "MemoryMax",
+          "t",
+          4278190080
+        ],
+        [
+          "MemorySwapMax",
+          "t",
+          0
+        ],
+        [
+          "TasksMax",
+          "t",
+          254
+        ]
+      ],
+      []
+    ],
+    "delivery": null
+  },
+  {
+    "stage": "install",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT-work.slice",
+      "fail",
+      [
+        [
+          "CPUQuotaPerSecUSec",
+          "t",
+          1900000
+        ],
+        [
+          "MemoryMax",
+          "t",
+          4026531840
+        ],
+        [
+          "MemorySwapMax",
+          "t",
+          0
+        ],
+        [
+          "TasksMax",
+          "t",
+          224
+        ]
+      ],
+      []
+    ],
+    "delivery": null
+  },
+  {
+    "stage": "install",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT-control.slice",
+      "fail",
+      [
+        [
+          "CPUQuotaPerSecUSec",
+          "t",
+          50000
+        ],
+        [
+          "MemoryMax",
+          "t",
+          251658240
+        ],
+        [
+          "MemorySwapMax",
+          "t",
+          0
+        ],
+        [
+          "TasksMax",
+          "t",
+          30
+        ]
+      ],
+      []
+    ],
+    "delivery": null
+  },
+  {
+    "stage": "activation",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT-keeper.service",
+      "fail",
+      [
+        [
+          "Type",
+          "s",
+          "notify"
+        ],
+        [
+          "User",
+          "s",
+          "0"
+        ],
+        [
+          "Group",
+          "s",
+          "0"
+        ],
+        [
+          "Slice",
+          "s",
+          "meowneroTJS2504$ATTEMPT-control.slice"
+        ],
+        [
+          "ExecStart",
+          "a(sasb)",
+          [
+            [
+              "$BOUND_PYTHON",
+              [
+                "$BOUND_PYTHON",
+                "-B",
+                "$BOUND_HELPER",
+                "serve",
+                "--bootstrap-role",
+                "keeper",
+                "--spec",
+                "$ROOT_OWNED_SPEC",
+                "--spec-sha256",
+                "$SPEC_SHA256"
+              ],
+              false
+            ]
+          ]
+        ],
+        [
+          "NoNewPrivileges",
+          "b",
+          true
+        ],
+        [
+          "ProtectSystem",
+          "s",
+          "strict"
+        ],
+        [
+          "PrivateTmp",
+          "b",
+          false
+        ],
+        [
+          "PrivateMounts",
+          "b",
+          true
+        ],
+        [
+          "RestrictAddressFamilies",
+          "(bas)",
+          [
+            true,
+            [
+              "AF_UNIX",
+              "AF_NETLINK"
+            ]
+          ]
+        ],
+        [
+          "CapabilityBoundingSet",
+          "t",
+          2097347
+        ],
+        [
+          "StandardInputFileDescriptor",
+          "h",
+          "$BOOTSTRAP_KEEPER_RECEIVE_FD"
+        ],
+        [
+          "StandardOutput",
+          "s",
+          "null"
+        ],
+        [
+          "StandardError",
+          "s",
+          "null"
+        ],
+        [
+          "LimitCORE",
+          "t",
+          0
+        ],
+        [
+          "KillMode",
+          "s",
+          "process"
+        ],
+        [
+          "TimeoutStopUSec",
+          "t",
+          300000000
+        ],
+        [
+          "ReadWritePaths",
+          "as",
+          [
+            "$C",
+            "$W",
+            "$O",
+            "$A"
+          ]
+        ],
+        [
+          "InaccessiblePaths",
+          "as",
+          [
+            "-/run/docker.sock",
+            "-/var/run/docker.sock"
+          ]
+        ],
+        [
+          "FileDescriptorStoreMax",
+          "u",
+          2
+        ],
+        [
+          "FileDescriptorStorePreserve",
+          "s",
+          "yes"
+        ],
+        [
+          "NotifyAccess",
+          "s",
+          "main"
+        ],
+        [
+          "Restart",
+          "s",
+          "on-failure"
+        ],
+        [
+          "RestartUSec",
+          "t",
+          1000000
+        ],
+        [
+          "OOMPolicy",
+          "s",
+          "continue"
+        ]
+      ],
+      []
+    ],
+    "delivery": {
+      "schema": "meownero-helper-delivery/1",
+      "role": "keeper",
+      "mode": "serve",
+      "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+      "property": [
+        "StandardInputFileDescriptor",
+        "h"
+      ],
+      "receiving_fd": 0,
+      "descriptors": [
+        "authority",
+        "sealed_context",
+        "retained_namespace"
+      ],
+      "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+      "bind": [
+        "task",
+        "attempt_id",
+        "role",
+        "mode",
+        "invocation_id",
+        "source",
+        "spec_sha256",
+        "contract_sha256",
+        "origin",
+        "deadlines",
+        "sender_credentials",
+        "sender_start",
+        "delivery_deadline",
+        "namespace_identity"
+      ],
+      "one_use": "one_fresh_activation",
+      "restart": "independently_authenticated_installed_unit_two_named_stored_FDs_recovery_only",
+      "actual_transport": "UNBOUND_NOT_QUALIFIED"
+    }
+  },
+  {
+    "stage": "activation",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT-deadline.service",
+      "fail",
+      [
+        [
+          "Type",
+          "s",
+          "exec"
+        ],
+        [
+          "User",
+          "s",
+          "0"
+        ],
+        [
+          "Group",
+          "s",
+          "0"
+        ],
+        [
+          "Slice",
+          "s",
+          "meowneroTJS2504$ATTEMPT-control.slice"
+        ],
+        [
+          "ExecStart",
+          "a(sasb)",
+          [
+            [
+              "$BOUND_PYTHON",
+              [
+                "$BOUND_PYTHON",
+                "-B",
+                "$BOUND_HELPER",
+                "recover",
+                "--bootstrap-role",
+                "deadline",
+                "--spec",
+                "$ROOT_OWNED_SPEC",
+                "--spec-sha256",
+                "$SPEC_SHA256",
+                "--deadline-owner"
+              ],
+              false
+            ]
+          ]
+        ],
+        [
+          "NoNewPrivileges",
+          "b",
+          true
+        ],
+        [
+          "ProtectSystem",
+          "s",
+          "strict"
+        ],
+        [
+          "PrivateTmp",
+          "b",
+          false
+        ],
+        [
+          "PrivateMounts",
+          "b",
+          true
+        ],
+        [
+          "RestrictAddressFamilies",
+          "(bas)",
+          [
+            true,
+            [
+              "AF_UNIX",
+              "AF_NETLINK"
+            ]
+          ]
+        ],
+        [
+          "CapabilityBoundingSet",
+          "t",
+          2097347
+        ],
+        [
+          "StandardInputFileDescriptor",
+          "h",
+          "$BOOTSTRAP_DEADLINE_RECEIVE_FD"
+        ],
+        [
+          "StandardOutput",
+          "s",
+          "null"
+        ],
+        [
+          "StandardError",
+          "s",
+          "null"
+        ],
+        [
+          "LimitCORE",
+          "t",
+          0
+        ],
+        [
+          "KillMode",
+          "s",
+          "process"
+        ],
+        [
+          "TimeoutStopUSec",
+          "t",
+          300000000
+        ],
+        [
+          "ReadWritePaths",
+          "as",
+          [
+            "$C",
+            "$W",
+            "$O",
+            "$A"
+          ]
+        ],
+        [
+          "InaccessiblePaths",
+          "as",
+          [
+            "-/run/docker.sock",
+            "-/var/run/docker.sock"
+          ]
+        ]
+      ],
+      []
+    ],
+    "delivery": {
+      "schema": "meownero-helper-delivery/1",
+      "role": "deadline",
+      "mode": "recover",
+      "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+      "property": [
+        "StandardInputFileDescriptor",
+        "h"
+      ],
+      "receiving_fd": 0,
+      "descriptors": [
+        "authority",
+        "sealed_context",
+        "retained_namespace"
+      ],
+      "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+      "bind": [
+        "task",
+        "attempt_id",
+        "role",
+        "mode",
+        "invocation_id",
+        "source",
+        "spec_sha256",
+        "contract_sha256",
+        "origin",
+        "deadlines",
+        "sender_credentials",
+        "sender_start",
+        "delivery_deadline",
+        "namespace_identity"
+      ],
+      "one_use": "role_invocation",
+      "restart": "new_role_bound_delivery_or_refuse",
+      "actual_transport": "UNBOUND_NOT_QUALIFIED"
+    }
+  },
+  {
+    "stage": "activation",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT-observer.service",
+      "fail",
+      [
+        [
+          "Type",
+          "s",
+          "exec"
+        ],
+        [
+          "User",
+          "s",
+          "0"
+        ],
+        [
+          "Group",
+          "s",
+          "0"
+        ],
+        [
+          "Slice",
+          "s",
+          "meowneroTJS2504$ATTEMPT-control.slice"
+        ],
+        [
+          "ExecStart",
+          "a(sasb)",
+          [
+            [
+              "$BOUND_PYTHON",
+              [
+                "$BOUND_PYTHON",
+                "-B",
+                "$BOUND_HELPER",
+                "observe",
+                "--bootstrap-role",
+                "observer",
+                "--spec",
+                "$ROOT_OWNED_SPEC",
+                "--spec-sha256",
+                "$SPEC_SHA256"
+              ],
+              false
+            ]
+          ]
+        ],
+        [
+          "NoNewPrivileges",
+          "b",
+          true
+        ],
+        [
+          "ProtectSystem",
+          "s",
+          "strict"
+        ],
+        [
+          "PrivateTmp",
+          "b",
+          false
+        ],
+        [
+          "PrivateMounts",
+          "b",
+          true
+        ],
+        [
+          "RestrictAddressFamilies",
+          "(bas)",
+          [
+            true,
+            [
+              "AF_UNIX",
+              "AF_NETLINK"
+            ]
+          ]
+        ],
+        [
+          "CapabilityBoundingSet",
+          "t",
+          2097347
+        ],
+        [
+          "StandardInputFileDescriptor",
+          "h",
+          "$BOOTSTRAP_OBSERVER_RECEIVE_FD"
+        ],
+        [
+          "StandardOutput",
+          "s",
+          "null"
+        ],
+        [
+          "StandardError",
+          "s",
+          "null"
+        ],
+        [
+          "LimitCORE",
+          "t",
+          0
+        ],
+        [
+          "KillMode",
+          "s",
+          "process"
+        ],
+        [
+          "TimeoutStopUSec",
+          "t",
+          300000000
+        ],
+        [
+          "ReadWritePaths",
+          "as",
+          [
+            "$C",
+            "$W",
+            "$O",
+            "$A"
+          ]
+        ],
+        [
+          "InaccessiblePaths",
+          "as",
+          [
+            "-/run/docker.sock",
+            "-/var/run/docker.sock"
+          ]
+        ]
+      ],
+      []
+    ],
+    "delivery": {
+      "schema": "meownero-helper-delivery/1",
+      "role": "observer",
+      "mode": "observe",
+      "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+      "property": [
+        "StandardInputFileDescriptor",
+        "h"
+      ],
+      "receiving_fd": 0,
+      "descriptors": [
+        "authority",
+        "sealed_context",
+        "retained_namespace"
+      ],
+      "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+      "bind": [
+        "task",
+        "attempt_id",
+        "role",
+        "mode",
+        "invocation_id",
+        "source",
+        "spec_sha256",
+        "contract_sha256",
+        "origin",
+        "deadlines",
+        "sender_credentials",
+        "sender_start",
+        "delivery_deadline",
+        "namespace_identity"
+      ],
+      "one_use": "role_invocation",
+      "restart": "new_role_bound_delivery_or_refuse",
+      "actual_transport": "UNBOUND_NOT_QUALIFIED"
+    }
+  },
+  {
+    "stage": "preparation_supervisor",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT-prepare.service",
+      "fail",
+      [
+        [
+          "Type",
+          "s",
+          "exec"
+        ],
+        [
+          "User",
+          "s",
+          "0"
+        ],
+        [
+          "Group",
+          "s",
+          "0"
+        ],
+        [
+          "ExecStart",
+          "a(sasb)",
+          [
+            [
+              "$BOUND_PYTHON",
+              [
+                "$BOUND_PYTHON",
+                "-B",
+                "$BOUND_HELPER",
+                "prepare",
+                "--bootstrap-role",
+                "prepare",
+                "--spec",
+                "$ROOT_OWNED_SPEC",
+                "--spec-sha256",
+                "$SPEC_SHA256"
+              ],
+              false
+            ]
+          ]
+        ],
+        [
+          "NoNewPrivileges",
+          "b",
+          true
+        ],
+        [
+          "ProtectSystem",
+          "s",
+          "strict"
+        ],
+        [
+          "PrivateTmp",
+          "b",
+          false
+        ],
+        [
+          "PrivateMounts",
+          "b",
+          true
+        ],
+        [
+          "RestrictAddressFamilies",
+          "(bas)",
+          [
+            true,
+            [
+              "AF_UNIX",
+              "AF_NETLINK"
+            ]
+          ]
+        ],
+        [
+          "CapabilityBoundingSet",
+          "t",
+          2097347
+        ],
+        [
+          "StandardInputFileDescriptor",
+          "h",
+          "$BOOTSTRAP_PREPARE_RECEIVE_FD"
+        ],
+        [
+          "StandardOutput",
+          "s",
+          "null"
+        ],
+        [
+          "StandardError",
+          "s",
+          "null"
+        ],
+        [
+          "LimitCORE",
+          "t",
+          0
+        ],
+        [
+          "KillMode",
+          "s",
+          "process"
+        ],
+        [
+          "TimeoutStopUSec",
+          "t",
+          300000000
+        ],
+        [
+          "ReadWritePaths",
+          "as",
+          [
+            "$C",
+            "$W",
+            "$O",
+            "$A"
+          ]
+        ],
+        [
+          "InaccessiblePaths",
+          "as",
+          [
+            "-/run/docker.sock",
+            "-/var/run/docker.sock"
+          ]
+        ],
+        [
+          "Slice",
+          "s",
+          "meowneroTJS2504$ATTEMPT-work.slice"
+        ],
+        [
+          "CPUQuotaPerSecUSec",
+          "t",
+          1000000
+        ],
+        [
+          "MemoryMax",
+          "t",
+          1073741824
+        ],
+        [
+          "MemorySwapMax",
+          "t",
+          0
+        ],
+        [
+          "TasksMax",
+          "t",
+          64
+        ],
+        [
+          "RuntimeMaxUSec",
+          "t",
+          1200000000
+        ]
+      ],
+      []
+    ],
+    "delivery": {
+      "schema": "meownero-helper-delivery/1",
+      "role": "prepare",
+      "mode": "prepare",
+      "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+      "property": [
+        "StandardInputFileDescriptor",
+        "h"
+      ],
+      "receiving_fd": 0,
+      "descriptors": [
+        "authority",
+        "sealed_context"
+      ],
+      "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+      "bind": [
+        "task",
+        "attempt_id",
+        "role",
+        "mode",
+        "invocation_id",
+        "source",
+        "spec_sha256",
+        "contract_sha256",
+        "origin",
+        "deadlines",
+        "sender_credentials",
+        "sender_start",
+        "delivery_deadline",
+        "namespace_identity"
+      ],
+      "one_use": "separate_preparation_capability",
+      "restart": "new_role_bound_delivery_or_refuse",
+      "actual_transport": "UNBOUND_NOT_QUALIFIED"
+    }
+  },
+  {
+    "stage": "work",
+    "bus": "org.freedesktop.systemd1",
+    "path": "/org/freedesktop/systemd1",
+    "interface": "org.freedesktop.systemd1.Manager",
+    "member": "StartTransientUnit",
+    "signature": "ssa(sv)a(sa(sv))",
+    "args": [
+      "meowneroTJS2504$ATTEMPT-workload.service",
+      "fail",
+      [
+        [
+          "Type",
+          "s",
+          "exec"
+        ],
+        [
+          "User",
+          "s",
+          "0"
+        ],
+        [
+          "Group",
+          "s",
+          "0"
+        ],
+        [
+          "Slice",
+          "s",
+          "meowneroTJS2504$ATTEMPT-work.slice"
+        ],
+        [
+          "ExecStart",
+          "a(sasb)",
+          [
+            [
+              "/usr/bin/dockerd",
+              [
+                "/usr/bin/dockerd",
+                "--host=unix://$W/root/exec/docker.sock",
+                "--data-root=$W/root/docker",
+                "--exec-root=$W/root/exec",
+                "--pidfile=$W/root/exec/dockerd.pid",
+                "--config-file=$C/manager/daemon.json",
+                "--exec-opt=native.cgroupdriver=cgroupfs",
+                "--cgroup-parent=$WORK_CGROUP",
+                "--bridge=none",
+                "--iptables=false",
+                "--ip6tables=false",
+                "--ip-forward=false",
+                "--ip-masq=false",
+                "--userland-proxy=false",
+                "--storage-driver=vfs"
+              ],
+              false
+            ]
+          ]
+        ],
+        [
+          "RestrictAddressFamilies",
+          "(bas)",
+          [
+            true,
+            [
+              "AF_UNIX",
+              "AF_NETLINK",
+              "AF_INET"
+            ]
+          ]
+        ],
+        [
+          "KillMode",
+          "s",
+          "control-group"
+        ],
+        [
+          "TimeoutStopUSec",
+          "t",
+          20000000
+        ],
+        [
+          "NoNewPrivileges",
+          "b",
+          true
+        ],
+        [
+          "ProtectSystem",
+          "s",
+          "strict"
+        ],
+        [
+          "PrivateTmp",
+          "b",
+          false
+        ],
+        [
+          "PrivateMounts",
+          "b",
+          true
+        ],
+        [
+          "ReadWritePaths",
+          "as",
+          [
+            "$W"
+          ]
+        ],
+        [
+          "ReadOnlyPaths",
+          "as",
+          [
+            "$C"
+          ]
+        ],
+        [
+          "InaccessiblePaths",
+          "as",
+          [
+            "-/run/docker.sock",
+            "-/var/run/docker.sock"
+          ]
+        ],
+        [
+          "StandardOutput",
+          "s",
+          "null"
+        ],
+        [
+          "StandardError",
+          "s",
+          "null"
+        ],
+        [
+          "LimitCORE",
+          "t",
+          0
+        ]
+      ],
+      []
+    ],
+    "delivery": null
+  }
+]

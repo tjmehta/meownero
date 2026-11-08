@@ -1,0 +1,55 @@
+{
+  "schema": "meownero-argv-deadline-source-evidence/1",
+  "writer_run": "9cd54c5d-4d14-412f-a0e6-49acf61d227e",
+  "base_commit": "664cc55a807719b8a17336efcc2d4f9efb0bc253",
+  "implementation_passes": 1,
+  "correction_passes": 0,
+  "verification_finished_at": "2026-11-01T04:55:11.076767+00:00",
+  "elapsed_seconds_to_verified_source": 292.477365,
+  "finite_window_seconds": 2700,
+  "checks": {
+    "focused": {
+      "tests": 80,
+      "seconds": 21.791,
+      "returncode": 0,
+      "log": "focused-implementation.log",
+      "sha256": "08c87f078afdaf26bb08630d7a576410ab37d0ed076835ebc71171c52ca0e587",
+      "inputs_unchanged": true
+    },
+    "suite": {
+      "tests": 236,
+      "seconds": 59.773,
+      "returncode": 0,
+      "log": "source-suite.log",
+      "sha256": "8a748e2e27d34a0dd0b4d9aa127590458b8271128aec88c55746d779008ab1ad",
+      "inputs_unchanged": true
+    }
+  },
+  "source_binding_check": {
+    "command": [
+      "python3",
+      "-B",
+      "freeze-profile.py",
+      "--check"
+    ],
+    "started_at": "2026-11-01T04:54:35.516533+00:00",
+    "finished_at": "2026-11-01T04:54:55.519064+00:00",
+    "returncode": 0,
+    "inputs_sha256": "ab97d147256dc86335c829a67eb7f14ac5cfd476ff3ac6164ccf912d9a2c9d0a"
+  },
+  "binding_verification": "binding-verification.json",
+  "known_bad_retention": "known-bad/authenticated-retention.json",
+  "previous_failures": "../original-deadlines/summary.json (unchanged prior-run evidence)",
+  "first_failures_this_run": [],
+  "source_acceptance": "PENDING_CHANGED_ARTIFACT_PLATFORM_AND_INDEPENDENT_SECURITY_ASSESSMENTS",
+  "installed_OS": "UNQUALIFIED",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "unchanged_formal_core": {
+    "stage": "bab7a7aa-fe78-4cc9-8822-2b3d1e9b35de",
+    "decision": "47234b59-ff49-4bb7-a20a-19df2c94d52e",
+    "changes_requested_count": 2
+  },
+  "next_action": "P2P obtains and consumes both independent assessments; studio lead retains protected administrator/installation/PID1/accounting/terminal handoff. Unused correction pass cannot extend the original45-minute window."
+}

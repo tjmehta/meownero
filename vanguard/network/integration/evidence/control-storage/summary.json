@@ -1,0 +1,40 @@
+{
+  "schema": "meownero-control-storage-source-evidence/1",
+  "run_id": "9c5348fd-e6d1-4e0c-a645-dd8009a3bd5b",
+  "authorization_comment": "0129b9cb-6539-43d3-85c7-c3dec9a9db8a",
+  "base_commit": "ea2f2b0fdfa5ec0775fb3fbc5371afbfac15e18b",
+  "source_scope": "section-15 storage fit/refusal only",
+  "implementation_passes": 1,
+  "correction_passes": 1,
+  "tests": {
+    "pass2": 36,
+    "outer": 24,
+    "profile": 18,
+    "handoff": 11
+  },
+  "total_source_tests": 89,
+  "first_run": "35 passed, 1 test-fixture KeyError in missing-control-digest case; pass1-tests.log preserved",
+  "correction": "fixture passes absent digest to validator; 36 manager tests pass",
+  "proposed_allocations_gib": {
+    "control": 1,
+    "workload": 11,
+    "archive": 2,
+    "other": 1
+  },
+  "actual_host_bindings": "UNBOUND",
+  "operator_pickup": "READ_ONLY_ACKNOWLEDGED",
+  "privileged_authority": "NOT_ESTABLISHED",
+  "platform_bootstrap_sha256": null,
+  "qualified_bootstraps": 0,
+  "host_native_observations": "NOT_RUN",
+  "helper_server_and_inner_integration": "UNAVAILABLE",
+  "public_launch": false,
+  "prior_receipt": {
+    "run_id": "f256c6b4-dd7b-487f-b125-8fc3a9e4dda7",
+    "tests": 82,
+    "path": "../selected-manager/summary.json",
+    "reused_scope": "original source/archive evidence retained; changed manager suite and outer/profile/handoff suite executed for this candidate"
+  },
+  "next_owner_action": "Meownero lead reconciles returned authority answer and concrete operator-supported interface through existing studio-lead/parent route; Platform qualifies changed source plus actual bindings before further integration.",
+  "retained_log_format": "One trailing space on the failed test label was removed; diagnostic and exception retained."
+}

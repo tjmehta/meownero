@@ -1,0 +1,67 @@
+test_altered_installation_refuses_before_capability_or_effect (test_ingress.IngressTests.test_altered_installation_refuses_before_capability_or_effect) ... ok
+test_crash_after_admission_keeps_pending_and_requires_recovery (test_ingress.IngressTests.test_crash_after_admission_keeps_pending_and_requires_recovery) ... FAIL
+test_failed_durability_has_no_effect_and_cannot_reuse_slot (test_ingress.IngressTests.test_failed_durability_has_no_effect_and_cannot_reuse_slot) ... ok
+test_fresh_process_replay_refuses (test_ingress.IngressTests.test_fresh_process_replay_refuses) ... FAIL
+test_known_bad_exact_base_has_only_per_instance_record_use (test_ingress.IngressTests.test_known_bad_exact_base_has_only_per_instance_record_use) ... FAIL
+test_modeled_effect_failure_preserves_recovery_only_state (test_ingress.IngressTests.test_modeled_effect_failure_preserves_recovery_only_state) ... FAIL
+test_out_of_order_and_changed_original_deadlines_refuse (test_ingress.IngressTests.test_out_of_order_and_changed_original_deadlines_refuse) ... ok
+test_partial_order_write_or_missing_original_refuses_without_repair (test_ingress.IngressTests.test_partial_order_write_or_missing_original_refuses_without_repair) ... ok
+test_real_main_ingress_installation_and_durable_order_across_invocations (test_ingress.IngressTests.test_real_main_ingress_installation_and_durable_order_across_invocations) ... FAIL
+test_same_bytes_sealed_index_substitution_is_not_authority (test_ingress.IngressTests.test_same_bytes_sealed_index_substitution_is_not_authority) ... ok
+test_substituted_delivery_index_authority_and_receiver_fail_before_effects (test_ingress.IngressTests.test_substituted_delivery_index_authority_and_receiver_fail_before_effects) ... <repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_ingress.py:147: ResourceWarning: unclosed <socket.socket fd=42, family=1, type=5, proto=0>
+  dict(mutate=lambda env,fds:fds.__setitem__(0,b.delivery_pair()[1].detach())),
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+
+======================================================================
+FAIL: test_crash_after_admission_keeps_pending_and_requires_recovery (test_ingress.IngressTests.test_crash_after_admission_keeps_pending_and_requires_recovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_ingress.py", line 197, in test_crash_after_admission_keeps_pending_and_requires_recovery
+    self.assertEqual(self.invoke(self.cleanup,recovered=True)[0],0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 0
+
+======================================================================
+FAIL: test_fresh_process_replay_refuses (test_ingress.IngressTests.test_fresh_process_replay_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_ingress.py", line 172, in test_fresh_process_replay_refuses
+    self.assertEqual(self.invoke()[0],0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 0
+
+======================================================================
+FAIL: test_known_bad_exact_base_has_only_per_instance_record_use (test_ingress.IngressTests.test_known_bad_exact_base_has_only_per_instance_record_use)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_ingress.py", line 230, in test_known_bad_exact_base_has_only_per_instance_record_use
+    self.assertEqual(self.invoke()[0],0);self.assertEqual(self.invoke()[0],3)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 0
+
+======================================================================
+FAIL: test_modeled_effect_failure_preserves_recovery_only_state (test_ingress.IngressTests.test_modeled_effect_failure_preserves_recovery_only_state)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_ingress.py", line 219, in test_modeled_effect_failure_preserves_recovery_only_state
+    self.assertEqual(self.state()['mode'],'RECOVERY_ONLY')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'LIVE' != 'RECOVERY_ONLY'
+- LIVE
++ RECOVERY_ONLY
+
+
+======================================================================
+FAIL: test_real_main_ingress_installation_and_durable_order_across_invocations (test_ingress.IngressTests.test_real_main_ingress_installation_and_durable_order_across_invocations)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_ingress.py", line 132, in test_real_main_ingress_installation_and_durable_order_across_invocations
+    self.assertEqual(self.invoke()[0],0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 3 != 0
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.480s
+
+FAILED (failures=5)

@@ -1,0 +1,79 @@
+{
+  "three_production_binaries": {
+    "status": "PASS",
+    "binaries": {
+      "monerod": {
+        "sha256": "b79cb49dbea95c0eeff7dca8c945d65f4fab3d49fb626fcbe7a9343569d4a2c1",
+        "needed": [
+          "libboost_chrono.so.1.83.0",
+          "libboost_filesystem.so.1.83.0",
+          "libboost_program_options.so.1.83.0",
+          "libzmq.so.5",
+          "libsodium.so.23",
+          "libreadline.so.8",
+          "libhidapi-libusb.so.0",
+          "libunbound.so.8",
+          "libssl.so.3",
+          "libcrypto.so.3",
+          "libboost_thread.so.1.83.0",
+          "libboost_serialization.so.1.83.0",
+          "libstdc++.so.6",
+          "libm.so.6",
+          "libgcc_s.so.1",
+          "libc.so.6",
+          "ld-linux-x86-64.so.2"
+        ]
+      },
+      "monero-wallet-cli": {
+        "sha256": "76ad8cb92d25decd91e0fc88152356dad2405703cac2190fb0508edb59301120",
+        "needed": [
+          "libboost_chrono.so.1.83.0",
+          "libboost_program_options.so.1.83.0",
+          "libboost_filesystem.so.1.83.0",
+          "libboost_thread.so.1.83.0",
+          "libreadline.so.8",
+          "libhidapi-libusb.so.0",
+          "libprotobuf.so.32",
+          "libusb-1.0.so.0",
+          "libunbound.so.8",
+          "libssl.so.3",
+          "libcrypto.so.3",
+          "libsodium.so.23",
+          "libboost_serialization.so.1.83.0",
+          "libstdc++.so.6",
+          "libm.so.6",
+          "libgcc_s.so.1",
+          "libc.so.6",
+          "ld-linux-x86-64.so.2"
+        ]
+      },
+      "monero-wallet-rpc": {
+        "sha256": "5782abee489e8b245b42fd237ece34d6df1c67929c552960755fab41de3a921a",
+        "needed": [
+          "libboost_chrono.so.1.83.0",
+          "libboost_program_options.so.1.83.0",
+          "libboost_filesystem.so.1.83.0",
+          "libboost_thread.so.1.83.0",
+          "libhidapi-libusb.so.0",
+          "libprotobuf.so.32",
+          "libusb-1.0.so.0",
+          "libboost_serialization.so.1.83.0",
+          "libsodium.so.23",
+          "libunbound.so.8",
+          "libssl.so.3",
+          "libcrypto.so.3",
+          "libreadline.so.8",
+          "libstdc++.so.6",
+          "libm.so.6",
+          "libgcc_s.so.1",
+          "libc.so.6",
+          "ld-linux-x86-64.so.2"
+        ]
+      }
+    }
+  },
+  "rpc_translation_unit": {
+    "status": "PASS",
+    "object_sha256": "8a594c315fe2617b87052d553797f9164019630cb07e0d166fd3a10d702b1e81"
+  }
+}

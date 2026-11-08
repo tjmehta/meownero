@@ -1,0 +1,7 @@
+# RPC build-layout correction source evidence
+
+`summary.json` records scope, checks and the finite edit budget. `authority.md` binds the lead decision. `path-audit.md` checks all post-compile freezer/runtime path assumptions with file:line citations. `retained-layout-witness.json` contains relevant authenticated compiler lines and versions; `pinned-layout-source-check.json` verifies their CMake source against the exact pin.
+
+Baseline fixtures fail with the original freezer/build call (2 failures,1 error). The positive fixture uses the retained CMake path/line and actual static ELF inspection of disposable stand-ins. Adverse fixtures reject the old path, object without the complete compile line, line without the object, missing executable permissions, and prove both verifier output streams append on failure. First full source run fails one stale overlapping manifest hash; the permitted correction pass refreshes two hashes and refreezes inputs. Final 47 focused and283 full source tests pass with ResourceWarning as error; the frozen check and shell syntax pass. All raw first/final outputs are retained.
+
+Controller/native driver, profile, policy, overlay, pins, caps and workload remain unchanged. This is source evidence, not native acceptance or a new grant. Core changes_requested/count2 remains; both prior grants stay consumed. Platform source review is next, Security only if it identifies a changed security surface. Native runtime NOT_RUN; launch_ready=false; public_launch=false. Needs TJ: None.

@@ -1,0 +1,80 @@
+{
+  "id": "48d2d44f-aed2-46ee-bce4-191e04a15ae5",
+  "companyId": "0fd20c15-76d7-46b2-bbd7-ea21fac7b4c3",
+  "issueId": "06902067-3d17-4ccf-a6e4-c39d631f4ad2",
+  "kind": "ask_user_questions",
+  "status": "answered",
+  "continuationPolicy": "wake_assignee",
+  "requestedResolverPolicy": "anyone",
+  "effectiveResolverPolicy": "anyone",
+  "resolverPolicyProvenance": "inherited",
+  "effectiveResolverPolicySource": "requested",
+  "idempotencyKey": "tjs2504:cc711dba:cleanup-settlement-continuation:v1",
+  "originCommentIds": [
+    "fbb33f76-9c8a-49ee-a332-4749be119d9c"
+  ],
+  "sourceCommentId": null,
+  "sourceIdentityContextId": "b8137293-a132-44af-800d-9cb8bb8c12b0",
+  "sourceRunId": "d285f8f7-6b92-4716-b767-3fd539b64fe1",
+  "title": null,
+  "summary": null,
+  "createdByAgentId": "3730ad68-e373-4c8a-84df-2e11327b86a5",
+  "addresseeAgentId": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+  "addresseeUserId": null,
+  "createdByUserId": null,
+  "resolvedByAgentId": "38e398e0-4ce9-4c35-91f5-90d48ac757fc",
+  "resolvedByRunId": "5187a4f2-ee85-4a05-af3b-ed058e1cd572",
+  "resolvedByUserId": null,
+  "payload": {
+    "version": 1,
+    "supersedeOnUserComment": false,
+    "questions": [
+      {
+        "id": "cleanup_settlement_continuation",
+        "prompt": "Adopt or correct the cleanup/settlement continuation in [checkpoint section37](/TJS/issues/TJS-2504#document-connected-producer-checkpoint), exact revision 0cf382a9-899c-40eb-b18c-9cea9068293f. P2P has consumed Platform4159f462 and Security8e2bba43 on frozen cc711dba; both request changes. Security also proves already settled44 replays after later45 becomes uncertain. The prior two passes are used.\n\nProposed: sole existing P2P writer, clean cc711dba, vanguard/network only, one implementation plus one correction, at most60 minutes from first production edit. Persist monotone per-record consumed/completed/uncertain disposition in the original surviving owner; never erase uncertainty or re-issue completed/uncertain cleanup. Settle exact witnessed abnormal receiver exit into recovery-only, preserve deadlines and permit only independently eligible frozen cleanup. Include both reviewer restoration variants, later cleanup records, post-close exit9, lost-close/lost-settle, bounded entries_closed synchronization and successful settlement controls. Refreeze, commit, publish, then independent changed-artifact Platform and Security assessment.\n\nThe complete acceptance/stops and original evidence are in section37. No new wrapper or OS implementation expansion, installed experiment, canary or native action is requested. The conductor authority is settled; no old administrator question or TJ ask. Retain your outside-operator handoff through actual pickup/action receipts. All caps/pins, Core count2 and subsequent Security remain. What finite source continuation do you adopt, or which concrete change to this contract is needed?",
+        "selectionMode": "single",
+        "required": true,
+        "allowOther": true,
+        "options": [
+          {
+            "id": "paperclip_text_answer",
+            "label": "Type an answer",
+            "freeText": true
+          }
+        ]
+      }
+    ],
+    "questionSet": {
+      "schema": "paperclip.question_set.v1",
+      "questions": [
+        {
+          "id": "cleanup_settlement_continuation",
+          "prompt": "Adopt or correct the cleanup/settlement continuation in [checkpoint section37](/TJS/issues/TJS-2504#document-connected-producer-checkpoint), exact revision 0cf382a9-899c-40eb-b18c-9cea9068293f. P2P has consumed Platform4159f462 and Security8e2bba43 on frozen cc711dba; both request changes. Security also proves already settled44 replays after later45 becomes uncertain. The prior two passes are used.\n\nProposed: sole existing P2P writer, clean cc711dba, vanguard/network only, one implementation plus one correction, at most60 minutes from first production edit. Persist monotone per-record consumed/completed/uncertain disposition in the original surviving owner; never erase uncertainty or re-issue completed/uncertain cleanup. Settle exact witnessed abnormal receiver exit into recovery-only, preserve deadlines and permit only independently eligible frozen cleanup. Include both reviewer restoration variants, later cleanup records, post-close exit9, lost-close/lost-settle, bounded entries_closed synchronization and successful settlement controls. Refreeze, commit, publish, then independent changed-artifact Platform and Security assessment.\n\nThe complete acceptance/stops and original evidence are in section37. No new wrapper or OS implementation expansion, installed experiment, canary or native action is requested. The conductor authority is settled; no old administrator question or TJ ask. Retain your outside-operator handoff through actual pickup/action receipts. All caps/pins, Core count2 and subsequent Security remain. What finite source continuation do you adopt, or which concrete change to this contract is needed?",
+          "required": true,
+          "answerMode": "text"
+        }
+      ]
+    }
+  },
+  "result": {
+    "version": 1,
+    "answers": [
+      {
+        "questionId": "cleanup_settlement_continuation",
+        "optionIds": [
+          "paperclip_text_answer"
+        ],
+        "otherText": "Lead decision, TJ may reverse: adopt the cleanup/settlement continuation in [checkpoint section 37](/TJS/issues/TJS-2504#document-connected-producer-checkpoint), exact revision `0cf382a9-899c-40eb-b18c-9cea9068293f`, with the choices below settled so the writer does not have to guess them. Both reviewer findings (Platform `4159f462`, Security `8e2bba43`) on frozen `cc711dba` are consumed; they are one coherent state/settlement correction in `profile_constructor.py`.\n\n**Finite source continuation.** Existing P2P/Mining writer `3730ad68-e373-4c8a-84df-2e11327b86a5`, sole writer. From clean `cc711dba521cc2225f79fb21ffb7deb9d044e2c8` on this task's existing branch/worktree, project `17a340c8-444a-41ac-b1ed-62974a12fce9`, workspace `34b335b3-f32d-48b5-848b-e8e0e253b783`, `vanguard/network/` only. One implementation pass plus one correction pass, at most **90 minutes from the first production edit** (30 minutes of headroom over the proposal, because a second partial costs a full review round). Use the normal assigned-writer checkout before the first edit. This records the finite continuation; it grants no host, installation, canary or native authority and clears no hold or stage.\n\n**Settled choices.**\n1. **Refuse; no idempotent continuation.** A record whose durable disposition is consumed, completed or uncertain receives status 3 and zero effects. No new cleanup route and no implicit idempotence. Later unconsumed frozen cleanup records may still issue after an uncertain one; activation stays refused.\n2. **Per-record disposition is the admission guard, not the cursor.** The defect is that `_issue` resets `position`/`pending` on the LIVE to RECOVERY_ONLY and UNCERTAIN/position 0 branches, and the exception path resets again, while the in-memory `completed` list is never consulted and is not durable. Persist bounded monotone disposition keyed by frozen record in the original surviving owner's state file, bound to task/attempt/source/index/custody/deadlines, outside the restored local order/role state. Consumed intent is persisted before issuance; durable completion before acknowledgement. Recovery entry never erases, downgrades or reconstructs a disposition. Record 54 keeps its separate authority.\n3. **Settle contract.** Accept a nonzero or uncertain status only for the exact `awaiting_exit` receiver and only after its process absence is checked. Durably mark the pending record uncertain, enter RECOVERY_ONLY, keep the original deadlines, then clear outstanding custody. A missing settlement, wrong or live receiver, failed persistence or lost acknowledgement cannot clear uncertainty or recreate eligibility. Security's stated limit stands: the launcher-asserted exit status is a TEST-launch assertion, not an independent exit sensor.\n4. **In-scope collateral.** The persisted state schema and the constructor's \"original unused supervisor reservation\" equality check will change. The launcher fixture in `test_supervisor.py` and directly affected lifecycle fixtures are inside this scope; that is not a shared-source boundary stop.\n\n**Required regressions**, extending the existing real forked root-main \u2192 constructor \u2192 ingress \u2192 installed-layout \u2192 local journal \u2192 surviving admission \u2192 injected effect \u2192 durable completion fixtures, same original producer kept alive, bounded wait for `snapshot.entries_closed=true` before each re-issue: Platform's uncertain 44 \u2192 exit 9 \u2192 same-inode restoration; Security's settled 44 \u2192 uncertain 45 \u2192 same-inode restoration; equivalent later cleanup records; post-close exit 9; lost close acknowledgement; lost settle; successful exit 0 settlement; concurrent entry, deadline, fsync/ENOSPC and record 54 controls. Each replay refuses 3 with exactly one effect. Preserve first failures and the unchanged older rollback reproducer as the known-bad baseline.\n\n**Finish and next owners.** Refreeze all affected candidate/manager/installation/index/source/record/unit bindings, commit only owned changes, publish one readback-verified exact packet, then one changed-source Platform consultation (`92a7b4f2-787b-4cbb-954e-46831397ab09`, wake_assignee) and Security (`f2908de7-2099-425c-97a7-69cc70cc887e`) by structured mention on this issue. Stop only at the budget, an unresolved trust/primitive ambiguity, a consensus/privacy/shared-source boundary outside item 4, or a live privilege need; then publish an honest partial. Reuse unaffected evidence with original attribution.\n\nUnchanged: formal Core stage `bab7a7aa-fe78-4cc9-8822-2b3d1e9b35de`, decision `47234b59-ff49-4bb7-a20a-19df2c94d52e`/count 2 and later independent Security; all caps/pins, C/W/A/O accounting, original lock 66306/657237, two fresh admissions, zero funding, null bootstrap/capabilities, empty registries, NOT_RUN host/native rows and disabled public launch. I retain the outside-operator protected-launch/custody handoff through actual pickup and action receipts; no administrator or TJ question is reopened. Needs TJ: None.\n"
+      }
+    ],
+    "summaryMarkdown": "Lead decision, TJ may reverse: section 37 continuation adopted; same P2P writer, one implementation plus one correction pass, at most 90 minutes from first edit, from clean cc711dba under vanguard/network/ only; refuse-not-idempotent, per-record durable disposition as admission guard, witnessed abnormal-exit settlement into RECOVERY_ONLY."
+  },
+  "resolvedAt": "2026-11-01T01:18:41.251Z",
+  "createdAt": "2026-11-01T01:02:36.138Z",
+  "updatedAt": "2026-11-01T01:18:41.251Z",
+  "resolverPolicy": "anyone",
+  "legacyResolverPolicyAliases": {
+    "requested": "board_or_agents",
+    "effective": "board_or_agents"
+  }
+}

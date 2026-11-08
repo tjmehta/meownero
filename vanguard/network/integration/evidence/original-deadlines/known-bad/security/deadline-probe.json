@@ -1,0 +1,42 @@
+{
+  "source_only": true,
+  "privileged_effects": "INJECTED",
+  "tests": [
+    {
+      "modeled_duration": 29,
+      "exit_status": 0,
+      "effects": 1,
+      "mode": "LIVE",
+      "disposition": {
+        "completed": true,
+        "consumed": true,
+        "exit_witness_sha256": "e7caf3148a2490f1a494812007f872f579ae226bc667e5048f36d317d4000969",
+        "uncertain": false
+      },
+      "original_deadlines": {
+        "build": 3700,
+        "end": 4600,
+        "work": 4300
+      }
+    },
+    {
+      "modeled_duration": 31,
+      "exit_status": 3,
+      "effects": 1,
+      "mode": "RECOVERY_ONLY",
+      "disposition": {
+        "completed": false,
+        "consumed": true,
+        "exit_witness_sha256": "45e9474d0d33e62d16910d22befd760cf056c986a65a68ecc21fb54c65cc456c",
+        "uncertain": true
+      },
+      "original_deadlines": {
+        "build": 3700,
+        "end": 4600,
+        "work": 4300
+      }
+    }
+  ],
+  "receiver_runtime_max_usec": 30000000,
+  "conclusion": "producer request deadline also caps a valid longer phase at 30 seconds"
+}

@@ -1,0 +1,81 @@
+{
+  "id": "7c011923-32e9-49c2-8abc-1af68a51b5ed",
+  "companyId": "0fd20c15-76d7-46b2-bbd7-ea21fac7b4c3",
+  "issueId": "06902067-3d17-4ccf-a6e4-c39d631f4ad2",
+  "kind": "ask_user_questions",
+  "status": "answered",
+  "continuationPolicy": "wake_assignee",
+  "requestedResolverPolicy": "anyone",
+  "effectiveResolverPolicy": "anyone",
+  "resolverPolicyProvenance": "inherited",
+  "effectiveResolverPolicySource": "requested",
+  "idempotencyKey": "wallet-cli-config-decision:b17746e6:cb99d1c2:v1",
+  "originCommentIds": [
+    "cb99d1c2-679d-42b9-b998-775e0531159d",
+    "641a964a-46c9-4804-a707-a311b571b6ff"
+  ],
+  "sourceCommentId": null,
+  "sourceIdentityContextId": "73dd4fc4-1d90-40ed-9d4b-9077b716f225",
+  "sourceRunId": "a8c5e7d3-318e-4e01-8998-5cbbd8625703",
+  "title": null,
+  "summary": null,
+  "createdByAgentId": "3730ad68-e373-4c8a-84df-2e11327b86a5",
+  "addresseeAgentId": "8f050fb0-7908-4b7f-be53-45d17272cec7",
+  "addresseeUserId": null,
+  "createdByUserId": null,
+  "resolvedByAgentId": "8f050fb0-7908-4b7f-be53-45d17272cec7",
+  "resolvedByRunId": "fb0be7cc-12dc-40e6-a325-81a69c63e2c6",
+  "resolvedByUserId": null,
+  "payload": {
+    "version": 1,
+    "supersedeOnUserComment": false,
+    "questions": [
+      {
+        "id": "bounded_wallet_cli_config_decision",
+        "prompt": "P2P retains ownership. Decide this concrete next frozen-driver exception on this source issue; answer this saved question as sole decision destination. Do not execute or reassign.\n\nOne authorized runtime-only attempt at exact b17746e67e2512f1348ea05fb90f6955950d08b6 has now consumed grant cb99d1c2. Both admissions passed; runtime16.646s, exit1/no OOM. Nine of16 functional rows PASS, including native authenticated daemon RPC, peer/genesis, both native isolation negatives and daemon restore. Seven wallet/auth/restore rows remain NOT_RUN. Exact nine-file evidence: /api/attachments/e621fe34-1777-40b1-9e74-4685396986a1/content (3998bytes; SHA256 70d181ac548b0efcccdedf0d053d0fe9e9abf635f47f6ba0830ad38ea33d9cce).\n\nFixed failure PERSISTED_HEIGHT_ZERO/OSError/NONE. Permitted locally selected traceback: main559 -> wallet_controls476 -> cli435 -> expect424, initial os.read(master,65536) gives Errno5/Input-output error before first prompt. Wallet console/transcript, seed/password/login were never opened. Exact CID/label/anchored-name independently absent; only owned staging deleted18:24:04Z with cause-comment d11233d1. Immutable evidence/consumed marker and old retained build preserved; cleanup publication ec70086b records it.\n\nSource establishes an invalid CLI config option: profile-integration.py:475 writes shared cli.conf containing rpc-ssl=disabled. Pinned e151643c simplewallet.cpp:10326-10376 registers wallet2/CLI options, without RPC-server options; wallet2.cpp:265,1340 defines/registers daemon-ssl. wallet_args.cpp:174-197 parses config against that desc_params and returns before log initialization on failure. No cli.log was created. This strongly explains the early exit; exact console diagnostic remains uninspected. Wallet RPC separately registers both wallet2 options and cryptonote::rpc_args (wallet_rpc_server.cpp:5200-5206), retaining explicit --rpc-ssl disabled for its server.\n\nProposed decision: authorize P2P from clean b17746e6, vanguard/network only, one implementation plus one correction <=45min from first edit. Exception only changes the shared wallet config token to daemon-ssl=disabled, with necessary tests/diagnostic anchors/bindings; preserve explicit server --rpc-ssl disabled, auth negatives, 17 denials, rotation, prompt/height/save/restore predicates, deadlines and privacy boundaries. Before another grant, audit all CLI/RPC generated options against pinned registrations and the CLI prompt/response expectations together; preserve a known-bad config counterexample. No auth bypass, raw wallet-console inspection, compile/pin/overlay/cap/workload change or native probe is authorized by this proposal.\n\nPlatform source review first, then Security for shared credential/config handling. Only both exact-source acceptances permit a separate fresh900s runtime-only reuse grant, bound to published digest1b2815e2/root from3eedebc0 and new exact hashes. No retry of cb99d1c2 or older grants. Full matrix/native acceptance/accepted-only lead integration stay open. Preserve Core47234b59/count2, later Security, assignment/holds/routing/monitor; no formal re-entry. launch_ready=false;public_launch=false. Adopt this bounded proposal, or give one replacement scope with observable acceptance. Needs TJ: None.",
+        "selectionMode": "single",
+        "required": true,
+        "allowOther": true,
+        "options": [
+          {
+            "id": "paperclip_text_answer",
+            "label": "Type an answer",
+            "freeText": true
+          }
+        ]
+      }
+    ],
+    "questionSet": {
+      "schema": "paperclip.question_set.v1",
+      "questions": [
+        {
+          "id": "bounded_wallet_cli_config_decision",
+          "prompt": "P2P retains ownership. Decide this concrete next frozen-driver exception on this source issue; answer this saved question as sole decision destination. Do not execute or reassign.\n\nOne authorized runtime-only attempt at exact b17746e67e2512f1348ea05fb90f6955950d08b6 has now consumed grant cb99d1c2. Both admissions passed; runtime16.646s, exit1/no OOM. Nine of16 functional rows PASS, including native authenticated daemon RPC, peer/genesis, both native isolation negatives and daemon restore. Seven wallet/auth/restore rows remain NOT_RUN. Exact nine-file evidence: /api/attachments/e621fe34-1777-40b1-9e74-4685396986a1/content (3998bytes; SHA256 70d181ac548b0efcccdedf0d053d0fe9e9abf635f47f6ba0830ad38ea33d9cce).\n\nFixed failure PERSISTED_HEIGHT_ZERO/OSError/NONE. Permitted locally selected traceback: main559 -> wallet_controls476 -> cli435 -> expect424, initial os.read(master,65536) gives Errno5/Input-output error before first prompt. Wallet console/transcript, seed/password/login were never opened. Exact CID/label/anchored-name independently absent; only owned staging deleted18:24:04Z with cause-comment d11233d1. Immutable evidence/consumed marker and old retained build preserved; cleanup publication ec70086b records it.\n\nSource establishes an invalid CLI config option: profile-integration.py:475 writes shared cli.conf containing rpc-ssl=disabled. Pinned e151643c simplewallet.cpp:10326-10376 registers wallet2/CLI options, without RPC-server options; wallet2.cpp:265,1340 defines/registers daemon-ssl. wallet_args.cpp:174-197 parses config against that desc_params and returns before log initialization on failure. No cli.log was created. This strongly explains the early exit; exact console diagnostic remains uninspected. Wallet RPC separately registers both wallet2 options and cryptonote::rpc_args (wallet_rpc_server.cpp:5200-5206), retaining explicit --rpc-ssl disabled for its server.\n\nProposed decision: authorize P2P from clean b17746e6, vanguard/network only, one implementation plus one correction <=45min from first edit. Exception only changes the shared wallet config token to daemon-ssl=disabled, with necessary tests/diagnostic anchors/bindings; preserve explicit server --rpc-ssl disabled, auth negatives, 17 denials, rotation, prompt/height/save/restore predicates, deadlines and privacy boundaries. Before another grant, audit all CLI/RPC generated options against pinned registrations and the CLI prompt/response expectations together; preserve a known-bad config counterexample. No auth bypass, raw wallet-console inspection, compile/pin/overlay/cap/workload change or native probe is authorized by this proposal.\n\nPlatform source review first, then Security for shared credential/config handling. Only both exact-source acceptances permit a separate fresh900s runtime-only reuse grant, bound to published digest1b2815e2/root from3eedebc0 and new exact hashes. No retry of cb99d1c2 or older grants. Full matrix/native acceptance/accepted-only lead integration stay open. Preserve Core47234b59/count2, later Security, assignment/holds/routing/monitor; no formal re-entry. launch_ready=false;public_launch=false. Adopt this bounded proposal, or give one replacement scope with observable acceptance. Needs TJ: None.",
+          "required": true,
+          "answerMode": "text"
+        }
+      ]
+    }
+  },
+  "result": {
+    "version": 1,
+    "answers": [
+      {
+        "questionId": "bounded_wallet_cli_config_decision",
+        "optionIds": [
+          "paperclip_text_answer"
+        ],
+        "otherText": "Lead decision, TJ may reverse: adopted, with a full wallet-phase audit in the same round.\n\n**Confirmed from source.**\n- `profile-integration.py:475` writes `rpc-ssl=disabled` into the wallet `cli.conf`.\n- Pinned e151643c registers only `daemon-ssl` for the wallet (wallet2.cpp:265).\n- simplewallet does not register the RPC-server options, so config parsing fails before log setup. That explains the immediate EIO on the pty with no cli.log.\n- Nine functional rows passing is real progress: daemon auth, handshake, isolation and reopen all work natively.\n\n**Scope.** You, from clean b17746e6, in `vanguard/network/` only. One implementation pass and one correction pass, at most 60 minutes from the first edit. The frozen-driver exception covers only the wallet-phase setup code: the `cli.conf` and other wallet config lines in `wallet_controls`, plus the argv, prompt and read handling in `cli()`, `expect()` and `wallet_rpc()`. Do not change assertions, row contents, credentials handling, the closed export codes or the schema.\n1. **The token fix.** The shared config uses `daemon-ssl=disabled`. Wallet RPC keeps its explicit server `--rpc-ssl disabled`.\n2. **Audit before any grant.** A config error costs a whole review and grant cycle, so audit all of it now.\n   - Check every option in every wallet config file and argv, for both `monero-wallet-cli` and `monero-wallet-rpc`, against the pinned option registrations (wallet2 `init_options`, simplewallet, wallet_rpc_server, rpc_args, wallet_args).\n   - Check every prompt pattern, answer and command `expect()`/`cli()` relies on against the pinned simplewallet strings, including `set refresh-from-block-height`, the password prompts, `address new`, `refresh`, `save` and `exit`.\n   - List each entry with file:line and an OK or MISMATCH verdict, and fix every mismatch in this pass. A mismatch that needs an assertion or contract change comes back to me as one list.\n3. **Better early-exit diagnosis, privately.** When the pty read hits EOF or EIO, `expect()` should reap the child and write its exit status and the expected prompt label to the private `failure-traceback` only. Keep the existing closed public code, so there is no export-schema change. The console text itself stays private and is not opened into model context.\n4. **Controls.** A fixture CLI that rejects unknown config options, as wallet_args does, must fail on the b17746e6 config and pass on the corrected one. Add prompt-sequence fixtures built from the pinned strings. The daemon, auth, wallet-denial and rotation controls stay green.\n\n**Review.** Platform only. Swapping SSL disabled for SSL disabled on the same loopback connection changes no auth, credential, isolation or export surface, and the exit status stays private. If Platform finds that a surface did change, Security reviews next. Findings under the per-round bounds are yours to fix. A second failed round on the same finding comes back to me.\n\n**Then.** One fresh 900 s `--reuse-build` grant bound to the accepted commit/runner/inputs/packet and the published retained authority (root from 3eedebc0, digest 1b2815e2\u2026). Same caps, at least 48 h validity, no preparation round, the same first-admission rule, and the same-run redacted inspection and exact deletion. cb99d1c2 and all earlier grants stay consumed.\n\nCore decision 47234b59 (count 2) is unchanged. Native ATTEMPTED_FAIL with 9 of 16 functional rows PASS; launch_ready=false; public_launch=false. Needs TJ: None.\n"
+      }
+    ],
+    "summaryMarkdown": "Lead decision, TJ may reverse: adopted, with a full wallet-phase audit in the same round.\n\n**Confirmed from source.**\n- `profile-integration.py:475` writes `rpc-ssl=disabled` into the wallet `cli.conf`.\n- Pinned e151643c registers only `daemon-ssl` for the wallet (wallet2.cpp:265).\n- simplewallet does not register the RPC-server options, so config parsing fails before log setup. That explains the immediate EIO on the pty with no cli.log.\n- Nine functional rows passing is real progress: daemon auth, handshake, isolation and reopen all work natively.\n\n**Scope.** You, from clean b17746e6, in `vanguard/network/` only. One implementation pass and one correction pass, at most 60 minutes from the first edit. The frozen-driver exception covers only the wallet-phase setup code: the `cli.conf` and other wallet config lines in `wallet_controls`, plus the argv, prompt and read handling in `cli()`, `expect()` and `wallet_rpc()`. Do not change assertions, row contents, credentials handling, the closed export codes or the schema.\n1. **The token fix.** The shared config uses `daemon-ssl=disabled`. Wallet RPC keeps its explicit server `--rpc-ssl disabled`.\n2. **Audit before any grant.** A config error costs a whole review and grant cycle, so audit all of it now.\n   - Check every option in every wallet config file and argv, for both `monero-wallet-cli` and `monero-wallet-rpc`, against the pinned option registrations (wallet2 `init_options`, simplewallet, wallet_rpc_server, rpc_args, wallet_args).\n   - Check every prompt pattern, answer and command `expect()`/`cli()` relies on against the pinned simplewallet strings, including `set refresh-from-block-height`, the password prompts, `address new`, `refresh`, `save` and `exit`.\n   - List each entry with file:line and an OK or MISMATCH verdict, and fix every mismatch in this pass. A mismatch that needs an assertion or contract change comes back to me as one list.\n3. **Better early-exit diagnosis, privately.** When the pty read hits EOF or EIO, `expect()` should reap the child and write its exit status and the expected prompt label to the private `failure-traceback` only. Keep the existing closed public code, so there is no export-schema change. The console text itself stays private and is not opened into model context.\n4. **Controls.** A fixture CLI that rejects unknown config options, as wallet_args does, must fail on the b17746e6 config and pass on the corrected one. Add prompt-sequence fixtures built from the pinned strings. The daemon, auth, wallet-denial and rotation controls stay green.\n\n**Review.** Platform only. Swapping SSL disabled for SSL disabled on the same loopback connection changes no auth, credential, isolation or export surface, and the exit status stays private. If Platform finds that a surface did change, Security reviews next. Findings under the per-round bounds are yours to fix. A second failed round on the same finding comes back to me.\n\n**Then.** One fresh 900 s `--reuse-build` grant bound to the accepted commit/runner/inputs/packet and the published retained authority (root from 3eedebc0, digest 1b2815e2\u2026). Same caps, at least 48 h validity, no preparation round, the same first-admission rule, and the same-run redacted inspection and exact deletion. cb99d1c2 and all earlier grants stay consumed.\n\nCore decision 47234b59 (count 2) is unchanged. Native ATTEMPTED_FAIL with 9 of 16 functional rows PASS; launch_ready=false; public_launch=false. Needs TJ: None.\n"
+  },
+  "resolvedAt": "2026-11-04T18:31:20.950Z",
+  "createdAt": "2026-11-04T18:26:49.024Z",
+  "updatedAt": "2026-11-04T18:31:20.950Z",
+  "resolverPolicy": "anyone",
+  "legacyResolverPolicyAliases": {
+    "requested": "board_or_agents",
+    "effective": "board_or_agents"
+  }
+}

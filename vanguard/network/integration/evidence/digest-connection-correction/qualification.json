@@ -1,0 +1,83 @@
+{
+  "schema": "meownero-digest-source-qualification/1",
+  "lead_interaction": "84eaf982-224b-4fbf-88c6-e76b78f77012",
+  "base_commit": "ed78cd5cbba465ae0cbc20e5ab67c4ebc002b418",
+  "implementation_passes": 1,
+  "correction_passes": 1,
+  "first_edit": "2026-11-04T16:16:02.151807+00:00",
+  "qualification_completed": "2026-11-04T16:27:58.031369+00:00",
+  "elapsed_seconds": 715.8795433428604,
+  "max_seconds": 3600,
+  "python_versions": {
+    "full": "Python 3.15.2",
+    "direct": "Python 3.12.3"
+  },
+  "final_source_checks": {
+    "full-source.log": {
+      "tests": {
+        "tests": 363,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "wall_seconds": 72.75715181790292,
+        "original_lock_guard": "path before open; device/inode before flock",
+        "native_effects": "substituted"
+      },
+      "guard": {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 72.75999325979501
+      },
+      "sha256": "7f8595896731b73944ac17e327f43d436adcbdb45506d2c8aed36041a8970b89"
+    },
+    "python312-direct.log": {
+      "tests": {
+        "tests": 84,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "wall_seconds": 15.948035652050748,
+        "original_lock_guard": "path before open; device/inode before flock",
+        "native_effects": "substituted"
+      },
+      "guard": {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 15.952632981119677
+      },
+      "sha256": "dcd4a39ccfcb2397881ee4451af43aad33b6689a660a23201904e8cc059782bb"
+    }
+  },
+  "freeze_check": "PASS",
+  "compiled_identity": "UNCHANGED",
+  "native_execution": "NOT_RUN",
+  "historical_native_execution": "ATTEMPTED_FAIL",
+  "launch_ready": false,
+  "public_launch": false,
+  "intermediate_observations": [
+    "Implementation:83 direct tests pass; Python3.15 temporary HTTPError resource warning.",
+    "Correction:close synthetic HTTPError; add close/deadline test. New fixture clock initially used600 with actual monotonic clock:four errors. Intermediate full run overlapped test refreeze and also reported19 legacy layout assertions; final stable reruns resolve all.",
+    "Known-bad urllib leaves HTTPResponses alive; retain and close every baseline response/socket in test harness only. Allocation diagnostic identifies all seven warnings on the broken baseline connection path. Final logs have zero ResourceWarning.",
+    "A bookkeeping import without-B regenerated two unowned caches. Exact originals reconstructed and all seven verified against pre-run SHA256; no bytecode committed."
+  ]
+}

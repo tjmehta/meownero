@@ -1,0 +1,56 @@
+{
+ "a_victim_after": "runtime\n",
+ "b_collect": "raised PermissionError",
+ "b_scandir_order": [
+  "wallet.json",
+  "receipt.json",
+  "isolation.json",
+  "aaa",
+  "resources.json",
+  "build.json",
+  "cleanup.json",
+  "reopen.json",
+  "peer.json",
+  "auth.json"
+ ],
+ "b_left_after_collect": [
+  [
+   "aaa",
+   false
+  ],
+  [
+   "auth.json",
+   true
+  ],
+  [
+   "build.json",
+   true
+  ],
+  [
+   "cleanup.json",
+   true
+  ],
+  [
+   "peer.json",
+   true
+  ],
+  [
+   "reopen.json",
+   true
+  ],
+  [
+   "resources.json",
+   true
+  ]
+ ],
+ "b_victims_clobbered": [
+  "auth.json",
+  "build.json",
+  "cleanup.json",
+  "peer.json",
+  "reopen.json",
+  "resources.json"
+ ],
+ "scratch_removed": true,
+ "python": "3.15.2"
+}

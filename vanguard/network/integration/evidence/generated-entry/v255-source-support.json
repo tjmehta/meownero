@@ -1,0 +1,54 @@
+{
+  "source": "https://raw.githubusercontent.com/systemd/systemd/v255/src/core/dbus-cgroup.c",
+  "sha256": "9424435e2cf158b845939a1c92b78cacf5c4e2d1535809722224255f228b43d3",
+  "slice_resource_properties": {
+    "CPUQuotaPerSecUSec": [
+      [
+        454,
+        "SD_BUS_PROPERTY(\"CPUQuotaPerSecUSec\", \"t\", bus_property_get_usec, offsetof(CGroupContext, cpu_quota_per_sec_usec), 0),"
+      ],
+      [
+        1291,
+        "if (streq(name, \"CPUQuotaPerSecUSec\")) {"
+      ]
+    ],
+    "MemoryMax": [
+      [
+        484,
+        "SD_BUS_PROPERTY(\"MemoryMax\", \"t\", NULL, offsetof(CGroupContext, memory_max), 0),"
+      ],
+      [
+        1226,
+        "if (streq(name, \"MemoryMax\"))"
+      ]
+    ],
+    "MemorySwapMax": [
+      [
+        486,
+        "SD_BUS_PROPERTY(\"MemorySwapMax\", \"t\", NULL, offsetof(CGroupContext, memory_swap_max), 0),"
+      ],
+      [
+        1206,
+        "if (streq(name, \"MemorySwapMax\"))"
+      ]
+    ],
+    "TasksMax": [
+      [
+        494,
+        "SD_BUS_PROPERTY(\"TasksMax\", \"t\", bus_property_get_tasks_max, offsetof(CGroupContext, tasks_max), 0),"
+      ],
+      [
+        1093,
+        "unit_write_settingf(u, flags, name, \"%s=%\" PRIu32 \".%\" PRIu32 \"%%\", \"TasksMax\","
+      ],
+      [
+        1285,
+        "if (streq(name, \"TasksMax\"))"
+      ]
+    ]
+  },
+  "std_input_property_source": "https://github.com/systemd/systemd/blob/v255/src/core/dbus-service.c#L623-L629",
+  "unsupported_slice_property_source": "https://github.com/systemd/systemd/blob/v255/src/core/dbus-unit.c#L2104-L2110",
+  "result": "PASS_PINNED_SOURCE_SUPPORT_ONLY",
+  "live_StartTransientUnit": "NOT_RUN"
+}

@@ -1,0 +1,28 @@
+test_all_production_reward_and_constructor_calls_pass_network (__main__.PolicyBoundary.test_all_production_reward_and_constructor_calls_pass_network) ... ok
+test_consumed_or_prior_overlay_grants_are_refused_before_output_creation (__main__.PolicyBoundary.test_consumed_or_prior_overlay_grants_are_refused_before_output_creation) ... ok
+test_exact_allowlist_keeps_crypto_wallet_and_pins_unchanged (__main__.PolicyBoundary.test_exact_allowlist_keeps_crypto_wallet_and_pins_unchanged) ... ok
+test_fallback_and_unknown_policy_are_refused (__main__.PolicyBoundary.test_fallback_and_unknown_policy_are_refused) ... ok
+test_foreign_emission_branch_and_penalty_are_preserved (__main__.PolicyBoundary.test_foreign_emission_branch_and_penalty_are_preserved) ... ok
+test_foreign_identity_fork_tables_and_global_targets_stay_identical (__main__.PolicyBoundary.test_foreign_identity_fork_tables_and_global_targets_stay_identical) ... ok
+test_inherited_unlock_rule_mapping_and_exact_coinbase_remain_intact (__main__.PolicyBoundary.test_inherited_unlock_rule_mapping_and_exact_coinbase_remain_intact) ... ok
+test_lock_contention_and_wrong_inode_refuse_before_native_admission (__main__.PolicyBoundary.test_lock_contention_and_wrong_inode_refuse_before_native_admission) ... ok
+test_patch_applies_and_reverses_every_changed_byte (__main__.PolicyBoundary.test_patch_applies_and_reverses_every_changed_byte) ... ok
+test_patch_is_repeatable_and_never_mutates_inputs (__main__.PolicyBoundary.test_patch_is_repeatable_and_never_mutates_inputs) ... ok
+test_projection_arithmetic_counterexample_and_nonmonotone_windows (__main__.PolicyBoundary.test_projection_arithmetic_counterexample_and_nonmonotone_windows) ... ok
+test_projection_correction_is_testnet_only_and_preserves_operation_order (__main__.PolicyBoundary.test_projection_correction_is_testnet_only_and_preserves_operation_order) ... ok
+test_source_drift_and_ambiguous_anchor_are_refused (__main__.PolicyBoundary.test_source_drift_and_ambiguous_anchor_are_refused) ... ok
+test_zero_balance_does_not_select_genesis_and_accounting_is_unchanged (__main__.PolicyBoundary.test_zero_balance_does_not_select_genesis_and_accounting_is_unchanged) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 1.294s
+
+OK
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_policy.py", line 274, in <module>
+    out = n.fresh_directory(args.evidence)
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/network.py", line 156, in fresh_directory
+    require(parent.stat().st_mode & 0o022 == 0, 'output parent must not be writable by others')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/network.py", line 21, in require
+    raise ValueError(message)
+ValueError: output parent must not be writable by others

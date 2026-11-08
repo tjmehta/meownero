@@ -1,0 +1,77 @@
+{
+  "schema": "tjs2504-wallet-setup-source-qualification/1",
+  "run_id": "2eb5b450-3335-4de6-b553-1a536277890e",
+  "base": "b17746e67e2512f1348ea05fb90f6955950d08b6",
+  "upstream": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "first_edit_utc": "2026-11-04T18:39:53.627327+00:00",
+  "qualification_utc": "2026-11-04T18:47:32.346810+00:00",
+  "elapsed_seconds": 458.719468,
+  "round_limit_seconds": 3600,
+  "implementation_pass": 1,
+  "review_correction_passes": 0,
+  "checks": [
+    {
+      "log": "full-source-qualified.log",
+      "tests": 378,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "wall_seconds": 75.4808042908553,
+      "original_lock_guard": "path before open; device/inode before flock",
+      "native_effects": "substituted"
+    },
+    {
+      "log": "direct-python312-qualified.log",
+      "tests": 99,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "wall_seconds": 21.358574436046183,
+      "original_lock_guard": "path before open; device/inode before flock",
+      "native_effects": "substituted"
+    }
+  ],
+  "new_wallet_checks": 12,
+  "intermediate": [
+    {
+      "log": "intermediate-stale-inputs.log",
+      "tests": 377,
+      "failures": 33,
+      "cause": "In-progress source/input freeze, including a temporary freezer edit, changed while suite ran. Frozen hash refusals propagated into installation/supervisor checks. Freezer restored exactly; tests placed in existing input; inputs regenerated after edits; final full suite green.",
+      "display_normalization": {
+        "trailing_whitespace_removed_lines": [
+          353,
+          361,
+          366,
+          375
+        ],
+        "raw_sha256": "3d69b4c76b44c10c23075ed898cecae931fce1ac652cf6b59d1ce5fd7666ece6",
+        "raw_retained_path": "run handoff-evidence/full-source-first.log",
+        "note": "Only trailing spaces removed in committed display copy; original raw bytes retained locally."
+      }
+    },
+    {
+      "log": "intermediate-wallet-fixtures.log",
+      "tests": 10,
+      "failures": 0,
+      "cause": "Earlier unretained initial fixture run had two missing stub-binary errors at seal argument evaluation; fixture stubs added, no product change required. This retained ten-check pass predates the final twelve checks."
+    }
+  ],
+  "invariants": {
+    "non_candidate_inputs_unchanged": true,
+    "actual_build_identity_unchanged": true,
+    "freezer_unchanged": true,
+    "runner_unchanged": true,
+    "unowned_bytecode_unchanged": true
+  },
+  "limitations": [
+    "Source fixtures only; native/Docker/admission/credential/private-native-file effects not executed",
+    "Historical native ATTEMPTED_FAIL with9/16 functional PASS; no new native rows",
+    "Platform source consultation pending; Security conditional on changed-surface finding; separate fresh exact900s grant required",
+    "Full remaining matrix, independent native acceptance and accepted-only lead integration unfinished"
+  ],
+  "launch_ready": false,
+  "public_launch": false,
+  "final_freeze_check": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+  "freeze_check_sha256": "fdd9db625b2c024ecfd6ce7c74f969f2b97ffe7a6607e41a14219043037c741a"
+}

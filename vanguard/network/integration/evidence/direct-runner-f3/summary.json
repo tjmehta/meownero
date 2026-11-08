@@ -1,0 +1,85 @@
+{
+  "schema": "meownero-direct-profile-f3-source-evidence/1",
+  "base_commit": "c79018acf1e281494f5c33582878d698fab1092a",
+  "authority_interaction": "b4df75a6-ad2c-4007-8675-e9da8376905e",
+  "platform_finding_interaction": "8005b5ca-dc3a-467e-a0fa-eaa48854d55f",
+  "candidate_commit": "bound by packet manifest; not self-referential",
+  "source_state": "PASS_SOURCE_CHECKS_PENDING_INDEPENDENT_REVIEWS",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "findings": {
+    "F3/P2": "corrected: recursive exact field set for PASS; validated partial known FAIL/NOT_RUN fields retained"
+  },
+  "source_tests": 263,
+  "direct_controller_tests": 27,
+  "required_pass_field_omission_cases": 64,
+  "status_only_pass_refusal_cases": 18,
+  "runner_sha256": "aae30e11366f01282107fbf773a4e1051a9ab3b528032328018aee1cd4c6f887",
+  "inputs_sha256": "a8d24725cc25810d482a18bb5a7e863e41bbe36097af9c0078440926e899057b",
+  "budget": {
+    "first_production_edit_utc": "2026-11-01T07:37:12.854725+00:00",
+    "budget_minutes": 45,
+    "passes": "one implementation plus one correction",
+    "authority_interaction": "b4df75a6-ad2c-4007-8675-e9da8376905e",
+    "base_commit": "c79018acf1e281494f5c33582878d698fab1092a",
+    "finding": "Platform F3/P2 recursive PASS witness completeness",
+    "source_pass_finished_utc": "2026-11-01T07:40:49.407045+00:00",
+    "implementation_passes": 1,
+    "correction_passes": 0,
+    "elapsed_minutes": 3.6092053333333336
+  },
+  "checks": {
+    "freeze-check.log": {
+      "sha256": "ac9198be048efc6858be2e70337fe965000acac26b4ac381bbde6a56cf8cd2bb",
+      "bytes": 4100,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "freeze.log": {
+      "sha256": "ac9198be048efc6858be2e70337fe965000acac26b4ac381bbde6a56cf8cd2bb",
+      "bytes": 4100,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "implementation-budget.json": {
+      "sha256": "811c1e0a197e7c4c11d4d6d1417bce22802cd68af69a9088d5375aa5a69be440",
+      "bytes": 506,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "preserved-inputs.json": {
+      "sha256": "222cc80dcba5d0bd3d09f74d980a76e17f37f73d5a4111a712187e576d1a64bd",
+      "bytes": 1007,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "source-tests.log": {
+      "sha256": "477822dab4a1bf952b232638515491c41cda99bc7d18992d6c09999f376e5159",
+      "bytes": 41169,
+      "result": "PASS_SOURCE_ONLY"
+    },
+    "test-command.json": {
+      "sha256": "2464ce0bdf0123ccc96356c83464b73c5faeb96849c01ebd52674107cd5f531b",
+      "bytes": 592,
+      "result": "PASS_SOURCE_ONLY"
+    }
+  },
+  "initial_focused_result": {
+    "tests": 27,
+    "seconds": 2.152,
+    "result": "PASS; tool receipt, complete direct test output also retained in full source suite"
+  },
+  "reuse": {
+    "unchanged_legacy_cli": "6+17+14 on cc5718f, original direct-runner logs and attribution retained"
+  },
+  "verification": [
+    "263 tests pass, including 27 direct tests",
+    "freeze --freeze and --check pass",
+    "build.sh shell syntax passes",
+    "git diff --check passes",
+    "native driver, profile, source, overlay, Cargo and toolchain bindings unchanged"
+  ],
+  "unconfirmed": [
+    "independent Platform assessment and exact one-attempt direct grant",
+    "independent Security loopback/auth/operator review",
+    "native build/runtime and remaining full launch matrix",
+    "accepted-only lead integration"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "status": "SOURCE_CHECKS_PASS_PENDING_SERIAL_INDEPENDENT_REVIEW",
+  "writer_run": "e57e13ba-3290-41f4-8289-eceec6120aa3",
+  "python": "3.15.2 (main, Oct 25 2026, 16:57:51) [GCC 13.3.0]",
+  "baseline": "68963718f5b96b0e1b3cba668f748ee7ac24b4a4",
+  "authority": "47e4e350-879c-40c0-b330-a41c82652b6c",
+  "full_suite": {
+    "tests": 413,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 87.44735354115255,
+    "protected_lock_touches": [],
+    "protected_lock_metadata_unchanged": true,
+    "native": "NOT_RUN",
+    "result": "PASS"
+  },
+  "focused_suite": {
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 0.4023298129905015,
+    "protected_lock_touches": [],
+    "protected_lock_metadata_unchanged": true,
+    "native": "NOT_RUN",
+    "result": "PASS"
+  },
+  "source_round": {
+    "authority": "47e4e350-879c-40c0-b330-a41c82652b6c",
+    "baseline": "68963718f5b96b0e1b3cba668f748ee7ac24b4a4",
+    "first_edit_utc": "2026-11-05T02:42:44.266595+00:00",
+    "first_edit_unix": 1793846564.2666075,
+    "limit_seconds": 2700,
+    "implementation_passes": 1,
+    "correction_passes": 0,
+    "finished_source_utc": "2026-11-05T02:48:13.358273+00:00",
+    "elapsed_seconds": 329.09167408943176
+  },
+  "freeze_check": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+  "known_bad_controls": {
+    "F1": "Exact baseline Journey rejects source-derived -4 at N60, zero relayed transactions. Asserted by test_known_bad_68963718_rejects_active_carrot_refusal.",
+    "F2": "Exact baseline Journey with legacy -37 fixture bypass reports light_mode=true while every captured daemon environment lacks mask. Asserted by test_known_bad_68963718_claims_light_mode_without_mask; this bypass isolates F2 and is not maturity evidence."
+  },
+  "failure_attribution": {
+    "product_source_checks": "No failing product checks in this correction run. Initial focused14 and final focused15/full413 PASS.",
+    "read_api": "GET individual interaction returned404; scoped collection GET recovered and authenticated exact answer. No write failed.",
+    "freeze_orchestration": "The initial freeze was still finishing its source check when final freeze started; both exited0. Final source bytes were independently verified by a subsequent sequential --check, and the full suite used final frozen inputs."
+  },
+  "preservation": "preservation.json; actual compiled identity/noncandidate inputs, 9 protected files and7 unowned bytecodes unchanged",
+  "native": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "next": "Platform changed-source consultation, then Core F1, then Security; no grant now"
+}

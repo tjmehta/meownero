@@ -1,0 +1,8 @@
+{
+  "scope": "STATIC_TEST_HARNESS_DIAGNOSIS_ONLY",
+  "observed_signature": "*args",
+  "executor_call": "RecordExecutor.effect calls run(argv, shell=False, check=True, stdin=DEVNULL, stdout=DEVNULL, stderr=DEVNULL, close_fds=True, timeout=deadline-clock, env/cwd/pass_fds/user/group/extra_groups/umask)",
+  "diagnosis": "new argv effect callback accepts *args but no **kwargs; keyword dispatch raises TypeError before injected argv effect",
+  "acceptance": "NOT_ESTABLISHED; no dynamic patch, no third correction pass",
+  "signature_binding_error": "got an unexpected keyword argument 'stdin'"
+}

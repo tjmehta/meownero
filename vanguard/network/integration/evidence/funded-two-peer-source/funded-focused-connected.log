@@ -1,0 +1,51 @@
+test_actual_controller_main_funded_pass_and_partial_failure_retention (integration.test_funded_profile.FundedContract.test_actual_controller_main_funded_pass_and_partial_failure_retention) ... 
+  test_actual_controller_main_funded_pass_and_partial_failure_retention (integration.test_funded_profile.FundedContract.test_actual_controller_main_funded_pass_and_partial_failure_retention) (incomplete=False) ... FAIL
+  test_actual_controller_main_funded_pass_and_partial_failure_retention (integration.test_funded_profile.FundedContract.test_actual_controller_main_funded_pass_and_partial_failure_retention) (incomplete=True) ... FAIL
+test_closed_funded_exports_reject_secrets_types_and_missing_witnesses (integration.test_funded_profile.FundedContract.test_closed_funded_exports_reject_secrets_types_and_missing_witnesses) ... ok
+test_controller_funded_deadlines_entry_and_complete_rows (integration.test_funded_profile.FundedContract.test_controller_funded_deadlines_entry_and_complete_rows) ... ok
+test_funded_main_requires_detached_reuse_before_api_or_lock (integration.test_funded_profile.FundedContract.test_funded_main_requires_detached_reuse_before_api_or_lock) ... ok
+test_grant_bound_workload_caps_retained_authority_window_and_no_schedule (integration.test_funded_profile.FundedContract.test_grant_bound_workload_caps_retained_authority_window_and_no_schedule) ... ok
+test_actual_journey_connected_positive_native_substitution (integration.test_funded_profile.FundedDriver.test_actual_journey_connected_positive_native_substitution) ... ok
+test_actual_journey_refuses_adverse_native_effects (integration.test_funded_profile.FundedDriver.test_actual_journey_refuses_adverse_native_effects) ... ok
+test_ceiling_deadline_and_overshoot_abort (integration.test_funded_profile.FundedDriver.test_ceiling_deadline_and_overshoot_abort) ... ok
+
+======================================================================
+FAIL: test_actual_controller_main_funded_pass_and_partial_failure_retention (integration.test_funded_profile.FundedContract.test_actual_controller_main_funded_pass_and_partial_failure_retention) (incomplete=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/integration/test_funded_profile.py", line 401, in test_actual_controller_main_funded_pass_and_partial_failure_retention
+    self.assertEqual(result, 1 if incomplete else 0)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+======================================================================
+FAIL: test_actual_controller_main_funded_pass_and_partial_failure_retention (integration.test_funded_profile.FundedContract.test_actual_controller_main_funded_pass_and_partial_failure_retention) (incomplete=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/integration/test_funded_profile.py", line 403, in test_actual_controller_main_funded_pass_and_partial_failure_retention
+    self.assertEqual(events, ['admit', 'stage', 'image', 'admit', 'create', 'start', 'rm'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ['admit', 'stage', 'image', 'admit', 'image'] != ['admit', 'stage', 'image', 'admit', 'create', 'start', 'rm']
+
+First differing element 4:
+'image'
+'create'
+
+Second list contains 2 additional elements.
+First extra element 5:
+'start'
+
+- ['admit', 'stage', 'image', 'admit', 'image']
+?                                       ^^ ^
+
++ ['admit', 'stage', 'image', 'admit', 'create', 'start', 'rm']
+?                                       ^^^ ^  +++++++++++++++
+
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.381s
+
+FAILED (failures=2)
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"tests": 8, "failures": 2, "errors": 0, "skipped": 0, "seconds": 0.4286173819564283, "protected_lock_touches": [], "protected_lock_metadata_unchanged": true, "native": "NOT_RUN", "result": "FAIL"}

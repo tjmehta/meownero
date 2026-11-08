@@ -1,0 +1,3200 @@
+{
+  "schema": "meownero-root-executor-proposal/1",
+  "root_entry": "/opt/meownero/TJS-2504/helper/profile-root-helper.py",
+  "root_command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "/opt/meownero/TJS-2504/helper/profile-root-helper.py"
+  ],
+  "arguments": "none; authenticated inherited role/request only",
+  "sudoers_proposal": "tjmehta ALL=(root) NOPASSWD: /usr/bin/python3 -I -B /opt/meownero/TJS-2504/helper/profile-root-helper.py",
+  "source_closure": {
+    "inventory": "integration/installation-inventory.json",
+    "hashes": "exact authority-bound inputs.json candidate_files and reference.repository_files",
+    "root": "/opt/meownero/TJS-2504/helper",
+    "child": "/opt/meownero/TJS-2504/helper/runtime/vanguard/network",
+    "authority_index": "runtime/vanguard/network/integration/inputs.json; exact grant-bound bytes",
+    "installation": "root-owned immutable files and ancestors; UNQUALIFIED"
+  },
+  "operations": [
+    "verify_inherited_authority",
+    "verify_prepared",
+    "bootstrap_delivery",
+    "StartTransientUnit",
+    "mount",
+    "openat",
+    "posix_fallocate",
+    "mke2fs",
+    "losetup",
+    "mkdirat_chown_fsync",
+    "bind_user_directory",
+    "bounded_archive",
+    "sd_notify",
+    "arm_deadline",
+    "first_admission_quarantine_consume",
+    "workload_namespace_view",
+    "place_before_exec",
+    "load",
+    "inspect_image",
+    "place_outer_before_exec",
+    "outer",
+    "controller",
+    "observe_and_create",
+    "start_and_wait",
+    "remove_owned",
+    "terminate_owned",
+    "StopUnit",
+    "KillUnit",
+    "export",
+    "umount",
+    "detach",
+    "unlinkat_owned_W",
+    "final_custody",
+    "observe",
+    "explicit_disposition"
+  ],
+  "command_allowlist": [
+    {
+      "record": 0,
+      "phase": "install",
+      "kind": "syscall",
+      "operation": "verify_inherited_authority",
+      "args": [],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "exact_source_spec_hashes",
+        "independent_reviews",
+        "noninteractive_task_only_authority",
+        "tool_hashes_versions",
+        "hard_C_W_A_O_limits_and_write_meter",
+        "PID1_kernel_and_observer_tail_fit_reserved_16MiB_2PID_0.05CPU"
+      ],
+      "deadline": "prep_origin+1200"
+    },
+    {
+      "record": 1,
+      "phase": "install",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "3b4c168714ec73dfed6f227fe8c9f5f419a5b4ada2f50345b2446d3d61b6099c",
+        "original_sequence": 1,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+1200"
+    },
+    {
+      "record": 2,
+      "phase": "install",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "5d0f3d8722b2e468e650c363810c7b0025336ba9a7ad7cc97c62adea9096213d",
+        "original_sequence": 2,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+1200"
+    },
+    {
+      "record": 3,
+      "phase": "install",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "b2e89789282add3b5a845ad47fb0abbb97fedbfc782617a7087ccfd98e88ecd6",
+        "original_sequence": 3,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+1200"
+    },
+    {
+      "record": 4,
+      "phase": "install",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "ccf10cbddaa40e68105441fa0bc6e1c29cbe1a61bf5349a036b5b4f9db96d93f",
+        "original_sequence": 4,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+1200"
+    },
+    {
+      "record": 5,
+      "phase": "preparation_supervisor",
+      "kind": "syscall",
+      "operation": "bootstrap_delivery",
+      "args": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "prepare",
+        "mode": "prepare",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "separate_preparation_capability",
+        "restart": "new_role_bound_delivery_or_refuse",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "authenticated_receiver_role_invocation_and_surviving_custodian",
+        "delivery_pair_receiver_SO_PASSCRED_sender_without_autobind_CLOEXEC",
+        "bounded_sendmsg_SCM_RIGHTS_exact_descriptor_order",
+        "independent_one_use_preparation_or_first_serve_or_role_capability",
+        "keeper_restart_uses_installed_recovery_never_packet_timeout_fallback"
+      ],
+      "deadline": "prep_origin+1200"
+    },
+    {
+      "record": 6,
+      "phase": "preparation_supervisor",
+      "kind": "dbus",
+      "operation": "StartTransientUnit",
+      "args": {
+        "stage": "preparation_supervisor",
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StartTransientUnit",
+        "signature": "ssa(sv)a(sa(sv))",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-prepare.service",
+          "fail",
+          [
+            [
+              "Type",
+              "s",
+              "exec"
+            ],
+            [
+              "User",
+              "s",
+              "0"
+            ],
+            [
+              "Group",
+              "s",
+              "0"
+            ],
+            [
+              "ExecStart",
+              "a(sasb)",
+              [
+                [
+                  "$BOUND_PYTHON",
+                  [
+                    "$BOUND_PYTHON",
+                    "-B",
+                    "$BOUND_HELPER",
+                    "prepare",
+                    "--bootstrap-role",
+                    "prepare",
+                    "--spec",
+                    "$ROOT_OWNED_SPEC",
+                    "--spec-sha256",
+                    "$SPEC_SHA256"
+                  ],
+                  false
+                ]
+              ]
+            ],
+            [
+              "NoNewPrivileges",
+              "b",
+              true
+            ],
+            [
+              "ProtectSystem",
+              "s",
+              "strict"
+            ],
+            [
+              "PrivateTmp",
+              "b",
+              false
+            ],
+            [
+              "PrivateMounts",
+              "b",
+              true
+            ],
+            [
+              "RestrictAddressFamilies",
+              "(bas)",
+              [
+                true,
+                [
+                  "AF_UNIX",
+                  "AF_NETLINK"
+                ]
+              ]
+            ],
+            [
+              "CapabilityBoundingSet",
+              "t",
+              2097347
+            ],
+            [
+              "StandardInputFileDescriptor",
+              "h",
+              "$BOOTSTRAP_PREPARE_RECEIVE_FD"
+            ],
+            [
+              "StandardOutput",
+              "s",
+              "null"
+            ],
+            [
+              "StandardError",
+              "s",
+              "null"
+            ],
+            [
+              "LimitCORE",
+              "t",
+              0
+            ],
+            [
+              "KillMode",
+              "s",
+              "process"
+            ],
+            [
+              "TimeoutStopUSec",
+              "t",
+              300000000
+            ],
+            [
+              "ReadWritePaths",
+              "as",
+              [
+                "$C",
+                "$W",
+                "$O",
+                "$A"
+              ]
+            ],
+            [
+              "InaccessiblePaths",
+              "as",
+              [
+                "-/run/docker.sock",
+                "-/var/run/docker.sock"
+              ]
+            ],
+            [
+              "Slice",
+              "s",
+              "meowneroTJS2504$ATTEMPT-work.slice"
+            ],
+            [
+              "CPUQuotaPerSecUSec",
+              "t",
+              1000000
+            ],
+            [
+              "MemoryMax",
+              "t",
+              1073741824
+            ],
+            [
+              "MemorySwapMax",
+              "t",
+              0
+            ],
+            [
+              "TasksMax",
+              "t",
+              64
+            ],
+            [
+              "RuntimeMaxUSec",
+              "t",
+              1200000000
+            ]
+          ],
+          []
+        ],
+        "delivery": {
+          "schema": "meownero-helper-delivery/1",
+          "role": "prepare",
+          "mode": "prepare",
+          "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+          "property": [
+            "StandardInputFileDescriptor",
+            "h"
+          ],
+          "receiving_fd": 0,
+          "descriptors": [
+            "authority",
+            "sealed_context"
+          ],
+          "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+          "bind": [
+            "task",
+            "attempt_id",
+            "role",
+            "mode",
+            "invocation_id",
+            "source",
+            "spec_sha256",
+            "contract_sha256",
+            "origin",
+            "deadlines",
+            "sender_credentials",
+            "sender_start",
+            "delivery_deadline",
+            "namespace_identity"
+          ],
+          "one_use": "separate_preparation_capability",
+          "restart": "new_role_bound_delivery_or_refuse",
+          "actual_transport": "UNBOUND_NOT_QUALIFIED"
+        }
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "prep_origin+1200"
+    },
+    {
+      "record": 7,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "5d54cc80e511ba62396b5ba881b10ba968c60c0da41d031539c22f096c236226",
+        "original_sequence": 7,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 8,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "164262de077a6d2a3c789bc314eb609f5d491ba4557cd7a88225d6b3667f9b68",
+        "original_sequence": 8,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 9,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "aff733ade8562cbbea976396cfbb36195c8c34b41077e5bf7ae9bb1e387e8bd8",
+        "original_sequence": 9,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 10,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "ecb92767863e53776beac348e1f088ea524bde3f95cb79fb0da2083a7e4a7a4a",
+        "original_sequence": 10,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 11,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "232c2c4ebb7e88aab5d5ec2f24ee97ef83ed747d4c092a90219fe4bcc2ff1e6a",
+        "original_sequence": 11,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 12,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "565fb3e64c67eed372e669b2b5074fcb629f97a705a0541ce8dc17e2cc9a8592",
+        "original_sequence": 12,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 13,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "099d228d1c2dd3eba92ec65c0747f1064a8e043b48638918550ece553123e688",
+        "original_sequence": 13,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 14,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "4463366a48423f0afa06d010d8ddc39b729dd1e29799160e3426554608fb1930",
+        "original_sequence": 14,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 15,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "0403f46614a7de21e983c91c469b298b53cefdc0fb0facaa8be2ee081d7454f9",
+        "original_sequence": 15,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 16,
+      "phase": "control",
+      "kind": "syscall",
+      "operation": "verify_prepared",
+      "args": {
+        "original_record_sha256": "3b2e96b53597824851df4363f0c93e4d20ce45dd31a0c67c38e7f11d8cec8c3e",
+        "original_sequence": 16,
+        "expectation": "independent_operator_prefix_receipt"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "original_prepared_identity_and_bytes",
+        "no_create_format_overwrite_or_rearm",
+        "prefix_accounted_before_first_entry"
+      ],
+      "deadline": "prep_origin+300"
+    },
+    {
+      "record": 17,
+      "phase": "archive",
+      "kind": "syscall",
+      "operation": "bounded_archive",
+      "args": [
+        "inherited_immutable_archive_fd_or_exact_authorized_producer",
+        "exclusive_bounded_output_fd",
+        "independent_cumulative_write_meter",
+        "sha256+provenance+config+layers+linux/amd64",
+        "fsync+readonly_custody"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "payload_plus_metadata_and_copies<=2GiB",
+        "producer_identity_and_hard_bound",
+        "no_shared_daemon_export"
+      ],
+      "deadline": "archive_origin+900"
+    },
+    {
+      "record": 18,
+      "phase": "activation",
+      "kind": "syscall",
+      "operation": "bootstrap_delivery",
+      "args": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "keeper",
+        "mode": "serve",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context",
+          "retained_namespace"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "one_fresh_activation",
+        "restart": "independently_authenticated_installed_unit_two_named_stored_FDs_recovery_only",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "authenticated_receiver_role_invocation_and_surviving_custodian",
+        "delivery_pair_receiver_SO_PASSCRED_sender_without_autobind_CLOEXEC",
+        "bounded_sendmsg_SCM_RIGHTS_exact_descriptor_order",
+        "independent_one_use_preparation_or_first_serve_or_role_capability",
+        "keeper_restart_uses_installed_recovery_never_packet_timeout_fallback"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 19,
+      "phase": "activation",
+      "kind": "dbus",
+      "operation": "StartTransientUnit",
+      "args": {
+        "stage": "activation",
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StartTransientUnit",
+        "signature": "ssa(sv)a(sa(sv))",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-keeper.service",
+          "fail",
+          [
+            [
+              "Type",
+              "s",
+              "notify"
+            ],
+            [
+              "User",
+              "s",
+              "0"
+            ],
+            [
+              "Group",
+              "s",
+              "0"
+            ],
+            [
+              "Slice",
+              "s",
+              "meowneroTJS2504$ATTEMPT-control.slice"
+            ],
+            [
+              "ExecStart",
+              "a(sasb)",
+              [
+                [
+                  "$BOUND_PYTHON",
+                  [
+                    "$BOUND_PYTHON",
+                    "-B",
+                    "$BOUND_HELPER",
+                    "serve",
+                    "--bootstrap-role",
+                    "keeper",
+                    "--spec",
+                    "$ROOT_OWNED_SPEC",
+                    "--spec-sha256",
+                    "$SPEC_SHA256"
+                  ],
+                  false
+                ]
+              ]
+            ],
+            [
+              "NoNewPrivileges",
+              "b",
+              true
+            ],
+            [
+              "ProtectSystem",
+              "s",
+              "strict"
+            ],
+            [
+              "PrivateTmp",
+              "b",
+              false
+            ],
+            [
+              "PrivateMounts",
+              "b",
+              true
+            ],
+            [
+              "RestrictAddressFamilies",
+              "(bas)",
+              [
+                true,
+                [
+                  "AF_UNIX",
+                  "AF_NETLINK"
+                ]
+              ]
+            ],
+            [
+              "CapabilityBoundingSet",
+              "t",
+              2097347
+            ],
+            [
+              "StandardInputFileDescriptor",
+              "h",
+              "$BOOTSTRAP_KEEPER_RECEIVE_FD"
+            ],
+            [
+              "StandardOutput",
+              "s",
+              "null"
+            ],
+            [
+              "StandardError",
+              "s",
+              "null"
+            ],
+            [
+              "LimitCORE",
+              "t",
+              0
+            ],
+            [
+              "KillMode",
+              "s",
+              "process"
+            ],
+            [
+              "TimeoutStopUSec",
+              "t",
+              300000000
+            ],
+            [
+              "ReadWritePaths",
+              "as",
+              [
+                "$C",
+                "$W",
+                "$O",
+                "$A"
+              ]
+            ],
+            [
+              "InaccessiblePaths",
+              "as",
+              [
+                "-/run/docker.sock",
+                "-/var/run/docker.sock"
+              ]
+            ],
+            [
+              "FileDescriptorStoreMax",
+              "u",
+              2
+            ],
+            [
+              "FileDescriptorStorePreserve",
+              "s",
+              "yes"
+            ],
+            [
+              "NotifyAccess",
+              "s",
+              "main"
+            ],
+            [
+              "Restart",
+              "s",
+              "on-failure"
+            ],
+            [
+              "RestartUSec",
+              "t",
+              1000000
+            ],
+            [
+              "OOMPolicy",
+              "s",
+              "continue"
+            ]
+          ],
+          []
+        ],
+        "delivery": {
+          "schema": "meownero-helper-delivery/1",
+          "role": "keeper",
+          "mode": "serve",
+          "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+          "property": [
+            "StandardInputFileDescriptor",
+            "h"
+          ],
+          "receiving_fd": 0,
+          "descriptors": [
+            "authority",
+            "sealed_context",
+            "retained_namespace"
+          ],
+          "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+          "bind": [
+            "task",
+            "attempt_id",
+            "role",
+            "mode",
+            "invocation_id",
+            "source",
+            "spec_sha256",
+            "contract_sha256",
+            "origin",
+            "deadlines",
+            "sender_credentials",
+            "sender_start",
+            "delivery_deadline",
+            "namespace_identity"
+          ],
+          "one_use": "one_fresh_activation",
+          "restart": "independently_authenticated_installed_unit_two_named_stored_FDs_recovery_only",
+          "actual_transport": "UNBOUND_NOT_QUALIFIED"
+        }
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 20,
+      "phase": "activation",
+      "kind": "syscall",
+      "operation": "bootstrap_delivery",
+      "args": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "deadline",
+        "mode": "recover",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context",
+          "retained_namespace"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "role_invocation",
+        "restart": "new_role_bound_delivery_or_refuse",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "authenticated_receiver_role_invocation_and_surviving_custodian",
+        "delivery_pair_receiver_SO_PASSCRED_sender_without_autobind_CLOEXEC",
+        "bounded_sendmsg_SCM_RIGHTS_exact_descriptor_order",
+        "independent_one_use_preparation_or_first_serve_or_role_capability",
+        "keeper_restart_uses_installed_recovery_never_packet_timeout_fallback"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 21,
+      "phase": "activation",
+      "kind": "dbus",
+      "operation": "StartTransientUnit",
+      "args": {
+        "stage": "activation",
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StartTransientUnit",
+        "signature": "ssa(sv)a(sa(sv))",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-deadline.service",
+          "fail",
+          [
+            [
+              "Type",
+              "s",
+              "exec"
+            ],
+            [
+              "User",
+              "s",
+              "0"
+            ],
+            [
+              "Group",
+              "s",
+              "0"
+            ],
+            [
+              "Slice",
+              "s",
+              "meowneroTJS2504$ATTEMPT-control.slice"
+            ],
+            [
+              "ExecStart",
+              "a(sasb)",
+              [
+                [
+                  "$BOUND_PYTHON",
+                  [
+                    "$BOUND_PYTHON",
+                    "-B",
+                    "$BOUND_HELPER",
+                    "recover",
+                    "--bootstrap-role",
+                    "deadline",
+                    "--spec",
+                    "$ROOT_OWNED_SPEC",
+                    "--spec-sha256",
+                    "$SPEC_SHA256",
+                    "--deadline-owner"
+                  ],
+                  false
+                ]
+              ]
+            ],
+            [
+              "NoNewPrivileges",
+              "b",
+              true
+            ],
+            [
+              "ProtectSystem",
+              "s",
+              "strict"
+            ],
+            [
+              "PrivateTmp",
+              "b",
+              false
+            ],
+            [
+              "PrivateMounts",
+              "b",
+              true
+            ],
+            [
+              "RestrictAddressFamilies",
+              "(bas)",
+              [
+                true,
+                [
+                  "AF_UNIX",
+                  "AF_NETLINK"
+                ]
+              ]
+            ],
+            [
+              "CapabilityBoundingSet",
+              "t",
+              2097347
+            ],
+            [
+              "StandardInputFileDescriptor",
+              "h",
+              "$BOOTSTRAP_DEADLINE_RECEIVE_FD"
+            ],
+            [
+              "StandardOutput",
+              "s",
+              "null"
+            ],
+            [
+              "StandardError",
+              "s",
+              "null"
+            ],
+            [
+              "LimitCORE",
+              "t",
+              0
+            ],
+            [
+              "KillMode",
+              "s",
+              "process"
+            ],
+            [
+              "TimeoutStopUSec",
+              "t",
+              300000000
+            ],
+            [
+              "ReadWritePaths",
+              "as",
+              [
+                "$C",
+                "$W",
+                "$O",
+                "$A"
+              ]
+            ],
+            [
+              "InaccessiblePaths",
+              "as",
+              [
+                "-/run/docker.sock",
+                "-/var/run/docker.sock"
+              ]
+            ]
+          ],
+          []
+        ],
+        "delivery": {
+          "schema": "meownero-helper-delivery/1",
+          "role": "deadline",
+          "mode": "recover",
+          "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+          "property": [
+            "StandardInputFileDescriptor",
+            "h"
+          ],
+          "receiving_fd": 0,
+          "descriptors": [
+            "authority",
+            "sealed_context",
+            "retained_namespace"
+          ],
+          "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+          "bind": [
+            "task",
+            "attempt_id",
+            "role",
+            "mode",
+            "invocation_id",
+            "source",
+            "spec_sha256",
+            "contract_sha256",
+            "origin",
+            "deadlines",
+            "sender_credentials",
+            "sender_start",
+            "delivery_deadline",
+            "namespace_identity"
+          ],
+          "one_use": "role_invocation",
+          "restart": "new_role_bound_delivery_or_refuse",
+          "actual_transport": "UNBOUND_NOT_QUALIFIED"
+        }
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 22,
+      "phase": "activation",
+      "kind": "syscall",
+      "operation": "bootstrap_delivery",
+      "args": {
+        "schema": "meownero-helper-delivery/1",
+        "role": "observer",
+        "mode": "observe",
+        "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+        "property": [
+          "StandardInputFileDescriptor",
+          "h"
+        ],
+        "receiving_fd": 0,
+        "descriptors": [
+          "authority",
+          "sealed_context",
+          "retained_namespace"
+        ],
+        "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+        "bind": [
+          "task",
+          "attempt_id",
+          "role",
+          "mode",
+          "invocation_id",
+          "source",
+          "spec_sha256",
+          "contract_sha256",
+          "origin",
+          "deadlines",
+          "sender_credentials",
+          "sender_start",
+          "delivery_deadline",
+          "namespace_identity"
+        ],
+        "one_use": "role_invocation",
+        "restart": "new_role_bound_delivery_or_refuse",
+        "actual_transport": "UNBOUND_NOT_QUALIFIED"
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "authenticated_receiver_role_invocation_and_surviving_custodian",
+        "delivery_pair_receiver_SO_PASSCRED_sender_without_autobind_CLOEXEC",
+        "bounded_sendmsg_SCM_RIGHTS_exact_descriptor_order",
+        "independent_one_use_preparation_or_first_serve_or_role_capability",
+        "keeper_restart_uses_installed_recovery_never_packet_timeout_fallback"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 23,
+      "phase": "activation",
+      "kind": "dbus",
+      "operation": "StartTransientUnit",
+      "args": {
+        "stage": "activation",
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StartTransientUnit",
+        "signature": "ssa(sv)a(sa(sv))",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-observer.service",
+          "fail",
+          [
+            [
+              "Type",
+              "s",
+              "exec"
+            ],
+            [
+              "User",
+              "s",
+              "0"
+            ],
+            [
+              "Group",
+              "s",
+              "0"
+            ],
+            [
+              "Slice",
+              "s",
+              "meowneroTJS2504$ATTEMPT-control.slice"
+            ],
+            [
+              "ExecStart",
+              "a(sasb)",
+              [
+                [
+                  "$BOUND_PYTHON",
+                  [
+                    "$BOUND_PYTHON",
+                    "-B",
+                    "$BOUND_HELPER",
+                    "observe",
+                    "--bootstrap-role",
+                    "observer",
+                    "--spec",
+                    "$ROOT_OWNED_SPEC",
+                    "--spec-sha256",
+                    "$SPEC_SHA256"
+                  ],
+                  false
+                ]
+              ]
+            ],
+            [
+              "NoNewPrivileges",
+              "b",
+              true
+            ],
+            [
+              "ProtectSystem",
+              "s",
+              "strict"
+            ],
+            [
+              "PrivateTmp",
+              "b",
+              false
+            ],
+            [
+              "PrivateMounts",
+              "b",
+              true
+            ],
+            [
+              "RestrictAddressFamilies",
+              "(bas)",
+              [
+                true,
+                [
+                  "AF_UNIX",
+                  "AF_NETLINK"
+                ]
+              ]
+            ],
+            [
+              "CapabilityBoundingSet",
+              "t",
+              2097347
+            ],
+            [
+              "StandardInputFileDescriptor",
+              "h",
+              "$BOOTSTRAP_OBSERVER_RECEIVE_FD"
+            ],
+            [
+              "StandardOutput",
+              "s",
+              "null"
+            ],
+            [
+              "StandardError",
+              "s",
+              "null"
+            ],
+            [
+              "LimitCORE",
+              "t",
+              0
+            ],
+            [
+              "KillMode",
+              "s",
+              "process"
+            ],
+            [
+              "TimeoutStopUSec",
+              "t",
+              300000000
+            ],
+            [
+              "ReadWritePaths",
+              "as",
+              [
+                "$C",
+                "$W",
+                "$O",
+                "$A"
+              ]
+            ],
+            [
+              "InaccessiblePaths",
+              "as",
+              [
+                "-/run/docker.sock",
+                "-/var/run/docker.sock"
+              ]
+            ]
+          ],
+          []
+        ],
+        "delivery": {
+          "schema": "meownero-helper-delivery/1",
+          "role": "observer",
+          "mode": "observe",
+          "transport": "unnamed_AF_UNIX_SOCK_SEQPACKET_SCM_RIGHTS_SCM_CREDENTIALS",
+          "property": [
+            "StandardInputFileDescriptor",
+            "h"
+          ],
+          "receiving_fd": 0,
+          "descriptors": [
+            "authority",
+            "sealed_context",
+            "retained_namespace"
+          ],
+          "expectation": "independently_authenticated_installed_unit_and_surviving_custodian",
+          "bind": [
+            "task",
+            "attempt_id",
+            "role",
+            "mode",
+            "invocation_id",
+            "source",
+            "spec_sha256",
+            "contract_sha256",
+            "origin",
+            "deadlines",
+            "sender_credentials",
+            "sender_start",
+            "delivery_deadline",
+            "namespace_identity"
+          ],
+          "one_use": "role_invocation",
+          "restart": "new_role_bound_delivery_or_refuse",
+          "actual_transport": "UNBOUND_NOT_QUALIFIED"
+        }
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 24,
+      "phase": "activation",
+      "kind": "syscall",
+      "operation": "place_outer_before_exec",
+      "args": [
+        "task_uid1000_outer_leaf.cgroup.procs"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "task_only_work_slice_exists",
+        "no_source_or_native_staging",
+        "no_supplementary_groups"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 25,
+      "phase": "activation",
+      "kind": "argv",
+      "operation": "outer",
+      "args": [
+        "$BOUND_PYTHON",
+        "-B",
+        "$BOUND_RUN_OUTER",
+        "--inputs",
+        "$BOUND_INPUTS",
+        "--capabilities",
+        "$BOUND_CAPABILITIES",
+        "--context-fd",
+        "$STARTUP_CONTEXT_FD",
+        "--helper-fd",
+        "$HELPER_FD",
+        "--ledger-directory-fd",
+        "$LEDGER_DIRECTORY_FD"
+      ],
+      "uid": 1000,
+      "gid": 1000,
+      "preconditions": [
+        "sealed_authenticated_startup_context",
+        "uid1000_directory_FD_only_no_C_path",
+        "allowlisted_environment",
+        "original_origin_from_context",
+        "no_activation_on_restart"
+      ],
+      "deadline": "origin+4200"
+    },
+    {
+      "record": 26,
+      "phase": "custody",
+      "kind": "syscall",
+      "operation": "sd_notify",
+      "args": [
+        "FDSTORE=1; FDNAME=original-lock",
+        "SCM_RIGHTS(lock_fd)",
+        "FDSTORE=1; FDNAME=mount-namespace",
+        "SCM_RIGHTS(namespace_fd)",
+        "BARRIER=1",
+        "independent_PID1_fdinfo_same_flock_description_and_namespace_readback"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "root_keeper_main_pid_start"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 27,
+      "phase": "custody",
+      "kind": "syscall",
+      "operation": "arm_deadline",
+      "args": [
+        "independent_deadline_owner",
+        "original_origin+3600/+4200/+4500"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "durable_original_origin",
+        "no_restart_time_reset"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 28,
+      "phase": "admission",
+      "kind": "syscall",
+      "operation": "first_admission_quarantine_consume",
+      "args": [
+        "full_observation_started_at",
+        "durable_manager_quarantine",
+        "task_uid1000_openat_ledger_dirfd_O_EXCL",
+        "fsync_file_directory_readback"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "elapsed_from_first_observed_field_through_consumption<=5sec",
+        "before_build_deadline"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 29,
+      "phase": "work",
+      "kind": "syscall",
+      "operation": "openat",
+      "args": [
+        "$W_PARENT_FD",
+        "$W_BASENAME",
+        "O_CREAT|O_EXCL|O_NOFOLLOW|O_RDWR|O_CLOEXEC",
+        384
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "exact_owned_parent_dirfd",
+        "nonexistent_target",
+        "hard_write_and_capacity_meter",
+        "first_admission_fresh_through_consumption",
+        "manager_QUARANTINED",
+        "local_CONSUMED"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 30,
+      "phase": "work",
+      "kind": "syscall",
+      "operation": "posix_fallocate",
+      "args": [
+        "$W_FD",
+        0,
+        11811160064
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "identity_regular_nlink1_root0600",
+        "allocated_blocks_and_length_readback"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 31,
+      "phase": "work",
+      "kind": "argv",
+      "operation": "mke2fs",
+      "args": [
+        "/usr/sbin/mke2fs",
+        "-t",
+        "ext4",
+        "-b",
+        "4096",
+        "-m",
+        "0",
+        "-E",
+        "lazy_itable_init=0,lazy_journal_init=0,nodiscard",
+        "/proc/self/fd/$W_FD",
+        "2883584"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "new_owned_verified_target",
+        "frozen_mke2fs_config_hash",
+        "pass_only_verified_backing_fd"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 32,
+      "phase": "work",
+      "kind": "argv",
+      "operation": "losetup",
+      "args": [
+        "/usr/sbin/losetup",
+        "--sizelimit",
+        "11811160064",
+        "$W_UNUSED_LOOP",
+        "$W_BACKING"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "explicit_loop_unused_no_find_or_reuse",
+        "backing_exact_identity"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 33,
+      "phase": "work",
+      "kind": "argv",
+      "operation": "mount",
+      "args": [
+        "/usr/bin/mount",
+        "-t",
+        "ext4",
+        "-o",
+        "nosuid,nodev",
+        "$W_LOOP",
+        "$W"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 34,
+      "phase": "work",
+      "kind": "syscall",
+      "operation": "mkdirat_chown_fsync",
+      "args": [
+        "$W_FD",
+        [
+          "root",
+          "user_bind_source"
+        ],
+        {
+          "root": [
+            0,
+            0
+          ],
+          "user_bind_source": [
+            1000,
+            1000
+          ]
+        }
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 35,
+      "phase": "work",
+      "kind": "syscall",
+      "operation": "bind_user_directory",
+      "args": [
+        "mount_bind_owned_user_subdirectory_to_task_accessible_mountpoint",
+        "task_mount_namespace_contains_no_C_root_or_Docker_socket"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "W_backing_root0600",
+        "W_private_mount_root0700",
+        "user_bind_endpoint_uid1000_mode0700"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 36,
+      "phase": "work",
+      "kind": "syscall",
+      "operation": "workload_namespace_view",
+      "args": [
+        "authenticated_retained_namespace_C_readonly_W_writable",
+        "PID1_workload_unit_mount_view_before_ExecStart",
+        "no_keeper_child_exec"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "exact_C_W_namespace_identities",
+        "independent_installed_binding_qualification"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 37,
+      "phase": "work",
+      "kind": "dbus",
+      "operation": "StartTransientUnit",
+      "args": {
+        "stage": "work",
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StartTransientUnit",
+        "signature": "ssa(sv)a(sa(sv))",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "fail",
+          [
+            [
+              "Type",
+              "s",
+              "exec"
+            ],
+            [
+              "User",
+              "s",
+              "0"
+            ],
+            [
+              "Group",
+              "s",
+              "0"
+            ],
+            [
+              "Slice",
+              "s",
+              "meowneroTJS2504$ATTEMPT-work.slice"
+            ],
+            [
+              "ExecStart",
+              "a(sasb)",
+              [
+                [
+                  "/usr/bin/dockerd",
+                  [
+                    "/usr/bin/dockerd",
+                    "--host=unix://$W/root/exec/docker.sock",
+                    "--data-root=$W/root/docker",
+                    "--exec-root=$W/root/exec",
+                    "--pidfile=$W/root/exec/dockerd.pid",
+                    "--config-file=$C/manager/daemon.json",
+                    "--exec-opt=native.cgroupdriver=cgroupfs",
+                    "--cgroup-parent=$WORK_CGROUP",
+                    "--bridge=none",
+                    "--iptables=false",
+                    "--ip6tables=false",
+                    "--ip-forward=false",
+                    "--ip-masq=false",
+                    "--userland-proxy=false",
+                    "--storage-driver=vfs"
+                  ],
+                  false
+                ]
+              ]
+            ],
+            [
+              "RestrictAddressFamilies",
+              "(bas)",
+              [
+                true,
+                [
+                  "AF_UNIX",
+                  "AF_NETLINK",
+                  "AF_INET"
+                ]
+              ]
+            ],
+            [
+              "KillMode",
+              "s",
+              "control-group"
+            ],
+            [
+              "TimeoutStopUSec",
+              "t",
+              20000000
+            ],
+            [
+              "NoNewPrivileges",
+              "b",
+              true
+            ],
+            [
+              "ProtectSystem",
+              "s",
+              "strict"
+            ],
+            [
+              "PrivateTmp",
+              "b",
+              false
+            ],
+            [
+              "PrivateMounts",
+              "b",
+              true
+            ],
+            [
+              "ReadWritePaths",
+              "as",
+              [
+                "$W"
+              ]
+            ],
+            [
+              "ReadOnlyPaths",
+              "as",
+              [
+                "$C"
+              ]
+            ],
+            [
+              "InaccessiblePaths",
+              "as",
+              [
+                "-/run/docker.sock",
+                "-/var/run/docker.sock"
+              ]
+            ],
+            [
+              "StandardOutput",
+              "s",
+              "null"
+            ],
+            [
+              "StandardError",
+              "s",
+              "null"
+            ],
+            [
+              "LimitCORE",
+              "t",
+              0
+            ]
+          ],
+          []
+        ],
+        "delivery": null
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "manager_QUARANTINED",
+        "local_CONSUMED",
+        "W_mounted_exact_identity",
+        "qualified_workload_namespace_view_before_ExecStart",
+        "frozen_config_log_none",
+        "private_root_socket_0600",
+        "PID1_not_keeper_child_exec"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 38,
+      "phase": "work",
+      "kind": "syscall",
+      "operation": "place_before_exec",
+      "args": [
+        "work_slice_leaf.cgroup.procs",
+        "controller_children_only; dockerd_uses_workload_Slice"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "work_memory3840MiB_pids224_OOMgroup1",
+        "control240MiB30PID",
+        "reserved16MiB2PID"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 39,
+      "phase": "work",
+      "kind": "docker",
+      "operation": "load",
+      "args": [
+        "private_socket",
+        "image",
+        "load",
+        "--input",
+        "$SEALED_ARCHIVE"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "sealed_archive_digest_provenance",
+        "hard_W_bound",
+        "no_pull_save"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 40,
+      "phase": "work",
+      "kind": "docker",
+      "operation": "inspect_image",
+      "args": [
+        "private_socket",
+        "image",
+        "inspect",
+        "$FIXED_IMAGE"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "exact_image_id_config_layers_linux_amd64"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 41,
+      "phase": "work",
+      "kind": "argv",
+      "operation": "controller",
+      "args": [
+        "$BOUND_PYTHON",
+        "-B",
+        "$BOUND_RUN_PROFILE",
+        "--inputs",
+        "$BOUND_INPUTS",
+        "--grant-comment",
+        "$GRANT_ID",
+        "--artifact-sha256",
+        "$ARTIFACT_SHA256",
+        "--context-fd",
+        "$CONTEXT_FD",
+        "--lock-fd",
+        "$LOCK_FD",
+        "--ledger-fd",
+        "$LEDGER_FD",
+        "--helper-fd",
+        "$HELPER_FD"
+      ],
+      "uid": 1000,
+      "gid": 1000,
+      "preconditions": [
+        "only_four_inherited_FDs",
+        "sealed_context",
+        "no_Docker_socket",
+        "allowlisted_environment",
+        "no_supplementary_groups"
+      ],
+      "deadline": "origin+4200"
+    },
+    {
+      "record": 42,
+      "phase": "work",
+      "kind": "docker",
+      "operation": "observe_and_create",
+      "args": [
+        "prevalidate_hash_fixed_CreateSpec",
+        "burn_request",
+        "full_fresh_observe",
+        "create_with_remaining_absolute_timeout",
+        "record_CID_even_late_or_ambiguous"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "observation_start_to_create_completion<=5sec",
+        "completion<origin+3600"
+      ],
+      "deadline": "origin+3600"
+    },
+    {
+      "record": 43,
+      "phase": "work",
+      "kind": "docker",
+      "operation": "start_and_wait",
+      "args": [
+        "exact_owned_CID",
+        "build_then_runtime_sentinel_only",
+        "bounded_output"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4200"
+    },
+    {
+      "record": 44,
+      "phase": "cleanup",
+      "kind": "docker",
+      "operation": "remove_owned",
+      "args": [
+        "inspect_exact_CID_and_ownership",
+        "stop",
+        "rm",
+        "independent_absence_readback"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 45,
+      "phase": "cleanup",
+      "kind": "syscall",
+      "operation": "terminate_owned",
+      "args": [
+        "PID_start_checked_signal_then_reap",
+        "work_subtree_cgroup.kill_only",
+        "zero_recursive_population",
+        "close_owned_FDs"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 46,
+      "phase": "cleanup",
+      "kind": "dbus",
+      "operation": "StopUnit",
+      "args": {
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StopUnit",
+        "signature": "ss",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "replace"
+        ]
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "exact_owned_workload_unit",
+        "keeper_or_independent_deadline_authority"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 47,
+      "phase": "cleanup",
+      "kind": "dbus",
+      "operation": "KillUnit",
+      "args": {
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "KillUnit",
+        "signature": "ssi",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "all",
+          9
+        ]
+      },
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "exact_owned_workload_unit",
+        "keeper_or_independent_deadline_authority",
+        "KillUnit_only_after_bounded_StopUnit_failure"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 48,
+      "phase": "cleanup",
+      "kind": "syscall",
+      "operation": "export",
+      "args": [
+        "schema_allowlist_only",
+        "reserved_C_export_FD",
+        "byte_and_cumulative_write_limit",
+        "ENOSPC_keeps_quarantine"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 49,
+      "phase": "cleanup",
+      "kind": "argv",
+      "operation": "umount",
+      "args": [
+        "/usr/bin/umount",
+        "--",
+        "$W"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "zero_population",
+        "no_open_owned_W_descriptors"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 50,
+      "phase": "cleanup",
+      "kind": "argv",
+      "operation": "detach",
+      "args": [
+        "/usr/sbin/losetup",
+        "--detach",
+        "$W_LOOP"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "normal_unmount_success"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 51,
+      "phase": "cleanup",
+      "kind": "syscall",
+      "operation": "unlinkat_owned_W",
+      "args": [
+        "verified_parent_fd",
+        "exact_backing_dev_inode",
+        "fsync_parent"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "independent_detach_absence"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 52,
+      "phase": "completion",
+      "kind": "syscall",
+      "operation": "final_custody",
+      "args": [
+        "durable_QUARANTINED",
+        "retain_C_slot_tombstone_and_A",
+        "prepare_independent_terminal_handoff_only",
+        "keep_C_namespace_and_lock_custody",
+        "NO_unmount_close_or_release_before_record53_completion_and_observer_tail"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "work_cleanup_proven",
+        "C_backing_and_A_retention_receipt",
+        "independent_terminal_owner_retains_original_descriptors"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 53,
+      "phase": "completion",
+      "kind": "syscall",
+      "operation": "observe",
+      "args": [
+        "keeper_and_cleanup_exit",
+        "W_absence",
+        "retained_C_and_A_exact_identities",
+        "PENDING_OBSERVER_EXIT",
+        "lifecycle_authority_observes_observer_exit",
+        "charged_final_tail_and_metrics"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "observer_cannot_attest_own_exit",
+        "everything<=origin+4500"
+      ],
+      "deadline": "origin+4500"
+    },
+    {
+      "record": 54,
+      "phase": "dispose",
+      "kind": "syscall",
+      "operation": "explicit_disposition",
+      "args": [
+        "export_receipt",
+        "irrevocably_expired_grant_tombstone",
+        "StopUnit(task_only)",
+        "RemoveSubgroup_only_when_empty",
+        "unlinkat_exact_C_A_O_identities"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "preconditions": [
+        "separate_disposition_authority",
+        "no_remaining_custody_obligations"
+      ],
+      "deadline": "separate_authority.absolute_deadline"
+    }
+  ],
+  "substitution_authority": "independent_installed_custodian_only_not_request_JSON",
+  "teardown": [
+    {
+      "sequence": 44,
+      "phase": "cleanup",
+      "kind": "docker",
+      "operation": "remove_owned",
+      "args": [
+        "inspect_exact_CID_and_ownership",
+        "stop",
+        "rm",
+        "independent_absence_readback"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [
+        "W",
+        "C:log"
+      ],
+      "created_or_checked": [],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 45,
+      "phase": "cleanup",
+      "kind": "syscall",
+      "operation": "terminate_owned",
+      "args": [
+        "PID_start_checked_signal_then_reap",
+        "work_subtree_cgroup.kill_only",
+        "zero_recursive_population",
+        "close_owned_FDs"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [
+        "W",
+        "C:log"
+      ],
+      "created_or_checked": [],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 46,
+      "phase": "cleanup",
+      "kind": "dbus",
+      "operation": "StopUnit",
+      "args": {
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "StopUnit",
+        "signature": "ss",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "replace"
+        ]
+      },
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [
+        "workload_cgroup_recursive_exit"
+      ],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "exact_owned_workload_unit",
+        "keeper_or_independent_deadline_authority"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 47,
+      "phase": "cleanup",
+      "kind": "dbus",
+      "operation": "KillUnit",
+      "args": {
+        "bus": "org.freedesktop.systemd1",
+        "path": "/org/freedesktop/systemd1",
+        "interface": "org.freedesktop.systemd1.Manager",
+        "member": "KillUnit",
+        "signature": "ssi",
+        "args": [
+          "meowneroTJS2504$ATTEMPT-workload.service",
+          "all",
+          9
+        ]
+      },
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [
+        "workload_cgroup_recursive_exit"
+      ],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "exact_owned_workload_unit",
+        "keeper_or_independent_deadline_authority",
+        "KillUnit_only_after_bounded_StopUnit_failure"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 48,
+      "phase": "cleanup",
+      "kind": "syscall",
+      "operation": "export",
+      "args": [
+        "schema_allowlist_only",
+        "reserved_C_export_FD",
+        "byte_and_cumulative_write_limit",
+        "ENOSPC_keeps_quarantine"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [
+        "C:export"
+      ],
+      "created_or_checked": [],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 49,
+      "phase": "cleanup",
+      "kind": "argv",
+      "operation": "umount",
+      "args": [
+        "/usr/bin/umount",
+        "--",
+        "$W"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "zero_population",
+        "no_open_owned_W_descriptors"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 50,
+      "phase": "cleanup",
+      "kind": "argv",
+      "operation": "detach",
+      "args": [
+        "/usr/sbin/losetup",
+        "--detach",
+        "$W_LOOP"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [
+        "W_loop_absence"
+      ],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "normal_unmount_success"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 51,
+      "phase": "cleanup",
+      "kind": "syscall",
+      "operation": "unlinkat_owned_W",
+      "args": [
+        "verified_parent_fd",
+        "exact_backing_dev_inode",
+        "fsync_parent"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [
+        "W"
+      ],
+      "created_or_checked": [],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "independent_detach_absence"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 52,
+      "phase": "completion",
+      "kind": "syscall",
+      "operation": "final_custody",
+      "args": [
+        "durable_QUARANTINED",
+        "retain_C_slot_tombstone_and_A",
+        "prepare_independent_terminal_handoff_only",
+        "keep_C_namespace_and_lock_custody",
+        "NO_unmount_close_or_release_before_record53_completion_and_observer_tail"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [
+        "C:export"
+      ],
+      "created_or_checked": [],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "work_cleanup_proven",
+        "C_backing_and_A_retention_receipt",
+        "independent_terminal_owner_retains_original_descriptors"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    },
+    {
+      "sequence": 53,
+      "phase": "completion",
+      "kind": "syscall",
+      "operation": "observe",
+      "args": [
+        "keeper_and_cleanup_exit",
+        "W_absence",
+        "retained_C_and_A_exact_identities",
+        "PENDING_OBSERVER_EXIT",
+        "lifecycle_authority_observes_observer_exit",
+        "charged_final_tail_and_metrics"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [],
+      "created_or_checked": [],
+      "charge": "W+C",
+      "deadline": "origin+4500",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "observer_cannot_attest_own_exit",
+        "everything<=origin+4500"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    }
+  ],
+  "operator_prefix": {
+    "schema": "meownero-operator-prefix/1",
+    "source_only": true,
+    "authority": "independently_authenticated_outside_operator_not_root_record_ingress",
+    "operations": [
+      {
+        "sequence": 1,
+        "phase": "install",
+        "kind": "syscall",
+        "operation": "install_exact_owned_source",
+        "args": [
+          "openat(O_EXCL|O_NOFOLLOW)",
+          "$BOUND_HELPER_AND_SPEC_BYTES",
+          "verify_hashes",
+          "fchown(0,0)",
+          "fchmod(0444)",
+          "fsync(file_and_directory)"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:installed_source_copies"
+        ],
+        "created_or_checked": [
+          "installed_source_inodes_hashes"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "task_only_install_parent_fd",
+          "no_dependencies_or_shared_unit_changes"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 2,
+        "phase": "install",
+        "kind": "dbus",
+        "operation": "StartTransientUnit",
+        "args": {
+          "stage": "install",
+          "bus": "org.freedesktop.systemd1",
+          "path": "/org/freedesktop/systemd1",
+          "interface": "org.freedesktop.systemd1.Manager",
+          "member": "StartTransientUnit",
+          "signature": "ssa(sv)a(sa(sv))",
+          "args": [
+            "meowneroTJS2504$ATTEMPT.slice",
+            "fail",
+            [
+              [
+                "CPUQuotaPerSecUSec",
+                "t",
+                1950000
+              ],
+              [
+                "MemoryMax",
+                "t",
+                4278190080
+              ],
+              [
+                "MemorySwapMax",
+                "t",
+                0
+              ],
+              [
+                "TasksMax",
+                "t",
+                254
+              ]
+            ],
+            []
+          ],
+          "delivery": null
+        },
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:unit_metadata"
+        ],
+        "created_or_checked": [
+          "task_only_unit_name"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 3,
+        "phase": "install",
+        "kind": "dbus",
+        "operation": "StartTransientUnit",
+        "args": {
+          "stage": "install",
+          "bus": "org.freedesktop.systemd1",
+          "path": "/org/freedesktop/systemd1",
+          "interface": "org.freedesktop.systemd1.Manager",
+          "member": "StartTransientUnit",
+          "signature": "ssa(sv)a(sa(sv))",
+          "args": [
+            "meowneroTJS2504$ATTEMPT-work.slice",
+            "fail",
+            [
+              [
+                "CPUQuotaPerSecUSec",
+                "t",
+                1900000
+              ],
+              [
+                "MemoryMax",
+                "t",
+                4026531840
+              ],
+              [
+                "MemorySwapMax",
+                "t",
+                0
+              ],
+              [
+                "TasksMax",
+                "t",
+                224
+              ]
+            ],
+            []
+          ],
+          "delivery": null
+        },
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:unit_metadata"
+        ],
+        "created_or_checked": [
+          "task_only_unit_name"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 4,
+        "phase": "install",
+        "kind": "dbus",
+        "operation": "StartTransientUnit",
+        "args": {
+          "stage": "install",
+          "bus": "org.freedesktop.systemd1",
+          "path": "/org/freedesktop/systemd1",
+          "interface": "org.freedesktop.systemd1.Manager",
+          "member": "StartTransientUnit",
+          "signature": "ssa(sv)a(sa(sv))",
+          "args": [
+            "meowneroTJS2504$ATTEMPT-control.slice",
+            "fail",
+            [
+              [
+                "CPUQuotaPerSecUSec",
+                "t",
+                50000
+              ],
+              [
+                "MemoryMax",
+                "t",
+                251658240
+              ],
+              [
+                "MemorySwapMax",
+                "t",
+                0
+              ],
+              [
+                "TasksMax",
+                "t",
+                30
+              ]
+            ],
+            []
+          ],
+          "delivery": null
+        },
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "O:unit_metadata"
+        ],
+        "created_or_checked": [
+          "task_only_unit_name"
+        ],
+        "charge": "O",
+        "deadline": "prep_origin+1200",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 7,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "unshare",
+        "args": [
+          "CLONE_NEWNS"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [],
+        "created_or_checked": [
+          "mount_namespace_inode"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 8,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "mount",
+        "args": [
+          "/usr/bin/mount",
+          "--make-rprivate",
+          "/"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [],
+        "created_or_checked": [],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "private_namespace"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 9,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "openat",
+        "args": [
+          "$C_PARENT_FD",
+          "$C_BASENAME",
+          "O_CREAT|O_EXCL|O_NOFOLLOW|O_RDWR|O_CLOEXEC",
+          384
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_backing_dev_inode_nlink"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "exact_owned_parent_dirfd",
+          "nonexistent_target",
+          "hard_write_and_capacity_meter"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 10,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "posix_fallocate",
+        "args": [
+          "$C_FD",
+          0,
+          1073741824
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_allocated_bytes"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "identity_regular_nlink1_root0600",
+          "allocated_blocks_and_length_readback"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 11,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "mke2fs",
+        "args": [
+          "/usr/sbin/mke2fs",
+          "-t",
+          "ext4",
+          "-b",
+          "4096",
+          "-m",
+          "0",
+          "-E",
+          "lazy_itable_init=0,lazy_journal_init=0,nodiscard",
+          "/proc/self/fd/$C_FD",
+          "262144"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_filesystem_uuid_capacity"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "new_owned_verified_target",
+          "frozen_mke2fs_config_hash",
+          "pass_only_verified_backing_fd"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 12,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "losetup",
+        "args": [
+          "/usr/sbin/losetup",
+          "--sizelimit",
+          "1073741824",
+          "$C_UNUSED_LOOP",
+          "$C_BACKING"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_loop_device_association"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "explicit_loop_unused_no_find_or_reuse",
+          "backing_exact_identity"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 13,
+        "phase": "control",
+        "kind": "argv",
+        "operation": "mount",
+        "args": [
+          "/usr/bin/mount",
+          "-t",
+          "ext4",
+          "-o",
+          "nosuid,nodev",
+          "$C_LOOP",
+          "$C"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_mount_id_namespace_inode"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 14,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "mkdirat_chown_fsync",
+        "args": [
+          "$C_FD",
+          [
+            "manager",
+            "ledger",
+            "log",
+            "export"
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C"
+        ],
+        "created_or_checked": [
+          "C_directory_identities"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 15,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "ledger_dirfd_handoff",
+        "args": [
+          "openat(C,ledger); fchown(1000,1000); fchmod(0700); SCM_RIGHTS"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C:ledger"
+        ],
+        "created_or_checked": [
+          "ledger_directory_dev_inode_uid_mode"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [
+          "outer_has_no_C_path_traversal",
+          "ledger_FD_identity_in_authenticated_context"
+        ],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      },
+      {
+        "sequence": 16,
+        "phase": "control",
+        "kind": "syscall",
+        "operation": "reserve_slot",
+        "args": [
+          "openat(O_EXCL|O_NOFOLLOW,0600)",
+          "write RESERVED+source+activation_hash",
+          "fsync(file)",
+          "fsync(directory)",
+          "readback_exact_identity_bytes"
+        ],
+        "uid": 0,
+        "gid": 0,
+        "writable": [
+          "C:manager"
+        ],
+        "created_or_checked": [
+          "root_slot_dev_inode_digest"
+        ],
+        "charge": "C",
+        "deadline": "prep_origin+300",
+        "environment": {
+          "LC_ALL": "C",
+          "PATH": "$PINNED_TOOL_PATH",
+          "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+        },
+        "preconditions": [],
+        "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+        "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+      }
+    ],
+    "before_first_entry": [
+      "exact_immutable_installation_and_index",
+      "original_retained_namespace",
+      "original_C_directory_record_order_and_all_role_capabilities",
+      "parent_work_control_accounting_units",
+      "durable_operator_quarantine_and_startup_receipt"
+    ],
+    "command": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/opt/meownero/TJS-2504/helper/profile-custodian.py"
+    ],
+    "charge": {
+      "preparation": {
+        "control": {
+          "seconds": 300,
+          "cpu": 1,
+          "memory": 536870912,
+          "swap": 0,
+          "pids": 32,
+          "writes": 1610612736
+        },
+        "archive": {
+          "seconds": 900,
+          "cpu": 1,
+          "memory": 1073741824,
+          "swap": 0,
+          "pids": 64,
+          "writes": 2147483648,
+          "output": 2147483648
+        },
+        "other_writes": 536870912,
+        "seconds": 1200,
+        "occupied": 4294967296,
+        "writes": 4294967296
+      },
+      "allocation": {
+        "control": 1073741824,
+        "workload": 11811160064,
+        "archive": 2147483648,
+        "other": 1073741824
+      },
+      "overhead": {
+        "reserved_memory": 16777216,
+        "reserved_pids": 2,
+        "reserved_cpu_per_second": 50000,
+        "qualified": null,
+        "control_memory": 251658240,
+        "control_pids": 30,
+        "work_memory": 4026531840,
+        "work_pids": 224
+      }
+    },
+    "administrator_only": {
+      "schema": "meownero-administrator-prefix/1",
+      "binding": null,
+      "implementation": "UNBOUND_UNQUALIFIED",
+      "authentication": "administrator_only_noninteractive_task_exact_source",
+      "preimport": [
+        "root_owned_immutable_opt_meownero_TJS2504_helper_and_all_ancestors",
+        "exact_authority_bound_inputs_and_complete_installation_inventory",
+        "fixed_isolated_no_argument_startup_before_any_project_import"
+      ],
+      "ordered": [
+        "immutable_preimport_publication",
+        "rootful_task_cgroup_accounting_before_workers",
+        "original_private_mount_namespace_and_fixed_loop_ext4_C_W_A_O",
+        "hard_occupied_bytes_and_separate_cumulative_write_reservations_for_every_writer",
+        "original_PID1_two_named_FDs_and_independent_same_open_description_readback",
+        "fourteen_original_prefix_operations_once",
+        "durable_bound_launch_receipt"
+      ],
+      "storage": {
+        "control_gib": 1,
+        "workload_gib": 11,
+        "archive_max_gib": 2,
+        "other_max_gib": 1,
+        "aggregate_max_gib": 15,
+        "metadata_and_copy_accounting": "inside_existing_C_W_A_O_caps"
+      },
+      "manager_bus": "independently_bound_system_or_user_for_launch_only",
+      "custody": "PID1_only; user_manager_is_not_independent_pid1_readback",
+      "terminal": "terminal_handoff_original_deadlines_normal_unmount_only",
+      "grant": "separate_exact_administrator_authority; no_source_packet_authorization"
+    },
+    "installed_implementation": "UNIMPLEMENTED_UNQUALIFIED"
+  },
+  "terminal_handoff": {
+    "schema": "meownero-terminal-handoff/1",
+    "source_only": true,
+    "owner": "independent_outside_operator_not_a_C_bound_root_entry",
+    "ordered": [
+      "record52_intent_and_durable_completion",
+      "record53_pending_observer_and_durable_completion",
+      "all_C_bound_entries_exit_and_close_journal_directory_descriptors",
+      "independent_keeper_cleanup_and_observer_exit_witness",
+      "account_and_sync_final_C_export_tail",
+      "retain_C_quarantine_tombstone_and_A",
+      "close_all_C_writers_and_descriptors",
+      "normal_C_unmount_and_independent_absence",
+      "close_original_namespace_custody",
+      "release_PID1_named_FDs_and_all_original_lock_copies",
+      "independent_original_inode_nonblocking_acquire_then_close"
+    ],
+    "deadline": "original_origin+4500",
+    "disposition": "record54_separate_authority_only",
+    "implementation": "UNIMPLEMENTED_UNQUALIFIED"
+  },
+  "receiver_launch": {
+    "builder": "profile_packet.receiver_unit",
+    "transport": "profile_receiver.ManagerTransport",
+    "bus": null,
+    "record_range": [
+      0,
+      53
+    ],
+    "command": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "/opt/meownero/TJS-2504/helper/profile-root-helper.py"
+    ],
+    "unit": "meowneroTJS2504$ATTEMPT-root$RECORD.service",
+    "deadline": {
+      "resolver": "profile_packet.operation_deadline",
+      "authority": "original protected record_binding including preparation.origin/archive_origin",
+      "operation": "minimum original record, enclosing phase and absolute end cutoffs",
+      "active_phase": "build except outer/controller/start_and_wait through work; cleanup reserve excluded",
+      "relative_runtime": "floor remaining original cutoff at render; supplementary only, active-entry relative",
+      "delivery_and_rpc": "separate short waits; never the operation lifetime",
+      "settlement": "same original cutoff; late completion/exit/confirmation stays uncertain"
+    },
+    "reference": "AddRef=true_on_original_authenticated_connection_until_durable_settlement_confirmation",
+    "restart": "no",
+    "charge": "existing_control_slice_and_O_metadata_caps",
+    "qualification": "UNBOUND_UNQUALIFIED"
+  },
+  "rollback": [
+    {
+      "sequence": 54,
+      "phase": "dispose",
+      "kind": "syscall",
+      "operation": "explicit_disposition",
+      "args": [
+        "export_receipt",
+        "irrevocably_expired_grant_tombstone",
+        "StopUnit(task_only)",
+        "RemoveSubgroup_only_when_empty",
+        "unlinkat_exact_C_A_O_identities"
+      ],
+      "uid": 0,
+      "gid": 0,
+      "writable": [
+        "C",
+        "A",
+        "O"
+      ],
+      "created_or_checked": [],
+      "charge": "O",
+      "deadline": "separate_authority.absolute_deadline",
+      "environment": {
+        "LC_ALL": "C",
+        "PATH": "$PINNED_TOOL_PATH",
+        "MKE2FS_CONFIG": "$FROZEN_MKE2FS_CONFIG"
+      },
+      "preconditions": [
+        "separate_disposition_authority",
+        "no_remaining_custody_obligations"
+      ],
+      "failure": "durable_quarantine; bounded_failure_class; retain_owned_identities_and_custody",
+      "recovery": "recover_only_original_deadlines; never_replace_slot_or_rearm"
+    }
+  ],
+  "never_rollback": "control quarantine, grant consumption or uncertain attempt eligibility",
+  "ingress": {
+    "source": "profile_ingress.InstalledIngress",
+    "transport": "existing unnamed seqpacket/SCM_RIGHTS",
+    "trust": "independently supplied constructor anchor, never packet/seals/hash/local JSON",
+    "state": "existing CapabilityStore/GrantJournal plus original record-order file; no create/rearm",
+    "qualification": "UNQUALIFIED; no installed constructor or surviving trust anchor supplied"
+  },
+  "unqualified": [
+    "installed authority/receiver",
+    "syscall/D-Bus/Docker adapters",
+    "PID1 same-description readback",
+    "workload C/W namespace view",
+    "external writer mediation",
+    "surviving deadline owner",
+    "observer exit/tail sensors",
+    "archive producer/custody"
+  ],
+  "activation": "REFUSED_UNQUALIFIED",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false
+}

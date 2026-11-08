@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "meownero-outer-completion/3",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "meownero-outer-completion/3"
+    },
+    "result": {
+      "const": "COMPLETE_AFTER_OBSERVER_EXIT"
+    },
+    "original_lock_release_witness": {
+      "const": "independent_nonblocking_acquire_then_close"
+    },
+    "bindings": {
+      "type": "object",
+      "required": [
+        "grant_id",
+        "grant_sha256",
+        "candidate_commit",
+        "inputs_sha256",
+        "artifact_sha256",
+        "bootstrap_sha256"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "grant_id": {
+          "type": "string"
+        },
+        "grant_sha256": {
+          "type": "string"
+        },
+        "candidate_commit": {
+          "type": "string"
+        },
+        "inputs_sha256": {
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "type": "string"
+        },
+        "bootstrap_sha256": {
+          "type": "string"
+        }
+      }
+    },
+    "original_lock_identity": {
+      "const": [
+        66306,
+        657237
+      ]
+    },
+    "origin": {
+      "type": "number",
+      "minimum": 0
+    },
+    "observed_at": {
+      "type": "number",
+      "minimum": 0
+    },
+    "aggregate_cpu_usec": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9000000000
+    },
+    "memory_peak": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967296
+    },
+    "pids_peak": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 256
+    },
+    "occupied_bytes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 16106127360
+    },
+    "tail_charged": {
+      "const": true
+    },
+    "overhead_qualified": {
+      "const": true
+    },
+    "remaining_work_mounts": {
+      "const": []
+    },
+    "remaining_work_loops": {
+      "const": []
+    },
+    "remaining_cids": {
+      "const": []
+    },
+    "live_owned_pid_identities": {
+      "const": []
+    },
+    "remaining_daemon_helpers": {
+      "const": []
+    },
+    "active_owned_units": {
+      "const": []
+    },
+    "open_lock_descriptors": {
+      "const": []
+    },
+    "pid1_stored_fd_names": {
+      "const": []
+    },
+    "recursive_population": {
+      "const": {
+        "work": 0,
+        "control": 0
+      }
+    },
+    "exits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workload",
+        "cleanup",
+        "keeper",
+        "observer"
+      ],
+      "properties": {
+        "workload": {
+          "type": "object",
+          "required": [
+            "at",
+            "pid_identity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "at": {
+              "type": "number"
+            },
+            "pid_identity": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "string",
+                  "minLength": 1
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "cleanup": {
+          "type": "object",
+          "required": [
+            "at",
+            "pid_identity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "at": {
+              "type": "number"
+            },
+            "pid_identity": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "string",
+                  "minLength": 1
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "keeper": {
+          "type": "object",
+          "required": [
+            "at",
+            "pid_identity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "at": {
+              "type": "number"
+            },
+            "pid_identity": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "string",
+                  "minLength": 1
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        },
+        "observer": {
+          "type": "object",
+          "required": [
+            "at",
+            "pid_identity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "at": {
+              "type": "number"
+            },
+            "pid_identity": {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "string",
+                  "minLength": 1
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            }
+          }
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": [
+        "task_scoped",
+        "authenticated",
+        "pid_identity",
+        "observer_exit_witness"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "task_scoped": {
+          "const": true
+        },
+        "authenticated": {
+          "const": true
+        },
+        "pid_identity": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "string",
+              "minLength": 1
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "observer_exit_witness": {
+          "const": true
+        }
+      }
+    },
+    "retained_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot_retained",
+        "archive_retained",
+        "mount_disposition",
+        "custodian",
+        "disposition",
+        "grant_state",
+        "identity_sha256"
+      ],
+      "properties": {
+        "slot_retained": {
+          "const": true
+        },
+        "archive_retained": {
+          "const": true
+        },
+        "mount_disposition": {
+          "const": "normal_unmounted_namespace_closed"
+        },
+        "custodian": {
+          "type": "string",
+          "minLength": 1
+        },
+        "disposition": {
+          "const": "separate_explicit_authority"
+        },
+        "grant_state": {
+          "const": "QUARANTINED_NEVER_REARM"
+        },
+        "identity_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "rows": {
+      "$ref": "outputs.schema.json"
+    }
+  },
+  "required": [
+    "schema",
+    "result",
+    "original_lock_release_witness",
+    "bindings",
+    "original_lock_identity",
+    "origin",
+    "observed_at",
+    "aggregate_cpu_usec",
+    "memory_peak",
+    "pids_peak",
+    "occupied_bytes",
+    "tail_charged",
+    "overhead_qualified",
+    "remaining_work_mounts",
+    "remaining_work_loops",
+    "remaining_cids",
+    "live_owned_pid_identities",
+    "remaining_daemon_helpers",
+    "active_owned_units",
+    "open_lock_descriptors",
+    "pid1_stored_fd_names",
+    "recursive_population",
+    "exits",
+    "lifecycle",
+    "retained_control",
+    "rows"
+  ],
+  "description": "Shape only. profile_handoff.validate_completion also enforces ordering, exact bindings and independent identity. No source fixture is runtime evidence."
+}

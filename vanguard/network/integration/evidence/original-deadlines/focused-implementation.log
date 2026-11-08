@@ -1,0 +1,1252 @@
+test_nonchild_echild_and_substituted_start_are_not_status_zero (test_receiver.ChildTests.test_nonchild_echild_and_substituted_start_are_not_status_zero) ... ERROR
+test_persistence_failure_retains_waitable_event_and_no_witness (test_receiver.ChildTests.test_persistence_failure_retains_waitable_event_and_no_witness) ... ok
+test_stopped_continued_missing_and_impossible_status_are_rejected (test_receiver.ChildTests.test_stopped_continued_missing_and_impossible_status_are_rejected) ... ok
+test_terminal_signal_is_abnormal_and_cannot_decode_as_zero (test_receiver.ChildTests.test_terminal_signal_is_abnormal_and_cannot_decode_as_zero) ... ok
+test_waitid_pins_child_persists_before_reap_and_decodes_exit9 (test_receiver.ChildTests.test_waitid_pins_child_persists_before_reap_and_decodes_exit9) ... ok
+test_absence_success_and_nonterminal_events_are_not_exit_witnesses (test_receiver.ManagerTests.test_absence_success_and_nonterminal_events_are_not_exit_witnesses) ... ok
+test_bound_bus_is_independent_of_destination_and_fixed_receiver (test_receiver.ManagerTests.test_bound_bus_is_independent_of_destination_and_fixed_receiver) ... ok
+test_bus_epoch_boot_and_connection_changes_refuse (test_receiver.ManagerTests.test_bus_epoch_boot_and_connection_changes_refuse) ... ok
+test_changed_scope_and_unconfirmed_receipts_cannot_release (test_receiver.ManagerTests.test_changed_scope_and_unconfirmed_receipts_cannot_release) ... ok
+test_lost_start_reply_burns_receiver_name_and_record54_refuses (test_receiver.ManagerTests.test_lost_start_reply_burns_receiver_name_and_record54_refuses) ... ok
+test_normal_nonzero_and_signal_terminal_events (test_receiver.ManagerTests.test_normal_nonzero_and_signal_terminal_events) ... ok
+test_original_deadlines_and_caller_reference_cannot_be_replaced (test_receiver.ManagerTests.test_original_deadlines_and_caller_reference_cannot_be_replaced) ... ok
+test_original_unit_invocation_pid_start_and_timestamp_are_pinned (test_receiver.ManagerTests.test_original_unit_invocation_pid_start_and_timestamp_are_pinned) ... ok
+test_persistence_failure_late_read_and_retained_property_change_refuse_release (test_receiver.ManagerTests.test_persistence_failure_late_read_and_retained_property_change_refuse_release) ... ok
+test_confirmation_requires_exact_durable_witness_digest (test_supervisor.SupervisorTests.test_confirmation_requires_exact_durable_witness_digest) ... ERROR
+test_crash_between_local_intent_and_supervisor_admission_refuses (test_supervisor.SupervisorTests.test_crash_between_local_intent_and_supervisor_admission_refuses) ... ERROR
+test_expired_original_deadline_refuses_issuance (test_supervisor.SupervisorTests.test_expired_original_deadline_refuses_issuance) ... ok
+test_fresh_entries_use_original_producer_and_durable_completion (test_supervisor.SupervisorTests.test_fresh_entries_use_original_producer_and_durable_completion) ... ERROR
+test_later_cleanup_can_run_after_uncertain_record_without_local_restoration (test_supervisor.SupervisorTests.test_later_cleanup_can_run_after_uncertain_record_without_local_restoration) ... ERROR
+test_live_receiver_and_concurrent_entry_refuse_before_exit (test_supervisor.SupervisorTests.test_live_receiver_and_concurrent_entry_refuse_before_exit) ... ERROR
+test_lost_close_and_settle_acknowledgements_never_rearm (test_supervisor.SupervisorTests.test_lost_close_and_settle_acknowledgements_never_rearm) ... 
+  test_lost_close_and_settle_acknowledgements_never_rearm (test_supervisor.SupervisorTests.test_lost_close_and_settle_acknowledgements_never_rearm) (operation='close') ... ERROR
+  test_lost_close_and_settle_acknowledgements_never_rearm (test_supervisor.SupervisorTests.test_lost_close_and_settle_acknowledgements_never_rearm) (operation='settle') ... ERROR
+test_lost_completion_acknowledgement_cannot_advance (test_supervisor.SupervisorTests.test_lost_completion_acknowledgement_cannot_advance) ... ERROR
+test_missing_and_wrong_receiver_settlement_cannot_release_custody (test_supervisor.SupervisorTests.test_missing_and_wrong_receiver_settlement_cannot_release_custody) ... ERROR
+test_missing_stale_substituted_and_unreaped_witnesses_retain_custody (test_supervisor.SupervisorTests.test_missing_stale_substituted_and_unreaped_witnesses_retain_custody) ... ERROR
+test_original_supervisor_loss_has_no_reconnect_or_reconstruction (test_supervisor.SupervisorTests.test_original_supervisor_loss_has_no_reconnect_or_reconstruction) ... ok
+test_pending_persistence_failure_blocks_effect_and_later_activation (test_supervisor.SupervisorTests.test_pending_persistence_failure_blocks_effect_and_later_activation) ... 
+  test_pending_persistence_failure_blocks_effect_and_later_activation (test_supervisor.SupervisorTests.test_pending_persistence_failure_blocks_effect_and_later_activation) (error=5) ... ERROR
+  test_pending_persistence_failure_blocks_effect_and_later_activation (test_supervisor.SupervisorTests.test_pending_persistence_failure_blocks_effect_and_later_activation) (error=28) ... ERROR
+test_post_close_abnormal_and_unknown_exits_enter_recovery_only (test_supervisor.SupervisorTests.test_post_close_abnormal_and_unknown_exits_enter_recovery_only) ... 
+  test_post_close_abnormal_and_unknown_exits_enter_recovery_only (test_supervisor.SupervisorTests.test_post_close_abnormal_and_unknown_exits_enter_recovery_only) (unknown=False) ... ERROR
+  test_post_close_abnormal_and_unknown_exits_enter_recovery_only (test_supervisor.SupervisorTests.test_post_close_abnormal_and_unknown_exits_enter_recovery_only) (unknown=True) ... ERROR
+test_same_inode_restoration_after_child_exit9_never_reactivates (test_supervisor.SupervisorTests.test_same_inode_restoration_after_child_exit9_never_reactivates) ... ERROR
+test_settled_cleanup_cannot_replay_after_later_uncertainty (test_supervisor.SupervisorTests.test_settled_cleanup_cannot_replay_after_later_uncertainty) ... ERROR
+test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) ... 
+  test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=5, stage='COMPLETED') ... ERROR
+  test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=5, stage='SETTLEMENT_SENT') ... ERROR
+  test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=28, stage='COMPLETED') ... ERROR
+  test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=28, stage='SETTLEMENT_SENT') ... ERROR
+test_skipped_surviving_authentication_cannot_admit_effect (test_supervisor.SupervisorTests.test_skipped_surviving_authentication_cannot_admit_effect) ... ERROR
+test_supervisor_fsync_and_enospc_prevent_receipt_delivery (test_supervisor.SupervisorTests.test_supervisor_fsync_and_enospc_prevent_receipt_delivery) ... ok
+test_surviving_memory_refuses_rollback_of_its_own_state_file (test_supervisor.SupervisorTests.test_surviving_memory_refuses_rollback_of_its_own_state_file) ... ERROR
+test_uncertain_activation_can_only_enter_original_surviving_cleanup (test_supervisor.SupervisorTests.test_uncertain_activation_can_only_enter_original_surviving_cleanup) ... ERROR
+test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) ... 
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=44) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=45) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=46) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=47) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=48) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=49) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=50) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=51) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=52) ... ERROR
+  test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=53) ... ERROR
+test_unreceived_settlement_reply_retains_custody_until_uncertain_settlement (test_supervisor.SupervisorTests.test_unreceived_settlement_reply_retains_custody_until_uncertain_settlement) ... ERROR
+test_wrong_receiver_start_and_record54_refuse (test_supervisor.SupervisorTests.test_wrong_receiver_start_and_record54_refuse) ... ok
+test_all_non_disposal_records_fresh_root_entries_and_eight_unit_declarations (test_lifecycle_source.LifecycleSourceTests.test_all_non_disposal_records_fresh_root_entries_and_eight_unit_declarations) ... ERROR
+test_fixed_custodian_default_refusal_and_empty_registry (test_lifecycle_source.LifecycleSourceTests.test_fixed_custodian_default_refusal_and_empty_registry) ... ok
+test_fourteen_originals_accounted_then_verify_prepared_without_reexecution (test_lifecycle_source.LifecycleSourceTests.test_fourteen_originals_accounted_then_verify_prepared_without_reexecution) ... ok
+test_original_reservations_never_overwrite_partial_fsync_failure (test_lifecycle_source.LifecycleSourceTests.test_original_reservations_never_overwrite_partial_fsync_failure) ... ok
+test_prefix_failed_accounting_never_effects_or_retries (test_lifecycle_source.LifecycleSourceTests.test_prefix_failed_accounting_never_effects_or_retries) ... ok
+test_terminal_failure_never_releases_namespace_or_original_lock (test_lifecycle_source.LifecycleSourceTests.test_terminal_failure_never_releases_namespace_or_original_lock) ... ok
+test_terminal_retains_custody_until_durable_records_independent_exits_and_tail (test_lifecycle_source.LifecycleSourceTests.test_terminal_retains_custody_until_durable_records_independent_exits_and_tail) ... ok
+test_ambiguous_launch_retains_original_consumption_and_manager_name (test_deadlines.DeadlineTests.test_ambiguous_launch_retains_original_consumption_and_manager_name) ... ERROR
+test_delayed_receiver_start_does_not_renew_delivery_or_operation (test_deadlines.DeadlineTests.test_delayed_receiver_start_does_not_renew_delivery_or_operation) ... 
+  test_delayed_receiver_start_does_not_renew_delivery_or_operation (test_deadlines.DeadlineTests.test_delayed_receiver_start_does_not_renew_delivery_or_operation) (at=102) ... ERROR
+  test_delayed_receiver_start_does_not_renew_delivery_or_operation (test_deadlines.DeadlineTests.test_delayed_receiver_start_does_not_renew_delivery_or_operation) (at=105) ... ERROR
+  test_delayed_receiver_start_does_not_renew_delivery_or_operation (test_deadlines.DeadlineTests.test_delayed_receiver_start_does_not_renew_delivery_or_operation) (at=4300) ... ERROR
+test_expiry_after_bound_record_verification_prevents_effect (test_deadlines.DeadlineTests.test_expiry_after_bound_record_verification_prevents_effect) ... ERROR
+test_expiry_and_equality_before_issue_have_no_effect (test_deadlines.DeadlineTests.test_expiry_and_equality_before_issue_have_no_effect) ... ok
+test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) ... 
+  test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=0) ... ERROR
+  test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=1) ... ERROR
+  test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=2) ... ERROR
+  test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=3) ... ERROR
+test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) ... 
+  test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=25, at=4300, timeout=False) ... ERROR
+  test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=43, at=4301, timeout=False) ... ERROR
+  test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=39, at=3700, timeout=False) ... ERROR
+  test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=25, at=131, timeout=True) ... ERROR
+test_late_settlement_confirmation_keeps_completed_record_uncertain (test_deadlines.DeadlineTests.test_late_settlement_confirmation_keeps_completed_record_uncertain) ... ERROR
+test_lost_long_completion_and_settlement_replies_cannot_reactivate (test_deadlines.DeadlineTests.test_lost_long_completion_and_settlement_replies_cannot_reactivate) ... 
+  test_lost_long_completion_and_settlement_replies_cannot_reactivate (test_deadlines.DeadlineTests.test_lost_long_completion_and_settlement_replies_cannot_reactivate) (reply='complete') ... ERROR
+  test_lost_long_completion_and_settlement_replies_cannot_reactivate (test_deadlines.DeadlineTests.test_lost_long_completion_and_settlement_replies_cannot_reactivate) (reply='settle') ... ERROR
+  test_lost_long_completion_and_settlement_replies_cannot_reactivate (test_deadlines.DeadlineTests.test_lost_long_completion_and_settlement_replies_cannot_reactivate) (reply='close') ... ERROR
+test_original_phase_limits_and_preparation_caps_are_distinct (test_deadlines.DeadlineTests.test_original_phase_limits_and_preparation_caps_are_distinct) ... ok
+test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) ... 
+  test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=17) ... ERROR
+  test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=25) ... ERROR
+  test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=39) ... ERROR
+  test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=41) ... ERROR
+  test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=43) ... ERROR
+
+======================================================================
+ERROR: test_nonchild_echild_and_substituted_start_are_not_status_zero (test_receiver.ChildTests.test_nonchild_echild_and_substituted_start_are_not_status_zero)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_receiver.py", line 243, in test_nonchild_echild_and_substituted_start_are_not_status_zero
+    with self.assertRaises(ChildProcessError):witness.observe(lambda row:None,deadline=time.monotonic()+5)
+                                              ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_confirmation_requires_exact_durable_witness_digest (test_supervisor.SupervisorTests.test_confirmation_requires_exact_durable_witness_digest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 496, in test_confirmation_requires_exact_durable_witness_digest
+    self.start();self.assertEqual(self.issue(settle=False),0)
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_crash_between_local_intent_and_supervisor_admission_refuses (test_supervisor.SupervisorTests.test_crash_between_local_intent_and_supervisor_admission_refuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 283, in test_crash_between_local_intent_and_supervisor_admission_refuses
+    self.start();before=self.snapshot_local();self.assertEqual(self.issue(after_local=True),9)
+                                                               ~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_fresh_entries_use_original_producer_and_durable_completion (test_supervisor.SupervisorTests.test_fresh_entries_use_original_producer_and_durable_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 270, in test_fresh_entries_use_original_producer_and_durable_completion
+    self.start();self.assertEqual(self.issue(),0)
+                                  ~~~~~~~~~~^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_later_cleanup_can_run_after_uncertain_record_without_local_restoration (test_supervisor.SupervisorTests.test_later_cleanup_can_run_after_uncertain_record_without_local_restoration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 383, in test_later_cleanup_can_run_after_uncertain_record_without_local_restoration
+    self.assertEqual(case.issue(44,recovered=True),9);case.wait_closed()
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_live_receiver_and_concurrent_entry_refuse_before_exit (test_supervisor.SupervisorTests.test_live_receiver_and_concurrent_entry_refuse_before_exit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 443, in test_live_receiver_and_concurrent_entry_refuse_before_exit
+    self.assertEqual(self.issue(pause_after_close=read_fd,before_wait=concurrent),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_lost_close_and_settle_acknowledgements_never_rearm (test_supervisor.SupervisorTests.test_lost_close_and_settle_acknowledgements_never_rearm) (operation='close')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 409, in test_lost_close_and_settle_acknowledgements_never_rearm
+    self.assertEqual(case.issue(),3 if operation=='close' else 0)
+                     ~~~~~~~~~~^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_lost_close_and_settle_acknowledgements_never_rearm (test_supervisor.SupervisorTests.test_lost_close_and_settle_acknowledgements_never_rearm) (operation='settle')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 409, in test_lost_close_and_settle_acknowledgements_never_rearm
+    self.assertEqual(case.issue(),3 if operation=='close' else 0)
+                     ~~~~~~~~~~^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_lost_completion_acknowledgement_cannot_advance (test_supervisor.SupervisorTests.test_lost_completion_acknowledgement_cannot_advance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 288, in test_lost_completion_acknowledgement_cannot_advance
+    self.start();before=self.snapshot_local();self.assertEqual(self.issue(lost_ack=True),3)
+                                                               ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_missing_and_wrong_receiver_settlement_cannot_release_custody (test_supervisor.SupervisorTests.test_missing_and_wrong_receiver_settlement_cannot_release_custody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 419, in test_missing_and_wrong_receiver_settlement_cannot_release_custody
+    self.start();self.assertEqual(self.issue(exit_after_close=9,settle=False),9)
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_missing_stale_substituted_and_unreaped_witnesses_retain_custody (test_supervisor.SupervisorTests.test_missing_stale_substituted_and_unreaped_witnesses_retain_custody)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 476, in test_missing_stale_substituted_and_unreaped_witnesses_retain_custody
+    self.start();self.assertEqual(self.issue(exit_after_close=9,settle=False),9)
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_pending_persistence_failure_blocks_effect_and_later_activation (test_supervisor.SupervisorTests.test_pending_persistence_failure_blocks_effect_and_later_activation) (error=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 320, in test_pending_persistence_failure_blocks_effect_and_later_activation
+    self.assertEqual(case.issue(crash=True),3);case.restore_local(before)
+                     ~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_pending_persistence_failure_blocks_effect_and_later_activation (test_supervisor.SupervisorTests.test_pending_persistence_failure_blocks_effect_and_later_activation) (error=28)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 320, in test_pending_persistence_failure_blocks_effect_and_later_activation
+    self.assertEqual(case.issue(crash=True),3);case.restore_local(before)
+                     ~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_post_close_abnormal_and_unknown_exits_enter_recovery_only (test_supervisor.SupervisorTests.test_post_close_abnormal_and_unknown_exits_enter_recovery_only) (unknown=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 394, in test_post_close_abnormal_and_unknown_exits_enter_recovery_only
+    case.start();self.assertEqual(case.issue(exit_after_close=9,unknown_status=unknown),9)
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_post_close_abnormal_and_unknown_exits_enter_recovery_only (test_supervisor.SupervisorTests.test_post_close_abnormal_and_unknown_exits_enter_recovery_only) (unknown=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 394, in test_post_close_abnormal_and_unknown_exits_enter_recovery_only
+    case.start();self.assertEqual(case.issue(exit_after_close=9,unknown_status=unknown),9)
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_same_inode_restoration_after_child_exit9_never_reactivates (test_supervisor.SupervisorTests.test_same_inode_restoration_after_child_exit9_never_reactivates)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 276, in test_same_inode_restoration_after_child_exit9_never_reactivates
+    self.start();before=self.snapshot_local();self.assertEqual(self.issue(crash=True),9)
+                                                               ~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_settled_cleanup_cannot_replay_after_later_uncertainty (test_supervisor.SupervisorTests.test_settled_cleanup_cannot_replay_after_later_uncertainty)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 359, in test_settled_cleanup_cannot_replay_after_later_uncertainty
+    self.assertEqual(case.issue(44,recovered=True),0);case.wait_closed()
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=5, stage='COMPLETED')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 465, in test_settlement_fsync_and_enospc_never_release_or_rearm
+    status=case.issue(exit_after_close=9 if stage=='SETTLEMENT_SENT' else None)
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=5, stage='SETTLEMENT_SENT')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 465, in test_settlement_fsync_and_enospc_never_release_or_rearm
+    status=case.issue(exit_after_close=9 if stage=='SETTLEMENT_SENT' else None)
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=28, stage='COMPLETED')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 465, in test_settlement_fsync_and_enospc_never_release_or_rearm
+    status=case.issue(exit_after_close=9 if stage=='SETTLEMENT_SENT' else None)
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_settlement_fsync_and_enospc_never_release_or_rearm (test_supervisor.SupervisorTests.test_settlement_fsync_and_enospc_never_release_or_rearm) (error=28, stage='SETTLEMENT_SENT')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 465, in test_settlement_fsync_and_enospc_never_release_or_rearm
+    status=case.issue(exit_after_close=9 if stage=='SETTLEMENT_SENT' else None)
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_skipped_surviving_authentication_cannot_admit_effect (test_supervisor.SupervisorTests.test_skipped_surviving_authentication_cannot_admit_effect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 506, in test_skipped_surviving_authentication_cannot_admit_effect
+    self.start();self.assertEqual(self.issue(skip_auth=True),3)
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_surviving_memory_refuses_rollback_of_its_own_state_file (test_supervisor.SupervisorTests.test_surviving_memory_refuses_rollback_of_its_own_state_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 310, in test_surviving_memory_refuses_rollback_of_its_own_state_file
+    self.start();original=self.state_path.read_bytes();self.assertEqual(self.issue(),0)
+                                                                        ~~~~~~~~~~^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_activation_can_only_enter_original_surviving_cleanup (test_supervisor.SupervisorTests.test_uncertain_activation_can_only_enter_original_surviving_cleanup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 325, in test_uncertain_activation_can_only_enter_original_surviving_cleanup
+    self.start();self.assertEqual(self.issue(crash=True),9)
+                                  ~~~~~~~~~~^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=44)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=45)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=46)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=47)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=48)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=49)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=50)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=51)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=52)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration (test_supervisor.SupervisorTests.test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration) (record=53)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 343, in test_uncertain_cleanup_records_never_repeat_after_same_inode_restoration
+    self.assertEqual(case.issue(number,recovered=True),9)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_unreceived_settlement_reply_retains_custody_until_uncertain_settlement (test_supervisor.SupervisorTests.test_unreceived_settlement_reply_retains_custody_until_uncertain_settlement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 447, in test_unreceived_settlement_reply_retains_custody_until_uncertain_settlement
+    self.start();self.assertEqual(self.issue(settle=False),0)
+                                  ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_all_non_disposal_records_fresh_root_entries_and_eight_unit_declarations (test_lifecycle_source.LifecycleSourceTests.test_all_non_disposal_records_fresh_root_entries_and_eight_unit_declarations)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_lifecycle_source.py", line 143, in test_all_non_disposal_records_fresh_root_entries_and_eight_unit_declarations
+    self.assertEqual(case.issue(number,recovered=number>=f.cleanup,generated=True),0,'record '+str(number))
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_ambiguous_launch_retains_original_consumption_and_manager_name (test_deadlines.DeadlineTests.test_ambiguous_launch_retains_original_consumption_and_manager_name)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 132, in test_ambiguous_launch_retains_original_consumption_and_manager_name
+    self.assertEqual(case.issue(25,generated=True,ambiguous_launch=True,unknown_status=True),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_delayed_receiver_start_does_not_renew_delivery_or_operation (test_deadlines.DeadlineTests.test_delayed_receiver_start_does_not_renew_delivery_or_operation) (at=102)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 99, in test_delayed_receiver_start_does_not_renew_delivery_or_operation
+    self.assertEqual(case.issue(25,generated=True,launch_delay=lambda:clock.set(at)),status)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_delayed_receiver_start_does_not_renew_delivery_or_operation (test_deadlines.DeadlineTests.test_delayed_receiver_start_does_not_renew_delivery_or_operation) (at=105)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 99, in test_delayed_receiver_start_does_not_renew_delivery_or_operation
+    self.assertEqual(case.issue(25,generated=True,launch_delay=lambda:clock.set(at)),status)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_delayed_receiver_start_does_not_renew_delivery_or_operation (test_deadlines.DeadlineTests.test_delayed_receiver_start_does_not_renew_delivery_or_operation) (at=4300)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 99, in test_delayed_receiver_start_does_not_renew_delivery_or_operation
+    self.assertEqual(case.issue(25,generated=True,launch_delay=lambda:clock.set(at)),status)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_expiry_after_bound_record_verification_prevents_effect (test_deadlines.DeadlineTests.test_expiry_after_bound_record_verification_prevents_effect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 110, in test_expiry_after_bound_record_verification_prevents_effect
+    self.assertEqual(case.issue(25,generated=True),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 90, in test_inconsistent_or_substituted_bindings_refuse_before_effect
+    self.assertEqual(case.issue(25,generated=True,entry_mutate=mutate),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 90, in test_inconsistent_or_substituted_bindings_refuse_before_effect
+    self.assertEqual(case.issue(25,generated=True,entry_mutate=mutate),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 90, in test_inconsistent_or_substituted_bindings_refuse_before_effect
+    self.assertEqual(case.issue(25,generated=True,entry_mutate=mutate),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_inconsistent_or_substituted_bindings_refuse_before_effect (test_deadlines.DeadlineTests.test_inconsistent_or_substituted_bindings_refuse_before_effect) (mutation=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 90, in test_inconsistent_or_substituted_bindings_refuse_before_effect
+    self.assertEqual(case.issue(25,generated=True,entry_mutate=mutate),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=25, at=4300, timeout=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 119, in test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup
+    self.assertEqual(case.issue(number,generated=True),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=43, at=4301, timeout=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 119, in test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup
+    self.assertEqual(case.issue(number,generated=True),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=39, at=3700, timeout=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 119, in test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup
+    self.assertEqual(case.issue(number,generated=True),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup (test_deadlines.DeadlineTests.test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup) (record=25, at=131, timeout=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 119, in test_late_and_timeout_effects_retain_consumption_and_only_original_cleanup
+    self.assertEqual(case.issue(number,generated=True),3)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_late_settlement_confirmation_keeps_completed_record_uncertain (test_deadlines.DeadlineTests.test_late_settlement_confirmation_keeps_completed_record_uncertain)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 152, in test_late_settlement_confirmation_keeps_completed_record_uncertain
+    self.assertEqual(case.issue(25,generated=True,settle=False),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_lost_long_completion_and_settlement_replies_cannot_reactivate (test_deadlines.DeadlineTests.test_lost_long_completion_and_settlement_replies_cannot_reactivate) (reply='complete')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 144, in test_lost_long_completion_and_settlement_replies_cannot_reactivate
+    self.assertEqual(case.issue(25,generated=True,lost_ack=lost=='complete'),3 if lost=='complete' else 0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_lost_long_completion_and_settlement_replies_cannot_reactivate (test_deadlines.DeadlineTests.test_lost_long_completion_and_settlement_replies_cannot_reactivate) (reply='settle')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 144, in test_lost_long_completion_and_settlement_replies_cannot_reactivate
+    self.assertEqual(case.issue(25,generated=True,lost_ack=lost=='complete'),3 if lost=='complete' else 0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_lost_long_completion_and_settlement_replies_cannot_reactivate (test_deadlines.DeadlineTests.test_lost_long_completion_and_settlement_replies_cannot_reactivate) (reply='close')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 144, in test_lost_long_completion_and_settlement_replies_cannot_reactivate
+    self.assertEqual(case.issue(25,generated=True,lost_ack=lost=='complete'),3 if lost=='complete' else 0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=17)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 53, in test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds
+    self.assertEqual(case.issue(number,generated=True),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=25)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 53, in test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds
+    self.assertEqual(case.issue(number,generated=True),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=39)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 53, in test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds
+    self.assertEqual(case.issue(number,generated=True),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=41)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 53, in test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds
+    self.assertEqual(case.issue(number,generated=True),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+======================================================================
+ERROR: test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds (test_deadlines.DeadlineTests.test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds) (record=43)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_deadlines.py", line 53, in test_valid_long_records_consume_generated_call_and_complete_after_thirty_seconds
+    self.assertEqual(case.issue(number,generated=True),0)
+                     ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_supervisor.py", line 208, in issue
+    value=witness.observe(persist,deadline=self.transport_deadline);break
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_receiver.py", line 80, in observe
+    c.require(not self.used and self.fd is not None and self.clock()<deadline and
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        deadline<=self.binding['record_binding']['deadlines']['end'] and
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.boot==boot_id() and self.observer==i.process_identity(os.getpid()),'original parenting observer')
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/profile_contract.py", line 49, in require
+    raise ValueError(message)
+ValueError: original parenting observer
+
+----------------------------------------------------------------------
+Ran 54 tests in 5.859s
+
+FAILED (errors=58)

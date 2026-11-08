@@ -1,0 +1,31 @@
+{
+  "schema": "meownero-elf-witness-source-correction/1",
+  "authority_interaction": "81de4466-14e3-4d2a-bfa3-d8eaebcc50dd",
+  "run_id": "cb7e39ce-561f-41f3-b88f-e44619f4f9a9",
+  "base_commit": "bf6acfba8cf0d649ec5c29480387bdd5327f8837",
+  "direct_tests": 46,
+  "full_source_tests": 288,
+  "real_historical_ELF_count": 3,
+  "needed_counts": [
+    17,
+    18,
+    18
+  ],
+  "real_readelf": true,
+  "historical_freezer_reader_main_gate": "PASS",
+  "baseline_main_same_payload": "REFUSED_BEFORE_RUNTIME",
+  "runtime_static_audit": "16 rows; no mismatches",
+  "unchanged_freezer_build_driver_profile_pins_caps": true,
+  "frozen_input_check": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+  "incident": "comparison-isolation-incident.md",
+  "native_runtime": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "consumed_grants": [
+    "365fa3e9",
+    "d9a6559b",
+    "ea19d496"
+  ],
+  "next": "Platform source review, then Security allowlist/retained-payload review, then fresh exact grant",
+  "needs_tj": "None"
+}

@@ -1,0 +1,21 @@
+--- reviewed/blockchain.cpp
++++ corrected/blockchain.cpp
+@@ -4349,15 +4349,16 @@
+   {
+     timestamps.push_back(m_db->get_block_timestamp(offset));
+   }
++  const uint64_t projection_target = m_nettype == TESTNET ? get_difficulty_target() : DIFFICULTY_TARGET_V2;
+   uint64_t median_ts = epee::misc_utils::median(timestamps);
+ 
+   // project the median to match approximately when the block being validated will appear
+   // the median is calculated from a chunk of past blocks, so we use +1 to offset onto the current block
+-  median_ts += (BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW + 1) * get_difficulty_target() / 2;
++  median_ts += (BLOCKCHAIN_TIMESTAMP_CHECK_WINDOW + 1) * projection_target / 2;
+ 
+   // project the current block's time based on the previous block's time
+   // we don't use the current block's time directly to mitigate timestamp manipulation
+-  uint64_t adjusted_current_block_ts = timestamps.back() + get_difficulty_target();
++  uint64_t adjusted_current_block_ts = timestamps.back() + projection_target;
+ 
+   // return minimum of ~current block time and adjusted median time
+   // we do this since it's better to report a time in the past than a time in the future

@@ -1,0 +1,176 @@
+test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) ...
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='diagnostic') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='witness') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='fail-row') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='missing-row') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='oom-counter') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='missing-counter') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='diagnostic') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='witness') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='fail-row') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='missing-row') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='oom-counter') ... FAIL
+  test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='missing-counter') ... FAIL
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='diagnostic')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='witness')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='fail-row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='missing-row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='oom-counter')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='full', scenario='missing-counter')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='diagnostic')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='witness')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='fail-row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='missing-row')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='oom-counter')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+======================================================================
+FAIL: test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse (test_direct_profile.Direct.test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse) (mode='reuse', scenario='missing-counter')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 714, in test_zero_exit_runtime_evidence_failures_retain_private_staging_full_and_reuse
+    result,receipt,events=self.exercise(mutate_public=mutate,reuse=reuse,staging_retained=True)
+                          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 266, in exercise
+    self.assertEqual((self.output/'staging').exists(),staging_retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False != True
+
+----------------------------------------------------------------------
+Ran 1 test in 2.597s
+
+FAILED (failures=12)
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "INCOMPLETE", "launch_ready": false, "consumed": true}
+{"result": "INCOMPLETE", "launch_ready": false, "consumed": true}
+{"result": "INCOMPLETE", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "FAIL", "launch_ready": false, "consumed": true}
+{"result": "INCOMPLETE", "launch_ready": false, "consumed": true}
+{"result": "INCOMPLETE", "launch_ready": false, "consumed": true}
+{"result": "INCOMPLETE", "launch_ready": false, "consumed": true}
+{"known_bad": "DETECTED", "candidate": "6671d176", "adverse_subcases_failed": 12, "native_effects": "substituted"}
+{"protected_lock_metadata_unchanged": true, "protected_lock_metadata": [66306, 657237, 1000, 33152, 0, 1792398177544654975, 1792398177544654975], "blocked_original_lock_touches": [], "guard": "builtins/io/os open before call by exact path and device/inode; flock before call", "wrapper_seconds": 2.795045993058011}

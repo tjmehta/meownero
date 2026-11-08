@@ -1,0 +1,39 @@
+{
+  "schema": "meownero-outer-handoff-source-checks/2",
+  "result": "PASS_SOURCE_ONLY",
+  "tests_this_run": {
+    "profile": 18,
+    "handoff": 11,
+    "total": 29,
+    "failures": 0
+  },
+  "retained_evidence": {
+    "prior_source_tests": 55,
+    "prior_run": "b9e91951-2da4-4f6a-a483-f5afbb06c610",
+    "unchanged_network_policy_provenance_tests": 37,
+    "rerun": false,
+    "platform_consultation_run": "1d5c3ef6-3b8c-4f9f-95e7-58912d624002",
+    "platform_source_tests": 18
+  },
+  "checks": {
+    "source_bindings": "PASS_SOURCE_ONLY",
+    "bash_syntax": "PASS",
+    "git_diff_check": "PASS",
+    "disposable_flock_descriptor_semantics": "PASS_DISPOSABLE_INODE_ONLY"
+  },
+  "native_execution": "NOT_RUN",
+  "resource_observation": "NOT_RUN",
+  "original_lock_acquisition": "NOT_RUN",
+  "build_staging": "NOT_RUN",
+  "platform_bootstrap": "UNAVAILABLE_NO_QUALIFIED_IMPLEMENTATION",
+  "second_admission_channel": "UNAVAILABLE",
+  "manager_recovery": "NOT_RUN",
+  "host_cleanup": "NOT_RUN",
+  "provenance": {
+    "agent": "3730ad68-e373-4c8a-84df-2e11327b86a5",
+    "run": "7145da46-a22c-4bb7-b2fe-162dfb494ce1",
+    "source_authorization_comment": "cf81ba5e-fcb5-44fe-ae6b-5537f57484bd",
+    "platform_findings_comment": "ca2ad2ac-d448-44fe-b228-c151c53fbcfe"
+  },
+  "launch_ready": false
+}

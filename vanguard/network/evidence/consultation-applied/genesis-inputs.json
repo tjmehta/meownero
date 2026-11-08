@@ -1,0 +1,51 @@
+{
+  "schema": "meownero-vanguard-genesis-inputs/1",
+  "result": "PREPARED_NOT_COMPILED_NOT_LAUNCHABLE",
+  "profile_sha256": "920825038185340ea4461e3899c0c74e579249fa57735621b7929dec4f3ef7c5",
+  "upstream_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "consultation": {
+    "comment_id": "3b6c0197-43f9-4c30-a90c-399f82fc0b57",
+    "reviewed_candidate": "4d89b4a35d0a3c8d8f40648989d5b6ffacc2e7b7",
+    "direction": "accepted-for-bounded-non-public-implementation",
+    "exact_genesis_and_candidate": "unverified",
+    "genesis": {
+      "block_version": 1,
+      "transaction_version": 2,
+      "rct_type": "RCTNull",
+      "input_height": 0,
+      "unlock_time": 60,
+      "outputs": 1,
+      "output_amount_atomic": 0,
+      "output_type": "txout_to_key",
+      "public_recovery_scalars_little_endian": [
+        1,
+        2,
+        3
+      ],
+      "amount_zero_commitment_hex": "5866666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
+  "native_recipe": "NOT_RUN",
+  "testnet_admission": "NOT_RUN",
+  "files": {
+    "src/hardforks/hardforks.cpp": {
+      "original_sha256": "1e5e8645150b6162df3e10af0c910966a2a56912d8d19c3e79cfdd9acbe6362b",
+      "changed_sha256": "08f645f982252a8caac4068a2534a9ae9c054b3a21ef04961af01d4b5d0dd31d"
+    },
+    "src/cryptonote_core/blockchain.cpp": {
+      "original_sha256": "55ad1760d739419bda3477b486b39b58dd8decdd700ad2ce25e139c54d27a005",
+      "changed_sha256": "18272f696871e8c0f0522f5eab63eea19318f1c66992ff67a189db482ca010cc"
+    }
+  },
+  "owned_source_sha256": {
+    "native/CMakeLists.txt": "d6da45873fca5eec30f914523f96028474668babbf6d1b02eb0f83441a7d23bb",
+    "native/genesis.cpp": "0b91c54541d51f944d1a9e805b8fdc2520a918ec8e7234427d52a8d38c817bc9"
+  },
+  "patch_sha256": "473e69d695af28afe00b567bcd06440cf72c6a78723445daf239d7473e37a173",
+  "missing": [
+    "native-derived-genesis-bytes-and-hash",
+    "selected-9-90-policy-overlay",
+    "native-admission-root-maturity-and-wallet-evidence"
+  ],
+  "launch_ready": false
+}

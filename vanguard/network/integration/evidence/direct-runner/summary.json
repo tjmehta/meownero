@@ -1,0 +1,136 @@
+{
+  "schema": "meownero-direct-profile-source-evidence/1",
+  "authority_comment": "bf88af40-a84e-4960-a37c-3c8d6d385bf3",
+  "base_commit": "fa7c19622a31439cbd386d8f8698fb4898508ef5",
+  "source_state": "PASS_SOURCE_CHECKS_PENDING_INDEPENDENT_REVIEWS",
+  "native_execution": "NOT_RUN",
+  "launch_ready": false,
+  "candidate_commit": "bound by review packet manifest; not self-referential",
+  "runner_sha256": "f0f4861a29fd75ec32b335b8bc0da8f64fa5f95b5af18e494da759be5c43e632",
+  "inputs_sha256": "8f7ad2ba76743f2dc6bfd7f9ee4389096ec712a68a0ccd7f5da0bf2ee67fcfb3",
+  "candidate_bindings": 66,
+  "reference_bindings": 32,
+  "source_tests": 251,
+  "direct_controller_tests_in_final_suite": 15,
+  "legacy_cli_tests": {
+    "admission": 6,
+    "network": 17,
+    "policy": 14
+  },
+  "budget": {
+    "first_production_edit_utc": "2026-11-01T06:31:09.349762+00:00",
+    "budget_minutes": 120,
+    "passes": "one implementation plus one correction",
+    "authority_comment": "bf88af40-a84e-4960-a37c-3c8d6d385bf3",
+    "correction_pass_utc": "2026-11-01T06:33:48.951403+00:00",
+    "source_pass_finished_utc": "2026-11-01T06:41:04.711244+00:00",
+    "elapsed_minutes": 9.922691366666667
+  },
+  "results": {
+    "full-source-tests.log": {
+      "sha256": "f555e2d6fe3f1bb1f3f0f8eb72e7674182a304bbe25b0c8ee516580066044ff8",
+      "bytes": 59274,
+      "tests": 273,
+      "seconds": 48.604,
+      "result": "FAIL_RETAINED"
+    },
+    "candidate-source-tests-before-parent-guard.log": {
+      "sha256": "ea5b27bdde7c456fa2242520f615c82dd167fd2b3a4776673985e6c9e9484481",
+      "bytes": 38474,
+      "tests": 250,
+      "seconds": 57.697,
+      "result": "PASS"
+    },
+    "candidate-source-tests.log": {
+      "sha256": "bfb5cdad1f289d07c49f43b2b981c540aeae92e66391e600448fdc3db6098d2e",
+      "bytes": 38713,
+      "tests": 251,
+      "seconds": 55.786,
+      "result": "PASS"
+    },
+    "direct-controller-tests.log": {
+      "sha256": "ab434ad7f965c1117f7ef77dcc61d89cd3d8d76d559604c932c4ed48dc13ef2d",
+      "bytes": 2756,
+      "tests": 14,
+      "seconds": 0.659,
+      "result": "PASS"
+    },
+    "legacy-admission-tests.log": {
+      "sha256": "0eb926ea6e9a80322d9767c6e718e2ed7b3c25a98d496d324073cbb8c5aa31e8",
+      "bytes": 702,
+      "tests": 6,
+      "seconds": 0.04,
+      "result": "PASS"
+    },
+    "legacy-network-tests.log": {
+      "sha256": "0d071094d50927a139d13f0863eef6c1c7d949a9a045c8091d5d3b1e264a0834",
+      "bytes": 2523,
+      "tests": 17,
+      "seconds": 2.597,
+      "result": "PASS"
+    },
+    "legacy-policy-tests.log": {
+      "sha256": "fe1842c791403dc23b59c53638069a75c34db90af72a42b5f813419433094292",
+      "bytes": 3259,
+      "tests": 14,
+      "seconds": 1.294,
+      "result": "FAIL_RETAINED_EVIDENCE_PARENT"
+    },
+    "legacy-policy-private-parent-tests.log": {
+      "sha256": "d5cf85329c10548e65846015f9195daffceb828749481b1235ed51e0ac42a46e",
+      "bytes": 2281,
+      "tests": 14,
+      "seconds": 0.837,
+      "result": "PASS"
+    },
+    "freeze.log": {
+      "sha256": "8914325f37deb5c7e09c6de6a25f93b96be0024434e6beed73da4a9f6933a3aa",
+      "bytes": 4100,
+      "tests": null,
+      "seconds": null,
+      "result": "SOURCE_CHECK"
+    },
+    "freeze-check.log": {
+      "sha256": "8914325f37deb5c7e09c6de6a25f93b96be0024434e6beed73da4a9f6933a3aa",
+      "bytes": 4100,
+      "tests": null,
+      "seconds": null,
+      "result": "SOURCE_CHECK"
+    }
+  },
+  "retained_failures": [
+    "Broad unittest discovery: 273 tests, 24 errors from CLI-only fixture globals and one stale manager source hash. Correct CLI invocations and refreshed metadata pass separately.",
+    "First policy CLI: 14 tests passed, but evidence publication refused the group-writable parent. Repeated with an owned 0700 validation parent; exit 0.",
+    "Initial 12-test direct run passed with open-pipe ResourceWarnings; command pipe cleanup corrected and final suite used -W error::ResourceWarning."
+  ],
+  "exclusions": {
+    "native_foreign_db_identity_refusal": "NOT_RUN",
+    "native_checkpoint_rejection": "NOT_RUN",
+    "native_offline_wallet_fork_agreement": "NOT_RUN",
+    "seed_restore_funded_rescan": "NOT_RUN",
+    "full_remaining_matrix": "NOT_RUN"
+  },
+  "formal_core_stage": "bab7a7aa-fe78-4cc9-8822-2b3d1e9b35de",
+  "formal_core_decision": "47234b59-ff49-4bb7-a20a-19df2c94d52e",
+  "changes_requested_count": 2,
+  "preserved": {
+    "production_targets": [
+      "daemon",
+      "simplewallet",
+      "wallet_rpc_server"
+    ],
+    "profile": true,
+    "source_overlay_cargo_toolchain_pins": true,
+    "frozen_native_driver": true,
+    "wire_cli_fixtures": true,
+    "funding": 0,
+    "transactions": 0,
+    "private_rpc": true
+  },
+  "unconfirmed": [
+    "independent Platform changed-source assessment and exact direct runtime grant",
+    "independent Security loopback/auth/operator assessment",
+    "native build, peer, wallet, auth, isolation, reopen and cleanup rows",
+    "full remaining launch acceptance matrix"
+  ]
+}

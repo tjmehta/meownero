@@ -1,0 +1,17 @@
+{
+  "upstream": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "files": {
+    "contrib/epee/include/net/http_protocol_handler.h": {
+      "sha256": "c8bc41f83f1a9debe5b63fcc8a6d35216e50c9b26a4b75b0292d0c24876830ef"
+    },
+    "contrib/epee/src/http_auth.cpp": {
+      "sha256": "3caa2376ecae1bccf92ff5445f32ef38384401c692e9d7c189e97698b9477f96"
+    }
+  },
+  "python312": "https://github.com/python/cpython/blob/v3.12.3/Lib/urllib/request.py",
+  "http_client_docs": "https://docs.python.org/3/library/http.client.html",
+  "cause_locations": [
+    "http_protocol_handler.h:197-200,237",
+    "http_auth.cpp:361-377,706-744,790-795"
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "base_commit": "00261c88c441cb471c3eda3480ec6488a723fdec",
+  "candidate_runner_sha256": "41bd65554c3856f6df0ada714e19e902931d03d06b145acbe65207a3fae01b15",
+  "native_execution": "NOT_RUN",
+  "docker": "SUBSTITUTED",
+  "host_locks": "DISPOSABLE_ONLY; every acquisition checked",
+  "scenarios": [
+    {
+      "name": "successful_container_rejected_by_build_gate",
+      "controller_exit": 1,
+      "result": "FAIL",
+      "started_phases": 1,
+      "failure_phase": "build",
+      "phase_diagnostics": {
+        "build": {
+          "started": true,
+          "cli_exit_code": 0,
+          "container_exit_code": 0,
+          "oom_killed": false
+        }
+      },
+      "build_rejection_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "rejected_key_paths": {
+        "build.json": "build.json.three_production_binaries.binaries.monerod"
+      },
+      "retained_payload": "RETAINED",
+      "retained_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "retained_sha256": "214c9ac1cdcb377f155cbe7350d0c59597a24b2bc09a8520f7ea1bc2eca8b852",
+      "retained_size_bytes": 61,
+      "retained_exact_bytes": true,
+      "staging_removed": true,
+      "cleanup": {
+        "owned_pids_absent": "PASS",
+        "owned_cid_absent": "PASS",
+        "owned_staging_removed": "PASS",
+        "lock_released": "PASS"
+      },
+      "expected": "Rejected build bytes and trusted path retained on failed pre-runtime build"
+    },
+    {
+      "name": "nonzero_build_cli_and_container",
+      "controller_exit": 1,
+      "result": "FAIL",
+      "started_phases": 1,
+      "failure_phase": "build",
+      "phase_diagnostics": {
+        "build": {
+          "started": true,
+          "cli_exit_code": 17,
+          "container_exit_code": 17,
+          "oom_killed": false
+        }
+      },
+      "build_rejection_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "rejected_key_paths": {
+        "build.json": "build.json.three_production_binaries.binaries.monerod"
+      },
+      "retained_payload": "RETAINED",
+      "retained_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "retained_sha256": "214c9ac1cdcb377f155cbe7350d0c59597a24b2bc09a8520f7ea1bc2eca8b852",
+      "retained_size_bytes": 61,
+      "retained_exact_bytes": true,
+      "staging_removed": true,
+      "cleanup": {
+        "owned_pids_absent": "PASS",
+        "owned_cid_absent": "PASS",
+        "owned_staging_removed": "PASS",
+        "lock_released": "PASS"
+      },
+      "expected": "Rejected build bytes and trusted path retained on failed pre-runtime build"
+    },
+    {
+      "name": "nonzero_container_with_zero_build_cli",
+      "controller_exit": 1,
+      "result": "FAIL",
+      "started_phases": 1,
+      "failure_phase": "build",
+      "phase_diagnostics": {
+        "build": {
+          "started": true,
+          "cli_exit_code": 0,
+          "container_exit_code": 17,
+          "oom_killed": false
+        }
+      },
+      "build_rejection_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "rejected_key_paths": {
+        "build.json": "build.json.three_production_binaries.binaries.monerod"
+      },
+      "retained_payload": "RETAINED",
+      "retained_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "retained_sha256": "214c9ac1cdcb377f155cbe7350d0c59597a24b2bc09a8520f7ea1bc2eca8b852",
+      "retained_size_bytes": 61,
+      "retained_exact_bytes": true,
+      "staging_removed": true,
+      "cleanup": {
+        "owned_pids_absent": "PASS",
+        "owned_cid_absent": "PASS",
+        "owned_staging_removed": "PASS",
+        "lock_released": "PASS"
+      },
+      "expected": "Rejected build bytes and trusted path retained on failed pre-runtime build"
+    },
+    {
+      "name": "raised_build_command",
+      "controller_exit": 1,
+      "result": "FAIL",
+      "started_phases": 1,
+      "failure_phase": "build",
+      "phase_diagnostics": {
+        "build": {
+          "started": true,
+          "cli_exit_code": 17
+        }
+      },
+      "build_rejection_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "rejected_key_paths": {
+        "build.json": "build.json.three_production_binaries.binaries.monerod"
+      },
+      "retained_payload": "RETAINED",
+      "retained_key_path": "build.json.three_production_binaries.binaries.monerod",
+      "retained_sha256": "214c9ac1cdcb377f155cbe7350d0c59597a24b2bc09a8520f7ea1bc2eca8b852",
+      "retained_size_bytes": 61,
+      "retained_exact_bytes": true,
+      "staging_removed": true,
+      "cleanup": {
+        "owned_pids_absent": "PASS",
+        "owned_cid_absent": "PASS",
+        "owned_staging_removed": "PASS",
+        "lock_released": "PASS"
+      },
+      "expected": "Rejected build bytes and trusted path retained on failed pre-runtime build"
+    },
+    {
+      "name": "same_historical_ELF_payload_reader_differential",
+      "baseline_refused": true,
+      "candidate_accepted": true,
+      "baseline_main_or_lock_invoked": false
+    }
+  ],
+  "unmet_retention_scenarios": [],
+  "verdict": "PASS_WRITER_CONNECTED_PROBES"
+}

@@ -1,0 +1,166 @@
+{
+  "result": "PASS_SOURCE_BINDINGS_AND_INTERFACES_ONLY",
+  "native_execution": "NOT_RUN",
+  "overlay_files": 10,
+  "repository_bindings": 32,
+  "upstream_bindings": 63,
+  "denial_request_bindings": {
+    "transfer": {
+      "handler": "on_transfer",
+      "schema": "COMMAND_RPC_TRANSFER",
+      "required_fields": [
+        "account_index",
+        "destinations",
+        "get_tx_key",
+        "payment_id",
+        "priority",
+        "subaddr_indices",
+        "unlock_time"
+      ]
+    },
+    "transfer_split": {
+      "handler": "on_transfer_split",
+      "schema": "COMMAND_RPC_TRANSFER_SPLIT",
+      "required_fields": [
+        "account_index",
+        "destinations",
+        "get_tx_keys",
+        "payment_id",
+        "priority",
+        "subaddr_indices",
+        "unlock_time"
+      ]
+    },
+    "sweep_all": {
+      "handler": "on_sweep_all",
+      "schema": "COMMAND_RPC_SWEEP_ALL",
+      "required_fields": [
+        "account_index",
+        "address",
+        "below_amount",
+        "get_tx_keys",
+        "payment_id",
+        "priority",
+        "subaddr_indices",
+        "unlock_time"
+      ]
+    },
+    "sweep_single": {
+      "handler": "on_sweep_single",
+      "schema": "COMMAND_RPC_SWEEP_SINGLE",
+      "required_fields": [
+        "address",
+        "get_tx_key",
+        "key_image",
+        "payment_id",
+        "priority",
+        "unlock_time"
+      ]
+    },
+    "sign": {
+      "handler": "on_sign",
+      "schema": "COMMAND_RPC_SIGN",
+      "required_fields": [
+        "data",
+        "signature_type"
+      ]
+    },
+    "sign_transfer": {
+      "handler": "on_sign_transfer",
+      "schema": "COMMAND_RPC_SIGN_TRANSFER",
+      "required_fields": [
+        "unsigned_txset"
+      ]
+    },
+    "query_key": {
+      "handler": "on_query_key",
+      "schema": "COMMAND_RPC_QUERY_KEY",
+      "required_fields": [
+        "key_type"
+      ]
+    },
+    "set_daemon": {
+      "handler": "on_set_daemon",
+      "schema": "COMMAND_RPC_SET_DAEMON",
+      "required_fields": [
+        "address",
+        "password",
+        "ssl_allowed_fingerprints",
+        "ssl_ca_file",
+        "ssl_certificate_path",
+        "ssl_private_key_path",
+        "username"
+      ]
+    },
+    "store": {
+      "handler": "on_store",
+      "schema": "COMMAND_RPC_STORE",
+      "required_fields": []
+    },
+    "stop_wallet": {
+      "handler": "on_stop_wallet",
+      "schema": "COMMAND_RPC_STOP_WALLET",
+      "required_fields": []
+    },
+    "close_wallet": {
+      "handler": "on_close_wallet",
+      "schema": "COMMAND_RPC_CLOSE_WALLET",
+      "required_fields": []
+    },
+    "create_address": {
+      "handler": "on_create_address",
+      "schema": "COMMAND_RPC_CREATE_ADDRESS",
+      "required_fields": [
+        "account_index",
+        "label"
+      ]
+    },
+    "create_account": {
+      "handler": "on_create_account",
+      "schema": "COMMAND_RPC_CREATE_ACCOUNT",
+      "required_fields": [
+        "label"
+      ]
+    },
+    "create_wallet": {
+      "handler": "on_create_wallet",
+      "schema": "COMMAND_RPC_CREATE_WALLET",
+      "required_fields": [
+        "filename",
+        "language",
+        "password"
+      ]
+    },
+    "open_wallet": {
+      "handler": "on_open_wallet",
+      "schema": "COMMAND_RPC_OPEN_WALLET",
+      "required_fields": [
+        "filename",
+        "password"
+      ]
+    },
+    "restore_deterministic_wallet": {
+      "handler": "on_restore_deterministic_wallet",
+      "schema": "COMMAND_RPC_RESTORE_DETERMINISTIC_WALLET",
+      "required_fields": [
+        "filename",
+        "language",
+        "password",
+        "seed",
+        "seed_offset"
+      ]
+    },
+    "refresh": {
+      "handler": "on_refresh",
+      "schema": "COMMAND_RPC_REFRESH",
+      "required_fields": []
+    }
+  },
+  "source_candidate_sha256": "ee6d40a24446318291afe4f6279bfa8aae0faec560e4e35a6755fbc1068e74e3",
+  "inputs_file_sha256": "4fdf36340b11238725097597c1263f4e1d924478d8a217c9724073f2376b25c1",
+  "public_launch": false,
+  "limitations": [
+    "No native schema parser, prompt, daemon, wallet, guard, build, resource enclosure or cleanup was executed."
+  ],
+  "candidate_files": 20
+}

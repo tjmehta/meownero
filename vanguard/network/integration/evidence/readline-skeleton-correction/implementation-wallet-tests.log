@@ -1,0 +1,63 @@
+test_accepted_baseline_refuses_pinned_background_startup (test_direct_profile.WalletCLI.test_accepted_baseline_refuses_pinned_background_startup) ... ok
+test_actual_create_and_reopen_prompt_sequences (test_direct_profile.WalletCLI.test_actual_create_and_reopen_prompt_sequences) ... ok
+test_actual_main_keeps_exit_note_private_with_closed_export (test_direct_profile.WalletCLI.test_actual_main_keeps_exit_note_private_with_closed_export) ... <frozen linecache>:311: DeprecationWarning: Module globals is missing a __spec__.loader
+ok
+test_actual_wallet_rpc_argv_keeps_server_ssl_and_restriction (test_direct_profile.WalletCLI.test_actual_wallet_rpc_argv_keeps_server_ssl_and_restriction) ... ok
+test_altered_or_command_background_prompt_refuses_without_answer (test_direct_profile.WalletCLI.test_altered_or_command_background_prompt_refuses_without_answer) ... ok
+test_background_mining_startup_is_declined_and_wallet_reopens (test_direct_profile.WalletCLI.test_background_mining_startup_is_declined_and_wallet_reopens) ... ok
+test_baseline_unknown_config_refuses_before_log_setup (test_direct_profile.WalletCLI.test_baseline_unknown_config_refuses_before_log_setup) ... ok
+test_command_eio_retains_expected_command (test_direct_profile.WalletCLI.test_command_eio_retains_expected_command) ... ok
+test_early_eio_reaps_and_retains_status_and_label (test_direct_profile.WalletCLI.test_early_eio_reaps_and_retains_status_and_label) ... ok
+test_eof_reaps_and_retains_status (test_direct_profile.WalletCLI.test_eof_reaps_and_retains_status) ... ok
+test_exact_818a4fc_readline_controls_fail_before_commands (test_direct_profile.WalletCLI.test_exact_818a4fc_readline_controls_fail_before_commands) ... ok
+test_out_of_sync_prompt_is_accepted (test_direct_profile.WalletCLI.test_out_of_sync_prompt_is_accepted) ... ok
+test_pinned_confirmation_prompt_refuses_without_answer (test_direct_profile.WalletCLI.test_pinned_confirmation_prompt_refuses_without_answer) ... ok
+test_pinned_options_and_prompts_match_git_objects (test_direct_profile.WalletCLI.test_pinned_options_and_prompts_match_git_objects) ... ok
+test_readline_adverse_prompts_still_refuse_and_reap (test_direct_profile.WalletCLI.test_readline_adverse_prompts_still_refuse_and_reap) ... ok
+test_readline_background_question_is_declined_once (test_direct_profile.WalletCLI.test_readline_background_question_is_declined_once) ... ok
+test_readline_two_phase_csi_osc_markers_and_backspace_create_reopen (test_direct_profile.WalletCLI.test_readline_two_phase_csi_osc_markers_and_backspace_create_reopen) ... ok
+test_repeated_background_prompt_refuses_after_one_negative_answer (test_direct_profile.WalletCLI.test_repeated_background_prompt_refuses_after_one_negative_answer) ... ok
+test_skeleton_connected_failure_redacts_fixture_password_and_secrets (test_direct_profile.WalletCLI.test_skeleton_connected_failure_redacts_fixture_password_and_secrets) ... ok
+test_skeleton_controls_formatting_tail_and_atomic_private_replacement (test_direct_profile.WalletCLI.test_skeleton_controls_formatting_tail_and_atomic_private_replacement) ... FAIL
+test_skeleton_dictionary_all_1626_words_binds_pinned_header (test_direct_profile.WalletCLI.test_skeleton_dictionary_all_1626_words_binds_pinned_header) ... FAIL
+test_skeleton_redacts_pinned_seed_address_types_and_keys (test_direct_profile.WalletCLI.test_skeleton_redacts_pinned_seed_address_types_and_keys) ... ok
+test_unknown_and_repeated_password_prompts_refuse (test_direct_profile.WalletCLI.test_unknown_and_repeated_password_prompts_refuse) ... ok
+test_wallet_assertions_commands_credentials_and_rows_unchanged (test_direct_profile.WalletCLI.test_wallet_assertions_commands_credentials_and_rows_unchanged) ... FAIL
+
+======================================================================
+FAIL: test_skeleton_controls_formatting_tail_and_atomic_private_replacement (test_direct_profile.WalletCLI.test_skeleton_controls_formatting_tail_and_atomic_private_replacement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 1780, in test_skeleton_controls_formatting_tail_and_atomic_private_replacement
+    self.assertIn(b'<w><0x1B>',result);self.assertIn(b'<b58><0x1B>',result)
+                                       ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'<b58><0x1B>' not found in b'<w><0x1B><0x1B>[0m <hex><0x1B>'
+
+======================================================================
+FAIL: test_skeleton_dictionary_all_1626_words_binds_pinned_header (test_direct_profile.WalletCLI.test_skeleton_dictionary_all_1626_words_binds_pinned_header)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 1765, in test_skeleton_dictionary_all_1626_words_binds_pinned_header
+    self.assertEqual(result.count(b'<w>'),expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1155 != 1622
+
+======================================================================
+FAIL: test_wallet_assertions_commands_credentials_and_rows_unchanged (test_direct_profile.WalletCLI.test_wallet_assertions_commands_credentials_and_rows_unchanged)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>/.paperclip/worktrees/TJS-2504-meownero-isolated-shared-testnet-profile-and-bootstrap-launch-candidate/vanguard/network/test_direct_profile.py", line 1919, in test_wallet_assertions_commands_credentials_and_rows_unchanged
+    self.assertEqual(contract(before), contract(after))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ["Cal[7585 chars]rgs=[Name(id='height'), Constant(value='persis[5566 chars])])"] != ["Cal[7585 chars]rgs=[BoolOp(op=And(), values=[Subscript(value=[5566 chars])])"]
+
+First differing element 22:
+"Call[54 chars]rgs=[Name(id='height'), Constant(value='persis[30 chars]')])"
+"Call[54 chars]rgs=[BoolOp(op=And(), values=[Subscript(value=[234 chars]')])"
+
+Diff is 15765 characters long. Set self.maxDiff to None to see it.
+
+----------------------------------------------------------------------
+Ran 24 tests in 3.407s
+
+FAILED (failures=3)
