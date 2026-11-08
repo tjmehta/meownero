@@ -43,7 +43,14 @@ def interruption_observation(journey, diagnostic, tester_sha256, child_exit, beg
 
 
 def main():
+    current = {}
+
     def cancelled(signum, frame):
+        # Mark the active case so an exported failure separates a delivered
+        # supervisor cancellation from its own fixture or assertion errors.
+        # Monotonic stamps share the host clock with the supervisor receipts.
+        current.update(interrupted_by_signal=signal.Signals(signum).name,
+                       interrupted_monotonic=round(time.monotonic(), 6))
         raise RuntimeError('control harness interrupted; stop its owned tester')
     signal.signal(signal.SIGTERM, cancelled)
     parser = argparse.ArgumentParser(description=__doc__)
@@ -57,14 +64,16 @@ def main():
     assert not out.exists() and out.parent.is_dir()
     out.mkdir(mode=0o700)
     rows = []
-    current = {'case': 'clean-preflight', 'phase': 'PREFLIGHT', 'reason_enum': 'CLEAN_PREFLIGHT_FAILED'}
+    current.update(case='clean-preflight', phase='PREFLIGHT', reason_enum='CLEAN_PREFLIGHT_FAILED',
+                   case_started_monotonic=round(time.monotonic(), 6))
     receipt = {'schema': 'meownero-portable-controls/2', 'result': 'FAIL_REFUSALS',
                'release_manifest_sha256': hashlib.sha256((package / 'release.json').read_bytes()).hexdigest(),
                'cases': rows}
 
     def begin(case, phase, reason):
         current.clear()
-        current.update(case=case, phase=phase, reason_enum=reason)
+        current.update(case=case, phase=phase, reason_enum=reason,
+                       case_started_monotonic=round(time.monotonic(), 6))
 
     def expect(condition, reason):
         current['reason_enum'] = reason
@@ -166,13 +175,18 @@ def main():
                     child = subprocess.Popen(argv,
                         stdout=log, stderr=subprocess.STDOUT,
                         **({'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP} if windows else {'preexec_fn': lambda: signal.pthread_sigmask(signal.SIG_SETMASK, mask)}))
+                    # Popen has returned: later failures, including a forwarded
+                    # cancellation while waiting, are not launch errors. Set this
+                    # while signals are still blocked so no window mislabels them.
+                    current.update(phase='WAIT_LIVE_INTERRUPTION_FIXTURE', reason_enum='INTERRUPTION_FIXTURE_WAIT_ERROR',
+                                   fixture_spawned_monotonic=round(time.monotonic(), 6))
                     if not windows:
                         signal.pthread_sigmask(signal.SIG_SETMASK, mask)
                     end = time.monotonic() + 60
                     fixture = journey / ('private/daemon.log' if windows and name == 'deadline' else 'private/sender.log')
                     while not fixture.exists() and child.poll() is None and time.monotonic() < end:
                         time.sleep(0.1)
-                    current['phase'] = 'WAIT_LIVE_INTERRUPTION_FIXTURE'
+                    current['fixture_wait_ended_monotonic'] = round(time.monotonic(), 6)
                     if diagnostic_wrapper is not None:
                         current['interruption_fixture'] = interruption_observation(journey, diagnostic, tester_digest,
                             child.poll(), started, projection.public_diagnostic)

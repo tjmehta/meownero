@@ -18,6 +18,7 @@ import stat
 import subprocess
 import sys
 import tarfile
+import threading
 import time
 import zipfile
 import xml.etree.ElementTree as ET
@@ -299,11 +300,153 @@ def public_check(value):
     return result
 
 
+class _DarwinTimeval(ctypes.Structure):
+    _fields_ = [('tv_sec', ctypes.c_int64), ('tv_usec', ctypes.c_int32)]
+
+
+class _DarwinExternProc(ctypes.Structure):
+    # <sys/proc.h> struct extern_proc, LP64 (x86_64 and arm64 share this layout).
+    _fields_ = [('p_starttime', _DarwinTimeval), ('p_vmspace', ctypes.c_void_p), ('p_sigacts', ctypes.c_void_p),
+                ('p_flag', ctypes.c_int), ('p_stat', ctypes.c_char), ('p_pid', ctypes.c_int32),
+                ('p_oppid', ctypes.c_int32), ('p_dupfd', ctypes.c_int), ('user_stack', ctypes.c_void_p),
+                ('exit_thread', ctypes.c_void_p), ('p_debugger', ctypes.c_int), ('sigwait', ctypes.c_int),
+                ('p_estcpu', ctypes.c_uint), ('p_cpticks', ctypes.c_int), ('p_pctcpu', ctypes.c_uint32),
+                ('p_wchan', ctypes.c_void_p), ('p_wmesg', ctypes.c_void_p), ('p_swtime', ctypes.c_uint),
+                ('p_slptime', ctypes.c_uint), ('p_realtimer', _DarwinTimeval * 2), ('p_rtime', _DarwinTimeval),
+                ('p_uticks', ctypes.c_uint64), ('p_sticks', ctypes.c_uint64), ('p_iticks', ctypes.c_uint64),
+                ('p_traceflag', ctypes.c_int), ('p_tracep', ctypes.c_void_p), ('p_siglist', ctypes.c_int),
+                ('p_textvp', ctypes.c_void_p), ('p_holdcnt', ctypes.c_int), ('p_sigmask', ctypes.c_uint32),
+                ('p_sigignore', ctypes.c_uint32), ('p_sigcatch', ctypes.c_uint32), ('p_priority', ctypes.c_ubyte),
+                ('p_usrpri', ctypes.c_ubyte), ('p_nice', ctypes.c_char), ('p_comm', ctypes.c_char * 17),
+                ('p_pgrp', ctypes.c_void_p), ('p_addr', ctypes.c_void_p), ('p_xstat', ctypes.c_ushort),
+                ('p_acflag', ctypes.c_ushort), ('p_ru', ctypes.c_void_p)]
+
+
+class _DarwinPcred(ctypes.Structure):
+    _fields_ = [('pc_lock', ctypes.c_char * 72), ('pc_ucred', ctypes.c_void_p), ('p_ruid', ctypes.c_uint32),
+                ('p_svuid', ctypes.c_uint32), ('p_rgid', ctypes.c_uint32), ('p_svgid', ctypes.c_uint32),
+                ('p_refcnt', ctypes.c_int)]
+
+
+class _DarwinUcred(ctypes.Structure):
+    _fields_ = [('cr_ref', ctypes.c_int32), ('cr_uid', ctypes.c_uint32), ('cr_ngroups', ctypes.c_short),
+                ('cr_groups', ctypes.c_uint32 * 16)]
+
+
+class _DarwinVmspace(ctypes.Structure):
+    _fields_ = [('vm_refcnt', ctypes.c_int), ('vm_shm', ctypes.c_void_p), ('vm_sizes', ctypes.c_int32 * 5),
+                ('vm_addrs', ctypes.c_void_p * 3)]
+
+
+class _DarwinEproc(ctypes.Structure):
+    # <sys/sysctl.h> struct eproc, with nested _pcred/_ucred/vmspace as declared.
+    _fields_ = [('e_paddr', ctypes.c_void_p), ('e_sess', ctypes.c_void_p), ('e_pcred', _DarwinPcred),
+                ('e_ucred', _DarwinUcred), ('e_vm', _DarwinVmspace), ('e_ppid', ctypes.c_int32),
+                ('e_pgid', ctypes.c_int32), ('e_jobc', ctypes.c_short), ('e_tdev', ctypes.c_int32),
+                ('e_tpgid', ctypes.c_int32), ('e_tsess', ctypes.c_void_p), ('e_wmesg', ctypes.c_char * 8),
+                ('e_xsize', ctypes.c_int32), ('e_xrssize', ctypes.c_short), ('e_xccount', ctypes.c_short),
+                ('e_xswrss', ctypes.c_short), ('e_flag', ctypes.c_int32), ('e_login', ctypes.c_char * 12),
+                ('e_spare', ctypes.c_int32 * 4)]
+
+
+class _DarwinKinfoProc(ctypes.Structure):
+    _fields_ = [('kp_proc', _DarwinExternProc), ('kp_eproc', _DarwinEproc)]
+
+
+DARWIN_PROCESS_STATES = {1: 'I', 2: 'R', 3: 'S', 4: 'T', 5: 'Z'}
+
+
+def parse_darwin_process_table(raw):
+    """Decode sysctl kern.proc.all records into the snapshot row schema."""
+    width = ctypes.sizeof(_DarwinKinfoProc)
+    assert width == 648 and len(raw) % width == 0, 'KERNEL_PROCESS_TABLE_LAYOUT_MISMATCH'
+    table = []
+    for offset in range(0, len(raw), width):
+        record = _DarwinKinfoProc.from_buffer_copy(raw, offset)
+        proc, eproc = record.kp_proc, record.kp_eproc
+        table.append((proc.p_pid, eproc.e_ppid, eproc.e_pcred.p_ruid, eproc.e_ucred.cr_uid,
+                      (proc.p_starttime.tv_sec, proc.p_starttime.tv_usec),
+                      DARWIN_PROCESS_STATES.get(proc.p_stat[0], '?'),
+                      proc.p_comm.decode('utf-8', 'replace')))
+    return table
+
+
+def darwin_process_table(pid=None):
+    """Read the kernel process table that ps itself starts from (sysctl kern.proc.all).
+
+    Darwin ps then opens every listed task and walks its VM map regions
+    (adv_cmds ps/tasks.c get_task_info: task_read_for_pid, mach_vm_region),
+    which stalls for seconds behind a starting monerod's address-space changes.
+    This table copy reads only process, credential and session fields
+    (xnu bsd/kern/kern_sysctl.c fill_user64_eproc/externproc).
+    """
+    library = ctypes.CDLL(None, use_errno=True)
+    call = library.sysctl
+    call.argtypes = [ctypes.POINTER(ctypes.c_int), ctypes.c_uint, ctypes.c_void_p,
+                     ctypes.POINTER(ctypes.c_size_t), ctypes.c_void_p, ctypes.c_size_t]
+    call.restype = ctypes.c_int
+    # CTL_KERN, KERN_PROC, then KERN_PROC_ALL as ps uses, or KERN_PROC_PID for one re-read.
+    mib = (ctypes.c_int * 4)(1, 14, 0, 0) if pid is None else (ctypes.c_int * 4)(1, 14, 1, pid)
+    for _ in range(8):
+        size = ctypes.c_size_t(0)
+        if call(mib, 4, None, ctypes.byref(size), None, 0) != 0:
+            raise OSError(ctypes.get_errno(), 'kern.proc.all size query failed')
+        size.value += size.value // 4 + ctypes.sizeof(_DarwinKinfoProc) * 64
+        buffer = ctypes.create_string_buffer(size.value)
+        if call(mib, 4, buffer, ctypes.byref(size), None, 0) == 0:
+            table = parse_darwin_process_table(buffer.raw[:size.value])
+            if pid is not None:
+                assert all(row[0] == pid for row in table), 'KERNEL_PROCESS_TABLE_LAYOUT_MISMATCH'
+                return table
+            mine = [row for row in table if row[0] == os.getpid()]
+            # Fail closed unless the decoded layout reproduces this process exactly.
+            assert len(mine) == 1 and mine[0][1:4] == (os.getppid(), os.getuid(), os.geteuid()), \
+                'KERNEL_PROCESS_TABLE_LAYOUT_MISMATCH'
+            return table
+        if ctypes.get_errno() != 12:  # ENOMEM: the table grew; retry with a fresh size.
+            raise OSError(ctypes.get_errno(), 'kern.proc.all read failed')
+    raise OSError(12, 'kern.proc.all kept growing')
+
+
+def kernel_table_output(*, timeout, receipt, context, pid=None):
+    """Bound the in-process table read by the same deadline as a ps observer."""
+    began, box = time.monotonic(), {}
+    cost = {'operation': 'OWNED_PROCESS_TABLE', 'source': 'SYSCTL_KERN_PROC_' + ('ALL' if pid is None else 'PID'),
+            'context': context,
+            'timeout_seconds': timeout, 'result': 'FAIL', 'began_monotonic': round(began, 6)}
+
+    def read():
+        try:
+            box['table'] = darwin_process_table(pid)
+        except BaseException as error:
+            box['error'] = error
+
+    try:
+        worker = threading.Thread(target=read, daemon=True)
+        worker.start()
+        worker.join(timeout)
+        if worker.is_alive():
+            # A read-only table copy has no process to reap; the deadline still fails.
+            cost['result'] = 'TIMEOUT'
+            raise subprocess.TimeoutExpired('sysctl kern.proc.all', timeout)
+        if 'error' in box:
+            raise box['error']
+        cost.update(result='PASS', process_rows=len(box['table']))
+        return box['table']
+    finally:
+        cost['elapsed_seconds'] = round(time.monotonic() - began, 6)
+        summary = receipt.setdefault('snapshot_cost', {'calls': 0, 'max_elapsed_seconds': 0, 'recent': []})
+        summary['calls'] += 1
+        summary['max_elapsed_seconds'] = max(summary['max_elapsed_seconds'], cost['elapsed_seconds'])
+        summary['recent'] = (summary['recent'] + [cost])[-8:]
+
+
 def snapshot_output(argv, *, timeout, receipt, context):
     """Time only the owned observer; discard incomplete output as authority."""
     began, observer = time.monotonic(), None
+    # The host monotonic clock is shared with the controls harness receipts.
     cost = {'operation': 'OWNED_PROCESS_SNAPSHOT', 'context': context,
-            'timeout_seconds': timeout, 'result': 'FAIL'}
+            'timeout_seconds': timeout, 'result': 'FAIL', 'began_monotonic': round(began, 6)}
     try:
         observer = subprocess.Popen(argv, stdout=subprocess.PIPE, text=True)
         cost.update(observer_pid=observer.pid, spawn_seconds=round(time.monotonic() - began, 6))
@@ -431,8 +574,12 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
         absent = False
         if pid not in known and (states.get(pid, '').startswith('Z') or row[4] == '(ps)'):
             absent = pid_absent(pid, {})
-            if not absent and platform.system() == 'Linux' and states.get(pid, '').startswith('Z'):
-                # Timed Popen.wait can sleep before reaping an exited child.
+            helper_exit_race = (platform.system() == 'Darwin' and row[4] == '(ps)' and process is not None
+                                and row[0] == process.pid and row[2] != os.geteuid())
+            if not absent and (helper_exit_race or platform.system() == 'Linux' and states.get(pid, '').startswith('Z')):
+                # Timed Popen.wait can sleep before reaping an exited child, and a
+                # Darwin helper whose single-process argv query found it gone may
+                # still await that reap.
                 # https://docs.python.org/3.13/library/subprocess.html#subprocess.Popen.wait
                 # Wait read-only for actual absence; infer no executable or
                 # ownership, and never extend the phase's existing deadline.
@@ -530,14 +677,58 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
         rows = {}
         states.clear()
         snapshot_began = time.monotonic()
+        darwin = platform.system() == 'Darwin'
+        operation = 'OWNED_PROCESS_TABLE' if darwin else 'OWNED_PROCESS_SNAPSHOT'
         try:
-            output = snapshot_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
-                                     timeout=5, receipt=receipt, context=snapshot_context)
+            if darwin:
+                # Darwin ps -ax inspects every task's VM map and stalls behind a
+                # starting monerod; read the kernel table instead (same deadline).
+                for pid, ppid, ruid, euid, start, state, comm in kernel_table_output(
+                        timeout=5, receipt=receipt, context=snapshot_context):
+                    # The table carries no argv. '(comm)' is ps's own display
+                    # when argv is unavailable, so existing exit-display checks hold.
+                    rows[pid] = (ppid, ruid, euid, start, '(' + comm + ')')
+                    states[pid] = state
+                wrapper = process.pid if process is not None else None
+                for pid, row in list(rows.items()):
+                    # Only a direct wrapper child with another effective UID is
+                    # judged by argv; ps -p inspects that single process only.
+                    if row[0] == wrapper and row[2] != os.geteuid() and not states[pid].startswith('Z'):
+                        operation = 'OWNED_HELPER_ARGV'
+                        try:
+                            argv = snapshot_output(['/bin/ps', '-p', str(pid), '-o', 'command='], timeout=5,
+                                                   receipt=receipt, context=snapshot_context).strip()
+                        except subprocess.CalledProcessError:
+                            argv = ''  # Already exited: keep the exit display; absence is proven later.
+                        if argv:
+                            rows[pid] = row[:4] + (argv,)
+                        else:
+                            # Pair the exit display with a fresh kernel state for this PID.
+                            # A vanished known helper is gone; a vanished first sighting
+                            # keeps its row so its actual absence is proven and recorded.
+                            fresh = kernel_table_output(timeout=5, receipt=receipt, context=snapshot_context, pid=pid)
+                            if not fresh:
+                                if pid in known:
+                                    rows.pop(pid)
+                                    states.pop(pid, None)
+                            elif fresh[0][1:5] != row[:4]:
+                                reject('HELPER_ROW_CHANGED_DURING_ARGV_QUERY')
+                            else:
+                                states[pid] = fresh[0][5]
+                        operation = 'OWNED_PROCESS_TABLE'
+            else:
+                output = snapshot_output(['/bin/ps', '-axo', 'pid=,ppid=,ruid=,uid=,lstart=,state=,command='],
+                                         timeout=5, receipt=receipt, context=snapshot_context)
+                for line in output.splitlines():
+                    fields = line.split(None, 10)
+                    if len(fields) == 11:
+                        rows[int(fields[0])] = (int(fields[1]), int(fields[2]), int(fields[3]), tuple(fields[4:9]), fields[10])
+                        states[int(fields[0])] = fields[9]
         except subprocess.TimeoutExpired:
             # check_output kills/reaps only its own helper before raising.
             # Preserve the first failed call without exporting argv or stderr.
             elapsed = round(time.monotonic() - snapshot_began, 3)
-            event = {'operation': 'OWNED_PROCESS_SNAPSHOT', 'context': snapshot_context,
+            event = {'operation': operation, 'context': snapshot_context,
                      'timeout_seconds': 5, 'elapsed_seconds': elapsed}
             events = receipt.setdefault('snapshot_timeouts', [])
             if len(events) < 64:
@@ -549,11 +740,6 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 receipt['failure_elapsed_seconds'] = elapsed
                 receipt.setdefault('failure_reason', 'PROCESS_SNAPSHOT_DEADLINE')
             raise
-        for line in output.splitlines():
-            fields = line.split(None, 10)
-            if len(fields) == 11:
-                rows[int(fields[0])] = (int(fields[1]), int(fields[2]), int(fields[3]), tuple(fields[4:9]), fields[10])
-                states[int(fields[0])] = fields[9]
         return rows
 
     def remember():
@@ -667,6 +853,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                 if process.poll() is None:
                     process.send_signal(signal.SIGTERM)
                     receipt['forwarded_sigterm'] = True
+                    receipt['forwarded_sigterm_monotonic'] = round(time.monotonic(), 6)
                     # The wrapper owns phase sessions and normally removes them itself.
                     while process.poll() is None and time.monotonic() < end - 20:
                         try:
