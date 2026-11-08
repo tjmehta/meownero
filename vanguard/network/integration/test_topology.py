@@ -641,6 +641,20 @@ class Manager(unittest.TestCase):
                         keeper.kill()
                         keeper.wait()
 
+    def test_spawned_keeper_imports_under_its_real_flags_and_env(self):
+        # Native rehearsal 8614b5ce: `-I` drops the script directory, so the keeper died on
+        # `import network` before taking the lock. Run the exact argv/env spawn_keeper builds.
+        with tempfile.TemporaryDirectory() as tmp:
+            with mock.patch.object(m.subprocess, 'Popen') as popen:
+                m.spawn_keeper(Path(tmp), 1)
+            argv, kwargs = popen.call_args
+            argv = argv[0]
+            self.assertEqual(argv[1:5], ['-I', '-B', str(c.HERE/'run-topology.py'), 'keep-lock'])
+            result = subprocess.run(argv[:4]+['keep-lock', '--help'], env=kwargs['env'], cwd=tmp,
+                                    capture_output=True, text=True, timeout=30)
+            self.assertEqual((result.returncode, result.stderr), (0, ''))
+            self.assertIn('--until', result.stdout)
+
     def test_heartbeat_and_owner_only_refusals(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -831,7 +845,7 @@ class ManagerIntegration(unittest.TestCase):
             captured['failed'] = failed
         return captured
 
-    def drive(self, fail=False, early=False):
+    def drive(self, fail=False, early=False, keeper_dies=False):
         tmp = tempfile.TemporaryDirectory()
         base = Path(tmp.name)
         (base/'journey').mkdir(mode=0o700)
@@ -864,6 +878,8 @@ class ManagerIntegration(unittest.TestCase):
         def api(path):
             return json.dumps(grant).encode() if '/comments/' in path else artifact
         def spawn(root, until):
+            if keeper_dies:  # Native 8614b5ce: the keeper exited on import before keeper.json.
+                return types.SimpleNamespace(pid=keeper_identity[0], poll=lambda: 1)
             lock['held'] = True
             m.write_private(root/'keeper.json', dict(pid=keeper_identity, lock=dict(device=m.g.LOCK_ID[0],
                 inode=m.g.LOCK_ID[1], created=False, mode='0600'), until=until))
@@ -894,6 +910,8 @@ class ManagerIntegration(unittest.TestCase):
             args = types.SimpleNamespace(command='start', inputs=c.HERE/'integration/inputs.json',
                 grant_comment=grant['id'], artifact_sha256=c.digest(artifact), reuse_build=retained, out=out)
             codes = [m.start(args)]
+            if keeper_dies:
+                return tmp, out, docker, codes
             again = types.SimpleNamespace(command='resume', out=out)
             codes.append(m.resume(again))
             if early:
@@ -951,6 +969,18 @@ class ManagerIntegration(unittest.TestCase):
                 self.assertEqual(cleanup[key]['status'], 'PASS', key)
             self.assertIsNone(docker.container)
             self.assertTrue((out/'persistent').is_dir())
+
+    def test_keeper_lost_before_launch_fails_with_clean_cleanup(self):
+        tmp, out, docker, codes = self.drive(keeper_dies=True)
+        with tmp:
+            self.assertEqual(codes, [1])
+            receipt = json.loads((out/'evidence/receipt.json').read_text())
+            self.assertEqual((receipt['result'], receipt['failure_class']), ('FAIL', 'FileNotFoundError'))
+            self.assertNotIn('cleanup_failure_class', receipt)
+            cleanup = json.loads((out/'evidence/cleanup.json').read_text())
+            for key in ('owned_cid_absent', 'owned_staging_removed', 'owned_pids_absent', 'lock_released'):
+                self.assertEqual(cleanup[key]['status'], 'PASS', key)
+            self.assertEqual(docker.starts, 0)
 
 
 if __name__ == '__main__':

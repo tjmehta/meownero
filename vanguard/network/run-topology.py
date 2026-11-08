@@ -23,6 +23,8 @@ import subprocess
 import sys
 import time
 
+# The keeper runs under `python3 -I`, which (3.11+) leaves the script directory off sys.path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 import network as n
 import profile_contract as c
 from integration import topology_contract as t
@@ -232,7 +234,7 @@ def collect(root, rows, receipt):
             pass
         except Exception as error:
             rejected.append(error.key_path if isinstance(error, r.PublicWitnessError) else filename)
-    for path in public.iterdir():
+    for path in (public.iterdir() if public.is_dir() else ()):  # Absent when start fails before launch.
         if path.name not in t.DRIVER_FILES+('persistence.json', 'heartbeat.json'):
             rejected.append('unexpected-public-entry')
         if path.is_dir() and not path.is_symlink():
