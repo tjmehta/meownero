@@ -86,7 +86,7 @@ packet attachment and digest, the output root, the retained build authority
 (`3eedebc0`, root `401698da…/native-profile-attempt`, manifest `1b2815e2…`), the
 container flags, the uptime mode, the 2,400-block ceiling, one mining thread,
 zero transactions, a keeper-held heavy lock, the load rule and the host-overhead
-allowance (1 GiB RSS, 4,000 CPU-s, 32 PIDs, measured not enforced), with at least
+allowance (1 GiB RSS, 4,000 CPU-s, 32 PIDs), with at least
 48 h validity. Two uptime modes exist and the grant picks one:
 
 | Mode | `uptime_seconds` | `wall_seconds` | `verdict_label` | Best verdict |
@@ -96,6 +96,16 @@ allowance (1 GiB RSS, 4,000 CPU-s, 32 PIDs, measured not enforced), with at leas
 
 A rehearsal runs the same code and every other row, including the full cycle and
 the manager-only restart (after 30 steady minutes instead of 60).
+
+The host-overhead allowance is a sampled abort, not a kernel limit: every 60 s the
+manager (inheriting `run-profile.py:Controller.sample_host`) measures its own
+process tree and aborts the attempt with `metrology_host_overhead` /
+`allowance_exceeded` when any value exceeds the grant. The peaks are per manager
+generation, so a full run has up to three generations, each under the same cap.
+The keeper is a separate session and keeps the heavy lock while a manager is
+down. Admission is the grant load rule (1/5/15 ≤ 9.0) plus memory ≥ 5 GiB and
+disk ≥ 20 GiB; at most three first admissions per grant, on separate wakes at
+least 2 h apart (lead decision on interaction `a9e5430f`).
 
 Run from a clean exact checkout of the candidate (a temporary `/tmp` worktree, so
 later edits to the managed worktree cannot change the running source). The
