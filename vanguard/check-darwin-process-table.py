@@ -35,7 +35,7 @@ def main():
         if len(fields) != 11 or int(fields[2]) != os.getuid() or int(fields[0]) not in table:
             continue
         pid = int(fields[0])
-        _, ppid, ruid, euid, start, state, comm = table[pid]
+        _, ppid, ruid, euid, start, state, comm, _execed = table[pid]
         started = datetime.datetime.strptime(' '.join(fields[4:9]), '%a %b %d %H:%M:%S %Y')
         expected = {'ppid': int(fields[1]), 'ruid': int(fields[2]), 'euid': int(fields[3]),
                     'start_second': int(started.timestamp()), 'zombie': fields[9].startswith('Z'),

@@ -35,6 +35,7 @@ def main():
         E.p_comm.offset, eproc + ci._DarwinEproc.e_pcred.offset + P.p_ruid.offset,
         eproc + ci._DarwinEproc.e_ucred.offset + U.cr_uid.offset, eproc + ci._DarwinEproc.e_ppid.offset) == \
         (648, 0, 36, 40, 243, 392, 420, 560)
+    checks['task_info_layout'] = (ctypes.sizeof(ci._DarwinTaskInfo), ci._DarwinTaskInfo.pti_resident_size.offset) == (96, 8)
     raw = record(4242, 1, 501, 0, 1762585200, 123456, 2, b'ps', 0x4004) + record(4243, 4242, 501, 501, 1762585201, 7, 5, b'monerod', 0x4)
     table = ci.parse_darwin_process_table(raw)
     checks['decode_rows'] = table == [(4242, 1, 501, 0, (1762585200, 123456), 'R', 'ps', True),

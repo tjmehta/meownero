@@ -246,6 +246,10 @@ def native_cli_event(package, out, row, backend, job):
     return evidence
 
 
+PUBLIC_FAILURE_TYPES = {'TimeoutExpired', 'Refused', 'AssertionError', 'RuntimeError', 'OSError',
+                        'CalledProcessError', 'ValueError', 'KeyboardInterrupt'}
+
+
 def public_check(value):
     """Project fixed check evidence; execution argv and paths remain private."""
     enums = {
@@ -279,6 +283,9 @@ def public_check(value):
         assert row['name'] in ('exception-probe', 'preflight', 'journey', 'controls')
         phase = project(row, ('pid', 'exit', 'reaped', 'wall_seconds'))
         phase['name'] = row['name']
+        if 'failure_type' in row:
+            # Exception class only; messages may carry private paths.
+            phase['failure_type'] = row['failure_type'] if row['failure_type'] in PUBLIC_FAILURE_TYPES else 'OTHER'
         result['phases'].append(phase)
     if 'cleanup' in value:
         result['cleanup'] = [project(row, ('pid', 'removed')) for row in value['cleanup']]
@@ -409,6 +416,31 @@ def darwin_process_table(pid=None):
         if ctypes.get_errno() != 12:  # ENOMEM: the table grew; retry with a fresh size.
             raise OSError(ctypes.get_errno(), 'kern.proc.all read failed')
     raise OSError(12, 'kern.proc.all kept growing')
+
+
+class _DarwinTaskInfo(ctypes.Structure):
+    # <sys/proc_info.h> struct proc_taskinfo (PROC_PIDTASKINFO).
+    _fields_ = [('pti_virtual_size', ctypes.c_uint64), ('pti_resident_size', ctypes.c_uint64),
+                ('pti_totals', ctypes.c_uint64 * 4), ('pti_counters', ctypes.c_int32 * 12)]
+
+
+def darwin_resident_bytes(pid):
+    """Resident bytes for one same-user process, or 0 once it has no task.
+
+    This is the phys_mem ledger balance ps reports as rss (xnu osfmk/kern
+    task.c TASK_BASIC_INFO), read under the task lock (bsd_kern.c
+    fill_taskprocinfo) without the VM-map walk that stalls ps.
+    """
+    library = ctypes.CDLL('/usr/lib/libproc.dylib', use_errno=True)
+    call = library.proc_pidinfo
+    call.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_uint64, ctypes.c_void_p, ctypes.c_int]
+    call.restype = ctypes.c_int
+    info = _DarwinTaskInfo()
+    if call(pid, 4, 0, ctypes.byref(info), ctypes.sizeof(info)) == ctypes.sizeof(info):
+        return info.pti_resident_size
+    if ctypes.get_errno() == 3:  # ESRCH: exited or zombie; ps reports no resident memory.
+        return 0
+    raise OSError(ctypes.get_errno(), 'resident size unavailable; refuse an unmeasured cap')
 
 
 def kernel_table_output(*, timeout, receipt, context, pid=None):

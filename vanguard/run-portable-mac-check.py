@@ -17,6 +17,10 @@ ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location('tester', ROOT / 'vanguard/tester.py')
 tester = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(tester)
+# Shared Darwin kernel-table observer; ps -ax walks every task's VM map and stalls.
+observer_spec = importlib.util.spec_from_file_location('darwin_observer', ROOT / 'vanguard/run-portable-ci.py')
+observer = importlib.util.module_from_spec(observer_spec)
+observer_spec.loader.exec_module(observer)
 
 
 def main():
@@ -54,15 +58,16 @@ def main():
             tester.write(out / 'check-receipt.json', receipt)
 
         def descendants(pid):
-            rows = [tuple(map(int, line.split())) for line in
-                    subprocess.check_output(['ps', '-axo', 'pid=,ppid=,rss='], text=True, timeout=10).splitlines()]
+            # Kernel process table ancestry and each owned task's resident ledger:
+            # the same rss ps reports, without ps's per-task VM-map walk.
+            rows = [(row[0], row[1]) for row in observer.darwin_process_table()]
             owned = {pid}
             while True:
-                children = {p for p, parent, _ in rows if parent in owned}
+                children = {p for p, parent in rows if parent in owned}
                 if children <= owned:
                     break
                 owned |= children
-            return owned, sum(rss * 1024 for p, _, rss in rows if p in owned)
+            return owned, sum(observer.darwin_resident_bytes(p) for p in owned)
 
         def phase(name, argv):
             row = {'name': name, 'argv': argv, 'reaped': False}
@@ -92,6 +97,9 @@ def main():
                             pass
                     row['exit'] = process.returncode
                     tester.require(process.returncode == 0, name + ' failed; preserve private diagnostics')
+            except BaseException as error:
+                row.setdefault('failure_type', type(error).__name__)
+                raise
             finally:
                 # Repeated cancellation cannot interrupt owned cleanup.
                 signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTERM, signal.SIGINT})
