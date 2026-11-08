@@ -17,8 +17,9 @@ ci = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ci)
 
 
-def record(pid, ppid, ruid, euid, sec, usec, stat, comm):
+def record(pid, ppid, ruid, euid, sec, usec, stat, comm, flag=0):
     value = ci._DarwinKinfoProc()
+    value.kp_proc.p_flag = flag
     value.kp_proc.p_pid, value.kp_proc.p_stat, value.kp_proc.p_comm = pid, bytes([stat]), comm
     value.kp_proc.p_starttime.tv_sec, value.kp_proc.p_starttime.tv_usec = sec, usec
     value.kp_eproc.e_ppid, value.kp_eproc.e_pcred.p_ruid, value.kp_eproc.e_ucred.cr_uid = ppid, ruid, euid
@@ -34,10 +35,10 @@ def main():
         E.p_comm.offset, eproc + ci._DarwinEproc.e_pcred.offset + P.p_ruid.offset,
         eproc + ci._DarwinEproc.e_ucred.offset + U.cr_uid.offset, eproc + ci._DarwinEproc.e_ppid.offset) == \
         (648, 0, 36, 40, 243, 392, 420, 560)
-    raw = record(4242, 1, 501, 0, 1762585200, 123456, 2, b'ps') + record(4243, 4242, 501, 501, 1762585201, 7, 5, b'monerod')
+    raw = record(4242, 1, 501, 0, 1762585200, 123456, 2, b'ps', 0x4004) + record(4243, 4242, 501, 501, 1762585201, 7, 5, b'monerod', 0x4)
     table = ci.parse_darwin_process_table(raw)
-    checks['decode_rows'] = table == [(4242, 1, 501, 0, (1762585200, 123456), 'R', 'ps'),
-                                      (4243, 4242, 501, 501, (1762585201, 7), 'Z', 'monerod')]
+    checks['decode_rows'] = table == [(4242, 1, 501, 0, (1762585200, 123456), 'R', 'ps', True),
+                                      (4243, 4242, 501, 501, (1762585201, 7), 'Z', 'monerod', False)]
     try:
         ci.parse_darwin_process_table(raw[:-8])
         checks['truncated_table_refused'] = False

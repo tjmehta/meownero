@@ -354,6 +354,8 @@ class _DarwinKinfoProc(ctypes.Structure):
 
 
 DARWIN_PROCESS_STATES = {1: 'I', 2: 'R', 3: 'S', 4: 'T', 5: 'Z'}
+# <sys/proc.h> P_EXEC: set by exec (kern_exec.c), never inherited by fork (kern_fork.c).
+DARWIN_P_EXEC = 0x00004000
 
 
 def parse_darwin_process_table(raw):
@@ -367,7 +369,8 @@ def parse_darwin_process_table(raw):
         table.append((proc.p_pid, eproc.e_ppid, eproc.e_pcred.p_ruid, eproc.e_ucred.cr_uid,
                       (proc.p_starttime.tv_sec, proc.p_starttime.tv_usec),
                       DARWIN_PROCESS_STATES.get(proc.p_stat[0], '?'),
-                      proc.p_comm.decode('utf-8', 'replace')))
+                      proc.p_comm.decode('utf-8', 'replace'),
+                      bool(proc.p_flag & DARWIN_P_EXEC)))
     return table
 
 
@@ -506,6 +509,7 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
                'observer_ruid': os.getuid(), 'observer_euid': os.geteuid(), 'helper_observations': [],
                'unverified_observations': []}
     known, pending, helper_bindings, states, unverified_zombies = {}, [], {}, {}, set()
+    exec_states, pre_exec = {}, set()
     rejected_live = {}
     process = None
     snapshot_context = 'INITIAL_OBSERVATION'
@@ -547,6 +551,17 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
     def remember_identity(pid, row):
         observation = {'pid': pid, 'ppid': row[0], 'ruid': row[1], 'euid': row[2],
                        'role': 'OWNED_WRAPPER' if pid == process.pid else 'OWNED_DESCENDANT'}
+        if pid in pre_exec and pid in known and row[1:] != known[pid]:
+            # Darwin: recorded as a fork copy that had not exec'd yet (no P_EXEC).
+            # Its one exec may change euid and image. The same process keeps its
+            # microsecond start time and real UID; re-validate the new image as a
+            # first observation. After P_EXEC every identity field stays immutable.
+            if (row[1], row[3]) != (known[pid][0], known[pid][2]):
+                reject('REMEMBERED_IMMUTABLE_PROCESS_IDENTITY_CHANGED', observation)
+            del known[pid]
+            pre_exec.discard(pid)
+            receipt['exec_revalidations'] = receipt.get('exec_revalidations', 0) + 1
+            observation['identity_state'] = 'REVALIDATED_AT_FIRST_EXEC'
         # Account for every first observation before validation can reject it.
         # Quarantined identities are never authority for a cleanup signal.
         first_candidate = pid not in known and pid not in rejected_live
@@ -670,6 +685,10 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             if temporary_observation:
                 receipt.pop('failure_observation', None)
         known[pid] = row[1:]
+        if exec_states.get(pid) is False:
+            pre_exec.add(pid)
+        else:
+            pre_exec.discard(pid)
         rejected_live.pop(pid, None)
         return True
 
@@ -683,12 +702,14 @@ def mac_check(argv, out, public, *, timeout=1500, cleanup_seconds=240,
             if darwin:
                 # Darwin ps -ax inspects every task's VM map and stalls behind a
                 # starting monerod; read the kernel table instead (same deadline).
-                for pid, ppid, ruid, euid, start, state, comm in kernel_table_output(
+                exec_states.clear()
+                for pid, ppid, ruid, euid, start, state, comm, execed in kernel_table_output(
                         timeout=5, receipt=receipt, context=snapshot_context):
                     # The table carries no argv. '(comm)' is ps's own display
                     # when argv is unavailable, so existing exit-display checks hold.
                     rows[pid] = (ppid, ruid, euid, start, '(' + comm + ')')
                     states[pid] = state
+                    exec_states[pid] = execed
                 wrapper = process.pid if process is not None else None
                 for pid, row in list(rows.items()):
                     # Only a direct wrapper child with another effective UID is
