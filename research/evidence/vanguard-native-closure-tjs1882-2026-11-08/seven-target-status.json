@@ -1,0 +1,149 @@
+{
+  "schema": "meownero-seven-target-release-status/2",
+  "as_of": "2026-11-08",
+  "issue": "TJS-1882",
+  "writer_agent_id": "92a7b4f2-787b-4cbb-954e-46831397ab09",
+  "reviewer_agent_id": "ec85048c-4b2b-4dcc-84e1-ff9bf87c9fe6",
+  "product_candidate": "7afd06180af9dc17697e8d5a78931c682dfdc074",
+  "supersedes": "research/evidence/vanguard-windows-review-adoption-tjs1882-2026-10-30/seven-target-status.json (2026-10-30) for current status; earlier records stay as history",
+  "adopted_acceptances": [
+    {
+      "target": "macos-x86_64",
+      "document": "native-intel-kernel-table-independent-review-2026-11-08",
+      "revision": "0aeba87f-3d2b-4479-ae98-7a1f51ff9269",
+      "binds": {
+        "product": "7afd0618",
+        "ci": "8a12c61a",
+        "inputs_sha256": "eb3cd78300051918e391ed364d4fe3334f1b50fa36150a2206d7e98f7bf42e91",
+        "archive_sha256": "54912e0c7f181f5cc100f17c66ced27c5ccb829fffae003b37dd9b91f50d4229"
+      }
+    },
+    {
+      "target": "windows-aarch64",
+      "document": "windows-arm64-public-runner-independent-review-2026-11-08",
+      "revision": "d9beba51-a86f-4699-ae36-d818e4aab15b",
+      "binds": {
+        "public_commit": "e4e8be65da1b076cc443b6c507a77a24c0f0ba36",
+        "bundle_sha256": "bedd371bc042ec2b893e45693083eae64637ca1a1f496933f2f90a5bf6f38034",
+        "archive_sha256": "eed161eff71038e0ca37034e195d4943870c4c10cca6fd07c52b7311c1dc8484"
+      }
+    }
+  ],
+  "status_vocabulary": {
+    "NATIVE": "independently accepted native journey and ten controls on the target architecture",
+    "TRANSLATED": "Rosetta or other translation only",
+    "WOW64_ONLY": "32-bit programs accepted under 64-bit Windows WoW64 only",
+    "UNTESTED": "built but not executed"
+  },
+  "targets": [
+    {
+      "target": "windows-i686",
+      "archive": "i68635 sanitized v1",
+      "archive_bytes": 97175736,
+      "archive_sha256": "b9bc676870a506d9bc5cc0ee3c478aba1789ee60726046064c417fc907da97ca",
+      "delivery_route": "Public download inside meownero-windows-test-diagnostics-v2.zip (164,120,029 bytes, bedd371b..., live HEAD 2026-11-08) and the earlier meownero-windows-test-sanitized-v1.zip (164,091,051 bytes, eb6b76d3...)",
+      "status": "WOW64_ONLY",
+      "binding_review": {
+        "document": "windows-returned-independent-review-2026-10-30",
+        "revision": "04f52059-7791-464a-a5a7-a0c82d79956c"
+      },
+      "limits": "Two tester-run i686/WoW64 journeys with ten controls on x64 Windows. Standalone 32-bit Windows and independent-host count are untested; the original funding-timeout cause is unknown."
+    },
+    {
+      "target": "windows-x86_64",
+      "archive": "meownero-vanguard-windows-x86_64-sanitized-v1.zip",
+      "archive_bytes": 71356211,
+      "archive_sha256": "bc5829dadaae0a84271a7993d9440a6210353567a6cf9b7caddb2a545695c19e",
+      "delivery_route": "Issue attachments only (nine reviewed parts plus SHA256SUMS); not on the public downloads page as of 2026-11-08",
+      "status": "NATIVE",
+      "binding_review": {
+        "document": "windows-x64-successor-independent-review-2026-10-30",
+        "revision": "5adf41ec-f2b6-43fb-a608-451fcb15ce9e"
+      },
+      "limits": "Native witness is the historical Windows Server 2025 run of byte-identical programs; other Windows versions untested; unsigned."
+    },
+    {
+      "target": "windows-aarch64",
+      "archive": "ARM13 sanitized v1",
+      "archive_bytes": 66636938,
+      "archive_sha256": "eed161eff71038e0ca37034e195d4943870c4c10cca6fd07c52b7311c1dc8484",
+      "delivery_route": "Public download inside meownero-windows-test-diagnostics-v2.zip (bedd371b..., manifest 46489d0a..., controller 7776dfee...)",
+      "status": "NATIVE",
+      "binding_review": {
+        "document": "windows-arm64-public-runner-independent-review-2026-11-08",
+        "revision": "d9beba51-a86f-4699-ae36-d818e4aab15b"
+      },
+      "evidence": "Public tjmehta/meownero run 42463019325 attempts 1-4 on windows-11-arm (commit e4e8be65), journey plus ten controls including an executed symlink-directory refusal",
+      "limits": "One hosted runner image; testers' machines may lack the symlink privilege (earlier INCOMPLETE_REFUSALS behavior accepted as such); unsigned; public CI artifacts expire after 3 days."
+    },
+    {
+      "target": "macos-aarch64",
+      "archive": "meownero-vanguard-macos-aarch64-remapped-v1.tar.gz",
+      "archive_bytes": 63055195,
+      "archive_sha256": "c02e656ae0fe0e8ffc774392dd535f12efec89b04a7fc400b4398124505eda00",
+      "delivery_route": "Public download https://meownero.com/downloads/artifacts/meownero-vanguard-macos-aarch64-remapped-v1.tar.gz (live HEAD 2026-11-08 matches size); parent delivery recorded in apple-silicon-delivery-2026-10-30 rev 69e1870e",
+      "status": "NATIVE",
+      "binding_review": {
+        "document": "macos-remapped-independent-review-2026-10-30",
+        "revision": "cddb02d7-0648-4af2-8b76-9b75a6100ffc"
+      },
+      "limits": "One Apple Silicon Mac on macOS 26.5.1; older versions, fresh install and Gatekeeper untested; ad hoc signed, not notarized. The 7afd0618 observer changes have not been run on this route."
+    },
+    {
+      "target": "macos-x86_64",
+      "archive": "meownero-vanguard-macos-x86_64-remapped-v1.tar.gz",
+      "archive_bytes": 64389695,
+      "archive_sha256": "54912e0c7f181f5cc100f17c66ced27c5ccb829fffae003b37dd9b91f50d4229",
+      "delivery_route": "Private CI parts only (meownero-private-archive ci/tjs1882/remaining-native); not on the public downloads page as of 2026-11-08",
+      "status": "NATIVE",
+      "binding_review": {
+        "document": "native-intel-kernel-table-independent-review-2026-11-08",
+        "revision": "0aeba87f-3d2b-4479-ae98-7a1f51ff9269"
+      },
+      "earlier_translated_acceptance": {
+        "document": "macos-intel-remapped-independent-review-2026-10-30",
+        "revision": "da8a8788-a6b5-412a-89c9-40d3518a5e04"
+      },
+      "evidence": "Private run 42459882900 attempts 1-4 on macos-15-intel at CI 8a12c61a, product 7afd0618",
+      "limits": "One macos-15-intel host family on macOS 15.7.9; other versions, fresh install and Gatekeeper untested; not notarized; residuals R1-R4 of the binding review."
+    },
+    {
+      "target": "linux-x86_64",
+      "archive": "meownero-vanguard-linux38-x86_64.tar.gz",
+      "archive_bytes": 76582444,
+      "archive_sha256": "fc4bde3b0a665bebcd22140fbc67fad2f15b5c841252a18dff0d5c5d79d56743",
+      "delivery_route": "Public downloads: the archive and meownero-vanguard-linux-x64-docker-96aa5a8.zip (190,475,713 bytes, 0b72d59f...), live HEAD 2026-11-08 matches sizes",
+      "status": "NATIVE",
+      "binding_review": {
+        "document": "linux38-independent-native-review",
+        "revision": "704b24bf-ed6a-4a06-837e-7c8facbd6ac1"
+      },
+      "limits": "Ubuntu 22 Docker userland on a native Ubuntu 24 kernel only; bare-metal Ubuntu 22, Debian 12 and Fedora/RHEL/Arch/openSUSE untested; glibc below 2.35 outside the recorded ABI floor."
+    },
+    {
+      "target": "linux-aarch64",
+      "archive": "ARM39 archive",
+      "archive_bytes": 72731614,
+      "archive_sha256": "b9f06ea78cf7da5c2272b998b48eed5a46dc404b721f32db7f09dc39407de1dc",
+      "delivery_route": "Issue attachment download guide and manifests (attachment 386b0498, SHA256 d1d23e8c...); not on the public downloads page as of 2026-11-08",
+      "status": "NATIVE",
+      "binding_review": {
+        "document": "arm39-independent-review",
+        "revision": "79710ac3-4e44-4175-9af8-70236f654ed6"
+      },
+      "limits": "Native ARM64 container userlands (Ubuntu 22/24, Debian 12); Debian 13 and Fedora/RHEL/Arch/openSUSE untested; glibc below 2.35 outside the recorded ABI floor."
+    }
+  ],
+  "seven_target_release": "OPEN_PENDING_FINAL_STAGE_DECISION",
+  "remaining_limits": [
+    "Standalone 32-bit Windows untested",
+    "Signing/notarization absent on all targets",
+    "Common-distribution and older-OS coverage as listed per target",
+    "macos-x86_64, windows-x86_64 and linux-aarch64 archives are not on the public downloads page; publication is the parent's delivery decision"
+  ],
+  "not_in_this_record": {
+    "lead_integration": "studio lead integrates 7afd0618 after final acceptance and preservation checks",
+    "parent_delivery": "parent owns group contact and any new publication"
+  },
+  "runtime_check_in_this_run": "Live HEAD of the five public download URLs only; no new native execution"
+}
