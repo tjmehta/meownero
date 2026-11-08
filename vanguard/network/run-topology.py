@@ -138,6 +138,14 @@ class Manager(r.Controller):
         super().__init__(root, grant, start)
         self.build_end = self.work_end = self.end = end_monotonic
 
+    def run(self, argv, deadline, **kwargs):
+        try:
+            return super().run(argv, deadline, **kwargs)
+        finally:
+            # Each run() already stopped and reaped its child; keep only live ones so a
+            # 28 h generation does not accumulate thousands of finished entries.
+            self.children = [child for child in self.children if child[0].poll() is None]
+
     def sample(self, force=False):
         now = time.monotonic()
         if not force and now-self.last_sample < SAMPLE_SECONDS:

@@ -329,6 +329,35 @@ class Driver(unittest.TestCase):
                     if key != 'uptime_24h':
                         self.assertEqual(row['status'], 'PASS', key)
 
+    def stop_race(self, which):
+        """Platform 949becac regression: the miner finds one block during its graceful stop."""
+        orig_stop, orig_partition = Ledger.stop, driver.Topology.partition
+        armed = {'on': False, 'fired': False}
+        def stop(ledger, name, graceful=True):
+            node = ledger.nodes.get(name)
+            if armed['on'] and node and node['mining'] and node['sync'] and name == which:
+                ledger.block += 1
+                node['chain'].append(f'{ledger.block:064x}')
+                armed.update(on=False, fired=True)
+            return orig_stop(ledger, name, graceful)
+        def partition(top):
+            armed['on'] = True
+            try:
+                return orig_partition(top)
+            finally:
+                armed['on'] = False
+        with tempfile.TemporaryDirectory() as tmp, mock.patch.object(Ledger, 'stop', stop), \
+                mock.patch.object(driver.Topology, 'partition', partition):
+            ledger, top = self.journey(Path(tmp), steady_shape=True)
+        self.assertTrue(armed['fired'])
+        self.assertEqual(top.state['rows']['reorg.json']['partition_reorg']['status'], 'PASS')
+
+    def test_isolated_miner_block_during_stop_is_not_a_failure(self):
+        self.stop_race('nodeA')
+
+    def test_majority_miner_block_during_stop_is_not_a_failure(self):
+        self.stop_race('nodeB')
+
     def test_offline_mining_never_produces_blocks(self):
         # Known-bad design control: an isolated --offline --start-mining side stalls.
         with tempfile.TemporaryDirectory() as tmp:
@@ -669,6 +698,15 @@ class Manager(unittest.TestCase):
             self.assertEqual(finished, ['native_exit'])
             code, state, finished = self.observe(tmp, [exited(0)], [dict(phase='steady', samples=0)])
             self.assertEqual(finished, ['native_exit'])
+
+    def test_manager_run_keeps_only_live_children(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            control = m.Manager(Path(tmp), dict(host_overhead_allowance=m.OVERHEAD), time.monotonic(),
+                                time.monotonic()+60)
+            for _ in range(5):
+                result = control.run(['true'], time.monotonic()+10, monitor=False)
+                self.assertEqual(result.returncode, 0)
+            self.assertEqual(control.children, [])
 
     def test_container_command_uses_accepted_flags_and_owner_mounts(self):
         root = Path('/tmp/x-tjs3920')

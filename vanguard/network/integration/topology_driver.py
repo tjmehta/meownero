@@ -109,7 +109,7 @@ class Topology:
     def heartbeat(self, phase=None, count=0, samples=0):
         value = dict(phase=phase or self.state['phase'], generation=self.state['generation'],
                      count=count, samples=samples, unix=int(time.time()))
-        (d.PUBLIC/'heartbeat.json').write_text(json.dumps(value)+'\n')
+        private_write(d.PUBLIC/'heartbeat.json', (json.dumps(value)+'\n').encode())  # Atomic for the manager.
 
     def tip(self, value):
         return t.salted(self.salt, hex64(value))
@@ -555,12 +555,22 @@ class Topology:
         self.stop('B')
         self.start('C', peers=('B',))  # Up first, so B's only exclusive dial finds it.
         self.start('B', peers=('C',), in_peers=0, mining=True)
-        isolated = self.wait(lambda: (lambda a: a if a[0] >= fork[0]+2 else None)(self.info('A')), 2400)
+        self.wait(lambda: self.info('A')[0] >= fork[0]+2, 2400)
+        # Stop first, then read: a block found during A's graceful shutdown is part of
+        # the saved isolated tip, never a race (Platform 949becac finding 1).
         self.stop('A')
         self.start('A')  # Not synchronized, not mining: frozen isolated tip.
-        c.require(self.info('A') == isolated, 'isolated tip changed')
-        majority = self.wait(lambda: (lambda b: b if b[0] >= isolated[0]+2 and b[2] > isolated[2] and
-                                      self.agree(('B', 'C')) == b else None)(self.info('B')), 3600)
+        isolated = self.info('A')
+        c.require(isolated[0] >= fork[0]+2, 'isolated side too short')
+        self.wait(lambda: (lambda b: b[0] >= isolated[0]+2 and b[2] > isolated[2] and
+                           self.agree(('B', 'C')) == b)(self.info('B')), 3600)
+        # Same rule for the majority miner (finding 2): restart B still partitioned and
+        # not mining, then read the tip that the reorg must adopt.
+        self.stop('B')
+        self.start('B', peers=('C',), in_peers=0)
+        majority = self.wait(lambda: (lambda b: b if self.agree(('B', 'C')) == b else None)(self.info('B')), 300)
+        c.require(majority[0] >= isolated[0]+2 and majority[2] > isolated[2], 'majority side not heavier')
+        c.require(self.info('A') == isolated, 'isolated tip changed while partitioned')
         c.require(self.known('B', isolated[1]) is None and self.known('C', isolated[1]) is None,
                   'majority saw isolated chain')
         self.stop('B')
