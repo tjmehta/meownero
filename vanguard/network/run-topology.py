@@ -134,6 +134,21 @@ def keep_lock(root, until):
     return 0
 
 
+def residual(child):
+    """True while the leader runs or any remembered group member (same start time) is alive."""
+    process, _, members = child
+    if process.poll() is None:
+        return True
+    for pid, start in members.items():
+        try:
+            fields = Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split()
+            if fields[19] == start and fields[0] != 'Z':
+                return True
+        except (FileNotFoundError, ProcessLookupError):
+            pass
+    return False
+
+
 class Manager(r.Controller):
     """Same measured host-overhead rules; sampled every 60 s over the long wall."""
     def __init__(self, root, grant, start, end_monotonic):
@@ -144,9 +159,10 @@ class Manager(r.Controller):
         try:
             return super().run(argv, deadline, **kwargs)
         finally:
-            # Each run() already stopped and reaped its child; keep only live ones so a
-            # 28 h generation does not accumulate thousands of finished entries.
-            self.children = [child for child in self.children if child[0].poll() is None]
+            # Each run() already tried to stop and reap its child; drop only settled ones so a
+            # 28 h generation does not accumulate thousands of finished entries. A child whose
+            # stop raised keeps a live group member, so finish() must see it again.
+            self.children = [child for child in self.children if residual(child)]
 
     def sample(self, force=False):
         now = time.monotonic()
@@ -472,35 +488,41 @@ def resume(args):
     previous = state['managers'][-1]
     c.require(not alive(previous['identity']), 'previous manager still alive')
     me = dict(identity=identity(os.getpid()), unix=int(time.time()))
-    if 'cycle' in state and 'cycle_resumed' not in state:
-        value = inspect(control, name, image, time.monotonic()+60)
-        c.require(value is not None and not value['State']['Running'] and value['State']['ExitCode'] == 0 and
-                  value['State']['FinishedAt'] == state['cycle']['container_finished'], 'cycle container state')
-        me['reason'] = 'full-cycle'
-        state['managers'].append(me)
-        control.run(g.DOCKER+['start', value['Id']], time.monotonic()+30)
-        after = inspect(control, name, image, time.monotonic()+60)
-        state['cycle_resumed'] = True
-        state['rows']['persistence.json']['manager_cycle'] = dict(status='PASS', manager_changed=True,
-            container_restarted=after['State']['StartedAt'] != value['State']['StartedAt'], same_container=True,
-            keeper_unchanged=alive(state['keeper']))
-    elif 'manager_restart' in state and 'manager_resumed' not in state:
-        value = inspect(control, name, image, time.monotonic()+60)
-        beat = heartbeat(args.out)
-        continuous = (value is not None and value['State']['Running'] and
-                      value['State']['StartedAt'] == state['manager_restart']['container_started'])
-        me['reason'] = 'manager-only'
-        state['managers'].append(me)
-        state['manager_resumed'] = True
-        state['rows']['persistence.json']['manager_restart'] = dict(status='PASS' if continuous and beat else 'FAIL',
-            manager_changed=True, container_continuous=continuous, keeper_unchanged=alive(state['keeper']),
-            heartbeat_samples_before=state['manager_restart']['samples'])
-    else:
-        raise ValueError('no planned manager restart is pending')
-    write_private(args.out/STATE, state)
+    # The checks above stay bare refusals (wrong session, wrong candidate, finished attempt or a
+    # live manager must not be cleaned from here). Past them this manager owns the attempt, so an
+    # unplanned or inconsistent restart still stops the container and releases the keeper.
     try:
+        if 'cycle' in state and 'cycle_resumed' not in state:
+            value = inspect(control, name, image, time.monotonic()+60)
+            c.require(value is not None and not value['State']['Running'] and value['State']['ExitCode'] == 0 and
+                      value['State']['FinishedAt'] == state['cycle']['container_finished'], 'cycle container state')
+            me['reason'] = 'full-cycle'
+            state['managers'].append(me)
+            control.run(g.DOCKER+['start', value['Id']], time.monotonic()+30)
+            after = inspect(control, name, image, time.monotonic()+60)
+            state['cycle_resumed'] = True
+            state['rows']['persistence.json']['manager_cycle'] = dict(status='PASS', manager_changed=True,
+                container_restarted=after['State']['StartedAt'] != value['State']['StartedAt'], same_container=True,
+                keeper_unchanged=alive(state['keeper']))
+        elif 'manager_restart' in state and 'manager_resumed' not in state:
+            value = inspect(control, name, image, time.monotonic()+60)
+            beat = heartbeat(args.out)
+            continuous = (value is not None and value['State']['Running'] and
+                          value['State']['StartedAt'] == state['manager_restart']['container_started'])
+            me['reason'] = 'manager-only'
+            state['managers'].append(me)
+            state['manager_resumed'] = True
+            state['rows']['persistence.json']['manager_restart'] = dict(status='PASS' if continuous and beat else 'FAIL',
+                manager_changed=True, container_continuous=continuous, keeper_unchanged=alive(state['keeper']),
+                heartbeat_samples_before=state['manager_restart']['samples'])
+        else:
+            raise ValueError('no planned manager restart is pending')
+        write_private(args.out/STATE, state)
         return observe(args, state, control, name, image)
     except Exception as error:
+        if 'reason' not in me:
+            me['reason'] = 'refused'
+            state['managers'].append(me)
         state['receipt']['failure_class'] = type(error).__name__
         return finish(args, state, control, name, image, 'manager_'+type(error).__name__)
 

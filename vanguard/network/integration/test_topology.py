@@ -722,6 +722,34 @@ class Manager(unittest.TestCase):
                 self.assertEqual(result.returncode, 0)
             self.assertEqual(control.children, [])
 
+    def test_manager_run_keeps_a_child_whose_stop_left_a_member(self):
+        # Platform note (e91be8d9): the leader exited but stop() raised on a surviving group
+        # member; the old poll() filter dropped it, so finish() reported owned_pids_absent PASS.
+        member = subprocess.Popen(['sleep', '30'], start_new_session=True)
+        try:
+            start = Path(f'/proc/{member.pid}/stat').read_text().rsplit(')', 1)[1].split()[19]
+            child = (types.SimpleNamespace(poll=lambda: 0, pid=member.pid), [member.pid, start],
+                     {member.pid: start})
+            with tempfile.TemporaryDirectory() as tmp:
+                control = m.Manager(Path(tmp), dict(host_overhead_allowance=m.OVERHEAD), time.monotonic(),
+                                    time.monotonic()+60)
+                def failed_stop(self, argv, deadline, **kwargs):
+                    self.children.append(child)
+                    raise ValueError('owned host process remains')
+                with mock.patch.object(m.r.Controller, 'run', failed_stop):
+                    with self.assertRaisesRegex(ValueError, 'owned host process remains'):
+                        control.run(['true'], time.monotonic()+10, monitor=False)
+                self.assertEqual(control.children, [child])
+                member.kill()
+                member.wait()
+                with mock.patch.object(m.r.Controller, 'run', lambda self, argv, deadline, **k: None):
+                    control.run(['true'], time.monotonic()+10, monitor=False)
+                self.assertEqual(control.children, [])
+        finally:
+            if member.poll() is None:
+                member.kill()
+                member.wait()
+
     def test_container_command_uses_accepted_flags_and_owner_mounts(self):
         root = Path('/tmp/x-tjs3920')
         argv = m.container_command(root, 'n', 'img')
@@ -845,7 +873,7 @@ class ManagerIntegration(unittest.TestCase):
             captured['failed'] = failed
         return captured
 
-    def drive(self, fail=False, early=False, keeper_dies=False):
+    def drive(self, fail=False, early=False, keeper_dies=False, before_resume=None):
         tmp = tempfile.TemporaryDirectory()
         base = Path(tmp.name)
         (base/'journey').mkdir(mode=0o700)
@@ -913,6 +941,12 @@ class ManagerIntegration(unittest.TestCase):
             if keeper_dies:
                 return tmp, out, docker, codes
             again = types.SimpleNamespace(command='resume', out=out)
+            if before_resume is not None:  # Returns the resume outcome itself (code or exception).
+                try:
+                    codes.append(m.resume(again) if before_resume(out) else None)
+                except ValueError as error:
+                    codes.append(error)
+                return tmp, out, docker, codes
             codes.append(m.resume(again))
             if early:
                 docker.complete()  # Known-bad: container stopped while the manager was down.
@@ -981,6 +1015,56 @@ class ManagerIntegration(unittest.TestCase):
             for key in ('owned_cid_absent', 'owned_staging_removed', 'owned_pids_absent', 'lock_released'):
                 self.assertEqual(cleanup[key]['status'], 'PASS', key)
             self.assertEqual(docker.starts, 0)
+
+    def tamper_state(self, change):
+        def before(out):
+            state = m.read_private(out/m.STATE)
+            change(state)
+            m.write_private(out/m.STATE, state)
+            return True
+        return before
+
+    def test_inconsistent_or_unplanned_resume_still_cleans(self):
+        # Platform note (e91be8d9): a refused resume left the container and the keeper (and so
+        # the heavy lock) in place until end_unix+600. Past the guard checks it now finishes.
+        def cycle(state):
+            state['cycle']['container_finished'] = 'tampered'
+        def unplanned(state):
+            del state['cycle']
+        for change, failure in ((cycle, 'ValueError'), (unplanned, 'ValueError')):
+            tmp, out, docker, codes = self.drive(before_resume=self.tamper_state(change))
+            with tmp:
+                self.assertEqual(codes, [m.CYCLE, 1])
+                receipt = json.loads((out/'evidence/receipt.json').read_text())
+                self.assertEqual((receipt['result'], receipt['failure_class']), ('FAIL', failure))
+                self.assertEqual([x['reason'] for x in receipt['manager_generations']], ['start', 'refused'])
+                cleanup = json.loads((out/'evidence/cleanup.json').read_text())
+                for key in ('owned_cid_absent', 'owned_staging_removed', 'lock_released', 'persistent_root_owner_only'):
+                    self.assertEqual(cleanup[key]['status'], 'PASS', key)
+                self.assertIsNone(docker.container)
+                self.assertTrue((out/'release').exists())
+
+    def test_guard_refusals_never_clean_a_live_or_finished_attempt(self):
+        def live_manager(out):
+            state = m.read_private(out/m.STATE)
+            owned = state['managers'][-1]['identity']
+            m.alive = lambda value, real=m.alive: value == owned or real(value)
+            return True
+        tmp, out, docker, codes = self.drive(before_resume=live_manager)
+        with tmp:
+            self.assertIsInstance(codes[-1], ValueError)
+            self.assertIn('previous manager still alive', str(codes[-1]))
+            self.assertFalse((out/'evidence').exists())
+            self.assertFalse((out/'release').exists())
+            self.assertIsNotNone(docker.container)
+        def finished(out):
+            (out/'evidence').mkdir(mode=0o700)
+            return True
+        tmp, out, docker, codes = self.drive(before_resume=finished)
+        with tmp:
+            self.assertIn('attempt already finished', str(codes[-1]))
+            self.assertFalse((out/'release').exists())
+            self.assertIsNotNone(docker.container)
 
 
 if __name__ == '__main__':
