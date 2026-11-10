@@ -91,3 +91,24 @@ no build phase). Withdraw nodes by stopping their owned process identities;
 never signal an unrelated PID or change networking. The full two-seed/client
 recovery topology, corruption controls, signed release and activation remain
 subsequent separately reviewed work.
+
+## Security limits for reuse beyond F1 (TJS-3920)
+
+The accepted F1 boundary carries limits L1-L6 (see `topology-operators.md`). Two apply
+to this addendum directly:
+
+- **Restore-mode signer auth bracket (L6).** The restore signer starts as an
+  empty `monero-wallet-rpc --wallet-dir` server (pinned main rejects
+  `--wallet-dir` with `--password-file`). Its authentication bracket is the same
+  as every signer: native RPC login stays enabled, the generated per-process
+  login file is private (0400/0600), and `restore_deterministic_wallet` carries
+  the mnemonic and new password only in the loopback RPC body. Between process
+  start and the restore call the server holds no wallet; it is reachable only on
+  127.0.0.1 inside the network-none container and rejects missing or wrong
+  credentials. There is no separate, longer-lived restore credential.
+- **Witness digests (L3).** F1's txid/key-image/tip digests are unsalted and are
+  acceptable only because that chain was private and deleted. Any shared-chain
+  reuse must salt or drop them, as the persistent topology driver does.
+
+Write any same-run inspection or cleanup receipt with `umask 077`.
+
