@@ -241,6 +241,18 @@ class OutsideMonitor(unittest.TestCase):
         with self.assertRaises(om.Alert):
             om.check_tip((5, 'b'*64), self.status(), max_spread=2)
 
+    def test_a_malformed_follower_reply_is_unverified_not_a_crash(self):
+        # Platform note a9bf5e0e: a get_info reply without height/top raised KeyError, not exit 3.
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base/'pin').write_text('a'*64)
+            (base/'status.json').write_text(json.dumps(self.status(unix=1000)))
+            def follower():
+                return {}['height']
+            result = om.evaluate(seed_host='h', pin_file=base/'pin', status_file=base/'status.json', follower=follower,
+                                 in_peers=16, now=1000, pin_of=lambda host: 'a'*64)
+            self.assertEqual(result['state'], 'UNVERIFIED')
+
     @unittest.skipUnless(shutil.which('openssl'), 'openssl CLI needed for a local certificate')
     def test_evaluate_reads_only_out_of_band_files_and_a_real_tls_pin(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -315,9 +327,15 @@ class OpNet(te.Net):
         node = self.nodes.get(name)
         if name == 'nodeS' and node and node['exposed']:  # One seed pass that dials nobody (--out-peers 0).
             with (node['root']/'native.log').open('ab') as log:
+                # Native rehearsal 1 (716f3d3c): the seed list is logged with the upstream addresses.
+                for ip in o.UPSTREAM_SEEDS:
+                    log.write(b'I net.p2p net_node.inl:804 Resolving node address: host='+ip.encode()+b', port=28080\n')
+                    log.write(b'I net.p2p net_node.inl:819 Added node: '+ip.encode()+b':28080\n')
                 log.write(b'W Failed to connect to any of seed peers, '+o.SEED_PASS+b'\n')
                 if self.adverse == 'dial':
                     log.write(o.DIAL_ATTEMPTED+b'176.9.0.187:28080\n')
+                if self.adverse == 'upstream':  # An upstream address outside seed-list loading.
+                    log.write(b'I net.p2p [176.9.0.187:28080 OUT] NEW CONNECTION\n')
         return process
 
     def kill(self, name):
@@ -561,6 +579,16 @@ class Journey(unittest.TestCase):
         base, net, roles, errors = self.run_journey(o.REHEARSAL_UPTIME_SECONDS, adverse='dial')
         self.assertIn('public seed dialled out', str(errors['seed']))
         self.assertEqual(rows_from(base)['seed.json']['public_seed_shape']['status'], 'NOT_RUN')
+
+    def test_an_upstream_address_outside_seed_list_loading_fails_the_shape_row(self):
+        base, net, roles, errors = self.run_journey(o.REHEARSAL_UPTIME_SECONDS, adverse='upstream')
+        self.assertIn('public seed dialled out', str(errors['seed']))
+
+    def test_seed_log_witness_separates_seed_list_loading_from_dials(self):
+        raw = (b'I Resolving node address: host=176.9.0.187, port=28080\nI Added node: 176.9.0.187:28080\n'
+               b'W Failed to connect to any of seed peers, continuing without seeds\n')
+        self.assertEqual(o.seed_log_witness(raw), (0, 0, 1, 2))
+        self.assertEqual(o.seed_log_witness(raw+b'I Connect failed to 176.9.0.187:28080\n'), (1, 1, 1, 2))
 
     def test_stalled_chain_fails_closed(self):
         base, net, roles, errors = self.run_journey(o.REHEARSAL_UPTIME_SECONDS, adverse='stall')
@@ -860,6 +888,7 @@ class ManagerIntegration(unittest.TestCase):
         self.assertEqual(receipt['rollback']['absence'], {'port-rule': 'UNVERIFIED', 'dns-record': 'UNVERIFIED'})
         self.assertIn((o.SEED_IP, o.P2P['S'], o.HOST_PROBE_HOLD), probes)
         self.assertGreaterEqual(rows['seed.json']['public_seed_shape']['seed_pass_lines'], 1)
+        self.assertGreaterEqual(rows['seed.json']['public_seed_shape']['seed_list_lines'], 10)
         self.assertEqual(set(receipt['exclusions']), set(o.EXCLUDED))
         self.assertTrue(all(v['status'] == 'NOT_RUN' and v['reason'] for v in receipt['exclusions'].values()))
         self.assertIsNone(docker.network)

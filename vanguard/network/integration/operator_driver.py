@@ -486,14 +486,13 @@ class Operator(ed.Exposure):
         # Every public launch's log: the current root plus the quarantined one (the crash took its lines).
         logs = b''.join(p.read_bytes() for p in (self.root('S')/'native.log',
                                                  self.private/'quarantine'/'S-0001'/'native.log'))
-        attempted = logs.count(o.DIAL_ATTEMPTED)
-        upstream = sum(logs.count(ip.encode()) for ip in o.UPSTREAM_SEEDS)
-        passes = logs.count(o.SEED_PASS)
+        attempted, upstream, passes, listed = o.seed_log_witness(logs)
         c.require(attempted == upstream == 0 and passes >= 1, 'public seed dialled out')
         self.row('seed.json', 'public_seed_shape', rpc='operator-tls', in_peers=self.plan['in_peers'], out_peers=0,
                  max_connections_per_ip=self.plan['max_connections_per_ip'], allow_local_ip=False,
                  hide_my_port=False, exclusive_peers=0, wildcard_listeners=0, plan_checked=True,
-                 launches=self.public_launches, dial_attempt_lines=0, upstream_seed_lines=0, seed_pass_lines=passes)
+                 launches=self.public_launches, dial_attempt_lines=0, upstream_dial_lines=0, seed_pass_lines=passes,
+                 seed_list_lines=listed)
         self.serve()
 
     def serve(self):

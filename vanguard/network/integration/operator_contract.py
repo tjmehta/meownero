@@ -77,6 +77,22 @@ HOST_PROBE_HOLD = 5               # Seconds the host-reach probe holds an open s
 UPSTREAM_SEEDS = ('176.9.0.187', '192.99.8.110', '37.187.74.171', '88.99.195.15', '5.104.84.64')
 DIAL_ATTEMPTED = b'Connect failed to '
 SEED_PASS = b'continuing without seeds'
+# Loading the seed list logs each upstream address at INFO without connecting (append_net_address,
+# net_node.inl:804,819; numeric hosts, no lookup). Native rehearsal 1 (grant 716f3d3c) logged these
+# lines once per launch; an upstream address anywhere else counts as a dial.
+SEED_LIST = (b'Resolving node address: ', b'Added node: ')
+
+
+def seed_log_witness(raw):
+    """(dial attempts, upstream lines outside seed-list loading, seed passes, seed-list lines)."""
+    upstream = listed = 0
+    for line in raw.splitlines():
+        if any(ip.encode() in line for ip in UPSTREAM_SEEDS):
+            if any(marker in line for marker in SEED_LIST):
+                listed += 1
+            else:
+                upstream += 1
+    return raw.count(DIAL_ATTEMPTED), upstream, raw.count(SEED_PASS), listed
 
 PUBLIC_FORBIDDEN = tuple(n for n in t.FORBIDDEN if n != '--confirm-external-bind')+(
     '--allow-local-ip', '--hide-my-port', '--add-exclusive-node', '--offline', '--ban-list',
@@ -262,7 +278,8 @@ def shapes():
         public_seed_shape=dict(rpc='operator-tls', in_peers=REHEARSAL_PEERS['in_peers'], out_peers=0,
             max_connections_per_ip=REHEARSAL_PEERS['max_connections_per_ip'], allow_local_ip=False,
             hide_my_port=False, exclusive_peers=0, wildcard_listeners=0, plan_checked=True, launches=integer(2, 16),
-            dial_attempt_lines=0, upstream_seed_lines=0, seed_pass_lines=integer(1, 10**8)),
+            dial_attempt_lines=0, upstream_dial_lines=0, seed_pass_lines=integer(1, 10**8),
+            seed_list_lines=integer(0, 10**6)),
         owner_namespace_auth=dict(correct_login_accepted=True, missing_rejected=True, wrong_rejected=True,
             pinned=True),
         planned_restart=dict(sealed=True, attested_against_seal=True, changed_process=True, new_certificate=True,

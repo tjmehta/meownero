@@ -135,6 +135,8 @@ def evaluate(*, seed_host, pin_file, status_file, follower, in_peers, max_age=18
         result.update(state='UNVERIFIED', reason=str(error))
     except OSError as error:  # The seed or the follower did not answer.
         result.update(state='ALERT', reason='unreachable: '+type(error).__name__)
+    except (KeyError, TypeError, ValueError) as error:  # A malformed follower reply (Platform note a9bf5e0e).
+        result.update(state='UNVERIFIED', reason='follower reply shape: '+type(error).__name__)
     return result
 
 
