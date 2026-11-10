@@ -16,8 +16,9 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      # SC2317 excluded: shellcheck 0.9.0 (ubuntu-24.04) reports EXIT-trap handler bodies as unreachable.
       - name: shellcheck
-        run: sudo apt-get install -y shellcheck && shellcheck chain/*.sh spikes/candidate-m/devnet.sh spikes/cuprate/run.sh spikes/cuprate/recovery/*.sh spikes/network-benchmark/*.sh spikes/p2pool/*.sh spikes/selected-issuance/*.sh demos/private-payment/*.sh
+        run: sudo apt-get install -y shellcheck && shellcheck -e SC2317 chain/*.sh spikes/candidate-m/devnet.sh spikes/cuprate/run.sh spikes/cuprate/recovery/*.sh spikes/network-benchmark/*.sh spikes/p2pool/*.sh spikes/selected-issuance/*.sh demos/private-payment/*.sh
       - name: patch series is well-formed and pins are consistent
         run: |
           set -e
