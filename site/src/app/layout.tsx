@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 const title = "Meownero | Private payments, proof of work";
 const description =
-  "Meownero is a proof-of-work cryptocurrency in development. Every payment is private. No premine or presale. Try the local Linux tester.";
+  "Meownero is a proof-of-work cryptocurrency in development. Every payment is private. No premine or presale. Try the local tester on Mac, Windows or Linux.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://meownero.com"),

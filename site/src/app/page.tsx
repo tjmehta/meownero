@@ -85,7 +85,7 @@ export default function Home() {
                 href="/downloads"
                 className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-11 w-full px-4 sm:w-auto")}
               >
-                Try the Linux tester
+                Try it on Mac, Windows or Linux
               </Link>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 Local, valueless test coins on your own machine. Not a public
