@@ -37,7 +37,25 @@ FORBIDDEN = ('--confirm-external-bind', '--disable-rpc-login', '--public-node', 
     '--rpc-restricted-bind-port', '--rpc-restricted-bind-ipv6-address', '--zmq-rpc-bind-ip',
     '--zmq-pub', '--add-peer', '--add-priority-node', '--seed-node', '--bootstrap-daemon-address',
     '--igd', '--rpc-ssl-allow-any-cert', '--trusted-daemon', '--untrusted-daemon', '--proxy',
-    '--tx-proxy', '--anonymous-inbound', '--rpc-access-control-origins', '--daemon-ssl-allow-any-cert')
+    '--tx-proxy', '--anonymous-inbound', '--rpc-access-control-origins', '--daemon-ssl-allow-any-cert',
+    '--rpc-login', '--daemon-login')  # L4: credentials reach a child only through its environment.
+# Exact allowlist of full option names (True = takes one value). Boost's
+# command_line_parser accepts any unique prefix ('--public-nod' is --public-node),
+# so a denylist alone is not a boundary; every name outside this table refuses.
+# Each name is an arg_descriptor of the pinned fork (monero-fcmp e151643c).
+ALLOWED = {
+    'monerod': {'--testnet': False, '--data-dir': True, '--non-interactive': False, '--no-igd': False,
+        '--allow-local-ip': False, '--disable-dns-checkpoints': False, '--check-updates': True,
+        '--hide-my-port': False, '--max-concurrency': True, '--no-zmq': False, '--rpc-ssl': True,
+        '--restricted-rpc': False, '--p2p-bind-ip': True, '--p2p-bind-ipv6-address': True,
+        '--p2p-bind-port': True, '--rpc-bind-ip': True, '--rpc-bind-port': True,
+        '--max-connections-per-ip': True, '--log-level': True, '--log-file': True, '--offline': False,
+        '--add-exclusive-node': True, '--in-peers': True, '--start-mining': True, '--mining-threads': True},
+    'monero-wallet-rpc': {'--testnet': False, '--config-file': True, '--daemon-address': True,
+        '--wallet-dir': True, '--rpc-bind-ip': True, '--rpc-bind-port': True, '--rpc-ssl': True,
+        '--log-file': True, '--restricted-rpc': False},
+}
+REPEATABLE = ('--add-exclusive-node',)
 BIND_OPTIONS = ('--p2p-bind-ip', '--p2p-bind-ipv6-address', '--rpc-bind-ip', '--rpc-bind-ipv6-address')
 
 
@@ -69,14 +87,24 @@ def options(argv):
     return result
 
 
+def allowlisted(parsed, allowed):
+    """Refuse forbidden, unknown or abbreviated names, value/flag misuse and repeats."""
+    names = [name for name, _ in parsed]
+    for name in FORBIDDEN:
+        _require(name not in names, 'forbidden option '+name)
+    for name, value in parsed:
+        _require(name in allowed, 'unknown or abbreviated option '+name)
+        _require((value is not None) == allowed[name], 'option value shape '+name)
+        _require(name in REPEATABLE or names.count(name) == 1, 'repeated option '+name)
+    return names
+
+
 def check_argv(kind, argv, *, mining=False, offline=False, signer=False):
     """L1/L2/L5 launcher refusal. Returns the parsed options when acceptable."""
     _require(kind in ('monerod', 'monero-wallet-rpc'), 'unknown native kind')
     _require(argv and str(argv[0]).endswith('/'+kind), 'executable/kind mismatch')
     parsed = options([str(x) for x in argv])
-    names = [name for name, _ in parsed]
-    for name in FORBIDDEN:
-        _require(name not in names, 'forbidden option '+name)
+    names = allowlisted(parsed, ALLOWED[kind])
     for name, value in parsed:
         if name in BIND_OPTIONS:
             _require(value in LOOPBACK, 'non-loopback bind '+name)  # L5 plaintext loopback only

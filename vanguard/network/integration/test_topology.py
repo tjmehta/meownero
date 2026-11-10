@@ -521,6 +521,55 @@ class Contract(unittest.TestCase):
         with self.assertRaises(t.PolicyRefusal):
             t.check_argv('monerod', good)
 
+    def daemon(self, **kwargs):
+        owner = types.SimpleNamespace(state={'address': '9'*95})
+        peers = () if kwargs.get('offline') else ('B',)
+        return driver.Topology.daemon_argv(owner, 'A', Path('/r'), peers=peers, **kwargs)
+
+    def test_argv_allowlist_refuses_unknown_prefixed_and_malformed_names(self):
+        # TJS-4177 step 1: boost's command_line_parser accepts unique prefixes, so an
+        # exact-name denylist let '--public-nod' through (Security note on e89f8adc).
+        good = self.daemon()
+        t.check_argv('monerod', good)
+        t.check_argv('monerod', self.daemon(mining=True), mining=True)
+        t.check_argv('monerod', self.daemon(offline=True), offline=True)
+        wallet = ['/b/monero-wallet-rpc', '--testnet', '--config-file', '/c', '--daemon-address', '127.0.0.1:48081',
+                  '--wallet-dir', '/w', '--rpc-bind-ip', '127.0.0.1', '--rpc-bind-port', '48083', '--rpc-ssl', 'disabled']
+        t.check_argv('monero-wallet-rpc', wallet, signer=True)
+        for extra in (['--public-nod'], ['--confirm-external-bin'], ['--rpc-restricted-bind-por', '48089'],
+                      ['--add-exclusive', '127.0.0.1:48180'], ['--add-pri', '127.0.0.1:48180'],
+                      ['--bootstrap-daemon', '127.0.0.1:18081'], ['--no-such-option'], ['--Testnet'],
+                      ['--rpc-bind-ip', '127.0.0.1'],          # Repeated single-valued option.
+                      ['--hide-my-port=1'],                    # Flag given a value.
+                      ['--log-level']):                        # Valued option without a value.
+            with self.subTest(extra=extra), self.assertRaises(t.PolicyRefusal):
+                t.check_argv('monerod', good+extra)
+        for extra in (['--daemon-addr', '127.0.0.1:48081'], ['--disable-rpc-log'], ['--trusted'],
+                      ['--password-f', '/p'], ['--wallet-dir', '/w2']):
+            with self.subTest(extra=extra), self.assertRaises(t.PolicyRefusal):
+                t.check_argv('monero-wallet-rpc', wallet+extra, signer=True)
+        # A wallet-only option is unknown to the daemon kind and vice versa.
+        with self.assertRaises(t.PolicyRefusal):
+            t.check_argv('monerod', good+['--wallet-dir', '/w'])
+        with self.assertRaises(t.PolicyRefusal):
+            t.check_argv('monero-wallet-rpc', wallet+['--start-mining', '9'*95], signer=True)
+
+    def test_login_options_are_forbidden(self):
+        # Credentials pass only through the child environment (L4): never through argv.
+        good = self.daemon()
+        for extra in (['--rpc-login', 'node:secret'], ['--rpc-login=node:secret'], ['--daemon-login', 'a:b']):
+            with self.subTest(extra=extra):
+                with self.assertRaises(t.PolicyRefusal) as caught:
+                    t.check_argv('monerod', good+extra)
+                self.assertNotIn('secret', str(caught.exception))
+        wallet = ['/b/monero-wallet-rpc', '--testnet', '--config-file', '/c', '--daemon-address', '127.0.0.1:48081',
+                  '--wallet-dir', '/w', '--rpc-bind-ip', '127.0.0.1', '--rpc-bind-port', '48083', '--rpc-ssl', 'disabled']
+        for extra in (['--daemon-login', 'a:b'], ['--rpc-login', 'a:b']):
+            with self.subTest(extra=extra), self.assertRaises(t.PolicyRefusal):
+                t.check_argv('monero-wallet-rpc', wallet+extra, signer=True)
+        self.assertIn('--rpc-login', t.FORBIDDEN)
+        self.assertIn('--daemon-login', t.FORBIDDEN)
+
     def test_shapes_cover_required_rows_and_reject_raw_values(self):
         shapes = t.shapes()
         for file, keys in t.REQUIRED.items():
