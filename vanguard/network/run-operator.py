@@ -491,7 +491,7 @@ def start(args):
         receipt=dict(schema='meownero-operator-attempt/1', result='INCOMPLETE', public_launch=False,
             launch_ready=False, mode=grant['verdict_label'], grant=args.grant_comment, candidate_commit=commit,
             runner_sha256=runner, driver_sha256=driver, first_admission=first, network=NETWORK,
-            exclusions={k: 'NOT_RUN' for k in x.EXCLUDED},
+            exclusions={k: dict(status='NOT_RUN', reason=v) for k, v in x.EXCLUDED.items()},
             build_reuse=dict(retained_build_sha256=reuse['manifest_sha256'],
                              authority_comment=r.funded.AUTHORITY_COMMENT)))
     holder = {}

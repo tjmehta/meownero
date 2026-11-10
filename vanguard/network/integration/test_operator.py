@@ -312,6 +312,12 @@ class OpNet(te.Net):
     def launch(self, name, argv, cwd, env=None, **kwargs):
         process = super().launch(name, argv, cwd, env, **kwargs)
         process.send_signal = lambda sig: self.kill(name)
+        node = self.nodes.get(name)
+        if name == 'nodeS' and node and node['exposed']:  # One seed pass that dials nobody (--out-peers 0).
+            with (node['root']/'native.log').open('ab') as log:
+                log.write(b'W Failed to connect to any of seed peers, '+o.SEED_PASS+b'\n')
+                if self.adverse == 'dial':
+                    log.write(o.DIAL_ATTEMPTED+b'176.9.0.187:28080\n')
         return process
 
     def kill(self, name):
@@ -551,6 +557,11 @@ class Journey(unittest.TestCase):
         self.assertIn('monitor', errors)
         self.assertEqual(rows_from(base)['monitor.json']['outside_pin']['status'], 'NOT_RUN')
 
+    def test_a_seed_log_showing_an_outbound_dial_fails_the_shape_row(self):
+        base, net, roles, errors = self.run_journey(o.REHEARSAL_UPTIME_SECONDS, adverse='dial')
+        self.assertIn('public seed dialled out', str(errors['seed']))
+        self.assertEqual(rows_from(base)['seed.json']['public_seed_shape']['status'], 'NOT_RUN')
+
     def test_stalled_chain_fails_closed(self):
         base, net, roles, errors = self.run_journey(o.REHEARSAL_UPTIME_SECONDS, adverse='stall')
         self.assertTrue(errors)
@@ -654,6 +665,41 @@ class OperatorManager(unittest.TestCase):
                 (seed/name).write_text(raw)
                 with self.assertRaises(ValueError):
                     m.relay(root)
+
+    def test_standalone_rollback_stops_seed_first_seals_and_releases(self):
+        # The runbook kill switch, with the attempt's manager gone.
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base/'journey').mkdir(mode=0o700)
+            journey(base/'journey', o.REHEARSAL_UPTIME_SECONDS)
+            out = base/'attempt'
+            out.mkdir(mode=0o700)
+            for role in o.ROLES:
+                for sub in ('public/'+role, 'persistent/'+role, 'staging/control-'+role):
+                    (out/sub).mkdir(parents=True, mode=0o700)
+            image, grant = 'sha256:'+'1'*64, '12345678-0000-0000-0000-000000000000'
+            docker = FakeDocker(out, image, {r: {} for r in o.ROLES}, base/'journey/seed-private/nodes/S')
+            state = dict(schema='meownero-operator-manager/1', manager=[os.getpid(), 'not-this-start-time'],
+                         names=m.names(grant), image=image)
+            with mock.patch.object(m.rt.Manager, 'run', lambda control, argv, deadline, **k: docker.run(argv, deadline, **k)), \
+                    mock.patch.object(te.m, 'LABEL', m.LABEL), mock.patch.object(te, 'x', o), \
+                    mock.patch.object(m.hr, 'probe', lambda host, port, timeout=3.0, hold=0.0: 'unreachable'), \
+                    mock.patch.object(m, 'route_absent', lambda: True):
+                docker.run(m.network_command(state['names']['network']), 0)
+                for role in o.ROLES:
+                    docker.run(m.container_command(out, role, state['names'][role], state['names']['network'], image), 0)
+                    info = docker.containers[role]
+                    state.setdefault('ids', {})[role] = info['id']
+                    docker.run(m.g.DOCKER+['start', info['id']], 0)
+                m.rt.write_private(out/m.STATE, state)
+                code = m.standalone_rollback(types.SimpleNamespace(out=out))
+            self.assertEqual(code, 0)
+            self.assertEqual(docker.order, ['seed', 'client', 'monitor'])
+            saved = m.rt.read_private(out/m.STATE)['standalone_rollback']
+            self.assertTrue(all(v['status'] == 'PASS' for v in saved['rows'].values()), saved)
+            self.assertEqual(docker.containers, {})
+            self.assertIsNone(docker.network)
+            self.assertTrue((out/'release').exists())
 
     def test_standalone_rollback_refuses_while_the_manager_lives(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -794,6 +840,9 @@ class ManagerIntegration(unittest.TestCase):
         self.assertGreater(rows['rollback.json']['rollback_timing']['seconds'], 0)
         self.assertEqual(receipt['rollback']['absence'], {'port-rule': 'UNVERIFIED', 'dns-record': 'UNVERIFIED'})
         self.assertIn((o.SEED_IP, o.P2P['S'], o.HOST_PROBE_HOLD), probes)
+        self.assertGreaterEqual(rows['seed.json']['public_seed_shape']['seed_pass_lines'], 1)
+        self.assertEqual(set(receipt['exclusions']), set(o.EXCLUDED))
+        self.assertTrue(all(v['status'] == 'NOT_RUN' and v['reason'] for v in receipt['exclusions'].values()))
         self.assertIsNone(docker.network)
         self.assertEqual(docker.containers, {})
         self.assertFalse((out/'staging').exists() or (out/'exchange').exists())

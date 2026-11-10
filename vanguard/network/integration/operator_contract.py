@@ -71,6 +71,12 @@ STATUS_MAX_AGE = 180
 MAX_COUNT = t.MAX_COUNT
 MAX_SPREAD = t.MAX_SPREAD
 HOST_PROBE_HOLD = 5               # Seconds the host-reach probe holds an open socket for the seed census.
+# Seed-log witness for --out-peers 0: at --log-level 1 (`*:INFO`, mlog.cpp:106) an attempted dial
+# that fails logs `Connect failed to <addr>` (net_node.inl:1505); a seed pass that dials nobody logs
+# `continuing without seeds` (net_node.inl:1984,1992). The upstream seed IPs (net_node.inl:836-842).
+UPSTREAM_SEEDS = ('176.9.0.187', '192.99.8.110', '37.187.74.171', '88.99.195.15', '5.104.84.64')
+DIAL_ATTEMPTED = b'Connect failed to '
+SEED_PASS = b'continuing without seeds'
 
 PUBLIC_FORBIDDEN = tuple(n for n in t.FORBIDDEN if n != '--confirm-external-bind')+(
     '--allow-local-ip', '--hide-my-port', '--add-exclusive-node', '--offline', '--ban-list',
@@ -216,9 +222,18 @@ REQUIRED = {
 DRIVER_FILES = {'seed': ('seed.json', 'seed-isolation.json'), 'client': ('client.json', 'client-isolation.json'),
                 'monitor': ('monitor.json', 'monitor-isolation.json')}
 REHEARSAL_NOT_RUN = (('client.json', 'newcomer_depth'),)
-EXCLUDED = ['monitor_different_uid', 'monitor_different_host', 'dedicated_seed_uid', 'published_host_port',
-    'public_dns_or_router', 'port_rule_created', 'dns_record_created', 'wallet_payment_on_exposed_topology',
-    'p2p_tls_unsupported_by_fork', 'login_less_public_rpc']
+EXCLUDED = {  # NOT_RUN by design, with the reason recorded in every receipt.
+    'monitor_different_uid': 'needs a second uid; this issue creates no uid (the monitor runs in its own namespace as the same uid)',
+    'monitor_different_host': 'needs a second host; no rented or second host on this issue',
+    'dedicated_seed_uid': 'needs a dedicated uid; this issue creates no uid',
+    'published_host_port': 'no host port is published to the internet on this issue',
+    'public_dns_or_router': 'no DNS, router or firewall change on this issue',
+    'port_rule_created': 'the port rule (connection-rate bound) is an activation object; only its removal and absence check are built',
+    'dns_record_created': 'the DNS record is an activation object; only its removal and absence check are built',
+    'wallet_payment_on_exposed_topology': 'excluded by the issue; F1 covers payment',
+    'p2p_tls_unsupported_by_fork': 'P2P TLS is hard-disabled in the fork (net_node.inl:1090)',
+    'login_less_public_rpc': 'a separate Privacy/Cryptography decision',
+}
 
 
 def empty_rows():
@@ -246,7 +261,8 @@ def shapes():
     return dict(
         public_seed_shape=dict(rpc='operator-tls', in_peers=REHEARSAL_PEERS['in_peers'], out_peers=0,
             max_connections_per_ip=REHEARSAL_PEERS['max_connections_per_ip'], allow_local_ip=False,
-            hide_my_port=False, exclusive_peers=0, wildcard_listeners=0, plan_checked=True, launches=integer(2, 16)),
+            hide_my_port=False, exclusive_peers=0, wildcard_listeners=0, plan_checked=True, launches=integer(2, 16),
+            dial_attempt_lines=0, upstream_seed_lines=0, seed_pass_lines=integer(1, 10**8)),
         owner_namespace_auth=dict(correct_login_accepted=True, missing_rejected=True, wrong_rejected=True,
             pinned=True),
         planned_restart=dict(sealed=True, attested_against_seal=True, changed_process=True, new_certificate=True,
