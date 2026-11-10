@@ -666,6 +666,25 @@ class OperatorManager(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     m.relay(root)
 
+    def test_relay_rereads_a_file_replaced_while_open(self):
+        # Suite run on bfc3204: the seed's rename landed between open and fstat; the old inode's
+        # link count was 0 and the relay refused a correct status.
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'status.json'
+            td.private_write(path, b'old')
+            real = os.fstat
+            calls = []
+            def racing(fd):
+                if not calls:
+                    calls.append(fd)
+                    td.private_write(path, b'new')  # Replaced between open and fstat.
+                return real(fd)
+            with mock.patch.object(m.os, 'fstat', racing):
+                self.assertEqual(m.read_relayed(path), b'new')
+            path.chmod(0o644)
+            with self.assertRaises(ValueError):
+                m.read_relayed(path)
+
     def test_standalone_rollback_stops_seed_first_seals_and_releases(self):
         # The runbook kill switch, with the attempt's manager gone.
         with tempfile.TemporaryDirectory() as tmp:

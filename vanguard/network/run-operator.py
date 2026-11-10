@@ -25,6 +25,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import subprocess
 import sys
 import time
@@ -277,12 +278,29 @@ def attest_sealed(root):
     return True
 
 
+def read_relayed(path, attempts=5):
+    """c.check_file, except a file replaced while open (the seed rewrites by rename every 2 s,
+    so the old inode reads link count 0) is read again instead of refused."""
+    for _ in range(attempts):
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+        try:
+            info = os.fstat(fd)
+            if info.st_nlink == 0:
+                continue  # Replaced under us: open the new file.
+            c.require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_uid == os.getuid() and
+                      stat.S_IMODE(info.st_mode) == 0o600, 'private regular file identity/mode')
+            return os.read(fd, 8192)
+        finally:
+            os.close(fd)
+    raise ValueError('operator channel item kept changing')
+
+
 def relay(root):
     """Operator channel: copy the seed's pin and status into the monitor's control directory."""
     source, target = root/'staging'/'control-seed', root/'staging'/'control-monitor'
     for name, destination in (('pin', 'pin'), ('status.json', 'seed-status.json')):
         try:
-            raw = c.check_file(source/name)
+            raw = read_relayed(source/name)
         except FileNotFoundError:
             continue
         c.require(len(raw) <= 4096, 'operator channel item size')
