@@ -77,6 +77,16 @@ def grant_payload(comment, *, commit, inputs_hash, artifact_hash, runner_hash, d
     return value
 
 
+def keeper_alive(owned):
+    """rt.alive, after reaping: this manager spawns the keeper, so an exited keeper stays a zombie
+    (same /proc start time) until waited for (native rehearsal 1c226b32 lock_released)."""
+    try:
+        os.waitpid(owned[0], os.WNOHANG)
+    except ChildProcessError:
+        pass  # Not this process's child: nothing to reap.
+    return rt.alive(owned)
+
+
 def names(grant):
     return dict(network='meownero-exposure-'+grant, **{role: f'meownero-exposure-{role}-{grant}' for role in x.ROLES})
 
@@ -136,8 +146,14 @@ def verify_limits(value, network, role):
     """The accepted kernel limits, with the owned bridge as the only network and no published port."""
     h = value['HostConfig']
     networks = value['NetworkSettings']['Networks']
+    endpoint = networks.get(network) or {}
+    # Docker fills IPAddress only once the container runs; the requested static address is in
+    # IPAMConfig from create on (native rehearsal 1c226b32). A running container needs both.
+    assigned = endpoint.get('IPAddress') == x.ROLES[role] or not value['State']['Running'] and \
+        endpoint.get('IPAddress') == ''
     c.require(h['NetworkMode'] == network and set(networks) == {network} and
-        networks[network]['IPAddress'] == x.ROLES[role] and h['NanoCpus'] == 2_000_000_000 and
+        (endpoint.get('IPAMConfig') or {}).get('IPv4Address') == x.ROLES[role] and assigned and
+        h['NanoCpus'] == 2_000_000_000 and
         h['Memory'] == h['MemorySwap'] == 4*rt.GiB and h['PidsLimit'] == 256 and h['CapDrop'] == ['ALL'] and
         'no-new-privileges' in h['SecurityOpt'] and not h['Privileged'] and not h.get('PortBindings') and
         not h.get('PublishAllPorts') and not any(value['NetworkSettings'].get('Ports') or {}) and
@@ -278,9 +294,9 @@ def finish(args, state, control, result_code):
     keeper = state.get('keeper')
     (args.out/'release').touch(mode=0o600)
     end = time.monotonic()+30
-    while keeper and rt.alive(keeper) and time.monotonic() < end:
+    while keeper and keeper_alive(keeper) and time.monotonic() < end:
         time.sleep(1)
-    released = not (keeper and rt.alive(keeper)) and not rt.lock_held_elsewhere()
+    released = not (keeper and keeper_alive(keeper)) and not rt.lock_held_elsewhere()
     rows['cleanup.json']['lock_released'] = dict(status='PASS' if released else 'FAIL', keeper_exited=released)
     try:
         rows['cleanup.json']['persistent_root_owner_only'] = dict(status='PASS', retained=True,
@@ -311,7 +327,7 @@ def observe(args, state, control):
     """Watch every role container until all exit; one failure stops the others."""
     while True:
         c.require(time.time() < state['end_unix'], 'exposure wall exhausted')
-        c.require(rt.alive(state['keeper']) and rt.lock_held_elsewhere(), 'heavy-lock keeper lost')
+        c.require(keeper_alive(state['keeper']) and rt.lock_held_elsewhere(), 'heavy-lock keeper lost')
         control.sample()
         values = {role: inspect(control, state, role, time.monotonic()+60) for role in x.ROLES}
         c.require(all(values.values()), 'owned container missing')

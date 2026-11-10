@@ -701,16 +701,28 @@ class ExposureManager(unittest.TestCase):
             for flag in m.FLAGS:
                 self.assertIn(flag, argv)
 
-    def inspected(self, role='seed', **host):
+    def inspected(self, role='seed', running=True, **host):
         h = dict(NetworkMode='net', NanoCpus=2_000_000_000, Memory=4*1024**3, MemorySwap=4*1024**3, PidsLimit=256,
                  CapDrop=['ALL'], SecurityOpt=['no-new-privileges'], Privileged=False, PortBindings={},
                  PublishAllPorts=False, Ulimits=[dict(Name='core', Soft=0, Hard=0)])
         h.update(host)
         return dict(HostConfig=h, Config=dict(User=f'{os.getuid()}:{os.getgid()}'),
-                    NetworkSettings=dict(Networks={'net': dict(IPAddress=x.ROLES[role])}, Ports={}, SandboxKey='k'))
+                    NetworkSettings=dict(Networks={'net': dict(IPAMConfig=dict(IPv4Address=x.ROLES[role]),
+                        IPAddress=x.ROLES[role] if running else '')}, Ports={}, SandboxKey='k' if running else ''),
+                    State=dict(Running=running))
 
     def test_limits_refuse_published_ports_and_foreign_networks(self):
         m.verify_limits(self.inspected(), 'net', 'seed')
+        # Native rehearsal 1c226b32: Docker assigns IPAddress only at start; a created container
+        # carries the requested address in IPAMConfig.IPv4Address and must pass.
+        m.verify_limits(self.inspected(running=False), 'net', 'seed')
+        unassigned = self.inspected()
+        unassigned['NetworkSettings']['Networks']['net']['IPAddress'] = ''
+        requested = self.inspected(running=False)
+        requested['NetworkSettings']['Networks']['net']['IPAMConfig'] = dict(IPv4Address=x.CLIENT_IP)
+        for value in (unassigned, requested):
+            with self.assertRaises(ValueError):
+                m.verify_limits(value, 'net', 'seed')
         for value in (self.inspected(PortBindings={'48080/tcp': [dict(HostPort='48080')]}),
                       self.inspected(PublishAllPorts=True), self.inspected(NetworkMode='bridge'),
                       self.inspected(NetworkMode='host'), self.inspected(Memory=8*1024**3)):
@@ -757,8 +769,10 @@ class FakeDocker:
             HostConfig=dict(NetworkMode=info['network'], NanoCpus=2_000_000_000, Memory=4*1024**3,
                 MemorySwap=4*1024**3, PidsLimit=256, CapDrop=['ALL'], SecurityOpt=['no-new-privileges'],
                 Privileged=False, PortBindings={}, PublishAllPorts=False, Ulimits=[dict(Name='core', Soft=0, Hard=0)]),
-            NetworkSettings=dict(Networks={info['network']: dict(IPAddress=info['ip'])}, Ports=ports,
-                                 SandboxKey='/var/run/docker/netns/'+info['id'][:12]),
+            # Docker reports the address and sandbox only once started (native 1c226b32).
+            NetworkSettings=dict(Networks={info['network']: dict(IPAMConfig=dict(IPv4Address=info['ip']),
+                IPAddress=info['ip'] if info['started'] else '')}, Ports=ports,
+                SandboxKey='/var/run/docker/netns/'+info['id'][:12] if info['started'] else ''),
             State=dict(info['state']))
 
     def complete(self, role, info):
@@ -809,7 +823,7 @@ class FakeDocker:
             self.containers[role] = dict(id=str(5+list(x.ROLES).index(role))*64, name=name, role=role,
                 network=argv[argv.index('--network')+1], ip=argv[argv.index('--ip')+1],
                 mounts=[tuple(argv[i+1].split(':')[:2]) for i, a in enumerate(argv) if a == '-v'],
-                state=dict(Running=False, ExitCode=0, OOMKilled=False), polls=0)
+                state=dict(Running=False, ExitCode=0, OOMKilled=False), polls=0, started=False)
             return done()
         if verb == 'inspect':
             info = next((i for i in self.containers.values() if i['name'] == rest[1] or i['id'] == rest[1]), None)
@@ -825,6 +839,7 @@ class FakeDocker:
         if verb == 'start':
             info = next(i for i in self.containers.values() if i['id'] == rest[1])
             info['state'].update(Running=True)
+            info['started'] = True
             return done()
         if verb == 'stop':
             info = next(i for i in self.containers.values() if i['id'] == rest[-1])
@@ -835,6 +850,35 @@ class FakeDocker:
             del self.containers[role]
             return done()
         raise AssertionError(argv)
+
+
+class KeeperReap(unittest.TestCase):
+    def test_an_exited_child_keeper_is_not_alive(self):
+        # Native rehearsal 1c226b32: the manager spawned the keeper, so the exited keeper stayed a
+        # zombie with its /proc entry and start time; lock_released then failed on a free lock.
+        child = subprocess.Popen(['sleep', '0.2'])
+        try:
+            owned = m.rt.identity(child.pid)
+            deadline = time.time()+10
+            while Path(f'/proc/{child.pid}/stat').read_text().rsplit(')', 1)[1].split()[0] != 'Z':
+                self.assertLess(time.time(), deadline)
+                time.sleep(.05)
+            self.assertTrue(m.rt.alive(owned))          # The inherited check sees the zombie.
+            self.assertFalse(m.keeper_alive(owned))     # Reaped, then gone.
+            self.assertFalse(Path(f'/proc/{child.pid}').exists())
+        finally:
+            with contextlib.suppress(ChildProcessError):
+                child.wait(timeout=5)
+
+    def test_a_running_or_foreign_keeper_is_unchanged(self):
+        child = subprocess.Popen(['sleep', '30'])
+        try:
+            owned = m.rt.identity(child.pid)
+            self.assertTrue(m.keeper_alive(owned))
+            self.assertTrue(m.keeper_alive(m.rt.identity(1)) == m.rt.alive(m.rt.identity(1)))  # Not our child.
+        finally:
+            child.kill()
+            child.wait()
 
 
 class ManagerIntegration(unittest.TestCase):
