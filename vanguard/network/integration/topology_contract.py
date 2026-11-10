@@ -87,10 +87,10 @@ def options(argv):
     return result
 
 
-def allowlisted(parsed, allowed):
+def allowlisted(parsed, allowed, forbidden=FORBIDDEN):
     """Refuse forbidden, unknown or abbreviated names, value/flag misuse and repeats."""
     names = [name for name, _ in parsed]
-    for name in FORBIDDEN:
+    for name in forbidden:
         _require(name not in names, 'forbidden option '+name)
     for name, value in parsed:
         _require(name in allowed, 'unknown or abbreviated option '+name)
