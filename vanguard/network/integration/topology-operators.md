@@ -536,7 +536,10 @@ The host contract, admission and launch command are the milestone-3 ones, with
    seed census counts gateway-sourced sockets as planned `host` edges.
 8. **Outside monitor.** M's role gets the pin and the seed's operator status
    only through the manager (copied from the seed's control directory into the
-   monitor's). It first checks that a wrong pin raises an alert, then samples
+   monitor's). In the rehearsal "out of band" means "never taken from the
+   listener": the copy runs under the same host uid, so its authenticity rests
+   on the same-uid boundary, not on an authenticated channel; that is why the
+   different-uid and different-host rows stay NOT_RUN. It first checks that a wrong pin raises an alert, then samples
    every 60 s for the window: pin by TLS handshake (no request byte), M's own
    validated tip against the status tip, the status's inbound count against
    `in-peers` with M's own edge in it, and the status age.
@@ -564,7 +567,11 @@ the activation decisions.
 3. Confirm the listener is exactly the planned interface on 48080 (and 48081
    only for `operator-tls`), no wildcard.
 4. Deliver the new TLS pin (operator RPC only) to every operator and the
-   monitor over the operator channel, never over the public path.
+   monitor over an authenticated operator channel, never over the public path.
+   The pin is public, so the channel needs integrity and a known origin, not
+   secrecy: SSH with a known host key, the tailnet, or a committed record. The
+   pin comes only from the supervisor's record for that launch (the seed's
+   own-namespace handshake after `listeners()` and `confirm_pin()`).
 
 **Monitor.**
 - Run `outside_monitor.py` under a different uid or on a different host, with
@@ -573,14 +580,36 @@ the activation decisions.
   is missing and the seed is not known healthy.
 - The public path cannot show peer counts: restricted RPC zeroes them
   (`core_rpc_server.cpp:316-321`). The count comes from the supervisor's status.
+- **Never clear a pin ALERT with the pin the monitor saw.** After a restart
+  the monitor reports a mismatch until the new pin arrives over the operator
+  channel. A pin read off the listener (the monitor's own handshake, or
+  `openssl s_client` from the monitor host) is trust on first use across the
+  public path. A mismatch with no known restart is an incident.
+- **The pin check needs the `operator-tls` RPC variant.** Under the
+  recommended `private` variant the public address has no TLS listener, so
+  `outside_monitor.py` as written reports ALERT (unreachable) on every sample,
+  and public P2P (plaintext Levin) has nothing to pin. Under `private` the
+  monitor's anchor is the tunnel's own key (SSH host key or tailnet node key),
+  which authenticates the status it carries, plus the follower's tip
+  comparison; a pin-less monitor mode is a later change, not part of this
+  candidate.
+- The pin authenticates the RPC listener only, never the status file: the
+  count, top and inbound figures are only as trustworthy as the operator
+  channel.
 
 **Restart (planned).** Stop gracefully (seal), attest, reopen; distribute the
-new pin. A planned restart also clears every in-memory host block.
+new pin over the authenticated operator channel (Start step 4). A planned
+restart also clears every in-memory host block.
 
 **Backup.** A cold backup is a planned restart with a copy: stop and seal,
 attest, copy, attest the copy, prune to the newest two, reopen. Rehearsal
 schedule: every 3 blocks. Suggested public schedule: daily (about 960 blocks),
-plus before any upgrade. Backups stay owner-only and are never distributed
+plus before any upgrade. Key lifecycle is tied to this schedule: with
+per-launch keys and `operator-tls`, a daily backup means a daily pin delivery
+to every operator and the monitor and an expected ALERT window each day; a
+persistent 0600 key file under the dedicated uid (activation checklist item 2)
+avoids that and makes any pin change a signal in itself. The choice belongs to
+the activation decision. Backups stay owner-only and are never distributed
 (signer artefacts live in the persistent root).
 
 **Crash.** Never reopen an unsealed root. Quarantine it (owner-only, kept for
