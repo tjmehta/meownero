@@ -239,8 +239,12 @@ milestone-2 recipe above is unchanged and still governs every loopback launch.
 
 - **P2P stays plaintext Levin.** The fork hard-disables P2P TLS
   (`net_node.inl:1090`, `m_ssl_support = e_ssl_support_disabled`), as upstream
-  Monero does. P2P carries public chain data. Network-level privacy (Tor/I2P) is
-  out of scope here.
+  Monero does. P2P carries chain data and transaction relay. Plaintext Levin
+  lets a peer or an observer link a transaction's first relay to an IP.
+  Dandelion++ (`cryptonote_config.h:111-116`, 2 stems, 20% fluff) helps only
+  when there are enough honest peers, which a few-node testnet lacks. The
+  testnet is therefore not private. Tor and I2P are upstream options outside
+  this candidate.
 - **Daemon RPC off loopback is TLS only.** The exposed seed runs
   `--rpc-ssl enabled` with no key or certificate path, so monerod generates an
   RSA-4096 self-signed certificate in memory at every launch
@@ -251,12 +255,23 @@ milestone-2 recipe above is unchanged and still governs every loopback launch.
   refuses it.
 - **Custody.** The private key exists only in the seed process's memory and
   dies with it. It is never in argv, logs, the exchange, evidence or the repo.
+  Disabled swap (`--memory-swap` equals `--memory`) and the container core limit
+  (`--ulimit core=0`) keep it off disk. Note one exception: this host's
+  `core_pattern` pipes crash dumps to apport, and the kernel does not apply
+  RLIMIT_CORE to piped dumps.
   The seed driver reads the launch certificate's SHA-256(DER) pin by a TLS
   handshake from its own namespace, which is trust on first use there only. It
   passes the pin, which is not secret, to the client through the owner-only
   exchange directory. The client compares the pin before sending the first
-  request byte. The daemon login is fresh per launch and stays in the seed
-  child's environment (L4); the client never holds it. Privacy/Cryptography was
+  request byte. The pin's authenticity rests on namespace locality and listener
+  ownership: the handshake never leaves the seed's namespace, `listeners()`
+  confirms that the launched monerod PID holds the listener, and
+  `confirm_pin()` then re-reads the pin and requires it to be unchanged. Digest
+  does not authenticate the server, because the client never checks `rspauth`.
+  A closed TLS session is never reopened (`auto_open = 0`), so the Digest header
+  cannot leave over plaintext. The daemon login is 192 random bits, fresh per
+  launch, and stays in the seed child's environment (L4); the client never holds
+  it. Privacy/Cryptography was
   consulted on this design before the pinning code (TJS-4177 consultation
   comment).
 
@@ -387,11 +402,25 @@ setsid bash -c '
 1. **Host and interface.** Which owned host runs the public seed, under which
    dedicated uid, on which interface or IP. The dev host's LAN address and
    tailnet are not public. No rented host, no phone.
-2. **Ports.** P2P TCP 48080 public. Daemon RPC 48081 either stays private
-   (recommended), or is published as TLS + login with the pin distributed out of
-   band, or becomes a login-less public restricted RPC (an explicit decision,
-   because `send_raw_transaction`/`submit_block` are mapped). No wallet RPC,
-   ever.
+2. **Ports.** P2P TCP 48080 public. Daemon RPC 48081 takes one of three
+   options. No wallet RPC, ever.
+   - **Stays private (recommended).** Operators reach it over the tailnet or an
+     SSH tunnel.
+   - **Published as TLS + login for operators only.** No CA certificate is
+     needed, but this requires:
+     - each operator receives the pin over an authenticated channel that does
+       not use the public path, never TOFU across the internet;
+     - a key-lifecycle decision: either per-launch keys with a fresh pin
+       distribution at each restart, or a persistent 0600 key file under a
+       dedicated uid with a written rotation and revocation step;
+     - clients accept exact pins only, never `--rpc-ssl-allow-any-cert` or
+       autodetect (check the text encoding of
+       `--daemon-ssl-allowed-fingerprints`);
+     - logins of at least 128 random bits per launch and per operator.
+   - **Login-less public restricted RPC (a remote node for wallets).** This is
+     a separate privacy decision: the node sees each wallet's IP and timing, and
+     `send_raw_transaction`/`submit_block` are mapped. It needs its own
+     Privacy/Cryptography consultation before it is offered.
 3. **DNS.** Record name, owner and TTL. None was created by this candidate.
 4. **Firewall/router.** Allow inbound TCP 48080 only (plus 48081 if item 2
    chooses it). Deny everything else. Set a connection-rate limit. The single
@@ -402,6 +431,8 @@ setsid bash -c '
    the DNS record, confirm absence from outside, and retain the data root
    owner-only. State the expected time to rollback.
 7. **Incident.** Who is alerted, the kill switch (rollback step 1), evidence
-   retention, and the public notice that this is a valueless testnet.
+   retention, and the public notice that this testnet is valueless and not
+   private. On the public host, the crash handler either drops the seed's dumps,
+   or `core_pattern` is a plain path with the core limit at 0.
 8. **Labels that stay.** The build identity (`1b2815e2…`/`3eedebc0`) stays
    unchanged. `launch_ready` flips only by TJ's decision recorded on the issue.

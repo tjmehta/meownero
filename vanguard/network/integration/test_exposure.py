@@ -134,6 +134,13 @@ class Census(unittest.TestCase):
         self.assertEqual(driver.classify('seed', owned, ROUTES), ({'client': 2}, 0))
         foreign = owned+[('S', sock('01', x.SEED_IP, 48080, x.FOREIGN_IP, 40100))]
         self.assertEqual(driver.classify('seed', foreign, ROUTES), ({'client': 2, 'foreign': 1}, 0))
+        # Platform 68a99d55: the client's planned TLS/RPC probes reach the seed RPC from the
+        # client address while the seed censuses; they are planned edges, never foreign.
+        probing = owned+[('S', sock('01', x.SEED_IP, 48081, x.CLIENT_IP, 40500))]
+        self.assertEqual(driver.classify('seed', probing, ROUTES), ({'client': 2}, 0))
+        for extra in (sock('01', x.SEED_IP, 48081, x.FOREIGN_IP, 40600),   # Foreign namespace on the RPC.
+                      sock('01', x.SEED_IP, 48081, '10.9.9.9', 40700)):
+            self.assertEqual(driver.classify('seed', owned+[('S', extra)], ROUTES)[1], 1)
         for extra in (sock('0A', '0.0.0.0', 48080, '0.0.0.0', 0), sock('01', x.SEED_IP, 48080, '10.9.9.9', 1),
                       sock('01', x.SEED_IP, 41000, '1.1.1.1', 443), sock('07', '0.0.0.0', 5353, '0.0.0.0', 0, 'udp')):
             self.assertEqual(driver.classify('seed', owned+[('S', extra)], ROUTES)[1], 1)
@@ -159,8 +166,8 @@ class Census(unittest.TestCase):
 
 class TLSServer:
     """Local TLS listener with epee-like per-connection Digest auth."""
-    def __init__(self, base, login='node:right'):
-        self.requests = 0
+    def __init__(self, base, login='node:right', close_on_401=False):
+        self.requests, self.plaintext = 0, 0
         key, cert = base/'key.pem', base/'cert.pem'
         subprocess.run(['openssl', 'req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-subj', '/CN=x', '-days', '1',
                         '-keyout', str(key), '-out', str(cert)], check=True, capture_output=True)
@@ -189,8 +196,10 @@ class TLSServer:
                     if f['username'] == user and f['response'] == expect:
                         return self.reply(200, b'{"result":{"status":"OK","height":1}}')
                 self.connection.nonce = os.urandom(8).hex()
-                self.reply(401, b'', {'WWW-Authenticate':
-                                      f'Digest qop="auth",algorithm=MD5,realm="x",nonce="{self.connection.nonce}"'})
+                headers = {'WWW-Authenticate': f'Digest qop="auth",algorithm=MD5,realm="x",nonce="{self.connection.nonce}"'}
+                if close_on_401:
+                    headers['Connection'] = 'close'
+                self.reply(401, b'', headers)
             def reply(self, code, body, headers={}):
                 self.send_response(code)
                 for k, v in dict(headers, **{'Content-Length': str(len(body))}).items():
@@ -205,6 +214,7 @@ class TLSServer:
                 try:
                     return context.wrap_socket(sock, server_side=True), address
                 except (ssl.SSLError, OSError):
+                    server.plaintext += 1  # A non-TLS client (or a failed handshake).
                     sock.close()
                     raise
             def handle_error(self, request, address):
@@ -249,6 +259,23 @@ class PinnedClient(unittest.TestCase):
         self.assertTrue(driver.plaintext_refused('127.0.0.1', port))
         with self.assertRaises(t.PolicyRefusal):
             driver.TLSRPC('127.0.0.1', port, 'not-a-pin')
+
+    def test_closed_session_never_retries_digest_in_plaintext(self):
+        # Platform 68a99d55 hardening: a 401 with Connection: close must end the call, not
+        # auto-open a plaintext socket to the TLS port and send the Digest header there.
+        base = Path(self.tmp.name)/'closing'
+        base.mkdir()
+        closing = TLSServer(base, close_on_401=True)
+        try:
+            rpc = driver.TLSRPC('127.0.0.1', closing.port, closing.pin, 'node:right')
+            self.assertFalse(rpc.session().auto_open)
+            with self.assertRaises(ConnectionError):
+                rpc.call('get_info')
+            time.sleep(.2)
+            self.assertEqual(closing.plaintext, 0)
+            self.assertEqual(closing.requests, 1)
+        finally:
+            closing.close()
 
     def test_plaintext_server_is_not_mistaken_for_refusal(self):
         with socket.socket() as listener:

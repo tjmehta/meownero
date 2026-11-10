@@ -79,6 +79,9 @@ class TLSRPC:
             raise PinMismatch('certificate pin mismatch')
         connection = http.client.HTTPConnection(self.host, self.port, timeout=d.budget(5))
         connection.sock = sock
+        # A closed session must never be reopened: http.client would reconnect in plaintext
+        # and send the Digest header before any pin check (Platform 68a99d55).
+        connection.auto_open = 0
         return connection
 
     def call(self, method, params=None, login='current', raw=False):
@@ -91,6 +94,8 @@ class TLSRPC:
                 headers = {'Content-Type': 'application/json'}
                 if authorization is not None:
                     headers['Authorization'] = 'Digest '+authorization
+                if connection.sock is None:  # epee closed the pinned session: never reconnect.
+                    raise ConnectionError('pinned TLS session closed')
                 connection.sock.settimeout(d.budget(5))
                 connection.request('POST', '/json_rpc', body, headers)
                 with connection.getresponse() as response:
@@ -147,7 +152,8 @@ def classify(role, owned, routes):
 
     Routes: loopback plus the owned /29 on the bridge, and no default route.
     Listeners: only the role's planned addresses (never a wildcard). Established
-    sockets: seed P2P accepts only from the client and foreign IPs; other nodes connect out to
+    sockets: seed P2P accepts only from the client and foreign IPs and the seed RPC only
+    from the client IP (its planned probes); other nodes connect out to
     the exposed seed P2P from an ephemeral port; same-namespace driver RPC is ignored;
     every other socket, and any UDP socket, counts as foreign.
     """
@@ -172,6 +178,8 @@ def classify(role, owned, routes):
             continue
         elif role == 'seed' and (lip, lport) == (x.SEED_IP, x.P2P['S']) and rip in inbound:
             edges[inbound[rip]] = edges.get(inbound[rip], 0)+1  # Peers by source namespace.
+        elif role == 'seed' and (lip, lport) == (x.SEED_IP, x.RPC['S']) and rip == x.CLIENT_IP:
+            continue  # The client's planned pin/TLS/auth probes; any other source stays foreign.
         elif role != 'seed' and lip == x.ROLES[role] and (rip, rport) == (x.SEED_IP, x.P2P['S']) and \
                 lport not in x.P2P.values():
             edges[node] = edges.get(node, 0)+1  # Client-initiated to the exposed listener.
@@ -421,6 +429,13 @@ class Exposure(td.Topology):
                   all(ip in (x.SEED_IP, '::1') for ip, _ in found), 'exposed listener set')
         return found
 
+    def confirm_pin(self):
+        """Re-read the pin after listeners() bound the listener to the launched PID."""
+        sock, presented = peer_pin(x.SEED_IP, x.RPC['S'])
+        sock.close()
+        c.require(presented == self.pins['S'], 'launch certificate changed after listener check')
+        return presented
+
     # ---- adverse launcher policy --------------------------------------------------
     def argv_controls(self):
         name = x.NODES[self.role][0]
@@ -492,6 +507,7 @@ class Exposure(td.Topology):
         self.stop('S')
         self.start('S', mining=True)
         self.listeners()
+        self.confirm_pin()
         self.rpc['S'].auth_controls()
         self.row('seed.json', 'owner_namespace_auth', correct_login_accepted=True, missing_rejected=True,
                  wrong_rejected=True, pinned=True)
@@ -520,6 +536,7 @@ class Exposure(td.Topology):
         self.stop('S')
         self.start('S', mining=True)
         self.listeners()
+        self.confirm_pin()
         second = self.pins['S']
         resumed = self.info('S')
         # A block found during the graceful stop is part of the sealed tip, never a race.
