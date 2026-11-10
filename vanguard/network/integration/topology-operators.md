@@ -225,3 +225,214 @@ Wallet payments on this topology (covered by accepted F1), a native exercise of
 the L1 proof methods, TLS or any off-loopback transport, more than one host
 (the only qualifying dev host is this Linux machine; TJ's Mac/phone and rented
 hosts are excluded), and the installed operator-route custody above.
+
+## Public exposure (TJS-4177, milestone 3 candidate, not activated)
+
+This section covers the first candidate in which a listener leaves loopback. It
+runs only on the dev host, on an owned Docker `--internal` bridge with no
+published host port. `public_launch` and `launch_ready` stay false. Activation
+is a TJ decision that the lead raises after Core and Security accept this
+candidate; the checklist at the end is what that decision needs. The
+milestone-2 recipe above is unchanged and still governs every loopback launch.
+
+### Transport and TLS choice (pinned fork `monero-fcmp` e151643c)
+
+- **P2P stays plaintext Levin.** The fork hard-disables P2P TLS
+  (`net_node.inl:1090`, `m_ssl_support = e_ssl_support_disabled`), as upstream
+  Monero does. P2P carries chain data and transaction relay. Plaintext Levin
+  lets a peer or an observer link a transaction's first relay to an IP.
+  Dandelion++ (`cryptonote_config.h:111-116`, 2 stems, 20% fluff) helps only
+  when there are enough honest peers, which a few-node testnet lacks. The
+  testnet is therefore not private. Tor and I2P are upstream options outside
+  this candidate.
+- **Daemon RPC off loopback is TLS only.** The exposed seed runs
+  `--rpc-ssl enabled` with no key or certificate path, so monerod generates an
+  RSA-4096 self-signed certificate in memory at every launch
+  (`net_ssl.cpp:265-290`). A non-loopback `--rpc-bind-ip` needs
+  `--confirm-external-bind` even with TLS (`rpc_args.cpp:159`).
+  `exposure_contract.check_exposed` accepts that option only together with TLS,
+  `--restricted-rpc` and the exact owned bridge IP. Every milestone-2 shape still
+  refuses it.
+- **Custody.** The private key exists only in the seed process's memory and
+  dies with it. It is never in argv, logs, the exchange, evidence or the repo.
+  Disabled swap (`--memory-swap` equals `--memory`) and the container core limit
+  (`--ulimit core=0`) keep it off disk. Note one exception: this host's
+  `core_pattern` pipes crash dumps to apport, and the kernel does not apply
+  RLIMIT_CORE to piped dumps.
+  The seed driver reads the launch certificate's SHA-256(DER) pin by a TLS
+  handshake from its own namespace, which is trust on first use there only. It
+  passes the pin, which is not secret, to the client through the owner-only
+  exchange directory. The client compares the pin before sending the first
+  request byte. The pin's authenticity rests on namespace locality and listener
+  ownership: the handshake never leaves the seed's namespace, `listeners()`
+  confirms that the launched monerod PID holds the listener, and
+  `confirm_pin()` then re-reads the pin and requires it to be unchanged. Digest
+  does not authenticate the server, because the client never checks `rspauth`.
+  A closed TLS session is never reopened (`auto_open = 0`), so the Digest header
+  cannot leave over plaintext. The daemon login is 192 random bits, fresh per
+  launch, and stays in the seed child's environment (L4); the client never holds
+  it. Privacy/Cryptography was
+  consulted on this design before the pinning code (TJS-4177 consultation
+  comment).
+
+### Topology and launch
+
+| Namespace (container) | Bridge IP | Node | P2P / RPC | Role |
+| --- | --- | --- | --- | --- |
+| seed | 10.231.77.2 | S | 10.231.77.2:48080 / TLS 10.231.77.2:48081 | exposed seed, only miner (1 thread, light mode) |
+| client | 10.231.77.3 | K | 127.0.0.1:48280 / 48281 | first client; exclusive peer `10.231.77.2:48080` |
+| client | 10.231.77.3 | N | 127.0.0.1:48380 / 48381 | cold newcomer from genesis |
+| foreign | 10.231.77.4 | F | 127.0.0.1:48480 / 48481 | `--stagenet` foreign peer |
+
+The foreign peer has its own namespace and address. The seed blocks a host for
+24 h after more than 10 wrong-network handshakes (`net_node.inl:2687`,
+`add_host_fail`, `P2P_IP_FAILS_BEFORE_BLOCK`). Sharing the client address would
+cut off K and N.
+
+The network is `docker network create --internal --subnet 10.231.77.0/29
+--gateway 10.231.77.1`, labelled and named by the grant. Containers on it get
+no default route and no NAT. The manager refuses the launch if any Docker
+network or host route overlaps the /29. All three containers keep the accepted
+kernel limits (`--cpus=2 --memory=4g --memory-swap=4g --pids-limit=256
+--cap-drop=ALL --security-opt=no-new-privileges`, core 0, owner uid). The only
+change is `--network <owned> --ip <role IP>` in place of `--network=none`.
+`run-exposure.py:verify_limits` refuses any port binding, `PublishAllPorts`,
+published `Ports` entry, a second network or a wrong IP. Cleanup binds container
+identity only, so a container that fails the limit check is still removed.
+
+The seed's exclusive peer is the client address, where nothing listens. The
+seed never dials beyond the owned subnet, and every seed/client connection is
+client-initiated to the exposed listener. Each container's census
+(`exposure_driver.classify`) refuses a default route, a route outside the /29, a
+wildcard listener, any UDP socket and any connection outside the planned
+edges.
+
+The grant is a Platform-authored `meownero-exposure-grant` block on TJS-4177
+(schema `meownero-exposure-grant/1`). It binds the same fields as the topology
+grant: candidate commit, inputs, runner `run-exposure.py`, driver
+`integration/exposure_driver.py`, packet, output root, retained build
+`3eedebc0`/`1b2815e2…`, keeper-held heavy lock and the host-overhead allowance
+(1 GiB, 4,000 CPU-s, 32 PIDs, sampled abort). It also binds the network (`internal`,
+subnet, the three role IPs, `published_ports: 0`), `listeners:
+internal-bridge-no-published-port` and `launch_ready: false`. A topology grant
+never binds this runner, and an exposure grant never binds the topology runner.
+
+| Mode | `uptime_seconds` | `wall_seconds` | `verdict_label` | Best verdict |
+| --- | --- | --- | --- | --- |
+| rehearsal | 1,800 | 10,800 | `rehearsal` | `REHEARSAL_PASS_STEADY_NOT_RUN` |
+| full | 21,600 | 32,400 | `full` | `PASS_EXPOSURE_CANDIDATE_DEV_HOST_ONLY` |
+
+Admission, spacing and the lock rules are the milestone-2 host contract (lead
+decision `a9e5430f`): load 1/5/15 ≤ 9.0, memory ≥ 5 GiB, disk ≥ 20 GiB, and at
+most three first admissions per grant on wakes at least 2 h apart. Both
+admissions run before the first owned container exists. Run it from a clean
+exact `/tmp` checkout as a session leader:
+
+```sh
+umask 077
+setsid bash -c '
+  setsid -w python3 -B vanguard/network/run-exposure.py start --grant-comment "$GRANT" \
+    --artifact-sha256 "$PACKET_SHA256" --reuse-build "$RETAINED_ROOT" --out "$ROOT"
+  echo "$?" > "$ROOT.wrapper-exit"
+' > "$RUN_DIR/exposure-controller.private.log" 2>&1 < /dev/null &
+```
+
+### What the drivers prove, in order
+
+1. **Exposed listener.** S starts once offline on loopback, in the milestone-2
+   shape, so that the F1 restore signer can create the miner address. It then
+   restarts on the bridge IP. Its listening sockets are exactly
+   `10.231.77.2:48080` and `:48081` (no wildcard). From the seed's own
+   namespace, the correct login over pinned TLS succeeds and missing or wrong
+   logins return 401.
+2. **Refusals from the other namespace.** These are checked before any client
+   node starts:
+   - a wrong pin is refused before any request byte;
+   - a plaintext HTTP client gets no HTTP response;
+   - a missing Digest login returns 401 over pinned TLS;
+   - a wrong Digest login returns 401 over pinned TLS.
+3. **Cold bootstrap.** K connects and S starts mining. Once S is at count ≥ 6, N
+   starts from an empty root at genesis and syncs to the seed tip, through
+   exactly one client-initiated connection to `10.231.77.2:48080`.
+4. **Foreign network.** F (`--stagenet`, fresh, third namespace) dials the
+   exposed seed for 90 s. S logs `WRONG NETWORK AGENT CONNECTED!`. F stays at
+   its own genesis, S never learns F's genesis block, and both client
+   connections stay up throughout.
+5. **Seed restart.** S stops, seals, and restarts with a new process and a new
+   certificate. The old pin is refused, and the new pin reaches 401 without the
+   login. K and N reconnect and catch up two blocks.
+6. **Client restart.** K stops while the chain advances two blocks, then
+   restarts and catches up.
+7. **Steady exposure.** K and N must follow the seed every 300 s, with no
+   foreign socket. The window is 6 h for full mode. In rehearsal it runs 30 min
+   and the row stays NOT_RUN.
+8. **Cleanup.** The manager writes `host.json` (internal network, no published
+   ports, three distinct namespaces) and then removes all three containers and
+   the network, confirming absence by label and name. It also removes `staging/`
+   and the exchange directory (steps, counts, tips and pins only). It releases
+   the keeper and retains `persistent/{seed,client,foreign}` owner-only. No evidence
+   file carries a `/home/…` or `/tmp/…` path (source test). Before any wider
+   distribution, check archives for host names as well.
+
+### L1-L6 and TLS under exposure
+
+| Limit | Exposure candidate | Enforced by |
+| --- | --- | --- |
+| L1 wallet RPC full-key | Unchanged. The only wallet is the one-time signer on the seed's private offline loopback launch; no wallet runs while anything is exposed. | `t.check_argv` wallet branch; driver order |
+| L2 daemon RPC restricted, still private | Every exposed daemon RPC is `--restricted-rpc` with TLS and a per-launch login, reachable only on the owned internal bridge. `send_raw_transaction`/`submit_block` stay mapped, so a public RPC is an activation decision, not a default. | `check_exposed`; `owner_namespace_auth`, `missing_auth_refused`, `wrong_auth_refused` rows |
+| L3 salted witnesses | Unchanged. Public rows carry salted tips and counts only. Pins and raw tips stay in the private exchange. | `x.shapes`; source test scans public rows |
+| L4 auth only in the environment | `--rpc-login`/`--daemon-login` are now refused by name, and abbreviations are refused by the allowlist. The seed login never enters argv, the exchange or any file. | `t.FORBIDDEN`, `t.allowlisted`; journey test |
+| L5 plaintext RPC loopback only | Still true. The one off-loopback RPC is TLS with a pinned in-memory certificate. P2P is off loopback in plaintext because the fork has no P2P TLS. | `check_exposed`; `wrong_tls_refused` row |
+| L6 hygiene | 0600 evidence under 0700 parents, `umask 077`, no host paths in evidence. | `r.publish_evidence`; manager test |
+| TLS | RSA-4096 self-signed per launch, SHA-256(DER) pin, TLS ≥ 1.2 on the client, no request before the pin matches, stale pin refused after restart. | `exposure_driver.TLSRPC`; local TLS server test |
+
+### Operator-route gaps re-examined for exposure
+
+| Gap (milestone 2) | Once a peer outside the host can reach the listener | Control for this candidate / needed before activation |
+| --- | --- | --- |
+| Protected pre-import immutable launch | **Still holds.** A remote peer reaches monerod's P2P and the TLS RPC only, never the checkout, launcher or harness (mounted read-only). The same-uid host writer is the same boundary as before. | Same: fresh exact `/tmp` checkout, hash-bound grant. **Before activation:** the public host runs only this workload under a dedicated uid, so no other same-uid process exists. |
+| Producer-loss recovery that survives separately | **Changes.** A remote peer can now crash or exhaust the seed. The exposure manager has no planned restart; a crash is a FAIL, and the crashed root is refused against its last seal (milestone-2 rule). | **Before activation:** a supervised restart path that keeps the seal/manifest check (offline attest, then reopen), plus cold backups on a schedule, named in the operator runbook. |
+| PID1 lock/namespace custody | **Changes meaning.** The namespace is a Docker user-defined internal bridge instead of `none`, and its custody is still dockerd, so Docker socket access stays root-equivalent. A remote peer cannot reach the socket. | **Before activation:** only the operator uid can reach the Docker socket. Publishing a port goes through one explicit, reviewed rule (`-p` or firewall). Host networking is never used. |
+| External-writer confinement | **Needs a different control.** Untrusted remote input now drives monerod, the writer of the persistent root. A monerod compromise acts as the container uid on its rw mounts (`persistent`, `public`, `control`, `tmp`, `exchange`). The kernel limits (cap-drop ALL, no-new-privileges, pids/memory) bound it, but the uid is the host owner's. | **Before activation:** run the public seed under a dedicated unprivileged uid or user-namespace remap (not TJ's uid), with only its data root writable and no exchange mount (the exchange is a test-harness channel). |
+| Full conditional OS cleanup | **Still holds, extended.** Cleanup also removes the owned network and confirms its absence, alongside the three containers. | **Before activation:** DNS records, firewall rules and port mappings become new owned objects. Each needs a written rollback with an absence check (see checklist). |
+| Independent terminal exit/tail | **Changes.** There are three containers. The terminal state comes from every Docker exit code plus per-role heartbeats. Every container can write the shared exchange, so a compromised seed could forge the client's view of the seed tip or pin; this affects only the harness. | Rows bind facts each role observes itself: client nodes' own tips and kernel sockets, and the seed's own log. **Before activation:** an outside monitor in a different uid or host checks the public node, and clients take the pin out of band. |
+
+### Activation checklist (for the lead to carry to TJ; nothing here is done)
+
+1. **Host and interface.** Which owned host runs the public seed, under which
+   dedicated uid, on which interface or IP. The dev host's LAN address and
+   tailnet are not public. No rented host, no phone.
+2. **Ports.** P2P TCP 48080 public. Daemon RPC 48081 takes one of three
+   options. No wallet RPC, ever.
+   - **Stays private (recommended).** Operators reach it over the tailnet or an
+     SSH tunnel.
+   - **Published as TLS + login for operators only.** No CA certificate is
+     needed, but this requires:
+     - each operator receives the pin over an authenticated channel that does
+       not use the public path, never TOFU across the internet;
+     - a key-lifecycle decision: either per-launch keys with a fresh pin
+       distribution at each restart, or a persistent 0600 key file under a
+       dedicated uid with a written rotation and revocation step;
+     - clients accept exact pins only, never `--rpc-ssl-allow-any-cert` or
+       autodetect (check the text encoding of
+       `--daemon-ssl-allowed-fingerprints`);
+     - logins of at least 128 random bits per launch and per operator.
+   - **Login-less public restricted RPC (a remote node for wallets).** This is
+     a separate privacy decision: the node sees each wallet's IP and timing, and
+     `send_raw_transaction`/`submit_block` are mapped. It needs its own
+     Privacy/Cryptography consultation before it is offered.
+3. **DNS.** Record name, owner and TTL. None was created by this candidate.
+4. **Firewall/router.** Allow inbound TCP 48080 only (plus 48081 if item 2
+   chooses it). Deny everything else. Set a connection-rate limit. The single
+   reviewed rule is recorded with its removal command.
+5. **Operator.** Who starts, monitors and restarts the seed; the supervised
+   restart path with the seal check; the backup schedule; the outside monitor.
+6. **Rollback.** Stop the seed (seal), remove the port mapping/firewall rule and
+   the DNS record, confirm absence from outside, and retain the data root
+   owner-only. State the expected time to rollback.
+7. **Incident.** Who is alerted, the kill switch (rollback step 1), evidence
+   retention, and the public notice that this testnet is valueless and not
+   private. On the public host, the crash handler either drops the seed's dumps,
+   or `core_pattern` is a plain path with the core limit at 0.
+8. **Labels that stay.** The build identity (`1b2815e2…`/`3eedebc0`) stays
+   unchanged. `launch_ready` flips only by TJ's decision recorded on the issue.
