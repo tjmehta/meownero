@@ -58,6 +58,51 @@ const nativeTesterRelease: NativeTesterRelease = {
   sourceCommit: "be5e7b161a08bbb396a00c46905b3ade6eec21aa",
 };
 
+// Exact reviewed packaging successor. This is a test-and-report handoff,
+// not native Windows execution acceptance or a release.
+const windowsTestBundle: Artifact = {
+  url: "/downloads/artifacts/meownero-windows-test-diagnostics-v2.zip",
+  filename: "meownero-windows-test-diagnostics-v2.zip",
+  bytes: 164120029,
+  sha256: "bedd371bc042ec2b893e45693083eae64637ca1a1f496933f2f90a5bf6f38034",
+};
+
+// Keep the earlier download available for historical report bindings.
+const previousWindowsTestBundle: Artifact = {
+  url: "/downloads/artifacts/meownero-windows-test-sanitized-v1.zip",
+  filename: "meownero-windows-test-sanitized-v1.zip",
+  bytes: 164091051,
+  sha256: "eb6b76d387f26e5b4a9f849d8e7de2fbf11e9ce06a221cb16b3f5dbd0502da46",
+};
+
+// Exact remapped successor, independently native-tested on macOS 26.5.1
+// Apple Silicon. The frozen archive retains its build-time status.
+const macTesterRelease: NativeTesterRelease = {
+  archive: {
+    url: "/downloads/artifacts/meownero-vanguard-macos-aarch64-remapped-v1.tar.gz",
+    filename: "meownero-vanguard-macos-aarch64-remapped-v1.tar.gz",
+    bytes: 63055195,
+    sha256: "c02e656ae0fe0e8ffc774392dd535f12efec89b04a7fc400b4398124505eda00",
+  },
+  archiveRoot: "meownero-vanguard-macos-aarch64",
+  sourceCommit: "85a9f4394345e520c66e85c7151b0df75e7fe15c",
+};
+
+export function getMacTesterRelease(): NativeTesterRelease {
+  validateNativeRelease(macTesterRelease);
+  return macTesterRelease;
+}
+
+export function getWindowsTestBundle(): Artifact {
+  validateArtifact(windowsTestBundle);
+  return windowsTestBundle;
+}
+
+export function getPreviousWindowsTestBundle(): Artifact {
+  validateArtifact(previousWindowsTestBundle);
+  return previousWindowsTestBundle;
+}
+
 const sha256Pattern = /^[a-f0-9]{64}$/;
 const filenamePattern = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
