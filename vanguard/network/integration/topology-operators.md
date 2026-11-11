@@ -401,7 +401,12 @@ setsid bash -c '
 
 1. **Host and interface.** Which owned host runs the public seed, under which
    dedicated uid, on which interface or IP. The dev host's LAN address and
-   tailnet are not public. No rented host, no phone.
+   tailnet are not public. A dedicated uid limits file/process authority, not
+   network reach. If the seed shares the host network namespace, every local
+   uid can reach `private` RPC at `127.0.0.1:48081`; its per-launch login is the
+   access control. Run the seed in its own network namespace (recommended),
+   and reach its loopback RPC through an authenticated operator tunnel into
+   that namespace. No rented host, no phone.
 2. **Ports.** P2P TCP 48080 public. Daemon RPC 48081 takes one of three
    options. No wallet RPC, ever.
    - **Stays private (recommended).** Operators reach it over the tailnet or an
@@ -424,7 +429,9 @@ setsid bash -c '
 3. **DNS.** Record name, owner and TTL. None was created by this candidate.
 4. **Firewall/router.** Allow inbound TCP 48080 only (plus 48081 if item 2
    chooses it). Deny everything else. Set a connection-rate limit. The single
-   reviewed rule is recorded with its removal command.
+   reviewed rule is recorded with its removal command. Use the seed-namespace
+   template below, with a per-source new-connection limit on every allowed
+   public port; nothing here applies it to the host.
 5. **Operator.** Who starts, monitors and restarts the seed; the supervised
    restart path with the seal check; the backup schedule; the outside monitor.
 6. **Rollback.** Stop the seed (seal), remove the port mapping/firewall rule and
@@ -461,11 +468,36 @@ process starts:
   both equal to the plan, and `--out-peers 0`. A daemon with no exclusive peer
   dials the five hard-coded upstream testnet seed IPs whenever its white peer
   list is empty, whatever `--out-peers` says (`net_node.inl:836-842,2016`; the
-  identity overlay changes only the port and network ID). Every outbound
-  attempt, seed dials included, returns before connecting when the out-peer
-  count equals `--out-peers` (`net_node.inl:1541`). A single public seed is
-  therefore a listener only and never contacts a third-party host. A second
-  public seed is a later decision (it needs a peering rule between owned seeds).
+  identity overlay changes only the port and network ID). The
+  `connections_maker` peer/seed path calls
+  `try_to_connect_and_handshake_with_new_peer`, which returns before connecting
+  when the out-peer count equals `--out-peers` (`net_node.inl:1529-1541`).
+  This gate does not cover every outbound path.
+  **Ping-backs:** monerod connects back by outbound TCP to an inbound
+  peer's own IP and advertised P2P port (`net_node.inl:2735-2740`, `try_ping`
+  at `:2507`), outside `--out-peers`.
+  **Gray-list housekeeping:** timed-sync replies on handshaked connections,
+  including inbound ones (`net_node.inl:2278-2296,1392`), supply addresses to
+  the gray list (`net_peerlist.h:192-198`). Every 60 seconds
+  (`net_node.h:446`), `gray_peerlist_housekeeping` can connect and handshake
+  with one of these public IPv4 addresses and ports, which may belong to any
+  third party chosen by an inbound peer (`net_node.inl:3052-3090` →
+  `:1590-1601` → `:1495-1503`), outside the `--out-peers` gate.
+  The outbound firewall must either allow both paths or knowingly drop them.
+  The template below chooses to allow both (`output` policy `accept`). K, N
+  and M hide their ports in the rehearsal, so zero dial lines do not exercise
+  or exclude ping-backs. Its RFC1918 subnet cannot exercise the gray-list
+  path either: the public shape forbids `--allow-local-ip`, and gray-list
+  insertion rejects local addresses without it (`net_peerlist.h:208-213,329`).
+  These are pinned-source findings, not dynamic reproductions. On a live
+  public seed, failed housekeeping dials log `Connect failed to`; activation
+  monitoring must distinguish these from upstream-seed dials rather than
+  reuse the rehearsal's zero-dial witness.
+  A second public seed is a later decision (it needs a peering rule between
+  owned seeds).
+- **Updates:** require explicit `--check-updates disabled`. Omission defaults
+  to `notify` (periodic update DNS lookups); `download` also fetches releases.
+  Both modes and omission are refused by the public-seed validator.
 - **Connection rate:** monerod has no connection-rate option
   (`net_node.cpp:145-165` has peer counts, the per-IP count and bandwidth
   only). The plan's `connection_rate` (new connections per minute 1-120, burst
@@ -478,6 +510,29 @@ process starts:
   login options, `--public-node`, restricted-port options, exclusive or extra
   peers, TLS off or autodetect, missing `--restricted-rpc` or
   `--confirm-external-bind`, two mining threads).
+
+### Reviewed port-rule template (text only)
+
+`operator_contract.OBJECT_CLASSES['port-rule']['rule']` is the canonical nft
+template for a **dedicated seed network namespace**, not a general host policy.
+`operator_contract.port_rule()` (or `port_rule('private')`) permits new inbound
+TCP only on the planned IPv4 interface/address and port 48080. The explicit
+`port_rule('operator-tls')` variant adds 48081 to both the meter and allow-list;
+no other variant may publish RPC. The input policy drops everything else except
+loopback and established/related traffic. IPv6 new inbound connections are
+dropped. Output policy accepts both peer ping-backs and gray-list housekeeping
+dials to peer-supplied third-party addresses, as described above.
+
+Before any later authorized activation, substitute `<interface>`, `<bind-ip>`,
+`<rate>` and `<burst>` from the checked plan; rate/burst use the plan's
+`connection_rate.new_per_minute` and `burst`. The named `seed_sources` meter is
+keyed by `ip saddr`, shared across all allowed ports for that source, with a
+one-minute idle timeout. An over-budget source is dropped before the explicit
+port accept rule; it cannot spend another source's allowance. The removal stays
+`nft delete table inet meownero_seed`. The
+[source parser test](test_operator.py) checks both variants and rule ordering;
+it does not establish kernel compatibility or apply any rule. Review the final
+substituted rule file on the chosen host before activation.
 
 ### Rehearsal topology
 

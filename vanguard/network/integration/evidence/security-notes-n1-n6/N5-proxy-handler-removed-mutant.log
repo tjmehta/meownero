@@ -1,0 +1,26 @@
+test_follower_ignores_environment_http_proxy (integration.test_operator.OutsideMonitor.test_follower_ignores_environment_http_proxy) ... FAIL
+
+======================================================================
+FAIL: test_follower_ignores_environment_http_proxy (integration.test_operator.OutsideMonitor.test_follower_ignores_environment_http_proxy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 310, in test_follower_ignores_environment_http_proxy
+    self.assertEqual(om.follower_info(address, 'fixture:fixture', timeout=2), (10, 'a'*64))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Tuples differ: (999, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') != (10, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+First differing element 0:
+999
+10
+
+- (999, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+?  ^^^
+
++ (10, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+?  ^^
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.033s
+
+FAILED (failures=1)

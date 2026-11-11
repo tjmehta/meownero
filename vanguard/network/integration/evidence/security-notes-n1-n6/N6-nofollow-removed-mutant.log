@@ -1,0 +1,15 @@
+test_relay_refuses_symlink_to_valid_owner_only_file (integration.test_operator.OperatorManager.test_relay_refuses_symlink_to_valid_owner_only_file) ... FAIL
+
+======================================================================
+FAIL: test_relay_refuses_symlink_to_valid_owner_only_file (integration.test_operator.OperatorManager.test_relay_refuses_symlink_to_valid_owner_only_file)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 847, in test_relay_refuses_symlink_to_valid_owner_only_file
+    with self.assertRaises(OSError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^
+AssertionError: OSError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.004s
+
+FAILED (failures=1)

@@ -1,0 +1,109 @@
+{
+  "result": "PASS_MUTATION_SENSITIVITY_ONLY",
+  "cases": [
+    {
+      "mutation": "N1-updates-gate-removed",
+      "test": "integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "removed": "_require(values['--check-updates'] == 'disabled', 'public seed updates must be disabled')",
+      "replacement": ""
+    },
+    {
+      "mutation": "N5-proxy-handler-removed",
+      "test": "integration.test_operator.OutsideMonitor.test_follower_ignores_environment_http_proxy",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "removed": "urllib.request.ProxyHandler({}),",
+      "replacement": ""
+    },
+    {
+      "mutation": "N5-finite-timestamp-check-removed",
+      "test": "integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 2,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "removed": "and math.isfinite(status['unix'])",
+      "replacement": ""
+    },
+    {
+      "mutation": "N6-nofollow-removed",
+      "test": "integration.test_operator.OperatorManager.test_relay_refuses_symlink_to_valid_owner_only_file",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "removed": "| os.O_NOFOLLOW",
+      "replacement": ""
+    },
+    {
+      "mutation": "N6-pin-change-check-removed",
+      "test": "integration.test_operator.OperatorManager.test_public_reopen_refuses_reused_pin_before_publishing",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "removed": "c.require(self.pins['S'] != before, 'seed certificate did not change')",
+      "replacement": ""
+    }
+  ],
+  "source_sha256": {
+    "vanguard/network/integration/operator_contract.py": "7708b892326e8c4e52de26e12705ccf039eee886548169b8faa4098843d5f57c",
+    "vanguard/network/integration/outside_monitor.py": "30ded46b4eb9dc13f36f7061ac167129e3a852b7c498ba8d4cf1fef3e34a6239",
+    "vanguard/network/run-operator.py": "5b23c35a5621776b92ff2321d766f4d5950aafd28d28c27accbb87a7e0a95f7d",
+    "vanguard/network/integration/operator_driver.py": "133939e4c49eadf8363ffba328bc959cbf99d33e15fcaa4543ed0dafdd7ad5dd"
+  },
+  "source_bytes_unchanged": true,
+  "native": "NOT_RUN",
+  "qualification": "In-memory faults prove regression sensitivity; no runtime source was rewritten."
+}

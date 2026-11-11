@@ -1,0 +1,296 @@
+Read-only local fork files verified byte-identical to Git objects at e151643c5269c83bf24a83b2548e2493876026b2
+
+src/p2p/net_node.inl:1380-1400
+1380:
+1381:     network_zone& zone = m_network_zones.at(context_.m_remote_address.get_zone());
+1382:     bool r = epee::net_utils::async_invoke_remote_command2<typename COMMAND_TIMED_SYNC::response>(context_, COMMAND_TIMED_SYNC::ID, arg, zone.m_net_server.get_config_object(),
+1383:       [this](int code, const typename COMMAND_TIMED_SYNC::response& rsp, p2p_connection_context& context)
+1384:     {
+1385:       context.m_in_timedsync = false;
+1386:       if(code < 0)
+1387:       {
+1388:         LOG_WARNING_CC(context, "COMMAND_TIMED_SYNC invoke failed. (" << code <<  ", " << epee::levin::get_err_descr(code) << ")");
+1389:         return;
+1390:       }
+1391:
+1392:       if(!handle_remote_peerlist(rsp.local_peerlist_new, context))
+1393:       {
+1394:         LOG_WARNING_CC(context, "COMMAND_TIMED_SYNC: failed to handle_remote_peerlist(...), closing connection.");
+1395:         m_network_zones.at(context.m_remote_address.get_zone()).m_net_server.get_config_object().close(context.m_connection_id, false);
+1396:         add_host_fail(context.m_remote_address);
+1397:       }
+1398:       if(!context.m_is_income)
+1399:         m_network_zones.at(context.m_remote_address.get_zone()).m_peerlist.set_peer_just_seen(context.peer_id, context.m_remote_address, context.m_pruning_seed, context.m_rpc_port, context.m_rpc_credits_per_hash);
+1400:       if (!m_payload_handler.process_payload_sync_data(rsp.payload_data, context, false))
+
+src/p2p/net_node.inl:1493-1507
+1493:
+1494:   template<class t_payload_net_handler>
+1495:   bool node_server<t_payload_net_handler>::connect_and_handshake_with_peer(network_zone& zone, const epee::net_utils::network_address& na, uint64_t last_seen_stamp, PeerType peer_type, bool just_take_peerlist, peerid_type& pi, boost::optional<p2p_connection_context>& con)
+1496:   {
+1497:     MDEBUG("Connecting to " << na.str() << " (peer_type=" << peer_type << ", last_seen: "
+1498:         << (last_seen_stamp ? epee::misc_utils::get_time_interval_string(time(NULL) - last_seen_stamp):"never")
+1499:         << ")...");
+1500:
+1501:     con = zone.m_connect(zone, na, m_ssl_support);
+1502:     if(!con)
+1503:     {
+1504:       bool is_priority = is_priority_node(na);
+1505:       LOG_PRINT_CC_PRIORITY_NODE(is_priority, p2p_connection_context{}, "Connect failed to " << na.str()
+1506:         /*<< ", try " << try_count*/);
+1507:       record_addr_failed(na);
+
+src/p2p/net_node.inl:1529-1545
+1529:   bool node_server<t_payload_net_handler>::try_to_connect_and_handshake_with_new_peer(const epee::net_utils::network_address& na, bool just_take_peerlist, uint64_t last_seen_stamp, PeerType peer_type, uint64_t first_seen_stamp)
+1530:   {
+1531:     network_zone& zone = m_network_zones.at(na.get_zone());
+1532:     if (zone.m_connect == nullptr) // outgoing connections in zone not possible
+1533:       return false;
+1534:
+1535:     if (should_skip_connect_address(na, m_use_ipv6))
+1536:       return false;
+1537:
+1538:     if (zone.m_our_address == na)
+1539:       return false;
+1540:
+1541:     if (zone.m_current_number_of_out_peers == zone.m_config.m_net_config.max_out_connection_count) // out peers limit
+1542:     {
+1543:       return false;
+1544:     }
+1545:     else if (zone.m_current_number_of_out_peers > zone.m_config.m_net_config.max_out_connection_count)
+
+src/p2p/net_node.inl:1590-1603
+1590:   bool node_server<t_payload_net_handler>::check_connection_and_handshake_with_peer(const epee::net_utils::network_address& na, uint64_t last_seen_stamp)
+1591:   {
+1592:     network_zone& zone = m_network_zones.at(na.get_zone());
+1593:     if (zone.m_connect == nullptr)
+1594:       return false;
+1595:
+1596:     peerid_type pi;
+1597:     boost::optional<p2p_connection_context> con;
+1598:     if (!connect_and_handshake_with_peer(zone, na, last_seen_stamp, white, true, pi, con))
+1599:       return false;
+1600:
+1601:     zone.m_net_server.get_config_object().close(con->m_connection_id, false);
+1602:
+1603:     LOG_DEBUG_CC(*con, "CONNECTION HANDSHAKED OK AND CLOSED.");
+
+src/p2p/net_node.inl:2278-2296
+2278:   bool node_server<t_payload_net_handler>::peer_sync_idle_maker()
+2279:   {
+2280:     MDEBUG("STARTED PEERLIST IDLE HANDSHAKE");
+2281:     typedef std::list<std::pair<epee::net_utils::connection_context_base, peerid_type> > local_connects_type;
+2282:     local_connects_type cncts;
+2283:     for(auto& zone : m_network_zones)
+2284:     {
+2285:       zone.second.m_net_server.get_config_object().foreach_connection([&](p2p_connection_context& cntxt)
+2286:       {
+2287:         if(cntxt.peer_id && !cntxt.m_in_timedsync)
+2288:         {
+2289:           cntxt.m_in_timedsync = true;
+2290:           cncts.push_back(local_connects_type::value_type(cntxt, cntxt.peer_id));//do idle sync only with handshaked connections
+2291:         }
+2292:         return true;
+2293:       });
+2294:     }
+2295:
+2296:     std::for_each(cncts.begin(), cncts.end(), [&](const typename local_connects_type::value_type& vl){do_peer_timed_sync(vl.first, vl.second);});
+
+src/p2p/net_node.inl:2342-2369
+2342:   bool node_server<t_payload_net_handler>::handle_remote_peerlist(const std::vector<peerlist_entry>& peerlist, const epee::net_utils::connection_context_base& context)
+2343:   {
+2344:     if (peerlist.size() > P2P_MAX_PEERS_IN_HANDSHAKE)
+2345:     {
+2346:       MWARNING(context << "peer sent " << peerlist.size() << " peers, considered spamming");
+2347:       return false;
+2348:     }
+2349:     std::vector<peerlist_entry> peerlist_ = peerlist;
+2350:     if(!sanitize_peerlist(peerlist_))
+2351:       return false;
+2352:
+2353:     const epee::net_utils::zone zone = context.m_remote_address.get_zone();
+2354:     for(const auto& peer : peerlist_)
+2355:     {
+2356:       if(peer.adr.get_zone() != zone)
+2357:       {
+2358:         MWARNING(context << " sent peerlist from another zone, dropping");
+2359:         return false;
+2360:       }
+2361:     }
+2362:
+2363:     LOG_DEBUG_CC(context, "REMOTE PEERLIST: remote peerlist size=" << peerlist_.size());
+2364:     LOG_TRACE_CC(context, "REMOTE PEERLIST: " << ENDL << print_peerlist_to_string(peerlist_));
+2365:     CRITICAL_REGION_LOCAL(m_blocked_hosts_lock);
+2366:     return m_network_zones.at(context.m_remote_address.get_zone()).m_peerlist.merge_peerlist(peerlist_, [this](const peerlist_entry &pe) {
+2367:       return !is_forbidden_ipv4_mapped_ipv6_address(pe.adr) &&
+2368:         !is_addr_recently_failed(pe.adr) && is_remote_host_allowed(pe.adr);
+2369:     });
+
+src/p2p/net_node.inl:2507-2535
+2507:   bool node_server<t_payload_net_handler>::try_ping(basic_node_data& node_data, p2p_connection_context& context, t_callback &&cb)
+2508:   {
+2509:     if(!node_data.my_port)
+2510:       return false;
+2511:
+2512:     bool address_ok = (context.m_remote_address.get_type_id() == epee::net_utils::ipv4_network_address::get_type_id() || context.m_remote_address.get_type_id() == epee::net_utils::ipv6_network_address::get_type_id());
+2513:     CHECK_AND_ASSERT_MES(address_ok, false,
+2514:         "Only IPv4 or IPv6 addresses are supported here");
+2515:
+2516:     const epee::net_utils::network_address na = context.m_remote_address;
+2517:     std::string ip;
+2518:     uint32_t ipv4_addr = 0;
+2519:     boost::asio::ip::address_v6 ipv6_addr;
+2520:     bool is_ipv4;
+2521:     if (na.get_type_id() == epee::net_utils::ipv4_network_address::get_type_id())
+2522:     {
+2523:       ipv4_addr = na.as<const epee::net_utils::ipv4_network_address>().ip();
+2524:       ip = epee::string_tools::get_ip_string_from_int32(ipv4_addr);
+2525:       is_ipv4 = true;
+2526:     }
+2527:     else
+2528:     {
+2529:       ipv6_addr = na.as<const epee::net_utils::ipv6_network_address>().ip();
+2530:       ip = ipv6_addr.to_string();
+2531:       is_ipv4 = false;
+2532:     }
+2533:     network_zone& zone = m_network_zones.at(na.get_zone());
+2534:
+2535:     if(!zone.m_peerlist.is_host_allowed(context.m_remote_address))
+
+src/p2p/net_node.inl:2735-2740
+2735:     if(arg.node_data.my_port && zone.m_can_pingback)
+2736:     {
+2737:       peerid_type peer_id_l = arg.node_data.peer_id;
+2738:       uint32_t port_l = arg.node_data.my_port;
+2739:       //try ping to be sure that we can add this peer to peer_list
+2740:       try_ping(arg.node_data, context, [peer_id_l, port_l, context, this]()
+
+src/p2p/net_node.inl:3052-3093
+3052:   bool node_server<t_payload_net_handler>::gray_peerlist_housekeeping()
+3053:   {
+3054:     if (m_offline) return true;
+3055:     if (!m_exclusive_peers.empty()) return true;
+3056:
+3057:     for (auto& zone : m_network_zones)
+3058:     {
+3059:       if (m_payload_handler.needs_new_sync_connections(zone.first))
+3060:         continue;
+3061:
+3062:       if (zone.second.m_net_server.is_stop_signal_sent())
+3063:         return false;
+3064:
+3065:       if (zone.second.m_connect == nullptr)
+3066:         continue;
+3067:
+3068:       peerlist_entry pe{};
+3069:       if (!zone.second.m_peerlist.get_random_gray_peer(pe))
+3070:         continue;
+3071:
+3072:       if (is_forbidden_ipv4_mapped_ipv6_address(pe.adr))
+3073:       {
+3074:         zone.second.m_peerlist.remove_from_peer_gray(pe);
+3075:         LOG_PRINT_L2("PEER EVICTED FROM GRAY PEER LIST: address: " << pe.adr.host_str() << " Peer ID: " << peerid_to_string(pe.id));
+3076:         continue;
+3077:       }
+3078:
+3079:       if (should_skip_connect_address(pe.adr, m_use_ipv6))
+3080:         continue;
+3081:
+3082:       if (!check_connection_and_handshake_with_peer(pe.adr, pe.last_seen))
+3083:       {
+3084:         zone.second.m_peerlist.remove_from_peer_gray(pe);
+3085:         LOG_PRINT_L2("PEER EVICTED FROM GRAY PEER LIST: address: " << pe.adr.host_str() << " Peer ID: " << peerid_to_string(pe.id));
+3086:       }
+3087:       else
+3088:       {
+3089:         zone.second.m_peerlist.set_peer_just_seen(pe.id, pe.adr, pe.pruning_seed, pe.rpc_port, pe.rpc_credits_per_hash);
+3090:         LOG_PRINT_L2("PEER PROMOTED TO WHITE PEER LIST IP address: " << pe.adr.host_str() << " Peer ID: " << peerid_to_string(pe.id));
+3091:       }
+3092:     }
+3093:     return true;
+
+src/p2p/net_peerlist.h:192-213
+192:   bool peerlist_manager::merge_peerlist(const std::vector<peerlist_entry>& outer_bs, const std::function<bool(const peerlist_entry&)> &f)
+193:   {
+194:     CRITICAL_REGION_LOCAL(m_peerlist_lock);
+195:     for(const peerlist_entry& be:  outer_bs)
+196:     {
+197:       if (!f || f(be))
+198:         append_with_peer_gray(be);
+199:     }
+200:     // delete extra elements
+201:     trim_gray_peerlist();
+202:     return true;
+203:   }
+204:   //--------------------------------------------------------------------------------------------------
+205:   inline
+206:   bool peerlist_manager::is_host_allowed(const epee::net_utils::network_address &address)
+207:   {
+208:     //never allow loopback ip
+209:     if(address.is_loopback())
+210:       return false;
+211:
+212:     if(!m_allow_local_ip && address.is_local())
+213:       return false;
+
+src/p2p/net_peerlist.h:326-356
+326:   bool peerlist_manager::append_with_peer_gray(const peerlist_entry& ple)
+327:   {
+328:     TRY_ENTRY();
+329:     if(!is_host_allowed(ple.adr))
+330:       return true;
+331:
+332:     CRITICAL_REGION_LOCAL(m_peerlist_lock);
+333:     //find in white list
+334:     auto by_addr_it_wt = m_peers_white.get<by_addr>().find(ple.adr);
+335:     if(by_addr_it_wt != m_peers_white.get<by_addr>().end())
+336:       return true;
+337:
+338:     //update gray list
+339:     auto by_addr_it_gr = m_peers_gray.get<by_addr>().find(ple.adr);
+340:     if(by_addr_it_gr == m_peers_gray.get<by_addr>().end())
+341:     {
+342:       //put new record into white list
+343:       m_peers_gray.insert(ple);
+344:       trim_gray_peerlist();
+345:     }else
+346:     {
+347:       //update record in gray list
+348:       peerlist_entry new_ple = ple;
+349:       if (by_addr_it_gr->pruning_seed && ple.pruning_seed == 0) // guard against older nodes not passing pruning info around
+350:         new_ple.pruning_seed = by_addr_it_gr->pruning_seed;
+351:       if (by_addr_it_gr->rpc_port && ple.rpc_port == 0) // guard against older nodes not passing RPC port around
+352:         new_ple.rpc_port = by_addr_it_gr->rpc_port;
+353:       new_ple.last_seen = by_addr_it_gr->last_seen; // do not overwrite the last seen timestamp, incoming peer list are untrusted
+354:       m_peers_gray.replace(by_addr_it_gr, new_ple);
+355:     }
+356:     return true;
+
+src/p2p/net_node.h:441-447
+441:     peerlist_storage m_peerlist_storage;
+442:
+443:     epee::math_helper::once_a_time_seconds<P2P_DEFAULT_HANDSHAKE_INTERVAL> m_peer_handshake_idle_maker_interval;
+444:     epee::math_helper::once_a_time_seconds<1> m_connections_maker_interval;
+445:     epee::math_helper::once_a_time_seconds<60*30, false> m_peerlist_store_interval;
+446:     epee::math_helper::once_a_time_seconds<60> m_gray_peerlist_housekeeping_interval;
+447:     epee::math_helper::once_a_time_seconds<3600, false> m_incoming_connections_interval;
+
+src/cryptonote_config.h:145-145
+145: #define P2P_DEFAULT_HANDSHAKE_INTERVAL                  60           //seconds
+
+src/cryptonote_protocol/cryptonote_protocol_handler.inl:3058-3072
+3058:   bool t_cryptonote_protocol_handler<t_core>::needs_new_sync_connections(epee::net_utils::zone zone) const
+3059:   {
+3060:     const uint64_t target = m_core.get_target_blockchain_height();
+3061:     const uint64_t height = m_core.get_current_blockchain_height();
+3062:     if (target && target <= height)
+3063:       return false;
+3064:     size_t n_out_peers = 0;
+3065:     m_p2p->for_each_connection([&](cryptonote_connection_context& ctx, nodetool::peerid_type peer_id, uint32_t support_flags)->bool{
+3066:       if (!ctx.m_is_income && ctx.m_remote_address.get_zone() == zone)
+3067:         ++n_out_peers;
+3068:       return true;
+3069:     });
+3070:     if (n_out_peers >= get_max_out_peers(zone))
+3071:       return false;
+3072:     return true;
