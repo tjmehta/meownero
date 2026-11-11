@@ -268,7 +268,8 @@ class PinnedClient(unittest.TestCase):
         closing = TLSServer(base, close_on_401=True)
         try:
             rpc = driver.TLSRPC('127.0.0.1', closing.port, closing.pin, 'node:right')
-            self.assertFalse(rpc.session().auto_open)
+            with contextlib.closing(rpc.session()) as session:
+                self.assertFalse(session.auto_open)
             with self.assertRaises(ConnectionError):
                 rpc.call('get_info')
             time.sleep(.2)

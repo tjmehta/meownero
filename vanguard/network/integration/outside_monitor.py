@@ -23,6 +23,7 @@ Exit 0 OK, 2 ALERT (a check failed), 3 UNVERIFIED (an input was missing or unrea
 import argparse
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -81,7 +82,7 @@ def check_status(status, now, *, in_peers, max_age):
     if not (type(status['count']) is int and status['count'] >= 1 and type(status['top']) is str and
             HEX64.fullmatch(status['top']) and type(status['inbound']) is dict and
             all(type(v) is int and v >= 0 for v in status['inbound'].values()) and
-            type(status['unix']) in (int, float)):
+            type(status['unix']) in (int, float) and math.isfinite(status['unix'])):
         raise Unverified('operator status values')
     age = now-status['unix']
     if age > max_age or age < -60:
@@ -109,7 +110,8 @@ def follower_info(address, login, timeout=5.0):
     url = f'http://{address}/json_rpc'
     manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     manager.add_password(None, url, *login.split(':', 1))
-    opener = urllib.request.build_opener(urllib.request.HTTPDigestAuthHandler(manager))
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}),
+                                         urllib.request.HTTPDigestAuthHandler(manager))
     body = json.dumps({'jsonrpc': '2.0', 'id': '0', 'method': 'get_info'}).encode()
     request = urllib.request.Request(url, body, {'Content-Type': 'application/json'})
     with opener.open(request, timeout=timeout) as response:

@@ -1,0 +1,69 @@
+{
+  "issue": "TJS-4393",
+  "run_id": "d8848c2a-2f59-4604-a509-a52e861b8644",
+  "agent_id": "3730ad68-e373-4c8a-84df-2e11327b86a5",
+  "base_commit": "def24f0c9fa9b1a928db718e87ae0f17eb91c301",
+  "branch": "TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates",
+  "utc": "2026-11-11T22:04:51.741523+00:00",
+  "python": "3.15.2 (main, Oct 25 2026, 16:57:51) [GCC 13.3.0]",
+  "full": {
+    "tests": 540,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 232.38006783695891,
+    "native": "NOT_RUN"
+  },
+  "focused": {
+    "tests": 56,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 60.3005619100295,
+    "native": "NOT_RUN"
+  },
+  "first_full_before_fixture_cleanup": {
+    "tests": 540,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 223.63444911688566,
+    "native": "NOT_RUN"
+  },
+  "final_full_resource_warnings": 0,
+  "mutations_detected": 5,
+  "source_sha256": {
+    "vanguard/network/integration/operator_contract.py": "7708b892326e8c4e52de26e12705ccf039eee886548169b8faa4098843d5f57c",
+    "vanguard/network/integration/outside_monitor.py": "30ded46b4eb9dc13f36f7061ac167129e3a852b7c498ba8d4cf1fef3e34a6239",
+    "vanguard/network/integration/test_exposure.py": "d66496f141d7970eb400273a6181c861f9dddf0aef01692f6c22a48ebbf9b262",
+    "vanguard/network/integration/test_operator.py": "639168d8cae3ce8e11af36800c7fa7bd70b2cbb96b2729396b2ca3d00192cae9",
+    "vanguard/network/integration/topology-operators.md": "54b3a714b09f564c93b112dbaf21e798c2402adb1e6ec4d657e6826ac1a215e8"
+  },
+  "frozen_sha256": {
+    "vanguard/network/run-operator.py": "5b23c35a5621776b92ff2321d766f4d5950aafd28d28c27accbb87a7e0a95f7d",
+    "vanguard/network/integration/operator_driver.py": "133939e4c49eadf8363ffba328bc959cbf99d33e15fcaa4543ed0dafdd7ad5dd",
+    "vanguard/network/integration/inputs.json": "42c920b4320d1a42ed099f999b202d4088540532be79b03956e7a95a86d010e5",
+    "vanguard/network/operators.md": "625bc51de17a28d581b9e43b42b1ce935fed7dc8e53742fe890bf11a6137774a"
+  },
+  "chain_and_operators_diff_exit": 0,
+  "scope_guard": "all changed paths under vanguard/network",
+  "lock_guard": {
+    "protected_lock_metadata_unchanged": true,
+    "protected_lock_metadata": [
+      66306,
+      657237,
+      1000,
+      33152,
+      0,
+      1792398177544654975,
+      1792398177544654975
+    ],
+    "blocked_original_lock_touches": [],
+    "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+    "wrapper_seconds": 232.38025640510023
+  },
+  "native": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "cleanup": "Test-owned TemporaryDirectory contexts and local listeners closed; no native resource created."
+}

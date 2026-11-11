@@ -1,0 +1,71 @@
+test_fails_closed (integration.test_operator.Absence.test_fails_closed) ... ok
+test_client_and_monitor_edges (integration.test_operator.Census.test_client_and_monitor_edges) ... ok
+test_seed_names_client_monitor_and_host_edges (integration.test_operator.Census.test_seed_names_client_monitor_and_host_edges) ... ok
+test_verdict_and_shapes (integration.test_operator.Contract.test_verdict_and_shapes) ... ok
+test_connected_and_refused (integration.test_operator.HostReach.test_connected_and_refused) ... ok
+test_a_disabled_attestation_lets_the_crashed_root_through_and_fails (integration.test_operator.Journey.test_a_disabled_attestation_lets_the_crashed_root_through_and_fails) ... ok
+test_a_disabled_retention_prune_is_detected (integration.test_operator.Journey.test_a_disabled_retention_prune_is_detected) ... ok
+test_a_seed_log_showing_an_outbound_dial_fails_the_shape_row (integration.test_operator.Journey.test_a_seed_log_showing_an_outbound_dial_fails_the_shape_row) ... ok
+test_adverse_argv_controls_refuse_before_any_launch (integration.test_operator.Journey.test_adverse_argv_controls_refuse_before_any_launch) ... ok
+test_an_upstream_address_outside_seed_list_loading_fails_the_shape_row (integration.test_operator.Journey.test_an_upstream_address_outside_seed_list_loading_fails_the_shape_row) ... ok
+test_crash_refuses_reopen_quarantines_and_restores_the_newest_backup (integration.test_operator.Journey.test_crash_refuses_reopen_quarantines_and_restores_the_newest_backup) ... ok
+test_full_journey_passes_every_driver_row (integration.test_operator.Journey.test_full_journey_passes_every_driver_row) ... ok
+test_rehearsal_leaves_the_newcomer_depth_row_not_run (integration.test_operator.Journey.test_rehearsal_leaves_the_newcomer_depth_row_not_run) ... ok
+test_seed_log_witness_separates_seed_list_loading_from_dials (integration.test_operator.Journey.test_seed_log_witness_separates_seed_list_loading_from_dials) ... ok
+test_stalled_chain_fails_closed (integration.test_operator.Journey.test_stalled_chain_fails_closed) ... ok
+test_stop_before_serving_fails_and_the_monitor_never_reads_the_exchange (integration.test_operator.Journey.test_stop_before_serving_fails_and_the_monitor_never_reads_the_exchange) ... ok
+test_wrong_out_of_band_pin_alarms_and_fails_the_monitor (integration.test_operator.Journey.test_wrong_out_of_band_pin_alarms_and_fails_the_monitor) ... ok
+test_a_listener_still_reachable_after_rollback_fails_closed (integration.test_operator.ManagerIntegration.test_a_listener_still_reachable_after_rollback_fails_closed) ... ok
+test_a_published_port_fails_closed_and_cleans (integration.test_operator.ManagerIntegration.test_a_published_port_fails_closed_and_cleans) ... ok
+test_a_role_exit_before_rollback_fails_and_still_cleans (integration.test_operator.ManagerIntegration.test_a_role_exit_before_rollback_fails_and_still_cleans) ... ok
+test_an_unsealed_seed_root_fails_the_rollback (integration.test_operator.ManagerIntegration.test_an_unsealed_seed_root_fails_the_rollback) ... ok
+test_host_unreachable_is_recorded_not_failed (integration.test_operator.ManagerIntegration.test_host_unreachable_is_recorded_not_failed) ... ok
+test_rehearsal_relays_probes_rolls_back_in_order_and_cleans (integration.test_operator.ManagerIntegration.test_rehearsal_relays_probes_rolls_back_in_order_and_cleans) ... ok
+test_grant_binds_issue_network_and_no_activation (integration.test_operator.OperatorManager.test_grant_binds_issue_network_and_no_activation) ... ok
+test_monitor_container_has_no_exchange_mount (integration.test_operator.OperatorManager.test_monitor_container_has_no_exchange_mount) ... ok
+test_public_reopen_refuses_reused_pin_before_publishing (integration.test_operator.OperatorManager.test_public_reopen_refuses_reused_pin_before_publishing) ... ok
+test_relay_copies_only_valid_operator_items (integration.test_operator.OperatorManager.test_relay_copies_only_valid_operator_items) ... ok
+test_relay_refuses_symlink_to_valid_owner_only_file (integration.test_operator.OperatorManager.test_relay_refuses_symlink_to_valid_owner_only_file) ... ok
+test_relay_rereads_a_file_replaced_while_open (integration.test_operator.OperatorManager.test_relay_rereads_a_file_replaced_while_open) ... ok
+test_standalone_rollback_refuses_while_the_manager_lives (integration.test_operator.OperatorManager.test_standalone_rollback_refuses_while_the_manager_lives) ... ok
+test_standalone_rollback_stops_seed_first_seals_and_releases (integration.test_operator.OperatorManager.test_standalone_rollback_stops_seed_first_seals_and_releases) ... ok
+test_a_malformed_follower_reply_is_unverified_not_a_crash (integration.test_operator.OutsideMonitor.test_a_malformed_follower_reply_is_unverified_not_a_crash) ... ok
+test_cli_alerts_on_lost_monitor_edge_with_a_connected_control (integration.test_operator.OutsideMonitor.test_cli_alerts_on_lost_monitor_edge_with_a_connected_control) ... ok
+test_evaluate_reads_only_out_of_band_files_and_a_real_tls_pin (integration.test_operator.OutsideMonitor.test_evaluate_reads_only_out_of_band_files_and_a_real_tls_pin) ... ok
+test_evaluate_requires_the_monitor_edge_even_when_cached_tips_agree (integration.test_operator.OutsideMonitor.test_evaluate_requires_the_monitor_edge_even_when_cached_tips_agree) ... ok
+test_follower_ignores_environment_http_proxy (integration.test_operator.OutsideMonitor.test_follower_ignores_environment_http_proxy) ... ok
+test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) ... ok
+test_pure_checks (integration.test_operator.OutsideMonitor.test_pure_checks) ... ok
+test_driver_public_seed_argv_passes_and_m3_shape_cannot_express_it (integration.test_operator.PublicSeedShape.test_driver_public_seed_argv_passes_and_m3_shape_cannot_express_it) ... ok
+test_every_milestone_3_adverse_argv_and_each_new_bound_refuses (integration.test_operator.PublicSeedShape.test_every_milestone_3_adverse_argv_and_each_new_bound_refuses) ... ok
+test_plan_bounds_and_owned_objects_refuse (integration.test_operator.PublicSeedShape.test_plan_bounds_and_owned_objects_refuse) ... ok
+test_port_rule_parses_to_only_planned_ports_with_per_source_limits (integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits) ... ok
+test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) ... ok
+test_upstream_seed_dial_and_rate_facts_are_bound_in_the_shape (integration.test_operator.PublicSeedShape.test_upstream_seed_dial_and_rate_facts_are_bound_in_the_shape) ... ok
+test_exit_is_the_drivers_after_a_forwarded_sigterm (integration.test_operator.RuntimeEntry.test_exit_is_the_drivers_after_a_forwarded_sigterm) ... ok
+test_container_command_uses_accepted_flags_and_owner_mounts (integration.test_topology.Manager.test_container_command_uses_accepted_flags_and_owner_mounts) ... ok
+test_finish_reaps_an_exited_child_keeper (integration.test_topology.Manager.test_finish_reaps_an_exited_child_keeper) ... ok
+test_grant_binds_issue_platform_candidate_wall_and_lock (integration.test_topology.Manager.test_grant_binds_issue_platform_candidate_wall_and_lock) ... ok
+test_heartbeat_and_owner_only_refusals (integration.test_topology.Manager.test_heartbeat_and_owner_only_refusals) ... ok
+test_keeper_holds_and_releases_a_substituted_lock (integration.test_topology.Manager.test_keeper_holds_and_releases_a_substituted_lock) ... ok
+test_manager_run_keeps_a_child_whose_stop_left_a_member (integration.test_topology.Manager.test_manager_run_keeps_a_child_whose_stop_left_a_member) ... ok
+test_manager_run_keeps_only_live_children (integration.test_topology.Manager.test_manager_run_keeps_only_live_children) ... ok
+test_observe_keeper_check_reaps_and_a_foreign_keeper_is_unchanged (integration.test_topology.Manager.test_observe_keeper_check_reaps_and_a_foreign_keeper_is_unchanged) ... ok
+test_observe_plans_restart_cycle_and_failure (integration.test_topology.Manager.test_observe_plans_restart_cycle_and_failure) ... ok
+test_resume_refuses_live_previous_manager_or_changed_candidate (integration.test_topology.Manager.test_resume_refuses_live_previous_manager_or_changed_candidate) ... ok
+test_spawned_keeper_imports_under_its_real_flags_and_env (integration.test_topology.Manager.test_spawned_keeper_imports_under_its_real_flags_and_env) ... ok
+
+----------------------------------------------------------------------
+Ran 56 tests in 59.896s
+
+OK
+{"result": "FAIL", "public_launch": false}
+{"result": "FAIL", "public_launch": false}
+{"result": "FAIL", "public_launch": false}
+{"result": "FAIL", "public_launch": false}
+{"result": "REHEARSAL_PASS_NEWCOMER_DEPTH_NOT_RUN", "public_launch": false}
+{"result": "REHEARSAL_PASS_NEWCOMER_DEPTH_NOT_RUN", "public_launch": false}
+{"rows": {"future_objects_fail_closed": {"classes": 2, "created": 0, "dns_record": "UNVERIFIED", "port_rule": "UNVERIFIED", "removal_commands_recorded": true, "status": "PASS"}, "owned_objects_absent": {"containers": 3, "listener_from_host": true, "network": true, "route": true, "status": "PASS"}, "rollback_timing": {"seconds": 0.002, "status": "PASS", "steps": 8}, "seed_sealed_on_stop": {"attested_offline": true, "manifest_matches": true, "status": "PASS", "stopped_saved": true}}, "seconds": 0.002}
+{"result": "FAIL", "public_launch": false}
+{"tests": 56, "failures": 0, "errors": 0, "skipped": 0, "seconds": 60.3005619100295, "native": "NOT_RUN"}
+{"protected_lock_metadata_unchanged": true, "protected_lock_metadata": [66306, 657237, 1000, 33152, 0, 1792398177544654975, 1792398177544654975], "blocked_original_lock_touches": [], "guard": "builtins/io/os open before call by exact path and device/inode; flock before call", "wrapper_seconds": 60.300700922030956}

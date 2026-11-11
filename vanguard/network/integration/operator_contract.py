@@ -12,7 +12,7 @@ Fork facts this contract relies on (monero-fcmp e151643c):
   (`net_node.inl:836-842,2016`; the identity overlay changes only the port and
   NETWORK_ID). Every outbound attempt, seed dials included, returns before the
   connect when the out-peer count equals --out-peers (`net_node.inl:1541`), so a
-  single public seed runs --out-peers 0 and never contacts third-party hosts.
+  single public seed runs --out-peers 0 and makes no ordinary peer/seed dials.
 - A peer that advertises its P2P port is pinged back (`net_node.inl:2735-2740`);
   that is an outbound connect outside --out-peers (runbook item).
 - monerod has no connection-rate option (`net_node.cpp:145-165`: in/out peers,
@@ -44,7 +44,7 @@ RPC = {name: port+1 for name, port in P2P.items()}
 WALLET_PORT = x.WALLET_PORT
 SEED = f'{SEED_IP}:{P2P["S"]}'
 
-# Public seed bounds (Security note 2). One public seed never dials out (see above).
+# Public seed bounds (Security note 2). Ordinary outbound dials are disabled; ping-backs are separate.
 IN_PEERS = (1, 64)
 OUT_PEERS = 0
 PER_IP = (1, 4)
@@ -99,7 +99,7 @@ PUBLIC_FORBIDDEN = tuple(n for n in t.FORBIDDEN if n != '--confirm-external-bind
     '--rpc-bind-ipv6-address', '--rpc-use-ipv6', '--p2p-use-ipv6')
 PUBLIC_ALLOWED = dict({k: v for k, v in t.ALLOWED['monerod'].items() if k not in PUBLIC_FORBIDDEN},
                       **{'--out-peers': True, '--confirm-external-bind': False})
-PUBLIC_REQUIRED = ('--testnet', '--non-interactive', '--no-igd', '--no-zmq', '--restricted-rpc',
+PUBLIC_REQUIRED = ('--testnet', '--non-interactive', '--no-igd', '--no-zmq', '--restricted-rpc', '--check-updates',
                    '--disable-dns-checkpoints', '--in-peers', '--out-peers', '--max-connections-per-ip')
 RPC_VARIANTS = ('private', 'operator-tls')  # A login-less public RPC needs its own Privacy decision.
 _INTEGER = re.compile('[0-9]{1,5}')
@@ -132,9 +132,20 @@ def bind_address(value):
 OBJECT_CLASSES = {
     'port-rule': dict(
         create=['nft', '-f', '<reviewed-rule-file>'],
-        rule=('table inet meownero_seed { chain input { type filter hook input priority 0; policy accept; '
-              'iifname "<interface>" tcp dport 48080 ct state new limit rate over <rate>/minute burst <burst> '
-              'packets drop; } }'),
+        # Seed network namespace only; render the optional RPC port with port_rule().
+        rule='''table inet meownero_seed {
+    chain input {
+        type filter hook input priority 0; policy drop;
+        iifname "lo" accept;
+        ct state invalid drop;
+        ct state established,related accept;
+        iifname "<interface>" ip daddr <bind-ip> tcp dport 48080 ct state new meter seed_sources { ip saddr timeout 1m limit rate over <rate>/minute burst <burst> packets } drop;
+        iifname "<interface>" ip daddr <bind-ip> tcp dport 48080 ct state new accept;
+    }
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}''',
         removal=['nft', 'delete', 'table', 'inet', 'meownero_seed'],
         absence='outside-tcp-connect'),
     'dns-record': dict(
@@ -143,6 +154,13 @@ OBJECT_CLASSES = {
         absence='outside-resolver-lookup'),
 }
 ABSENCE = ('ABSENT', 'PRESENT', 'UNVERIFIED')
+
+
+def port_rule(rpc='private'):
+    """Review-only nft template: P2P by default, RPC only for operator TLS; no host effects."""
+    _require(rpc in RPC_VARIANTS, 'port-rule RPC variant')
+    rule = OBJECT_CLASSES['port-rule']['rule']
+    return rule.replace('tcp dport 48080', 'tcp dport { 48080, 48081 }') if rpc == 'operator-tls' else rule
 
 
 def plan(bind_ip, *, rpc='operator-tls', in_peers=16, max_connections_per_ip=4, rate=30, burst=10,
@@ -186,6 +204,7 @@ def check_public_seed(argv, value, *, mining=False):
     values = dict(parsed)
     for name in PUBLIC_REQUIRED:
         _require(name in names, 'required public seed option '+name)
+    _require(values['--check-updates'] == 'disabled', 'public seed updates must be disabled')
     for name in ('--in-peers', '--out-peers', '--max-connections-per-ip'):
         _require(_INTEGER.fullmatch(values[name]) is not None, 'integer option '+name)
     _require(int(values['--in-peers']) == value['in_peers'] and int(values['--out-peers']) == value['out_peers'] and

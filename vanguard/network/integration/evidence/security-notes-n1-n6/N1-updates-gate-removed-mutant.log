@@ -1,0 +1,36 @@
+test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) ... 
+  test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) (mode=None) ... FAIL
+  test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) (mode='notify') ... FAIL
+  test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) (mode='download') ... FAIL
+
+======================================================================
+FAIL: test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) (mode=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 78, in test_updates_must_be_explicitly_disabled
+    with self.subTest(mode=mode), self.assertRaises(t.PolicyRefusal):
+                                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: PolicyRefusal not raised
+
+======================================================================
+FAIL: test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) (mode='notify')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 78, in test_updates_must_be_explicitly_disabled
+    with self.subTest(mode=mode), self.assertRaises(t.PolicyRefusal):
+                                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: PolicyRefusal not raised
+
+======================================================================
+FAIL: test_updates_must_be_explicitly_disabled (integration.test_operator.PublicSeedShape.test_updates_must_be_explicitly_disabled) (mode='download')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 78, in test_updates_must_be_explicitly_disabled
+    with self.subTest(mode=mode), self.assertRaises(t.PolicyRefusal):
+                                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: PolicyRefusal not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.003s
+
+FAILED (failures=3)

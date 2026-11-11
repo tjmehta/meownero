@@ -10,10 +10,12 @@ probe run against real local sockets.
 """
 import contextlib
 import hashlib
+import http.server
 import json
 import math
 import os
 from pathlib import Path
+import re
 import shutil
 import signal
 import socket
@@ -68,6 +70,42 @@ def swap(base, option, value):
 
 class PublicSeedShape(unittest.TestCase):
     """Item 1 (Core note 5, Security note 2)."""
+    def test_updates_must_be_explicitly_disabled(self):
+        base, plan = public(), o.plan(o.SEED_IP)
+        for mode in (None, 'notify', 'download'):
+            value = [a for i, a in enumerate(base) if a != '--check-updates' and base[i-1] != '--check-updates'] \
+                if mode is None else swap(base, '--check-updates', mode)
+            with self.subTest(mode=mode), self.assertRaises(t.PolicyRefusal):
+                o.check_public_seed(value, plan, mining=True)
+        self.assertEqual(dict(o.check_public_seed(base, plan, mining=True))['--check-updates'], 'disabled')
+
+    def test_port_rule_parses_to_only_planned_ports_with_per_source_limits(self):
+        # Parse the review-only template, never invoke nft or touch host rules.
+        for rpc, ports in (('private', {48080}), ('operator-tls', {48080, 48081})):
+            with self.subTest(rpc=rpc):
+                raw = o.port_rule(rpc)
+                table = re.fullmatch(r'table inet meownero_seed \{\n(.*)\n\}', raw, re.S)
+                self.assertIsNotNone(table)
+                chains = re.findall(r'    chain (\w+) \{\n(.*?)\n    \}', table[1], re.S)
+                self.assertEqual([name for name, _ in chains], ['input', 'output'])
+                inbound = [line.strip() for line in chains[0][1].splitlines()]
+                self.assertEqual(inbound[:4], ['type filter hook input priority 0; policy drop;',
+                    'iifname "lo" accept;', 'ct state invalid drop;', 'ct state established,related accept;'])
+                self.assertEqual(len(inbound), 6)  # No extra accept rule bypasses the meter or port list.
+                prefix = r'iifname "<interface>" ip daddr <bind-ip> tcp dport (48080|\{ 48080, 48081 \}) ct state new '
+                meter = re.fullmatch(prefix+r'meter (\w+) \{ (ip saddr) timeout 1m '
+                    r'limit rate over (<rate>)/minute burst (<burst>) packets \} drop;', inbound[4])
+                allowed = re.fullmatch(prefix+r'accept;', inbound[5])
+                self.assertIsNotNone(meter)
+                self.assertIsNotNone(allowed)
+                for parsed in (meter, allowed):
+                    self.assertEqual(set(map(int, re.findall(r'\d+', parsed[1]))), ports)
+                self.assertEqual(chains[1][1].strip(), 'type filter hook output priority 0; policy accept;')
+        self.assertEqual(o.port_rule(), o.port_rule('private'))
+        self.assertEqual(o.OBJECT_CLASSES['port-rule']['rule'], o.port_rule())
+        with self.assertRaises(t.PolicyRefusal):
+            o.port_rule('public')
+
     def test_driver_public_seed_argv_passes_and_m3_shape_cannot_express_it(self):
         plan = o.plan(o.SEED_IP)
         names = o.check_public_seed(public(), plan, mining=True)
@@ -221,6 +259,63 @@ class OutsideMonitor(unittest.TestCase):
         value = dict(count=10, top='a'*64, inbound=dict(client=2, monitor=1), launch=5, step='serving', unix=1000)
         value.update(change)
         return value
+
+    def test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base/'pin').write_text('a'*64)
+            for timestamp in (float('nan'), float('inf'), float('-inf')):
+                with self.subTest(timestamp=timestamp):
+                    value = self.status(unix=timestamp)
+                    with self.assertRaises(om.Unverified):
+                        om.check_status(value, 1000, in_peers=16, max_age=180)
+                    (base/'status.json').write_text(json.dumps(value))
+                    result = om.evaluate(seed_host='fixture', pin_file=base/'pin', status_file=base/'status.json',
+                        follower=lambda: (10, 'a'*64), in_peers=16, now=1000, pin_of=lambda host: 'a'*64)
+                    self.assertEqual(result['state'], 'UNVERIFIED')
+            for timestamp in (1000, 1000.5):
+                self.assertEqual(om.check_status(self.status(unix=timestamp), 1010, in_peers=16, max_age=180),
+                                 (3, int(1010-timestamp)))
+
+    def test_follower_ignores_environment_http_proxy(self):
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def do_POST(self):
+                self.rfile.read(int(self.headers['Content-Length']))
+                self.server.requests.append(self.path)
+                body = json.dumps({'result': {'height': self.server.height, 'top_block_hash': 'a'*64}}).encode()
+                self.send_response(200)
+                self.send_header('Content-Length', str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+        with http.server.ThreadingHTTPServer(('127.0.0.1', 0), Handler) as follower, \
+                http.server.ThreadingHTTPServer(('127.0.0.1', 0), Handler) as proxy:
+            threads = []
+            for server, height in ((follower, 10), (proxy, 999)):
+                server.requests, server.height = [], height
+                thread = threading.Thread(target=server.serve_forever, kwargs={'poll_interval': .01})
+                thread.start()
+                threads.append(thread)
+            try:
+                address = '127.0.0.1:'+str(follower.server_port)
+                url = 'http://'+address+'/json_rpc'
+                with mock.patch.dict(os.environ, {'http_proxy': 'http://127.0.0.1:'+str(proxy.server_port)}, clear=True):
+                    self.assertFalse(om.urllib.request.proxy_bypass('127.0.0.1'))
+                    # Connected negative control: the default opener really uses this local proxy.
+                    with om.urllib.request.build_opener().open(url, data=b'{}', timeout=2) as reply:
+                        self.assertEqual(json.load(reply)['result']['height'], 999)
+                    self.assertEqual(proxy.requests, [url])
+                    self.assertEqual(follower.requests, [])
+                    self.assertEqual(om.follower_info(address, 'fixture:fixture', timeout=2), (10, 'a'*64))
+                    self.assertEqual(follower.requests, ['/json_rpc'])
+                    self.assertEqual(proxy.requests, [url])
+            finally:
+                for server in (follower, proxy):
+                    server.shutdown()
+                for thread in threads:
+                    thread.join(timeout=2)
+                    self.assertFalse(thread.is_alive())
 
     def test_evaluate_requires_the_monitor_edge_even_when_cached_tips_agree(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -743,6 +838,35 @@ class Journey(unittest.TestCase):
 
 # ---- manager ---------------------------------------------------------------------------
 class OperatorManager(unittest.TestCase):
+    def test_relay_refuses_symlink_to_valid_owner_only_file(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target, link = Path(tmp)/'target', Path(tmp)/'pin'
+            td.private_write(target, ('a'*64+'\n').encode())
+            self.assertEqual(m.read_relayed(target), ('a'*64+'\n').encode())
+            link.symlink_to(target)
+            with self.assertRaises(OSError):
+                m.read_relayed(link)
+            self.assertEqual(target.read_bytes(), ('a'*64+'\n').encode())
+
+    def test_public_reopen_refuses_reused_pin_before_publishing(self):
+        # Exercise the real publication boundary with only launch/listener transports substituted.
+        with tempfile.TemporaryDirectory() as tmp:
+            op = types.SimpleNamespace(pins={}, public_launches=0, control=Path(tmp),
+                start=mock.Mock(), listeners=mock.Mock(), confirm_pin=mock.Mock())
+            def present(pin):
+                op.start.side_effect = lambda *args, **kwargs: op.pins.update(S=pin)
+            for pin in ('a'*64, 'b'*64):  # First launch and a genuinely rotated restart both publish.
+                present(pin)
+                self.assertEqual(od.Operator.open_public(op), pin)
+                self.assertEqual((op.control/'pin').read_text(), pin+'\n')
+            self.assertEqual(op.public_launches, 2)
+            present('b'*64)  # A confirmed listener with the previous certificate must still be refused.
+            with self.assertRaisesRegex(ValueError, 'seed certificate did not change'):
+                od.Operator.open_public(op)
+            self.assertEqual(op.public_launches, 2)
+            self.assertEqual((op.control/'pin').read_text(), 'b'*64+'\n')
+            self.assertEqual(op.confirm_pin.call_count, 3)
+
     def grant(self, out, **change):
         base = json.loads(TopologyManager().grant(out)['body'].split('\n', 1)[1].rsplit('\n', 1)[0])
         for key in ('verdict_label', 'uptime_seconds', 'wall_seconds', 'container_flags', 'listeners'):

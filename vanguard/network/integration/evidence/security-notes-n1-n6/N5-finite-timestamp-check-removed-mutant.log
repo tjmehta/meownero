@@ -1,0 +1,38 @@
+test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) ... 
+  test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) (timestamp=nan) ... FAIL
+  test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) (timestamp=inf) ... ERROR
+  test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) (timestamp=-inf) ... ERROR
+
+======================================================================
+ERROR: test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) (timestamp=inf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 271, in test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree
+    om.check_status(value, 1000, in_peers=16, max_age=180)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<N5-finite-timestamp-check-removed>", line 11, in check_status
+integration.outside_monitor.Alert: operator status is stale
+
+======================================================================
+ERROR: test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) (timestamp=-inf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 271, in test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree
+    om.check_status(value, 1000, in_peers=16, max_age=180)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<N5-finite-timestamp-check-removed>", line 11, in check_status
+integration.outside_monitor.Alert: operator status is stale
+
+======================================================================
+FAIL: test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree (integration.test_operator.OutsideMonitor.test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree) (timestamp=nan)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "~/Developer/.worktrees/meownero/TJS-4393-meownero-testnet-milestone-4b-close-security-s-pre-activation-notes-n1-n6-on-the-operator-package-check-updates/vanguard/network/integration/test_operator.py", line 270, in test_nonfinite_status_timestamp_is_unverified_even_when_tips_agree
+    with self.assertRaises(om.Unverified):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: Unverified not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=1, errors=2)
