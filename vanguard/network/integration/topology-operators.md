@@ -468,16 +468,31 @@ process starts:
   both equal to the plan, and `--out-peers 0`. A daemon with no exclusive peer
   dials the five hard-coded upstream testnet seed IPs whenever its white peer
   list is empty, whatever `--out-peers` says (`net_node.inl:836-842,2016`; the
-  identity overlay changes only the port and network ID). Every outbound
-  attempt, seed dials included, returns before connecting when the out-peer
-  count equals `--out-peers` (`net_node.inl:1541`). A single public seed
-  therefore does not make ordinary outbound peer or upstream seed dials.
-  **Exception: ping-backs.** monerod connects back by outbound TCP to an inbound
+  identity overlay changes only the port and network ID). The
+  `connections_maker` peer/seed path calls
+  `try_to_connect_and_handshake_with_new_peer`, which returns before connecting
+  when the out-peer count equals `--out-peers` (`net_node.inl:1529-1541`).
+  This gate does not cover every outbound path.
+  **Ping-backs:** monerod connects back by outbound TCP to an inbound
   peer's own IP and advertised P2P port (`net_node.inl:2735-2740`, `try_ping`
-  at `:2507`), outside `--out-peers`. The outbound firewall must either allow
-  these connections or knowingly drop them. The template below chooses to
-  allow them (`output` policy `accept`). K, N and M hide their ports in the
-  rehearsal, so its zero dial lines do not exercise or exclude ping-backs.
+  at `:2507`), outside `--out-peers`.
+  **Gray-list housekeeping:** timed-sync replies on handshaked connections,
+  including inbound ones (`net_node.inl:2278-2296,1392`), supply addresses to
+  the gray list (`net_peerlist.h:192-198`). Every 60 seconds
+  (`net_node.h:446`), `gray_peerlist_housekeeping` can connect and handshake
+  with one of these public IPv4 addresses and ports, which may belong to any
+  third party chosen by an inbound peer (`net_node.inl:3052-3090` →
+  `:1590-1601` → `:1495-1503`), outside the `--out-peers` gate.
+  The outbound firewall must either allow both paths or knowingly drop them.
+  The template below chooses to allow both (`output` policy `accept`). K, N
+  and M hide their ports in the rehearsal, so zero dial lines do not exercise
+  or exclude ping-backs. Its RFC1918 subnet cannot exercise the gray-list
+  path either: the public shape forbids `--allow-local-ip`, and gray-list
+  insertion rejects local addresses without it (`net_peerlist.h:208-213,329`).
+  These are pinned-source findings, not dynamic reproductions. On a live
+  public seed, failed housekeeping dials log `Connect failed to`; activation
+  monitoring must distinguish these from upstream-seed dials rather than
+  reuse the rehearsal's zero-dial witness.
   A second public seed is a later decision (it needs a peering rule between
   owned seeds).
 - **Updates:** require explicit `--check-updates disabled`. Omission defaults
@@ -505,7 +520,8 @@ TCP only on the planned IPv4 interface/address and port 48080. The explicit
 `port_rule('operator-tls')` variant adds 48081 to both the meter and allow-list;
 no other variant may publish RPC. The input policy drops everything else except
 loopback and established/related traffic. IPv6 new inbound connections are
-dropped. Output policy accepts, including the peer ping-backs described above.
+dropped. Output policy accepts both peer ping-backs and gray-list housekeeping
+dials to peer-supplied third-party addresses, as described above.
 
 Before any later authorized activation, substitute `<interface>`, `<bind-ip>`,
 `<rate>` and `<burst>` from the checked plan; rate/burst use the plan's

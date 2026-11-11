@@ -10,11 +10,18 @@ Fork facts this contract relies on (monero-fcmp e151643c):
 - An online daemon with no exclusive peer dials the five hard-coded upstream
   testnet seed IPs whenever its white peer list is empty, whatever --out-peers is
   (`net_node.inl:836-842,2016`; the identity overlay changes only the port and
-  NETWORK_ID). Every outbound attempt, seed dials included, returns before the
-  connect when the out-peer count equals --out-peers (`net_node.inl:1541`), so a
-  single public seed runs --out-peers 0 and makes no ordinary peer/seed dials.
+  NETWORK_ID). The connections_maker peer/seed path uses
+  try_to_connect_and_handshake_with_new_peer, which returns before connecting
+  when the out-peer count equals --out-peers (`net_node.inl:1529-1541`). This
+  gate does not cover every outbound path below.
 - A peer that advertises its P2P port is pinged back (`net_node.inl:2735-2740`);
   that is an outbound connect outside --out-peers (runbook item).
+- Timed-sync replies from inbound peers can populate the gray list
+  (`net_node.inl:2278-2296,1392`; `net_peerlist.h:192-198`). Every 60 seconds,
+  gray_peerlist_housekeeping can connect and handshake with a listed public
+  third-party address outside --out-peers (`net_node.h:446`;
+  `net_node.inl:3052-3090,1590-1601,1495-1503`). The port-rule template's output
+  policy accept permits both ping-backs and these housekeeping dials.
 - monerod has no connection-rate option (`net_node.cpp:145-165`: in/out peers,
   per-IP count and bandwidth only). The rate bound is a host firewall rule, so it
   is declared in the activation plan as an owned object with a removal command.
@@ -44,7 +51,8 @@ RPC = {name: port+1 for name, port in P2P.items()}
 WALLET_PORT = x.WALLET_PORT
 SEED = f'{SEED_IP}:{P2P["S"]}'
 
-# Public seed bounds (Security note 2). Ordinary outbound dials are disabled; ping-backs are separate.
+# Public seed bounds (Security note 2). --out-peers 0 gates connections_maker
+# peer/seed dials; output policy accept permits ping-backs and gray-list housekeeping.
 IN_PEERS = (1, 64)
 OUT_PEERS = 0
 PER_IP = (1, 4)
