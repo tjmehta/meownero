@@ -22,6 +22,8 @@ child=$!
 trap 'kill -TERM "$child" 2>/dev/null || true' TERM INT HUP
 status=0
 wait "$child" || status=$?
-# A forwarded signal interrupts the first wait; collect the driver's real exit.
-if kill -0 "$child" 2>/dev/null; then wait "$child" || status=$?; fi
+# A trapped signal makes the first wait return 128+signal while the driver is still sealing.
+# Wait again for the driver's own exit; bash keeps an exited child's status until it is waited for.
+# (Rehearsal 2: the old re-wait kept 143 when the driver then exited 0, so a sealed rollback read as failed.)
+if [ "$status" -gt 128 ]; then status=0; wait "$child" || status=$?; fi
 exit "$status"

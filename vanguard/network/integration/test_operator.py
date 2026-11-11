@@ -15,6 +15,7 @@ import math
 import os
 from pathlib import Path
 import shutil
+import signal
 import socket
 import subprocess
 import tempfile
@@ -301,6 +302,72 @@ class HostReach(unittest.TestCase):
 
 
 # ---- three-role journey ------------------------------------------------------------------
+class RuntimeEntry(unittest.TestCase):
+    """The container entry's exit is the driver's exit, including after the rollback's SIGTERM.
+
+    Rehearsal 2 (grant 70001c43): every driver sealed and exited 0 on `docker stop`, but the entry
+    kept the interrupted wait's 143, so the manager's exit-0 requirement failed the attempt.
+    """
+    STUB = """import os, signal, sys, time
+code, delay, signalled = int(sys.argv[1]), float(sys.argv[2]), sys.argv[3] == 'term'
+def stopped(signum, frame):
+    time.sleep(delay)
+    sys.exit(code)
+signal.signal(signal.SIGTERM, stopped)
+open(sys.argv[4], 'w').close()
+if not signalled:
+    sys.exit(code)
+while True:
+    time.sleep(0.05)
+"""
+
+    def entry(self, code, delay, signalled):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            cgroup, control = base/'cgroup', base/'control'
+            cgroup.mkdir()
+            control.mkdir()
+            (cgroup/'memory.events').write_text('oom 0\noom_kill 0\n')
+            (cgroup/'cpu.stat').write_text('usage_usec 7\n')
+            (cgroup/'memory.peak').write_text('9\n')
+            (base/'stub.py').write_text(self.STUB)
+            ready = base/'ready'
+            driver = f"{base/'stub.py'} {code} {delay} {'term' if signalled else 'exit'} {ready}"
+            script = (c.HERE/'integration/operator-runtime.sh').read_text()
+            for old, value in (('/out/harness/integration/operator_driver.py', driver),
+                               ('/sys/fs/cgroup', str(cgroup)), ('/out/control/resources-', f'{control}/resources-')):
+                self.assertEqual(script.count(old), 1)
+                script = script.replace(old, value)
+            (base/'entry.sh').write_text(script)
+            def default_signals():  # Docker starts the entry with default dispositions; earlier driver
+                for sig in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):  # tests leave SIGTERM ignored,
+                    signal.signal(sig, signal.SIG_DFL)  # and bash cannot trap a signal ignored at entry.
+            process = subprocess.Popen(['/bin/bash', str(base/'entry.sh')], env=dict(os.environ, HOME=tmp),
+                                       preexec_fn=default_signals)
+            try:
+                end = time.monotonic()+20
+                while signalled and not ready.exists() and time.monotonic() < end:
+                    time.sleep(0.02)
+                if signalled:
+                    self.assertTrue(ready.exists())
+                    process.send_signal(signal.SIGTERM)
+                result = process.wait(timeout=30)
+            finally:
+                if process.poll() is None:
+                    process.kill()
+                    process.wait()
+            counters = list(control.glob('resources-*.json'))
+            self.assertEqual(len(counters), 1)
+            self.assertEqual(json.loads(counters[0].read_text())['oom_kill'], 0)
+            return result
+
+    def test_exit_is_the_drivers_after_a_forwarded_sigterm(self):
+        for code, delay, signalled in ((0, 1.0, True), (0, 0.0, True), (1, 1.0, True), (0, 0.0, False),
+                                       (1, 0.0, False), (200, 0.0, False)):
+            with self.subTest(code=code, delay=delay, signalled=signalled):
+                self.assertEqual(self.entry(code, delay, signalled), code)
+
+
 class OpClock(te.Clock):
     def sleep(self, seconds):
         super().sleep(seconds)
