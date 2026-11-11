@@ -799,6 +799,58 @@ class Manager(unittest.TestCase):
                 member.kill()
                 member.wait()
 
+    def zombie(self):
+        child = subprocess.Popen(['sleep', '0.2'])
+        owned = m.identity(child.pid)
+        deadline = time.time()+10
+        while Path(f'/proc/{child.pid}/stat').read_text().rsplit(')', 1)[1].split()[0] != 'Z':
+            self.assertLess(time.time(), deadline)
+            time.sleep(.05)
+        return child, owned
+
+    def test_finish_reaps_an_exited_child_keeper(self):
+        # TJS-4238 item 7 (Platform note on TJS-4177 e552f7d6/4704c0ef): the first manager is the
+        # keeper's parent, so an exited keeper stays a zombie that alive() still counts.
+        child, owned = self.zombie()
+        try:
+            self.assertTrue(m.alive(owned))  # The plain identity check sees the zombie.
+            with tempfile.TemporaryDirectory() as tmp:
+                out = Path(tmp)
+                (out/'persistent').mkdir(mode=0o700)
+                state = dict(rows=t.empty_rows(), receipt=dict(result='INCOMPLETE'), keeper=owned,
+                             end_unix=int(time.time())+600, uptime=t.UPTIME_SECONDS, managers=[])
+                control = m.Manager(out, dict(host_overhead_allowance=m.OVERHEAD), time.monotonic(),
+                                    time.monotonic()+60)
+                published = {}
+                with mock.patch.object(m, 'inspect', lambda *a, **k: None), \
+                        mock.patch.object(m, 'collect', lambda *a: None), mock.patch.object(m, 'counters', lambda root: []), \
+                        mock.patch.object(m, 'lock_held_elsewhere', lambda: False), \
+                        mock.patch.object(m.time, 'sleep', lambda s: None), \
+                        mock.patch.object(m.r, 'publish_evidence', lambda root, rows, receipt: published.update(rows=rows)):
+                    m.finish(types.SimpleNamespace(out=out), state, control, 'name', 'image', None)
+            self.assertEqual(published['rows']['cleanup.json']['lock_released'],
+                             dict(status='PASS', keeper_exited=True))
+            self.assertFalse(Path(f'/proc/{child.pid}').exists())  # Reaped by finish().
+        finally:
+            with contextlib.suppress(ChildProcessError):
+                child.wait(timeout=5)
+
+    def test_observe_keeper_check_reaps_and_a_foreign_keeper_is_unchanged(self):
+        child, owned = self.zombie()
+        try:
+            self.assertFalse(m.keeper_alive(owned))
+            self.assertFalse(Path(f'/proc/{child.pid}').exists())
+        finally:
+            with contextlib.suppress(ChildProcessError):
+                child.wait(timeout=5)
+        running = subprocess.Popen(['sleep', '30'])
+        try:
+            self.assertTrue(m.keeper_alive(m.identity(running.pid)))
+            self.assertEqual(m.keeper_alive(m.identity(1)), m.alive(m.identity(1)))  # Not our child.
+        finally:
+            running.kill()
+            running.wait()
+
     def test_container_command_uses_accepted_flags_and_owner_mounts(self):
         root = Path('/tmp/x-tjs3920')
         argv = m.container_command(root, 'n', 'img')

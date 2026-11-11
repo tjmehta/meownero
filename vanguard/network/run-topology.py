@@ -86,6 +86,16 @@ def alive(owned):
         return False
 
 
+def keeper_alive(owned):
+    """alive(), after reaping: the first manager spawns the keeper, so an exited keeper stays a
+    zombie with the same /proc start time until waited for (TJS-4177 rehearsal 1c226b32)."""
+    try:
+        os.waitpid(owned[0], os.WNOHANG)
+    except ChildProcessError:
+        pass  # Not this process's child (a resumed manager): init reaps it.
+    return alive(owned)
+
+
 def write_private(path, value):
     raw = (json.dumps(value, indent=2, sort_keys=True)+'\n').encode()
     temporary = path.with_name(path.name+'.new')
@@ -311,9 +321,9 @@ def finish(args, state, control, name, image, result_code):
     keeper = state.get('keeper')
     (args.out/'release').touch(mode=0o600)
     end = time.monotonic()+30
-    while keeper and alive(keeper) and time.monotonic() < end:
+    while keeper and keeper_alive(keeper) and time.monotonic() < end:
         time.sleep(1)
-    released = not (keeper and alive(keeper)) and not lock_held_elsewhere()
+    released = not (keeper and keeper_alive(keeper)) and not lock_held_elsewhere()
     rows['cleanup.json']['lock_released'] = dict(status='PASS' if released else 'FAIL', keeper_exited=released)
     try:
         rows['cleanup.json']['persistent_root_owner_only'] = dict(status='PASS', retained=True,
@@ -348,7 +358,7 @@ def observe(args, state, control, name, image):
     while True:
         c.require(time.time() < state['end_unix'], 'topology wall exhausted')
         keeper = state['keeper']
-        c.require(alive(keeper) and lock_held_elsewhere(), 'heavy-lock keeper lost')
+        c.require(keeper_alive(keeper) and lock_held_elsewhere(), 'heavy-lock keeper lost')
         control.sample()
         value = inspect(control, name, image, time.monotonic()+60)
         c.require(value is not None, 'owned container missing')

@@ -436,3 +436,239 @@ setsid bash -c '
    or `core_pattern` is a plain path with the core limit at 0.
 8. **Labels that stay.** The build identity (`1b2815e2…`/`3eedebc0`) stays
    unchanged. `launch_ready` flips only by TJ's decision recorded on the issue.
+
+## Operator package (TJS-4238, milestone 4, not activated)
+
+This section adds what activation needs and does not depend on the host, DNS or
+RPC decisions. It still runs only on the dev host, on the milestone-3 owned
+`--internal` /29 with no published host port. `public_launch` and
+`launch_ready` stay false. Nothing here creates a uid, a firewall or router
+rule, a DNS record or a published port.
+
+### Public seed shape (`operator_contract.check_public_seed`)
+
+A public seed launch is checked against an activation plan
+(`operator_contract.plan`, schema `meownero-public-seed-plan/1`) before any
+process starts:
+
+- **Binds:** P2P on the planned interface address (`--p2p-bind-ip`, never a
+  wildcard, loopback, link-local or multicast address), port 48080; IPv6 P2P
+  stays `::1`.
+- **Not the internal-bridge shape:** no `--allow-local-ip`, no `--hide-my-port`,
+  no `--add-exclusive-node`, no `--add-priority-node`, `--seed-node`,
+  `--add-peer` or `--ban-list`.
+- **Peer bounds (explicit):** `--in-peers` 1-64, `--max-connections-per-ip` 1-4,
+  both equal to the plan, and `--out-peers 0`. A daemon with no exclusive peer
+  dials the five hard-coded upstream testnet seed IPs whenever its white peer
+  list is empty, whatever `--out-peers` says (`net_node.inl:836-842,2016`; the
+  identity overlay changes only the port and network ID). Every outbound
+  attempt, seed dials included, returns before connecting when the out-peer
+  count equals `--out-peers` (`net_node.inl:1541`). A single public seed is
+  therefore a listener only and never contacts a third-party host. A second
+  public seed is a later decision (it needs a peering rule between owned seeds).
+- **Connection rate:** monerod has no connection-rate option
+  (`net_node.cpp:145-165` has peer counts, the per-IP count and bandwidth
+  only). The plan's `connection_rate` (new connections per minute 1-120, burst
+  1-60) is enforced by the port rule, an owned object (see Rollback).
+- **RPC variants:** `private` (recommended: `127.0.0.1`, plaintext, operators
+  use their own tunnel) or `operator-tls` (TLS on the planned interface with
+  `--confirm-external-bind`, the milestone-3 key and pin rules). A login-less
+  public RPC is refused; it needs its own Privacy/Cryptography decision.
+- **Every milestone-3 adverse argv is still refused** (wildcards, prefixes,
+  login options, `--public-node`, restricted-port options, exclusive or extra
+  peers, TLS off or autodetect, missing `--restricted-rpc` or
+  `--confirm-external-bind`, two mining threads).
+
+### Rehearsal topology
+
+| Namespace (container) | Bridge IP | Node | Role |
+| --- | --- | --- | --- |
+| seed | 10.231.77.2 | S | public seed shape (`in-peers 16`, `out-peers 0`, `max-connections-per-ip 4`, `operator-tls` RPC), only miner (1 thread, light mode); its driver is the supervisor |
+| client | 10.231.77.3 | K, N | K follows every seed launch; N is the newcomer that joins at depth |
+| monitor | 10.231.77.5 | M | the outside monitor and its own validating follower; no exchange mount |
+
+The manager is `run-operator.py` (derived from `run-exposure.py`), the driver
+`integration/operator_driver.py`, the entry `integration/operator-runtime.sh`.
+The grant is a Platform-authored `meownero-operator-grant/1` block on TJS-4238.
+It binds the milestone-3 fields plus the monitor address, `listeners:
+internal-bridge-public-seed-shape-no-published-port`,
+`firewall_or_dns_change: false` and `uid_creation: false`.
+
+| Mode | `uptime_seconds` (monitor window) | `wall_seconds` | Best verdict |
+| --- | --- | --- | --- |
+| rehearsal | 600 | 10,800 | `REHEARSAL_PASS_NEWCOMER_DEPTH_NOT_RUN` |
+| full | 1,800 | 28,800 | `PASS_OPERATOR_PACKAGE_DEV_HOST_ONLY` |
+
+The host contract, admission and launch command are the milestone-3 ones, with
+`run-operator.py start`.
+
+### What the drivers and the manager prove, in order
+
+1. **Public shape.** S starts once offline on loopback for the miner address,
+   then in the public seed shape. Each role's adverse argv list is refused
+   before any launch. The owner-namespace TLS/Digest checks of milestone 3 hold.
+2. **Cold bootstrap.** M (monitor) connects first, so S mines. K joins from
+   genesis once S is at count ≥ 6.
+3. **Scheduled cold backups (planned restarts).** Every 3 blocks, three times:
+   S stops and seals; the supervisor attests the root against that seal
+   (`c.root_manifest`: manifest, `stopped_saved`, file digests, modes, no
+   alias); the root is copied to `backups/NNNN/S` and the copy is attested
+   (`d.copy_stopped`); backups beyond the newest two are pruned and the
+   remaining set is checked; S reopens (attested again) with a new process and
+   a new certificate, and K and M reconnect.
+4. **Crash.** At least 2 blocks after the newest backup, S is killed with
+   SIGKILL (exact PID identity). The unsealed root fails attestation; a reopen
+   with the last seal record is refused before any process starts (launch
+   count unchanged); the root moves to `quarantine/S-0001` (owner-only, never
+   opened again). The newest backup is attested, copied back and attested, and
+   S reopens. It recovers the lost blocks from K and reaches K's exact tip.
+5. **Follows restarts.** K, with an unchanged process, reached the seed tip in
+   every seed launch (5).
+6. **Newcomer depth (full only).** N joins when the chain is at count ≥ 121,
+   so it needs at least two 100-block sync batches (tiny blocks sync
+   `BLOCKS_MAX_WINDOW` = 100 at a time, `cryptonote_core.cpp:929-940`); its log
+   must show at least two `Synced` lines (one per added span,
+   `cryptonote_protocol_handler.inl:1821`). The rehearsal leaves this row
+   NOT_RUN.
+7. **Host reach.** While S serves, the manager, in the host namespace, opens
+   one TCP connection to `10.231.77.2:48080` and one to `:48081`, sends no
+   byte, holds each for 5 s and records the outcome (`host_reach.py`). The
+   seed census counts gateway-sourced sockets as planned `host` edges.
+8. **Outside monitor.** M's role gets the pin and the seed's operator status
+   only through the manager (copied from the seed's control directory into the
+   monitor's). In the rehearsal "out of band" means "never taken from the
+   listener": the copy runs under the same host uid, so its authenticity rests
+   on the same-uid boundary, not on an authenticated channel; that is why the
+   different-uid and different-host rows stay NOT_RUN. It first checks that a wrong pin raises an alert, then samples
+   every 60 s for the window: pin by TLS handshake (no request byte), M's own
+   validated tip against the status tip, the status's inbound count against
+   `in-peers` with M's own edge in it, and the status age.
+9. **Timed rollback.** When every role serves, the manager stops the seed
+   first (the kill switch; S seals on SIGTERM), then the client and monitor,
+   attests the seed's seal offline on the host, removes the three containers
+   and the network, checks that no route overlaps the /29 and that a
+   host-namespace connection to `10.231.77.2:48080` fails, and runs the
+   port-rule and DNS-record absence checks, which fail closed (UNVERIFIED)
+   because the dev host has no outside vantage and created neither. It records
+   the elapsed seconds. Cleanup, keeper release and evidence are as in
+   milestone 3.
+
+### Operator runbook
+
+Plain steps for whoever operates the public seed after activation. Commands
+name the owned objects only; the host, interface, DNS name and RPC variant are
+the activation decisions.
+
+**Start.**
+1. Check the plan with `operator_contract.check_plan`, then the exact argv with
+   `check_public_seed`. Never edit the argv by hand.
+2. Start from a sealed root only (a fresh root, a planned stop, or a restored
+   backup). The supervisor attests it before the process starts.
+3. Confirm the listener is exactly the planned interface on 48080 (and 48081
+   only for `operator-tls`), no wildcard.
+4. Deliver the new TLS pin (operator RPC only) to every operator and the
+   monitor over an authenticated operator channel, never over the public path.
+   The pin is public, so the channel needs integrity and a known origin, not
+   secrecy: SSH with a known host key, the tailnet, or a committed record. The
+   pin comes only from the supervisor's record for that launch (the seed's
+   own-namespace handshake after `listeners()` and `confirm_pin()`).
+
+**Monitor.**
+- Run `outside_monitor.py` under a different uid or on a different host, with
+  its own follower node, the out-of-band pin file and the seed's operator
+  status. Exit 2 (ALERT) pages the operator; exit 3 (UNVERIFIED) means an input
+  is missing and the seed is not known healthy.
+- The public path cannot show peer counts: restricted RPC zeroes them
+  (`core_rpc_server.cpp:316-321`). The count comes from the supervisor's status.
+  The supervisor identifies the follower's connection as `inbound.monitor`.
+  The reference monitor requires that count to be at least one: zero or a
+  missing entry is ALERT even when cached tips agree. An unreadable or malformed
+  status is UNVERIFIED; other peers alone cannot establish monitor health.
+- **Never clear a pin ALERT with the pin the monitor saw.** After a restart
+  the monitor reports a mismatch until the new pin arrives over the operator
+  channel. A pin read off the listener (the monitor's own handshake, or
+  `openssl s_client` from the monitor host) is trust on first use across the
+  public path. A mismatch with no known restart is an incident.
+- **The pin check needs the `operator-tls` RPC variant.** Under the
+  recommended `private` variant the public address has no TLS listener, so
+  `outside_monitor.py` as written reports ALERT (unreachable) on every sample,
+  and public P2P (plaintext Levin) has nothing to pin. Under `private` the
+  monitor's anchor is the tunnel's own key (SSH host key or tailnet node key),
+  which authenticates the status it carries, plus the follower's tip
+  comparison; a pin-less monitor mode is a later change, not part of this
+  candidate.
+- The pin authenticates the RPC listener only, never the status file: the
+  count, top and inbound figures are only as trustworthy as the operator
+  channel.
+
+**Restart (planned).** Stop gracefully (seal), attest, reopen; distribute the
+new pin over the authenticated operator channel (Start step 4). A planned
+restart also clears every in-memory host block.
+
+**Backup.** A cold backup is a planned restart with a copy: stop and seal,
+attest, copy, attest the copy, prune to the newest two, reopen. Rehearsal
+schedule: every 3 blocks. Suggested public schedule: daily (about 960 blocks),
+plus before any upgrade. Key lifecycle is tied to this schedule: with
+per-launch keys and `operator-tls`, a daily backup means a daily pin delivery
+to every operator and the monitor and an expected ALERT window each day; a
+persistent 0600 key file under the dedicated uid (activation checklist item 2)
+avoids that and makes any pin change a signal in itself. The choice belongs to
+the activation decision. Backups stay owner-only and are never distributed
+(signer artefacts live in the persistent root).
+
+**Crash.** Never reopen an unsealed root. Quarantine it (owner-only, kept for
+review), restore the newest attested backup, reopen, and let the seed recover
+the lost blocks from its peers. If no backup attests, the seed stays down and
+the operator escalates; a fresh chain is a reset (below).
+
+**Rollback (kill switch).** In this order:
+1. Stop the seed (it seals). `run-operator.py rollback --out <attempt root>`
+   does this for an attempt whose manager is gone.
+2. Remove the port rule: `nft delete table inet meownero_seed` (the rule
+   template is `operator_contract.OBJECT_CLASSES['port-rule']['rule']`).
+3. Remove the DNS record with the provider's delete command for the planned
+   name.
+4. Remove the owned containers and network.
+5. Absence checks, each failing closed: a TCP connect to the public address
+   on 48080 from an outside vantage must fail; the DNS name must not resolve
+   from an outside resolver; no route or container remains. Without an outside
+   vantage the result is UNVERIFIED, never "absent".
+6. Keep the data root owner-only. The rehearsal records the time to rollback
+   in `rollback.json` `rollback_timing`.
+
+**Incident.**
+- Alert: the monitor's ALERT or UNVERIFIED, a crash, or an unexpected reorg.
+- Kill switch: rollback step 1.
+- Evidence: keep the quarantined root, the native log and the monitor output,
+  owner-only.
+- Notice: this testnet is valueless and not private (plaintext P2P).
+- **Open-consensus reorg (Core note 3).** P2P is open, there are no
+  checkpoints, and the seed mines with one light-mode thread, so anyone with
+  more hash can mine or reorg this testnet at any depth. A reorg is expected
+  behaviour, not a compromise: record its depth and the competing tip, do not
+  roll back on reorg alone, and roll back only if the seed misbehaves, the
+  host is at risk or the network ID is abused. Adding checkpoints or a
+  permissioned miner is a consensus decision for the lead, not an operator
+  step.
+- **Crash dumps (Security note 3).** On the public host either the crash
+  handler drops the seed's dumps or `core_pattern` is a plain path with the
+  core limit at 0. A piped `core_pattern` ignores RLIMIT_CORE, so the
+  container's `core=0` alone does not keep the in-memory TLS key off disk.
+
+**Unblock (Core note 4).** monerod blocks an address for 24 h after more than
+10 failures (`add_host_fail`, `net_node.inl:2682-2688`), and
+`--max-connections-per-ip` counts per IPv4 address, so peers behind one NAT
+share both. The blocks live in memory only (`net_node.inl:266-281,346-356`):
+a planned restart (seal, attest, reopen) clears them. Unrestricted
+`set_bans` is not available on the restricted RPC and is never exposed.
+`--ban-list` is refused by the public shape.
+
+**Reset (Core note 2).** Foreign networks are refused by network ID at the
+handshake. A peer with the same ID on another chain (an earlier reset of this
+testnet) passes the handshake and is rejected only at sync. Rule: a testnet
+reset changes `NETWORK_ID` (and therefore the build identity), as a separate
+recorded decision on the issue. Until such a decision, the runbook accepts
+same-identity rejection at sync: the old chain's peers fail sync, and the
+protocol handler's drops add failure scores (`drop_connection_with_score`,
+`cryptonote_protocol_handler.inl:2851-2862`) that can lead to an address block;
+the unblock step clears it.
