@@ -18,6 +18,7 @@ import shutil
 import signal
 import socket
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -220,6 +221,52 @@ class OutsideMonitor(unittest.TestCase):
         value = dict(count=10, top='a'*64, inbound=dict(client=2, monitor=1), launch=5, step='serving', unix=1000)
         value.update(change)
         return value
+
+    def test_evaluate_requires_the_monitor_edge_even_when_cached_tips_agree(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base/'pin').write_text('a'*64)
+            for peers, expected in (({}, 'ALERT'), ({'client': 2}, 'ALERT'),
+                                    ({'client': 2, 'monitor': 0}, 'ALERT'),
+                                    ({'client': 2, 'monitor': 1}, 'OK'), ({'monitor': 1}, 'OK')):
+                with self.subTest(peers=peers):
+                    (base/'status.json').write_text(json.dumps(self.status(inbound=peers)))
+                    result = om.evaluate(seed_host='fixture', pin_file=base/'pin', status_file=base/'status.json',
+                                         follower=lambda: (10, 'a'*64), in_peers=16, now=1000,
+                                         pin_of=lambda host: 'a'*64)
+                    self.assertEqual(result['state'], expected)
+                    if expected == 'OK':
+                        self.assertTrue(result['tip'])
+                    else:
+                        self.assertEqual(result['reason'], 'monitor follower connection missing')
+
+    def test_cli_alerts_on_lost_monitor_edge_with_a_connected_control(self):
+        # Real CLI parsing, JSON and process exit; only pin/follower transports are fixtures.
+        script = ("import sys\nfrom integration import outside_monitor as m\n"
+                  "m.presented_pin = lambda host: 'a'*64\n"
+                  "m.follower_info = lambda address, login: (10, 'a'*64)\n"
+                  "sys.exit(m.main())\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base/'pin').write_text('a'*64)
+            for peers, expected, exit_code in (({}, 'ALERT', 2), ({'client': 2}, 'ALERT', 2),
+                                               ({'client': 2, 'monitor': 0}, 'ALERT', 2),
+                                               ({'client': 2, 'monitor': 1}, 'OK', 0),
+                                               ({'monitor': 1}, 'OK', 0)):
+                with self.subTest(peers=peers):
+                    (base/'status.json').write_text(json.dumps(self.status(inbound=peers, unix=time.time())))
+                    result = subprocess.run([sys.executable, '-B', '-c', script, '--seed-host', 'fixture',
+                                             '--pin-file', str(base/'pin'), '--status-file', str(base/'status.json'),
+                                             '--follower-rpc', '127.0.0.1:1', '--in-peers', '16'], cwd=c.HERE,
+                                            env={'MONITOR_FOLLOWER_LOGIN': 'fixture:fixture'},
+                                            text=True, capture_output=True, timeout=10)
+                    self.assertEqual(result.returncode, exit_code, result.stderr)
+                    sample = json.loads(result.stdout)
+                    self.assertEqual(sample['state'], expected)
+                    if expected == 'OK':
+                        self.assertTrue(sample['tip'])
+                    else:
+                        self.assertEqual(sample['reason'], 'monitor follower connection missing')
 
     def test_pure_checks(self):
         self.assertTrue(om.check_pin('a'*64, 'a'*64))

@@ -580,6 +580,10 @@ the activation decisions.
   is missing and the seed is not known healthy.
 - The public path cannot show peer counts: restricted RPC zeroes them
   (`core_rpc_server.cpp:316-321`). The count comes from the supervisor's status.
+  The supervisor identifies the follower's connection as `inbound.monitor`.
+  The reference monitor requires that count to be at least one: zero or a
+  missing entry is ALERT even when cached tips agree. An unreadable or malformed
+  status is UNVERIFIED; other peers alone cannot establish monitor health.
 - **Never clear a pin ALERT with the pin the monitor saw.** After a restart
   the monitor reports a mismatch until the new pin arrives over the operator
   channel. A pin read off the listener (the monitor's own handshake, or

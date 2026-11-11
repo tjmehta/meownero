@@ -89,6 +89,8 @@ def check_status(status, now, *, in_peers, max_age):
     total = sum(status['inbound'].values())
     if total > in_peers:
         raise Alert('inbound peers above the in-peers bound')
+    if status['inbound'].get('monitor', 0) < 1:
+        raise Alert('monitor follower connection missing')
     return total, int(max(0, age))
 
 
