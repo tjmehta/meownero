@@ -20,5 +20,37 @@
   },
   "native": "NOT_RUN",
   "launch_ready": false,
-  "public_launch": false
+  "public_launch": false,
+  "fresh_full_source_suite": {
+    "command": "python3 -B vanguard/network/integration/evidence/security-notes-n1-n6/guarded-source-tests.py --full",
+    "exit_code": 0,
+    "tests": 540,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 224.75307092117146,
+    "native": "NOT_RUN",
+    "resource_warnings": false
+  },
+  "guard": {
+    "protected_lock_metadata_unchanged": true,
+    "protected_lock_metadata": [
+      66306,
+      657237,
+      1000,
+      33152,
+      0,
+      1792398177544654975,
+      1792398177544654975
+    ],
+    "blocked_original_lock_touches": [],
+    "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+    "wrapper_seconds": 224.7532801530324
+  },
+  "fork_excerpt_format": "Line-numbered excerpts trim trailing whitespace; file hashes above bind complete unmodified files.",
+  "corrected_source_sha256": {
+    "vanguard/network/integration/evidence/security-notes-n1-n6/README.md": "0c1cef5e4aa22c075645b5306194c227f8d4ab2d101be21fc5701177f1f451ea",
+    "vanguard/network/integration/operator_contract.py": "f445aeed8c8c7e455c48aaf6b65bf1998590acd1c48c1da2eba24c9632b3856e",
+    "vanguard/network/integration/topology-operators.md": "341e964017f36f319f80fd695402b2dd6c8bc090170ed315f3c7d7fe533d7522"
+  }
 }

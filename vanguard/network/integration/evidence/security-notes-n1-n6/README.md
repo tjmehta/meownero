@@ -51,9 +51,11 @@ to candidate `5712874057afdb07bffd8d200cf7239e1547ad87`. This correction scopes
 the out-peer gate, documents gray-list housekeeping and the template's choice
 to permit it, and records that live activation monitoring cannot reuse the
 rehearsal's zero-`Connect failed to` witness. Runner, driver, inputs, chain and
-operators.md remain frozen. Fresh guarded full-suite results and source checks
-are in `f1-correction/`; the initial logs and mutation evidence below are retained
-unchanged. No runtime expression changes, so the five original N1/N5/N6 mutation
+operators.md remain frozen. Fresh guarded full suite: **540 tests, zero failures/errors/skips, exit 0,
+224.753 seconds; no resource warning**. Original-lock metadata stayed
+unchanged and the original-lock touch list is empty. Results, source checks and
+pinned-fork excerpts are in `f1-correction/`; the initial logs and mutation
+evidence below are retained unchanged. No runtime expression changes, so the five original N1/N5/N6 mutation
 results remain applicable.
 
 ### Initial candidate evidence (5712874)
