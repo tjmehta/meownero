@@ -11,6 +11,7 @@ probe run against real local sockets.
 import contextlib
 import hashlib
 import http.server
+import io
 import json
 import math
 import os
@@ -35,6 +36,7 @@ from integration import host_reach as hr
 from integration import operator_contract as o
 from integration import operator_driver as od
 from integration import outside_monitor as om
+from integration import activation_witness as aw
 from integration import test_exposure as te
 from integration import topology_contract as t
 from integration import topology_driver as td
@@ -86,19 +88,24 @@ class PublicSeedShape(unittest.TestCase):
                 raw = o.port_rule(rpc)
                 table = re.fullmatch(r'table inet meownero_seed \{\n(.*)\n\}', raw, re.S)
                 self.assertIsNotNone(table)
+                declaration = re.fullmatch(r'    set seed_sources \{\n        type ipv4_addr;\n'
+                    r'        size 65535;\n        flags dynamic,timeout;\n        timeout 1m;\n    \}\n',
+                    table[1].split('    chain input')[0])
+                self.assertIsNotNone(declaration)
                 chains = re.findall(r'    chain (\w+) \{\n(.*?)\n    \}', table[1], re.S)
                 self.assertEqual([name for name, _ in chains], ['input', 'output'])
                 inbound = [line.strip() for line in chains[0][1].splitlines()]
                 self.assertEqual(inbound[:4], ['type filter hook input priority 0; policy drop;',
                     'iifname "lo" accept;', 'ct state invalid drop;', 'ct state established,related accept;'])
-                self.assertEqual(len(inbound), 6)  # No extra accept rule bypasses the meter or port list.
+                self.assertEqual(len(inbound), 7)  # No extra accept rule bypasses either limit or port list.
                 prefix = r'iifname "<interface>" ip daddr <bind-ip> tcp dport (48080|\{ 48080, 48081 \}) ct state new '
-                meter = re.fullmatch(prefix+r'meter (\w+) \{ (ip saddr) timeout 1m '
-                    r'limit rate over (<rate>)/minute burst (<burst>) packets \} drop;', inbound[4])
-                allowed = re.fullmatch(prefix+r'accept;', inbound[5])
+                meter = re.fullmatch(prefix+r'update @(seed_sources) \{ (ip saddr) limit rate over (<rate>)/minute burst (<burst>) packets \} drop;', inbound[4])
+                backstop = re.fullmatch(prefix+r'ip saddr != @seed_sources limit rate over 120/minute burst 60 packets drop;', inbound[5])
+                allowed = re.fullmatch(prefix+r'accept;', inbound[6])
                 self.assertIsNotNone(meter)
+                self.assertIsNotNone(backstop)
                 self.assertIsNotNone(allowed)
-                for parsed in (meter, allowed):
+                for parsed in (meter, backstop, allowed):
                     self.assertEqual(set(map(int, re.findall(r'\d+', parsed[1]))), ports)
                 self.assertEqual(chains[1][1].strip(), 'type filter hook output priority 0; policy accept;')
         self.assertEqual(o.port_rule(), o.port_rule('private'))
@@ -193,6 +200,148 @@ class PublicSeedShape(unittest.TestCase):
         self.assertIn('limit rate over <rate>/minute', o.OBJECT_CLASSES['port-rule']['rule'])
 
 
+class ActivationWitness(unittest.TestCase):
+    # Fixed POSIX seconds for 2026-11-11 23:30:00.100 through 23:31:00 UTC.
+    # Independent of both the banner parser and the host's local timezone.
+    WINDOW = (1794439800.1, 1794439860.0)
+    BANNER = b"2026-11-11 23:30:00.500\tmain\tINFO\tglobal\tsrc/daemon/main.cpp:298\tMonero 'test' (v0.18)\n"
+    BASE = (BANNER+b'I Resolving node address: host=176.9.0.187, port=28080\n'
+            b'I Added node: 176.9.0.187:28080\n'
+            b'W Failed to connect to any of seed peers, continuing without seeds\n')
+
+    def sample(self, raw, args=None):
+        return o.activation_seed_witness(raw, public() if args is None else args,
+                                         o.plan(o.SEED_IP), mining=True, launch_window=self.WINDOW)
+
+    def test_upstream_dials_alert_for_each_seed_on_failure_or_success(self):
+        for ip in o.UPSTREAM_SEEDS:
+            for message in ('Connect failed to ', 'Connecting to ', 'Failed to HANDSHAKE with peer '):
+                with self.subTest(ip=ip, message=message):
+                    result = self.sample(self.BASE+f'I {message}{ip}:28080\n'.encode())
+                    self.assertEqual(result['state'], 'ALERT')
+                    self.assertEqual(result['upstream_dial_lines'], 1)
+
+    def test_connections_maker_gate_and_activity_alert(self):
+        for peers in ('1', '8', '-1'):
+            with self.subTest(peers=peers):
+                self.assertEqual(self.sample(self.BASE, swap(public(), '--out-peers', peers))['state'], 'ALERT')
+        for line in (b'D Selected peer: abc 203.0.113.10:48080 [peer_list=1]\n',
+                     b'I Failed to connect to any, trying seeds\n'):
+            self.assertEqual(self.sample(self.BASE+line)['state'], 'ALERT')
+
+    def test_info_and_debug_seed_list_loading_are_not_dials(self):
+        for ip in o.UPSTREAM_SEEDS:
+            for marker in ('Seed node: ', 'Fallback seed node: '):
+                with self.subTest(ip=ip, marker=marker):
+                    raw = self.BASE+f'D {marker}{ip}:28080\n'.encode()
+                    result = self.sample(raw)
+                    self.assertEqual(result['state'], 'OK')
+                    self.assertEqual(result['seed_list_lines'], 3)
+
+    def test_housekeeping_and_ping_back_lines_do_not_alert(self):
+        raw = (self.BASE+b'D Connecting to 203.0.113.10:48080 (peer_type=1, last_seen: never)...\n'
+               b'I Connect failed to 203.0.113.10:48080\n'
+               b'W back ping connect failed to 198.51.100.5:48080\n')
+        result = self.sample(raw)
+        self.assertEqual(result['state'], 'OK')
+        self.assertEqual(result['dial_attempt_lines'], 1)
+        self.assertEqual(result['upstream_dial_lines'], 0)
+        self.assertEqual(o.seed_log_witness(raw), (1, 0, 1, 2))  # Rehearsal still rejects this total.
+
+    def test_restart_without_seed_pass_is_ok(self):
+        raw = self.BANNER+b'I peer list loaded; retained white peers\n'
+        result = self.sample(raw)
+        self.assertEqual(result['state'], 'OK')
+        self.assertEqual(result['seed_pass_lines'], 0)
+
+    def test_utc_banners_work_in_explicit_non_utc_zones(self):
+        try:
+            for zone in ('UTC0', 'PST8', 'JST-9'):
+                with self.subTest(zone=zone), mock.patch.dict(os.environ, TZ=zone):
+                    time.tzset()
+                    self.assertEqual(self.sample(self.BASE)['state'], 'OK')
+                    self.assertEqual(self.sample(self.BASE+b'I Connect failed to 176.9.0.187:28080\n')['state'],
+                                     'ALERT')
+                    old = self.BASE.replace(b'23:30:00.500', b'22:30:00.500')
+                    self.assertEqual(self.sample(old)['state'], 'UNVERIFIED')
+        finally:
+            time.tzset()  # The environment patches have restored the caller's TZ.
+
+    def test_rotation_stays_unverified_until_a_new_current_banner(self):
+        tail = b'I peer list loaded; retained white peers\n'
+        self.assertEqual(self.sample(tail)['state'], 'UNVERIFIED')
+        # Planned restart: the new process starts at 23:32:00.100 UTC and writes
+        # a new banner to the running file. It need not emit a seed-pass line.
+        window = (self.WINDOW[0]+120, self.WINDOW[1]+120)
+        current = self.BANNER.replace(b'23:30:00.500', b'23:32:00.500')+tail
+        for raw, state in ((tail, 'UNVERIFIED'), (self.BASE+tail, 'UNVERIFIED'),
+                           (tail+current, 'OK'),
+                           (tail+current+b'I Connect failed to 176.9.0.187:28080\n', 'ALERT')):
+            with self.subTest(state=state, raw=raw):
+                result = o.activation_seed_witness(raw, public(), o.plan(o.SEED_IP), mining=True,
+                                                   launch_window=window)
+                self.assertEqual(result['state'], state)
+
+    def test_warning_only_or_missing_logging_never_reaches_ok(self):
+        for level in ('0', 'net.p2p:WARNING', '1,net.p2p:WARNING', '*:WARNING', 'INFO', '5'):
+            with self.subTest(level=level):
+                self.assertEqual(self.sample(self.BASE, swap(public(), '--log-level', level))['state'], 'UNVERIFIED')
+        for level in ('1', '2', '3', '4'):
+            self.assertEqual(self.sample(self.BASE, swap(public(), '--log-level', level))['state'], 'OK')
+        args = public()
+        index = args.index('--log-level')
+        del args[index:index+2]
+        self.assertEqual(self.sample(self.BASE, args)['state'], 'UNVERIFIED')
+
+    def test_old_launch_cannot_supply_current_coverage_or_dials(self):
+        old = self.BASE.replace(b'23:30:00.500', b'22:30:00.500')
+        self.assertEqual(self.sample(old)['state'], 'UNVERIFIED')
+        self.assertEqual(self.sample(old+b'I peer list loaded; retained white peers\n')['state'], 'UNVERIFIED')
+        current = self.BANNER+b'I peer list loaded; retained white peers\n'
+        result = self.sample(old+b'I Connect failed to 176.9.0.187:28080\n'+current)
+        self.assertEqual(result['state'], 'OK')
+        self.assertEqual(result['seed_pass_lines'], 0)
+        self.assertEqual(result['upstream_dial_lines'], 0)
+        self.assertEqual(self.sample(old+current+b'I Connect failed to 176.9.0.187:28080\n')['state'], 'ALERT')
+
+    def test_missing_ambiguous_or_unbound_launch_is_unverified(self):
+        for raw in (b'', self.BASE.split(b'\n', 1)[1], self.BASE+self.BANNER,
+                    self.BASE.replace(b'23:30:00.500', b'23:32:00.500'),
+                    self.BASE.replace(b'23:30:00.500', b'23:30:00.001')):
+            self.assertEqual(self.sample(raw)['state'], 'UNVERIFIED')
+        for window in (None, (0, 1), (self.WINDOW[1], self.WINDOW[0]), (float('inf'), float('inf'))):
+            self.assertEqual(o.activation_seed_witness(self.BASE, public(), o.plan(o.SEED_IP), mining=True,
+                                                     launch_window=window)['state'], 'UNVERIFIED')
+
+    def test_cli_reads_running_argv_and_maps_states_to_exits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base/'plan.json').write_text(json.dumps(o.plan(o.SEED_IP)))
+            proc = Path('/proc/12345')
+            read_bytes, read_text = Path.read_bytes, Path.read_text
+            seed_argv = swap(public(), '--log-file', str(base/'native.log'))
+            def read(path):
+                return b'\0'.join(a.encode() for a in seed_argv)+b'\0' if path == proc/'cmdline' else read_bytes(path)
+            def text(path, *args, **kwargs):
+                # field 22, with a comm containing a closing parenthesis.
+                return '12345 (seed) name) '+ ' '.join(['S']+['0']*18+[str(4998*os.sysconf('SC_CLK_TCK'))]) \
+                    if path == proc/'stat' else read_text(path, *args, **kwargs)
+            for raw, state, exit_code in ((self.BASE, 'OK', 0), (self.BANNER, 'OK', 0),
+                    (b'', 'UNVERIFIED', 3),
+                    (self.BASE+b'I Connect failed to 176.9.0.187:28080\n', 'ALERT', 2)):
+                (base/'native.log').write_bytes(raw)
+                output = io.StringIO()
+                with mock.patch.object(sys, 'argv', ['activation_witness', '--pid', '12345', '--log-file',
+                        str(base/'native.log'), '--plan-file', str(base/'plan.json')]), \
+                        mock.patch.object(Path, 'read_bytes', read), mock.patch.object(Path, 'read_text', text), \
+                        mock.patch.object(aw.time, 'clock_gettime', return_value=5000), \
+                        mock.patch.object(aw.time, 'time', return_value=self.WINDOW[0]+1), \
+                        contextlib.redirect_stdout(output):
+                    self.assertEqual(aw.main(), exit_code)
+                self.assertEqual(json.loads(output.getvalue())['state'], state)
+
+
+
 class Absence(unittest.TestCase):
     """Item 3: an absence check never claims ABSENT without a vantage."""
     def test_fails_closed(self):
@@ -276,6 +425,27 @@ class OutsideMonitor(unittest.TestCase):
             for timestamp in (1000, 1000.5):
                 self.assertEqual(om.check_status(self.status(unix=timestamp), 1010, in_peers=16, max_age=180),
                                  (3, int(1010-timestamp)))
+
+    def test_out_of_float_range_integer_timestamp_is_unverified_with_cli_exit_3(self):
+        script = ("import sys\nfrom integration import outside_monitor as m\n"
+                  "m.presented_pin = lambda host: 'a'*64\n"
+                  "m.follower_info = lambda address, login: (10, 'a'*64)\n"
+                  "sys.exit(m.main())\n")
+        with tempfile.TemporaryDirectory() as tmp:
+            base = Path(tmp)
+            (base/'pin').write_text('a'*64)
+            for timestamp in (10**400, -10**400):
+                value = self.status(unix=timestamp)
+                with self.subTest(sign=timestamp > 0):
+                    with self.assertRaises(om.Unverified):
+                        om.check_status(value, 1000, in_peers=16, max_age=180)
+                    (base/'status.json').write_text(json.dumps(value))
+                    result = subprocess.run([sys.executable, '-B', '-c', script, '--seed-host', 'fixture',
+                        '--pin-file', str(base/'pin'), '--status-file', str(base/'status.json'),
+                        '--follower-rpc', '127.0.0.1:1', '--in-peers', '16'], cwd=c.HERE,
+                        env={'MONITOR_FOLLOWER_LOGIN': 'fixture:fixture'}, text=True, capture_output=True, timeout=10)
+                    self.assertEqual(result.returncode, 3, result.stderr)
+                    self.assertEqual(json.loads(result.stdout)['state'], 'UNVERIFIED')
 
     def test_follower_ignores_environment_http_proxy(self):
         class Handler(http.server.BaseHTTPRequestHandler):

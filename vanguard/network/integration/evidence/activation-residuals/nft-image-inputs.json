@@ -1,0 +1,44 @@
+{
+  "context": "/tmp/TJS-4398-nft-i34713d6",
+  "ldd": "\tlinux-vdso.so.1 (0x00007ffc30aca000)\n\tlibnftables.so.1 => /lib/x86_64-linux-gnu/libnftables.so.1 (0x000070561c120000)\n\tlibedit.so.2 => /lib/x86_64-linux-gnu/libedit.so.2 (0x000070561c0e6000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000070561be00000)\n\tlibmnl.so.0 => /lib/x86_64-linux-gnu/libmnl.so.0 (0x000070561c0df000)\n\tlibnftnl.so.11 => /lib/x86_64-linux-gnu/libnftnl.so.11 (0x000070561c0ad000)\n\tlibxtables.so.12 => /lib/x86_64-linux-gnu/libxtables.so.12 (0x000070561c097000)\n\tlibjansson.so.4 => /lib/x86_64-linux-gnu/libjansson.so.4 (0x000070561c086000)\n\tlibgmp.so.10 => /lib/x86_64-linux-gnu/libgmp.so.10 (0x000070561bd7c000)\n\tlibtinfo.so.6 => /lib/x86_64-linux-gnu/libtinfo.so.6 (0x000070561c052000)\n\tlibbsd.so.0 => /lib/x86_64-linux-gnu/libbsd.so.0 (0x000070561c03c000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000070561c22f000)\n\tlibmd.so.0 => /lib/x86_64-linux-gnu/libmd.so.0 (0x000070561c02b000)\n",
+  "files": [
+    "/usr/sbin/nft",
+    "/lib/x86_64-linux-gnu/libnftables.so.1",
+    "/lib/x86_64-linux-gnu/libedit.so.2",
+    "/lib/x86_64-linux-gnu/libc.so.6",
+    "/lib/x86_64-linux-gnu/libmnl.so.0",
+    "/lib/x86_64-linux-gnu/libnftnl.so.11",
+    "/lib/x86_64-linux-gnu/libxtables.so.12",
+    "/lib/x86_64-linux-gnu/libjansson.so.4",
+    "/lib/x86_64-linux-gnu/libgmp.so.10",
+    "/lib/x86_64-linux-gnu/libtinfo.so.6",
+    "/lib/x86_64-linux-gnu/libbsd.so.0",
+    "/lib64/ld-linux-x86-64.so.2",
+    "/lib/x86_64-linux-gnu/libmd.so.0"
+  ],
+  "Dockerfile": "FROM scratch\nCOPY rootfs /\nENTRYPOINT [\"/usr/sbin/nft\"]\n",
+  "build_command": [
+    "docker",
+    "build",
+    "--network",
+    "none",
+    "--tag",
+    "meownero-tjs4398-nft-check:local",
+    "/tmp/TJS-4398-nft-i34713d6"
+  ],
+  "sha256": {
+    "/usr/sbin/nft": "3f1c21553e62716ef1abfcf31f51ff94eb73ff4234a6653bac754a42f936d1c7",
+    "/lib/x86_64-linux-gnu/libnftables.so.1": "992de9571a44b904f0f55626160bdd60b690227cbffb8b7f962b0950e22bead3",
+    "/lib/x86_64-linux-gnu/libedit.so.2": "195c607216f8581dbf516346ed38f4c73500cac4b84e18eb0a4fd49931e4cd56",
+    "/lib/x86_64-linux-gnu/libc.so.6": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+    "/lib/x86_64-linux-gnu/libmnl.so.0": "a166aeee69e4b89b3cdb94e9b4cf1391081c1d141e19d24f1964e76990a18435",
+    "/lib/x86_64-linux-gnu/libnftnl.so.11": "31de1bbd42e0976d6fbde5cc8b805036189506d092dd0964dc8547b2e2ad57e5",
+    "/lib/x86_64-linux-gnu/libxtables.so.12": "e971495b2fcde36e24ed71636f085f8e2e3f5eacdf81e76c8d1cecf496dfd60f",
+    "/lib/x86_64-linux-gnu/libjansson.so.4": "c49935a4b3ac599064281b1f257576087806d0dad7ec46f353bd983b052c5e26",
+    "/lib/x86_64-linux-gnu/libgmp.so.10": "0ccdfb6d6f5c039465f6d002cf7e4c072d48ac6a2cffc8dd6c748dec31592804",
+    "/lib/x86_64-linux-gnu/libtinfo.so.6": "e6089d7bb95eee5b545f3770dd69095b0bca47d26701cad145af429561d16306",
+    "/lib/x86_64-linux-gnu/libbsd.so.0": "e86cd4f0019f42c2ba5e60602e0edc8694d2948377d98c3654d0f6bddb5254bb",
+    "/lib64/ld-linux-x86-64.so.2": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da",
+    "/lib/x86_64-linux-gnu/libmd.so.0": "423e18586b6ea740f4465afd64f7a9a4cb7264ed979c8e7256f9085af5345fef"
+  }
+}

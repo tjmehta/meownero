@@ -1,0 +1,152 @@
+{
+  "base": "fe479217fb8fd712caaae1da3a47ebad9640b2f2",
+  "python": "3.15.2 (main, Oct 25 2026, 16:57:51) [GCC 13.3.0]",
+  "full_source": {
+    "exit": 0,
+    "tests": {
+      "tests": 547,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 219.15283214719966,
+      "native": "NOT_RUN"
+    },
+    "guard": {
+      "protected_lock_metadata_unchanged": true,
+      "protected_lock_metadata": [
+        66306,
+        657237,
+        1000,
+        33152,
+        0,
+        1792398177544654975,
+        1792398177544654975
+      ],
+      "blocked_original_lock_touches": [],
+      "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+      "wrapper_seconds": 219.15296478196979
+    }
+  },
+  "focused_before_debug_list": {
+    "exit": 0,
+    "tests": {
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 65.30131430504844,
+      "native": "NOT_RUN"
+    },
+    "guard": {
+      "protected_lock_metadata_unchanged": true,
+      "protected_lock_metadata": [
+        66306,
+        657237,
+        1000,
+        33152,
+        0,
+        1792398177544654975,
+        1792398177544654975
+      ],
+      "blocked_original_lock_touches": [],
+      "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+      "wrapper_seconds": 65.30141963902861
+    }
+  },
+  "full_before_debug_list": {
+    "exit": 0,
+    "tests": {
+      "tests": 546,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 232.41443248093128,
+      "native": "NOT_RUN"
+    },
+    "guard": {
+      "protected_lock_metadata_unchanged": true,
+      "protected_lock_metadata": [
+        66306,
+        657237,
+        1000,
+        33152,
+        0,
+        1792398177544654975,
+        1792398177544654975
+      ],
+      "blocked_original_lock_touches": [],
+      "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+      "wrapper_seconds": 232.41466456092894
+    }
+  },
+  "source_sha256": {
+    "vanguard/network/integration/operator_contract.py": "d958297a268610365e4660b0a97509780b9374287d739e1c9f53323e10119516",
+    "vanguard/network/integration/outside_monitor.py": "9cc208d6164ae802c61974cf8172ebd7b841049f44168363e3fbba1e15d0ed89",
+    "vanguard/network/integration/test_operator.py": "3e1bedf8f2e218a565f30db3f4ab6771a03055e1edc9c69f4c3ea8e19f8e333b",
+    "vanguard/network/integration/activation_witness.py": "ffa2ace8e6ece15281328e1ed26f3bb31f53ca9b95a3b894f51a4df07dc89cd6",
+    "vanguard/network/integration/topology-operators.md": "0f837d16578db06b4f13dd0837eebd5f5c060175d14b332d5ea831c9d5dd6d47"
+  },
+  "mutations_detected": 12,
+  "nft_checks": {
+    "image": "sha256:6a6d5f94a8a54243103609b06c2de613360edf1350d74919d5c3d8c231dfe471",
+    "nft_version": "nftables v1.0.9 (Old Doc Yak #3)",
+    "kernel": "6.8.0-146-generic",
+    "checks": [
+      {
+        "variant": "private",
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--cap-drop",
+          "ALL",
+          "--cap-add",
+          "NET_ADMIN",
+          "--mount",
+          "type=bind,src=~/Developer/.worktrees/meownero/TJS-4398-meownero-testnet-milestone-4c-activation-time-residuals-live-seed-dial-witness-nft-template-syntax-check-meter-/vanguard/network/integration/evidence/activation-residuals/private.nft,dst=/rule.nft,readonly",
+          "meownero-tjs4398-nft-check:local",
+          "-c",
+          "-f",
+          "/rule.nft"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "rule_sha256": "a556b5aca57258c8a0d27a83442b6eb4780b7399b283a14614ae2806d4b0e7a2"
+      },
+      {
+        "variant": "operator-tls",
+        "command": [
+          "docker",
+          "run",
+          "--rm",
+          "--network",
+          "none",
+          "--cap-drop",
+          "ALL",
+          "--cap-add",
+          "NET_ADMIN",
+          "--mount",
+          "type=bind,src=~/Developer/.worktrees/meownero/TJS-4398-meownero-testnet-milestone-4c-activation-time-residuals-live-seed-dial-witness-nft-template-syntax-check-meter-/vanguard/network/integration/evidence/activation-residuals/operator-tls.nft,dst=/rule.nft,readonly",
+          "meownero-tjs4398-nft-check:local",
+          "-c",
+          "-f",
+          "/rule.nft"
+        ],
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "rule_sha256": "d451c41784c55528cabdf249b7f10fa4c6dafa7b2621959943428c1828ed73e1"
+      }
+    ]
+  },
+  "frozen_files": 74,
+  "frozen_result": "PASS_BYTE_FROZEN",
+  "native_seed": "NOT_RUN",
+  "launch_ready": false,
+  "public_launch": false,
+  "whitespace_exit": 0,
+  "prior_evidence_manifest_exit": 0
+}

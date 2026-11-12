@@ -1,0 +1,18 @@
+{
+  "source_root": "<repo>/build/vanguard-src/monero-fcmp",
+  "head": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "source_sha256": {
+    "src/p2p/net_node.inl": "9167387672982a943fe74f093a3578d16f980a310fc3a30f3a4317f3e01a588b",
+    "src/p2p/net_node.h": "9d790c1c150afae71d05e0f67052e2d0c9d20407078c037774d57db97e5ff08b"
+  },
+  "references": {
+    "upstream_seeds": "net_node.inl:836-842",
+    "out_peer_gate": "net_node.inl:1529-1541",
+    "shared_connect_log": "net_node.inl:1495-1505",
+    "maker_peer_selection": "net_node.inl:1651,1911",
+    "maker_seed_fallback": "net_node.inl:2066",
+    "ping_back": "net_node.inl:2507-2562",
+    "gray_housekeeping": "net_node.inl:3052-3090"
+  },
+  "qualification": "Source inspection only; current fork source was not built or launched."
+}

@@ -32,7 +32,9 @@ Fork facts this contract relies on (monero-fcmp e151643c):
 - Tiny blocks sync in batches of BLOCKS_MAX_WINDOW (100) (`cryptonote_core.cpp:929-940`),
   and every added span logs `Synced H/T` (`cryptonote_protocol_handler.inl:1821`).
 """
+from datetime import datetime, timezone
 import ipaddress
+import math
 import re
 
 from integration import exposure_contract as x
@@ -91,16 +93,66 @@ SEED_PASS = b'continuing without seeds'
 SEED_LIST = (b'Resolving node address: ', b'Added node: ')
 
 
-def seed_log_witness(raw):
+def seed_log_witness(raw, *, seed_list=SEED_LIST):
     """(dial attempts, upstream lines outside seed-list loading, seed passes, seed-list lines)."""
     upstream = listed = 0
     for line in raw.splitlines():
         if any(ip.encode() in line for ip in UPSTREAM_SEEDS):
-            if any(marker in line for marker in SEED_LIST):
+            if any(marker in line for marker in seed_list):
                 listed += 1
             else:
                 upstream += 1
     return raw.count(DIAL_ATTEMPTED), upstream, raw.count(SEED_PASS), listed
+
+
+# Default file format: mlog.cpp:49; banner after logging setup, daemon/main.cpp:298.
+LAUNCH_BANNER = re.compile(rb"^(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d\.\d{3})\t[^\t]+\tINFO\tglobal\t[^\t]*daemon/main\.cpp:\d+\tMonero '[^\r\n]+$", re.M)
+
+
+def activation_seed_witness(raw, argv, value, *, mining=False, launch_window=None):
+    """Current-launch sample from checked running argv and a complete native log.
+
+    launch_window is (conservative process-start upper bound, observation time),
+    read by activation_witness from Linux procfs and CLOCK_BOOTTIME. Banner
+    timestamps are UTC (ea_config.h:11, ELPP_UTC_DATETIME), independent of the
+    daemon's and CLI's local timezone.
+    Earlier launches are excluded before checking dial lines. This is source and
+    log evidence, not arbitrary-egress absence proof or executable attestation.
+    """
+    try:
+        options = dict(check_public_seed(argv, value, mining=mining))
+    except t.PolicyRefusal as error:
+        return dict(state='ALERT', reason=str(error))
+    # Numeric 1-4 establish INFO visibility; category overrides need separate verification.
+    if options.get('--log-level') not in ('1', '2', '3', '4'):
+        return dict(state='UNVERIFIED', reason='running argv does not establish net.p2p INFO logging')
+    if (not isinstance(launch_window, tuple) or len(launch_window) != 2 or
+            any(type(v) not in (int, float) or not math.isfinite(v) for v in launch_window) or
+            not 0 < launch_window[0] <= launch_window[1]):
+        return dict(state='UNVERIFIED', reason='current process launch window missing')
+    starts = []
+    for match in LAUNCH_BANNER.finditer(raw):
+        try:
+            stamp = datetime.strptime(match[1].decode(), '%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=timezone.utc).timestamp()
+        except (ValueError, OverflowError, OSError):
+            continue
+        if launch_window[0] <= stamp <= launch_window[1]:
+            starts.append(match.start())
+    if len(starts) != 1:
+        return dict(state='UNVERIFIED', reason='current launch banner missing or ambiguous')
+    raw = raw[starts[0]:]
+    # DEBUG also reports static seed-list initialization, without a connect.
+    attempted, upstream, passes, listed = seed_log_witness(
+        raw, seed_list=SEED_LIST+(b'Seed node: ', b'Fallback seed node: '))
+    maker = sum(any(marker in line for marker in (
+        b'Selected peer: ', b'Failed to connect to any, trying seeds')) for line in raw.splitlines())
+    result = dict(dial_attempt_lines=attempted, upstream_dial_lines=upstream,
+                  connections_maker_lines=maker, seed_pass_lines=passes, seed_list_lines=listed,
+                  current_launch_offset=starts[0])
+    if upstream or maker:
+        return dict(result, state='ALERT', reason='connections_maker or upstream-seed activity')
+    return dict(result, state='OK', reason=None)
+
 
 PUBLIC_FORBIDDEN = tuple(n for n in t.FORBIDDEN if n != '--confirm-external-bind')+(
     '--allow-local-ip', '--hide-my-port', '--add-exclusive-node', '--offline', '--ban-list',
@@ -142,12 +194,19 @@ OBJECT_CLASSES = {
         create=['nft', '-f', '<reviewed-rule-file>'],
         # Seed network namespace only; render the optional RPC port with port_rule().
         rule='''table inet meownero_seed {
+    set seed_sources {
+        type ipv4_addr;
+        size 65535;
+        flags dynamic,timeout;
+        timeout 1m;
+    }
     chain input {
         type filter hook input priority 0; policy drop;
         iifname "lo" accept;
         ct state invalid drop;
         ct state established,related accept;
-        iifname "<interface>" ip daddr <bind-ip> tcp dport 48080 ct state new meter seed_sources { ip saddr timeout 1m limit rate over <rate>/minute burst <burst> packets } drop;
+        iifname "<interface>" ip daddr <bind-ip> tcp dport 48080 ct state new update @seed_sources { ip saddr limit rate over <rate>/minute burst <burst> packets } drop;
+        iifname "<interface>" ip daddr <bind-ip> tcp dport 48080 ct state new ip saddr != @seed_sources limit rate over 120/minute burst 60 packets drop;
         iifname "<interface>" ip daddr <bind-ip> tcp dport 48080 ct state new accept;
     }
     chain output {

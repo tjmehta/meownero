@@ -1,0 +1,354 @@
+{
+  "result": "PASS_MUTATION_SENSITIVITY_ONLY",
+  "cases": [
+    {
+      "mutation": "dial-debug-list-exemption-removed",
+      "test": "integration.test_operator.ActivationWitness.test_info_and_debug_seed_list_loading_are_not_dials",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 10,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "seed_list=SEED_LIST+(b'Seed node: ', b'Fallback seed node: ')",
+      "replacement": "seed_list=SEED_LIST"
+    },
+    {
+      "mutation": "dial-upstream-check-removed",
+      "test": "integration.test_operator.ActivationWitness.test_upstream_dials_alert_for_each_seed_on_failure_or_success",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 15,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "if upstream or maker:",
+      "replacement": "if maker:"
+    },
+    {
+      "mutation": "dial-argv-gate-removed",
+      "test": "integration.test_operator.ActivationWitness.test_connections_maker_gate_and_activity_alert",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 3,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "options = dict(check_public_seed(argv, value, mining=mining))",
+      "replacement": "options = {'--log-level': '1'}"
+    },
+    {
+      "mutation": "dial-maker-check-removed",
+      "test": "integration.test_operator.ActivationWitness.test_connections_maker_gate_and_activity_alert",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "if upstream or maker:",
+      "replacement": "if upstream:"
+    },
+    {
+      "mutation": "dial-rehearsal-zero-rule-reused",
+      "test": "integration.test_operator.ActivationWitness.test_housekeeping_and_ping_back_lines_do_not_alert",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "if upstream or maker:",
+      "replacement": "if upstream or maker or attempted:"
+    },
+    {
+      "mutation": "dial-seed-pass-required-again",
+      "test": "integration.test_operator.ActivationWitness.test_restart_without_seed_pass_is_ok",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "return dict(result, state='OK', reason=None)",
+      "replacement": "return dict(result, state='OK' if passes else 'UNVERIFIED', reason=None)"
+    },
+    {
+      "mutation": "dial-info-check-removed",
+      "test": "integration.test_operator.ActivationWitness.test_warning_only_or_missing_logging_never_reaches_ok",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 7,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "if options.get('--log-level') not in ('1', '2', '3', '4'):",
+      "replacement": "if False:"
+    },
+    {
+      "mutation": "dial-earlier-banner-accepted",
+      "test": "integration.test_operator.ActivationWitness.test_old_launch_cannot_supply_current_coverage_or_dials",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "if launch_window[0] <= stamp <= launch_window[1]:",
+      "replacement": "if stamp <= launch_window[1]:"
+    },
+    {
+      "mutation": "dial-launch-slice-removed",
+      "test": "integration.test_operator.ActivationWitness.test_old_launch_cannot_supply_current_coverage_or_dials",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "raw = raw[starts[0]:]",
+      "replacement": "raw = raw"
+    },
+    {
+      "mutation": "monitor-overflow-handler-removed",
+      "test": "integration.test_operator.OutsideMonitor.test_out_of_float_range_integer_timestamp_is_unverified_with_cli_exit_3",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 2,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "except OverflowError:",
+      "replacement": "except ZeroDivisionError:"
+    },
+    {
+      "mutation": "meter-size-removed",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "size 65535",
+      "replacement": ""
+    },
+    {
+      "mutation": "meter-size-unbounded",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "size 65535",
+      "replacement": "size 0"
+    },
+    {
+      "mutation": "meter-key-wrong",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "{ ip saddr limit",
+      "replacement": "{ ip daddr limit"
+    },
+    {
+      "mutation": "backstop-removed",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "        iifname \"<interface>\" ip daddr <bind-ip> tcp dport 48080 ct state new ip saddr != @seed_sources limit rate over 120/minute burst 60 packets drop;\n",
+      "replacement": ""
+    },
+    {
+      "mutation": "backstop-unconditional",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "ip saddr != @seed_sources ",
+      "replacement": ""
+    },
+    {
+      "mutation": "backstop-tracked-only",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "ip saddr != @seed_sources ",
+      "replacement": "ip saddr @seed_sources "
+    },
+    {
+      "mutation": "backstop-wrong-verdict",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "        iifname \"<interface>\" ip daddr <bind-ip> tcp dport 48080 ct state new ip saddr != @seed_sources limit rate over 120/minute burst 60 packets drop;\n",
+      "replacement": "        iifname \"<interface>\" ip daddr <bind-ip> tcp dport 48080 ct state new ip saddr != @seed_sources limit rate over 120/minute burst 60 packets accept;\n"
+    },
+    {
+      "mutation": "backstop-wrong-order",
+      "test": "integration.test_operator.PublicSeedShape.test_port_rule_parses_to_only_planned_ports_with_per_source_limits",
+      "control": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "mutant": {
+        "tests": 1,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "DETECTED",
+      "original": "        iifname \"<interface>\" ip daddr <bind-ip> tcp dport 48080 ct state new ip saddr != @seed_sources limit rate over 120/minute burst 60 packets drop;\n",
+      "replacement": ""
+    }
+  ],
+  "source_sha256": {
+    "vanguard/network/integration/operator_contract.py": "36c2a507a2fe7cee128fbe65508cd5499a1ad6dbfa5a8c58dd9f847f2b809b8d",
+    "vanguard/network/integration/outside_monitor.py": "9cc208d6164ae802c61974cf8172ebd7b841049f44168363e3fbba1e15d0ed89",
+    "vanguard/network/integration/test_operator.py": "697d7877b3aecaeffdc5bc86836dcb3a8f3d86c0a0ffdda99bfc7fb6f40e4234"
+  },
+  "source_bytes_unchanged": true,
+  "native": "NOT_RUN"
+}

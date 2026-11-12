@@ -1,0 +1,26 @@
+{
+  "corrected_tree": {
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/network/integration/evidence/check_compressed_privacy.py",
+      "--exclude-from",
+      "vanguard/network/integration/evidence/compressed-privacy/publication-exclusions.txt"
+    ],
+    "exit": 0
+  },
+  "planted_leak_copy": {
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/network/integration/evidence/check_compressed_privacy.py",
+      "--root",
+      "<temporary evidence copy>",
+      "--exclude-from",
+      "vanguard/network/integration/evidence/compressed-privacy/publication-exclusions.txt"
+    ],
+    "fixture": "one additional gzip containing a synthetic Linux home path",
+    "exit": 1,
+    "temporary_copy_removed": true
+  }
+}

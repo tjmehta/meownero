@@ -1,0 +1,568 @@
+{
+  "result": "PASS",
+  "native_seed": "NOT_RUN",
+  "recovery": "planned restart with a new PID and a fresh UTC banner in the running file",
+  "supervisor_seal_attestation": "not exercised by stand-in",
+  "cases": [
+    {
+      "case": "UTC-stamped clean launch",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "UTC-stamped upstream dial",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old launch only",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old upstream dial excluded",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 129,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "ambiguous current banners",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated banner absent from running file",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated file refused as running file",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "concatenated copy refused",
+      "zone": "UTC",
+      "pid": 1513555,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart new PID and banner no seed pass",
+      "zone": "UTC",
+      "pid": 1515105,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart still detects upstream dial",
+      "zone": "UTC",
+      "pid": 1515105,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "UTC-stamped clean launch",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "UTC-stamped upstream dial",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old launch only",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old upstream dial excluded",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 129,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "ambiguous current banners",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated banner absent from running file",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated file refused as running file",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "concatenated copy refused",
+      "zone": "America/Los_Angeles",
+      "pid": 1515701,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart new PID and banner no seed pass",
+      "zone": "America/Los_Angeles",
+      "pid": 1516685,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart still detects upstream dial",
+      "zone": "America/Los_Angeles",
+      "pid": 1516685,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "UTC-stamped clean launch",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "UTC-stamped upstream dial",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old launch only",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old upstream dial excluded",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 129,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "ambiguous current banners",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated banner absent from running file",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated file refused as running file",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "concatenated copy refused",
+      "zone": "Europe/Berlin",
+      "pid": 1516939,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart new PID and banner no seed pass",
+      "zone": "Europe/Berlin",
+      "pid": 1517402,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart still detects upstream dial",
+      "zone": "Europe/Berlin",
+      "pid": 1517402,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "UTC-stamped clean launch",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "UTC-stamped upstream dial",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old launch only",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old upstream dial excluded",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 129,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "ambiguous current banners",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated banner absent from running file",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "rotated file refused as running file",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "concatenated copy refused",
+      "zone": "Asia/Tokyo",
+      "pid": 1517514,
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart new PID and banner no seed pass",
+      "zone": "Asia/Tokyo",
+      "pid": 1518034,
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "planned restart still detects upstream dial",
+      "zone": "Asia/Tokyo",
+      "pid": 1518034,
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 41,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    }
+  ]
+}

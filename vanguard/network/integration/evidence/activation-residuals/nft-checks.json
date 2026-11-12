@@ -1,0 +1,55 @@
+{
+  "image": "sha256:6a6d5f94a8a54243103609b06c2de613360edf1350d74919d5c3d8c231dfe471",
+  "nft_version": "nftables v1.0.9 (Old Doc Yak #3)",
+  "kernel": "6.8.0-146-generic",
+  "checks": [
+    {
+      "variant": "private",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--cap-drop",
+        "ALL",
+        "--cap-add",
+        "NET_ADMIN",
+        "--mount",
+        "type=bind,src=~/Developer/.worktrees/meownero/TJS-4398-meownero-testnet-milestone-4c-activation-time-residuals-live-seed-dial-witness-nft-template-syntax-check-meter-/vanguard/network/integration/evidence/activation-residuals/private.nft,dst=/rule.nft,readonly",
+        "meownero-tjs4398-nft-check:local",
+        "-c",
+        "-f",
+        "/rule.nft"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "rule_sha256": "a556b5aca57258c8a0d27a83442b6eb4780b7399b283a14614ae2806d4b0e7a2"
+    },
+    {
+      "variant": "operator-tls",
+      "command": [
+        "docker",
+        "run",
+        "--rm",
+        "--network",
+        "none",
+        "--cap-drop",
+        "ALL",
+        "--cap-add",
+        "NET_ADMIN",
+        "--mount",
+        "type=bind,src=~/Developer/.worktrees/meownero/TJS-4398-meownero-testnet-milestone-4c-activation-time-residuals-live-seed-dial-witness-nft-template-syntax-check-meter-/vanguard/network/integration/evidence/activation-residuals/operator-tls.nft,dst=/rule.nft,readonly",
+        "meownero-tjs4398-nft-check:local",
+        "-c",
+        "-f",
+        "/rule.nft"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "rule_sha256": "d451c41784c55528cabdf249b7f10fa4c6dafa7b2621959943428c1828ed73e1"
+    }
+  ]
+}

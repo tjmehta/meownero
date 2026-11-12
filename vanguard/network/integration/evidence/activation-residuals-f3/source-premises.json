@@ -1,0 +1,78 @@
+{
+  "fork_commit": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "excerpts": {
+    "external/easylogging++/ea_config.h": {
+      "sha256": "e480f65d4cf6bddb6aedb0c7531f4dee58ba2b5fd5eb8e7c5b66205dae3c4200",
+      "lines": [
+        "1: #pragma once",
+        "2: ",
+        "3: #include <limits.h>",
+        "4: ",
+        "5: #define ELPP_THREAD_SAFE",
+        "6: #define ELPP_DEFAULT_LOG_FILE \"\"",
+        "7: #define ELPP_DISABLE_DEFAULT_CRASH_HANDLING",
+        "8: #define ELPP_NO_CHECK_MACROS",
+        "9: #define ELPP_WINSOCK2",
+        "10: #define ELPP_NO_DEBUG_MACROS",
+        "11: #define ELPP_UTC_DATETIME",
+        "12: ",
+        "13: #ifdef EASYLOGGING_CC",
+        "14: #if !(!defined __GLIBC__ || !defined __GNUC__ || defined __MINGW32__ || defined __MINGW64__ || defined __ANDROID__ || defined __NetBSD__) || (defined __FreeBSD__)"
+      ]
+    },
+    "external/easylogging++/easylogging++.h": {
+      "sha256": "7263a1b8dd256b03f49c44c0f0dc6c98aa0ff9df0d085caf0e1c12b531b4c6d3",
+      "lines": [
+        "478: #if defined(ELPP_UTC_DATETIME)",
+        "479: #   define elpptime_r gmtime_r",
+        "480: #   define elpptime_s gmtime_s",
+        "481: #   define elpptime   gmtime",
+        "482: #else",
+        "483: #   define elpptime_r localtime_r",
+        "484: #   define elpptime_s localtime_s",
+        "485: #   define elpptime   localtime",
+        "486: #endif  // defined(ELPP_UTC_DATETIME)",
+        "487: // Forward declarations"
+      ]
+    },
+    "external/easylogging++/easylogging++.cc": {
+      "sha256": "3fe27aeda8fbf2896637daf20c8f4cf17e9f2cbb7fe9a2812c74bf8fe21bf821",
+      "lines": [
+        "1339: struct ::tm* DateTime::buildTimeInfo(struct timeval* currTime, struct ::tm* timeInfo) {",
+        "1340: #if ELPP_OS_UNIX",
+        "1341:   time_t rawTime = currTime->tv_sec;",
+        "1342:   ::elpptime_r(&rawTime, timeInfo);",
+        "1343:   return timeInfo;",
+        "1344: #else"
+      ]
+    },
+    "contrib/epee/include/misc_log_ex.h": {
+      "sha256": "53601bb41d0580debde80fd8747964ffaffbfa2ed85c5a761f677e8ebb2be4f3",
+      "lines": [
+        "39: #define MONERO_DEFAULT_LOG_CATEGORY \"default\"",
+        "40: ",
+        "41: #define MAX_LOG_FILE_SIZE 104850000 // 100 MB - 7600 bytes",
+        "42: #define MAX_LOG_FILES 10"
+      ]
+    },
+    "contrib/epee/src/mlog.cpp": {
+      "sha256": "6c07144a2bce9fdf5e1c9f03f1d11b1bd494508dcf7194f13b3ac17772944fe5",
+      "lines": [
+        "166:   el::Helpers::installPreRollOutCallback([filename_base, max_log_files](const char *name, size_t){",
+        "167:     std::string rname = generate_log_filename(filename_base.c_str());",
+        "168:     int ret = rename(name, rname.c_str());",
+        "169:     if (ret < 0)",
+        "170:     {",
+        "171:       // can't log a failure, but don't do the file removal below",
+        "172:       return;"
+      ]
+    }
+  },
+  "python": "3.15.2 (main, Oct 25 2026, 16:57:51) [GCC 13.3.0]",
+  "documentation": [
+    "https://docs.python.org/3/library/datetime.html#datetime.datetime.timestamp",
+    "https://docs.python.org/3/library/time.html#time.tzset"
+  ],
+  "utc_conversion": "Explicit UTC tzinfo makes timestamp independent of the CLI timezone",
+  "rotation_choice": "Use the existing seal/attest/reopen planned restart; preserve rotated logs; do not accept arbitrary concatenated files"
+}

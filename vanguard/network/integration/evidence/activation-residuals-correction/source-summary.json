@@ -1,0 +1,42 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "vanguard/network/integration/evidence/activation-residuals/guarded-source-tests.py",
+    "--full"
+  ],
+  "exit": 0,
+  "python": "3.15.2 (main, Oct 25 2026, 16:57:51) [GCC 13.3.0]",
+  "rows": [
+    {
+      "tests": 550,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 223.01915601920336,
+      "native": "NOT_RUN"
+    },
+    {
+      "protected_lock_metadata_unchanged": true,
+      "protected_lock_metadata": [
+        66306,
+        657237,
+        1000,
+        33152,
+        0,
+        1792398177544654975,
+        1792398177544654975
+      ],
+      "blocked_original_lock_touches": [],
+      "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+      "wrapper_seconds": 223.01927097607404
+    }
+  ],
+  "source_sha256": {
+    "vanguard/network/integration/activation_witness.py": "704fa84ec8d340c6e49c39869bd567f7082562d74edd372e111915bd9cee8df1",
+    "vanguard/network/integration/operator_contract.py": "36c2a507a2fe7cee128fbe65508cd5499a1ad6dbfa5a8c58dd9f847f2b809b8d",
+    "vanguard/network/integration/test_operator.py": "697d7877b3aecaeffdc5bc86836dcb3a8f3d86c0a0ffdda99bfc7fb6f40e4234",
+    "vanguard/network/integration/outside_monitor.py": "9cc208d6164ae802c61974cf8172ebd7b841049f44168363e3fbba1e15d0ed89",
+    "vanguard/network/integration/topology-operators.md": "348fcc03befbe5cf5e820c464cecbe8ac51d21d76f1766a60997b4430bcaa76f"
+  }
+}

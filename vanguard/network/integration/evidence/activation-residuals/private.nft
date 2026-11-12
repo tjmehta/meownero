@@ -1,0 +1,14 @@
+table inet meownero_seed {
+    chain input {
+        type filter hook input priority 0; policy drop;
+        iifname "lo" accept;
+        ct state invalid drop;
+        ct state established,related accept;
+        iifname "eth0" ip daddr 192.0.2.10 tcp dport 48080 ct state new meter seed_sources size 65535 { ip saddr timeout 1m limit rate over 30/minute burst 10 packets } drop;
+        iifname "eth0" ip daddr 192.0.2.10 tcp dport 48080 ct state new limit rate over 120/minute burst 60 packets drop;
+        iifname "eth0" ip daddr 192.0.2.10 tcp dport 48080 ct state new accept;
+    }
+    chain output {
+        type filter hook output priority 0; policy accept;
+    }
+}

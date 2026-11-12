@@ -458,6 +458,15 @@ A public seed launch is checked against an activation plan
 (`operator_contract.plan`, schema `meownero-public-seed-plan/1`) before any
 process starts:
 
+Executable identity is supplied by the managed launcher, separately from this
+argv-shape validator: `run-operator.py` stages each binary through
+`run-profile.binary_copy`, checking its expected hash and stable file metadata,
+and `Operator.daemon_argv` selects `d.BIN/'monerod'` from that staged directory.
+`check_public_seed` retains the `/monerod` suffix check so the policy also works
+with isolated fixture roots; the suffix alone is not binary attestation. Keep
+the launcher's verified-binary custody when activating. The read-only dial
+witness below checks argv and logs, not `/proc/<pid>/exe` bytes.
+
 - **Binds:** P2P on the planned interface address (`--p2p-bind-ip`, never a
   wildcard, loopback, link-local or multicast address), port 48080; IPv6 P2P
   stays `::1`.
@@ -492,7 +501,8 @@ process starts:
   These are pinned-source findings, not dynamic reproductions. On a live
   public seed, failed housekeeping dials log `Connect failed to`; activation
   monitoring must distinguish these from upstream-seed dials rather than
-  reuse the rehearsal's zero-dial witness.
+  reuse the rehearsal's zero-dial witness. Use the read-only
+  `activation_witness` command below, alongside the outside monitor.
   A second public seed is a later decision (it needs a peering rule between
   owned seeds).
 - **Updates:** require explicit `--check-updates disabled`. Omission defaults
@@ -511,6 +521,68 @@ process starts:
   peers, TLS off or autodetect, missing `--restricted-rpc` or
   `--confirm-external-bind`, two mining threads).
 
+For activation monitoring, sample the running seed in its PID namespace with
+the checked plan and the native log named by its running `--log-file` option.
+Banner timestamps are UTC regardless of the daemon's or CLI's local timezone
+(`ea_config.h:11`, `ELPP_UTC_DATETIME`). Use the default file format; keep numeric
+`--log-level` 1, 2, 3 or 4 so `net.p2p` INFO dial lines are visible:
+
+```sh
+PYTHONPATH=vanguard/network python3 -B -m integration.activation_witness \
+  --pid <seed-pid> --log-file <running-native.log> --plan-file <checked-plan.json>
+```
+
+The command reads `/proc/<seed-pid>/cmdline` and `/proc/<seed-pid>/stat`
+(starttime, field 22), checks that the supplied file is the running `--log-file`,
+and calls
+`operator_contract.activation_seed_witness`. Exit 0 is OK, 2 is ALERT, 3 is
+UNVERIFIED. A changed `--out-peers 0` gate or any other refused launch option
+alerts. Any of the five upstream seed IPs outside seed-list loading alerts,
+including connection, handshake and failed-connect lines. Peer-selection or
+`Failed to connect to any, trying seeds` messages from `connections_maker`
+also alert. The startup banner at `daemon/main.cpp:298` follows log setup;
+its default timestamp format is `mlog.cpp:49`. The witness selects the unique
+banner between the process-start upper bound (procfs clock ticks mapped through
+`CLOCK_BOOTTIME` to wall time) and the observation. It checks only that banner
+and its suffix in an accumulated multi-launch file. An earlier launch's seed
+pass never supplies current coverage, and earlier launches' dials are excluded.
+A restart with a retained white list and no seed-pass line can return OK;
+the pass count is diagnostic only.
+
+UNVERIFIED (exit 3) means restore observation before claiming OK: check
+PID/plan/file identity, numeric logging level and default log format, then sample
+again. Preserve the file named in the running argv, including its current
+startup banner. The fork rotates it at 104,850,000 bytes by default
+(`misc_log_ex.h:41`, `mlog.cpp:166–170`). If rotation moved the current banner
+out of that file, preserve the running and rotated logs for investigation and
+perform **Restart (planned)** in the **Operator runbook** below (stop, seal,
+attest, reopen). Refresh the PID and, for TLS, obtain the new launch pin from the
+supervisor's record as described in **Start** step 4 and **Monitor** below.
+Sample the new process using the same running log path and checked
+plan after it writes its new UTC startup banner. A clean new launch returns OK
+even with retained white peers and no seed-pass line; a new upstream dial still
+alerts. The CLI does not accept a rotated predecessor or a concatenated copy
+in place of the running file. Rotation remains UNVERIFIED until this recovery;
+a restart does not resolve an earlier ALERT, which still needs investigation.
+WARNING-only
+or category-override argv never returns OK. A missing/ambiguous banner, startup
+within the process-start clock tick, unreadable inputs or a process/clock change
+during sampling is also UNVERIFIED. The timestamp binding assumes a stable wall
+clock since launch; investigate clock corrections rather
+than substituting an old seed-pass line. The CLI rechecks process starttime and
+argv after reading. An ALERT requires investigation of the gate or address/path;
+a housekeeping or ping-back contact with an upstream IP alerts conservatively.
+
+Non-upstream housekeeping `Connect failed to` and `back ping connect failed to`
+lines do not alert; their count is diagnostic. INFO logs share a connect call
+site between housekeeping and peer/seed dialing, so the actual argv gate and
+pinned source are part of this witness; logs alone cannot attribute every
+non-upstream dial. This sample does not prove absence of arbitrary outbound
+traffic or replace the outside pin/tip/peer monitor. Keep sampling and preserve
+the complete launch log; a missing/rotated-away launch prefix requires the
+recovery above before an OK claim. The rehearsal's `public_seed_shape` row
+remains unchanged.
+
 ### Reviewed port-rule template (text only)
 
 `operator_contract.OBJECT_CLASSES['port-rule']['rule']` is the canonical nft
@@ -525,14 +597,26 @@ dials to peer-supplied third-party addresses, as described above.
 
 Before any later authorized activation, substitute `<interface>`, `<bind-ip>`,
 `<rate>` and `<burst>` from the checked plan; rate/burst use the plan's
-`connection_rate.new_per_minute` and `burst`. The named `seed_sources` meter is
+`connection_rate.new_per_minute` and `burst`. The named dynamic `seed_sources` set is
 keyed by `ip saddr`, shared across all allowed ports for that source, with a
-one-minute idle timeout. An over-budget source is dropped before the explicit
-port accept rule; it cannot spend another source's allowance. The removal stays
+one-minute idle timeout and a capacity of 65,535 sources. An over-budget source
+is dropped before the explicit port accept rule. A separate global backstop
+after the meter drops new-connection packets above 120/minute with burst 60,
+only for sources absent from `@seed_sources`. The preceding `update` rule
+inserts/refreshes tracked sources and applies their per-source limit. Tracked
+sources within their own allowance never spend a shared token, so other tracked
+sources cannot consume their budget. If insertion fails when the set is full,
+untracked traffic still faces the shared bound; traffic below it can pass.
+These are packet token buckets for `ct state new`, so SYN retransmissions also
+consume them. Untracked sources can exhaust that fallback bucket; it bounds
+full-set admission without guaranteeing fairness among untracked sources. The removal stays
 `nft delete table inet meownero_seed`. The
 [source parser test](test_operator.py) checks both variants and rule ordering;
-it does not establish kernel compatibility or apply any rule. Review the final
-substituted rule file on the chosen host before activation.
+it does not establish kernel compatibility or apply any rule. Both rendered
+variants passed `nft -c -f` in a disposable NET_ADMIN container with no network
+([commands and output](evidence/activation-residuals-correction/nft-checks.json)). This is
+syntax/kernel validation on that host, not a live enforcement witness. Review
+and validate the final substituted rule file on the chosen host before activation.
 
 ### Rehearsal topology
 

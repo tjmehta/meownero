@@ -1,0 +1,302 @@
+{
+  "base": "fe479217fb8fd712caaae1da3a47ebad9640b2f2",
+  "result": "PASS_BYTE_FROZEN",
+  "files": [
+    {
+      "path": "chain/Dockerfile",
+      "sha256": "515f63613e5d1c09d69f78cda5a15e7a018aa48c5d313d1eb4d498e3333cfd4a"
+    },
+    {
+      "path": "chain/README.md",
+      "sha256": "90a8e6c4de20c615bd489c0960b8bffca1e950c31f1449c7797259ccba41a771"
+    },
+    {
+      "path": "chain/benchmark-difficulty.py",
+      "sha256": "055d8f02687dec173824aa4bafacc6917fb0f0fe8a89657fd5e89199a0b21f8f"
+    },
+    {
+      "path": "chain/benchmark-difficulty.sh",
+      "sha256": "d3cdb855093d0207aee6072bc423eb537ca96f60035d178b328f9f98ab80e2b4"
+    },
+    {
+      "path": "chain/build.sh",
+      "sha256": "222b76227bf3d85799e81a225fd81850bf985e79dfb04ad1f79d3b2e9f1fa236"
+    },
+    {
+      "path": "chain/daa-benchmark.cpp",
+      "sha256": "f73afe6fc38e73a29043604ca166f24552cafddef13e5d5f71febe5993633368"
+    },
+    {
+      "path": "chain/network-build-guard.sh",
+      "sha256": "7b3f15a72c5b4dd725d1c2567a213ab0ad9ac4efd5bb6de86cec3aca330318e4"
+    },
+    {
+      "path": "chain/patches/0001-consensus-perpetual-flat-subsidy-of-0.9-MEOW-per-blo.patch",
+      "sha256": "9987a0abafc4c54f67829ae39b965c2b1729b001ed94429e11a1ab6a64eb6d63"
+    },
+    {
+      "path": "chain/patches/0002-identity-Meownero-network-constants-and-zero-amount-.patch",
+      "sha256": "e2b96c10d8c327728514ac80ceea4604e37f4b85d6b7fa82ef41b8401f0cf57c"
+    },
+    {
+      "path": "chain/patches/0003-consensus-mainnet-hard-fork-table-v1-0-v16-1-single-.patch",
+      "sha256": "95762a124007baed57d26a3a2add3ccc15be24c39387ee4c92e502e77b93ea58"
+    },
+    {
+      "path": "chain/patches/0004-trust-surfaces-remove-inherited-checkpoints-block-ha.patch",
+      "sha256": "0b61f60c2956db2b5c6ec7a7ae211bff4a850de97f26192bf66cffda26890cb9"
+    },
+    {
+      "path": "chain/patches/0005-tests-replace-block_reward-unit-tests-with-Meownero-.patch",
+      "sha256": "27fcfd4742d4cc16fa170c182347580dad2c466d3217857e2fc897f58d96097c"
+    },
+    {
+      "path": "chain/patches/0006-consensus-launch-difficulty-floor-MEOW_MIN_DIFFICULT.patch",
+      "sha256": "572be181a3c8b047e78393cda58598114086d5e9cc6f041bb8ccaa7386707c49"
+    },
+    {
+      "path": "chain/patches/0007-tests-encode-synthetic-miner-outputs-for-the-active-.patch",
+      "sha256": "1aa9d661b25d622a2941a091cd7f1cae45589b91a9b4753f3972be833fa1c960"
+    },
+    {
+      "path": "chain/patches/0008-consensus-apply-launch-floor-to-startup-difficulty-a.patch",
+      "sha256": "30513ce2426f57c4495255ff0ca9247980b0ad6dd815e86df27a7a23cbdbbb6a"
+    },
+    {
+      "path": "chain/patches/0009-tests-adapt-address-and-URI-fixtures-to-Meownero-net.patch",
+      "sha256": "af768c937455b1372bc5255c47bd5008880fc8bfcb718f37d67dc4bdff810e32"
+    },
+    {
+      "path": "chain/patches/0010-trust-disable-inherited-update-blocklist-and-donatio.patch",
+      "sha256": "397543b11a7eabc71794da2135f9aac3501a997e696ed06131ba614a80d64036"
+    },
+    {
+      "path": "chain/patches/0011-tests-re-encode-multisig-fixtures-for-Meownero-testn.patch",
+      "sha256": "2e1864e853bc66b35065cf021e8f5295d8b7eb12beb9fc0a3050bba93c530d0d"
+    },
+    {
+      "path": "chain/patches/0012-tests-adapt-wallet-storage-caches-while-retaining-ge.patch",
+      "sha256": "eca5d371bc55fca1f9f10a705d099459b5e2f234ba6bccb68d82184e80c46188"
+    },
+    {
+      "path": "chain/patches/0013-tests-retain-historical-archive-portability-under-Me.patch",
+      "sha256": "1bcef1fff487bb75bef690997d154f89c5890d3563bedb86a21a8782e60ca234"
+    },
+    {
+      "path": "chain/patches/0014-wallet-validate-block-versions-by-fork-table-entry.patch",
+      "sha256": "2f745403274c5187b4a5d793970a46354c4eef4b86066cf25a74902f6313a02a"
+    },
+    {
+      "path": "chain/patches/0015-tests-compare-difficulty-callers-across-window-and-r.patch",
+      "sha256": "055f8f4801705bdcb65526fb95dd9171b3a6381acf292c84bf90da6e9478a15f"
+    },
+    {
+      "path": "chain/privacy-test.py",
+      "sha256": "16e6f8732ccac28320b36de2a93cc35d6ddf5cf93d2c18ffab023cf1df9d0ce4"
+    },
+    {
+      "path": "chain/privacy-test.sh",
+      "sha256": "9ee99929c7565ddabef6b29b58c0ebe391e7fc69f95b5ef3fcf19140d2c7c3f7"
+    },
+    {
+      "path": "chain/privacy-wallet-rpc.py",
+      "sha256": "a4c6b706625ffab284c2ce2a737f56a8108b67f9d69972986f3d14f7e9fe3ffc"
+    },
+    {
+      "path": "chain/test-authorities.sh",
+      "sha256": "b39025168ea05efdaf798c38a49ae9622ddc69c1e553bd93072283e2a9852d2c"
+    },
+    {
+      "path": "chain/test-difficulty.sh",
+      "sha256": "35bee09c233b0ab9ab33f92d2b7984a414e3861da1dacf8844c00564f4e32095"
+    },
+    {
+      "path": "chain/test-network-loaded.py",
+      "sha256": "d65aca97346dad325f44c89c9c6a3b9ac7386c32dfe6d81116171e104cbee71b"
+    },
+    {
+      "path": "chain/test-network-loaded.sh",
+      "sha256": "bf3a3af6ce218011d59d0fb1295038b873b22117ffa568d179678c7190c31b67"
+    },
+    {
+      "path": "chain/test-network-p2p.py",
+      "sha256": "a11c4bbd0a44c37850115c0347b6bce37b02cee805243446167d705ad815d794"
+    },
+    {
+      "path": "chain/test-network-p2p.sh",
+      "sha256": "d22da19d39301a56e23c2e938012998ca1e0100a29c13176d543583cb116ff48"
+    },
+    {
+      "path": "chain/test-network-payment.py",
+      "sha256": "ebac3a527dc9189b4bfe51f2fd2d7e7aa9eb7f4133f2dc1640d2cf42324135f5"
+    },
+    {
+      "path": "chain/test-network-profiles.py",
+      "sha256": "b3c158fc6febefb44c0482bb96f94063bc1439e137068cdcceb65562ab3e6215"
+    },
+    {
+      "path": "chain/test-reorg-vardiff.py",
+      "sha256": "2f841710f49a9a3d60ff2a05139ed0804ba3080ff2c30bceab106ef9f97db1df"
+    },
+    {
+      "path": "chain/test-reorg-vardiff.sh",
+      "sha256": "6754037ab5f320e7910e8cf0d0050538fb30f5b61e8e2022dd6e5b1291369e18"
+    },
+    {
+      "path": "chain/test-reorg.py",
+      "sha256": "eb610c2809411166a1f0420e8d3e06a3a5fc953b60f0c03866a737da74a61173"
+    },
+    {
+      "path": "chain/test-reorg.sh",
+      "sha256": "966e5c8ffc49bc8a83917a8c430aa9b514d41c743051f1b6ebdf7d5daf42a999"
+    },
+    {
+      "path": "chain/test-reproducibility.sh",
+      "sha256": "8fb0799f060fd48a802abe15e82f41bb1caa62ce1efbb521d046ade0959e0cdf"
+    },
+    {
+      "path": "chain/test-seed-recovery.py",
+      "sha256": "e2952a9f067614d63255ba31905278d4396fff1d7baecd964b09e024d006167e"
+    },
+    {
+      "path": "chain/test-seed-recovery.sh",
+      "sha256": "05c79e3fd6499ee6b3f085bb13a13e31358b5b271d13603853ae1dc41a764259"
+    },
+    {
+      "path": "chain/test-wallet-funded.py",
+      "sha256": "2b4021517bdf39cdd43b54837da253fa48a86f7a95250943100014017e626aa3"
+    },
+    {
+      "path": "chain/test-wallet-funded.sh",
+      "sha256": "695f9f2d60ebb4adf5dc4b6253586f5edd8c20419eb404b8fcdfbc613fd9cd8a"
+    },
+    {
+      "path": "chain/test-wallet-transport.py",
+      "sha256": "b8be308c0b5fe4249748d545ea7f4d9ac4b8c9ff9441aada8d78ff6231295e07"
+    },
+    {
+      "path": "chain/test-wallet-transport.sh",
+      "sha256": "0d7d07f2ae7207a8e526e75013a715ba8b89196274a1d8a284ec7d043d399cd6"
+    },
+    {
+      "path": "chain/testnet-v0/README.md",
+      "sha256": "967a8e3da1bb465f5a5ac9ff9cee51e4ebd3ad8d37630c9289e6c806083e258a"
+    },
+    {
+      "path": "chain/testnet-v0/baseline.json",
+      "sha256": "4463c73398ded36e38b074f1d5c68fc881c2ac091f42443929e38f8978e8163e"
+    },
+    {
+      "path": "chain/testnet-v0/journey.md",
+      "sha256": "7624c0b8cc5317f7f532fb4b1c6cdddff602e2fb32979ea1a1aba5fd97452ab3"
+    },
+    {
+      "path": "chain/testnet-v0/journey.py",
+      "sha256": "60e64b3ba53fb203fb4f0042ae511366f831a00e38f2dff22b509ea6ca173be4"
+    },
+    {
+      "path": "chain/testnet-v0/launch.py",
+      "sha256": "d6dfb675fab03d4ca0a84b2fd143d857b693631846f64595f865a7c52d5cad2e"
+    },
+    {
+      "path": "chain/testnet-v0/payment-journey.md",
+      "sha256": "d349d5f9b6e5912cb74ca6e5d86ddbece2f545947c0cde1748a95700324a5b72"
+    },
+    {
+      "path": "chain/testnet-v0/payment.py",
+      "sha256": "327ca254a6cee2128ad7052b52496798ee6175f16b17c873a289d77b68b7162d"
+    },
+    {
+      "path": "chain/testnet-v0/pool-restart-journey.md",
+      "sha256": "286567bce3d93d20a44da6712750407435e0c142120ad37340f2f33cb85bb706"
+    },
+    {
+      "path": "chain/testnet-v0/pool-restart.py",
+      "sha256": "7ac7f7a615ebb1c23eee2e0ca55b0eb548822afc58fdf0d76cdb3f02c7518ebf"
+    },
+    {
+      "path": "chain/testnet-v0/profile.json",
+      "sha256": "126345a8703a43150be6d1822fa1912c9492ebda9df420360371baa15be5ce29"
+    },
+    {
+      "path": "chain/testnet-v0/recover-journey.md",
+      "sha256": "e098c5bc5eb21171c3b611e1df9945f45d695fe7c1068bca0e48fde1b7a2b06b"
+    },
+    {
+      "path": "chain/testnet-v0/recover.py",
+      "sha256": "3a6391d4e3c339fe4b6e656e0b98a6252f2fcd233759660d253013083fac6da0"
+    },
+    {
+      "path": "chain/testnet-v0/sync-journey.md",
+      "sha256": "ca5e90bfc2156f479474ec8018511acd8027f449ce2734e4ae17a2406654b6c2"
+    },
+    {
+      "path": "chain/testnet-v0/sync.py",
+      "sha256": "288f68dc0bc2a31a02ef4e0ec713cb13c6b30055e642fbffc61039284b01fd28"
+    },
+    {
+      "path": "chain/testnet-v0/test-journey-refusals.py",
+      "sha256": "4f23bea831a5689b6c577975e68bd6b3971ad76dfc7ec3080a6af086814f25ab"
+    },
+    {
+      "path": "chain/testnet-v0/test-pool-restart-refusals.py",
+      "sha256": "9375c67c7481285ed3537bcdaa1ef4a9dee8675ccac70ffed5e0778ec218ebdc"
+    },
+    {
+      "path": "chain/testnet-v0/test-recover-refusals.py",
+      "sha256": "8eeeccf7ee669eb996b216ca7b15fe90e3d2be48571ff89626b8e3bee24b78b5"
+    },
+    {
+      "path": "chain/testnet-v0/test-refusals.py",
+      "sha256": "83b61bbdf0bbdbaa2dd7c734e18c1c5c932d888600a4535d42dfbfdc7fbf840e"
+    },
+    {
+      "path": "chain/testnet-v0/test-sync-refusals.py",
+      "sha256": "e04c70d8733cfc892be294c2cc832db0f18980bf2c729256578cc1e2e3e174af"
+    },
+    {
+      "path": "chain/testnet-v0/verify-journey.py",
+      "sha256": "d18329d1808ba893c6fade953e4947bfe047ad6ba57e241362ecafdeeb604383"
+    },
+    {
+      "path": "chain/testnet-v0/verify-payment.py",
+      "sha256": "596198f2f234cfc0420a472aaf713f9fe70113d3d56e58dbcc3ef3b5e4993759"
+    },
+    {
+      "path": "chain/testnet-v0/verify-pool-restart.py",
+      "sha256": "1f4fe62da5df6cfd0e056d6761dca531f1e47ee2cdefa5b59f9e78a7834c7624"
+    },
+    {
+      "path": "chain/testnet-v0/verify-recover.py",
+      "sha256": "7f2750490e3d4af6a9e0b5fc6353211301d1c0af2f60016ffc3ba22bbab66d8d"
+    },
+    {
+      "path": "chain/testnet-v0/verify-sync.py",
+      "sha256": "43f004da394722165b06859f17b0bfdc824ef357d65be58e6afce1f47e72cdb2"
+    },
+    {
+      "path": "chain/testnet-v0/verify.py",
+      "sha256": "c70b9e862cac5c1d74984c022f06608707a9c5b672c2ff4f3cead27272d44bb6"
+    },
+    {
+      "path": "chain/upstream.lock",
+      "sha256": "1f5a0f179a80cff2b3be76377ba11dc6a2e7598cd3ed8c5150116d8c14ac3f90"
+    },
+    {
+      "path": "vanguard/network/integration/inputs.json",
+      "sha256": "42c920b4320d1a42ed099f999b202d4088540532be79b03956e7a95a86d010e5"
+    },
+    {
+      "path": "vanguard/network/integration/operator_driver.py",
+      "sha256": "133939e4c49eadf8363ffba328bc959cbf99d33e15fcaa4543ed0dafdd7ad5dd"
+    },
+    {
+      "path": "vanguard/network/operators.md",
+      "sha256": "625bc51de17a28d581b9e43b42b1ce935fed7dc8e53742fe890bf11a6137774a"
+    },
+    {
+      "path": "vanguard/network/run-operator.py",
+      "sha256": "5b23c35a5621776b92ff2321d766f4d5950aafd28d28c27accbb87a7e0a95f7d"
+    }
+  ]
+}

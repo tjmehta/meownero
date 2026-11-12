@@ -1,0 +1,160 @@
+{
+  "result": "PASS",
+  "native_seed": "NOT_RUN",
+  "stand_in_source": "#include <unistd.h>\nint main(void){sleep(120);return 0;}\n",
+  "cases": [
+    {
+      "case": "first launch",
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 1,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "restart without seed pass",
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old launch cannot supply coverage",
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "accumulated multi-launch",
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 118,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "old launch dial excluded",
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 156,
+        "dial_attempt_lines": 0,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "current launch upstream dial",
+      "exit": 2,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 118,
+        "dial_attempt_lines": 1,
+        "reason": "connections_maker or upstream-seed activity",
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "ALERT",
+        "upstream_dial_lines": 1
+      },
+      "stderr": ""
+    },
+    {
+      "case": "benign housekeeping and ping-back",
+      "exit": 0,
+      "result": {
+        "connections_maker_lines": 0,
+        "current_launch_offset": 0,
+        "dial_attempt_lines": 1,
+        "reason": null,
+        "seed_list_lines": 0,
+        "seed_pass_lines": 0,
+        "state": "OK",
+        "upstream_dial_lines": 0
+      },
+      "stderr": ""
+    },
+    {
+      "case": "missing header",
+      "exit": 3,
+      "result": {
+        "reason": "current launch banner missing or ambiguous",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "wrong log path",
+      "exit": 3,
+      "result": {
+        "reason": "witness input: ValueError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "warning-only net.p2p:WARNING",
+      "exit": 3,
+      "result": {
+        "reason": "running argv does not establish net.p2p INFO logging",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "warning-only 1,net.p2p:WARNING",
+      "exit": 3,
+      "result": {
+        "reason": "running argv does not establish net.p2p INFO logging",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "warning-only *:WARNING",
+      "exit": 3,
+      "result": {
+        "reason": "running argv does not establish net.p2p INFO logging",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    },
+    {
+      "case": "dead pid",
+      "exit": 3,
+      "result": {
+        "reason": "witness input: FileNotFoundError",
+        "state": "UNVERIFIED"
+      },
+      "stderr": ""
+    }
+  ]
+}

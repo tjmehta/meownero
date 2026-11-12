@@ -79,10 +79,14 @@ def check_pin(expected, presented):
 def check_status(status, now, *, in_peers, max_age):
     if type(status) is not dict or set(status) != STATUS_KEYS:
         raise Unverified('operator status shape')
+    try:
+        finite_unix = type(status['unix']) in (int, float) and math.isfinite(status['unix'])
+    except OverflowError:  # JSON integers can exceed the float range used by isfinite.
+        finite_unix = False
     if not (type(status['count']) is int and status['count'] >= 1 and type(status['top']) is str and
             HEX64.fullmatch(status['top']) and type(status['inbound']) is dict and
             all(type(v) is int and v >= 0 for v in status['inbound'].values()) and
-            type(status['unix']) in (int, float) and math.isfinite(status['unix'])):
+            finite_unix):
         raise Unverified('operator status values')
     age = now-status['unix']
     if age > max_age or age < -60:

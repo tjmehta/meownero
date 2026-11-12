@@ -1,0 +1,61 @@
+{
+  "head": "e151643c5269c83bf24a83b2548e2493876026b2",
+  "sources": {
+    "src/daemon/main.cpp": {
+      "sha256": "208d20f9eb4b5069dda9f7ca061ae39d4833b12648818488a637dac5d89bc82c",
+      "excerpts": [
+        {
+          "start": 274,
+          "end": 299,
+          "text": "274:     //   default: <data_dir>/<CRYPTONOTE_NAME>.log\n275:     //   if log-file argument given:\n276:     //     absolute path\n277:     //     relative path: relative to data_dir\n278:     bf::path log_file_path {data_dir / std::string(CRYPTONOTE_NAME \".log\")};\n279:     if (!command_line::is_arg_defaulted(vm, daemon_args::arg_log_file))\n280:       log_file_path = command_line::get_arg(vm, daemon_args::arg_log_file);\n281:     if (!log_file_path.has_parent_path())\n282:       log_file_path = bf::absolute(log_file_path, relative_path_base);\n283:     mlog_configure(log_file_path.string(), true, command_line::get_arg(vm, daemon_args::arg_max_log_file_size), command_line::get_arg(vm, daemon_args::arg_max_log_files));\n284: \n285:     // Set log level\n286:     if (!command_line::is_arg_defaulted(vm, daemon_args::arg_log_level))\n287:     {\n288:       mlog_set_log(command_line::get_arg(vm, daemon_args::arg_log_level).c_str());\n289:     }\n290: \n291:     // after logs initialized\n292:     tools::create_directories_if_necessary(data_dir.string());\n293: \n294:     if (!command_line::is_arg_defaulted(vm, daemon_args::arg_max_concurrency))\n295:       tools::set_max_concurrency(command_line::get_arg(vm, daemon_args::arg_max_concurrency));\n296: \n297:     // logging is now set up\n298:     MGINFO(\"Monero '\" << MONERO_RELEASE_NAME << \"' (v\" << MONERO_VERSION_FULL << \")\");\n299: "
+        }
+      ]
+    },
+    "contrib/epee/src/mlog.cpp": {
+      "sha256": "6c07144a2bce9fdf5e1c9f03f1d11b1bd494508dcf7194f13b3ac17772944fe5",
+      "excerpts": [
+        {
+          "start": 45,
+          "end": 50,
+          "text": "45: \n46: #undef MONERO_DEFAULT_LOG_CATEGORY\n47: #define MONERO_DEFAULT_LOG_CATEGORY \"logging\"\n48: \n49: #define MLOG_BASE_FORMAT \"%datetime{%Y-%M-%d %H:%m:%s.%g}\\t%thread\\t%level\\t%logger\\t%loc\\t%msg\"\n50: "
+        },
+        {
+          "start": 96,
+          "end": 121,
+          "text": "96: \n97: static const char *get_default_categories(int level)\n98: {\n99:   const char *categories = \"\";\n100:   switch (level)\n101:   {\n102:     case 0:\n103:       categories = \"*:WARNING,net:FATAL,net.http:FATAL,net.ssl:FATAL,net.p2p:FATAL,net.cn:FATAL,daemon.rpc:FATAL,global:INFO,verify:FATAL,serialization:FATAL,daemon.rpc.payment:ERROR,stacktrace:INFO,logging:INFO,msgwriter:INFO\";\n104:       break;\n105:     case 1:\n106:       categories = \"*:INFO,global:INFO,stacktrace:INFO,logging:INFO,msgwriter:INFO,perf.*:DEBUG\";\n107:       break;\n108:     case 2:\n109:       categories = \"*:DEBUG\";\n110:       break;\n111:     case 3:\n112:       categories = \"*:TRACE,*.dump:DEBUG\";\n113:       break;\n114:     case 4:\n115:       categories = \"*:TRACE\";\n116:       break;\n117:     default:\n118:       break;\n119:   }\n120:   return categories;\n121: }"
+        }
+      ]
+    },
+    "external/easylogging++/easylogging++.cc": {
+      "sha256": "3fe27aeda8fbf2896637daf20c8f4cf17e9f2cbb7fe9a2812c74bf8fe21bf821",
+      "excerpts": [
+        {
+          "start": 2831,
+          "end": 2841,
+          "text": "2831:   if (logFormat->hasFlag(base::FormatFlags::Location)) {\n2832:     // Location\n2833:     char* buf = base::utils::Str::clearBuff(buff,\n2834:                                             base::consts::kSourceFilenameMaxLength + base::consts::kSourceLineMaxLength);\n2835:     base::utils::File::buildStrippedFilename(logMessage->file().c_str(), buff, ELPP->vRegistry()->getFilenameCommonPrefix());\n2836:     buf = base::utils::Str::addToBuff(buff, buf, bufLim);\n2837:     buf = base::utils::Str::addToBuff(\":\", buf, bufLim);\n2838:     buf = base::utils::Str::convertAndAddToBuff(logMessage->line(),  base::consts::kSourceLineMaxLength, buf, bufLim,\n2839:           false);\n2840:     base::utils::Str::replaceFirstWithEscape(logLine, base::consts::kLogLocationFormatSpecifier, std::string(buff));\n2841:   }"
+        }
+      ]
+    },
+    "src/p2p/net_node.inl": {
+      "sha256": "9167387672982a943fe74f093a3578d16f980a310fc3a30f3a4317f3e01a588b",
+      "excerpts": [
+        {
+          "start": 2008,
+          "end": 2018,
+          "text": "2008:     if (!connect_to_peerlist(m_exclusive_peers)) return false;\n2009: \n2010:     if (!m_exclusive_peers.empty()) return true;\n2011: \n2012:     bool one_succeeded = false;\n2013:     for(auto& zone : m_network_zones)\n2014:     {\n2015:       size_t start_conn_count = get_outgoing_connections_count(zone.second);\n2016:       if(!zone.second.m_peerlist.get_white_peers_count() && !connect_to_seed(zone.first))\n2017:       {\n2018:         continue;"
+        },
+        {
+          "start": 2058,
+          "end": 2068,
+          "text": "2058:           boost::this_thread::sleep_for(boost::chrono::seconds(1));\n2059:           break;\n2060:         }\n2061:         conn_count = new_conn_count;\n2062:       }\n2063: \n2064:       if (start_conn_count == get_outgoing_connections_count(zone.second) && start_conn_count < zone.second.m_config.m_net_config.max_out_connection_count)\n2065:       {\n2066:         MINFO(\"Failed to connect to any, trying seeds\");\n2067:         if (!connect_to_seed(zone.first))\n2068:           continue;"
+        }
+      ]
+    }
+  },
+  "references": [
+    "https://man7.org/linux/man-pages/man5/proc_pid_stat.5.html",
+    "https://man7.org/linux/man-pages/man2/clock_gettime.2.html",
+    "https://wiki.nftables.org/wiki-nftables/index.php/Meters",
+    "https://netfilter.org/projects/nftables/manpage.html"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "focus": {
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/network/integration/evidence/activation-residuals/guarded-source-tests.py",
+      "--focus"
+    ],
+    "exit": 0,
+    "rows": [
+      {
+        "tests": 68,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 58.06275842431933,
+        "native": "NOT_RUN"
+      },
+      {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 58.06293594231829
+      }
+    ]
+  },
+  "full": {
+    "command": [
+      "python3",
+      "-B",
+      "vanguard/network/integration/evidence/activation-residuals/guarded-source-tests.py",
+      "--full"
+    ],
+    "exit": 0,
+    "rows": [
+      {
+        "tests": 552,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 206.18067597225308,
+        "native": "NOT_RUN"
+      },
+      {
+        "protected_lock_metadata_unchanged": true,
+        "protected_lock_metadata": [
+          66306,
+          657237,
+          1000,
+          33152,
+          0,
+          1792398177544654975,
+          1792398177544654975
+        ],
+        "blocked_original_lock_touches": [],
+        "guard": "builtins/io/os open before call by exact path and device/inode; flock before call",
+        "wrapper_seconds": 206.18083931226283
+      }
+    ]
+  },
+  "mutations": {
+    "exit": 0,
+    "cases": 19,
+    "source_bytes_unchanged": true
+  },
+  "cli": {
+    "exit": 0,
+    "cases": 40,
+    "native_seed": "NOT_RUN"
+  },
+  "source_sha256": {
+    "vanguard/network/integration/activation_witness.py": "02a03a0226ca0e254ef7de409aad8defc465c2d12ed358b084c4b72c299c0b94",
+    "vanguard/network/integration/operator_contract.py": "018a5778681a59ffc83f386e60dc700ac98687b25caa7215792186e44b24b701",
+    "vanguard/network/integration/test_operator.py": "0beceead1b9611adc9c99242d3b1f5a2ae2a020c10c5643e642d63565e934043",
+    "vanguard/network/integration/outside_monitor.py": "9cc208d6164ae802c61974cf8172ebd7b841049f44168363e3fbba1e15d0ed89",
+    "vanguard/network/integration/topology-operators.md": "24bef21a1ecbc6b4c0d8d1758db1dcf865b67f5745194ebec0b9611e43b58be5",
+    "vanguard/network/integration/evidence/activation-residuals/mutation-checks.py": "9e2081b87892682e56856ffc7834e2cf2ca45c16404b1a013a5c7b6abd15a362",
+    "vanguard/network/integration/evidence/activation-residuals/guarded-source-tests.py": "8b4ef26f7ec1ce185a74d7446d6e340d78dd1a8ccb7d688d72b72598b252c8f8",
+    "vanguard/network/integration/evidence/activation-residuals-f3/cli-check.py": "be2766447f34e46841ef09d03d2fcba4be2e4ed51cb8f0deb7c3a7de697a616f"
+  },
+  "python": "3.15.2 (main, Oct 25 2026, 16:57:51) [GCC 13.3.0]"
+}
